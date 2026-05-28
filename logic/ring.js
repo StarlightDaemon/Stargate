@@ -187,6 +187,7 @@ class RingController {
      */
     arrive() {
         this.isSpinning = false;
+        this.isOvershooting = false;
         this.velocity = 0;
 
         // Normalize angle

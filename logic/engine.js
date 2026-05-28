@@ -43,6 +43,10 @@ class SDCEngine {
             kawooshDuration: 800     // Kawoosh effect duration
         };
 
+        // Fast mode (testing)
+        this.fastMode = false;
+        this.fastMultiplier = 15;
+
         // Criss-cross chevron sequences
         this.sequences = {
             7: [1, 8, 2, 7, 3, 6, 9],
@@ -61,9 +65,10 @@ class SDCEngine {
         this.cacheDom();
         this.initRing();
         this.initAudio();
+        this.signalStrength = window.signalStrength || null;
         this.bindEvents();
-        this.populateAddressBook();
-        this.generateDHDKeyboard();
+        this.generateGlyphGrid();
+        this.updateBufferLabel();
         this.log('System initialized. Ready for dialing sequence.');
     }
 
@@ -73,18 +78,14 @@ class SDCEngine {
             innerRing: document.getElementById('innerRing'),
             eventHorizon: document.getElementById('eventHorizon'),
             kawoosh: document.getElementById('kawooshEffect'),
-
-            // Fusion layout elements
             headerStatus: document.getElementById('headerStatus'),
             chevronIndicators: document.getElementById('chevronIndicators'),
-            destCode: document.getElementById('destCode'),
-            statusInfo: document.getElementById('statusInfo'),
-            bufferDisplay: document.getElementById('bufferDisplay'),
-            addressBook: document.getElementById('addressBook'),
-            dhdGrid: document.getElementById('dhdGrid'),
+            statusLog: document.getElementById('statusLog'),
+            destInfo: document.getElementById('destInfo'),
+            bufferLabel: document.getElementById('bufferLabel'),
+            bufferSlots: document.getElementById('bufferSlots'),
+            glyphGrid: document.getElementById('glyphGrid'),
             btnEngage: document.getElementById('engageBtn'),
-            statusText: document.getElementById('statusText'),
-            chevronCount: document.getElementById('chevronCount')
         };
     }
 
@@ -107,32 +108,26 @@ class SDCEngine {
                 document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 this.reset();
-                this.updateChevronCount();
+                this.updateBufferLabel();
             });
         });
 
-        // Engage button
-        this.dom.btnEngage.addEventListener('click', () => this.engage());
+        // Engage / Abort / Disconnect button
+        this.dom.btnEngage.addEventListener('click', () => {
+            if (this.state === 'locking') this.abort();
+            else if (this.state === 'active') this.disconnect();
+            else this.engage();
+        });
+
+        // Fast mode checkbox
+        document.getElementById('fastModeCheck').addEventListener('change', (e) => {
+            this.setFastMode(e.target.checked);
+        });
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.abort();
             if (e.key === 'Enter' && !this.dom.btnEngage.disabled) this.engage();
-        });
-    }
-
-    populateAddressBook() {
-        this.dom.addressBook.innerHTML = '';
-
-        Object.entries(ADDRESSES).forEach(([key, addr]) => {
-            const btn = document.createElement('button');
-            btn.className = 'address-btn';
-            btn.innerHTML = `
-                <span class="planet-name">${addr.name}</span>
-                <span class="planet-code">${addr.designation}</span>
-            `;
-            btn.addEventListener('click', () => this.autoDial(key));
-            this.dom.addressBook.appendChild(btn);
         });
     }
 
@@ -210,11 +205,11 @@ class SDCEngine {
     }
 
     /**
-     * Update chevron count display
+     * Update buffer section label to reflect current mode
      */
-    updateChevronCount() {
-        if (this.dom.chevronCount) {
-            this.dom.chevronCount.textContent = `${this.lockedChevrons.length}/${this.mode}`;
+    updateBufferLabel() {
+        if (this.dom.bufferLabel) {
+            this.dom.bufferLabel.textContent = `ADDRESS BUFFER — ${this.mode} CHEVRONS`;
         }
     }
 
@@ -222,7 +217,7 @@ class SDCEngine {
      * Update buffer display slots
      */
     updateBufferDisplay() {
-        const slots = this.dom.bufferSlots.querySelectorAll('.buffer-slot:not(.poo)');
+        const slots = this.dom.bufferSlots.querySelectorAll('.buffer-slot:not(.origin-slot)');
         slots.forEach((slot, i) => {
             if (i < this.buffer.length) {
                 const glyphId = this.buffer[i];
@@ -261,11 +256,11 @@ class SDCEngine {
         // Enter glyphs with delay
         for (const glyphId of address.address) {
             this.handleGlyphClick(glyphId);
-            await this.sleep(200);
+            await this.sleep(this.t(200));
         }
 
         // Auto-engage after brief delay
-        await this.sleep(500);
+        await this.sleep(this.t(500));
         this.engage();
     }
 
@@ -278,8 +273,8 @@ class SDCEngine {
         }
 
         this.state = 'locking';
-        this.dom.btnEngage.disabled = true;
-        this.disableKeyboard(true);
+        this.setEngageBtn('abort');
+        this.disableGlyphGrid(true);
 
         this.log('Initiating dialing sequence...');
 
@@ -307,7 +302,7 @@ class SDCEngine {
             if (this.state === 'aborting') break;
 
             // Lock chevron
-            await this.sleep(this.timing.encodeDelay);
+            await this.sleep(this.t(this.timing.encodeDelay));
             this.lockChevron(chevronNum, i);
             this.setChevronState(i, 'locked');
 
@@ -319,7 +314,7 @@ class SDCEngine {
             this.log(`Chevron ${i + 1} locked.`);
 
             // Delay before next chevron
-            await this.sleep(this.timing.interChevronDelay);
+            await this.sleep(this.t(this.timing.interChevronDelay));
         }
 
         // Establish wormhole
@@ -342,7 +337,7 @@ class SDCEngine {
     }
 
     /**
-     * Set chevron state in left panel indicators
+     * Set chevron state in panel indicators
      */
     setChevronState(index, state) {
         const indicators = this.dom.chevronIndicators.querySelectorAll('.chev-indicator');
@@ -352,9 +347,6 @@ class SDCEngine {
                 indicators[index].classList.add('active');
             }
         }
-
-        // Update chevron count
-        this.updateChevronCount();
     }
 
     /**
@@ -373,20 +365,19 @@ class SDCEngine {
         // Trigger kawoosh animation
         this.dom.kawoosh.classList.add('active');
 
-        await this.sleep(this.timing.kawooshDuration);
+        await this.sleep(this.t(this.timing.kawooshDuration));
 
         this.dom.kawoosh.classList.remove('active');
 
         // Activate event horizon
         this.dom.eventHorizon.classList.add('active');
+        this.setEngageBtn('disconnect');
 
         // Update destination display
         if (this.destination) {
-            this.dom.destCode.textContent = this.destination.designation;
-            this.dom.statusInfo.textContent = this.destination.description;
+            this.dom.destInfo.textContent = `${this.destination.name}  ·  ${this.destination.designation}`;
         } else {
-            this.dom.destCode.textContent = 'P??-???';
-            this.dom.statusInfo.textContent = 'Unknown world';
+            this.dom.destInfo.textContent = 'UNKNOWN WORLD  ·  P??-???';
         }
 
         if (this.dom.headerStatus) {
@@ -402,24 +393,62 @@ class SDCEngine {
     }
 
     /**
-     * Abort the current operation
+     * Abort the current operation (mid-dial)
      */
     abort() {
         if (this.state === 'idle') return;
 
         this.state = 'aborting';
         this.log('Aborting sequence...');
+        this.setEngageBtn('engage');
 
-        // Play abort sound
         if (typeof audioManager !== 'undefined') {
             audioManager.play('abort');
         }
 
-        // Stop ring
         this.ringController.stop();
-
-        // Reset after short delay
         setTimeout(() => this.reset(), 500);
+    }
+
+    /**
+     * Disconnect an active wormhole
+     */
+    disconnect() {
+        if (this.state !== 'active') return;
+
+        this.state = 'aborting';
+        this.log('Severing connection...');
+        this.setEngageBtn('engage');
+
+        if (typeof audioManager !== 'undefined') {
+            audioManager.play('abort');
+        }
+
+        this.dom.eventHorizon.classList.remove('active');
+        if (this.dom.headerStatus) this.dom.headerStatus.textContent = 'IDLE';
+
+        setTimeout(() => this.reset(), 600);
+    }
+
+    /**
+     * Set engage button state: 'engage' | 'abort' | 'disconnect'
+     */
+    setEngageBtn(mode) {
+        const btn = this.dom.btnEngage;
+        btn.classList.remove('state-abort', 'state-disconnect');
+
+        if (mode === 'abort') {
+            btn.textContent = 'ABORT';
+            btn.classList.add('state-abort');
+            btn.disabled = false;
+        } else if (mode === 'disconnect') {
+            btn.textContent = 'DISCONNECT';
+            btn.classList.add('state-disconnect');
+            btn.disabled = false;
+        } else {
+            btn.textContent = 'ENGAGE';
+            btn.disabled = true;
+        }
     }
 
     /**
@@ -449,15 +478,15 @@ class SDCEngine {
         // Reset buffer display
         this.updateBufferDisplay();
 
-        // Reset destination
-        if (this.dom.destCode) this.dom.destCode.textContent = '---';
-        if (this.dom.statusInfo) this.dom.statusInfo.textContent = 'AWAITING';
+        // Reset status
+        if (this.dom.statusLog) this.dom.statusLog.textContent = 'AWAITING';
+        if (this.dom.destInfo) this.dom.destInfo.textContent = '';
 
         // Deactivate event horizon
         this.dom.eventHorizon.classList.remove('active');
 
         // Reset controls
-        this.dom.btnEngage.disabled = true;
+        this.setEngageBtn('engage');
         this.disableGlyphGrid(false);
 
         // Reset system status
@@ -472,9 +501,6 @@ class SDCEngine {
         this.dom.glyphGrid.querySelectorAll('.dhd-key').forEach(k => {
             k.classList.remove('selected');
         });
-
-        // Update chevron count
-        this.updateChevronCount();
 
         this.log('Gate reset. Standing by.');
     }
@@ -526,11 +552,32 @@ class SDCEngine {
      * Log a message to the status panel
      */
     log(message) {
-        // Update status text
-        if (this.dom.statusInfo) {
-            this.dom.statusInfo.textContent = message;
+        if (this.dom.statusLog) {
+            this.dom.statusLog.textContent = message;
         }
         console.log('[SDC]', message);
+    }
+
+    /**
+     * Enable/disable fast mode — scales timing and ring physics
+     */
+    setFastMode(enabled) {
+        this.fastMode = enabled;
+        const rc = this.ringController.config;
+        if (enabled) {
+            rc.maxVelocity = 900;
+            rc.acceleration = 1800;
+        } else {
+            rc.maxVelocity = 120;
+            rc.acceleration = 200;
+        }
+    }
+
+    /**
+     * Timing helper — returns ms scaled by fast mode multiplier
+     */
+    t(ms) {
+        return this.fastMode ? Math.round(ms / this.fastMultiplier) : ms;
     }
 
     /**
