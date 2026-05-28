@@ -232,6 +232,7 @@ body::before {
    =================================== */
 .gate-panel {
     grid-area: gate-view;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -367,8 +368,8 @@ body::before {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 50%;
-    height: 50%;
+    width: 57%;
+    height: 57%;
     transform: translate(-50%, -50%) scale(0);
     background: radial-gradient(ellipse, rgba(0, 204, 40, 0.7) 0%, rgba(0, 136, 34, 0.3) 50%, transparent 70%);
     border-radius: 50%;

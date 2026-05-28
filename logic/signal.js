@@ -1,6 +1,6 @@
 /**
- * Gate Dialing Computer - Signal Strength Visualization
- * Real-time waveform and bar graph visualization
+ * Gate Dialing Computer — Signal Strength Visualization
+ * Oscilloscope-style waveform + spectrum analyzer bars
  */
 
 class SignalStrength {
@@ -12,51 +12,65 @@ class SignalStrength {
         }
 
         this.ctx = this.canvas.getContext('2d');
-        this.dataPoints = [];
-        this.bars = [];
-        this.animationId = null;
         this.isActive = false;
+        this.animationId = null;
+        this.frame = 0;
+        this.mode = 'idle';
 
-        // Configuration
-        this.config = {
-            waveformColor: '#00ff33',
-            barColor: '#00ff33',
-            gridColor: '#003300',
-            backgroundColor: 'rgba(0, 30, 0, 0.2)',
-            maxDataPoints: 100,
-            barCount: 20,
-            baselineNoise: 0.75,
-            peakRange: 0.2
-        };
+        // Logical draw dimensions (set by resize)
+        this.W = 0;
+        this.H = 0;
 
-        // Initialize with baseline data
-        this.generateBaselineData();
+        // Waveform — ring buffer of normalised values (0=center, ±1=full height)
+        this.WAVEFORM_LEN = 120;
+        this.waveform = new Float32Array(this.WAVEFORM_LEN);
+
+        // Carrier/envelope state
+        this.ph1 = Math.random() * Math.PI * 2; // primary carrier phase
+        this.ph2 = Math.random() * Math.PI * 2; // secondary carrier phase
+        this.ph3 = Math.random() * Math.PI * 2; // slow modulation phase
+        this.envelope = 0.3; // current amplitude envelope (0–1)
+
+        // Spectrum bars — 20 bars each with smoothed value and peak hold
+        this.BAR_COUNT = 20;
+        this.barValues  = new Float32Array(this.BAR_COUNT).fill(0.15);
+        this.barTargets = new Float32Array(this.BAR_COUNT).fill(0.15);
+        this.barPeaks   = new Float32Array(this.BAR_COUNT).fill(0.15);
+        this.barHold    = new Int32Array(this.BAR_COUNT).fill(0);   // frames remaining at peak
+        this.barTimer   = new Int32Array(this.BAR_COUNT).fill(0);   // frames until next target roll
+
+        // Stats (smoothed for display)
+        this.peakStat = 0.3;
+        this.avgStat  = 0.3;
+
+        this.resize();
+        this._ro = new ResizeObserver(() => this.resize());
+        this._ro.observe(this.canvas);
     }
 
-    /**
-     * Generate baseline "idle" signal data
-     */
-    generateBaselineData() {
-        for (let i = 0; i < this.config.maxDataPoints; i++) {
-            this.dataPoints.push(this.config.baselineNoise + (Math.random() * 0.1));
-        }
-        for (let i = 0; i < this.config.barCount; i++) {
-            this.bars.push(this.config.baselineNoise + (Math.random() * 0.15));
-        }
+    resize() {
+        const dpr  = window.devicePixelRatio || 1;
+        const rect = this.canvas.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return;
+
+        this.W = rect.width;
+        this.H = rect.height;
+
+        this.canvas.width  = Math.round(rect.width  * dpr);
+        this.canvas.height = Math.round(rect.height * dpr);
+
+        // Reset transform so repeated resizes don't stack scales
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    /**
-     * Start the animation loop
-     */
+    // ----- Public API -----
+
     start() {
         if (this.isActive) return;
         this.isActive = true;
         this.animate();
     }
 
-    /**
-     * Stop the animation loop
-     */
     stop() {
         this.isActive = false;
         if (this.animationId) {
@@ -65,157 +79,227 @@ class SignalStrength {
         }
     }
 
-    /**
-     * Set signal mode (affects data generation)
-     */
+    /** Called by engine.js on state transitions */
     setMode(mode) {
-        if (mode === 'active') {
-            this.config.baselineNoise = 0.85;
-            this.config.peakRange = 0.15;
-        } else if (mode === 'dialing') {
-            this.config.baselineNoise = 0.80;
-            this.config.peakRange = 0.18;
-        } else {
-            this.config.baselineNoise = 0.75;
-            this.config.peakRange = 0.2;
+        this.mode = mode;
+    }
+
+    // ----- Mode parameters -----
+
+    get params() {
+        // base: target envelope centre (0–1)
+        // spread: amplitude of envelope variation
+        // envSpeed: how fast envelope wanders
+        // noise: random noise floor added to waveform
+        // ph1Rate, ph2Rate, ph3Rate: phase advance per frame (radians)
+        switch (this.mode) {
+            case 'active':
+                return { base: 0.78, spread: 0.15, envSpeed: 0.006, noise: 0.06,
+                         ph1Rate: 0.09, ph2Rate: 0.05, ph3Rate: 0.018 };
+            case 'dialing':
+                return { base: 0.50, spread: 0.28, envSpeed: 0.018, noise: 0.10,
+                         ph1Rate: 0.11, ph2Rate: 0.07, ph3Rate: 0.025 };
+            default: // idle
+                return { base: 0.22, spread: 0.20, envSpeed: 0.008, noise: 0.14,
+                         ph1Rate: 0.06, ph2Rate: 0.035, ph3Rate: 0.012 };
         }
     }
 
-    /**
-     * Animation loop
-     */
-    animate() {
-        if (!this.isActive) return;
+    // ----- Update -----
 
-        this.update();
-        this.draw();
+    updateWaveform() {
+        const p = this.params;
 
-        this.animationId = requestAnimationFrame(() => this.animate());
+        // Advance carrier phases
+        this.ph1 += p.ph1Rate;
+        this.ph2 += p.ph2Rate;
+        this.ph3 += p.ph3Rate;
+
+        // Envelope wanders toward mode base with random drift
+        const envTarget = p.base + Math.sin(this.ph3) * p.spread;
+        this.envelope += (envTarget - this.envelope) * p.envSpeed +
+                         (Math.random() - 0.5) * p.envSpeed * 0.5;
+        this.envelope = Math.max(0.05, Math.min(0.98, this.envelope));
+
+        // Composite signal: two sine carriers + noise, scaled by envelope
+        const signal = (
+            Math.sin(this.ph1) * 0.55 +
+            Math.sin(this.ph2) * 0.30 +
+            (Math.random() - 0.5) * p.noise
+        ) * this.envelope;
+
+        // Shift buffer left, append new value (clamped to ±1)
+        this.waveform.copyWithin(0, 1);
+        this.waveform[this.WAVEFORM_LEN - 1] = Math.max(-1, Math.min(1, signal));
     }
 
-    /**
-     * Update data
-     */
-    update() {
-        // Add new waveform data point
-        const newValue = this.config.baselineNoise + (Math.random() * this.config.peakRange);
-        this.dataPoints.push(newValue);
-        if (this.dataPoints.length > this.config.maxDataPoints) {
-            this.dataPoints.shift();
-        }
+    updateBars() {
+        const p = this.params;
+        const centerIdx = (this.BAR_COUNT - 1) / 2;
 
-        // Update bar graph (slower update rate)
-        if (Math.random() > 0.7) {
-            this.bars.shift();
-            this.bars.push(this.config.baselineNoise + (Math.random() * this.config.peakRange));
-        }
+        for (let i = 0; i < this.BAR_COUNT; i++) {
+            // Roll a new target periodically
+            this.barTimer[i]--;
+            if (this.barTimer[i] <= 0) {
+                // Spectral hump: bars closer to center are stronger
+                const dist    = Math.abs(i - centerIdx) / centerIdx; // 0 at center, 1 at edge
+                const hump    = 1 - dist * 0.65;
+                const tgt     = (p.base * hump + Math.random() * p.spread) * hump;
+                this.barTargets[i] = Math.max(0.04, Math.min(0.97, tgt));
+                this.barTimer[i]   = 6 + Math.floor(Math.random() * 18);
+            }
 
-        // Calculate statistics
-        this.updateStats();
-    }
+            // Smooth bar toward target
+            this.barValues[i] += (this.barTargets[i] - this.barValues[i]) * 0.18;
 
-    /**
-     * Update peak/avg statistics
-     */
-    updateStats() {
-        const peak = Math.max(...this.dataPoints);
-        const avg = this.dataPoints.reduce((a, b) => a + b, 0) / this.dataPoints.length;
-
-        const peakEl = document.getElementById('peakValue');
-        const avgEl = document.getElementById('avgValue');
-
-        if (peakEl) peakEl.textContent = `${(peak * 100).toFixed(1)}%`;
-        if (avgEl) avgEl.textContent = `${(avg * 100).toFixed(1)}%`;
-    }
-
-    /**
-     * Draw visualization
-     */
-    draw() {
-        const w = this.canvas.width;
-        const h = this.canvas.height;
-
-        // Clear canvas
-        this.ctx.fillStyle = this.config.backgroundColor;
-        this.ctx.fillRect(0, 0, w, h);
-
-        // Draw grid
-        this.drawGrid(w, h);
-
-        // Draw waveform
-        this.drawWaveform(w, h);
-
-        // Draw bars
-        this.drawBars(w, h);
-    }
-
-    /**
-     * Draw background grid
-     */
-    drawGrid(w, h) {
-        this.ctx.strokeStyle = this.config.gridColor;
-        this.ctx.lineWidth = 0.5;
-
-        // Horizontal lines
-        for (let y = 0; y <= h; y += h / 4) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(0, y);
-            this.ctx.lineTo(w * 0.7, y);
-            this.ctx.stroke();
-        }
-
-        // Vertical lines
-        for (let x = 0; x <= w * 0.7; x += w / 10) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(x, 0);
-            this.ctx.lineTo(x, h);
-            this.ctx.stroke();
-        }
-    }
-
-    /**
-     * Draw waveform line
-     */
-    drawWaveform(w, h) {
-        const waveformWidth = w * 0.65;
-        const step = waveformWidth / this.config.maxDataPoints;
-
-        this.ctx.strokeStyle = this.config.waveformColor;
-        this.ctx.lineWidth = 2;
-        this.ctx.beginPath();
-
-        for (let i = 0; i < this.dataPoints.length; i++) {
-            const x = i * step;
-            const y = h - (this.dataPoints[i] * h);
-
-            if (i === 0) {
-                this.ctx.moveTo(x, y);
+            // Peak hold
+            if (this.barValues[i] >= this.barPeaks[i]) {
+                this.barPeaks[i] = this.barValues[i];
+                this.barHold[i]  = 45;
             } else {
-                this.ctx.lineTo(x, y);
+                this.barHold[i]--;
+                if (this.barHold[i] <= 0) {
+                    this.barPeaks[i] = Math.max(this.barPeaks[i] - 0.01, this.barValues[i]);
+                }
             }
         }
-
-        this.ctx.stroke();
     }
 
-    /**
-     * Draw bar graph
-     */
-    drawBars(w, h) {
-        const barAreaStart = w * 0.73;
-        const barAreaWidth = w * 0.25;
-        const barWidth = barAreaWidth / this.config.barCount;
-        const padding = 1;
-
-        this.ctx.fillStyle = this.config.barColor;
-
-        for (let i = 0; i < this.bars.length; i++) {
-            const x = barAreaStart + (i * barWidth);
-            const barHeight = this.bars[i] * h;
-            const y = h - barHeight;
-
-            this.ctx.fillRect(x + padding, y, barWidth - (padding * 2), barHeight);
+    updateStats() {
+        // Signal values are −1 to +1; convert to 0–1 magnitude for display
+        let peak = 0, sum = 0;
+        for (let i = 0; i < this.WAVEFORM_LEN; i++) {
+            const mag = Math.abs(this.waveform[i]);
+            if (mag > peak) peak = mag;
+            sum += mag;
         }
+        const avg = sum / this.WAVEFORM_LEN;
+
+        this.peakStat += (peak - this.peakStat) * 0.04;
+        this.avgStat  += (avg  - this.avgStat)  * 0.04;
+
+        const peakEl = document.getElementById('peakValue');
+        const avgEl  = document.getElementById('avgValue');
+        if (peakEl) peakEl.textContent = `${(this.peakStat * 100).toFixed(1)}%`;
+        if (avgEl)  avgEl.textContent  = `${(this.avgStat  * 100).toFixed(1)}%`;
+    }
+
+    // ----- Draw -----
+
+    draw() {
+        const { ctx, W, H } = this;
+        if (!W || !H) return;
+
+        // Layout split
+        const WAVE_W   = Math.floor(W * 0.63);   // waveform panel width
+        const GAP      = Math.floor(W * 0.04);   // divider gap
+        const BAR_X    = WAVE_W + GAP;            // bars start x
+        const BAR_W    = W - BAR_X;              // bars panel width
+
+        // Background
+        ctx.fillStyle = '#001400';
+        ctx.fillRect(0, 0, W, H);
+
+        this._drawGrid(W, H, WAVE_W);
+        this._drawWaveform(WAVE_W, H);
+        this._drawDivider(WAVE_W, GAP, H);
+        this._drawBars(BAR_X, BAR_W, H);
+    }
+
+    _drawGrid(W, H, waveW) {
+        const ctx = this.ctx;
+        ctx.strokeStyle = '#002800';
+        ctx.lineWidth   = 0.5;
+
+        const cols = 8, rows = 4;
+        for (let c = 0; c <= cols; c++) {
+            const x = (c / cols) * waveW;
+            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+        }
+        for (let r = 0; r <= rows; r++) {
+            const y = (r / rows) * H;
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(waveW, y); ctx.stroke();
+        }
+
+        // Centre line (reference 0-crossing)
+        ctx.strokeStyle = '#004400';
+        ctx.lineWidth = 0.75;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(waveW, H / 2); ctx.stroke();
+        ctx.setLineDash([]);
+    }
+
+    _drawWaveform(waveW, H) {
+        const ctx  = this.ctx;
+        const mid  = H / 2;
+        const amp  = H / 2 - 2;   // max pixel amplitude
+        const step = waveW / (this.WAVEFORM_LEN - 1);
+
+        // Under-fill (very faint)
+        ctx.fillStyle = 'rgba(0, 255, 65, 0.05)';
+        ctx.beginPath();
+        for (let i = 0; i < this.WAVEFORM_LEN; i++) {
+            const x = i * step;
+            const y = mid - this.waveform[i] * amp;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.lineTo(waveW, H); ctx.lineTo(0, H); ctx.closePath();
+        ctx.fill();
+
+        // Waveform line
+        ctx.strokeStyle = '#00ff41';
+        ctx.lineWidth   = 1.5;
+        ctx.lineJoin    = 'round';
+        ctx.beginPath();
+        for (let i = 0; i < this.WAVEFORM_LEN; i++) {
+            const x = i * step;
+            const y = mid - this.waveform[i] * amp;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+
+    _drawDivider(waveW, gap, H) {
+        const ctx = this.ctx;
+        const x = waveW + gap / 2;
+        ctx.strokeStyle = '#003300';
+        ctx.lineWidth   = 1;
+        ctx.beginPath(); ctx.moveTo(x, 4); ctx.lineTo(x, H - 4); ctx.stroke();
+    }
+
+    _drawBars(barX, barW, H) {
+        const ctx  = this.ctx;
+        const bw   = barW / this.BAR_COUNT;
+        const pad  = 1;
+
+        for (let i = 0; i < this.BAR_COUNT; i++) {
+            const x      = barX + i * bw;
+            const barH   = this.barValues[i] * H;
+            const y      = H - barH;
+
+            // Bar body
+            ctx.fillStyle = '#00ff41';
+            ctx.fillRect(x + pad, y, bw - pad * 2, barH);
+
+            // Peak-hold marker (bright white notch)
+            if (this.barHold[i] > 0 && this.barPeaks[i] > this.barValues[i] + 0.01) {
+                const py = H - this.barPeaks[i] * H;
+                ctx.fillStyle = '#ccffcc';
+                ctx.fillRect(x + pad, py - 1, bw - pad * 2, 2);
+            }
+        }
+    }
+
+    // ----- Loop -----
+
+    animate() {
+        if (!this.isActive) return;
+        this.frame++;
+        this.updateWaveform();
+        this.updateBars();
+        this.updateStats();
+        this.draw();
+        this.animationId = requestAnimationFrame(() => this.animate());
     }
 }
 
