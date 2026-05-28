@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src https://fonts.gstatic.com;
+                   script-src 'self' 'unsafe-inline';
+                   img-src 'self' data:;">
+    <title>GATE DIALING COMPUTER - FUSION</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=VT323&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/fusion.css">
+</head>
+
+<body>
+    <div class="crt-overlay"></div>
+    <div class="vignette"></div>
+
+    <div class="sdc-fusion-container">
+        <!-- HEADER BAR -->
+        <header class="fusion-header">
+            <span class="fusion-title">◆ GATE DIALING COMPUTER ◆</span>
+            <span class="fusion-status">
+                <span class="status-dot"></span>
+                <span id="headerStatus">IDLE</span>
+            </span>
+        </header>
+
+        <!-- LEFT PANEL REMOVED - Integrated into right sidebar -->
+
+        <!-- GATE VIEWPORT (CENTER) -->
+        <section class="gate-panel">
+            <svg viewBox="0 0 500 500" class="stargate-svg" id="stargateSvg">
+                <defs>
+                    <radialGradient id="horizonGradient" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#00ff33" />
+                        <stop offset="70%" stop-color="#00aa2a" />
+                        <stop offset="100%" stop-color="#003300" />
+                    </radialGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                        <feMerge>
+                            <feMergeNode in="coloredBlur" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Outer Ring Assembly (Segmented) -->
+                <g class="outer-ring-assembly">
+                    <!-- Background base -->
+                    <circle class="outer-ring-base" cx="250" cy="250" r="230" fill="none" stroke="#0a1a0a"
+                        stroke-width="50" />
+
+                    <!-- Segmented Ring (Precise 9-segment Alignment) 
+                         Circumference ~1445px. 9 Segments (40° pitch).
+                         Segment: 30° (~120.4px). Gap: 10° (~40.1px).
+                         Rotate -85° to start segment just after Top Chevron (-90°).
+                    -->
+                    <circle class="ring-segments-smooth" cx="250" cy="250" r="230" fill="none" stroke="#1f3f1f"
+                        stroke-width="44" stroke-dasharray="120.4 40.1" stroke-dashoffset="0"
+                        transform="rotate(-85 250 250)" />
+
+                    <!-- Inner border ring -->
+                    <circle class="outer-ring-inner" cx="250" cy="250" r="203" fill="none" stroke="var(--green)"
+                        stroke-width="2" />
+                    <circle class="outer-ring-boundary" cx="250" cy="250" r="254" fill="none" stroke="#0da020"
+                        stroke-width="1" opacity="0.5" />
+                </g>
+
+                <!-- Chevrons (Smaller, won't cut off) -->
+                <g class="chevrons" id="chevrons">
+                    <g class="chevron" data-num="9" transform="rotate(0, 250, 250)">
+                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="1" transform="rotate(40, 250, 250)">
+                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="2" transform="rotate(80, 250, 250)">
+                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="3" transform="rotate(120, 250, 250)">
+                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="4" transform="rotate(160, 250, 250)">
+                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="5" transform="rotate(200, 250, 250)">
+                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="6" transform="rotate(240, 250, 250)">
+                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="7" transform="rotate(280, 250, 250)">
+                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="8" transform="rotate(320, 250, 250)">
+                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                </g>
+
+                <!-- Inner Ring with Glyphs -->
+                <g class="inner-ring" id="innerRing">
+                    <circle class="inner-ring-track" cx="250" cy="250" r="175" />
+                </g>
+
+                <!-- Event Horizon -->
+                <circle class="event-horizon" id="eventHorizon" cx="250" cy="250" r="150" />
+            </svg>
+            <div class="kawoosh-effect" id="kawooshEffect"></div>
+        </section>
+
+        <!-- RIGHT PANEL - UTILITY SIDEBAR -->
+        <aside class="utility-panel">
+            <div class="panel-title">◆ UTILITY AREA ◆</div>
+
+            <!-- Chevron Status Section -->
+            <div class="utility-section chevron-section">
+                <div class="section-header">CHEVRON STATUS</div>
+                <div class="chevron-grid" id="chevronIndicators">
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
+                </div>
+            </div>
+
+            <!-- Status Section -->
+            <div class="utility-section status-section">
+                <div class="section-header">STATUS</div>
+                <div class="status-display" id="statusInfo">AWAITING</div>
+            </div>
+
+            <!-- Mode Select Section -->
+            <div class="utility-section mode-section">
+                <div class="section-header">MODE SELECT</div>
+                <div class="mode-grid">
+                    <button class="mode-btn" data-mode="8">
+                        <div class="mode-number">8</div>
+                        <div class="mode-label">INTER</div>
+                    </button>
+                    <button class="mode-btn active" data-mode="7">
+                        <div class="mode-number">7</div>
+                        <div class="mode-label">INTRA</div>
+                    </button>
+                    <button class="mode-btn" data-mode="9">
+                        <div class="mode-number">9</div>
+                        <div class="mode-label">DESTINY</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Address Buffer Section -->
+            <div class="utility-section buffer-section">
+                <div class="section-header">ADDRESS BUFFER (8 SLOTS)</div>
+                <div class="buffer-slots" id="bufferSlots">
+                    <div class="buffer-slot">—</div>
+                    <div class="buffer-slot">—</div>
+                    <div class="buffer-slot">—</div>
+                    <div class="buffer-slot">—</div>
+                    <div class="buffer-slot">—</div>
+                    <div class="buffer-slot">—</div>
+                    <div class="buffer-slot">—</div>
+                    <div class="buffer-slot poo">⊕</div>
+                </div>
+            </div>
+
+            <!-- Signal Strength Section -->
+            <div class="utility-section signal-section">
+                <div class="section-header">SIGNAL STRENGTH</div>
+                <canvas id="signalCanvas" class="signal-canvas" width="400" height="80"></canvas>
+                <div class="signal-stats">
+                    <span>PEAK: <strong id="peakValue">98.4%</strong></span>
+                    <span>AVG: <strong id="avgValue">85.2%</strong></span>
+                </div>
+            </div>
+
+            <!-- Input Area Section (Glyph Grid) -->
+            <div class="utility-section input-section">
+                <div class="section-header">INPUT AREA</div>
+                <div class="glyph-grid" id="glyphGrid"></div>
+            </div>
+
+            <!-- Engage Button -->
+            <button class="engage-button" id="engageBtn" disabled>ENGAGE</button>
+        </aside>
+    </div>
+
+    <script src="logic/addresses.js"></script>
+    <script src="logic/audio.js"></script>
+    <script src="logic/ring.js"></script>
+    <script src="logic/signal.js"></script>
+    <script src="logic/engine.js"></script>
+</body>
+
+</html>
