@@ -46,6 +46,7 @@ class SDCEngine {
         // Fast mode (testing)
         this.fastMode = false;
         this.fastMultiplier = 15;
+        this.instantMode = false;
 
         // Criss-cross chevron sequences
         this.sequences = {
@@ -68,6 +69,7 @@ class SDCEngine {
         this.signalStrength = window.signalStrength || null;
         this.bindEvents();
         this.generateGlyphGrid();
+        this.generateQuickDial();
         this.updateBufferLabel();
         this.log('System initialized. Ready for dialing sequence.');
     }
@@ -86,6 +88,9 @@ class SDCEngine {
             bufferSlots: document.getElementById('bufferSlots'),
             glyphGrid: document.getElementById('glyphGrid'),
             btnEngage: document.getElementById('engageBtn'),
+            quickDialList: document.getElementById('quickDialList'),
+            quickDialPosBtn: document.getElementById('quickDialPosBtn'),
+            container: document.querySelector('.sdc-fusion-container'),
         };
     }
 
@@ -97,6 +102,33 @@ class SDCEngine {
         if (typeof audioManager !== 'undefined') {
             await audioManager.init();
         }
+    }
+
+    generateQuickDial() {
+        const list = this.dom.quickDialList;
+        list.innerHTML = '';
+        const entries = Object.entries(ADDRESSES).slice(0, 10);
+        for (const [key, addr] of entries) {
+            const btn = document.createElement('button');
+            btn.className = 'qd-entry';
+            btn.dataset.addrKey = key;
+            btn.innerHTML = `<span class="qd-name">${addr.name}</span><span class="qd-desig">${addr.designation}</span>`;
+            btn.addEventListener('click', () => this.autoDial(key));
+            list.appendChild(btn);
+        }
+
+        // Position toggle
+        this.dom.quickDialPosBtn.addEventListener('click', () => {
+            const right = this.dom.container.classList.toggle('quick-dial-right');
+            this.dom.quickDialPosBtn.textContent = right ? '◀' : '▶';
+        });
+    }
+
+    disableQuickDial(disabled) {
+        if (!this.dom.quickDialList) return;
+        this.dom.quickDialList.querySelectorAll('.qd-entry').forEach(btn => {
+            btn.disabled = disabled;
+        });
     }
 
     bindEvents() {
@@ -119,9 +151,15 @@ class SDCEngine {
             else this.engage();
         });
 
-        // Fast mode checkbox
-        document.getElementById('fastModeCheck').addEventListener('change', (e) => {
-            this.setFastMode(e.target.checked);
+        // Dial speed segmented control
+        document.querySelectorAll('.dial-speed-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.dial-speed-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const speed = btn.dataset.speed;
+                this.setFastMode(speed === 'fast');
+                this.instantMode = speed === 'instant';
+            });
         });
 
         // Keyboard shortcuts
@@ -245,6 +283,16 @@ class SDCEngine {
             return;
         }
 
+        // Auto-select mode matching address length
+        const requiredMode = address.address.length + 1;
+        if (this.sequences[requiredMode]) {
+            this.mode = requiredMode;
+            document.querySelectorAll('.mode-btn').forEach(b => {
+                b.classList.toggle('active', parseInt(b.dataset.mode) === this.mode);
+            });
+            this.updateBufferLabel();
+        }
+
         this.log(`Auto-dialing: ${address.name}`);
         this.destination = address;
 
@@ -256,11 +304,11 @@ class SDCEngine {
         // Enter glyphs with delay
         for (const glyphId of address.address) {
             this.handleGlyphClick(glyphId);
-            await this.sleep(this.t(200));
+            if (!this.instantMode) await this.sleep(this.t(200));
         }
 
         // Auto-engage after brief delay
-        await this.sleep(this.t(500));
+        if (!this.instantMode) await this.sleep(this.t(500));
         this.engage();
     }
 
@@ -272,9 +320,12 @@ class SDCEngine {
             return;
         }
 
+        if (this.instantMode) return this.engageInstant();
+
         this.state = 'locking';
         this.setEngageBtn('abort');
         this.disableGlyphGrid(true);
+        this.disableQuickDial(true);
 
         this.log('Initiating dialing sequence...');
 
@@ -318,6 +369,53 @@ class SDCEngine {
         }
 
         // Establish wormhole
+        if (this.state !== 'aborting') {
+            await this.establishWormhole();
+        }
+    }
+
+    /**
+     * Instant dial — lock all chevrons without ring rotation (DHD style)
+     */
+    async engageInstant() {
+        this.state = 'locking';
+        this.setEngageBtn('abort');
+        this.disableGlyphGrid(true);
+        this.disableQuickDial(true);
+
+        this.log('Initiating instant dial sequence...');
+
+        if (!this.destination) {
+            this.destination = this.findDestination(this.buffer);
+        }
+
+        const sequence = this.sequences[this.mode];
+
+        for (let i = 0; i < sequence.length; i++) {
+            if (this.state === 'aborting') break;
+
+            const chevronNum = sequence[i];
+            const isLast = i === sequence.length - 1;
+            const glyphId = isLast ? 0 : this.buffer[i];
+
+            this.ringController.highlightGlyph(glyphId);
+            this.setChevronState(i, 'encoding');
+
+            await this.sleep(80);
+
+            if (this.state === 'aborting') break;
+
+            this.lockChevron(chevronNum, i);
+            this.setChevronState(i, 'locked');
+
+            if (typeof audioManager !== 'undefined') {
+                audioManager.play('chevronLock');
+            }
+
+            this.log(`Chevron ${i + 1} locked.`);
+            await this.sleep(120);
+        }
+
         if (this.state !== 'aborting') {
             await this.establishWormhole();
         }
@@ -501,6 +599,9 @@ class SDCEngine {
         this.dom.glyphGrid.querySelectorAll('.dhd-key').forEach(k => {
             k.classList.remove('selected');
         });
+
+        // Re-enable quick dial
+        this.disableQuickDial(false);
 
         this.log('Gate reset. Standing by.');
     }

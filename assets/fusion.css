@@ -49,14 +49,130 @@ body::before {
 .sdc-fusion-container {
     display: grid;
     grid-template-rows: min(6vh, 46px) 1fr;
-    grid-template-columns: 1fr clamp(300px, 30vw, 420px);
+    grid-template-columns: clamp(130px, 13vw, 175px) 1fr clamp(300px, 30vw, 420px);
     grid-template-areas:
-        "header header"
-        "gate-view right-panel";
+        "header header header"
+        "quick-dial gate-view right-panel";
     width: 100%;
     height: 100%;
     padding: min(2vh, 14px);
     gap: 0;
+}
+
+.sdc-fusion-container.quick-dial-right {
+    grid-template-columns: 1fr clamp(300px, 30vw, 420px) clamp(130px, 13vw, 175px);
+    grid-template-areas:
+        "header header header"
+        "gate-view right-panel quick-dial";
+}
+
+/* ===================================
+   QUICK DIAL PANEL
+   =================================== */
+.quick-dial-panel {
+    grid-area: quick-dial;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+    background: var(--bg-panel);
+    padding: min(1.5vh, 10px) min(1vh, 7px);
+    gap: min(0.8vh, 6px);
+    overflow: hidden;
+    min-height: 0;
+}
+
+.sdc-fusion-container.quick-dial-right .quick-dial-panel {
+    border-right: none;
+    border-left: 1px solid var(--border);
+}
+
+.quick-dial-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: min(1vh, 8px);
+    border-bottom: 1px solid var(--border);
+    flex: 0 0 auto;
+}
+
+.quick-dial-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(9px, 1.1vh, 12px);
+    letter-spacing: 1.5px;
+    color: var(--green);
+}
+
+.quick-dial-pos-btn {
+    background: transparent;
+    border: 1px solid var(--green-dim);
+    border-radius: 3px;
+    color: var(--text-dim);
+    font-family: 'VT323', monospace;
+    font-size: clamp(11px, 1.4vh, 15px);
+    line-height: 1;
+    padding: 2px 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+
+.quick-dial-pos-btn:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.quick-dial-list {
+    display: flex;
+    flex-direction: column;
+    gap: min(0.6vh, 4px);
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--green-dim) transparent;
+}
+
+.qd-entry {
+    display: flex;
+    flex-direction: column;
+    padding: min(0.8vh, 5px) min(0.8vh, 6px);
+    background: #001100;
+    border: 1px solid var(--green-dim);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    width: 100%;
+    gap: 2px;
+    flex: 0 0 auto;
+}
+
+.qd-entry:hover:not(:disabled) {
+    background: #001f00;
+    border-color: var(--green);
+}
+
+.qd-entry:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.qd-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(7px, 0.95vh, 10px);
+    letter-spacing: 0.5px;
+    color: var(--green);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.qd-desig {
+    font-family: 'VT323', monospace;
+    font-size: clamp(9px, 1.1vh, 12px);
+    color: var(--text-dim);
+    line-height: 1;
 }
 
 /* ===================================
@@ -582,50 +698,49 @@ body::before {
 }
 
 /* Fast Mode Toggle */
-.fast-mode-label {
+.dial-speed-control {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 6px;
+    justify-content: space-between;
     padding: 4px 2px 0;
-    cursor: pointer;
-    user-select: none;
+    gap: 6px;
 }
 
-.fast-mode-check {
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    border: 1px solid var(--green-dim);
-    border-radius: 2px;
-    background: transparent;
-    cursor: pointer;
-    flex-shrink: 0;
-    position: relative;
-    transition: all 0.15s;
-}
-
-.fast-mode-check:checked {
-    background: var(--green);
-    border-color: var(--green);
-}
-
-.fast-mode-check:checked::after {
-    content: '';
-    position: absolute;
-    inset: 2px;
-    background: #000;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-}
-
-.fast-mode-text {
+.dial-speed-label {
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(7px, 0.85vh, 9px);
     letter-spacing: 1px;
     color: var(--text-dim);
-    transition: color 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.fast-mode-label:has(.fast-mode-check:checked) .fast-mode-text {
+.dial-speed-btns {
+    display: flex;
+    gap: 3px;
+}
+
+.dial-speed-btn {
+    padding: 2px 6px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-dim);
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(6px, 0.8vh, 8px);
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.dial-speed-btn:hover {
+    border-color: var(--green);
     color: var(--green);
+}
+
+.dial-speed-btn.active {
+    background: var(--green);
+    color: #000;
+    border-color: var(--green);
 }

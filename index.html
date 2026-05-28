@@ -28,7 +28,14 @@
             </span>
         </header>
 
-        <!-- LEFT PANEL REMOVED - Integrated into right sidebar -->
+        <!-- QUICK DIAL PANEL (LEFT) -->
+        <aside class="quick-dial-panel" id="quickDialPanel">
+            <div class="quick-dial-header">
+                <span class="quick-dial-title">◆ QUICK DIAL</span>
+                <button class="quick-dial-pos-btn" id="quickDialPosBtn" title="Move panel">▶</button>
+            </div>
+            <div class="quick-dial-list" id="quickDialList"></div>
+        </aside>
 
         <!-- GATE VIEWPORT (CENTER) -->
         <section class="gate-panel">
@@ -195,11 +202,15 @@
             <!-- Engage Button -->
             <button class="engage-button" id="engageBtn" disabled>ENGAGE</button>
 
-            <!-- Fast Mode Toggle -->
-            <label class="fast-mode-label">
-                <input type="checkbox" id="fastModeCheck" class="fast-mode-check">
-                <span class="fast-mode-text">⚡ FAST DIAL</span>
-            </label>
+            <!-- Dial Speed Control -->
+            <div class="dial-speed-control">
+                <span class="dial-speed-label">DIAL SPEED</span>
+                <div class="dial-speed-btns">
+                    <button class="dial-speed-btn active" data-speed="normal">NORMAL</button>
+                    <button class="dial-speed-btn" data-speed="fast">FAST</button>
+                    <button class="dial-speed-btn" data-speed="instant">INSTANT</button>
+                </div>
+            </div>
         </aside>
     </div>
 
