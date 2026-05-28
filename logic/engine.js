@@ -49,10 +49,15 @@ class SDCEngine {
         this.instantMode = false;
 
         // Criss-cross chevron sequences
+        // Modes 7-9: legacy pairs (original 9-chevron gate)
+        // Modes 10-12: true-opposite pairs (all 180° apart on 12-chevron gate)
         this.sequences = {
-            7: [1, 8, 2, 7, 3, 6, 9],
-            8: [1, 8, 2, 7, 3, 6, 4, 9],
-            9: [1, 8, 2, 7, 3, 6, 4, 5, 9]
+            7:  [1, 8, 2, 7, 3, 6, 9],
+            8:  [1, 8, 2, 7, 3, 6, 4, 9],
+            9:  [1, 8, 2, 7, 3, 6, 4, 5, 9],
+            10: [1, 7, 2, 8, 3, 10, 4, 11, 5, 9],
+            11: [1, 7, 2, 8, 3, 10, 4, 11, 5, 12, 9],
+            12: [1, 7, 2, 8, 3, 10, 4, 11, 5, 12, 6, 9]
         };
 
         // DOM references
@@ -107,7 +112,7 @@ class SDCEngine {
     generateQuickDial() {
         const list = this.dom.quickDialList;
         list.innerHTML = '';
-        const entries = Object.entries(ADDRESSES).slice(0, 10);
+        const entries = Object.entries(ADDRESSES);
         for (const [key, addr] of entries) {
             const btn = document.createElement('button');
             btn.className = 'qd-entry';

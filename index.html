@@ -54,14 +54,14 @@
                     <circle class="outer-ring-base" cx="250" cy="250" r="230" fill="none" stroke="#0a1a0a"
                         stroke-width="50" />
 
-                    <!-- Segmented Ring (Precise 9-segment Alignment) 
-                         Circumference ~1445px. 9 Segments (40° pitch).
-                         Segment: 30° (~120.4px). Gap: 10° (~40.1px).
-                         Rotate -85° to start segment just after Top Chevron (-90°).
+                    <!-- Segmented Ring (12-segment Alignment)
+                         Circumference ~1445px. 12 Segments (30° pitch).
+                         Segment: 22° (~88.3px). Gap: 8° (~32.1px). Ratio: 2.75:1
+                         Rotate -86° to center each 8° gap on its chevron.
                     -->
                     <circle class="ring-segments-smooth" cx="250" cy="250" r="230" fill="none" stroke="#1f3f1f"
-                        stroke-width="44" stroke-dasharray="120.4 40.1" stroke-dashoffset="0"
-                        transform="rotate(-85 250 250)" />
+                        stroke-width="44" stroke-dasharray="88.3 32.1" stroke-dashoffset="0"
+                        transform="rotate(-86 250 250)" />
 
                     <!-- Inner border ring -->
                     <circle class="outer-ring-inner" cx="250" cy="250" r="203" fill="none" stroke="var(--green)"
@@ -70,42 +70,54 @@
                         stroke-width="1" opacity="0.5" />
                 </g>
 
-                <!-- Chevrons (Smaller, won't cut off) -->
+                <!-- Chevrons — 12 total at 30° pitch (clock-face positions) -->
                 <g class="chevrons" id="chevrons">
-                    <g class="chevron" data-num="9" transform="rotate(0, 250, 250)">
-                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                    <g class="chevron" data-num="9"  transform="rotate(0,   250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
                         <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
                     </g>
-                    <g class="chevron" data-num="1" transform="rotate(40, 250, 250)">
-                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                    <g class="chevron" data-num="1"  transform="rotate(30,  250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
                         <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
                     </g>
-                    <g class="chevron" data-num="2" transform="rotate(80, 250, 250)">
-                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                    <g class="chevron" data-num="2"  transform="rotate(60,  250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
                         <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
                     </g>
-                    <g class="chevron" data-num="3" transform="rotate(120, 250, 250)">
-                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                    <g class="chevron" data-num="3"  transform="rotate(90,  250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
                         <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
                     </g>
-                    <g class="chevron" data-num="4" transform="rotate(160, 250, 250)">
-                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                    <g class="chevron" data-num="4"  transform="rotate(120, 250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
                         <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
                     </g>
-                    <g class="chevron" data-num="5" transform="rotate(200, 250, 250)">
-                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                    <g class="chevron" data-num="5"  transform="rotate(150, 250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
                         <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
                     </g>
-                    <g class="chevron" data-num="6" transform="rotate(240, 250, 250)">
-                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                    <g class="chevron" data-num="6"  transform="rotate(180, 250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
                         <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
                     </g>
-                    <g class="chevron" data-num="7" transform="rotate(280, 250, 250)">
-                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                    <g class="chevron" data-num="7"  transform="rotate(210, 250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
                         <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
                     </g>
-                    <g class="chevron" data-num="8" transform="rotate(320, 250, 250)">
-                        <rect class="chevron-body" x="239" y="28" width="22" height="40" rx="2" />
+                    <g class="chevron" data-num="8"  transform="rotate(240, 250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="10" transform="rotate(270, 250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="11" transform="rotate(300, 250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
+                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                    </g>
+                    <g class="chevron" data-num="12" transform="rotate(330, 250, 250)">
+                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
                         <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
                     </g>
                 </g>
@@ -141,6 +153,18 @@
                         <div class="mode-number">9</div>
                         <div class="mode-label">DESTINY</div>
                     </button>
+                    <button class="mode-btn" data-mode="10">
+                        <div class="mode-number">10</div>
+                        <div class="mode-label">TBD</div>
+                    </button>
+                    <button class="mode-btn" data-mode="11">
+                        <div class="mode-number">11</div>
+                        <div class="mode-label">TBD</div>
+                    </button>
+                    <button class="mode-btn" data-mode="12">
+                        <div class="mode-number">12</div>
+                        <div class="mode-label">TBD</div>
+                    </button>
                 </div>
             </div>
 
@@ -148,6 +172,9 @@
             <div class="utility-section buffer-section">
                 <div class="section-header" id="bufferLabel">ADDRESS BUFFER — 7 CHEVRONS</div>
                 <div class="buffer-slots" id="bufferSlots">
+                    <div class="buffer-slot">—</div>
+                    <div class="buffer-slot">—</div>
+                    <div class="buffer-slot">—</div>
                     <div class="buffer-slot">—</div>
                     <div class="buffer-slot">—</div>
                     <div class="buffer-slot">—</div>
@@ -170,6 +197,9 @@
             <div class="utility-section chevron-section">
                 <div class="section-header">CHEVRON STATUS</div>
                 <div class="chevron-grid" id="chevronIndicators">
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
+                    <div class="chev-indicator"></div>
                     <div class="chev-indicator"></div>
                     <div class="chev-indicator"></div>
                     <div class="chev-indicator"></div>

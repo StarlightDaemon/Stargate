@@ -499,7 +499,7 @@ body::before {
 /* Chevron Status Section */
 .chevron-section .chevron-grid {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: repeat(12, 1fr);
     gap: min(0.5vh, 4px);
 }
 
@@ -538,7 +538,7 @@ body::before {
 /* Buffer Section */
 .buffer-section .buffer-slots {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: repeat(12, 1fr);
     gap: min(0.5vh, 4px);
 }
 
