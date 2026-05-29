@@ -3,15 +3,163 @@
  * Hybrid layout blending Mark II Reference with current implementation
  */
 
+/* ─────────────────────────────────────────────────────────
+   THEME SYSTEM
+   All visual color is driven by CSS custom properties.
+   data-theme on .sdc-fusion-container selects the palette.
+   Three themes:
+     terminal  — green SDC computer aesthetic
+   ───────────────────────────────────────────────────────── */
+
+/* ── Terminal (default) ── */
+[data-theme="terminal"] {
+    /* UI chrome */
+    --green:       #00cc28;
+    --green-bright:#00cc00;
+    --green-dim:   #007a1e;
+    --bg:          #000800;
+    --bg-panel:    #001100;
+    --border:      #008822;
+    --text:        #00cc28;
+    --text-dim:    #006618;
+    /* Gate ring */
+    --ring-body:       #080e08;
+    --ring-segment:    #1c2e1c;
+    --ring-accent:     #1e2e1e;
+    --ring-mid:        #0d160d;
+    --ring-boundary:   #007a1e;
+    /* Chevron */
+    --chevron-fill:    #151f15;
+    --chevron-stroke:  #2a3f2a;
+    --chevron-crystal: #060e06;
+    /* Event horizon */
+    --horizon-c1:      #00ff33;
+    --horizon-c2:      #00aa2a;
+    --horizon-c3:      #003300;
+    --idle-gate-color: #081408;
+    /* Kawoosh */
+    --kawoosh-c1: rgba(0, 204, 40, 0.7);
+    --kawoosh-c2: rgba(0, 136, 34, 0.3);
+    /* Signal canvas */
+    --signal-bg:         #010d01;
+    --signal-grid:       #002800;
+    --signal-grid-cx:    #004400;
+    --signal-line:       #00ff41;
+    --signal-fill-rgb:   0, 255, 65;
+    --signal-peak:       #ccffcc;
+    --signal-divider:    #003300;
+}
+
+/* ── Amber — gunmetal ring, amber crystals ── */
+[data-theme="amber"] {
+    /* UI chrome */
+    --green:       #cc7700;
+    --green-bright:#e89000;
+    --green-dim:   #7a4800;
+    --bg:          #080500;
+    --bg-panel:    #0f0800;
+    --border:      #7a4a00;
+    --text:        #cc7700;
+    --text-dim:    #5a3a00;
+    /* Gate ring — metallic grey */
+    --ring-body:       #0c0c0c;
+    --ring-segment:    #242424;
+    --ring-accent:     #2e2e2e;
+    --ring-mid:        #181818;
+    --ring-boundary:   #7a4800;
+    /* Chevron */
+    --chevron-fill:    #252525;
+    --chevron-stroke:  #3a3a3a;
+    --chevron-crystal: #1a0c00;
+    /* Event horizon */
+    --horizon-c1:      #ffaa00;
+    --horizon-c2:      #cc6600;
+    --horizon-c3:      #2a0e00;
+    --idle-gate-color: #140800;
+    /* Kawoosh */
+    --kawoosh-c1: rgba(232, 144, 10, 0.7);
+    --kawoosh-c2: rgba(122, 72, 0, 0.3);
+    /* Signal canvas */
+    --signal-bg:         #0a0500;
+    --signal-grid:       #281a00;
+    --signal-grid-cx:    #443000;
+    --signal-line:       #ff9900;
+    --signal-fill-rgb:   255, 153, 0;
+    --signal-peak:       #ffeecc;
+    --signal-divider:    #332200;
+}
+
+/* ── Cyan — gunmetal ring, cyan crystals ── */
+[data-theme="cyan"] {
+    /* UI chrome */
+    --green:       #00aad4;
+    --green-bright:#00ccff;
+    --green-dim:   #006680;
+    --bg:          #000408;
+    --bg-panel:    #000810;
+    --border:      #006a88;
+    --text:        #00aad4;
+    --text-dim:    #00556a;
+    /* Gate ring — metallic grey with blue cast */
+    --ring-body:       #0a0c0e;
+    --ring-segment:    #1c2428;
+    --ring-accent:     #252e34;
+    --ring-mid:        #141a1e;
+    --ring-boundary:   #006680;
+    /* Chevron */
+    --chevron-fill:    #0f1a22;
+    --chevron-stroke:  #1e3040;
+    --chevron-crystal: #001428;
+    /* Event horizon */
+    --horizon-c1:      #00d4ff;
+    --horizon-c2:      #0088cc;
+    --horizon-c3:      #001a33;
+    --idle-gate-color: #000c14;
+    /* Kawoosh */
+    --kawoosh-c1: rgba(0, 180, 216, 0.7);
+    --kawoosh-c2: rgba(0, 96, 128, 0.3);
+    /* Signal canvas */
+    --signal-bg:         #00040a;
+    --signal-grid:       #001828;
+    --signal-grid-cx:    #003048;
+    --signal-line:       #00ccff;
+    --signal-fill-rgb:   0, 204, 255;
+    --signal-peak:       #ccf4ff;
+    --signal-divider:    #002233;
+}
+
+/* Fallback: :root supplies terminal values so the page
+   never renders unstyled if data-theme is missing */
 :root {
-    --green: #00cc28;
-    --green-bright: #00cc00;
-    --green-dim: #007a1e;
-    --bg: #000800;
-    --bg-panel: #001100;
-    --border: #008822;
-    --text: #00cc28;
-    --text-dim: #006618;
+    --green:       #00cc28;
+    --green-bright:#00cc00;
+    --green-dim:   #007a1e;
+    --bg:          #000800;
+    --bg-panel:    #001100;
+    --border:      #008822;
+    --text:        #00cc28;
+    --text-dim:    #006618;
+    --ring-body:       #080e08;
+    --ring-segment:    #1c2e1c;
+    --ring-accent:     #1e2e1e;
+    --ring-mid:        #0d160d;
+    --ring-boundary:   #007a1e;
+    --chevron-fill:    #151f15;
+    --chevron-stroke:  #2a3f2a;
+    --chevron-crystal: #060e06;
+    --horizon-c1:      #00ff33;
+    --horizon-c2:      #00aa2a;
+    --horizon-c3:      #003300;
+    --idle-gate-color: #081408;
+    --kawoosh-c1: rgba(0, 204, 40, 0.7);
+    --kawoosh-c2: rgba(0, 136, 34, 0.3);
+    --signal-bg:         #010d01;
+    --signal-grid:       #002800;
+    --signal-grid-cx:    #004400;
+    --signal-line:       #00ff41;
+    --signal-fill-rgb:   0, 255, 65;
+    --signal-peak:       #ccffcc;
+    --signal-divider:    #003300;
 }
 
 * {
@@ -57,6 +205,10 @@ body::before {
     height: 100%;
     padding: min(2vh, 14px);
     gap: 0;
+    /* Theme palette propagates from here — all children inherit CSS vars */
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.4s, color 0.4s;
 }
 
 .sdc-fusion-container.quick-dial-right {
@@ -136,7 +288,7 @@ body::before {
     display: flex;
     flex-direction: column;
     padding: min(0.8vh, 5px) min(0.8vh, 6px);
-    background: #001100;
+    background: var(--bg-panel);
     border: 1px solid var(--green-dim);
     border-radius: 4px;
     cursor: pointer;
@@ -148,7 +300,7 @@ body::before {
 }
 
 .qd-entry:hover:not(:disabled) {
-    background: #001f00;
+    background: color-mix(in srgb, var(--green) 5%, var(--bg-panel));
     border-color: var(--green);
 }
 
@@ -185,7 +337,7 @@ body::before {
     align-items: center;
     padding: 0 16px;
     border-bottom: 1px solid var(--border);
-    background: #001400;
+    background: var(--bg-panel);
 }
 
 .fusion-title {
@@ -237,7 +389,7 @@ body::before {
     align-items: center;
     justify-content: center;
     padding: 0;
-    background: #000800;
+    background: var(--bg);
     border-right: 1px solid var(--green-dim);
     overflow: hidden;
     min-height: 0;
@@ -251,42 +403,70 @@ body::before {
     object-fit: contain;
 }
 
-/* SVG Elements - Hybrid Design */
+/* SVG Elements — all colors driven by CSS custom properties */
+
+/* ── Outer ring base (dark body behind segments) ── */
 .outer-ring-base {
     fill: none;
-    stroke: #0a1a0a;
-    stroke-width: 52;
+    stroke: var(--ring-body);
+    stroke-width: 56;
 }
 
-.ring-segments .ring-segment {
+/* ── Ring segment track — banded fill between chevrons ── */
+.ring-segments-smooth {
     fill: none;
-    stroke: #1a3a1a;
+    stroke: var(--ring-segment);
     stroke-width: 46;
-    stroke-linecap: round;
-    transition: all 0.3s;
 }
 
-.outer-ring-inner {
+/* ── Ring detail bands ── */
+.ring-band-outer {
     fill: none;
-    stroke: var(--border);
+    stroke: var(--ring-accent);
+    stroke-width: 3.5;
+}
+
+.ring-band-inner {
+    fill: none;
+    stroke: var(--ring-accent);
     stroke-width: 2.5;
 }
 
-/* Chevrons */
+.ring-band-mid {
+    fill: none;
+    stroke: var(--ring-mid);
+    stroke-width: 2;
+}
+
+.outer-ring-boundary {
+    fill: none;
+    stroke: var(--ring-boundary);
+    stroke-width: 1;
+    opacity: 0.4;
+}
+
+/* ── Chevrons ── */
+/*
+ * Shape: 7-point polygon — wide outer cap → shoulder wings → tapered body → inner tip
+ * Outer cap: 60px wide at y=-2 (beyond ring outer edge, matching reference housing)
+ * Inner tip: y=70 (r=180, reaching toward inner ring)
+ */
 .chevron-body {
-    fill: #1a2a1a;
-    stroke: var(--border);
+    fill: var(--chevron-fill);
+    stroke: var(--chevron-stroke);
     stroke-width: 1.5;
-    transition: all 0.3s;
+    stroke-linejoin: round;
+    transition: fill 0.3s, stroke 0.3s, filter 0.3s;
 }
 
 .chevron-inner {
-    fill: #0a1a0a;
-    transition: all 0.3s;
+    fill: var(--chevron-crystal);
+    stroke: none;
+    transition: fill 0.3s, filter 0.3s;
 }
 
 .chevron.encoding .chevron-body {
-    fill: #1a3a1a;
+    fill: color-mix(in srgb, var(--green-dim) 35%, var(--chevron-fill));
     stroke: var(--green-bright);
     stroke-width: 2;
 }
@@ -297,36 +477,52 @@ body::before {
 }
 
 @keyframes chevronBlink {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.3;
-    }
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
 }
 
 .chevron.locked .chevron-body {
-    fill: #0a3a0a;
+    fill: #0d3a0d;
     stroke: var(--green-bright);
     stroke-width: 2.5;
+    filter: url(#glow-locked);
 }
 
 .chevron.locked .chevron-inner {
     fill: var(--green);
+    filter: url(#glow-locked);
 }
 
-/* Inner Ring */
+/* ── Inner Ring ── */
 .inner-ring-track {
-    fill: #0a1a0a;
-    stroke: #1a2a1a;
+    fill: var(--ring-body);
+    stroke: var(--ring-segment);
     stroke-width: 40;
 }
 
 .inner-ring {
     transform-origin: 250px 250px;
+}
+
+/* 39 tick marks — one per glyph slot (period = 2π×191/39 ≈ 30.75px) */
+.ring-tick-marks {
+    fill: none;
+    stroke: var(--green-dim);
+    stroke-width: 1.5;
+    stroke-dasharray: 2.5 28.25;
+}
+
+/* Fixed accent borders at inner ring edges (outside the rotating group) */
+.inner-ring-edge-outer {
+    fill: none;
+    stroke: var(--ring-accent);
+    stroke-width: 2.5;
+}
+
+.inner-ring-edge-inner {
+    fill: none;
+    stroke: var(--ring-accent);
+    stroke-width: 2;
 }
 
 .glyph-symbol {
@@ -350,11 +546,12 @@ body::before {
     font-size: 15px;
 }
 
-/* Event Horizon */
+/* ── Event Horizon ── */
+/* Idle: subtle depth gradient — "closed portal" rather than blank void */
 .event-horizon {
-    fill: #000;
-    opacity: 0;
-    transition: opacity 0.5s;
+    fill: url(#idleGate);
+    opacity: 0.85;
+    transition: fill 0.5s, opacity 0.5s;
 }
 
 .event-horizon.active {
@@ -371,7 +568,7 @@ body::before {
     width: 57%;
     height: 57%;
     transform: translate(-50%, -50%) scale(0);
-    background: radial-gradient(ellipse, rgba(0, 204, 40, 0.7) 0%, rgba(0, 136, 34, 0.3) 50%, transparent 70%);
+    background: radial-gradient(ellipse, var(--kawoosh-c1) 0%, var(--kawoosh-c2) 50%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
     opacity: 0;
@@ -433,7 +630,7 @@ body::before {
     border: 1px solid var(--border);
     border-radius: 5px;
     padding: min(1.2vh, 8px);
-    background: #001100;
+    background: var(--bg-panel);
     flex: 0 0 auto;
     min-height: 0;
 }
@@ -505,7 +702,7 @@ body::before {
 
 .chevron-section .chev-indicator {
     aspect-ratio: 1.6;
-    background: #003200;
+    background: color-mix(in srgb, var(--green) 6%, var(--bg-panel));
     border: 1px solid var(--green-dim);
     border-radius: 2px;
     transition: all 0.3s;
@@ -544,7 +741,7 @@ body::before {
 
 .buffer-section .buffer-slot {
     aspect-ratio: 1.4;
-    background: #002800;
+    background: var(--bg-panel);
     border: 1px solid var(--border);
     border-radius: 3px;
     display: flex;
@@ -573,7 +770,7 @@ body::before {
 .signal-canvas {
     width: 100%;
     height: clamp(36px, 5.5vh, 64px);
-    background: #001e00;
+    background: color-mix(in srgb, var(--green) 3%, var(--bg));
     border: 1px solid var(--green-dim);
     border-radius: 3px;
     margin-bottom: min(0.6vh, 5px);
@@ -611,7 +808,7 @@ body::before {
 
 .input-section .dhd-key {
     aspect-ratio: 1;
-    background: #002800;
+    background: var(--bg-panel);
     border: 1px solid var(--green-dim);
     border-radius: 4px;
     display: flex;
@@ -641,7 +838,7 @@ body::before {
     width: 100%;
     margin-top: auto;
     padding: min(1.5vh, 10px);
-    background: #001800;
+    background: var(--bg-panel);
     border: 2px solid var(--border);
     border-radius: 6px;
     font-family: 'Orbitron', sans-serif;
@@ -745,3 +942,52 @@ body::before {
     color: #000;
     border-color: var(--green);
 }
+
+/* ===================================
+   THEME SELECTOR
+   =================================== */
+.theme-section .theme-btns {
+    display: flex;
+    gap: min(0.8vh, 6px);
+}
+
+.theme-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: min(0.8vh, 6px) 4px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(7px, 0.85vh, 9px);
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.theme-btn:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.theme-btn.active {
+    border-color: var(--green);
+    color: var(--green);
+    background: color-mix(in srgb, var(--green) 12%, transparent);
+}
+
+/* Small color-swatch dot above the label */
+.theme-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+}
+
+.theme-swatch--terminal  { background: #00cc28; }
+.theme-swatch--amber { background: #cc7700; }
+.theme-swatch--cyan   { background: #00aad4; }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self';
                    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
                    font-src https://fonts.gstatic.com;
                    script-src 'self' 'unsafe-inline';
@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <div class="sdc-fusion-container">
+    <div class="sdc-fusion-container" data-theme="terminal">
         <!-- HEADER BAR -->
         <header class="fusion-header">
             <span class="fusion-title">◆ GATE DIALING COMPUTER ◆</span>
@@ -41,93 +41,126 @@
         <section class="gate-panel">
             <svg viewBox="-12 -12 524 524" class="stargate-svg" id="stargateSvg">
                 <defs>
+                    <!-- Gradient stop colors driven by CSS custom properties per theme -->
                     <radialGradient id="horizonGradient" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="#00ff33" />
-                        <stop offset="70%" stop-color="#00aa2a" />
-                        <stop offset="100%" stop-color="#003300" />
+                        <stop offset="0%"   stop-color="var(--horizon-c1)" />
+                        <stop offset="70%"  stop-color="var(--horizon-c2)" />
+                        <stop offset="100%" stop-color="var(--horizon-c3)" />
                     </radialGradient>
+                    <radialGradient id="idleGate" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%"   stop-color="var(--idle-gate-color)" stop-opacity="0.7" />
+                        <stop offset="55%"  stop-color="var(--idle-gate-color)" stop-opacity="0.9" />
+                        <stop offset="100%" stop-color="#000" stop-opacity="1" />
+                    </radialGradient>
+                    <!-- Locked-chevron glow — color follows chevron-inner fill automatically -->
+                    <filter id="glow-locked" x="-25%" y="-25%" width="150%" height="150%">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feMerge>
+                            <feMergeNode in="blur" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
                 </defs>
 
-                <!-- Outer Ring Assembly (Segmented) -->
+                <!-- ═══════════════════════════════════════════════════
+                     OUTER RING ASSEMBLY
+                     ═══════════════════════════════════════════════════ -->
                 <g class="outer-ring-assembly">
-                    <!-- Background base -->
-                    <circle class="outer-ring-base" cx="250" cy="250" r="230" fill="none" stroke="#0a1a0a"
-                        stroke-width="50" />
+                    <!-- Base fill — the dark body of the ring -->
+                    <circle class="outer-ring-base" cx="250" cy="250" r="230" />
 
-                    <!-- Segmented Ring (12-segment Alignment)
-                         Circumference ~1445px. 12 Segments (30° pitch).
-                         Segment: 22° (~88.3px). Gap: 8° (~32.1px). Ratio: 2.75:1
-                         Rotate -86° to center each 8° gap on its chevron.
-                    -->
-                    <circle class="ring-segments-smooth" cx="250" cy="250" r="230" fill="none" stroke="#1f3f1f"
-                        stroke-width="44" stroke-dasharray="88.3 32.1" stroke-dashoffset="0"
-                        transform="rotate(-86 250 250)" />
+                    <!-- Segmented ring track (12 segments × 30°)
+                         Circumference: 2π×230 = 1445.13px → period = 120.43px
+                         Chevron foot at ring midline ≈ 49px → segment = 71.43px
+                         Gap center at 95.93px = 23.9° from period start.
+                         rotate(-84°) → path start at 6.1° past 12 o'clock →
+                         first gap center at 30° = chevron 1; wrap gap at 0° = chevron 9 -->
+                    <circle class="ring-segments-smooth" cx="250" cy="250" r="230"
+                        stroke-dasharray="71.428 49"
+                        transform="rotate(-84 250 250)" />
 
-                    <!-- Inner border ring -->
-                    <circle class="outer-ring-inner" cx="250" cy="250" r="203" fill="none" stroke="var(--green)"
-                        stroke-width="2" />
-                    <circle class="outer-ring-boundary" cx="250" cy="250" r="254" fill="none" stroke="#0da020"
-                        stroke-width="1" opacity="0.5" />
+                    <!-- Band 1: outer hard rim accent -->
+                    <circle class="ring-band-outer" cx="250" cy="250" r="253" />
+                    <!-- Band 2: inner edge accent -->
+                    <circle class="ring-band-inner" cx="250" cy="250" r="208" />
+                    <!-- Band 3: mid structural separator -->
+                    <circle class="ring-band-mid"   cx="250" cy="250" r="236" />
+                    <!-- Band 4: outer boundary faint edge -->
+                    <circle class="outer-ring-boundary" cx="250" cy="250" r="255" />
                 </g>
 
-                <!-- Chevrons — 12 total at 30° pitch (clock-face positions) -->
+                <!-- ═══════════════════════════════════════════════════
+                     CHEVRONS — 12 total at 30° pitch
+                     ═══════════════════════════════════════════════════ -->
                 <g class="chevrons" id="chevrons">
                     <g class="chevron" data-num="9"  transform="rotate(0,   250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="1"  transform="rotate(30,  250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="2"  transform="rotate(60,  250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="3"  transform="rotate(90,  250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="4"  transform="rotate(120, 250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="5"  transform="rotate(150, 250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="6"  transform="rotate(180, 250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="7"  transform="rotate(210, 250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="8"  transform="rotate(240, 250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="10" transform="rotate(270, 250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="11" transform="rotate(300, 250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                     <g class="chevron" data-num="12" transform="rotate(330, 250, 250)">
-                        <rect class="chevron-body"  x="239" y="28" width="22" height="40" rx="2" />
-                        <rect class="chevron-inner" x="243" y="35" width="14" height="24" rx="1" />
+                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
+                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
                     </g>
                 </g>
 
-                <!-- Inner Ring with Glyphs -->
+                <!-- ═══════════════════════════════════════════════════
+                     INNER RING — glyph track (rotates during dialing)
+                     Contains glyph symbols + tick-mark ring for visible
+                     rotation feedback (39 ticks, one per glyph slot).
+                     Accent borders are fixed (outside the rotate group).
+                     ═══════════════════════════════════════════════════ -->
+                <!-- Fixed accent border — outer edge of inner ring -->
+                <circle class="inner-ring-edge-outer" cx="250" cy="250" r="195" />
+                <!-- Rotating group -->
                 <g class="inner-ring" id="innerRing">
                     <circle class="inner-ring-track" cx="250" cy="250" r="175" />
+                    <!-- 39 tick marks — one per glyph slot, rotate with ring -->
+                    <circle class="ring-tick-marks" cx="250" cy="250" r="191" />
                 </g>
+                <!-- Fixed accent border — inner edge of inner ring -->
+                <circle class="inner-ring-edge-inner" cx="250" cy="250" r="157" />
 
-                <!-- Event Horizon -->
+                <!-- Event Horizon — idle shows subtle closed-portal depth -->
                 <circle class="event-horizon" id="eventHorizon" cx="250" cy="250" r="150" />
             </svg>
             <div class="kawoosh-effect" id="kawooshEffect"></div>
@@ -136,6 +169,25 @@
         <!-- RIGHT PANEL - UTILITY SIDEBAR -->
         <aside class="utility-panel">
             <div class="panel-title">◆ UTILITY AREA ◆</div>
+
+            <!-- Gate Theme Selector -->
+            <div class="utility-section theme-section">
+                <div class="section-header">GATE THEME</div>
+                <div class="theme-btns">
+                    <button class="theme-btn" data-theme="terminal">
+                        <div class="theme-swatch theme-swatch--terminal"></div>
+                        <span>SDC</span>
+                    </button>
+                    <button class="theme-btn" data-theme="amber">
+                        <div class="theme-swatch theme-swatch--amber"></div>
+                        <span>MW</span>
+                    </button>
+                    <button class="theme-btn" data-theme="cyan">
+                        <div class="theme-swatch theme-swatch--cyan"></div>
+                        <span>PEG</span>
+                    </button>
+                </div>
+            </div>
 
             <!-- Mode Select Section -->
             <div class="utility-section mode-section">
@@ -249,6 +301,7 @@
     <script src="logic/ring.js"></script>
     <script src="logic/signal.js"></script>
     <script src="logic/engine.js"></script>
+    <script src="logic/theme.js"></script>
 </body>
 
 </html>

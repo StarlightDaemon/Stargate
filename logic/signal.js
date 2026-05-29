@@ -186,57 +186,72 @@ class SignalStrength {
 
     // ----- Draw -----
 
+    /** Read current theme colors from CSS custom properties each frame. */
+    _colors() {
+        const el = document.querySelector('[data-theme]') || document.documentElement;
+        const cs = getComputedStyle(el);
+        const g  = v => cs.getPropertyValue(v).trim();
+        return {
+            bg:      g('--signal-bg')       || '#001400',
+            grid:    g('--signal-grid')     || '#002800',
+            gridCx:  g('--signal-grid-cx')  || '#004400',
+            line:    g('--signal-line')     || '#00ff41',
+            fillRgb: g('--signal-fill-rgb') || '0, 255, 65',
+            peak:    g('--signal-peak')     || '#ccffcc',
+            divider: g('--signal-divider')  || '#003300',
+        };
+    }
+
     draw() {
         const { ctx, W, H } = this;
         if (!W || !H) return;
 
-        // Layout split
-        const WAVE_W   = Math.floor(W * 0.63);   // waveform panel width
-        const GAP      = Math.floor(W * 0.04);   // divider gap
-        const BAR_X    = WAVE_W + GAP;            // bars start x
-        const BAR_W    = W - BAR_X;              // bars panel width
+        const c = this._colors();
 
-        // Background
-        ctx.fillStyle = '#001400';
+        // Layout split
+        const WAVE_W = Math.floor(W * 0.63);
+        const GAP    = Math.floor(W * 0.04);
+        const BAR_X  = WAVE_W + GAP;
+        const BAR_W  = W - BAR_X;
+
+        ctx.fillStyle = c.bg;
         ctx.fillRect(0, 0, W, H);
 
-        this._drawGrid(W, H, WAVE_W);
-        this._drawWaveform(WAVE_W, H);
-        this._drawDivider(WAVE_W, GAP, H);
-        this._drawBars(BAR_X, BAR_W, H);
+        this._drawGrid(W, H, WAVE_W, c);
+        this._drawWaveform(WAVE_W, H, c);
+        this._drawDivider(WAVE_W, GAP, H, c);
+        this._drawBars(BAR_X, BAR_W, H, c);
     }
 
-    _drawGrid(W, H, waveW) {
+    _drawGrid(W, H, waveW, c) {
         const ctx = this.ctx;
-        ctx.strokeStyle = '#002800';
+        ctx.strokeStyle = c.grid;
         ctx.lineWidth   = 0.5;
 
         const cols = 8, rows = 4;
-        for (let c = 0; c <= cols; c++) {
-            const x = (c / cols) * waveW;
+        for (let i = 0; i <= cols; i++) {
+            const x = (i / cols) * waveW;
             ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
         }
-        for (let r = 0; r <= rows; r++) {
-            const y = (r / rows) * H;
+        for (let i = 0; i <= rows; i++) {
+            const y = (i / rows) * H;
             ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(waveW, y); ctx.stroke();
         }
 
-        // Centre line (reference 0-crossing)
-        ctx.strokeStyle = '#004400';
+        ctx.strokeStyle = c.gridCx;
         ctx.lineWidth = 0.75;
         ctx.setLineDash([4, 4]);
         ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(waveW, H / 2); ctx.stroke();
         ctx.setLineDash([]);
     }
 
-    _drawWaveform(waveW, H) {
+    _drawWaveform(waveW, H, c) {
         const ctx  = this.ctx;
         const mid  = H / 2;
-        const amp  = H / 2 - 2;   // max pixel amplitude
+        const amp  = H / 2 - 2;
         const step = waveW / (this.WAVEFORM_LEN - 1);
 
-        // Under-fill (very faint)
-        ctx.fillStyle = 'rgba(0, 255, 65, 0.05)';
+        ctx.fillStyle = `rgba(${c.fillRgb}, 0.05)`;
         ctx.beginPath();
         for (let i = 0; i < this.WAVEFORM_LEN; i++) {
             const x = i * step;
@@ -246,8 +261,7 @@ class SignalStrength {
         ctx.lineTo(waveW, H); ctx.lineTo(0, H); ctx.closePath();
         ctx.fill();
 
-        // Waveform line
-        ctx.strokeStyle = '#00ff41';
+        ctx.strokeStyle = c.line;
         ctx.lineWidth   = 1.5;
         ctx.lineJoin    = 'round';
         ctx.beginPath();
@@ -259,32 +273,30 @@ class SignalStrength {
         ctx.stroke();
     }
 
-    _drawDivider(waveW, gap, H) {
+    _drawDivider(waveW, gap, H, c) {
         const ctx = this.ctx;
         const x = waveW + gap / 2;
-        ctx.strokeStyle = '#003300';
+        ctx.strokeStyle = c.divider;
         ctx.lineWidth   = 1;
         ctx.beginPath(); ctx.moveTo(x, 4); ctx.lineTo(x, H - 4); ctx.stroke();
     }
 
-    _drawBars(barX, barW, H) {
-        const ctx  = this.ctx;
-        const bw   = barW / this.BAR_COUNT;
-        const pad  = 1;
+    _drawBars(barX, barW, H, c) {
+        const ctx = this.ctx;
+        const bw  = barW / this.BAR_COUNT;
+        const pad = 1;
 
         for (let i = 0; i < this.BAR_COUNT; i++) {
-            const x      = barX + i * bw;
-            const barH   = this.barValues[i] * H;
-            const y      = H - barH;
+            const x    = barX + i * bw;
+            const barH = this.barValues[i] * H;
+            const y    = H - barH;
 
-            // Bar body
-            ctx.fillStyle = '#00ff41';
+            ctx.fillStyle = c.line;
             ctx.fillRect(x + pad, y, bw - pad * 2, barH);
 
-            // Peak-hold marker (bright white notch)
             if (this.barHold[i] > 0 && this.barPeaks[i] > this.barValues[i] + 0.01) {
                 const py = H - this.barPeaks[i] * H;
-                ctx.fillStyle = '#ccffcc';
+                ctx.fillStyle = c.peak;
                 ctx.fillRect(x + pad, py - 1, bw - pad * 2, 2);
             }
         }
