@@ -37,13 +37,32 @@ class RingController {
     }
 
     generateGlyphs() {
-        // Clear existing glyphs
-        const existingGlyphs = this.innerRing.querySelectorAll('.glyph-symbol');
-        existingGlyphs.forEach(g => g.remove());
+        // Clear existing glyphs and slot dividers
+        this.innerRing.querySelectorAll('.glyph-symbol, .glyph-slot-divider').forEach(el => el.remove());
 
         const radius = 175;
         const centerX = 250;
         const centerY = 250;
+
+        // Glyph slot divider lines — one radial line at each slot boundary.
+        // Spans from inner track edge (r=160) to outer track edge (r=190).
+        // Each divider is placed at the LEADING edge of slot i (halfway between i-1 and i).
+        const r1 = 160, r2 = 190;
+        for (let i = 0; i < this.config.totalGlyphs; i++) {
+            const angleDeg = (i * this.config.degreesPerGlyph) - (this.config.degreesPerGlyph / 2) - 90;
+            const angleRad = angleDeg * Math.PI / 180;
+            const x1 = centerX + r1 * Math.cos(angleRad);
+            const y1 = centerY + r1 * Math.sin(angleRad);
+            const x2 = centerX + r2 * Math.cos(angleRad);
+            const y2 = centerY + r2 * Math.sin(angleRad);
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1.toFixed(2));
+            line.setAttribute('y1', y1.toFixed(2));
+            line.setAttribute('x2', x2.toFixed(2));
+            line.setAttribute('y2', y2.toFixed(2));
+            line.setAttribute('class', 'glyph-slot-divider');
+            this.innerRing.appendChild(line);
+        }
 
         for (let i = 0; i < this.config.totalGlyphs; i++) {
             const angle = (i * this.config.degreesPerGlyph) * (Math.PI / 180);

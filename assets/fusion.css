@@ -37,6 +37,18 @@
     --horizon-c2:      #00aa2a;
     --horizon-c3:      #003300;
     --idle-gate-color: #081408;
+    /* Gate ring structural segments */
+    --ring-housing:       #1a2e1a;
+    --ring-housing-edge:  #243824;
+    --ring-panel:         #060c06;
+    --ring-panel-edge:    #0e180e;
+    /* Chevron locked state */
+    --chevron-locked-body:    #0a2e0a;
+    --chevron-locked-crystal: #00cc28;
+    /* Alignment mark */
+    --align-mark-color:   #00cc28;
+    /* Glyph slot dividers */
+    --ring-slot-divider:  #1a2e1a;
     /* Kawoosh */
     --kawoosh-c1: rgba(0, 204, 40, 0.7);
     --kawoosh-c2: rgba(0, 136, 34, 0.3);
@@ -76,6 +88,18 @@
     --horizon-c2:      #cc6600;
     --horizon-c3:      #2a0e00;
     --idle-gate-color: #140800;
+    /* Gate ring structural segments */
+    --ring-housing:       #2c2c2c;
+    --ring-housing-edge:  #3e3e3e;
+    --ring-panel:         #0a0a0a;
+    --ring-panel-edge:    #181818;
+    /* Chevron locked state */
+    --chevron-locked-body:    #2a1800;
+    --chevron-locked-crystal: #e89000;
+    /* Alignment mark */
+    --align-mark-color:   #cc7700;
+    /* Glyph slot dividers */
+    --ring-slot-divider:  #2a2a2a;
     /* Kawoosh */
     --kawoosh-c1: rgba(232, 144, 10, 0.7);
     --kawoosh-c2: rgba(122, 72, 0, 0.3);
@@ -115,6 +139,18 @@
     --horizon-c2:      #0088cc;
     --horizon-c3:      #001a33;
     --idle-gate-color: #000c14;
+    /* Gate ring structural segments */
+    --ring-housing:       #1e2e3a;
+    --ring-housing-edge:  #2a3e4e;
+    --ring-panel:         #060c12;
+    --ring-panel-edge:    #101e28;
+    /* Chevron locked state */
+    --chevron-locked-body:    #00182a;
+    --chevron-locked-crystal: #00ccff;
+    /* Alignment mark */
+    --align-mark-color:   #00aad4;
+    /* Glyph slot dividers */
+    --ring-slot-divider:  #1a2a38;
     /* Kawoosh */
     --kawoosh-c1: rgba(0, 180, 216, 0.7);
     --kawoosh-c2: rgba(0, 96, 128, 0.3);
@@ -160,6 +196,14 @@
     --signal-fill-rgb:   0, 255, 65;
     --signal-peak:       #ccffcc;
     --signal-divider:    #003300;
+    --ring-housing:       #1a2e1a;
+    --ring-housing-edge:  #243824;
+    --ring-panel:         #060c06;
+    --ring-panel-edge:    #0e180e;
+    --chevron-locked-body:    #0a2e0a;
+    --chevron-locked-crystal: #00cc28;
+    --align-mark-color:   #00cc28;
+    --ring-slot-divider:  #1a2e1a;
 }
 
 * {
@@ -405,18 +449,24 @@ body::before {
 
 /* SVG Elements — all colors driven by CSS custom properties */
 
-/* ── Outer ring base (dark body behind segments) ── */
+/* ── Outer ring base (dark body behind arc segments) ── */
 .outer-ring-base {
     fill: none;
     stroke: var(--ring-body);
     stroke-width: 56;
 }
 
-/* ── Ring segment track — banded fill between chevrons ── */
-.ring-segments-smooth {
-    fill: none;
-    stroke: var(--ring-segment);
-    stroke-width: 46;
+/* ── Arc segment zones — built by buildRingSegments() at runtime ── */
+.ring-housing-zone {
+    fill: var(--ring-housing);
+    stroke: var(--ring-housing-edge);
+    stroke-width: 0.8;
+}
+
+.ring-panel-zone {
+    fill: var(--ring-panel);
+    stroke: var(--ring-panel-edge);
+    stroke-width: 0.5;
 }
 
 /* ── Ring detail bands ── */
@@ -447,49 +497,50 @@ body::before {
 
 /* ── Chevrons ── */
 /*
- * Shape: 7-point polygon — wide outer cap → shoulder wings → tapered body → inner tip
- * Outer cap: 60px wide at y=-2 (beyond ring outer edge, matching reference housing)
- * Inner tip: y=70 (r=180, reaching toward inner ring)
+ * Shape: 11-point polygon — wide outer cap (protrudes past ring edge) →
+ * stepped shoulder wings → tapered body → inner tip at r≈176.
+ * Inner crystal triangle sits in the body cavity.
+ * Outer cap: 80px wide at y=-16 (8px beyond ring outer edge at r=258).
  */
 .chevron-body {
     fill: var(--chevron-fill);
     stroke: var(--chevron-stroke);
     stroke-width: 1.5;
-    stroke-linejoin: round;
-    transition: fill 0.3s, stroke 0.3s, filter 0.3s;
+    stroke-linejoin: miter;
+    transition: fill 0.25s, stroke 0.25s, filter 0.25s;
 }
 
 .chevron-inner {
     fill: var(--chevron-crystal);
     stroke: none;
-    transition: fill 0.3s, filter 0.3s;
+    transition: fill 0.25s, filter 0.25s;
 }
 
 .chevron.encoding .chevron-body {
-    fill: color-mix(in srgb, var(--green-dim) 35%, var(--chevron-fill));
+    fill: color-mix(in srgb, var(--green-dim) 40%, var(--chevron-fill));
     stroke: var(--green-bright);
     stroke-width: 2;
 }
 
 .chevron.encoding .chevron-inner {
     fill: var(--green-dim);
-    animation: chevronBlink 0.3s infinite;
+    animation: chevronBlink 0.35s infinite;
 }
 
 @keyframes chevronBlink {
     0%, 100% { opacity: 1; }
-    50%       { opacity: 0.3; }
+    50%       { opacity: 0.25; }
 }
 
 .chevron.locked .chevron-body {
-    fill: #0d3a0d;
+    fill: var(--chevron-locked-body);
     stroke: var(--green-bright);
-    stroke-width: 2.5;
+    stroke-width: 2;
     filter: url(#glow-locked);
 }
 
 .chevron.locked .chevron-inner {
-    fill: var(--green);
+    fill: var(--chevron-locked-crystal);
     filter: url(#glow-locked);
 }
 
@@ -544,6 +595,27 @@ body::before {
 .glyph-symbol.active {
     fill: var(--green);
     font-size: 15px;
+}
+
+/* ── Glyph slot dividers (rotate with inner ring) ── */
+.glyph-slot-divider {
+    stroke: var(--ring-slot-divider);
+    stroke-width: 0.8;
+    stroke-linecap: round;
+    opacity: 0.7;
+}
+
+/* ── Alignment mark — fixed at 12 o'clock, between outer & inner rings ── */
+.alignment-mark .align-pointer {
+    fill: var(--align-mark-color);
+    opacity: 0.75;
+}
+
+.alignment-mark .align-bracket {
+    stroke: var(--align-mark-color);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    opacity: 0.5;
 }
 
 /* ── Event Horizon ── */

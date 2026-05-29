@@ -39,7 +39,7 @@
 
         <!-- GATE VIEWPORT (CENTER) -->
         <section class="gate-panel">
-            <svg viewBox="-12 -12 524 524" class="stargate-svg" id="stargateSvg">
+            <svg viewBox="-20 -20 540 540" class="stargate-svg" id="stargateSvg">
                 <defs>
                     <!-- Gradient stop colors driven by CSS custom properties per theme -->
                     <radialGradient id="horizonGradient" cx="50%" cy="50%" r="50%">
@@ -66,18 +66,12 @@
                      OUTER RING ASSEMBLY
                      ═══════════════════════════════════════════════════ -->
                 <g class="outer-ring-assembly">
-                    <!-- Base fill — the dark body of the ring -->
+                    <!-- Base fill — dark ring body background -->
                     <circle class="outer-ring-base" cx="250" cy="250" r="230" />
 
-                    <!-- Segmented ring track (12 segments × 30°)
-                         Circumference: 2π×230 = 1445.13px → period = 120.43px
-                         Chevron foot at ring midline ≈ 49px → segment = 71.43px
-                         Gap center at 95.93px = 23.9° from period start.
-                         rotate(-84°) → path start at 6.1° past 12 o'clock →
-                         first gap center at 30° = chevron 1; wrap gap at 0° = chevron 9 -->
-                    <circle class="ring-segments-smooth" cx="250" cy="250" r="230"
-                        stroke-dasharray="71.428 49"
-                        transform="rotate(-84 250 250)" />
+                    <!-- Arc panel segments: housing zones + glyph window panels
+                         Built at runtime by buildRingSegments() in engine.js -->
+                    <g id="ringSegments"></g>
 
                     <!-- Band 1: outer hard rim accent -->
                     <circle class="ring-band-outer" cx="250" cy="250" r="253" />
@@ -94,52 +88,52 @@
                      ═══════════════════════════════════════════════════ -->
                 <g class="chevrons" id="chevrons">
                     <g class="chevron" data-num="9"  transform="rotate(0,   250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="1"  transform="rotate(30,  250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="2"  transform="rotate(60,  250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="3"  transform="rotate(90,  250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="4"  transform="rotate(120, 250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="5"  transform="rotate(150, 250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="6"  transform="rotate(180, 250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="7"  transform="rotate(210, 250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="8"  transform="rotate(240, 250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="10" transform="rotate(270, 250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="11" transform="rotate(300, 250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                     <g class="chevron" data-num="12" transform="rotate(330, 250, 250)">
-                        <polygon class="chevron-body"  points="220,-2 280,-2 280,14 265,30 250,70 235,30 220,14" />
-                        <polygon class="chevron-inner" points="234,6 266,6 250,64" />
+                        <polygon class="chevron-body"  points="210,-16 290,-16 290,-2 274,-2 274,14 268,22 250,74 232,22 226,14 226,-2 210,-2" />
+                        <polygon class="chevron-inner" points="235,4 265,4 250,70" />
                     </g>
                 </g>
 
@@ -159,6 +153,16 @@
                 </g>
                 <!-- Fixed accent border — inner edge of inner ring -->
                 <circle class="inner-ring-edge-inner" cx="250" cy="250" r="157" />
+
+                <!-- Alignment mark — fixed locking indicator at 12 o'clock.
+                     Rendered AFTER the rotating ring so it always appears on top.
+                     Triangle tip points down from the outer ring's inner edge (r=202)
+                     into the inner ring face, marking the glyph lock position. -->
+                <g class="alignment-mark">
+                    <polygon class="align-pointer" points="250,57 243,48 257,48" />
+                    <line class="align-bracket" x1="240" y1="50" x2="240" y2="55" />
+                    <line class="align-bracket" x1="260" y1="50" x2="260" y2="55" />
+                </g>
 
                 <!-- Event Horizon — idle shows subtle closed-portal depth -->
                 <circle class="event-horizon" id="eventHorizon" cx="250" cy="250" r="150" />

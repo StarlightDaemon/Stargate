@@ -69,6 +69,7 @@ class SDCEngine {
      */
     async init() {
         this.cacheDom();
+        this.buildRingSegments();
         this.initRing();
         this.initAudio();
         this.signalStrength = window.signalStrength || null;
@@ -77,6 +78,66 @@ class SDCEngine {
         this.generateQuickDial();
         this.updateBufferLabel();
         this.log('System initialized. Ready for dialing sequence.');
+    }
+
+    /**
+     * Build outer ring arc segments: 12 housing zones + 24 panel window zones.
+     * Housing zones sit behind chevron bodies; panel zones are the dark "windows"
+     * showing the inner glyph ring through the outer frame structure.
+     */
+    buildRingSegments() {
+        const group = document.getElementById('ringSegments');
+        if (!group) return;
+
+        const cx = 250, cy = 250;
+        const rOuter = 258;  // outer visual edge of ring body
+        const rInner = 202;  // inner visual edge of ring body
+        const totalChevrons = 12;
+        const pitch = 360 / totalChevrons;   // 30° per chevron
+        const housingHalf = 7;               // ±7° housing arc around each chevron center
+
+        // Convert SVG rotation degrees (0=up, CW) to standard math radians
+        const toRad = deg => (deg - 90) * Math.PI / 180;
+
+        const arcPath = (a1deg, a2deg, r1, r2) => {
+            const a1 = toRad(a1deg), a2 = toRad(a2deg);
+            const large = (a2deg - a1deg) > 180 ? 1 : 0;
+            const x1o = cx + r2 * Math.cos(a1), y1o = cy + r2 * Math.sin(a1);
+            const x2o = cx + r2 * Math.cos(a2), y2o = cy + r2 * Math.sin(a2);
+            const x1i = cx + r1 * Math.cos(a1), y1i = cy + r1 * Math.sin(a1);
+            const x2i = cx + r1 * Math.cos(a2), y2i = cy + r1 * Math.sin(a2);
+            return `M${x1o.toFixed(2)},${y1o.toFixed(2)} ` +
+                   `A${r2},${r2},0,${large},1,${x2o.toFixed(2)},${y2o.toFixed(2)} ` +
+                   `L${x2i.toFixed(2)},${y2i.toFixed(2)} ` +
+                   `A${r1},${r1},0,${large},0,${x1i.toFixed(2)},${y1i.toFixed(2)} Z`;
+        };
+
+        const addPath = (d, cls) => {
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', d);
+            path.setAttribute('class', cls);
+            group.appendChild(path);
+        };
+
+        for (let i = 0; i < totalChevrons; i++) {
+            const chevAngle = i * pitch;
+
+            // Housing zone behind this chevron (±housingHalf degrees)
+            addPath(
+                arcPath(chevAngle - housingHalf, chevAngle + housingHalf, rInner, rOuter),
+                'ring-housing-zone'
+            );
+
+            // Two panel window zones in the gap to the next chevron.
+            // A 0.5° gap at the midpoint creates a subtle structural separator.
+            const gapStart = chevAngle + housingHalf;
+            const gapEnd   = chevAngle + pitch - housingHalf;
+            const gapMid   = (gapStart + gapEnd) / 2;
+            const sep      = 0.5;
+
+            addPath(arcPath(gapStart,     gapMid - sep, rInner, rOuter), 'ring-panel-zone');
+            addPath(arcPath(gapMid + sep, gapEnd,       rInner, rOuter), 'ring-panel-zone');
+        }
     }
 
     cacheDom() {
