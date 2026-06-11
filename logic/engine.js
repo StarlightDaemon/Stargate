@@ -35,10 +35,8 @@ class SDCEngine {
 
         // Animation timing (configurable)
         this.timing = {
-            spinDuration: 1500,      // Base ring spin time
-            encodeDelay: 200,        // Delay before chevron encodes
-            encodeDuration: 300,     // Chevron encoding animation
-            lockDuration: 500,       // Chevron lock animation
+            encodeDuration: 600,     // Pause between ring-stop and chevron lock
+            lockDuration: 400,       // Dwell in encoding blink before lock
             interChevronDelay: 400,  // Delay between chevrons
             kawooshDuration: 800     // Kawoosh effect duration
         };
@@ -419,13 +417,13 @@ class SDCEngine {
             if (this.state === 'aborting') break;
 
             // Lock chevron
-            await this.sleep(this.t(this.timing.encodeDelay));
-            this.lockChevron(chevronNum, i);
+            await this.sleep(this.t(this.timing.encodeDuration));
+            await this.lockChevron(chevronNum, i);
             this.setChevronState(i, 'locked');
 
-            // Play chevron lock sound
+            // Play chevron lock sound — master chevron gets its heavier lock
             if (typeof audioManager !== 'undefined') {
-                audioManager.play('chevronLock');
+                audioManager.play(isLast ? 'masterLock' : 'chevronLock');
             }
 
             this.log(`Chevron ${i + 1} locked.`);
@@ -436,6 +434,8 @@ class SDCEngine {
 
         // Establish wormhole
         if (this.state !== 'aborting') {
+            // Canon beat of silence after the master chevron locks
+            await this.sleep(this.t(250));
             await this.establishWormhole();
         }
     }
@@ -467,11 +467,11 @@ class SDCEngine {
             this.ringController.highlightGlyph(glyphId);
             this.setChevronState(i, 'encoding');
 
-            await this.sleep(80);
+            await this.sleep(this.t(80));
 
             if (this.state === 'aborting') break;
 
-            this.lockChevron(chevronNum, i);
+            await this.lockChevron(chevronNum, i);
             this.setChevronState(i, 'locked');
 
             if (typeof audioManager !== 'undefined') {
@@ -479,7 +479,7 @@ class SDCEngine {
             }
 
             this.log(`Chevron ${i + 1} locked.`);
-            await this.sleep(120);
+            await this.sleep(this.t(120));
         }
 
         if (this.state !== 'aborting') {
@@ -488,10 +488,17 @@ class SDCEngine {
     }
 
     /**
-     * Lock a chevron (visual)
+     * Lock a chevron (visual) — dwells in the encoding blink before locking
      */
-    lockChevron(chevronNum, index) {
+    async lockChevron(chevronNum, index) {
         const chevron = document.querySelector(`.chevron[data-num="${chevronNum}"]`);
+        if (chevron) {
+            chevron.classList.add('encoding');
+        }
+        this.setChevronState(index, 'encoding');
+
+        await this.sleep(this.t(this.timing.lockDuration));
+
         if (chevron) {
             chevron.classList.remove('encoding');
             chevron.classList.add('locked');
@@ -735,8 +742,8 @@ class SDCEngine {
             rc.maxVelocity = 900;
             rc.acceleration = 1800;
         } else {
-            rc.maxVelocity = 120;
-            rc.acceleration = 200;
+            rc.maxVelocity = 180;
+            rc.acceleration = 350;
         }
     }
 

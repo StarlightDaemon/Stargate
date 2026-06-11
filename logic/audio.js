@@ -12,6 +12,7 @@ class AudioManager {
         // Sound buffers (would be loaded from files in production)
         this.sounds = {
             chevronLock: null,
+            masterLock: null,
             ringRotate: null,
             kawoosh: null,
             alarm: null,
@@ -41,6 +42,9 @@ class AudioManager {
     generateProceduralSounds() {
         // Chevron lock "clunk" sound
         this.sounds.chevronLock = this.createChevronLockSound();
+
+        // Master chevron lock — heavier, resonant
+        this.sounds.masterLock = this.createMasterLockSound();
 
         // Ring rotation hum
         this.sounds.ringRotate = this.createRingRotateSound();
@@ -73,11 +77,31 @@ class AudioManager {
         return buffer;
     }
 
-    createRingRotateSound() {
-        const duration = 0.5;
+    createMasterLockSound() {
+        const duration = 0.3;
         const sampleRate = this.context.sampleRate;
         const buffer = this.context.createBuffer(1, duration * sampleRate, sampleRate);
         const data = buffer.getChannelData(0);
+
+        for (let i = 0; i < data.length; i++) {
+            const t = i / sampleRate;
+            // Heavier clunk: deeper sweep, slower decay, resonant undertone
+            const freq = 80 - (t * 500);
+            const envelope = Math.exp(-t * 15);
+            const noise = (Math.random() - 0.5) * 0.3;
+            const undertone = Math.sin(2 * Math.PI * 440 * t) * 0.3;
+            data[i] = (Math.sin(2 * Math.PI * freq * t) * 0.7 + noise + undertone) * envelope;
+        }
+
+        return buffer;
+    }
+
+    createRingRotateSound() {
+        const duration = 1.0;
+        const sampleRate = this.context.sampleRate;
+        const buffer = this.context.createBuffer(1, duration * sampleRate, sampleRate);
+        const data = buffer.getChannelData(0);
+        const fade = 0.08;
 
         for (let i = 0; i < data.length; i++) {
             const t = i / sampleRate;
@@ -85,7 +109,13 @@ class AudioManager {
             const fundamental = Math.sin(2 * Math.PI * 80 * t);
             const harmonic1 = Math.sin(2 * Math.PI * 160 * t) * 0.5;
             const harmonic2 = Math.sin(2 * Math.PI * 240 * t) * 0.25;
-            const envelope = Math.sin(Math.PI * t / duration);
+            // Flat body with short linear fades so the buffer loops without a gap
+            let envelope = 1;
+            if (t < fade) {
+                envelope = t / fade;
+            } else if (t > duration - fade) {
+                envelope = (duration - t) / fade;
+            }
             data[i] = (fundamental + harmonic1 + harmonic2) * envelope * 0.3;
         }
 
@@ -158,6 +188,46 @@ class AudioManager {
         };
 
         return id;
+    }
+
+    /**
+     * Start a sound looping indefinitely. Returns a handle for stopLooping().
+     */
+    playLooping(soundName, options = {}) {
+        if (!this.enabled || !this.context || !this.sounds[soundName]) {
+            return null;
+        }
+
+        if (this.context.state === 'suspended') {
+            this.context.resume();
+        }
+
+        const source = this.context.createBufferSource();
+        source.buffer = this.sounds[soundName];
+        source.loop = true;
+
+        const gainNode = this.context.createGain();
+        gainNode.gain.value = (options.volume || 1) * this.masterVolume;
+
+        source.connect(gainNode);
+        gainNode.connect(this.context.destination);
+
+        source.start(0);
+
+        return { source, gainNode };
+    }
+
+    /**
+     * Stop a looping sound with a short fade to avoid click artifacts.
+     */
+    stopLooping(handle) {
+        if (!handle || !this.context) return;
+
+        const rampTime = 0.06;
+        const now = this.context.currentTime;
+        handle.gainNode.gain.setValueAtTime(handle.gainNode.gain.value, now);
+        handle.gainNode.gain.linearRampToValueAtTime(0, now + rampTime);
+        handle.source.stop(now + rampTime);
     }
 
     stop(id) {

@@ -12,11 +12,11 @@ class RingController {
         this.config = {
             totalGlyphs: 39,
             degreesPerGlyph: 360 / 39,
-            maxVelocity: 120,        // degrees per second
-            acceleration: 200,        // degrees per second²
-            friction: 0.92,           // decay multiplier
-            overshootAmplitude: 1.5,  // degrees
-            overshootDecay: 6         // decay rate
+            maxVelocity: 180,        // degrees per second
+            acceleration: 350,        // degrees per second²
+            friction: 0.88,           // decay multiplier
+            overshootAmplitude: 0.8,  // degrees
+            overshootDecay: 10        // decay rate
         };
 
         // State
@@ -31,6 +31,9 @@ class RingController {
         // Animation
         this.animationId = null;
         this.lastTime = 0;
+
+        // Looping rotation audio handle
+        this._rotateAudioHandle = null;
 
         // Generate glyphs on the ring
         this.generateGlyphs();
@@ -122,9 +125,10 @@ class RingController {
                 this.animate();
             }
 
-            // Play rotation sound
+            // Play rotation sound — looped for the lifetime of the spin
             if (typeof audioManager !== 'undefined') {
-                audioManager.play('ringRotate', { volume: 0.3 });
+                this.stopRotateAudio();
+                this._rotateAudioHandle = audioManager.playLooping('ringRotate', { volume: 0.3 });
             }
         });
     }
@@ -159,7 +163,7 @@ class RingController {
             // Damped harmonic oscillator
             this.overshootTime += dt;
             const decay = Math.exp(-this.config.overshootDecay * this.overshootTime);
-            const oscillation = Math.cos(2 * Math.PI * 4 * this.overshootTime);
+            const oscillation = Math.cos(2 * Math.PI * 2.5 * this.overshootTime);
 
             this.currentAngle = this.targetAngle +
                 (this.config.overshootAmplitude * decay * oscillation);
@@ -180,7 +184,7 @@ class RingController {
                 );
 
                 // Apply friction when approaching
-                if (Math.abs(distance) < 30) {
+                if (Math.abs(distance) < 60) {
                     this.velocity *= this.config.friction;
                 }
 
@@ -192,11 +196,13 @@ class RingController {
                     this.isOvershooting = true;
                     this.overshootTime = 0;
                     this.config.overshootAmplitude = Math.abs(this.velocity) * 0.015;
+                    this.stopRotateAudio();
                 }
             } else {
                 // Close enough, trigger overshoot
                 this.isOvershooting = true;
                 this.overshootTime = 0;
+                this.stopRotateAudio();
             }
         }
     }
@@ -220,12 +226,23 @@ class RingController {
     }
 
     /**
+     * Stop the looping rotation audio if playing
+     */
+    stopRotateAudio() {
+        if (this._rotateAudioHandle && typeof audioManager !== 'undefined') {
+            audioManager.stopLooping(this._rotateAudioHandle);
+            this._rotateAudioHandle = null;
+        }
+    }
+
+    /**
      * Stop immediately
      */
     stop() {
         this.isSpinning = false;
         this.isOvershooting = false;
         this.velocity = 0;
+        this.stopRotateAudio();
 
         if (this.onArrival) {
             this.onArrival();
