@@ -60,6 +60,40 @@
                             <feMergeNode in="SourceGraphic" />
                         </feMerge>
                     </filter>
+
+                    <!-- Kawoosh vortex fill — bright core fading out through horizon colours -->
+                    <radialGradient id="kawooshGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%"   stop-color="#ffffff"          stop-opacity="0.95" />
+                        <stop offset="30%"  stop-color="var(--horizon-c1)" stop-opacity="0.95" />
+                        <stop offset="70%"  stop-color="var(--horizon-c2)" stop-opacity="0.75" />
+                        <stop offset="100%" stop-color="var(--horizon-c2)" stop-opacity="0" />
+                    </radialGradient>
+
+                    <!-- Event-horizon shimmer — animated fractal displacement = rippling puddle.
+                         Only applied to .event-horizon.active (see fusion.css); SMIL drives the
+                         slow surface drift. -->
+                    <filter id="horizonShimmer" x="-25%" y="-25%" width="150%" height="150%">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.011 0.018"
+                                      numOctaves="2" seed="4" result="noise">
+                            <animate attributeName="baseFrequency" dur="16s"
+                                     values="0.011 0.018; 0.02 0.012; 0.011 0.018"
+                                     repeatCount="indefinite" />
+                        </feTurbulence>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="13"
+                                           xChannelSelector="R" yChannelSelector="G" />
+                    </filter>
+
+                    <!-- Kawoosh churn — heavier, faster turbulence for the eruption texture -->
+                    <filter id="kawooshTurb" x="-60%" y="-60%" width="220%" height="220%">
+                        <feTurbulence type="turbulence" baseFrequency="0.018 0.03"
+                                      numOctaves="2" seed="7" result="noise">
+                            <animate attributeName="baseFrequency" dur="1.6s"
+                                     values="0.05 0.07; 0.015 0.025; 0.05 0.07"
+                                     repeatCount="indefinite" />
+                        </feTurbulence>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="28"
+                                           xChannelSelector="R" yChannelSelector="G" />
+                    </filter>
                 </defs>
 
                 <!-- ═══════════════════════════════════════════════════
@@ -164,10 +198,25 @@
                     <line class="align-bracket" x1="260" y1="50" x2="260" y2="55" />
                 </g>
 
-                <!-- Event Horizon — idle shows subtle closed-portal depth -->
+                <!-- Event Horizon — idle shows subtle closed-portal depth.
+                     Active state applies the shimmer filter (see fusion.css). -->
                 <circle class="event-horizon" id="eventHorizon" cx="250" cy="250" r="150" />
+
+                <!-- Surface ripples — concentric rings expanding to the puddle edge while active -->
+                <g class="horizon-ripples" aria-hidden="true">
+                    <circle class="horizon-ripple" cx="250" cy="250" r="150" />
+                    <circle class="horizon-ripple" cx="250" cy="250" r="150" />
+                    <circle class="horizon-ripple" cx="250" cy="250" r="150" />
+                </g>
+
+                <!-- Kawoosh — unstable-vortex eruption on final chevron lock.
+                     shock ring (behind) → vortex core → bright flash (front). -->
+                <g class="kawoosh-svg" id="kawooshEffect" aria-hidden="true">
+                    <circle class="kawoosh-shock" cx="250" cy="250" r="150" />
+                    <circle class="kawoosh-core"  cx="250" cy="250" r="150" />
+                    <circle class="kawoosh-flash" cx="250" cy="250" r="150" />
+                </g>
             </svg>
-            <div class="kawoosh-effect" id="kawooshEffect"></div>
         </section>
 
         <!-- RIGHT PANEL - UTILITY SIDEBAR -->

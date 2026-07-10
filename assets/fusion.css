@@ -626,50 +626,109 @@ body::before {
     transition: fill 0.5s, opacity 0.5s;
 }
 
+/* Active: bright horizon gradient + animated shimmer surface + gentle luminance pulse */
 .event-horizon.active {
     fill: url(#horizonGradient);
     opacity: 1;
+    filter: url(#horizonShimmer);
+    animation: horizonPulse 5s ease-in-out infinite;
 }
 
+@keyframes horizonPulse {
+    0%, 100% { opacity: 0.9; }
+    50%      { opacity: 1; }
+}
 
-/* Kawoosh */
-.kawoosh-effect {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 57%;
-    height: 57%;
-    transform: translate(-50%, -50%) scale(0);
-    background: radial-gradient(ellipse, var(--kawoosh-c1) 0%, var(--kawoosh-c2) 50%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
+/* ── Surface ripples — concentric rings expanding to the puddle edge ── */
+.horizon-ripples {
     opacity: 0;
 }
 
-.kawoosh-effect.active {
-    animation: kawoosh 0.8s ease-out forwards;
+.horizon-ripple {
+    fill: none;
+    stroke: var(--horizon-c1);
+    stroke-width: 2;
+    opacity: 0;
+    transform-origin: 250px 250px;
+    transform-box: view-box;
 }
 
-@keyframes kawoosh {
-    0% {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 1;
-    }
+/* Ripples only run while the wormhole is active (sibling of .event-horizon) */
+.event-horizon.active ~ .horizon-ripples {
+    opacity: 1;
+}
 
-    30% {
-        transform: translate(-50%, -50%) scale(1.5) scaleY(0.3);
-        opacity: 1;
-    }
+.event-horizon.active ~ .horizon-ripples .horizon-ripple {
+    animation: horizonRipple 3.6s ease-out infinite;
+}
 
-    60% {
-        transform: translate(-50%, -50%) scale(0.8);
-        opacity: 0.7;
-    }
+.event-horizon.active ~ .horizon-ripples .horizon-ripple:nth-child(2) {
+    animation-delay: 1.2s;
+}
 
-    100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0;
-    }
+.event-horizon.active ~ .horizon-ripples .horizon-ripple:nth-child(3) {
+    animation-delay: 2.4s;
+}
+
+@keyframes horizonRipple {
+    0%   { transform: scale(0.12); opacity: 0.5;  stroke-width: 3; }
+    70%  { opacity: 0.08; }
+    100% { transform: scale(1);    opacity: 0;    stroke-width: 0.75; }
+}
+
+/* ── Kawoosh — unstable-vortex eruption ── */
+.kawoosh-svg {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.kawoosh-svg circle {
+    transform-origin: 250px 250px;
+    transform-box: view-box;
+}
+
+.kawoosh-flash { fill: #ffffff;            opacity: 0; }
+.kawoosh-core  { fill: url(#kawooshGrad);  opacity: 0; filter: url(#kawooshTurb); }
+.kawoosh-shock { fill: none; stroke: var(--horizon-c1); stroke-width: 4; opacity: 0; }
+
+.kawoosh-svg.active {
+    opacity: 1;
+}
+
+.kawoosh-svg.active .kawoosh-flash {
+    animation: kawooshFlash 0.8s ease-out forwards;
+}
+
+.kawoosh-svg.active .kawoosh-core {
+    animation: kawooshCore 0.8s cubic-bezier(0.18, 0.9, 0.32, 1) forwards;
+}
+
+.kawoosh-svg.active .kawoosh-shock {
+    animation: kawooshShock 0.8s ease-out forwards;
+}
+
+/* Bright punch of light at ignition */
+@keyframes kawooshFlash {
+    0%   { transform: scale(0.1);  opacity: 0; }
+    8%   { transform: scale(1.15); opacity: 0.95; }
+    28%  { transform: scale(1.7);  opacity: 0; }
+    100% { opacity: 0; }
+}
+
+/* Vortex jet forward (over-scale + splash squash) then retract into the puddle */
+@keyframes kawooshCore {
+    0%   { transform: scale(0.05);            opacity: 0; }
+    12%  { transform: scale(1.9) scaleY(0.5); opacity: 1; }
+    30%  { transform: scale(1.72);            opacity: 1; }
+    58%  { transform: scale(0.82);            opacity: 0.9; }
+    100% { transform: scale(1);               opacity: 0; }
+}
+
+/* Shockwave ring racing outward past the gate */
+@keyframes kawooshShock {
+    0%   { transform: scale(0.4); opacity: 0;    stroke-width: 6; }
+    14%  { opacity: 0.85; }
+    100% { transform: scale(2.4); opacity: 0;    stroke-width: 0.5; }
 }
 
 /* ===================================

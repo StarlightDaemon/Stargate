@@ -533,15 +533,14 @@ class SDCEngine {
             audioManager.play('kawoosh');
         }
 
-        // Trigger kawoosh animation
+        // Trigger the kawoosh eruption and light the horizon underneath it, so
+        // the collapsing vortex settles seamlessly into the shimmering puddle.
         this.dom.kawoosh.classList.add('active');
+        this.dom.eventHorizon.classList.add('active');
 
         await this.sleep(this.t(this.timing.kawooshDuration));
 
         this.dom.kawoosh.classList.remove('active');
-
-        // Activate event horizon
-        this.dom.eventHorizon.classList.add('active');
         this.setEngageBtn('disconnect');
 
         // Update destination display
