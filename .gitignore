@@ -8,3 +8,5 @@ Thumbs.db
 
 # Archived prototypes — stale Next.js caches with ephemeral keys, keep local-only
 archive/
+
+audit-reports/
