@@ -10,3 +10,6 @@ Thumbs.db
 archive/
 
 audit-reports/
+
+# macOS
+._*
