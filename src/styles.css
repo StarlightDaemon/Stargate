@@ -1,0 +1,485 @@
+/* STARGATE console — dark SGC-style theme. System fonts only: the build has
+   no runtime network dependency. */
+
+:root {
+  --bg: #05080f;
+  --panel: #0b1220;
+  --panel-edge: #14243d;
+  --text: #b8d4ee;
+  --text-dim: #5b7794;
+  --accent: #38bdf8;
+  --amber: #fbbf24;
+  --red: #f87171;
+  --naquadah: #2a3648;
+  --naquadah-deep: #171f2c;
+  --glyph: #9fc3e0;
+  --iris: #6b7687;
+  /* keep in sync with IRIS_TRANSIT_MS in src/state/constants.ts */
+  --iris-transit: 1.1s;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(ellipse at 50% -20%, #0a1526 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: 'Cascadia Code', 'Consolas', 'SF Mono', ui-monospace, monospace;
+  letter-spacing: 0.04em;
+}
+
+.console {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 1rem clamp(1rem, 3vw, 2.5rem);
+  gap: 1rem;
+}
+
+/* ---------------------------------------------------------------- status */
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  border: 1px solid var(--panel-edge);
+  background: linear-gradient(180deg, var(--panel), #070d18);
+  padding: 0.7rem 1.1rem;
+  border-radius: 6px;
+}
+
+.status__banner {
+  display: flex;
+  flex-direction: column;
+  min-width: 18rem;
+}
+
+.status__phase {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.status__attract {
+  color: var(--amber);
+  font-size: 0.7rem;
+  animation: blink 1.6s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.status__chevrons {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.status__chevron {
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  color: var(--text-dim);
+  background: var(--naquadah-deep);
+  transition: all 0.25s;
+}
+
+.status__chevron--active {
+  color: var(--amber);
+  border-color: var(--amber);
+}
+
+.status__chevron--locked {
+  color: #fde68a;
+  border-color: var(--amber);
+  background: #3a2f10;
+}
+
+.status__chevron--energized {
+  color: #0b1220;
+  background: var(--amber);
+  border-color: var(--amber);
+  box-shadow: 0 0 8px var(--amber);
+}
+
+.status__dest {
+  flex: 1;
+  min-width: 12rem;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.status__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.status__iris,
+.status__audio {
+  font: inherit;
+  font-size: 0.72rem;
+  padding: 0.45rem 0.8rem;
+  background: var(--naquadah-deep);
+  color: var(--text);
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.status__iris--closed {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.status__iris--closing,
+.status__iris--opening {
+  color: var(--amber);
+  border-color: var(--amber);
+}
+
+.status__iris:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* ----------------------------------------------------------------- stage */
+
+.console__stage {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
+  gap: clamp(1rem, 3vw, 3rem);
+  align-items: center;
+}
+
+@media (max-width: 880px) {
+  .console__stage {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ------------------------------------------------------------------ gate */
+
+.gate {
+  position: relative;
+  width: min(100%, 78vh);
+  margin: 0 auto;
+  aspect-ratio: 1;
+}
+
+.gate__svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.gate__horizon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 0;
+}
+
+.horizon {
+  width: 65%;
+  height: 65%;
+  border-radius: 50%;
+  filter: blur(1.5px);
+  transition: opacity 0.4s;
+}
+
+.horizon--off {
+  opacity: 0;
+}
+
+.ring-outer {
+  fill: none;
+  stroke: var(--naquadah);
+  stroke-width: 14;
+}
+
+.ring-outer--inner-edge {
+  stroke-width: 6;
+  stroke: var(--naquadah-deep);
+}
+
+.symbol-ring__band {
+  fill: none;
+  stroke: var(--naquadah-deep);
+  stroke-width: 74;
+}
+
+.symbol-ring__divider {
+  stroke: #0a0f18;
+  stroke-width: 2;
+}
+
+.glyph__stroke {
+  fill: none;
+  stroke: var(--glyph);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.glyph__star {
+  fill: var(--glyph);
+}
+
+/* chevrons */
+
+.chevron__housing {
+  fill: var(--naquadah);
+  stroke: #0a0f18;
+  stroke-width: 2;
+}
+
+.chevron__vee {
+  fill: #1c2635;
+  transition: fill 0.2s, filter 0.3s;
+}
+
+.chevron--active .chevron__vee {
+  fill: #7c5a10;
+}
+
+.chevron--locked .chevron__vee {
+  fill: var(--amber);
+}
+
+.chevron--energized .chevron__vee {
+  fill: #fde68a;
+  filter: drop-shadow(0 0 6px var(--amber));
+}
+
+.chevron--master .chevron__housing {
+  stroke: #2c3c55;
+}
+
+/* iris */
+
+.iris__blade {
+  fill: var(--iris);
+  stroke: #3d4654;
+  stroke-width: 1.5;
+  transition: transform var(--iris-transit) cubic-bezier(0.4, 0, 0.4, 1);
+}
+
+.iris--open .iris__blade,
+.iris--opening .iris__blade {
+  transform: translateY(-215px);
+}
+
+.iris--closed .iris__blade,
+.iris--closing .iris__blade {
+  transform: translateY(0);
+}
+
+/* ------------------------------------------------------------------- dhd */
+
+.dhd {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  border: 1px solid var(--panel-edge);
+  background: linear-gradient(180deg, var(--panel), #070d18);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.dhd__buffer {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.dhd__slot {
+  width: 2.2rem;
+  height: 2.2rem;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--panel-edge);
+  border-radius: 4px;
+  color: var(--text-dim);
+}
+
+.dhd__slot--set {
+  border-style: solid;
+  border-color: var(--accent);
+  box-shadow: inset 0 0 6px rgba(56, 189, 248, 0.25);
+}
+
+.dhd__slot svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.dhd__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.4rem, 1fr));
+  gap: 0.3rem;
+}
+
+.dhd__key {
+  aspect-ratio: 1;
+  padding: 0.25rem;
+  background: var(--naquadah-deep);
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.dhd__key svg {
+  width: 100%;
+  height: 100%;
+}
+
+.dhd__key:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.dhd__key--lit {
+  background: #10283c;
+  border-color: var(--accent);
+}
+
+.dhd__key--origin {
+  border-color: #7c5a10;
+}
+
+.dhd__key:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.dhd__controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dhd__engage {
+  flex: 1;
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 0.7rem;
+  border-radius: 4px;
+  border: 1px solid var(--accent);
+  background: #0c2233;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.dhd__engage:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.dhd__engage--abort {
+  border-color: var(--red);
+  color: var(--red);
+  background: #2a1010;
+}
+
+.dhd__engage--shutdown {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: #2a2210;
+}
+
+.dhd__aux {
+  font: inherit;
+  font-size: 0.75rem;
+  padding: 0 0.9rem;
+  background: var(--naquadah-deep);
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.dhd__aux:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.dhd__book h2 {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin: 0 0 0.4rem;
+  letter-spacing: 0.2em;
+}
+
+.dhd__book {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.dhd__entry {
+  display: flex;
+  gap: 0.8rem;
+  font: inherit;
+  font-size: 0.78rem;
+  text-align: left;
+  padding: 0.45rem 0.7rem;
+  background: transparent;
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.dhd__entry:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.dhd__entry:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.dhd__entry-designation {
+  color: var(--accent);
+  min-width: 5.2rem;
+}
+
+.dhd__entry-name {
+  color: var(--text-dim);
+}
+
+/* ---------------------------------------------------------------- footer */
+
+.console__footer {
+  text-align: center;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  padding: 0.4rem 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status__attract {
+    animation: none;
+  }
+}
