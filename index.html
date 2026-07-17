@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AETHERGATE — Transit Ring Console</title>
+<meta name="description" content="An original interactive tribute to ring-portal science fiction. Dial a seven-sigil address, watch the seals lock, and open the aperture. Fully client-side.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%2359d8ff' stroke-width='9'/%3E%3Ccircle cx='50' cy='50' r='18' fill='%2359d8ff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-state="idle">
+
+<canvas id="starfield" aria-hidden="true"></canvas>
+
+<header class="masthead">
+  <div class="brand">
+    <h1>AETHER<span>GATE</span></h1>
+    <p class="tagline">ORBITAL TRANSIT RING &middot; CONTROL CONSOLE 7</p>
+  </div>
+  <div class="masthead-controls">
+    <button id="btn-audio" class="chip" aria-pressed="false" title="Toggle synthesized sound (M)">SOUND&nbsp;: OFF</button>
+    <button id="btn-help" class="chip" title="Operator's manual">MANUAL</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <section class="gate-stage" aria-label="Transit ring">
+    <div class="gate-wrap" id="gate-wrap">
+      <canvas id="portal" width="900" height="900" aria-hidden="true"></canvas>
+      <svg id="ring" viewBox="0 0 1000 1000" role="img" aria-label="Dialing ring with rotating sigil track and locking seals"></svg>
+      <div id="flash" class="flash" aria-hidden="true"></div>
+    </div>
+    <div class="stage-readout">
+      <div class="readout-line">
+        <span class="readout-label">STATUS</span>
+        <span id="status-text" class="readout-value">IDLE — RING COLD</span>
+      </div>
+      <div class="readout-line">
+        <span class="readout-label">APERTURE STABILITY</span>
+        <div class="meter" aria-hidden="true"><div id="stability-bar"></div></div>
+        <span id="stability-pct" class="readout-value">—</span>
+      </div>
+    </div>
+  </section>
+
+  <aside class="console">
+
+    <section class="panel address-panel">
+      <h2>Destination Sequence</h2>
+      <div id="address-slots" class="slots" aria-label="Seven sigil address"></div>
+      <div class="row">
+        <button id="btn-dial"   class="btn primary" title="Begin dialing sequence (Enter)">ENGAGE RING</button>
+        <button id="btn-abort"  class="btn danger" hidden title="Abort dialing (Esc)">ABORT</button>
+        <button id="btn-close"  class="btn danger" hidden title="Collapse the aperture (Esc)">SEAL PORTAL</button>
+        <button id="btn-probe"  class="btn" hidden title="Send a telemetry drone through">LAUNCH PROBE</button>
+      </div>
+      <div class="row">
+        <button id="btn-random" class="btn ghost" title="Draft random coordinates (R)">RANDOM COORDS</button>
+        <button id="btn-clear"  class="btn ghost" title="Clear the sequence (C)">CLEAR</button>
+      </div>
+    </section>
+
+    <section class="panel pad-panel">
+      <h2>Sigil Pad</h2>
+      <div id="sigil-pad" class="pad" aria-label="Thirty-six sigil keys"></div>
+    </section>
+
+    <section class="panel dest-panel">
+      <h2>Charted Destinations</h2>
+      <div id="destinations" class="dest-list"></div>
+    </section>
+
+    <section class="panel log-panel">
+      <h2>Operations Log</h2>
+      <div id="log" class="log" role="log" aria-live="polite"></div>
+    </section>
+
+  </aside>
+</main>
+
+<footer class="foot">
+  An original fan-made tribute to ring-portal science fiction. Runs entirely in your browser —
+  no server, no network, no data leaves this page. Every destination is fictional.
+</footer>
+
+<div id="help" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="help-title">
+  <div class="modal-card">
+    <h2 id="help-title">Operator's Manual</h2>
+    <ol>
+      <li><strong>Compose an address.</strong> Tap seven distinct sigils on the pad, pick a charted
+          destination, or press <kbd>R</kbd> for random coordinates.</li>
+      <li><strong>Engage the ring.</strong> The sigil track spins each glyph to the crown marker
+          and a mechanical seal clamps shut for every encoded sigil — seven locks in all.</li>
+      <li><strong>Aperture opens.</strong> When the prime seal engages, stand clear of the
+          vestibule: the forming event horizon surges outward before it settles.</li>
+      <li><strong>While open</strong>, you may launch a telemetry probe. Watch aperture stability —
+          the ring cannot hold a lane forever and will emergency-seal at zero.</li>
+      <li><strong>Seal the portal</strong> when you're done, or press <kbd>Esc</kbd>.</li>
+    </ol>
+    <p class="kbd-row">
+      <kbd>Enter</kbd> dial &nbsp; <kbd>Esc</kbd> abort / seal &nbsp; <kbd>R</kbd> random &nbsp;
+      <kbd>C</kbd> clear &nbsp; <kbd>M</kbd> sound
+    </p>
+    <p class="fine">AETHERGATE is an original work: its sigils are procedurally generated, its
+       destinations invented, its sounds synthesized live by your browser.</p>
+    <button id="btn-help-close" class="btn primary">CLOSE MANUAL</button>
+  </div>
+</div>
+
+<noscript><p class="noscript">The transit ring needs JavaScript to spin. Please enable it.</p></noscript>
+
+<script src="js/glyphs.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/starfield.js"></script>
+<script src="js/portal.js"></script>
+<script src="js/ring.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
