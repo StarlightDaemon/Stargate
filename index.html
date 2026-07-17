@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heliacal Ring — Gate Command</title>
+<meta name="description" content="An original interactive ring-gate dialing terminal. Fully client-side, entirely fictional.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%2357e6ff' stroke-width='9'/%3E%3Ccircle cx='50' cy='50' r='16' fill='%2357e6ff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-state="idle">
+
+<canvas id="starfield" aria-hidden="true"></canvas>
+
+<div id="app">
+  <header id="topbar">
+    <div class="brand">
+      <svg class="brand-sigil" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="7"/>
+        <circle cx="50" cy="50" r="13" fill="currentColor"/>
+        <line x1="50" y1="4" x2="50" y2="22" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <div class="brand-text">
+        <h1>HELIACAL RING</h1>
+        <span class="brand-sub">GATE COMMAND · TERMINAL VII</span>
+      </div>
+    </div>
+    <div class="statusbar">
+      <div class="lamp-block">
+        <span id="status-lamp" class="lamp"></span>
+        <span id="status-text">STANDBY</span>
+      </div>
+      <span id="clock" title="Station time">--:--:--</span>
+      <button id="btn-mute" class="chip" aria-pressed="false" title="Toggle sound (M)">SOUND OFF</button>
+      <button id="btn-help" class="chip" title="Operations manual (H)">MANUAL</button>
+    </div>
+  </header>
+
+  <main id="layout">
+    <section id="gate-stage" aria-label="Gate visual">
+      <div id="gate-wrap">
+        <canvas id="portal-canvas" aria-hidden="true"></canvas>
+        <svg id="gate-svg" viewBox="0 0 1000 1000" role="img" aria-label="Ring gate"></svg>
+        <button id="portal-hotspot" title="Launch survey probe through the open conduit" hidden></button>
+        <div id="flash" aria-hidden="true"></div>
+      </div>
+      <div id="gate-caption">RING IDLE — AWAITING COORDINATES</div>
+    </section>
+
+    <aside id="console" aria-label="Dialing console">
+
+      <div class="panel" id="panel-register">
+        <h2>ADDRESS REGISTER</h2>
+        <div id="register-slots" aria-live="polite"></div>
+        <div id="register-hint" class="hint"></div>
+        <div class="btn-row">
+          <button id="btn-dial" class="btn primary" disabled>INITIATE DIAL</button>
+          <button id="btn-abort" class="btn danger" disabled>ABORT</button>
+        </div>
+        <div class="btn-row">
+          <button id="btn-clear" class="btn">CLEAR</button>
+          <button id="btn-undo" class="btn">UNDO GLYPH</button>
+          <button id="btn-survey" class="btn" title="Fill the register with unverified random coordinates">SURVEY DIAL</button>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-glyphs">
+        <h2>GLYPH INPUT MATRIX</h2>
+        <div id="glyph-grid"></div>
+      </div>
+
+      <div class="panel" id="panel-archive">
+        <h2>DESTINATION ARCHIVE</h2>
+        <ul id="dest-list"></ul>
+      </div>
+
+      <div class="panel" id="panel-systems">
+        <h2>CONDUIT SYSTEMS</h2>
+        <div class="meter-row">
+          <span class="meter-label">STABILITY</span>
+          <div class="meter"><div id="stability-fill"></div></div>
+          <span id="stability-pct">—</span>
+        </div>
+        <div class="meter-row">
+          <span class="meter-label">ELAPSED</span>
+          <span id="elapsed">—</span>
+          <span class="meter-label" style="margin-left:auto">PROBES</span>
+          <span id="probe-count">0</span>
+        </div>
+        <div class="btn-row">
+          <button id="btn-shutdown" class="btn danger" disabled>DISENGAGE CONDUIT</button>
+          <button id="btn-probe" class="btn" disabled>LAUNCH PROBE</button>
+        </div>
+        <div class="btn-row">
+          <button id="btn-iris" class="btn wide">APERTURE SHIELD : <span id="iris-state">OPEN</span></button>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-log">
+        <h2>EVENT LOG</h2>
+        <div id="event-log" aria-live="polite"></div>
+      </div>
+
+    </aside>
+  </main>
+
+  <footer id="footer">
+    An original fan-tribute interface. Every symbol, address and destination is fictional.
+    Runs entirely in your browser — nothing is sent or received.
+  </footer>
+</div>
+
+<div id="tunnel-overlay" hidden><canvas id="tunnel-canvas"></canvas><div id="tunnel-label"></div></div>
+
+<div id="help-overlay" hidden>
+  <div class="help-card">
+    <h2>RING OPERATIONS MANUAL</h2>
+    <ol>
+      <li><strong>Compose an address</strong> — select six destination glyphs on the input matrix, then the
+        <em>Solyn</em> point-of-origin glyph (marked ◈) to complete the seven-lock sequence.
+        Or pick a verified entry from the Destination Archive.</li>
+      <li><strong>Initiate dial</strong> — the inner ring spins each glyph to the primary lock; nine lugs
+        engage one by one. Unverified coordinates usually fail on the seventh lock.</li>
+      <li><strong>Conduit open</strong> — the breach surge is not survivable; stand clear of the ring.
+        Launch survey probes through the event surface while stability holds.</li>
+      <li><strong>Disengage</strong> — close the conduit manually, or the ring disengages itself when
+        stability is exhausted.</li>
+      <li><strong>Aperture shield</strong> — seal the opening at any time. A sealed ring blocks
+        unscheduled inbound breaches.</li>
+    </ol>
+    <table class="keys">
+      <tr><td><kbd>Enter</kbd></td><td>Initiate dial</td><td><kbd>Esc</kbd></td><td>Abort / disengage</td></tr>
+      <tr><td><kbd>I</kbd></td><td>Aperture shield</td><td><kbd>P</kbd></td><td>Launch probe</td></tr>
+      <tr><td><kbd>M</kbd></td><td>Sound on/off</td><td><kbd>Backspace</kbd></td><td>Remove last glyph</td></tr>
+      <tr><td><kbd>R</kbd></td><td>Dial random archive entry</td><td><kbd>H</kbd></td><td>This manual</td></tr>
+    </table>
+    <button id="btn-help-close" class="btn primary">CLOSE</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/glyphs.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/starfield.js"></script>
+<script src="js/portal.js"></script>
+<script src="js/gate.js"></script>
+<script src="js/sequencer.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
