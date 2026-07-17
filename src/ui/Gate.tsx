@@ -33,8 +33,15 @@ export function Gate({ rotation, chevrons, horizonPhase, irisPhase }: GateProps)
       </div>
 
       <svg className="gate__svg" viewBox="0 0 600 600" role="img" aria-label="Stargate">
-        {/* Iris — sits over the horizon, under the ring. */}
-        <g className={`iris iris--${irisPhase}`}>
+        {/* Iris — sits over the horizon, under the ring. Clipped to the
+            aperture so retracted blades vanish behind the ring instead of
+            protruding past the rim. */}
+        <defs>
+          <clipPath id="iris-aperture">
+            <circle cx="300" cy="300" r="196" />
+          </clipPath>
+        </defs>
+        <g className={`iris iris--${irisPhase}`} clipPath="url(#iris-aperture)">
           {Array.from({ length: IRIS_BLADES }, (_, i) => (
             <g key={i} transform={`rotate(${(360 / IRIS_BLADES) * i} 300 300)`}>
               <path
