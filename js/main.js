@@ -274,7 +274,8 @@
       ],
       { duration: 420 * CFG.timeScale, easing: "ease-in-out", fill: "forwards" }
     );
-    await anim.finished.catch(() => {});
+    /* finished can stall in throttled/background tabs — don't let the rig hang on it */
+    await Promise.race([anim.finished.catch(() => {}), wait(520)]);
     chipEl(i).classList.add("ember");
     setTimeout(() => chipEl(i).classList.remove("ember"), 900 * CFG.timeScale);
     hearthAudio.sputter();
@@ -478,8 +479,10 @@
     if (!S.mothLit) {
       S.drippings = Math.min(S.drippings + 1, 8);
       journal(COPY.drippings);
+      journal(COPY.sealed);
+    } else {
+      journal(COPY.sealedMoth);
     }
-    journal(COPY.sealed);
     await wait(600);
     els.ironPin.classList.remove("drawn");
     resetChalking(false);
@@ -555,6 +558,7 @@
      + URL params (?rig=<dest-id>&fast=1&quick=1). Documented in README. */
   async function runTestCycle(destId = "fen-market", fast = false, holdMs = 4000) {
     const dest = DESTINATIONS.find((d) => d.id === destId) || DESTINATIONS[0];
+    S.mode = fast ? "moth" : "patient";
     if (S.state === "open") await sealWay(true);
     await onLedgerClick(dest);
     if (S.state === "primed") await onLadle();
@@ -574,6 +578,7 @@
     timeScale: (x) => { CFG.timeScale = x; },
     test: runTestCycle,
     _setMode: (m) => { S.mode = m; },
+    _fx: () => portal,
   };
 
   /* ═══════════════ boot ═══════════════ */

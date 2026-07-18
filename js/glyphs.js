@@ -133,6 +133,7 @@ const COPY = {
   guttered: "The tallow gave out. The way fell shut on its own, as the rules say it must.",
   sealing: "Iron in the socket. The way closes clean.",
   sealed: "Sealed and snuffed. Scrape the drippings while they're warm.",
+  sealedMoth: "Sealed and snuffed. Nothing to scrape — the moth took its fee.",
   drippings: "A dripping saved to the jar. Two makes a taper.",
   taperDipped: "A new taper, moth-dipped and set on the shelf.",
   wipe: "Slate wiped. Start your chalking over.",
