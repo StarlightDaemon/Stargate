@@ -1,0 +1,23 @@
+# Normalize line endings across platforms.
+#
+# core.autocrlf is set to true system-wide on this machine, which checks out
+# CRLF working-tree files from LF blobs. These rules pin both the stored and
+# the checked-out form to LF so the working tree matches the committed
+# content regardless of any platform or user setting.
+#
+# Extension list derived from the tracked files actually present across the
+# six Stargate variant repositories: js, css, html, json, md, and .gitignore.
+
+# Baseline: auto-detect text, check out LF. Binary files are left untouched.
+* text=auto eol=lf
+
+# Explicit rules for the file types present in this repository.
+*.js        text eol=lf
+*.css       text eol=lf
+*.html      text eol=lf
+*.json      text eol=lf
+*.md        text eol=lf
+
+# Dotfiles tracked in the variant repositories.
+.gitignore      text eol=lf
+.gitattributes  text eol=lf
