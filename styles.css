@@ -1,0 +1,533 @@
+/* ═══════════════════════════════════════════════════════════════════
+   SIDEREUM — the Ring of Seven Wards
+   Palette: night-indigo stone, argent (silver-blue) inlay, aurum gold.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --ink:      #070510;
+  --night:    #0d0a1e;
+  --stone:    #141026;
+  --stone-hi: #1e1838;
+  --argent:   #cfd8ff;
+  --argent-dim: #6d7396;
+  --aurum:    #e8c06a;
+  --aurum-hi: #ffe9b0;
+  --violet:   #8f6cff;
+  --ember:    #f2e3b3;
+  --line:     rgba(232, 192, 106, 0.28);
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(1200px 800px at 50% -10%, #191340 0%, var(--night) 45%, var(--ink) 100%);
+  color: var(--argent);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+#starfield {
+  position: fixed; inset: 0; z-index: -1;
+  background-repeat: repeat;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* ————— Masthead ————— */
+
+.masthead { text-align: center; padding: 2.2rem 1rem 0.6rem; }
+
+.masthead h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: 0.45em;
+  text-indent: 0.45em; /* balance the tracking */
+  text-transform: uppercase;
+  color: var(--aurum);
+  text-shadow: 0 0 24px rgba(232, 192, 106, 0.35), 0 0 2px rgba(255, 233, 176, 0.6);
+}
+
+.subtitle {
+  margin: 0.4rem 0 0;
+  font-variant: small-caps;
+  letter-spacing: 0.22em;
+  color: var(--argent-dim);
+}
+
+/* ————— Layout frame ————— */
+
+.frame {
+  display: grid;
+  grid-template-columns: minmax(250px, 300px) minmax(340px, 1fr) minmax(270px, 330px);
+  gap: 1.2rem;
+  align-items: start;
+  max-width: 1440px;
+  margin: 1rem auto 2rem;
+  padding: 0 1.2rem;
+}
+
+.frame > * { min-width: 0; }
+
+.panel {
+  background: linear-gradient(170deg, rgba(30, 24, 56, 0.72), rgba(13, 10, 30, 0.85));
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1.1rem 1.2rem 1.3rem;
+  box-shadow: 0 0 0 1px rgba(7, 5, 16, 0.8), 0 12px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.panel h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--aurum);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.45rem;
+}
+
+.panel h2 + .rubric { margin-top: 0.6rem; }
+
+.rubric {
+  font-size: 0.86rem;
+  font-style: italic;
+  color: var(--argent-dim);
+  margin: 0 0 0.9rem;
+}
+
+.minor-head {
+  margin: 1.3rem 0 0.4rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--argent-dim);
+}
+
+/* ————— Codex of Ways ————— */
+
+.codex-list, .remembered-list { list-style: none; margin: 0; padding: 0; }
+
+.way {
+  border: 1px solid rgba(232, 192, 106, 0.16);
+  border-radius: 5px;
+  padding: 0.65rem 0.7rem;
+  margin-bottom: 0.7rem;
+  background: rgba(7, 5, 16, 0.45);
+  transition: border-color 0.4s ease;
+}
+
+.way.is-remembered { border-color: rgba(232, 192, 106, 0.45); }
+
+.way-name {
+  display: flex; align-items: baseline; gap: 0.45rem;
+  font-size: 0.98rem;
+  color: var(--ember);
+  letter-spacing: 0.04em;
+}
+
+.way-name .mem-star { color: var(--aurum); font-size: 0.85em; }
+
+.way-lore {
+  margin: 0.25rem 0 0.45rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--argent-dim);
+}
+
+.way-sigils { display: flex; gap: 3px; margin-bottom: 0.55rem; }
+.way-sigils svg { display: block; opacity: 0.85; }
+
+.way-actions { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+
+.remembered-list li {
+  font-size: 0.85rem;
+  color: var(--argent-dim);
+  padding: 0.2rem 0;
+}
+.remembered-list .none { font-style: italic; }
+
+/* ————— Buttons ————— */
+
+.btn {
+  font-family: var(--serif);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aurum);
+  background: rgba(232, 192, 106, 0.07);
+  border: 1px solid rgba(232, 192, 106, 0.45);
+  border-radius: 3px;
+  padding: 0.42rem 0.85rem;
+  cursor: pointer;
+  transition: background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+}
+
+.btn:hover:not(:disabled), .btn:focus-visible {
+  background: rgba(232, 192, 106, 0.18);
+  box-shadow: 0 0 14px rgba(232, 192, 106, 0.25);
+  outline: none;
+}
+
+.btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  color: var(--argent-dim);
+  border-color: rgba(207, 216, 255, 0.25);
+  background: transparent;
+}
+.btn-ghost:hover:not(:disabled), .btn-ghost:focus-visible {
+  color: var(--argent);
+  background: rgba(207, 216, 255, 0.08);
+  box-shadow: 0 0 12px rgba(207, 216, 255, 0.15);
+}
+
+.btn-swift {
+  color: #b9a5ff;
+  border-color: rgba(143, 108, 255, 0.55);
+  background: rgba(143, 108, 255, 0.08);
+}
+.btn-swift:hover:not(:disabled), .btn-swift:focus-visible {
+  background: rgba(143, 108, 255, 0.2);
+  box-shadow: 0 0 14px rgba(143, 108, 255, 0.3);
+}
+
+.btn-seal {
+  color: #ffb9a0;
+  border-color: rgba(255, 150, 110, 0.5);
+  background: rgba(255, 150, 110, 0.07);
+}
+.btn-seal:hover:not(:disabled), .btn-seal:focus-visible {
+  background: rgba(255, 150, 110, 0.18);
+  box-shadow: 0 0 14px rgba(255, 150, 110, 0.3);
+}
+
+/* ————— The stage ————— */
+
+.stage-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+
+.ring-stage {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  aspect-ratio: 1;
+}
+
+#portalCanvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+
+#ringSvg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+#ringSvg .sigil, #ringSvg #keystone { pointer-events: auto; cursor: pointer; }
+#ringSvg .sigil.is-used { cursor: default; }
+body[data-state="open"] #ringSvg .sigil,
+body[data-state="igniting"] #ringSvg .sigil,
+body[data-state="sealing"] #ringSvg .sigil { cursor: default; }
+
+#flash {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 240, 210, 0.95) 0%, rgba(232, 192, 106, 0.5) 40%, transparent 72%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#flash.blaze { animation: blaze 0.9s ease-out forwards; }
+
+@keyframes blaze {
+  0%   { opacity: 0; }
+  18%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.status {
+  min-height: 1.6em;
+  margin: 0;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: var(--ember);
+  text-align: center;
+  text-shadow: 0 0 12px rgba(242, 227, 179, 0.25);
+}
+
+.stage-actions { display: flex; gap: 0.8rem; min-height: 2.2rem; }
+
+/* ————— SVG ring pieces (classes assigned by ring.js) ————— */
+
+.ward-gem {
+  fill: #241d42;
+  stroke: rgba(207, 216, 255, 0.35);
+  stroke-width: 1.5;
+  transition: fill 0.5s ease;
+}
+
+.ward-frame {
+  fill: none;
+  stroke: rgba(232, 192, 106, 0.5);
+  stroke-width: 2;
+}
+
+.ward.is-lit .ward-gem {
+  fill: var(--aurum);
+  filter: url(#wardGlow);
+}
+
+.ward.is-lit.is-swift .ward-gem { fill: var(--violet); }
+
+.ward .ward-flare {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ward.is-lit .ward-flare { animation: wardFlare 0.7s ease-out; }
+
+@keyframes wardFlare {
+  0%   { opacity: 0.95; transform: scale(0.4); }
+  100% { opacity: 0;    transform: scale(2.4); }
+}
+
+body[data-state="open"] .ward.is-lit .ward-gem { animation: wardBreath 3.2s ease-in-out infinite; }
+
+@keyframes wardBreath {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+
+.sigil .sigil-hit { fill: transparent; }
+
+.sigil .sigil-art {
+  stroke: rgba(207, 216, 255, 0.66);
+  fill: none;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.3s ease, filter 0.3s ease;
+}
+.sigil .sigil-star { fill: rgba(207, 216, 255, 0.75); stroke: none; transition: fill 0.3s ease; }
+
+.sigil:hover .sigil-art { stroke: var(--aurum-hi); filter: url(#sigilGlow); }
+.sigil:hover .sigil-star { fill: var(--aurum-hi); }
+
+.sigil.is-used .sigil-art { stroke: var(--aurum); filter: url(#sigilGlow); }
+.sigil.is-used .sigil-star { fill: var(--aurum); }
+
+body[data-state="open"] .sigil:hover .sigil-art { stroke: rgba(207, 216, 255, 0.66); filter: none; }
+body[data-state="open"] .sigil:hover .sigil-star { fill: rgba(207, 216, 255, 0.75); }
+
+.ring-engraving {
+  font-family: var(--serif);
+  font-size: 21px;
+  letter-spacing: 6px;
+  fill: rgba(232, 192, 106, 0.5);
+  text-transform: uppercase;
+}
+
+#keystone .keystone-boss {
+  fill: #1a1433;
+  stroke: rgba(232, 192, 106, 0.55);
+  stroke-width: 2.5;
+  transition: fill 0.6s ease;
+}
+
+#keystone .keystone-star {
+  fill: none;
+  stroke: rgba(207, 216, 255, 0.4);
+  stroke-width: 2;
+  transition: stroke 0.6s ease;
+}
+
+#keystone.is-awake .keystone-boss {
+  fill: #2b2152;
+  animation: keystonePulse 1.6s ease-in-out infinite;
+}
+#keystone.is-awake .keystone-star { stroke: var(--aurum-hi); filter: url(#sigilGlow); }
+
+@keyframes keystonePulse {
+  0%, 100% { stroke: rgba(232, 192, 106, 0.55); }
+  50%      { stroke: var(--aurum-hi); }
+}
+
+#keystone { transition: opacity 0.9s ease; }
+#keystone.is-hidden { opacity: 0; pointer-events: none !important; }
+
+.lens-frame {
+  fill: none;
+  stroke: var(--aurum);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 6px rgba(232, 192, 106, 0.45));
+}
+
+.lens-flash-art { stroke: var(--aurum-hi); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.lens-flash-star { fill: var(--aurum-hi); }
+
+#lensFlash { opacity: 0; }
+#lensFlash.flare { animation: lensFlare 0.85s ease-out; }
+#lensFlash.flare-swift { animation: lensFlare 0.32s ease-out; }
+
+@keyframes lensFlare {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.decor { pointer-events: none; }
+
+/* ————— Inscription tray ————— */
+
+.tray {
+  list-style: none;
+  display: flex;
+  gap: 6px;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.tray li {
+  width: 38px; height: 38px;
+  border: 1px solid rgba(207, 216, 255, 0.22);
+  border-radius: 4px;
+  background: rgba(7, 5, 16, 0.5);
+  display: grid;
+  place-items: center;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.tray li.filled {
+  border-color: rgba(232, 192, 106, 0.6);
+  box-shadow: 0 0 10px rgba(232, 192, 106, 0.2), inset 0 0 8px rgba(232, 192, 106, 0.12);
+}
+
+.ledger-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+
+/* ————— Ritual record ————— */
+
+.record {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  max-height: 340px;
+  overflow-y: auto;
+  font-size: 0.84rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 192, 106, 0.3) transparent;
+}
+
+.record li {
+  padding: 0.3rem 0 0.3rem 1.1rem;
+  position: relative;
+  color: var(--argent-dim);
+  border-bottom: 1px dotted rgba(207, 216, 255, 0.08);
+  animation: recordIn 0.5s ease;
+}
+
+.record li::before {
+  content: "⋆";
+  position: absolute; left: 0; top: 0.3rem;
+  color: var(--aurum);
+  opacity: 0.7;
+}
+
+.record li.notable { color: var(--ember); }
+.record li.swift::before { color: var(--violet); }
+
+@keyframes recordIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ————— Grimoire overlay ————— */
+
+.veil {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(7, 5, 16, 0.82);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.veil[hidden] { display: none; }
+
+.grimoire-page {
+  max-width: 620px;
+  max-height: 86vh;
+  overflow-y: auto;
+  background: linear-gradient(165deg, #1c1636, #0d0a1e);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1.6rem 2rem 1.8rem;
+  box-shadow: 0 0 60px rgba(143, 108, 255, 0.15), 0 24px 80px rgba(0, 0, 0, 0.6);
+}
+
+.grimoire-page h2 {
+  margin-top: 0;
+  color: var(--aurum);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 1.15rem;
+}
+
+.grimoire-page h3 {
+  color: var(--ember);
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  margin: 1.2rem 0 0.3rem;
+  font-size: 1rem;
+}
+
+.grimoire-page p { margin: 0.3rem 0; font-size: 0.92rem; color: var(--argent); }
+.grimoire-page em { color: var(--aurum-hi); }
+.grimoire-page .btn { margin-top: 1.4rem; }
+
+/* ————— Colophon ————— */
+
+.colophon {
+  text-align: center;
+  padding: 0 1rem 2rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: rgba(109, 115, 150, 0.75);
+}
+
+.noscript { text-align: center; color: var(--ember); }
+
+/* ————— Responsive ————— */
+
+@media (max-width: 1080px) {
+  .frame { grid-template-columns: 1fr; }
+  .stage-wrap { order: -1; }
+  .panel { max-width: 680px; margin: 0 auto; width: 100%; }
+}
+
+/* ————— Reduced motion ————— */
+
+@media (prefers-reduced-motion: reduce) {
+  #flash.blaze,
+  .ward.is-lit .ward-flare,
+  #keystone.is-awake .keystone-boss,
+  body[data-state="open"] .ward.is-lit .ward-gem,
+  .record li { animation: none !important; }
+  #flash.blaze { opacity: 0; }
+}
