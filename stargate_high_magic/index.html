@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIDEREUM — the Ring of Seven Wards</title>
+<meta name="description" content="An interactive artifact of the Astrolith Order: inscribe seven star-sigils upon the Ring, wake the Keystone, and open the Way.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='%23e8c06a' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%238f6cff'/%3E%3Ccircle cx='32' cy='8' r='4' fill='%23cfd8ff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-state="dormant">
+
+<div id="starfield" aria-hidden="true"></div>
+
+<header class="masthead">
+  <h1>Sidereum</h1>
+  <p class="subtitle">the Ring of Seven Wards &middot; an artifact of the Astrolith Order</p>
+</header>
+
+<main class="frame">
+
+  <!-- ————— Codex of Ways ————— -->
+  <aside class="panel codex" aria-label="Codex of Ways">
+    <h2>Codex of Ways</h2>
+    <p class="rubric">Seven sigils, truly graven, are a Way. These the Order has charted.
+       A Way once opened is <em>remembered</em>, and a remembered Way may be recalled by
+       Swift Working — the Ring need not turn for a road it already knows.</p>
+    <ul id="codexList" class="codex-list"><!-- built by main.js --></ul>
+    <h3 class="minor-head">Remembered by the Ring</h3>
+    <ul id="rememberedList" class="remembered-list"><!-- built by main.js --></ul>
+    <button id="forgetBtn" class="btn btn-ghost" type="button" title="Efface every remembered Way from the Ring's memory">Efface the Ring's Memory</button>
+  </aside>
+
+  <!-- ————— The Ring ————— -->
+  <section class="stage-wrap" aria-label="The Ring of Seven Wards">
+    <div class="ring-stage" id="ringStage">
+      <canvas id="portalCanvas" aria-hidden="true"></canvas>
+      <svg id="ringSvg" viewBox="0 0 900 900" role="img" aria-label="A great stone ring inlaid with star-sigils"><!-- built by ring.js --></svg>
+      <div id="flash" aria-hidden="true"></div>
+    </div>
+    <p id="statusLine" class="status" role="status" aria-live="polite">The Ring dreams beneath its wards.</p>
+    <div class="stage-actions">
+      <button id="effaceBtn" class="btn" type="button" hidden>Efface the Inscription</button>
+      <button id="sealBtn" class="btn btn-seal" type="button" hidden>Seal the Way</button>
+    </div>
+  </section>
+
+  <!-- ————— Ritual Record ————— -->
+  <aside class="panel ledger" aria-label="Inscription and Ritual Record">
+    <h2>The Inscription</h2>
+    <p class="rubric">Touch a sigil on the band, or intone a charted Way. Each graven sigil
+       ignites a ward. When all seven burn, the Keystone wakes.</p>
+    <ol id="tray" class="tray" aria-label="Sigils graven so far"><!-- 7 slots --></ol>
+    <div class="ledger-controls">
+      <button id="audioBtn" class="btn btn-ghost" type="button" aria-pressed="false">Voces Aetheris: Silent</button>
+      <button id="helpBtn" class="btn btn-ghost" type="button">Open the Grimoire</button>
+    </div>
+    <h2>Ritual Record</h2>
+    <ul id="record" class="record" aria-live="polite"><!-- log entries --></ul>
+  </aside>
+
+</main>
+
+<footer class="colophon">
+  <p>Wrought by the Astrolith Order in the Year of the Quiet Comet.
+     Every destination herein is a fiction; every star, an invention.</p>
+</footer>
+
+<!-- ————— Grimoire (help) overlay ————— -->
+<div id="grimoire" class="veil" hidden>
+  <article class="grimoire-page" role="dialog" aria-modal="true" aria-labelledby="grimoireTitle">
+    <h2 id="grimoireTitle">The Grimoire of the Ring</h2>
+
+    <h3>Of the Ring</h3>
+    <p>The Sidereum is a gate-ring of the Astrolith Order, who wrote their magic in the
+       grammar of constellations. Twenty-one star-sigils are inlaid upon its turning band;
+       seven wards stand about its rim in heptagonal array.</p>
+
+    <h3>Of Inscription</h3>
+    <p>Choose seven sigils, one by one. At each choice the band turns until the chosen
+       sigil stands beneath the Crown Lens, and a ward takes fire. No sigil may be graven
+       twice in one Way. To unmake a half-written inscription, <em>Efface</em> it.</p>
+
+    <h3>Of the Keystone</h3>
+    <p>When seven wards burn, the Keystone at the Ring's heart wakes. Touch it, and the
+       Way opens. A Way matching the Codex leads to a charted realm; seven true sigils in
+       an order no chart records will still open — an <em>uncharted</em> Way, at the
+       dialer's peril.</p>
+
+    <h3>Of Swift Working</h3>
+    <p>Graven about the Ring's own rim stands its law: <em>“What the Ring remembers, the
+       Ring may recall.”</em> A Way opened once in full ritual leaves its echo in the
+       stone. To recall such a Way, the band need not turn at all — the wards remember
+       their sigils unbidden and take fire in moments. This is the Swift Working, and it
+       is only possible for Ways the Ring has already known.</p>
+
+    <h3>Of Sealing</h3>
+    <p>An open Way is closed by the Sealing — the wards release their sigils in reverse
+       order and the veil falls dark. An unsealed gate is an unlatched door; the Order
+       counsels against leaving one open.</p>
+
+    <h3>Of the Voces Aetheris</h3>
+    <p>The Ring may speak — hums, chimes, and the choir of an open Way — if you grant it
+       voice with the toggle in the ledger.</p>
+
+    <button id="grimoireClose" class="btn" type="button">Close the Grimoire</button>
+  </article>
+</div>
+
+<noscript><p class="noscript">The Ring is inert without the animating spark (JavaScript).</p></noscript>
+
+<script src="js/glyphs.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/portal.js"></script>
+<script src="js/ring.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
