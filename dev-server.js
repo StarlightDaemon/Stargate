@@ -6,7 +6,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
-const PORT = Number(process.argv[2]) || 8737;
+const PORT = Number(process.env.PORT) || Number(process.argv[2]) || 8737;
 const ROOT = __dirname;
 const MIME = {
   ".html": "text/html; charset=utf-8",

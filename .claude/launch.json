@@ -4,8 +4,9 @@
     {
       "name": "wayband",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["dev-server.js", "8737"],
-      "port": 8737
+      "runtimeArgs": ["dev-server.js"],
+      "port": 8737,
+      "autoPort": true
     }
   ]
 }
