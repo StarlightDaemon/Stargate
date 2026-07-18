@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HELIORA · Threshold Annulus</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23e8c98a' stroke-width='8'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23e8c98a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="app">
+
+    <header id="masthead">
+      <div class="mast-left">
+        <h1>HELIORA</h1>
+        <p class="subtitle">Threshold Annulus &middot; Meridian Vault Instrument No.&nbsp;1</p>
+      </div>
+      <div class="mast-right">
+        <div id="status-lamp" class="lamp idle"></div>
+        <div id="status-text">AT REST</div>
+      </div>
+    </header>
+
+    <main id="stage">
+
+      <section id="scene" aria-label="The Threshold Annulus">
+        <div id="gate-wrap">
+          <canvas id="portal" width="800" height="800"></canvas>
+          <svg id="gate" viewBox="0 0 1000 1000" role="img" aria-label="Ring-shaped dialing instrument"></svg>
+          <div id="flash"></div>
+        </div>
+      </section>
+
+      <aside id="console" aria-label="Attunement console">
+        <div class="console-head">
+          <span class="console-title">ATTUNEMENT CONSOLE</span>
+          <div class="console-head-btns">
+            <button id="btn-mute" class="icon-btn" title="Toggle sound (M)" aria-label="Toggle sound">&#9834;</button>
+            <button id="btn-help" class="icon-btn" title="Operator's primer (H)" aria-label="Help">?</button>
+          </div>
+        </div>
+
+        <div id="sockets" aria-label="Locked sigils of the current cant"></div>
+
+        <div id="stability-row" hidden>
+          <span class="stab-label">APERTURE STABILITY</span>
+          <div id="stability-bar"><div id="stability-fill"></div></div>
+          <span id="stability-time">38</span>
+        </div>
+
+        <div id="actions">
+          <button id="btn-random" class="act-btn">DRIFT CANT</button>
+          <button id="btn-abort" class="act-btn" disabled>RELEASE</button>
+          <button id="btn-seal" class="act-btn primary" disabled>SEAL THRESHOLD</button>
+        </div>
+
+        <div class="codex-head">CODEX OF KNOWN CANTS</div>
+        <ul id="codex"></ul>
+
+        <div class="log-head">ATTUNEMENT TRANSCRIPT</div>
+        <div id="log" aria-live="polite"></div>
+      </aside>
+
+    </main>
+
+    <div id="help-overlay" hidden>
+      <div id="help-card">
+        <h2>Operator&rsquo;s Primer</h2>
+        <p><strong>Heliora</strong> is a threshold annulus &mdash; a ring of thirty heliographic
+        sigils that, when attuned in the correct order, opens a standing well of
+        travel-light called the <em>Wellglass</em>.</p>
+        <ul>
+          <li><strong>Dial a cant</strong> &mdash; select seven sigils by clicking them on the
+          ring, or choose a known cant from the Codex. Each locked sigil ignites one
+          of the seven <strong>Annular Seals</strong>.</li>
+          <li><strong>The Standing Sun</strong> &mdash; every cant must close with
+          <em>Solyn</em>, the origin sigil (marked in gold at the ring's crown side).
+          The annulus refuses repeats and a premature origin.</li>
+          <li><strong>Sunstrike</strong> &mdash; when the seventh seal locks, the well
+          strikes open. The aperture holds for thirty-eight seconds.</li>
+          <li><strong>Seal the threshold</strong> &mdash; the <em>Umbral Occulter</em>, a
+          dark eclipse-disc, transits across the well and quenches it. Let the
+          stability lapse instead, and the well collapses on its own &mdash; ungently.</li>
+        </ul>
+        <p class="help-keys">Keys &mdash; <kbd>R</kbd> drift cant &nbsp; <kbd>S</kbd> seal
+        &nbsp; <kbd>Esc</kbd> release &nbsp; <kbd>M</kbd> sound &nbsp; <kbd>H</kbd> primer</p>
+        <p class="help-fine">A fiction. Every destination named here is invented; the
+        instrument reaches nowhere and no one.</p>
+        <button id="btn-help-close" class="act-btn">RETURN TO THE RING</button>
+      </div>
+    </div>
+
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
