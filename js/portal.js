@@ -167,29 +167,34 @@ class PortalFX {
       ctx.stroke();
     }
 
-    /* ── slow sheen: two soft rotating light patches ── */
+    /* ── slow sheen: two soft rotating light patches ──
+       gradient fades to transparent past its own radius, so filling the
+       whole canvas for it just burns fill-rate on pixels that paint
+       nothing — fill only the gradient's bounding box instead. */
     for (let k = 0; k < 2; k++) {
       const ang = this.t * (k ? -0.17 : 0.11) + k * 2.4;
       const px = cx + Math.cos(ang) * rad * 0.4;
       const py = cy + Math.sin(ang) * rad * 0.4;
-      const gs = ctx.createRadialGradient(px, py, 0, px, py, rad * 0.55);
+      const sr = rad * 0.55;
+      const gs = ctx.createRadialGradient(px, py, 0, px, py, sr);
       const c = this.unstable ? "224, 210, 140" : "190, 240, 225";
       gs.addColorStop(0, `rgba(${c}, ${0.10 * f})`);
       gs.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = gs;
-      ctx.fillRect(0, 0, W, H);
+      ctx.fillRect(px - sr, py - sr, sr * 2, sr * 2);
     }
 
-    /* ── candle reflections shimmering on the surface ── */
+    /* ── candle reflections shimmering on the surface (same reasoning) ── */
     for (const a of this.candleAngles) {
       const px = cx + Math.cos(a) * rad * 0.8;
       const py = cy + Math.sin(a) * rad * 0.8;
       const shimmer = 0.5 + 0.5 * Math.sin(this.t * 5 + a * 13);
-      const gr = ctx.createRadialGradient(px, py, 0, px, py, rad * 0.13);
+      const cr = rad * 0.13;
+      const gr = ctx.createRadialGradient(px, py, 0, px, py, cr);
       gr.addColorStop(0, `rgba(255, 214, 140, ${0.12 * shimmer * f})`);
       gr.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = gr;
-      ctx.fillRect(0, 0, W, H);
+      ctx.fillRect(px - cr, py - cr, cr * 2, cr * 2);
     }
 
     /* ── drifting motes: fen-dust caught in the light ── */
