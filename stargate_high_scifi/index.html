@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MERIDIAN — Transit Artifact Console</title>
+<meta name="description" content="Interactive console for Transit Artifact M-1 'Meridian'. A fictional, fully client-side novelty. No data leaves this page.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23cfe8f5' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='5' fill='none' stroke='%23ffb057' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/console.css">
+</head>
+<body>
+
+<header id="topbar">
+  <div class="station-id">
+    <span class="lamp" id="statusLamp"></span>
+    <h1>MERIDIAN FIELD STATION</h1>
+    <span class="annex">L4 ANNEX · TRANSIT ARTIFACT M-1</span>
+  </div>
+  <div class="topbar-right">
+    <span id="uptime" class="uptime">T+00:00:00</span>
+    <button id="aboutBtn" class="chip" type="button">ARTIFACT DOSSIER</button>
+    <button id="muteBtn" class="chip" type="button" aria-pressed="false">SOUND: OFF</button>
+  </div>
+</header>
+
+<main id="layout">
+
+  <section id="stageWrap" aria-label="The Meridian artifact">
+    <div id="stage">
+      <canvas id="aperture" aria-hidden="true"></canvas>
+      <svg id="ring" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
+      <div id="diagBadge" hidden>DIAGNOSTIC ROUTINE</div>
+    </div>
+    <div id="phaseline">
+      <span id="phaseText">ARTIFACT DORMANT — AMBIENT DRIFT 0.03 rad/s</span>
+    </div>
+    <div id="stageControls">
+      <button id="abortBtn" class="ctl warn" type="button" hidden>ABORT SOLVE</button>
+      <button id="probeBtn" class="ctl" type="button" hidden>LAUNCH PROBE</button>
+      <button id="collapseBtn" class="ctl warn" type="button" hidden>COLLAPSE APERTURE</button>
+    </div>
+  </section>
+
+  <aside id="console">
+
+    <section class="panel" id="catalogPanel">
+      <h2>ROUTE CATALOG <span class="sub">// surveyed metric signatures</span></h2>
+      <ul id="catalog"></ul>
+    </section>
+
+    <section class="panel" id="composerPanel">
+      <h2>SIGNATURE COMPOSER <span class="sub">// manual metric entry</span></h2>
+      <div id="slots" aria-label="Signature slots"></div>
+      <div id="palette" aria-label="Glyph palette"></div>
+      <div class="composer-actions">
+        <button id="clearSigBtn" class="ctl small" type="button">CLEAR</button>
+        <button id="compileBtn" class="ctl small primary" type="button" disabled>COMPILE METRIC</button>
+      </div>
+    </section>
+
+    <section class="panel" id="telemetryPanel">
+      <h2>LATTICE TELEMETRY</h2>
+      <dl id="readouts">
+        <div><dt>LATTICE TEMP</dt><dd id="roTemp">4.20 mK</dd></div>
+        <div><dt>VACUUM STRAIN</dt><dd id="roStrain">0.00021 ε</dd></div>
+        <div><dt>SOLUTION RESIDUAL</dt><dd id="roResidual">—</dd></div>
+        <div><dt>GEODESIC CACHE</dt><dd id="roCache">0 / 8 SLOTS</dd></div>
+      </dl>
+    </section>
+
+    <section class="panel" id="logPanel">
+      <h2>STATION LOG</h2>
+      <div id="log" role="log" aria-live="polite"></div>
+    </section>
+
+    <footer id="engineering">
+      <button id="purgeBtn" class="chip dim" type="button">ENGINEERING: PURGE GEODESIC CACHE</button>
+    </footer>
+
+  </aside>
+</main>
+
+<dialog id="aboutDialog">
+  <h2>TRANSIT ARTIFACT M-1 · “MERIDIAN”</h2>
+  <p class="dossier">
+    Recovered 2081 from a stable halo orbit at Sol–Earth L4. An eleven-metre torus of
+    scale-invariant grey glass; every magnification reveals the same structure. Radiometric
+    lattice dating: 2.1 million years. Builders unknown. The Artifact does not store
+    addresses — it <em>solves</em> them. Given a nine-glyph metric signature, Meridian
+    numerically relaxes a traversable wormhole solution between here and the target manifold,
+    confirming nine topological invariants one by one. It has never been wrong. It has
+    occasionally declined.
+  </p>
+  <p class="dossier">
+    <strong>COLD SOLVE</strong> — an unsolved route. The bands search solution space;
+    expect 15–20 seconds of relaxation passes.<br>
+    <strong>LATTICE RECALL</strong> — a route Meridian has solved before is imprinted
+    permanently in its lattice. Recall does not search: one memory sweep, and the cached
+    solution streams back in under four seconds.
+  </p>
+  <p class="dossier fine">
+    This console is a fictional novelty. It runs entirely in your browser: no server, no
+    network calls, no telemetry leaves this page. All destinations, glyphs and coordinates
+    are invented. Sound is synthesized locally and off by default.
+  </p>
+  <form method="dialog"><button class="ctl small" type="submit">CLOSE DOSSIER</button></form>
+</dialog>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
