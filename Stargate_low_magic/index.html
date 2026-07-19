@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wayband of Wren Alderwick</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%95%AF%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/wayband.css">
+</head>
+<body>
+<div id="barn">
+
+  <header id="masthead">
+    <h1>The&nbsp;Wayband</h1>
+    <p class="sub">a threshold wheel of the drove-road cunning folk &mdash; kept &amp; mended by <em>Wren Alderwick</em>, hedge-dialer</p>
+  </header>
+
+  <main id="workbench">
+
+    <!-- ══════════ LEFT: the ledger of known roads ══════════ -->
+    <aside id="ledger" aria-label="Ledger of known roads">
+      <h2 class="panel-title">Wren&rsquo;s Road-Ledger</h2>
+      <p class="panel-hint">Roads the wax remembers. Tap a page to chalk its marks.</p>
+      <div id="ledger-cards"></div>
+
+      <div id="bargain-box">
+        <h3 class="panel-title small">The Manner of Dialing</h3>
+        <div id="mode-toggle" role="radiogroup" aria-label="Dialing manner">
+          <button class="mode-btn selected" data-mode="patient" role="radio" aria-checked="true">
+            <span class="mode-name">The Patient Way</span>
+            <span class="mode-desc">Turn the wheel mark by mark. Slow, honest, and the wax keeps its drippings.</span>
+          </button>
+          <button class="mode-btn" data-mode="moth" role="radio" aria-checked="false">
+            <span class="mode-name">The Moth&rsquo;s Bargain</span>
+            <span class="mode-desc">Burn a moth-dipped taper. The flame flies the road from the wax&rsquo;s own memory &mdash; quick, but it costs the taper, and moth-light never sits steady.</span>
+          </button>
+        </div>
+        <div id="taper-shelf">
+          <span class="shelf-label">Tapers dipped:</span>
+          <span id="taper-row" aria-live="polite"></span>
+          <button id="dip-btn" title="Dip a new taper from saved drippings" disabled>dip a taper<small id="drip-count">(0/2 drippings)</small></button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ══════════ CENTER: the rig ══════════ -->
+    <section id="rig-wrap" aria-label="The threshold wheel">
+      <div id="rig">
+        <div id="well" aria-hidden="true">
+          <div class="chalk-circle"></div>
+          <div class="scorch"></div>
+        </div>
+        <canvas id="portal" width="640" height="640" aria-hidden="true"></canvas>
+        <div id="sockets" aria-hidden="true"></div>
+        <svg id="wheel" viewBox="-500 -500 1000 1000" aria-hidden="true"></svg>
+        <div id="nail" title="the reading nail" aria-hidden="true"></div>
+
+        <button id="hearth-mark" title="Wren's own mark — press it last to close the chalking" disabled>
+          <svg viewBox="0 0 100 100"><path d="M50 82 C 30 70, 26 46, 42 36 C 56 27, 68 38, 62 50 C 57 60, 44 58, 46 47" fill="none"/><path d="M40 84 L50 74 L60 84 M50 74 L50 62" fill="none"/></svg>
+          <span>Wren&rsquo;s Mark</span>
+        </button>
+      </div>
+
+      <div id="rig-controls">
+        <button id="ladle" disabled>
+          <span class="ladle-art" aria-hidden="true"></span>
+          <span class="ladle-label">Tip the Copper Ladle</span>
+          <small>pours the priming water once all seven catches hold</small>
+        </button>
+        <button id="iron-pin" hidden>
+          <span class="pin-art" aria-hidden="true"></span>
+          <span class="pin-label">Draw the Cold-Iron Pin</span>
+          <small>seals the way shut. Always seal the way shut.</small>
+        </button>
+        <button id="wipe-slate" hidden>wipe the slate</button>
+      </div>
+    </section>
+
+    <!-- ══════════ RIGHT: journal + the rules ══════════ -->
+    <aside id="deskside" aria-label="Journal and house rules">
+      <div id="sound-box">
+        <button id="sound-toggle" aria-pressed="false"><span class="bell" aria-hidden="true">🔔</span> <span id="sound-label">wake the sounds</span></button>
+      </div>
+      <h2 class="panel-title">The Night&rsquo;s Journal</h2>
+      <div id="journal" aria-live="polite"></div>
+      <div id="rules-card">
+        <h3 class="panel-title small">House Rules <small>(nailed to the beam)</small></h3>
+        <ol>
+          <li>Six way-marks, then Wren&rsquo;s own, always in that order.</li>
+          <li>No dialing what the ledger crosses out. <em>She crossed it out for a reason.</em></li>
+          <li>Tallow only holds so long. When the wax gutters, the way falls shut on its own.</li>
+          <li>The iron pin goes back in the moment you&rsquo;re done. <em>Always.</em></li>
+        </ol>
+      </div>
+    </aside>
+
+  </main>
+
+  <footer id="colophon">
+    <p>Chalk, twine, tallow &amp; a wheel off Marsh Pyecombe&rsquo;s dray. No two dials alike; none guaranteed. &mdash; W.&nbsp;A.</p>
+  </footer>
+</div>
+
+<script src="js/glyphs.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/portal.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
