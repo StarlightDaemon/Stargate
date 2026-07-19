@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICA Substation 6 — Panel K</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%235b6a58'/%3E%3Ccircle cx='8' cy='8' r='4.5' fill='%23131719' stroke='%23b9b09a' stroke-width='1'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="panel" id="panel">
+
+  <header class="nameplate-bar">
+    <div class="lamacoid main-plate">
+      <span class="plate-title">INTERMUNICIPAL CONDUIT AUTHORITY</span>
+      <span class="plate-sub">SUBSTATION 6 &nbsp;·&nbsp; PANEL K &nbsp;·&nbsp; CONDUIT ROUTING &amp; SERVICE</span>
+    </div>
+    <div class="mfr-plate">
+      <span>STRAND &amp; WEIR LTD.</span>
+      <span>TYPE 44 ROUTING CONSOLE</span>
+      <span>SER. Nº 1187</span>
+    </div>
+  </header>
+
+  <section class="col col-supply well">
+    <h2 class="section-label">SUPPLY &amp; PLENUM</h2>
+
+    <div class="key-station">
+      <div class="key-switch" id="keySwitch" role="switch" aria-checked="false" tabindex="0" aria-label="Panel supply key switch">
+        <div class="key-bezel">
+          <div class="key-head"><div class="key-slot"></div></div>
+        </div>
+        <div class="key-legend"><span>OFF</span><span>ENERGIZE</span></div>
+      </div>
+      <div class="lamp-col">
+        <div class="lamp amber" id="busLamp"></div>
+        <label>BUS</label>
+      </div>
+    </div>
+
+    <div class="gauge-row" id="gaugeRow"></div>
+
+    <div class="switch-row">
+      <div class="toggle" id="compToggle" role="switch" aria-checked="false" tabindex="0" aria-label="Plenum compressor">
+        <div class="toggle-plate"><div class="bat"></div></div>
+        <label>COMPRESSOR</label>
+      </div>
+      <div class="lamp-col">
+        <div class="lamp green" id="plenumLamp"></div>
+        <label>PLENUM<br>NORMAL</label>
+      </div>
+      <button class="small-btn" id="lampTest" aria-label="Lamp test">LAMP<br>TEST</button>
+    </div>
+
+    <div class="insp-tag">
+      <span>LAST INSP. 03-26 &nbsp; BY: R.T.</span>
+      <span>NEXT DUE 09-26 &nbsp; M.O. 7-C APPLIES</span>
+    </div>
+  </section>
+
+  <section class="col col-conduit">
+    <div class="port-assembly well">
+      <h2 class="section-label">CONDUIT 6 — INSPECTION PORT</h2>
+      <div class="port-flange">
+        <canvas id="portCanvas" width="360" height="360"></canvas>
+      </div>
+      <div class="port-lamps">
+        <div class="lamp-col"><div class="lamp green big" id="openLamp"></div><label>CONDUIT<br>OPEN</label></div>
+        <div class="lamp-col"><div class="lamp red big" id="interlockLamp"></div><label>INTERLOCK</label></div>
+      </div>
+    </div>
+
+    <div class="selector well">
+      <h2 class="section-label">ROUTE SELECTOR — SET PER LEDGER</h2>
+      <div class="selector-row">
+        <div class="tw-rack" id="twRack"></div>
+        <button class="line-btn" id="lineBtn" aria-label="Line up route">LINE<br>UP</button>
+      </div>
+      <div class="seek-row">
+        <div class="seek-lamps" id="seekLamps"></div>
+        <div class="lamp-col"><div class="lamp green" id="lineLamp"></div><label>LINE<br>PROVED</label></div>
+        <div class="lamp-col"><div class="lamp red" id="noRouteLamp"></div><label>NO<br>ROUTE</label></div>
+      </div>
+      <div class="card-slot-station">
+        <div class="card-slot" id="cardSlot">
+          <div class="slot-mouth"></div>
+          <div class="seated-card" id="seatedCard" hidden></div>
+        </div>
+        <div class="slot-legend">
+          <span class="engraved">STORED ROUTE CARD — GANG RELEASE</span>
+          <span class="engraved fine">PRE-CERT PER MAINT. ORDER 7-C</span>
+        </div>
+        <button class="small-btn" id="ejectBtn" aria-label="Eject route card">EJECT</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="col col-service">
+    <div class="ledger well">
+      <h2 class="section-label">ROUTING LEDGER</h2>
+      <div class="paper ledger-paper">
+        <div class="paper-head">SUBSTATION 6 — SERVICEABLE JUNCTIONS<br><span class="fine">REV. 14 · DIAL BY HAND OR SEATED CARD</span></div>
+        <div class="ledger-rows" id="ledgerList"></div>
+      </div>
+    </div>
+
+    <div class="card-rack-station well">
+      <h2 class="section-label">ROUTE CARDS — STAMPED</h2>
+      <div class="card-rack" id="cardRack"></div>
+    </div>
+
+    <div class="cert well">
+      <h2 class="section-label">PRE-TRANSIT CHECKLIST</h2>
+      <div class="checklist" id="checkList"></div>
+      <div class="open-station">
+        <div class="guard" id="openGuard">
+          <button class="big-btn" id="openBtn" aria-label="Open conduit">OPEN<br>CONDUIT</button>
+          <div class="guard-cover" id="guardCover" role="button" tabindex="0" aria-label="Guard cover"></div>
+        </div>
+        <div class="open-legend engraved">RAISE GUARD ·<br>CERT REQ’D</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="log-strip">
+    <div class="log-tape-holder">
+      <div class="log-tape" id="logTape"></div>
+    </div>
+    <div class="log-plate lamacoid"><span>SERVICE LOG</span><span class="fine">DO NOT TEAR OFF</span></div>
+  </footer>
+
+</main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
