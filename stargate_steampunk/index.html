@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Old Punctual — Vane &amp; Harrow Transit Engine №7</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23b08d3f'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%231a1410'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="engine">
+
+  <header id="nameplate">
+    <div class="plate-small">VANE &amp; HARROW · ENGINEERS TO THE ÆTHERIC CORRESPONDENCE TRUST · BLACKFRIARS</div>
+    <h1>TRANSIT ENGINE №7 · <span class="engine-name">“OLD PUNCTUAL”</span></h1>
+    <div class="plate-small">PATTERN D COMPOSING READER &nbsp;·&nbsp; PATENT 88,431 &nbsp;·&nbsp; 1894 &nbsp;·&nbsp; ALL FAR SHORES FICTITIOUS — NO TRAFFIC IS CARRIED BEYOND THIS ROOM</div>
+  </header>
+
+  <section id="boiler" aria-label="Steam plant">
+    <h2 class="brass-tag">STEAM PLANT</h2>
+    <div id="firebox" aria-hidden="true">
+      <div id="fire-glow"></div>
+      <div id="grate"></div>
+    </div>
+    <button id="damper" class="lever latching" aria-pressed="false" title="Open the damper to raise steam">
+      <span class="lever-quad" aria-hidden="true"><span class="lever-arm"><span class="lever-knob"></span></span></span>
+      <span class="lever-label">DAMPER</span>
+    </button>
+    <svg id="gauge" viewBox="0 0 200 200" role="img" aria-label="Boiler pressure gauge"></svg>
+    <div id="governor-house">
+      <svg id="governor" viewBox="0 0 120 150" aria-hidden="true"></svg>
+      <div class="tiny-tag">GOVERNOR</div>
+    </div>
+    <div id="steam-wisps" aria-hidden="true"><i></i><i></i><i></i></div>
+  </section>
+
+  <section id="bay" aria-label="Æther aperture">
+    <div id="aperture">
+      <canvas id="aether" width="440" height="440" aria-hidden="true"></canvas>
+      <svg id="iris" viewBox="0 0 440 440" aria-hidden="true"></svg>
+    </div>
+    <div id="annunciator" aria-label="Register annunciator"></div>
+    <div id="placard"><span id="placard-text">THE LINE IS QUIET</span></div>
+  </section>
+
+  <section id="registry" aria-label="Correspondence registry">
+    <h2 class="brass-tag">CERTIFIED CORRESPONDENTS</h2>
+    <div id="rack"></div>
+    <h2 class="brass-tag">COMPOSING READER</h2>
+    <div id="reader">
+      <div id="reader-slot">
+        <button id="reader-card" class="cardbtn" hidden title="Eject the card"></button>
+        <div class="roller left" aria-hidden="true"></div>
+        <div class="roller right" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div id="main-levers">
+      <button id="draw-lever" class="lever momentary" title="Draw the card through the reader">
+        <span class="lever-quad" aria-hidden="true"><span class="lever-arm"><span class="lever-knob"></span></span></span>
+        <span class="lever-label">DRAW</span>
+      </button>
+      <button id="coupling-lever" class="lever latching" aria-pressed="false" title="Throw the coupling to open the line">
+        <span class="lever-quad" aria-hidden="true"><span class="lever-arm"><span class="lever-knob"></span></span></span>
+        <span class="lever-label">COUPLING</span>
+      </button>
+      <button id="vent-lever" class="lever momentary" title="Blow down: clear registers, eject card, close the line">
+        <span class="lever-quad" aria-hidden="true"><span class="lever-arm"><span class="lever-knob"></span></span></span>
+        <span class="lever-label">VENT</span>
+      </button>
+    </div>
+  </section>
+
+  <section id="punchdesk" aria-label="Composing punch">
+    <h2 class="brass-tag">COMPOSING PUNCH</h2>
+    <div id="punch-lay">
+      <div id="punch-scale">
+        <div class="tiny-tag">SETTING</div>
+        <div id="notches"></div>
+        <div id="scale-knob" aria-hidden="true"></div>
+      </div>
+      <div id="punch-body">
+        <div id="punch-head" aria-hidden="true"></div>
+        <div id="punch-card"></div>
+        <div id="col-arrow" aria-hidden="true">▲</div>
+        <div id="col-numerals"></div>
+      </div>
+      <div id="punch-actions">
+        <button id="strike" title="Strike the punch: cut the set value into the current column">STRIKE</button>
+        <button id="spoil" title="Spoil the card and draw a fresh blank">SPOIL</button>
+        <div id="tray">
+          <div class="tiny-tag">OUT-TRAY</div>
+          <button id="tray-card" class="cardbtn" hidden title="Present the composed card to the reader"></button>
+        </div>
+      </div>
+    </div>
+    <details id="bill">
+      <summary>BILL OF WORKING — read before use</summary>
+      <ol>
+        <li>Open the <b>DAMPER</b> and wait for pressure to enter the working band.</li>
+        <li>Draw a <b>certified card</b> from the rack — or compose your own: set a value, <b>STRIKE</b> each of the six columns, and take the card from the out-tray.</li>
+        <li>Throw <b>DRAW</b>. Certified cards run at governor speed; uncertified compositions are proved column by column.</li>
+        <li>When all six registers drop, throw the <b>COUPLING</b>.</li>
+        <li>To close the line and clear the engine, pull <b>VENT</b>.</li>
+      </ol>
+      <p class="fine">Hand-composed codes not answering to a listed correspondent will find no reply. The Trust accepts no liability for parcels, persons, or pigeons.</p>
+    </details>
+  </section>
+
+  <section id="tapedesk" aria-label="Engineer's tape">
+    <h2 class="brass-tag">ENGINEER’S TAPE</h2>
+    <div id="tape"></div>
+    <button id="sound-toggle" aria-pressed="true" title="Silence or restore the works">SOUND <span id="sound-state">ON</span></button>
+  </section>
+
+</main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
