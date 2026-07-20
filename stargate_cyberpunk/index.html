@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEADRINGER — A7-113</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="stage" id="stage">
+
+  <!-- ============ LEFT: THE CHAMBER ============ -->
+  <div class="chamber" id="chamber">
+    <!-- wall/water behind, portal canvas in the middle, ring in front -->
+    <svg id="sceneBack" viewBox="0 0 1031 1000" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+    <canvas id="portal" aria-hidden="true"></canvas>
+    <svg id="sceneFront" viewBox="0 0 1031 1000" preserveAspectRatio="xMidYMid meet" aria-label="Salvaged transit aperture A7-113 hanging over floodwater"></svg>
+    <div class="stencil">
+      <div class="corp-stencil">KESSLER&#8211;VOSS ORBITAL &mdash; SPINDLE NODE</div>
+      <div class="serial-stencil">APERTURE A7-113 &middot; DECOMMISSIONED</div>
+      <div class="tag">DEADRINGER</div>
+    </div>
+  </div>
+
+  <!-- ============ RIGHT: THE RIG ============ -->
+  <div class="rig" id="rig">
+
+    <!-- CRT terminal -->
+    <section class="crt-shell" id="crtShell">
+      <div class="crt-brand">KV&nbsp;OPTERM&nbsp;220 <span class="crt-brand-sub">property of Kessler-Voss Orbital — do not remove</span></div>
+      <div class="crt" id="crt">
+        <div class="crt-lines" id="crtLines"></div>
+        <div class="crt-cursor">&#9608;</div>
+        <div class="crt-glass"></div>
+      </div>
+      <div class="crt-keyrow">
+        <button class="crt-key" id="negKey" type="button" title="Run the full forged handshake"><span>NEG</span><em>forge route</em></button>
+        <button class="crt-key aftermarket" id="resKey" type="button" title="Replay a warm session ticket"><span>RES</span><em>hot ticket</em></button>
+        <div class="crt-sticker">bought back from the repo man. twice. — v.</div>
+      </div>
+    </section>
+
+    <!-- route board + token rack row -->
+    <div class="mid-row">
+      <section class="board" id="board">
+        <div class="board-head">ROUTES <span class="board-head-sub">(that still answer)</span></div>
+        <div class="tags" id="destTags"></div>
+        <div class="board-scrawl">don&#8217;t dial anything vee hasn&#8217;t walked first</div>
+      </section>
+
+      <section class="tokens" id="tokens">
+        <div class="tokens-head">GHOST&nbsp;KEYS</div>
+        <div class="chip-rack" id="chipRack"></div>
+        <div class="reader" id="reader">
+          <div class="reader-slot" id="readerSlot"></div>
+          <div class="reader-led" id="readerLed"></div>
+          <div class="reader-label">READER</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- control bench -->
+    <section class="bench" id="bench">
+      <div class="meter-block">
+        <div class="meter" id="meter">
+          <svg viewBox="0 0 120 74">
+            <defs>
+              <linearGradient id="mglass" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ffffff" stop-opacity=".14"/>
+                <stop offset=".35" stop-color="#ffffff" stop-opacity=".03"/>
+                <stop offset="1" stop-color="#000000" stop-opacity=".22"/>
+              </linearGradient>
+            </defs>
+            <path d="M8 66 A54 54 0 0 1 112 66" fill="none" stroke="#3d4148" stroke-width="1.4"/>
+            <g id="meterTicks"></g>
+            <path d="M84 27 A54 54 0 0 1 112 66 L 98 66 A40 40 0 0 0 77 37 Z" fill="#7e2f2c" opacity=".55"/>
+            <line id="needle" x1="60" y1="66" x2="60" y2="20" stroke="#d8d3c8" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="60" cy="66" r="4.5" fill="#22252a" stroke="#4a4e55" stroke-width="1"/>
+            <rect x="2" y="2" width="116" height="70" rx="4" fill="url(#mglass)"/>
+          </svg>
+          <div class="meter-label">RING CURRENT &middot; kA</div>
+        </div>
+        <div class="digital" id="digital">0.07</div>
+        <div class="digital-note">gauge reads low, trust neither &mdash; v.</div>
+      </div>
+
+      <div class="switch-block">
+        <div class="guarded" id="guarded">
+          <div class="guard-cover" id="guardCover"><span>APERTURE</span></div>
+          <div class="lever-well">
+            <div class="lever" id="lever"><div class="lever-grip"></div></div>
+            <div class="lever-legend"><span>SHUT</span><span>OPEN</span></div>
+          </div>
+        </div>
+        <button class="cut" id="cutBtn" type="button"><span>CUT</span></button>
+        <div class="small-switches">
+          <button class="toggle" id="audioTgl" type="button" aria-pressed="false">
+            <span class="toggle-lbl">AUD</span><span class="toggle-nub"></span>
+          </button>
+          <div class="run-led-wrap"><div class="run-led" id="runLed"></div><span>NEG</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- cable overlay across the rig -->
+    <svg class="rig-cables" viewBox="0 0 420 560" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M 30 178 C 18 220, 44 240, 30 292" class="cbl c1"/>
+      <path d="M 388 176 C 402 230, 380 260, 392 300 C 400 340, 382 380, 390 420" class="cbl c2"/>
+      <path d="M 214 396 C 200 430, 240 440, 228 470" class="cbl c3"/>
+      <path d="M 60 398 C 52 430, 76 450, 64 478" class="cbl c1"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ============ BELOW THE FOLD: LORE ============ -->
+<section class="lore">
+  <h2>// what this thing is</h2>
+  <p>Before the Receivership, Kessler&#8211;Voss Orbital ran SPINDLE &mdash; a private point-to-point
+  transit lattice strung between their towers, tethers, and freeports. Executives stepped through
+  apertures like this one the way the rest of us take a stairwell. Then the money stopped, the
+  towers went dark, and the liquidators sold the network for scrap without ever managing to
+  switch it off. Most of the exchange nodes are still out there: flooded, unmanned, running on
+  trickle feeds and refusing to die, listening for handshakes from a company that no longer exists.</p>
+
+  <p>Aperture A7-113 was cut out of the Ossian Exchange with plasma saws and floated here on a
+  barge. The crew re-hung it on a chain gantry in the sub-basement &mdash; below the waterline,
+  because the ring drinks three hundred kilowatts when it lights and the flood keeps it cool.
+  Three emitter segments didn&#8217;t survive the move; the replacements came off a fab bench in
+  the Narrows and the vendor&#8217;s pilot diodes are the wrong colour. Nobody has fixed segment E.
+  Segment E is beyond fixing.</p>
+
+  <p>Nobody here holds a KV credential. Dialing is forgery: the rig probes a chain of derelict
+  exchanges, answers their challenges with ghosted responses lifted from captured traffic, and
+  pins a route hop by hop before the dead network notices it never actually authenticated anyone.
+  That takes as long as it takes. But an exchange that has accepted you once keeps the session
+  warm for a while &mdash; and if you kept the ticket, you can walk straight back in.
+  That&#8217;s a hot ticket. That&#8217;s the fast way. The crew burns physical ghost keys
+  &mdash; stolen auth chips with a captured session on them &mdash; for routes worth keeping warm.</p>
+
+  <h2>// operating notes (taped to the bench)</h2>
+  <ul>
+    <li>Pick a route off the board. If the tag is struck through, it is struck through for a reason.</li>
+    <li><b>NEG</b> on the terminal runs the full forgery. Spool &rarr; probe &rarr; challenge &rarr; ghost &rarr; pin, per hop. Go make tea.</li>
+    <li>Segment C stalls on cold spool-up. Whack it. (Click the dark bulky segment when the terminal tells you.)</li>
+    <li>Got a ghost key for the route? Seat the chip in the reader and hit <b>RES</b> &mdash; ticket replay, no negotiation, aperture in seconds. A full dial also leaves a session ticket cached until the rig powers down.</li>
+    <li>When the lattice pins, lift the cover, pull the bar. The exchange drops the route on session expiry (~2 min) whether you like it or not. <b>CUT</b> severs early.</li>
+  </ul>
+
+  <h2>// colophon</h2>
+  <p>Fiction. All destinations invented; the gate goes nowhere and talks to no one &mdash; there is no
+  networking, no backend, no data leaving this page. Vanilla HTML/CSS/JS ES modules, no dependencies,
+  no build step. SVG ring, canvas portal field, DOM rig. Original setting and artwork; not affiliated
+  with any franchise.</p>
+</section>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
