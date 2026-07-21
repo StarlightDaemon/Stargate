@@ -1,0 +1,103 @@
+/* The Hollowbeck Six — one 16:9 scene, scaled to the viewport. */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #16110b; /* the dark past the letterbox reads as more tower */
+}
+
+#scene {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Only the worn, handled things answer the hand. */
+#scene * { pointer-events: none; }
+#scene .hit {
+  pointer-events: all;
+  fill: transparent;
+  cursor: pointer;
+}
+
+/* Lettering: painted on the board, carved on oak, chalked on slate and stone. */
+#scene text {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+#scene .boardTitle {
+  font-size: 30px;
+  font-variant: small-caps;
+  letter-spacing: 3px;
+  fill: #cdb87a;
+}
+#scene .boardSub {
+  font-size: 19px;
+  font-style: italic;
+  fill: #a8925e;
+}
+#scene .boardRoad { font-size: 23px; fill: #d6c69a; }
+#scene .boardChange { font-size: 24px; fill: #e2d3a4; letter-spacing: 5px; }
+#scene .boardRoad.struck, #scene .boardChange.struck { fill: #8d7f5f; }
+#scene .boardScrawl {
+  font-size: 17px;
+  font-style: italic;
+  fill: #d8d2c4;
+  opacity: 0.75;
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+}
+#scene .boardFoot { font-size: 15.5px; font-style: italic; fill: #96835a; }
+#scene .carved {
+  font-size: 19px;
+  letter-spacing: 4px;
+  fill: #2a1c0d;
+  stroke: #7c6844;
+  stroke-width: 0.4px;
+}
+#scene .carvedSmall {
+  font-size: 15px;
+  font-style: italic;
+  fill: #1d1206;
+  opacity: 0.85;
+}
+#scene .cardName {
+  font-size: 19px;
+  fill: #3a2c14;
+  font-variant: small-caps;
+  letter-spacing: 1px;
+}
+#scene .slateNums {
+  font-size: 42px;
+  letter-spacing: 6px;
+  fill: #e8e4da;
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+}
+#scene .chalkMsg {
+  font-size: 25px;
+  fill: #ddd6c6;
+  opacity: 0.85;
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+}
+
+/* Corner marks: quiet, out of the chamber's way. */
+.corner {
+  position: fixed;
+  bottom: clamp(6px, 0.8vh, 14px);
+  z-index: 10;
+  font-family: Georgia, serif;
+  font-size: clamp(11px, 0.9vw, 16px);
+  opacity: 0.4;
+  color: #cdb87a;
+}
+.corner.version { right: clamp(8px, 1vw, 18px); }
+.corner.maker { left: clamp(8px, 1vw, 18px); }
+.corner.maker a {
+  color: #cdb87a;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(205, 184, 122, 0.5);
+}
+.corner.maker a:hover { opacity: 1; border-bottom-style: solid; }
