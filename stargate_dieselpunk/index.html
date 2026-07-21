@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STENTOR — Resonance Alternator No. 3 — Overland Wireless Traction Board</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%232e3830' stroke='%238a6d3b' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%236fb0ff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="viewport">
+    <div id="stage">
+      <!-- background hall, machine, pedestals are injected by modules -->
+      <div id="hall"></div>
+      <div id="machine-wrap"></div>
+      <div id="pedestal-left"></div>
+      <div id="desk-right"></div>
+      <div id="tuning-right"></div>
+      <div id="placard"></div>
+    </div>
+  </div>
+
+  <section id="belowfold">
+    <div class="lore">
+      <h1>Overland Wireless Traction Board — Station No. 3 “STENTOR”</h1>
+      <p class="stamp-line">FORM 77-C · OPERATING NOTES FOR RELIEF CREW · NOT TO BE REMOVED FROM THE HALL</p>
+
+      <h2>What this machine is</h2>
+      <p>The Halvorsen &amp; Krag Type 88 is a resonance alternator: a 96-tonne rotary machine whose
+      carrier wave is generated mechanically. There are no valves in the carrier chain — the
+      frequency of the traction carrier is the speed of the rotor, nothing else. 1,440 pole
+      shoes on a forged rim; five revolutions per second per kilocycle. When the carrier is
+      governed onto a distant station's resonant signature and that station answers, the
+      traction arc strikes across the stator bore and the span is open. Freight, post, and
+      passengers walk through the bore on the gangway. The Board operates eleven such machines;
+      No. 3 has held the overland record (4,140 miles, Kettle Rapids) since 1929.</p>
+
+      <h2>Standing orders (long form)</h2>
+      <ol>
+        <li>Open the fuel cock and hold the air-start lever until the prime mover catches.
+            Watch lubricating-oil pressure; the clutch interlock will refuse below 25 lb.</li>
+        <li>Post a traffic order from the ledger, or draw the issued crystal for the
+            destination from the channel rack if one exists.</li>
+        <li><b>Hand tuning:</b> engage the clutch, bring the governor quadrant to the
+            destination's speed band, then work the vernier wheel until the beat note nulls
+            and the resonance latch takes. Swing the goniometer to the stamped bearing.</li>
+        <li><b>Crystal working:</b> seat the crystal in the oven socket. The crystal bridge
+            overrides the governor and slews the machine to grind-exact speed; the selsyn
+            repeater lays the goniometer on the stamped bearing without hand work. This is
+            the approved fast working for scheduled traffic.</li>
+        <li>Key the call. The coder drum sends the destination's sign; wait for the answering
+            signature on the beat scope.</li>
+        <li>Close the main contactor. Do not close early: the overload will trip and must be
+            reset at the alarm board.</li>
+        <li>To shut down: open the contactor, let the arc die, declutch, close the fuel cock.</li>
+      </ol>
+
+      <h2>Why crystal working is faster</h2>
+      <p>A hand tune is honest work: the operator hunts the vernier against the beat note,
+      waits out governor hunting, and swings the goniometer by eye. A ground quartz crystal
+      in a heated oven is a frequency standard better than any human ear — the crystal bridge
+      compares the alternator's own slip frequency against the crystal and drives the governor
+      servo directly, dead-beat, no hunting. Bearings for crystal channels are pre-set on the
+      selsyn transmitter at the exchange. Board circular 1188 (March 1930) authorises crystal
+      working for all scheduled traffic; hand tuning remains mandatory for unscheduled and
+      distressed stations, whose signatures drift.</p>
+
+      <h2>Destinations</h2>
+      <p>All destinations are fictional. The ledger lists seven working stations of the Board's
+      overland net, from Port Vellum on the coast to the abandoned platform at Semaphore Flats
+      (hand tuning only — its signature has drifted since the crews left).</p>
+
+      <h2>Colophon</h2>
+      <p>An original dieselpunk portal-dialing console. No franchise assets, names, or symbols
+      are reproduced; every station, mark, and mechanism is invented. Fully client-side —
+      no backend, no networking, nothing leaves this page. Built with hand-written SVG,
+      canvas, and vanilla ES modules; no frameworks, no build step, no external resources.
+      Idle state is ambient only: the hall sits cold until you work the machine.
+      Audio starts after your first click (period hall ambience; click the tannoy horn on
+      the wall to silence it).</p>
+    </div>
+  </section>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

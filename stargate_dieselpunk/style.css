@@ -1,0 +1,139 @@
+/* STENTOR — Resonance Alternator No. 3
+   Light source convention: single warm worklight/skylight, upper-left.
+   All gradients, bevels and shadows obey it. */
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  background:#0d0f0d;
+  color:#cfc9b8;
+  font-family: Georgia, 'Times New Roman', serif;
+  overflow-x:hidden; /* 100vw includes the scrollbar gutter once #belowfold forces a v-scrollbar */
+}
+
+/* ---------- stage scaling: 1920x1080 design space, scaled to fit ---------- */
+
+#viewport {
+  position:relative;
+  width:100vw; height:100vh;
+  overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 30% 0%, #171915 0%, #0d0f0d 60%, #080908 100%);
+}
+
+#stage {
+  position:absolute;
+  width:1920px; height:1080px;
+  left:50%; top:50%;
+  transform-origin:50% 50%;
+  /* main.js sets transform: translate(-50%,-50%) scale(s) */
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+#stage, #stage * { cursor:default; }
+#stage .grab { cursor:grab; }
+#stage .grab:active { cursor:grabbing; }
+#stage .push { cursor:pointer; }
+
+/* injected root groups */
+#hall, #machine-wrap, #pedestal-left, #desk-right, #tuning-right, #placard {
+  position:absolute; top:0; left:0;
+}
+#hall { width:1920px; height:1080px; }
+
+svg { display:block; overflow:visible; }
+svg text { user-select:none; }
+
+/* ---------- hall ---------- */
+
+#dust-canvas { position:absolute; left:0; top:0; pointer-events:none; }
+
+/* ---------- machine ---------- */
+
+#machine-wrap { left:575px; top:38px; width:770px; height:1010px; }
+#machine-svg { position:absolute; left:0; top:0; }
+
+#arc-canvas {
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+}
+
+/* rotor spin group is driven from JS */
+
+/* ---------- generic physical bits ---------- */
+
+.stencil {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  letter-spacing:0.08em;
+}
+.typed {
+  font-family: 'Courier New', Courier, monospace;
+}
+.engraved {
+  font-family: Georgia, serif;
+}
+
+/* ---------- below the fold ---------- */
+
+#belowfold {
+  background:
+    linear-gradient(180deg, #080908 0%, #101210 120px, #101210 100%);
+  border-top:3px solid #1e211d;
+  padding:70px 0 110px;
+}
+.lore {
+  max-width:880px;
+  margin:0 auto;
+  padding:0 28px;
+  line-height:1.55;
+  color:#b9b29c;
+}
+.lore h1 {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  letter-spacing:0.06em;
+  font-weight:normal;
+  color:#d8cdb4;
+  font-size:30px;
+  margin-bottom:6px;
+}
+.lore h2 {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  letter-spacing:0.05em;
+  font-weight:normal;
+  color:#c9bd9f;
+  font-size:20px;
+  margin:34px 0 8px;
+}
+.lore p, .lore li { font-size:15.5px; margin-bottom:10px; }
+.lore ol { margin-left:26px; }
+.lore .stamp-line {
+  font-family:'Courier New', monospace;
+  font-size:12.5px;
+  color:#8f8770;
+  letter-spacing:0.06em;
+  margin-bottom:26px;
+}
+.lore b { color:#cfc9b8; }
+
+/* ---------- shakedown chit (test harness log, only with ?shakedown) ---------- */
+
+#shakedown-chit {
+  position:absolute;
+  right:14px; bottom:12px;
+  width:390px; max-height:300px;
+  overflow-y:auto;
+  background:linear-gradient(175deg, #d8cdb4, #c4b795);
+  color:#33301f;
+  font-family:'Courier New', monospace;
+  font-size:11.5px;
+  line-height:1.35;
+  padding:10px 12px;
+  box-shadow: -6px 8px 18px rgba(0,0,0,.55);
+  transform:rotate(-0.7deg);
+  z-index:60;
+  pointer-events:none; /* log only — must never occlude controls from hit-tests */
+}
+#shakedown-chit .fail { color:#8c2418; font-weight:bold; }
+#shakedown-chit .pass { color:#2f5d33; }
