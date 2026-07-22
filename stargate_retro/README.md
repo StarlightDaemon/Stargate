@@ -21,8 +21,12 @@ fast-dial mechanism, and it is exactly how storage scopes really worked.
 **Manual dial from cold (6 actions, 2 control clusters):**
 
 1. MAINS toggle up — HT rises, tube readies (~2.5 s).
-2. FIGURE X:Y knob — wheel/drag/arrows to the destination's ratio (see TRACE TABLE).
-3. PHASE VERNIER — tune to the destination's phase; inside ±3° the AFC latches (~1 s).
+2. FIGURE X:Y knob — click to turn it one detent at a time (wraps around
+   indefinitely) until it shows the destination's ratio (see TRACE TABLE);
+   wheel/arrows also step it.
+3. PHASE VERNIER — click to turn it 6° per notch (wraps past 360°) toward the
+   destination's phase; wheel/arrows trim by 1° (shift: 0.2°) for the final lock-in.
+   Inside ±3° the AFC latches (~1 s).
 4. STRIKE — commits the standing figure into the storage mesh.
 5. Raise the ENERGIZE cover (clicking the blocked switch raises it for you).
 6. Throw ENERGIZE — mesh flood, aperture stands. Throw it back to collapse.

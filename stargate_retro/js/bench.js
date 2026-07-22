@@ -3,7 +3,7 @@
 // never by calling sim actions directly. Loaded only via ?trace or
 // window.__augur.bench() — never for ordinary visitors.
 
-import { state, DESTS, RATIOS, wrapDiff, log } from './sim.js';
+import { state, DESTS, RATIOS, PHASE_CLICK_STEP, wrapDiff, log } from './sim.js';
 
 const $ = id => document.getElementById(id);
 
@@ -72,21 +72,6 @@ function realWheel(el, dir) {
   return true;
 }
 
-// Hit-tested pointer drag on a knob: dyPx > 0 drags UP (value increase)
-async function realDrag(el, dyPx) {
-  const [x, y] = center(el);
-  const top = topAt(x, y);
-  if (!top || (top !== el && !el.contains(top))) return false;
-  const opts = p => ({ bubbles: true, cancelable: true, clientX: x, clientY: p, pointerId: 7, isPrimary: true, button: 0 });
-  top.dispatchEvent(new PointerEvent('pointerdown', opts(y)));
-  const steps = Math.max(1, Math.ceil(Math.abs(dyPx) / 18));
-  for (let i = 1; i <= steps; i++) {
-    top.dispatchEvent(new PointerEvent('pointermove', opts(y - dyPx * i / steps)));
-    if (i % 4 === 0) await pump(10);
-  }
-  top.dispatchEvent(new PointerEvent('pointerup', opts(y - dyPx)));
-  return true;
-}
 
 /* ---------- composite operations (all through real events) ---------- */
 async function setPowerViaClick(on) {
@@ -95,21 +80,32 @@ async function setPowerViaClick(on) {
   await pump(50);
 }
 
+// Click-to-turn: each click is one hand-turned notch forward, wrapping
+// around indefinitely. Drive it by repeated real clicks on the knob center,
+// same as an operator would, up to a generous guard for the wraparound.
 async function tuneRatioTo(a, b) {
   const target = RATIOS.findIndex(r => r[0] === a && r[1] === b);
-  for (let guard = 0; guard < 12 && state.ratioIdx !== target; guard++) {
-    if (!realWheel($('knob-ratio'), state.ratioIdx < target ? 1 : -1)) return false;
+  const el = $('knob-ratio');
+  for (let guard = 0; guard <= RATIOS.length && state.ratioIdx !== target; guard++) {
+    if (!clickLanded(el, realClick(el))) return false;
     await pump(20);
   }
   return state.ratioIdx === target;
 }
 
 async function tunePhaseTo(deg) {
-  for (let pass = 0; pass < 6; pass++) {
+  const el = $('knob-phase');
+  const maxNotches = Math.ceil(360 / PHASE_CLICK_STEP) + 1;
+  for (let guard = 0; guard < maxNotches && Math.abs(wrapDiff(deg, state.phase)) > PHASE_CLICK_STEP / 2; guard++) {
+    if (!clickLanded(el, realClick(el))) return false;
+    await pump(20);
+  }
+  // land within one notch of target; wheel-trim (1deg, then fine) locks it in
+  for (let pass = 0; pass < 8; pass++) {
     const err = wrapDiff(deg, state.phase);
     if (Math.abs(err) <= 1.2) return true;
-    if (!await realDrag($('knob-phase'), err / 0.35)) return false;   // 0.35°/px, up = +
-    await pump(30);
+    if (!realWheel(el, err > 0 ? 1 : -1)) return false;
+    await pump(20);
   }
   return Math.abs(wrapDiff(deg, state.phase)) <= 3;
 }
@@ -186,8 +182,8 @@ async function scenarioManual() {
   const top = realClick(row);                                            // optional aid
   check('trace-table row click lands (graticule mask)', clickLanded(row, top) && state.register === destIdx);
 
-  check('ratio knob wheel to 3:2', await tuneRatioTo(d.a, d.b));         // action 2
-  check('phase vernier drag to +036', await tunePhaseTo(d.phase),        // action 3
+  check('ratio knob clicked to 3:2', await tuneRatioTo(d.a, d.b));       // action 2
+  check('phase vernier clicked to +036', await tunePhaseTo(d.phase),     // action 3
     `phase=${state.phase.toFixed(1)}`);
   check('AFC latches after sustained tolerance',
     await waitFor(() => state.latch && state.latch.destIdx === destIdx, 80));

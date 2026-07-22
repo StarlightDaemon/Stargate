@@ -12,6 +12,7 @@ export const DESTS = [
   { id: 'TR-09', name: 'HIGH TARN',    a: 5, b: 3, phase: 204 },
 ];
 
+export const PHASE_CLICK_STEP = 6; // degrees advanced per knob click (a hand-turned notch)
 export const PHASE_TOL = 3;        // degrees either side to begin latch
 export const PHASE_HOLD = 8;       // AFC holds latch within this
 export const LATCH_MS = 900;       // sustained in-tolerance time to latch
@@ -99,13 +100,17 @@ export function togglePower() {
   }
 }
 
-export function nudgeRatio(d) {
+// the FIGURE selector is a continuously-turning rotary switch: each click
+// advances one detent and it wraps around indefinitely, like turning a real
+// knob by hand — no end stop.
+export function setRatioIdx(i) {
   if (!state.power) return;
-  const i = Math.max(0, Math.min(RATIOS.length - 1, state.ratioIdx + d));
+  i = ((i % RATIOS.length) + RATIOS.length) % RATIOS.length;
   if (i === state.ratioIdx) return;
   state.ratioIdx = i;
   breakLatch('FIGURE CHANGED');
 }
+export const nudgeRatio = d => setRatioIdx(state.ratioIdx + d);
 
 export function setPhase(v) {
   if (!state.power) return;

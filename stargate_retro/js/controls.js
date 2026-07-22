@@ -1,27 +1,16 @@
-// controls.js — wires real DOM events to sim actions. Knobs: pointer drag,
-// wheel, and arrow keys. Everything routes through sim.js actions.
+// controls.js — wires real DOM events to sim actions. Knobs are click-to-turn:
+// each click advances the knob exactly one hand-turned notch, the way an
+// operator would turn a physical dial — not a drag, and not a click-to-position
+// (a mouse can't hold pixel precision against a small control). Repeated
+// clicks keep advancing and wrap around indefinitely. Wheel and arrow keys
+// remain for fine trim. Everything routes through sim.js actions.
 
 import * as sim from './sim.js';
 
 const $ = id => document.getElementById(id);
 
-/* ---------- knob drag/wheel/keys ---------- */
-function wireKnob(el, { onStep, onDrag, dragScale }) {
-  let dragging = null;
-  el.addEventListener('pointerdown', e => {
-    dragging = { y0: e.clientY, acc: 0 };
-    try { el.setPointerCapture(e.pointerId); } catch { /* synthetic pointers have no capture */ }
-    e.preventDefault();
-  });
-  el.addEventListener('pointermove', e => {
-    if (!dragging) return;
-    const dy = dragging.y0 - e.clientY;         // up = increase
-    dragging.y0 = e.clientY;
-    onDrag(dy * dragScale, dragging);
-  });
-  const end = () => { dragging = null; };
-  el.addEventListener('pointerup', end);
-  el.addEventListener('pointercancel', end);
+function wireKnob(el, { onClick, onStep }) {
+  el.addEventListener('click', onClick);
   el.addEventListener('wheel', e => {
     e.preventDefault();
     onStep(e.deltaY < 0 ? 1 : -1, e.shiftKey);
@@ -32,22 +21,18 @@ function wireKnob(el, { onStep, onDrag, dragScale }) {
   });
 }
 
-// FIGURE knob: detented — a step per ~26px of drag
+// FIGURE knob: detented rotary selector — one click, one detent forward,
+// wrapping past the last position back to the first
 wireKnob($('knob-ratio'), {
+  onClick: () => sim.nudgeRatio(1),
   onStep: d => sim.nudgeRatio(d),
-  dragScale: 1,
-  onDrag: (dv, drag) => {
-    drag.acc += dv;
-    while (drag.acc >= 26) { sim.nudgeRatio(1); drag.acc -= 26; }
-    while (drag.acc <= -26) { sim.nudgeRatio(-1); drag.acc += 26; }
-  },
 });
 
-// PHASE vernier: continuous — 0.35°/px, wheel 1° (shift 0.2°)
+// PHASE vernier: one click advances PHASE_CLICK_STEP degrees, wrapping past
+// 360; wheel/arrows trim by 1deg (shift: 0.2deg fine) for the final lock-in
 wireKnob($('knob-phase'), {
+  onClick: () => sim.nudgePhase(sim.PHASE_CLICK_STEP),
   onStep: (d, fine) => sim.nudgePhase(d * (fine ? 0.2 : 1)),
-  dragScale: 0.35,
-  onDrag: dv => sim.nudgePhase(dv),
 });
 
 /* ---------- switches & buttons ---------- */

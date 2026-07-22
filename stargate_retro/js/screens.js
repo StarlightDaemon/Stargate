@@ -58,11 +58,11 @@ export function update(t) {
   stage.dataset.power = state.power ? '1' : '0';
   stage.dataset.warm = state.power && state.htReady ? '1' : '0';
 
-  // knobs
+  // knobs — FIGURE is a continuously-turning selector: 7 detents spaced
+  // evenly around the full circle, no dead zone / end stop
   const ratioKnob = $('knob-ratio'), phaseKnob = $('knob-phase');
-  const span = RATIOS.length - 1;
   ratioKnob.firstElementChild.style.transform =
-    `rotate(${-135 + 270 * (state.ratioIdx / span)}deg)`;
+    `rotate(${state.ratioIdx * (360 / RATIOS.length)}deg)`;
   ratioKnob.setAttribute('aria-valuenow', state.ratioIdx);
   phaseKnob.firstElementChild.style.transform = `rotate(${state.phase}deg)`;
   phaseKnob.setAttribute('aria-valuenow', Math.round(state.phase));

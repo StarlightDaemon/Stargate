@@ -4,6 +4,20 @@ All notable changes to AUGUR (stargate_retro) are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.0.2] - 2026-07-22
+
+### Changed
+
+- Replaced click-to-position knob interaction with click-to-turn: each click
+  advances the FIGURE X:Y and PHASE VERNIER knobs one fixed notch (a full
+  detent for FIGURE, 6° for PHASE), wrapping indefinitely in both directions
+  of travel — an operator turning a physical dial by hand, notch by notch,
+  rather than pointing at a location. FIGURE's rotary switch dropped its
+  270° dead-zone/end-stop in favor of a full 360° sweep across its 7 evenly
+  spaced detents, matching the new indefinite-wrap behavior. Wheel and arrow
+  keys remain for fine trim. Bench updated to drive clicks the same way;
+  28/28.
+
 ## [1.0.1] - 2026-07-22
 
 ### Fixed
