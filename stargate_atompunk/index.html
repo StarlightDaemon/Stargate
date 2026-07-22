@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VANTAGE — Type 9 Aperture Surveillance Console</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="stage" id="stage">
+  <main class="console" id="console">
+
+    <!-- ==================== SCOPE BAY ==================== -->
+    <section class="scope-bay">
+      <div class="bezel" id="bezel">
+        <canvas id="scope" width="860" height="860"></canvas>
+      </div>
+      <div class="data-plate">
+        <span class="plate-line1">TYPE 9 APERTURE SURVEILLANCE &amp; INDUCTION CONSOLE &mdash; &ldquo;VANTAGE&rdquo;</span>
+        <span class="plate-line2">CONTINENTAL THRESHOLD WARNING LINE &middot; STATION 3 &ldquo;BLUFF CREEK&rdquo; &middot; BUREAU OF CIVIL APERTURE DEFENSE</span>
+      </div>
+    </section>
+
+    <!-- ==================== RIGHT STACK ==================== -->
+    <section class="right">
+
+      <section class="panel status-panel">
+        <h2 class="panel-title">TRACK &amp; SIGNATURE</h2>
+        <div class="nixie-row">
+          <div class="nixie-group"><label>BEARING</label><span class="tubes" data-nixie="brg" data-digits="3"></span><span class="unit">DEG</span></div>
+          <div class="nixie-group"><label>RANGE</label><span class="tubes" data-nixie="rng" data-digits="3"></span><span class="unit">MI</span></div>
+          <div class="nixie-group"><label>PAINTS</label><span class="tubes" data-nixie="trk" data-digits="1"></span><span class="unit">OF 3</span></div>
+          <div class="nixie-group"><label>SIGNATURE</label><span class="tubes" data-nixie="sig" data-digits="4"></span><span class="unit"></span></div>
+        </div>
+        <div class="legend-row">
+          <span class="legend" data-legend="search">SEARCH</span>
+          <span class="legend" data-legend="track">TRACK</span>
+          <span class="legend" data-legend="lock">LOCK</span>
+          <span class="legend amberless" data-legend="verify">VERIFY</span>
+          <span class="legend warn" data-legend="nojoy">NO JOY</span>
+          <span class="legend openlegend" data-legend="open">APERTURE OPEN</span>
+        </div>
+        <div class="fault-strip" id="faultStrip">&nbsp;</div>
+      </section>
+
+      <section class="panel log-panel">
+        <h2 class="panel-title">TARGET LOG &mdash; SWEPT STATIONS</h2>
+        <table class="log-table" id="logTable">
+          <thead>
+            <tr><th class="col-name">STATION</th><th>BRG</th><th>RNG</th><th class="col-drum">DRUM</th></tr>
+          </thead>
+          <tbody><!-- rows injected --></tbody>
+        </table>
+      </section>
+
+      <section class="controls">
+        <div class="cluster" id="cluster-search">
+          <h3 class="cluster-title">SEARCH</h3>
+          <div class="cluster-body">
+            <div class="toggle-block">
+              <div class="toggle" id="htToggle" role="switch" aria-checked="false" aria-label="High tension">
+                <div class="toggle-slot"><div class="toggle-lever"></div></div>
+              </div>
+              <label>H.T.</label>
+              <span class="lamp" data-lamp="ht"></span>
+            </div>
+            <div class="knob-block">
+              <div class="knob knob-lg" id="knobBearing" aria-label="Bearing cursor">
+                <div class="skirt"></div>
+                <div class="cap"><div class="pointer"></div></div>
+              </div>
+              <label>BEARING</label>
+            </div>
+            <div class="knob-block">
+              <div class="knob knob-lg" id="knobRange" aria-label="Range gate">
+                <div class="skirt"></div>
+                <div class="cap"><div class="pointer"></div></div>
+              </div>
+              <label>RANGE GATE</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="cluster" id="cluster-induct">
+          <h3 class="cluster-title">INDUCTION</h3>
+          <div class="cluster-body">
+            <div class="button-block">
+              <button class="pushbtn" id="btnChallenge" aria-label="Challenge">CHAL</button>
+              <label>CHALLENGE</label>
+            </div>
+            <div class="drum-block">
+              <div class="knob knob-sm" id="knobSlot" aria-label="Drum slot">
+                <div class="skirt"></div>
+                <div class="cap"><div class="pointer"></div></div>
+              </div>
+              <span class="tubes slot-tube" data-nixie="slot" data-digits="1"></span>
+              <div class="drum-name" id="drumName">&mdash;&mdash;&mdash;&mdash;</div>
+              <label>DRUM STORE</label>
+            </div>
+            <div class="button-block">
+              <button class="pushbtn" id="btnRecall" aria-label="Recall">RCL</button>
+              <label>RECALL</label>
+            </div>
+            <div class="induct-block">
+              <div class="induct-assembly" id="inductAssembly">
+                <div class="toggle induct-toggle" id="inductSwitch" role="switch" aria-checked="false" aria-label="Induct">
+                  <div class="toggle-slot"><div class="toggle-lever"></div></div>
+                </div>
+                <div class="cover" id="inductCover">
+                  <div class="cover-lid"></div>
+                </div>
+                <div class="cover-hinge" id="coverHinge" title="Cover latch"></div>
+              </div>
+              <label>INDUCT</label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <a class="credit" href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+  <div class="version">v1.0.0</div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
