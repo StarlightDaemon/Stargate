@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AUGUR — Type 61 Aperture Trace Console</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage">
+
+  <!-- ============ nameplate ============ -->
+  <div id="plate">
+    <span class="plate-line1">PHYSICAL ESTABLISHMENT · NINE ELMS</span>
+    <span class="plate-line2">APERTURE TRACE CONSOLE · TYPE 61 &ldquo;AUGUR&rdquo;</span>
+    <span class="plate-line3">SER. №&nbsp;0061-04 · 2.4&nbsp;kV STORAGE MESH · 1961</span>
+  </div>
+
+  <!-- ============ main round CRT ============ -->
+  <section id="crt-unit" aria-label="Main storage trace screen">
+    <div id="crt-bezel">
+      <div class="screw screw-tl"></div>
+      <div class="screw screw-tr"></div>
+      <div class="screw screw-bl"></div>
+      <div class="screw screw-br"></div>
+      <div id="crt-face">
+        <canvas id="scope" width="1240" height="1240"></canvas>
+        <div id="crt-status" aria-hidden="true">
+          <div class="st-row"><span class="st-lab">FIG</span><span id="st-fig">1:1</span><span class="st-lab">&phi;</span><span id="st-phase">+000.0&deg;</span></div>
+          <div class="st-row"><span class="st-lab">AFC</span><span id="st-afc">&mdash;</span><span class="st-lab">MESH</span><span id="st-mesh">0.0kV</span></div>
+          <div class="st-row"><span id="st-mode">STANDBY</span><span class="cursor">&#9608;</span></div>
+        </div>
+        <div class="crt-scan"></div>
+        <div class="crt-glass"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ side screens ============ -->
+  <section id="side">
+
+    <div class="rscreen" id="table-screen" aria-label="Trace table">
+      <div class="rs-face">
+        <div class="rs-title">TRACE TABLE &mdash; STANDING ADDRESSES</div>
+        <div class="rs-head"><span class="c-id">REF</span><span class="c-name">DESTINATION</span><span class="c-fig">FIG</span><span class="c-ph">&phi;</span><span class="c-st">STATE</span></div>
+        <div id="dest-rows"></div>
+        <div class="rs-foot">SELECT ROW &rarr; GRATICULE MASK &middot; PLOT FIG + &phi; TO LATCH</div>
+      </div>
+      <div class="rs-scan"></div>
+    </div>
+
+    <div class="rscreen" id="log-screen" aria-label="System log">
+      <div class="rs-face">
+        <div class="rs-title">SUPERVISORY LOG</div>
+        <div id="log-lines"></div>
+      </div>
+      <div class="rs-scan"></div>
+    </div>
+
+    <div class="rscreen" id="store-screen" aria-label="Storage mesh">
+      <div class="rs-face">
+        <div class="rs-title">STORAGE MESH &mdash; RETAINED TRACES <span id="mesh-kv" class="rs-dim"></span></div>
+        <div id="store-rows"></div>
+      </div>
+      <div class="rs-scan"></div>
+    </div>
+
+    <!-- ============ control rail ============ -->
+    <section id="rail">
+      <div class="cluster" id="osc-cluster" aria-label="Oscillator group">
+        <div class="cluster-name">OSCILLATOR GROUP</div>
+        <div class="cluster-body">
+          <div class="knob-block">
+            <div class="knob" id="knob-ratio" tabindex="0" role="slider" aria-label="Figure ratio"
+                 aria-valuemin="0" aria-valuemax="6" aria-valuenow="0">
+              <div class="knob-cap"><div class="knob-line"></div></div>
+            </div>
+            <div class="knob-label">FIGURE&nbsp;X:Y</div>
+            <div class="knob-value" id="ratio-readout">1:1</div>
+          </div>
+          <div class="knob-block">
+            <div class="knob" id="knob-phase" tabindex="0" role="slider" aria-label="Phase vernier"
+                 aria-valuemin="0" aria-valuemax="359" aria-valuenow="210">
+              <div class="knob-cap fine"><div class="knob-line"></div></div>
+            </div>
+            <div class="knob-label">PHASE&nbsp;VERNIER</div>
+            <div class="knob-value" id="phase-readout">+210.0&deg;</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cluster" id="ap-cluster" aria-label="Aperture group">
+        <div class="cluster-name">APERTURE GROUP</div>
+        <div class="cluster-body">
+          <div class="toggle-block">
+            <div class="toggle" id="power-toggle" tabindex="0" role="switch" aria-checked="false" aria-label="Master power">
+              <div class="toggle-slot"><div class="toggle-bat"></div></div>
+            </div>
+            <div class="knob-label">MAINS</div>
+          </div>
+
+          <div id="lamp-row" aria-hidden="true">
+            <div class="lamp-block"><div class="lamp" id="lamp-power"></div><span>PWR</span></div>
+            <div class="lamp-block"><div class="lamp" id="lamp-ht"></div><span>HT</span></div>
+            <div class="lamp-block"><div class="lamp" id="lamp-latch"></div><span>AFC</span></div>
+            <div class="lamp-block"><div class="lamp" id="lamp-live"></div><span>TRC</span></div>
+            <div class="lamp-block"><div class="lamp" id="lamp-ap"></div><span>APR</span></div>
+            <div class="lamp-block"><div class="lamp lamp-red" id="lamp-fault"></div><span>FLT</span></div>
+          </div>
+
+          <div class="button-block">
+            <button class="pushbtn" id="strike-btn" aria-label="Strike trace into mesh"></button>
+            <div class="knob-label">STRIKE</div>
+          </div>
+
+          <div class="covered-block">
+            <div id="energize-unit">
+              <div class="toggle big" id="energize-switch" tabindex="0" role="switch" aria-checked="false" aria-label="Energize aperture">
+                <div class="toggle-slot"><div class="toggle-bat"></div></div>
+              </div>
+              <div class="switch-cover" id="energize-cover" tabindex="0" role="button" aria-label="Safety cover"></div>
+              <div class="cover-hinge" id="cover-hinge" tabindex="0" role="button" aria-label="Safety cover hinge"></div>
+            </div>
+            <div class="knob-label">ENERGIZE</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <a id="credit" href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+  <div id="ver">v1.0.0</div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
