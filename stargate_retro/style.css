@@ -261,6 +261,7 @@ html, body {
 /* --- knurled knobs --- */
 .knob-block { display: flex; flex-direction: column; align-items: center; }
 .knob {
+  position: relative;               /* anchor for .knob-cap */
   width: 92px; height: 92px; border-radius: 50%; cursor: grab;
   background:
     repeating-conic-gradient(#3c4045 0deg 5deg, #202226 5deg 10deg);
@@ -288,7 +289,8 @@ html, body {
 /* --- bat toggles --- */
 .toggle-block, .button-block, .covered-block { display: flex; flex-direction: column; align-items: center; }
 .toggle {
-  width: 54px; height: 84px; border-radius: 9px; cursor: pointer; position: relative;
+  position: relative;               /* anchor for .toggle-slot */
+  width: 54px; height: 84px; border-radius: 9px; cursor: pointer;
   background: linear-gradient(178deg, #3a3e43, #202226 60%, #16181a);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -2px 5px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.6);
 }

@@ -4,6 +4,22 @@ All notable changes to AUGUR (stargate_retro) are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] - 2026-07-22
+
+### Fixed
+
+- OSCILLATOR GROUP knobs were unusable: `.knob` lacked `position: relative`,
+  so both knob caps anchored to the cluster and stacked over the whole group,
+  occluding the FIGURE knob and blocking every manual dial.
+
+### Changed
+
+- Bench drag/wheel drivers are now hit-tested via `elementFromPoint` like
+  clicks (occluded controls fail honestly instead of being bypassed), and a
+  geometry audit scenario checks control reachability, internal-element
+  anchoring, and knob overlap. Cover occlusion checks force-settle the CSS
+  transition first. Suite is 28/28.
+
 ## [1.0.0] - 2026-07-22
 
 ### Added

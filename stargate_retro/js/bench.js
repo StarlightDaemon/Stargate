@@ -60,28 +60,32 @@ function realClick(el) {
 }
 const clickLanded = (el, top) => top && (top === el || el.contains(top));
 
+// Hit-tested wheel: dispatches on whatever is really under the pointer and
+// reports false if the control is occluded (events must reach el by bubbling).
 function realWheel(el, dir) {
   const [x, y] = center(el);
   const top = topAt(x, y);
-  const target = top && el.contains(top) ? top : el;
-  target.dispatchEvent(new WheelEvent('wheel', {
+  if (!top || (top !== el && !el.contains(top))) return false;
+  top.dispatchEvent(new WheelEvent('wheel', {
     bubbles: true, cancelable: true, clientX: x, clientY: y, deltaY: dir < 0 ? 120 : -120,
   }));
+  return true;
 }
 
-// pointer drag on a knob: dyPx > 0 drags UP (value increase)
+// Hit-tested pointer drag on a knob: dyPx > 0 drags UP (value increase)
 async function realDrag(el, dyPx) {
   const [x, y] = center(el);
   const top = topAt(x, y);
-  const target = top && el.contains(top) ? el : el;   // knob children are inside the knob
+  if (!top || (top !== el && !el.contains(top))) return false;
   const opts = p => ({ bubbles: true, cancelable: true, clientX: x, clientY: p, pointerId: 7, isPrimary: true, button: 0 });
-  target.dispatchEvent(new PointerEvent('pointerdown', opts(y)));
+  top.dispatchEvent(new PointerEvent('pointerdown', opts(y)));
   const steps = Math.max(1, Math.ceil(Math.abs(dyPx) / 18));
   for (let i = 1; i <= steps; i++) {
-    target.dispatchEvent(new PointerEvent('pointermove', opts(y - dyPx * i / steps)));
+    top.dispatchEvent(new PointerEvent('pointermove', opts(y - dyPx * i / steps)));
     if (i % 4 === 0) await pump(10);
   }
-  target.dispatchEvent(new PointerEvent('pointerup', opts(y - dyPx)));
+  top.dispatchEvent(new PointerEvent('pointerup', opts(y - dyPx)));
+  return true;
 }
 
 /* ---------- composite operations (all through real events) ---------- */
@@ -94,7 +98,7 @@ async function setPowerViaClick(on) {
 async function tuneRatioTo(a, b) {
   const target = RATIOS.findIndex(r => r[0] === a && r[1] === b);
   for (let guard = 0; guard < 12 && state.ratioIdx !== target; guard++) {
-    realWheel($('knob-ratio'), state.ratioIdx < target ? 1 : -1);
+    if (!realWheel($('knob-ratio'), state.ratioIdx < target ? 1 : -1)) return false;
     await pump(20);
   }
   return state.ratioIdx === target;
@@ -104,10 +108,42 @@ async function tunePhaseTo(deg) {
   for (let pass = 0; pass < 6; pass++) {
     const err = wrapDiff(deg, state.phase);
     if (Math.abs(err) <= 1.2) return true;
-    await realDrag($('knob-phase'), err / 0.35);     // 0.35°/px, up = +
+    if (!await realDrag($('knob-phase'), err / 0.35)) return false;   // 0.35°/px, up = +
     await pump(30);
   }
   return Math.abs(wrapDiff(deg, state.phase)) <= 3;
+}
+
+/* ---------- geometry audit: every control reachable, internals contained ---------- */
+function scenarioGeometry() {
+  log('BENCH — CONTROL GEOMETRY AUDIT', 'warn');
+  const controls = ['power-toggle', 'knob-ratio', 'knob-phase', 'strike-btn',
+    'energize-cover', 'cover-hinge', ...document.querySelectorAll('.dest-row, .store-row')]
+    .map(c => typeof c === 'string' ? $(c) : c);
+  const unreachable = controls.filter(el => {
+    const [x, y] = center(el);
+    const top = topAt(x, y);
+    return !top || (top !== el && !el.contains(top));
+  }).map(el => el.id || el.className);
+  check('every control reachable at its center', unreachable.length === 0, unreachable.join(','));
+
+  // absolutely-positioned internals must anchor to and fit their control.
+  // Uses layout boxes (offset*) — client rects of rotated caps are inflated.
+  const pairs = [['knob-ratio', '.knob-cap'], ['knob-phase', '.knob-cap'],
+    ['power-toggle', '.toggle-slot'], ['energize-switch', '.toggle-slot']];
+  const escaped = pairs.filter(([pid, sel]) => {
+    const p = $(pid), c = p.querySelector(sel);
+    return c.offsetParent !== p ||
+      c.offsetLeft < -1 || c.offsetTop < -1 ||
+      c.offsetLeft + c.offsetWidth > p.clientWidth + 1 ||
+      c.offsetTop + c.offsetHeight > p.clientHeight + 1;
+  }).map(([pid, sel]) => `${pid} ${sel}`);
+  check('absolute internals contained in their controls', escaped.length === 0, escaped.join(','));
+
+  // the two knobs must not overlap each other
+  const r1 = $('knob-ratio').getBoundingClientRect(), r2 = $('knob-phase').getBoundingClientRect();
+  const overlap = r1.left < r2.right && r2.left < r1.right && r1.top < r2.bottom && r2.top < r1.bottom;
+  check('oscillator knobs do not overlap', !overlap);
 }
 
 /* wait until the cover's DOM class reflects sim state — a click dispatched
@@ -116,10 +152,20 @@ function coverSynced() {
   return $('energize-unit').classList.contains('open') === state.coverOpen;
 }
 
+/* rAF-starved panes freeze CSS transitions mid-flight; force the cover to its
+   resting pose before any occlusion judgment */
+function settleCover() {
+  const c = $('energize-cover');
+  c.style.transition = 'none';
+  void c.offsetWidth;                                // reflow commits end state
+  c.style.transition = '';
+}
+
 async function ensureCover(open) {
-  if (state.coverOpen === open) { await waitFor(coverSynced, 40); return; }
+  if (state.coverOpen === open) { await waitFor(coverSynced, 40); settleCover(); return; }
   realClick($('cover-hinge'));                       // hinge bar works in both states
   await waitFor(() => state.coverOpen === open && coverSynced(), 40);
+  settleCover();
 }
 
 /* ---------- scenarios ---------- */
@@ -158,6 +204,7 @@ async function scenarioManual() {
   check('closed cover occludes energize switch', blocked === $('energize-cover'));
   realClick($('energize-switch'));                                       // hits cover -> raises it (action 5)
   await waitFor(() => state.coverOpen && coverSynced(), 40);
+  settleCover();
   check('clicking blocked switch raises cover instead', state.coverOpen && !state.energize);
 
   const eTop = realClick($('energize-switch'));                          // action 6
@@ -242,6 +289,7 @@ async function scenarioGuards() {
 export async function bench(mode = 'all') {
   results.length = 0;
   console.log(`AUGUR bench — mode: ${mode}`);
+  if (mode === 'geometry' || mode === 'all') scenarioGeometry();
   if (mode === 'manual' || mode === 'all') await scenarioManual();
   if (mode === 'recall' || mode === 'all') await scenarioRecall();
   if (mode === 'guards' || mode === 'all') await scenarioGuards();
