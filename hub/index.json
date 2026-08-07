@@ -1,0 +1,130 @@
+{
+  "entries": [
+    {
+      "id": "stargate-cyberpunk",
+      "folder": "stargate_cyberpunk",
+      "title": "DEADRINGER — salvaged transit aperture A7-113",
+      "blurb": "An interactive, fully fictional portal-dialing console. Cyberpunk build of the Stargate-inspired series: a decommissioned Kessler-Voss Orbital \"SPINDLE\" transit aperture, cut out of a bankrupt megacorp's tower and…",
+      "link": "../stargate_cyberpunk/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-dieselpunk",
+      "folder": "stargate_dieselpunk",
+      "title": "STENTOR — Resonance Alternator No. 3",
+      "blurb": "An original dieselpunk portal-dialing console: the Halvorsen & Krag Type 88 resonance alternator, worked by the fictional Overland Wireless Traction Board, alternate 1931. The paradigm is the great mechanical longwave…",
+      "link": "../stargate_dieselpunk/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-fable",
+      "folder": "Stargate_fable",
+      "title": "MERIDIAN RING — Gateway Operations Console",
+      "blurb": "An original, fully client-side interactive novelty site: a ring-shaped dialing apparatus that acquires a seven-sigil address, seats eight mechanical hold-clamps one by one, ignites a violent energy surge, and settles…",
+      "link": "../Stargate_fable/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-fable-02",
+      "folder": "Stargate_fable_02",
+      "title": "Heliacal Ring — Gate Command · Terminal VII",
+      "blurb": "An original, fully client-side interactive novelty site: a ring-shaped dialing device that opens a shimmering travel conduit. Compose a seven-glyph address, watch the inner ring spin each glyph to the primary lock, see…",
+      "link": "../Stargate_fable_02/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-fable-03",
+      "folder": "Stargate_fable_03",
+      "title": "AETHERGATE — Transit Ring Console",
+      "blurb": "An original, fully client-side interactive tribute to ring-portal science fiction. Compose a seven-sigil destination address, watch the sigil track spin each glyph under the crown marker while mechanical seals clamp…",
+      "link": "../Stargate_fable_03/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-fable-u",
+      "folder": "Stargate_fable_u",
+      "title": "HELIORA · Threshold Annulus",
+      "blurb": "An interactive novelty website: a ring-shaped dialing instrument that attunes seven-sigil addresses (\"cants\"), locks seven Annular Seals one by one, strikes open a molten travel-well (the Wellglass) with a dramatic…",
+      "link": "../Stargate_fable_u/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-high-magic",
+      "folder": "stargate_high_magic",
+      "title": "SIDEREUM — the Ring of Seven Wards",
+      "blurb": "An interactive novelty website: a ring-shaped portal-activation artifact of the Astrolith Order, a fictional tradition of sidereal high magic — magic written in the grammar of constellations, inlaid in silver and gold…",
+      "link": "../stargate_high_magic/index.html",
+      "preview": null,
+      "status": "in-progress"
+    },
+    {
+      "id": "stargate-high-scifi",
+      "folder": "stargate_high_scifi",
+      "title": "MERIDIAN — Transit Artifact Console",
+      "blurb": "An interactive novelty portal-dialing website. High Sci-Fi theme, ancient-megastructure register: Transit Artifact M-1 “Meridian” is a 2.1-million-year-old torus of scale-invariant grey glass recovered at Sol–Earth L4,…",
+      "link": "../stargate_high_scifi/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-low-magic",
+      "folder": "Stargate_low_magic",
+      "title": "The Wayband of Wren Alderwick",
+      "blurb": "An interactive novelty website: a ring-shaped, portal-opening device built in a low-magic register — hedge-craft, not high sorcery. The Wayband is a threshold wheel kept by Wren Alderwick, a hedge-dialer of the…",
+      "link": "../Stargate_low_magic/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-low-magicv2",
+      "folder": "stargate_low_magicv2",
+      "title": "The Hollowbeck Six — a lych-ring",
+      "blurb": "An interactive novelty website in a low-magic register: not sorcery, just an old practice that works if you do it properly. Hollowbeck's church tower keeps a ring of six bells — Lark, Tansy, Dole, Mattock, Hobb, and…",
+      "link": "../stargate_low_magicv2/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-low-scifi-maintenance",
+      "folder": "stargate_low_scifi_maintenance",
+      "title": "Panel K — Conduit Routing & Service",
+      "blurb": "A fictional, fully client-side, interactive portal-dialing site in the register of grounded, workaday low-tech science fiction. Portals here are not relics or ritual instruments — they are municipal infrastructure,…",
+      "link": "../stargate_low_scifi_maintenance/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-retro",
+      "folder": "stargate_retro",
+      "title": "AUGUR — Type 61 Aperture Trace Console",
+      "blurb": "A single-session novelty portal-dialing toy in the Retro register: an early-1960s storage-oscilloscope installation at the (fictional) Physical Establishment, Nine Elms. Fully client-side; all destinations are…",
+      "link": "../stargate_retro/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-steampunk",
+      "folder": "stargate_steampunk",
+      "title": "Old Punctual — Vane & Harrow Transit Engine №7",
+      "blurb": "An interactive, entirely fictional portal-dialing exhibit in a Victorian steampunk idiom: a punched-card æther correspondence engine built in 1894 by the (equally fictional) firm of Vane & Harrow, Blackfriars, for the…",
+      "link": "../stargate_steampunk/index.html",
+      "preview": null,
+      "status": "live"
+    },
+    {
+      "id": "stargate-modern",
+      "folder": "stargate_modern",
+      "title": "AERIS — Astraea Subspace Gateway Console",
+      "blurb": "An ultra-modern dark-mode mission control interface for the Astraea Deep Resonance Laboratory (ADRL-04). Features a functioning motorized rotating glyph ring, harmonic stator clamps, radial oscilloscope, and 1-click fast-dial EAFP protocol.",
+      "link": "../stargate_modern/index.html",
+      "preview": null,
+      "status": "live"
+    }
+  ]
+}

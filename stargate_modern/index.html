@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AERIS // Astraea Subspace Gateway Console</title>
+  <meta name="description" content="AERIS OS v4.8.2 - Subspace Telemetry & Aperture Transit Control Interface for the Astraea Deep Resonance Laboratory (ADRL-04).">
+  
+  <!-- Modern Sci-Fi Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="aeris-app">
+  <!-- Top Navigation / Header Bar -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="agency-logo">
+        <svg viewBox="0 0 40 40" class="logo-svg">
+          <polygon points="20,4 36,32 4,32" fill="none" stroke="#00f0ff" stroke-width="2.5"/>
+          <circle cx="20" cy="22" r="6" fill="#00f0ff"/>
+          <line x1="20" y1="4" x2="20" y2="16" stroke="#00f0ff" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="header-titles">
+        <h1 class="program-title">ASTRAEA <span class="dim">//</span> PROJECT AETHERLINK</h1>
+        <div class="facility-sub">ADRL-04 Deep Resonance Lab <span class="separator">·</span> Mount Erebus Polar Site</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="nav-tab-btn active" data-tab="GATE" id="tab-gate">
+        <span class="tab-icon">⬡</span> GATE CONSOLE
+      </button>
+      <button class="nav-tab-btn" data-tab="DATABASE" id="tab-database">
+        <span class="tab-icon">◫</span> DESTINATIONS
+      </button>
+      <button class="nav-tab-btn" data-tab="STARMAP" id="tab-starmap">
+        <span class="tab-icon">◈</span> STAR-CHART
+      </button>
+      <button class="nav-tab-btn" data-tab="TELEMETRY" id="tab-telemetry">
+        <span class="tab-icon">∿</span> DIAGNOSTICS
+      </button>
+      <button class="nav-tab-btn" data-tab="HISTORY" id="tab-history">
+        <span class="tab-icon">▤</span> MISSION LOG
+      </button>
+      <button class="nav-tab-btn" data-tab="SETTINGS" id="tab-settings">
+        <span class="tab-icon">⚙</span> SETTINGS
+      </button>
+    </nav>
+
+    <!-- Header Right Meta -->
+    <div class="header-right">
+      <div class="system-clock" id="top-clock">--:--:-- UTC</div>
+      <div class="status-badge badge-idle" id="system-status-badge">STANDBY</div>
+      <button class="btn-help-ref" id="btn-help-ref" title="Operator Reference Manual" aria-label="Help">?</button>
+    </div>
+  </header>
+
+  <!-- Main Viewport Area -->
+  <main class="main-viewport" id="main-viewport">
+    
+    <!-- PRIMARY VIEW: GATE CONSOLE (Strictly fitting 1080p single-screen) -->
+    <div class="console-grid" id="main-gate-console">
+      
+      <!-- LEFT COLUMN: CONTROL CLUSTER 1 [ COORDINATE VECTOR DIALPAD ] -->
+      <section class="console-column col-left" aria-label="Coordinate Vector Console">
+        <div class="panel-card cluster-panel">
+          <div class="panel-header">
+            <div class="cluster-tag">CLUSTER 01</div>
+            <h2 class="panel-title">COORDINATE VECTOR DIALPAD</h2>
+          </div>
+
+          <!-- Fast-Dial EAFP Bar -->
+          <div class="presets-section">
+            <div class="presets-label">
+              <span>EAFP FAST-DIAL PRESETS</span>
+              <span class="presets-badge">1-CLICK LOCK</span>
+            </div>
+            <div class="presets-bar" id="presets-bar"></div>
+          </div>
+
+          <!-- Coordinate Buffer Slots -->
+          <div class="buffer-container">
+            <div class="buffer-header">
+              <span class="buffer-title">ACTIVE VECTOR SEQUENCE</span>
+              <div class="buffer-tools">
+                <button class="btn-tool" id="btn-buffer-bksp" title="Backspace">⌫</button>
+                <button class="btn-tool" id="btn-buffer-clear" title="Clear Buffer">CLEAR</button>
+                <button class="btn-tool" id="btn-buffer-random" title="Random Vector">RND</button>
+              </div>
+            </div>
+
+            <div class="buffer-slots" id="buffer-slots">
+              <div class="buffer-slot" data-index="0"><span class="buffer-empty-label">V-01</span></div>
+              <div class="buffer-slot" data-index="1"><span class="buffer-empty-label">V-02</span></div>
+              <div class="buffer-slot" data-index="2"><span class="buffer-empty-label">V-03</span></div>
+              <div class="buffer-slot" data-index="3"><span class="buffer-empty-label">V-04</span></div>
+              <div class="buffer-slot" data-index="4"><span class="buffer-empty-label">V-05</span></div>
+              <div class="buffer-slot" data-index="5"><span class="buffer-empty-label">V-06</span></div>
+            </div>
+          </div>
+
+          <!-- 20-Glyph Matrix Grid -->
+          <div class="dialpad-matrix-container">
+            <div class="matrix-label">SUB-CARRIER GLYPH MATRIX (20-CADENCE)</div>
+            <div class="dialpad-grid" id="dialpad-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CENTER COLUMN: THE VECTOR RING (FUNCTIONING DISPLAY MECHANISM) -->
+      <section class="console-column col-center" aria-label="The Vector Ring Display">
+        <div class="ring-display-card">
+          <!-- Top HUD telemetry over ring -->
+          <div class="ring-top-hud">
+            <div class="ring-hud-item">
+              <span class="hud-label">ANNULUS MODEL</span>
+              <span class="hud-val">HVA-900 SERIES IX</span>
+            </div>
+            <div class="ring-hud-item">
+              <span class="hud-label">APEX HARMONIC</span>
+              <span class="hud-val text-cyan">1420.405 MHz</span>
+            </div>
+            <div class="ring-hud-item">
+              <span class="hud-label">APERTURE DIA</span>
+              <span class="hud-val">6.80 METERS</span>
+            </div>
+          </div>
+
+          <!-- Main Interactive Ring Container (Holds Canvas & Iris Overlays) -->
+          <div class="vector-ring-wrapper">
+            <div class="vector-ring-container" id="vector-ring-container">
+              <!-- ring.js & iris.js canvases dynamically injected here -->
+            </div>
+          </div>
+
+          <!-- Bottom Target Destination Readout -->
+          <div class="target-card" id="target-readout-card">
+            <div class="target-header">
+              <div class="target-titles">
+                <div class="target-sub" id="target-dest-sector">Enter 4 to 6 glyphs to calculate trajectory</div>
+                <h3 class="target-main" id="target-dest-name">NO TARGET VECTOR SELECTED</h3>
+              </div>
+              <span class="threat-badge hidden" id="target-threat-badge">CLASS-1</span>
+            </div>
+            <div class="target-meta" id="target-dest-freq">
+              Carrier: 1420.405 MHz (Standard Harmonic)
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: CONTROL CLUSTER 2 [ GATE IGNITION & POWER CONSOLE ] -->
+      <section class="console-column col-right" aria-label="Gate Ignition and Power Console">
+        
+        <!-- Primary Power & Ignition Cluster -->
+        <div class="panel-card cluster-panel">
+          <div class="panel-header">
+            <div class="cluster-tag">CLUSTER 02</div>
+            <h2 class="panel-title">GATE IGNITION & POWER CONSOLE</h2>
+          </div>
+
+          <div class="actions-cluster">
+            <!-- Step 1: Power Toggle -->
+            <button class="btn-action-primary btn-power" id="btn-power-toggle">
+              <span class="status-dot dot-offline"></span> INITIALIZE POWER
+            </button>
+
+            <!-- Step 2: Lock Target Vector -->
+            <button class="btn-action-primary btn-lock" id="btn-lock-target" disabled>
+              <span class="action-icon">🔒</span> LOCK TARGET VECTOR
+            </button>
+
+            <!-- Step 3: Engage Aperture / Abort -->
+            <button class="btn-action-primary btn-engage" id="btn-engage-aperture" disabled>
+              <span class="engage-icon">⚡</span> ENGAGE APERTURE
+            </button>
+          </div>
+
+          <!-- Containment Iris / Safety Barrier Module -->
+          <div class="iris-control-module">
+            <div class="iris-header">
+              <span class="iris-title">CONTAINMENT SHIELD (IRIS)</span>
+              <span class="iris-status" id="iris-status-val">OPEN / RETRACTED</span>
+            </div>
+            <button class="btn-iris" id="btn-iris-toggle">
+              <span class="shield-icon">🛡️</span> SEAL IRIS
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Telemetry Quick HUD -->
+        <div class="panel-card telemetry-quick-panel">
+          <div class="panel-header">
+            <h3 class="panel-title-sm">LIVE APERTURE TELEMETRY</h3>
+            <span class="live-tag">LIVE FEED</span>
+          </div>
+
+          <div class="telemetry-grid">
+            <div class="tel-cell">
+              <span class="tel-label">POWER FEED</span>
+              <span class="tel-value text-cyan" id="tel-power-val">0.0 MW</span>
+            </div>
+            <div class="tel-cell">
+              <span class="tel-label">CAPACITORS</span>
+              <span class="tel-value text-emerald" id="tel-cap-val">100%</span>
+            </div>
+            <div class="tel-cell">
+              <span class="tel-label">STABILITY</span>
+              <span class="tel-value text-cyan" id="tel-stab-val">0.00%</span>
+            </div>
+            <div class="tel-cell">
+              <span class="tel-label">HARMONIC Δ</span>
+              <span class="tel-value" id="tel-delta-val">+0.000 Hz</span>
+            </div>
+            <div class="tel-cell">
+              <span class="tel-label">MANIFOLD TENSION</span>
+              <span class="tel-value" id="tel-tension-val">101.3 kPa</span>
+            </div>
+            <div class="tel-cell">
+              <span class="tel-label">CRYO TEMP</span>
+              <span class="tel-value" id="tel-cryo-val">18.2 K</span>
+            </div>
+          </div>
+
+          <!-- Sparkline Graph -->
+          <div class="sparkline-wrapper">
+            <div class="sparkline-label">WAVE INTEGRITY STREAM</div>
+            <canvas id="telemetry-sparkline" class="sparkline-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- In-Universe Live Alerts Feed -->
+        <div class="alerts-feed-wrapper" id="alerts-feed">
+          <!-- Dynamic Alert Toasts -->
+        </div>
+      </section>
+    </div>
+
+    <!-- SECONDARY VIEW 1: DESTINATIONS DATABASE -->
+    <div class="sub-panel-view hidden" id="panel-database">
+      <div class="db-view-header">
+        <div>
+          <h2 class="view-title">SUBSPACE DESTINATION REGISTRY</h2>
+          <div class="view-sub">Verified harmonic addresses cataloged by Astraea Deep Resonance Recon</div>
+        </div>
+        <div class="db-controls">
+          <input type="text" id="db-search-input" class="db-search-field" placeholder="Search designation, sector, notes...">
+          <select id="db-sector-select" class="db-filter-select">
+            <option value="ALL">All Sectors</option>
+            <option value="Inner Sol Boundary">Inner Sol Boundary</option>
+            <option value="Perseus Arm">Perseus Arm</option>
+            <option value="Cygnus Rift">Cygnus Rift</option>
+            <option value="Outer Magellanic">Outer Magellanic</option>
+          </select>
+          <select id="db-threat-select" class="db-filter-select">
+            <option value="ALL">All Threat Levels</option>
+            <option value="Class-1">Class-1 Habitable</option>
+            <option value="Class-2">Class-2 Moderate</option>
+            <option value="Class-3">Class-3 Hazardous</option>
+            <option value="Class-4">Class-4 Extreme</option>
+            <option value="Class-5">Class-5 Critical</option>
+          </select>
+          <span class="db-count" id="db-results-count">24 DESTINATIONS</span>
+        </div>
+      </div>
+      <div class="db-cards-grid" id="db-destinations-list"></div>
+    </div>
+
+    <!-- SECONDARY VIEW 2: SUBSPACE STAR-CHART MAP -->
+    <div class="sub-panel-view hidden" id="panel-starmap">
+      <div class="starmap-view-header">
+        <div>
+          <h2 class="view-title">SUBSPACE NETWORK RADAR & STAR-CHART</h2>
+          <div class="view-sub">Interactive spatial projection of active Astraea gate nodes</div>
+        </div>
+        <div class="starmap-tools">
+          <span class="starmap-hint">Drag to Pan · Wheel to Zoom · Click Node to Inspect</span>
+        </div>
+      </div>
+      <div class="starmap-canvas-wrapper">
+        <canvas id="starmap-canvas"></canvas>
+        
+        <!-- Floating Info Card on Node Select -->
+        <div class="starmap-info-card hidden" id="starmap-info-card">
+          <div class="info-card-header">
+            <h4 id="starmap-dest-name">DESTINATION NAME</h4>
+            <span class="info-threat" id="starmap-dest-threat">CLASS-1</span>
+          </div>
+          <div class="info-card-body">
+            <div class="info-row" id="starmap-dest-sector">Sector · Distance</div>
+            <div class="info-row" id="starmap-dest-env">Environment</div>
+            <div class="info-glyphs" id="starmap-dest-glyphs"></div>
+          </div>
+          <div class="info-card-actions">
+            <button class="btn-info-load" id="btn-starmap-load">LOAD COORDINATES</button>
+            <button class="btn-info-fast" id="btn-starmap-fast">⚡ FAST ENGAGE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECONDARY VIEW 3: DIAGNOSTICS & TELEMETRY DEEP DIVE -->
+    <div class="sub-panel-view hidden" id="panel-telemetry">
+      <div class="diag-view-header">
+        <h2 class="view-title">FACILITY OMEGA DIAGNOSTICS & TELEMETRY</h2>
+        <div class="view-sub">Deep Resonance Sub-Basement Omicron bus telemetry and manifold stress vectors</div>
+      </div>
+      <div class="diag-cards-grid">
+        <div class="diag-card">
+          <h3 class="diag-card-title">SUB-STATION BUS CAPACITOR BANKS</h3>
+          <div class="diag-bar-group">
+            <div class="diag-bar-label"><span>BANK 01 (PRIMARY FEED)</span><span>100% / 40 MW</span></div>
+            <div class="diag-bar-track"><div class="diag-bar-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="diag-bar-group">
+            <div class="diag-bar-label"><span>BANK 02 (RESONANCE SHUNT)</span><span>100% / 40 MW</span></div>
+            <div class="diag-bar-track"><div class="diag-bar-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="diag-bar-group">
+            <div class="diag-bar-label"><span>BANK 03 (SURGE BUFFER)</span><span>100% / 40 MW</span></div>
+            <div class="diag-bar-track"><div class="diag-bar-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="diag-bar-group">
+            <div class="diag-bar-label"><span>BANK 04 (DISENGAGE DAMPENER)</span><span>100% / 40 MW</span></div>
+            <div class="diag-bar-track"><div class="diag-bar-fill" style="width: 100%;"></div></div>
+          </div>
+        </div>
+
+        <div class="diag-card">
+          <h3 class="diag-card-title">MAGNETIC COIL & CRYO STATUS</h3>
+          <div class="diag-stat-row">
+            <span>SUPERCONDUCTING COIL B-FIELD</span>
+            <span class="text-cyan">4.82 TESLA (NOMINAL)</span>
+          </div>
+          <div class="diag-stat-row">
+            <span>CRYO-COOLANT LOOP ALPHA</span>
+            <span class="text-emerald">18.2 K (-254.95°C)</span>
+          </div>
+          <div class="diag-stat-row">
+            <span>CRYO-COOLANT LOOP BETA</span>
+            <span class="text-emerald">18.4 K (-254.75°C)</span>
+          </div>
+          <div class="diag-stat-row">
+            <span>COOLANT MASS FLOW RATE</span>
+            <span>142.5 L/MIN</span>
+          </div>
+          <div class="diag-stat-row">
+            <span>VACUUM FOAM LEAKAGE</span>
+            <span class="text-emerald">0.0000 nPa (HERMETIC)</span>
+          </div>
+        </div>
+
+        <div class="diag-card">
+          <h3 class="diag-card-title">SUBSPACE CARRIER COHERENCE</h3>
+          <div class="diag-stat-row">
+            <span>RESTING HARMONIC BASELINE</span>
+            <span class="text-cyan">1420.405 MHz (HI LINE)</span>
+          </div>
+          <div class="diag-stat-row">
+            <span>PHASE JITTER TOLERANCE</span>
+            <span>±0.004 RADIANS</span>
+          </div>
+          <div class="diag-stat-row">
+            <span>EVENT HORIZON DRAG COEFFICIENT</span>
+            <span>0.0018 γ</span>
+          </div>
+          <div class="diag-stat-row">
+            <span>CONTAINMENT IRIS BLADE SEAT</span>
+            <span class="text-cyan">12/12 BLADES PROVEN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECONDARY VIEW 4: MISSION LOG & DIAL HISTORY -->
+    <div class="sub-panel-view hidden" id="panel-history">
+      <div class="history-view-header">
+        <div>
+          <h2 class="view-title">MISSION ACTIVITY & DIAL LEDGER</h2>
+          <div class="view-sub">Chronological event stream with microsecond timestamps</div>
+        </div>
+        <div class="history-controls">
+          <div class="filter-group">
+            <button class="btn-log-filter active" data-filter="ALL">ALL</button>
+            <button class="btn-log-filter" data-filter="DIAL">DIAL</button>
+            <button class="btn-log-filter" data-filter="LOCK">LOCK</button>
+            <button class="btn-log-filter" data-filter="IGNITE">IGNITE</button>
+            <button class="btn-log-filter" data-filter="SHIELD">SHIELD</button>
+            <button class="btn-log-filter" data-filter="POWER">POWER</button>
+            <button class="btn-log-filter" data-filter="SYSTEM">SYSTEM</button>
+          </div>
+          <button class="btn-tool" id="btn-export-log">EXPORT LOG</button>
+          <button class="btn-tool" id="btn-clear-log">CLEAR</button>
+        </div>
+      </div>
+      <div class="history-log-stream" id="history-log-stream"></div>
+    </div>
+
+    <!-- SECONDARY VIEW 5: SYSTEM SETTINGS -->
+    <div class="sub-panel-view hidden" id="panel-settings">
+      <div class="settings-view-header">
+        <h2 class="view-title">AERIS CONSOLE CONFIGURATION</h2>
+        <div class="view-sub">Audio synthesis, visual density, and operational preferences</div>
+      </div>
+      <div class="settings-grid">
+        <div class="settings-card">
+          <h3 class="settings-card-title">WEB AUDIO SYNTHESIZER</h3>
+          <div class="setting-item">
+            <label for="setting-audio-toggle">Enable Procedural Sound Engine</label>
+            <input type="checkbox" id="setting-audio-toggle" checked>
+          </div>
+          <div class="setting-item">
+            <label for="setting-master-volume">Master Volume</label>
+            <input type="range" id="setting-master-volume" min="0" max="1" step="0.05" value="0.75">
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <h3 class="settings-card-title">DISPLAY & VISUALS</h3>
+          <div class="setting-item">
+            <label for="setting-crt-toggle">CRT Scanline & Phosphor Filter</label>
+            <input type="checkbox" id="setting-crt-toggle">
+          </div>
+          <div class="setting-item">
+            <label for="setting-motion-toggle">Reduced Motion Mode</label>
+            <input type="checkbox" id="setting-motion-toggle">
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- OPERATOR REFERENCE MODAL OVERLAY (?) -->
+  <div class="modal-overlay hidden" id="modal-operator-ref">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-titles">
+          <span class="modal-tag">ASTRAEA TECHNICAL DIRECTIVE 09-C</span>
+          <h3 class="modal-title">AERIS GATE OPERATOR REFERENCE</h3>
+        </div>
+        <button class="modal-close-btn" id="btn-close-help">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <section class="ref-section">
+          <h4>1. CORE MANUAL DIAL SEQUENCE (5 to 7 Actions)</h4>
+          <p>The manual dial sequence follows a strict sequential protocol to establish a stable subspace wormhole:</p>
+          <ol class="ref-list">
+            <li><strong>Initialize Power:</strong> Click <code>INITIALIZE POWER</code> in Cluster 02. The power bus energizes and the stator nodes illuminate.</li>
+            <li><strong>Input Coordinate Glyphs:</strong> Select 4 to 6 glyph keys on the 20-Glyph Matrix in Cluster 01. The active sequence populates the vector buffer.</li>
+            <li><strong>Lock Target Vector:</strong> Click <code>LOCK TARGET VECTOR</code> in Cluster 02. The outer annular ring rotates each glyph to the Apex stator while harmonic clamps lock sequentially with resonant chimes.</li>
+            <li><strong>Engage Aperture:</strong> Once all nodes are locked, click <code>ENGAGE APERTURE</code>. A superluminal shockwave ignites and stabilizes into an active transit wormhole!</li>
+            <li><strong>Disengage / Abort:</strong> Click <code>ABORT / DISENGAGE</code> to safely collapse the wormhole bridge.</li>
+          </ol>
+        </section>
+
+        <section class="ref-section">
+          <h4>2. EMERGENCY AUTOMATED FAST-LOCK PROTOCOL (EAFP)</h4>
+          <p>For tactical rapid transit, pre-calibrated subspace carrier harmonics are stored in the <strong>EAFP Quick-Dial Presets</strong> bar (e.g. Alpha Site, Helios Forge, Perseus Archive). Clicking any preset executes an automated power-up, multi-clamp lock, and aperture ignition in a single fast sequence.</p>
+        </section>
+
+        <section class="ref-section">
+          <h4>3. CONTAINMENT IRIS SUBSYSTEM</h4>
+          <p>The 12-blade titanium diaphragm shield operates independently from the dialing sequence. Seal the iris via <code>SEAL IRIS</code> when receiving unverified incoming carrier waves or conducting high-energy ignition containment drills.</p>
+        </section>
+
+        <section class="ref-section">
+          <h4>4. TELEMETRY & SPATIAL STAR-CHART</h4>
+          <p>Explore the <strong>Destinations Database</strong> to review 24 charted star systems with threat classifications, or switch to the <strong>Star-Chart</strong> tab for an interactive radar projection with live transit conduit tracking.</p>
+        </section>
+      </div>
+
+      <div class="modal-footer">
+        <span class="ref-footer-text">Astraea Subspace Authority · Security Clearance Level 4 Required</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Persistent Corner Attributions (Required) -->
+  <footer class="app-footer">
+    <div class="footer-left">
+      <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="corner-credit-link">StarlightDaemon</a>
+    </div>
+    <div class="footer-center">
+      <span class="footer-ticker">ASTRAEA TELEMETRY: CARRIER NOMINAL · MOUNT EREBUS DEEP LAB</span>
+    </div>
+    <div class="footer-right">
+      <span class="corner-version-tag">v1.0.0</span>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/ring.js"></script>
+  <script src="js/iris.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/starmap.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
