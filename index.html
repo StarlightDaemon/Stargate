@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astro-Transit Pavilion '64</title>
+    <!-- Google Fonts for that clean mid-century futuristic look -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Operator Reference -->
+    <div id="operator-reference-btn" class="operator-reference-btn" title="Operator Reference">?</div>
+    <div id="operator-reference-overlay" class="overlay hidden">
+        <div class="overlay-card">
+            <h2>Operator Reference Guide</h2>
+            <div class="guide-content">
+                <p>Welcome to the <strong>Astro-Transit Pavilion '64</strong>! This terminal connects you to our network of utopian destinations.</p>
+                
+                <div class="guide-section">
+                    <h3>Manual Transit Protocol</h3>
+                    <ol>
+                        <li>Consult the <strong>Destination Directory</strong> (left panel) for your desired coordinate sequence.</li>
+                        <li>Input the precise 4-symbol sequence using the <strong>Sequence Input Console</strong> (right panel).</li>
+                        <li>Verify the symbols in the center Ring display.</li>
+                        <li>Press the <strong>ENGAGE</strong> activator to initialize the transit corridor.</li>
+                    </ol>
+                </div>
+                
+                <div class="guide-section">
+                    <h3>Express Transit Tokens</h3>
+                    <p>For rapid deployment, utilize the <strong>Express Tokens</strong> located next to each destination in the Directory. Inserting a token bypasses manual entry and immediately initializes the transit sequence automatically.</p>
+                </div>
+            </div>
+            <button id="close-reference-btn" class="btn btn-primary">Close Guide</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="pavilion-header">
+        <h1>Astro-Transit Pavilion</h1>
+        <div class="subtitle">Tomorrow's Gateway, Today!</div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard">
+        
+        <!-- Left Cluster: Directory & Logs -->
+        <section class="control-cluster" id="cluster-left">
+            <div class="panel directory-panel">
+                <h2>Destination Directory</h2>
+                <p class="panel-desc">Insert Express Token for rapid routing.</p>
+                <ul id="destination-list" class="dest-list">
+                    <!-- Populated via JS -->
+                </ul>
+            </div>
+            
+            <div class="panel log-panel">
+                <h2>Activity Log</h2>
+                <div class="log-container">
+                    <ul id="activity-log" class="log-list">
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Center Stage: The Ring Display -->
+        <section id="center-stage" class="center-stage">
+            <div class="ring-container">
+                <!-- The Ring Track (Visual background) -->
+                <div class="ring-track">
+                    <!-- Dynamic Energy Fill (Controlled by JS) -->
+                    <div id="ring-energy-fill" class="ring-energy-fill"></div>
+                    
+                    <!-- Inner Track to hollow out the ring -->
+                    <div class="ring-inner-track">
+                        <!-- Portal Center -->
+                        <div class="ring-center-portal">
+                            <div id="portal-surface" class="portal-surface"></div>
+                            
+                            <div class="portal-content">
+                                <div id="ring-status" class="ring-status">AWAITING INPUT</div>
+                                <div id="sequence-display" class="sequence-display">
+                                    <div class="sequence-slot"></div>
+                                    <div class="sequence-slot"></div>
+                                    <div class="sequence-slot"></div>
+                                    <div class="sequence-slot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Cluster: Input Console -->
+        <section class="control-cluster" id="cluster-right">
+            <div class="panel input-panel">
+                <h2>Sequence Input Console</h2>
+                <p class="panel-desc">Input 4-symbol transit coordinate.</p>
+                
+                <div class="symbol-grid" id="symbol-grid">
+                    <!-- Symbols populated via JS -->
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="btn-clear" class="btn btn-secondary">CLEAR</button>
+                    <button id="btn-engage" class="btn btn-engage" disabled>ENGAGE</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Attribution -->
+    <div class="corner-attribution corner-bottom-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+    </div>
+    <div class="corner-attribution corner-bottom-right">v1.0.0</div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
