@@ -107,9 +107,9 @@ async function selectSymbol(symbolIdx) {
     
     let targetAngle = (targetChevron - symbolIdx) * 40;
     
-    let diff = targetAngle - (currentRotation % 360);
-    // add 1.5 rotations minimum
-    let rotations = 360 + 180;
+    let normalizedCurrent = ((currentRotation % 360) + 360) % 360;
+    let diff = targetAngle - normalizedCurrent;
+    let rotations = 720; // Must be a multiple of 360
     if (direction === 1) {
         if (diff <= 0) diff += 360;
         currentRotation += rotations + diff;
