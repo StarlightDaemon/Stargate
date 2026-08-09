@@ -27,10 +27,13 @@ const symbols = [
 ];
 
 const destinations = [
-    { id: 'D1', name: 'Lunar Botanical Gardens', sequence: ['S1', 'S18', 'S9', 'S5'], x: 20, y: 30, meta: { dist: '1.3 LS', auth: 'Public', gravity: '0.16g' }, adv: false },
-    { id: 'D2', name: 'Oceanic Research Pavilion', sequence: ['S3', 'S13', 'S17', 'S2'], x: 70, y: 40, meta: { dist: '400km Depth', auth: 'Level 2', gravity: '1.0g' }, adv: false },
-    { id: 'D3', name: 'Starlight Observatory', sequence: ['S4', 'S15', 'S21', 'S19'], x: 50, y: 80, meta: { dist: 'Geo-Sync', auth: 'Public', gravity: 'Micro' }, adv: false },
-    { id: 'D4', name: 'Deep Space Terminal Nine', sequence: ['S24', 'S7', 'S12', 'S14', 'S22', 'S11', 'S10', 'S23'], x: 90, y: 10, meta: { dist: '40.5 LY', auth: 'Advanced', gravity: '1.2g' }, adv: true }
+    { id: 'D1', name: 'Lunar Botanical Gardens', sequence: ['S1', 'S18', 'S9', 'S5'], x: 20, y: 30, meta: { dist: '1.3 LS', auth: 'Public', gravity: '0.16g' }, adv: false, tokenClass: 'public' },
+    { id: 'D2', name: 'Oceanic Research Pavilion', sequence: ['S3', 'S13', 'S17', 'S2'], x: 70, y: 40, meta: { dist: '400km Depth', auth: 'Level 2', gravity: '1.0g' }, adv: false, tokenClass: 'standard' },
+    { id: 'D3', name: 'Starlight Observatory', sequence: ['S4', 'S15', 'S21', 'S19'], x: 50, y: 80, meta: { dist: 'Geo-Sync', auth: 'Public', gravity: 'Micro' }, adv: false, tokenClass: 'public' },
+    { id: 'D4', name: 'Aegis Defense Perimeter', sequence: ['S8', 'S6', 'S16', 'S20'], x: 15, y: 70, meta: { dist: '1.5 AU', auth: 'Level 5', gravity: '1.2g' }, adv: false, tokenClass: 'emergency' },
+    { id: 'D5', name: 'Solar Core Tap', sequence: ['S10', 'S24', 'S1', 'S11'], x: 80, y: 80, meta: { dist: '1.0 AU', auth: 'Engineering', gravity: '0.8g' }, adv: false, tokenClass: 'vip' },
+    { id: 'D6', name: 'Alpha Centauri Embassy', sequence: ['S18', 'S22', 'S12', 'S19', 'S14', 'S3', 'S6', 'S2'], x: 90, y: 50, meta: { dist: '4.3 LY', auth: 'Diplomatic', gravity: '1.0g' }, adv: true, tokenClass: 'diplomatic' },
+    { id: 'D7', name: 'Deep Space Terminal Nine', sequence: ['S24', 'S7', 'S12', 'S14', 'S22', 'S11', 'S10', 'S23'], x: 90, y: 10, meta: { dist: '40.5 LY', auth: 'Advanced', gravity: '1.2g' }, adv: true, tokenClass: 'vip' }
 ];
 
 // Configuration
@@ -183,11 +186,24 @@ function renderDestinations() {
                 </div>
                 <div class="dest-meta">Coord: ${seqNames}</div>
             </div>
-            <button class="btn btn-express" data-target="${dest.id}">Express Token</button>
+            <button class="btn btn-express token-${dest.tokenClass}" data-target="${dest.id}">
+                ${getTokenIcon(dest.tokenClass)} Express Token
+            </button>
         `;
         li.querySelector('.btn-express').addEventListener('click', () => handleExpressDial(dest));
         els.destList.appendChild(li);
     });
+}
+
+function getTokenIcon(type) {
+    switch(type) {
+        case 'vip': return '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2L15 9h8l-6 5 2 8-7-5-7 5 2-8-6-5h8z"/></svg>';
+        case 'emergency': return '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>';
+        case 'diplomatic': return '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>';
+        case 'public':
+        case 'standard':
+        default: return '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.5v-1c0-.8-.7-1.5-1.5-1.5H16v-2c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4.5c-.8 0-1.5.7-1.5 1.5v1c0 .8.7 1.5 1.5 1.5H8v2c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2v-2h3.5c.8 0 1.5-.7 1.5-1.5z"/></svg>';
+    }
 }
 
 function renderStarChart() {
