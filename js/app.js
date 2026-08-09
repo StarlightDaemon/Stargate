@@ -1,80 +1,5 @@
-const MAX_SEQUENCE_LENGTH = 4;
-let currentSequence = [];
-let isSystemActive = false;
-let idleHumOscillator = null;
-
-const AudioSys = {
-    ctx: null,
-    init() {
-        if (!this.ctx) {
-            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            this.startIdleHum();
-        }
-    },
-    startIdleHum() {
-        if (idleHumOscillator) return;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(50, this.ctx.currentTime); // Low hum
-        gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        idleHumOscillator = osc;
-    },
-    playTone(freq, type = 'sine', duration = 0.3, volume = 0.3) {
-        if (!this.ctx) return;
-        this.init();
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-        gain.gain.setValueAtTime(0, this.ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(volume, this.ctx.currentTime + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + duration);
-    },
-    playButtonHover() { this.playTone(800, 'sine', 0.1, 0.02); },
-    playSymbolSelect(index) { this.playTone(400 + (index * 100), 'sine', 0.2, 0.2); },
-    playChevronLock(index) {
-        // Distinct mechanical lock sound
-        const base = [200, 250, 300, 350][index];
-        this.playTone(base, 'square', 0.2, 0.1);
-        this.playTone(100, 'sawtooth', 0.15, 0.15); // Mechanical thud
-        setTimeout(() => this.playTone(base*2, 'sine', 0.3, 0.1), 50); // Resonance
-    },
-    playError() { this.playTone(150, 'sawtooth', 0.4, 0.2); },
-    playClear() { this.playTone(300, 'sine', 0.2); setTimeout(() => this.playTone(200, 'sine', 0.2), 100); },
-    playEngage() {
-        if (!this.ctx) return;
-        this.init();
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(200, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 1.8);
-        gain.gain.setValueAtTime(0, this.ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.4, this.ctx.currentTime + 0.5);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 2.5);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + 2.5);
-    },
-    playSuccess() {
-        if (!this.ctx) return;
-        setTimeout(() => this.playTone(600, 'sine', 0.2, 0.3), 1500);
-        setTimeout(() => this.playTone(800, 'sine', 0.4, 0.3), 1700);
-        setTimeout(() => this.playTone(1200, 'sine', 0.6, 0.3), 1900);
-    }
-};
-
-// 24 Unique Glyphs
 const symbols = [
+    { id: 'S0', name: 'Origin', svg: '<polygon points="50,15 85,85 15,85"/><circle cx="50" cy="65" r="12"/>' }, // Used for Engage Final Lock
     { id: 'S1', name: 'Aperture', svg: '<circle cx="50" cy="50" r="30"/><path d="M50 20 L80 50 L50 80 L20 50 Z"/>' },
     { id: 'S2', name: 'Vector', svg: '<path d="M30 80 L50 20 L70 80 L50 60 Z"/>' },
     { id: 'S3', name: 'Meridian', svg: '<circle cx="50" cy="50" r="35"/><line x1="50" y1="15" x2="50" y2="85"/><line x1="15" y1="50" x2="85" y2="50"/><ellipse cx="50" cy="50" rx="35" ry="10"/>' },
@@ -102,70 +27,159 @@ const symbols = [
 ];
 
 const destinations = [
-    { id: 'D1', name: 'Lunar Botanical Gardens', sequence: ['S1', 'S18', 'S9', 'S5'], x: 20, y: 30, meta: { dist: '1.3 LS', auth: 'Public', gravity: '0.16g' } },
-    { id: 'D2', name: 'Oceanic Research Pavilion', sequence: ['S3', 'S13', 'S17', 'S2'], x: 70, y: 40, meta: { dist: '400km Depth', auth: 'Level 2', gravity: '1.0g' } },
-    { id: 'D3', name: 'Starlight Observatory', sequence: ['S4', 'S15', 'S21', 'S19'], x: 50, y: 80, meta: { dist: 'Geo-Sync', auth: 'Public', gravity: 'Micro' } },
-    { id: 'D4', name: 'Aero-Transit Hub Delta', sequence: ['S24', 'S7', 'S12', 'S14'], x: 80, y: 20, meta: { dist: 'Surface', auth: 'Transit', gravity: '1.0g' } }
+    { id: 'D1', name: 'Lunar Botanical Gardens', sequence: ['S1', 'S18', 'S9', 'S5'], x: 20, y: 30, meta: { dist: '1.3 LS', auth: 'Public', gravity: '0.16g' }, adv: false },
+    { id: 'D2', name: 'Oceanic Research Pavilion', sequence: ['S3', 'S13', 'S17', 'S2'], x: 70, y: 40, meta: { dist: '400km Depth', auth: 'Level 2', gravity: '1.0g' }, adv: false },
+    { id: 'D3', name: 'Starlight Observatory', sequence: ['S4', 'S15', 'S21', 'S19'], x: 50, y: 80, meta: { dist: 'Geo-Sync', auth: 'Public', gravity: 'Micro' }, adv: false },
+    { id: 'D4', name: 'Deep Space Terminal Nine', sequence: ['S24', 'S7', 'S12', 'S14', 'S22', 'S11', 'S10', 'S23'], x: 90, y: 10, meta: { dist: '40.5 LY', auth: 'Advanced', gravity: '1.2g' }, adv: true }
 ];
 
+// Configuration
+let isAdvancedMode = false;
+let currentMaxSequence = 4;
+const chevOrders = {
+    standard: [1, 8, 2, 7],
+    advanced: [1, 8, 2, 7, 3, 6, 4, 5]
+};
+let currentSequence = [];
+let dialQueue = [];
+let isSystemActive = false;
+let isDialing = false;
+let currentRingRotation = 0;
+let lastRotationDirection = 1; // 1 CW, -1 CCW
+
+const AudioSys = {
+    ctx: null, portalOsc: null, portalGain: null,
+    init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+    playTone(freq, type = 'sine', duration = 0.3, volume = 0.3) {
+        if (!this.ctx) return; this.init();
+        const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+        osc.type = type; osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(volume, this.ctx.currentTime + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + duration);
+    },
+    playButtonHover() { this.playTone(800, 'sine', 0.1, 0.02); },
+    playSymbolSelect(index) { this.playTone(400 + (index * 100), 'sine', 0.2, 0.2); },
+    playChevronLock(index) {
+        const base = 250 + (index * 20);
+        this.playTone(base, 'square', 0.2, 0.1);
+        this.playTone(100, 'sawtooth', 0.15, 0.15); // Mechanical clamp
+    },
+    playFinalLock() {
+        this.playTone(150, 'sawtooth', 0.5, 0.3);
+        this.playTone(300, 'square', 0.4, 0.2);
+        setTimeout(() => this.playTone(100, 'triangle', 0.8, 0.4), 100);
+    },
+    playError() { this.playTone(150, 'sawtooth', 0.4, 0.2); },
+    playClear() { this.playTone(300, 'sine', 0.2); setTimeout(() => this.playTone(200, 'sine', 0.2), 100); },
+    playDischarge() {
+        if (!this.ctx) return; this.init();
+        const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 1.0);
+        gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 1.0);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 1.0);
+    },
+    startPortalHum() {
+        if (this.portalOsc) return;
+        this.portalOsc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        this.portalOsc.type = 'sine'; this.portalOsc.frequency.setValueAtTime(120, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+        this.portalOsc.connect(gain); gain.connect(this.ctx.destination);
+        this.portalOsc.start(); this.portalGain = gain;
+    },
+    stopPortalHum() {
+        if (this.portalOsc) {
+            this.portalGain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 1.0);
+            this.portalOsc.stop(this.ctx.currentTime + 1.0); this.portalOsc = null;
+        }
+    },
+    playCollapse() {
+        this.playTone(200, 'sawtooth', 0.8, 0.3);
+        setTimeout(() => this.playTone(100, 'sine', 0.5, 0.2), 200);
+    }
+};
+
 const els = {
-    symbolGrid: document.getElementById('symbol-grid'),
-    destList: document.getElementById('destination-list'),
-    logList: document.getElementById('activity-log'),
-    seqSlots: document.querySelectorAll('.sequence-slot'),
-    ringEnergyFill: document.getElementById('ring-energy-fill'),
-    ringStatus: document.getElementById('ring-status'),
-    portalSurface: document.getElementById('portal-surface'),
-    ringContainer: document.querySelector('.ring-container'),
-    btnEngage: document.getElementById('btn-engage'),
-    btnClear: document.getElementById('btn-clear'),
-    btnRefOpen: document.getElementById('operator-reference-btn'),
-    btnRefClose: document.getElementById('close-reference-btn'),
-    overlayRef: document.getElementById('operator-reference-overlay'),
+    symbolGrid: document.getElementById('symbol-grid'), destList: document.getElementById('destination-list'),
+    logList: document.getElementById('activity-log'), seqDisplay: document.getElementById('sequence-display'),
+    ringStatus: document.getElementById('ring-status'), portalSurface: document.getElementById('portal-surface'),
+    ringRotator: document.getElementById('ring-rotator'), energyDischarge: document.getElementById('energy-discharge'),
+    btnEngage: document.getElementById('btn-engage'), btnClear: document.getElementById('btn-clear'),
+    btnRefOpen: document.getElementById('operator-reference-btn'), btnRefClose: document.getElementById('close-reference-btn'),
+    overlayRef: document.getElementById('operator-reference-overlay'), advToggle: document.getElementById('adv-route-toggle'),
     chevrons: [
-        document.getElementById('chev-0'),
-        document.getElementById('chev-1'),
-        document.getElementById('chev-2'),
-        document.getElementById('chev-3')
+        document.getElementById('chev-0'), document.getElementById('chev-1'), document.getElementById('chev-2'),
+        document.getElementById('chev-3'), document.getElementById('chev-4'), document.getElementById('chev-5'),
+        document.getElementById('chev-6'), document.getElementById('chev-7'), document.getElementById('chev-8')
     ],
-    animLayer: document.getElementById('animation-layer'),
-    tabs: document.querySelectorAll('.tab-btn'),
-    tabContents: document.querySelectorAll('.tab-content'),
+    tabs: document.querySelectorAll('.tab-btn'), tabContents: document.querySelectorAll('.tab-content'),
     starChart: document.getElementById('star-chart-svg')
 };
 
+function logActivity(msg, type = 'normal') {
+    const li = document.createElement('li');
+    li.className = type;
+    const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    li.textContent = `[${time}] ${msg}`;
+    els.logList.appendChild(li);
+    els.logList.parentElement.scrollTop = els.logList.parentElement.scrollHeight;
+}
+
 function init() {
+    renderRingGlyphs();
     renderSymbols();
     renderDestinations();
     renderStarChart();
+    updateSequenceDisplay();
     bindEvents();
-    logActivity('System initialized. Awaiting input.', 'success');
+    logActivity('System initialized. Standby.', 'success');
 }
 
-function renderSymbols() {
-    symbols.forEach(sym => {
-        const btn = document.createElement('button');
-        btn.className = 'symbol-btn';
-        btn.dataset.id = sym.id;
-        btn.innerHTML = `<svg viewBox="0 0 100 100">${sym.svg}</svg><span>${sym.name}</span>`;
-        btn.addEventListener('mouseenter', () => { if(!isSystemActive) AudioSys.playButtonHover(); });
-        btn.addEventListener('click', (e) => handleSymbolClick(sym, btn, e));
-        els.symbolGrid.appendChild(btn);
+function renderRingGlyphs() {
+    els.ringRotator.innerHTML = '';
+    const angleStep = 360 / symbols.length; // 25 glyphs -> 14.4 degrees
+    symbols.forEach((sym, idx) => {
+        const div = document.createElement('div');
+        div.className = 'glyph-on-ring';
+        // Position on the edge of the 500px ring (radius 250px)
+        // translateY(-235) to sit inside the track
+        div.style.transform = `rotate(${idx * angleStep}deg) translateY(-225px) rotate(180deg)`;
+        div.innerHTML = `<svg viewBox="0 0 100 100">${sym.svg}</svg>`;
+        els.ringRotator.appendChild(div);
     });
 }
 
+function renderSymbols() {
+    els.symbolGrid.innerHTML = '';
+    // Skip index 0 (Origin) for the input console
+    for (let i = 1; i < symbols.length; i++) {
+        const sym = symbols[i];
+        const btn = document.createElement('button');
+        btn.className = 'symbol-btn'; btn.dataset.id = sym.id;
+        btn.innerHTML = `<svg viewBox="0 0 100 100">${sym.svg}</svg><span>${sym.name}</span>`;
+        btn.addEventListener('mouseenter', () => { if(!isSystemActive && !isDialing) AudioSys.playButtonHover(); });
+        btn.addEventListener('click', () => handleSymbolClick(sym, btn));
+        els.symbolGrid.appendChild(btn);
+    }
+}
+
 function renderDestinations() {
+    els.destList.innerHTML = '';
     destinations.forEach(dest => {
-        const li = document.createElement('li');
-        li.className = 'dest-item';
+        if (dest.adv && !isAdvancedMode) return; // Hide advanced destinations in standard mode
+        const li = document.createElement('li'); li.className = 'dest-item';
         const seqNames = dest.sequence.map(id => symbols.find(s => s.id === id).name).join(', ');
         li.innerHTML = `
             <div class="dest-info">
                 <div class="dest-name">${dest.name}</div>
                 <div class="dest-meta">
-                    <span class="meta-tag">${dest.meta.dist}</span>
-                    <span class="meta-tag">${dest.meta.auth}</span>
-                    <span class="meta-tag">${dest.meta.gravity}</span>
+                    <span class="meta-tag">${dest.meta.dist}</span><span class="meta-tag">${dest.meta.auth}</span><span class="meta-tag">${dest.meta.gravity}</span>
                 </div>
                 <div class="dest-meta">Coord: ${seqNames}</div>
             </div>
@@ -178,31 +192,26 @@ function renderDestinations() {
 
 function renderStarChart() {
     let svgHtml = '';
-    // Draw links to center
     destinations.forEach(dest => {
+        if (dest.adv && !isAdvancedMode) return;
         svgHtml += `<line x1="50" y1="50" x2="${dest.x}" y2="${dest.y}" class="sc-link" />`;
     });
-    // Draw center
     svgHtml += `<circle cx="50" cy="50" r="3" class="sc-node" fill="#ffffff" /><text x="50" y="56" class="sc-label">PAVILION</text>`;
-    // Draw nodes
     destinations.forEach(dest => {
-        svgHtml += `
-            <circle cx="${dest.x}" cy="${dest.y}" r="2" class="sc-node" />
-            <text x="${dest.x}" y="${dest.y + 4}" class="sc-label">${dest.name.split(' ')[0]}</text>
-        `;
+        if (dest.adv && !isAdvancedMode) return;
+        svgHtml += `<circle cx="${dest.x}" cy="${dest.y}" r="2" class="sc-node" /><text x="${dest.x}" y="${dest.y + 4}" class="sc-label">${dest.name.split(' ')[0]}</text>`;
     });
     els.starChart.innerHTML = svgHtml;
 }
 
 function bindEvents() {
     els.btnClear.addEventListener('click', () => {
-        if (isSystemActive) return;
-        AudioSys.playClear();
-        clearSequence();
+        if (isSystemActive || isDialing) return;
+        AudioSys.playClear(); clearSequence();
     });
     els.btnEngage.addEventListener('click', () => {
-        if (isSystemActive || currentSequence.length !== MAX_SEQUENCE_LENGTH) return;
-        engageTransit();
+        if (isSystemActive) { disengageTransit(); }
+        else if (currentSequence.length === currentMaxSequence && !isDialing) { engageTransit(); }
     });
     els.btnRefOpen.addEventListener('click', () => els.overlayRef.classList.remove('hidden'));
     els.btnRefClose.addEventListener('click', () => els.overlayRef.classList.add('hidden'));
@@ -216,153 +225,214 @@ function bindEvents() {
             document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
         });
     });
-}
 
-function handleSymbolClick(sym, btn, e) {
-    if (isSystemActive) return;
-    if (currentSequence.length >= MAX_SEQUENCE_LENGTH) {
-        AudioSys.playError();
-        logActivity('Sequence buffer full.', 'warn');
-        return;
-    }
-    if (currentSequence.includes(sym.id)) {
-        AudioSys.playError();
-        logActivity(`Symbol ${sym.name} already in sequence.`, 'warn');
-        return;
-    }
-
-    const index = currentSequence.length;
-    currentSequence.push(sym.id);
-    btn.classList.add('active');
-    AudioSys.playSymbolSelect(index);
-    logActivity(`Coordinate locked: ${sym.name}`);
-
-    // Animate to Chevron
-    animateLock(sym, btn, index);
-}
-
-function animateLock(sym, btn, index) {
-    const startRect = btn.getBoundingClientRect();
-    const targetChev = els.chevrons[index];
-    const endRect = targetChev.getBoundingClientRect();
-    
-    const floater = document.createElement('div');
-    floater.className = 'floating-glyph';
-    floater.innerHTML = `<svg viewBox="0 0 100 100">${sym.svg}</svg>`;
-    floater.style.left = `${startRect.left + startRect.width/2 - 20}px`;
-    floater.style.top = `${startRect.top + startRect.height/2 - 20}px`;
-    
-    els.animLayer.appendChild(floater);
-
-    // Force reflow
-    void floater.offsetWidth;
-    
-    floater.style.left = `${endRect.left + endRect.width/2 - 20}px`;
-    floater.style.top = `${endRect.top + endRect.height/2 - 20}px`;
-
-    setTimeout(() => {
-        floater.remove();
-        targetChev.classList.add('locked');
-        targetChev.querySelector('.chev-inner').innerHTML = `<svg viewBox="0 0 100 100">${sym.svg}</svg>`;
-        AudioSys.playChevronLock(index);
-        updateDisplay();
-    }, 600); // matches transition time
-}
-
-function updateDisplay() {
-    els.seqSlots.forEach((slot, idx) => {
-        if (idx < currentSequence.length) {
-            const sym = symbols.find(s => s.id === currentSequence[idx]);
-            slot.innerHTML = `<svg viewBox="0 0 100 100">${sym.svg}</svg>`;
-            slot.classList.add('filled');
-        } else {
-            slot.innerHTML = '';
-            slot.classList.remove('filled');
+    els.advToggle.addEventListener('change', (e) => {
+        if (isSystemActive || isDialing) {
+            e.target.checked = !e.target.checked;
+            logActivity('Cannot change routing mode while system active.', 'error');
+            return;
         }
+        isAdvancedMode = e.target.checked;
+        currentMaxSequence = isAdvancedMode ? 8 : 4;
+        clearSequence();
+        renderDestinations();
+        renderStarChart();
+        updateSequenceDisplay();
+        logActivity(`Routing Mode set to: ${isAdvancedMode ? 'Advanced (8-Symbol)' : 'Standard (4-Symbol)'}`, 'warn');
     });
+}
+
+function handleSymbolClick(sym, btn) {
+    if (isSystemActive || isDialing) return;
+    if (currentSequence.length + dialQueue.length >= currentMaxSequence) {
+        AudioSys.playError(); logActivity('Sequence buffer full.', 'warn'); return;
+    }
+    if (currentSequence.includes(sym.id) || dialQueue.includes(sym)) {
+        AudioSys.playError(); logActivity(`Symbol ${sym.name} already in sequence.`, 'warn'); return;
+    }
+
+    btn.classList.add('active');
+    AudioSys.playSymbolSelect(currentSequence.length + dialQueue.length);
+    dialQueue.push(sym);
+    if (!isDialing) processDialQueue();
+}
+
+async function processDialQueue() {
+    isDialing = true;
+    els.advToggle.disabled = true;
+    els.btnClear.disabled = true;
     
-    const progress = (currentSequence.length / MAX_SEQUENCE_LENGTH) * 100;
-    els.ringEnergyFill.style.setProperty('--fill-angle', `${progress}%`);
+    while (dialQueue.length > 0) {
+        const sym = dialQueue.shift();
+        const seqIndex = currentSequence.length;
+        const chevOrderArr = isAdvancedMode ? chevOrders.advanced : chevOrders.standard;
+        const chevIndex = chevOrderArr[seqIndex];
+        const targetChev = els.chevrons[chevIndex];
+        const glyphIndex = symbols.findIndex(s => s.id === sym.id);
+        
+        targetChev.classList.add('seeking');
+        await rotateRingToAlign(glyphIndex, chevIndex);
+        
+        targetChev.classList.remove('seeking');
+        targetChev.classList.add('locked');
+        AudioSys.playChevronLock(seqIndex);
+        
+        currentSequence.push(sym.id);
+        updateSequenceDisplay();
+        await new Promise(r => setTimeout(r, 400));
+    }
     
-    if (currentSequence.length === MAX_SEQUENCE_LENGTH) {
+    isDialing = false;
+    els.btnClear.disabled = false;
+    els.advToggle.disabled = false;
+    
+    if (currentSequence.length === currentMaxSequence) {
         els.ringStatus.textContent = 'READY TO ENGAGE';
         els.ringStatus.className = 'ring-status status-ready';
         els.btnEngage.disabled = false;
-    } else {
-        els.ringStatus.textContent = 'AWAITING INPUT';
-        els.ringStatus.className = 'ring-status';
-        els.btnEngage.disabled = true;
+    }
+}
+
+function rotateRingToAlign(glyphIndex, chevIndex) {
+    return new Promise(resolve => {
+        const angleStep = 360 / symbols.length;
+        const A_g = glyphIndex * angleStep;
+        const A_c = [0, 40, 80, 120, 160, 200, 240, 280, 320][chevIndex];
+        
+        let TargetR_base = (A_c - A_g) % 360;
+        if (TargetR_base < 0) TargetR_base += 360;
+        let CurrentR_mod = ((currentRingRotation % 360) + 360) % 360;
+        let delta = TargetR_base - CurrentR_mod;
+        
+        if (lastRotationDirection === 1) { // CW
+            if (delta <= 0) delta += 360;
+            delta += 360; // Extra spin for mechanical richness
+        } else { // CCW
+            if (delta >= 0) delta -= 360;
+            delta -= 360;
+        }
+        
+        let NewR = currentRingRotation + delta;
+        currentRingRotation = NewR;
+        lastRotationDirection *= -1; // alternate next time
+        
+        // Easing out, decelerates visibly
+        els.ringRotator.style.transition = `transform 1.8s cubic-bezier(0.25, 1, 0.3, 1)`;
+        els.ringRotator.style.transform = `rotate(${NewR}deg)`;
+        
+        setTimeout(resolve, 1800);
+    });
+}
+
+function updateSequenceDisplay() {
+    els.seqDisplay.innerHTML = '';
+    for (let i = 0; i < currentMaxSequence; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'sequence-slot';
+        if (i < currentSequence.length) {
+            const sym = symbols.find(s => s.id === currentSequence[i]);
+            slot.innerHTML = `<svg viewBox="0 0 100 100">${sym.svg}</svg>`;
+            slot.classList.add('filled');
+        }
+        els.seqDisplay.appendChild(slot);
     }
 }
 
 function clearSequence() {
-    currentSequence = [];
+    currentSequence = []; dialQueue = [];
     document.querySelectorAll('.symbol-btn.active').forEach(b => b.classList.remove('active'));
-    els.chevrons.forEach(chev => {
-        chev.classList.remove('locked');
-        chev.querySelector('.chev-inner').innerHTML = '';
-    });
-    updateDisplay();
+    els.chevrons.forEach(chev => { chev.classList.remove('seeking', 'locked'); });
+    updateSequenceDisplay();
+    els.ringStatus.textContent = 'STANDBY';
+    els.ringStatus.className = 'ring-status';
+    els.btnEngage.disabled = true;
     logActivity('Sequence cleared.');
-    els.portalSurface.classList.remove('active');
-    els.ringContainer.classList.remove('spin');
 }
 
 async function handleExpressDial(dest) {
-    if (isSystemActive) return;
+    if (isSystemActive || isDialing) return;
+    if (dest.adv && !isAdvancedMode) return;
     clearSequence();
     logActivity(`Express Token inserted for ${dest.name}...`);
     
-    // Simulate mechanical input delay
-    for (let i = 0; i < dest.sequence.length; i++) {
-        await new Promise(r => setTimeout(r, 800)); // Time for animation to finish
-        const symId = dest.sequence[i];
+    dest.sequence.forEach(symId => {
         const sym = symbols.find(s => s.id === symId);
         const btn = document.querySelector(`.symbol-btn[data-id="${symId}"]`);
-        handleSymbolClick(sym, btn);
-    }
-    await new Promise(r => setTimeout(r, 1000));
+        btn.classList.add('active');
+        dialQueue.push(sym);
+    });
+    
+    await processDialQueue();
+    await new Promise(r => setTimeout(r, 600));
     engageTransit();
 }
 
-function engageTransit() {
+async function engageTransit() {
     isSystemActive = true;
     els.btnEngage.disabled = true;
     els.btnClear.disabled = true;
+    els.advToggle.disabled = true;
     document.querySelectorAll('.symbol-btn').forEach(b => b.disabled = true);
     document.querySelectorAll('.btn-express').forEach(b => b.disabled = true);
     
-    AudioSys.playEngage();
     logActivity('TRANSIT SEQUENCE INITIATED.', 'warn');
-    els.ringStatus.textContent = 'TRANSIT ACTIVE';
-    els.ringStatus.className = 'ring-status status-active';
-    els.ringContainer.classList.add('spin');
+    els.ringStatus.textContent = 'ACTIVATING...';
+    
+    // Final Origin Lock (Glyph 0 to Chevron 0)
+    els.chevrons[0].classList.add('seeking');
+    await rotateRingToAlign(0, 0);
+    els.chevrons[0].classList.remove('seeking');
+    els.chevrons[0].classList.add('locked');
+    AudioSys.playFinalLock();
+    
+    await new Promise(r => setTimeout(r, 600));
+    
+    // Discharge & Portal
+    AudioSys.playDischarge();
+    els.energyDischarge.classList.add('active');
     
     setTimeout(() => {
+        els.portalSurface.classList.remove('collapsing');
         els.portalSurface.classList.add('active');
-        AudioSys.playSuccess();
-        const destMatch = destinations.find(d => JSON.stringify(d.sequence) === JSON.stringify(currentSequence));
-        const destName = destMatch ? destMatch.name : 'Unknown Coordinate';
-        logActivity(`Connection established to: ${destName}`, 'success');
+        AudioSys.startPortalHum();
         
-        setTimeout(() => {
-            logActivity('Transit complete. Connection closed.', 'warn');
-            clearSequence();
-            isSystemActive = false;
-            document.querySelectorAll('.symbol-btn').forEach(b => b.disabled = false);
-            document.querySelectorAll('.btn-express').forEach(b => b.disabled = false);
-            els.btnClear.disabled = false;
-        }, 5000);
-    }, 1500);
+        els.ringStatus.textContent = 'TRANSIT ACTIVE';
+        els.ringStatus.className = 'ring-status status-active';
+        
+        els.btnEngage.textContent = 'DISENGAGE';
+        els.btnEngage.classList.add('btn-danger');
+        els.btnEngage.disabled = false;
+        
+        const destMatch = destinations.find(d => JSON.stringify(d.sequence) === JSON.stringify(currentSequence));
+        logActivity(`Wormhole established to: ${destMatch ? destMatch.name : 'Unknown Coordinate'}`, 'success');
+    }, 1000);
 }
 
-function logActivity(message, type = 'normal') {
-    const li = document.createElement('li');
-    const time = new Date().toLocaleTimeString([], { hour12: false });
-    li.textContent = `[${time}] ${message}`;
-    if (type !== 'normal') li.className = type;
-    els.logList.appendChild(li);
-    els.logList.parentElement.scrollTop = els.logList.parentElement.scrollHeight;
+async function disengageTransit() {
+    els.btnEngage.disabled = true;
+    logActivity('Disengaging transit sequence...', 'warn');
+    
+    AudioSys.stopPortalHum();
+    AudioSys.playCollapse();
+    
+    els.portalSurface.classList.remove('active');
+    els.portalSurface.classList.add('collapsing');
+    
+    await new Promise(r => setTimeout(r, 1500));
+    
+    els.portalSurface.classList.remove('collapsing');
+    els.energyDischarge.classList.remove('active');
+    
+    els.btnEngage.textContent = 'ENGAGE';
+    els.btnEngage.classList.remove('btn-danger');
+    
+    document.querySelectorAll('.symbol-btn').forEach(b => b.disabled = false);
+    document.querySelectorAll('.btn-express').forEach(b => b.disabled = false);
+    els.btnClear.disabled = false;
+    els.advToggle.disabled = false;
+    isSystemActive = false;
+    
+    clearSequence();
 }
 
 init();

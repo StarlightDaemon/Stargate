@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Operator Reference -->
     <div id="operator-reference-btn" class="operator-reference-btn" title="Operator Reference">?</div>
     <div id="operator-reference-overlay" class="overlay hidden">
         <div class="overlay-card">
@@ -20,28 +19,25 @@
                     <ol>
                         <li>Consult the <strong>Directory</strong> or <strong>Star Chart</strong> for your desired coordinate sequence.</li>
                         <li>Input the precise 4-symbol sequence using the <strong>Sequence Input Console</strong>.</li>
-                        <li>Observe the mechanical chevrons physically lock each coordinate in place.</li>
-                        <li>Press the <strong>ENGAGE</strong> activator to initialize the transit corridor.</li>
+                        <li>Observe the 9-chevron mechanical ring automatically align and lock each coordinate in place.</li>
+                        <li>Press the <strong>ENGAGE</strong> activator to initialize the final origin lock and transit corridor.</li>
                     </ol>
                 </div>
                 <div class="guide-section">
-                    <h3>Express Transit Tokens</h3>
-                    <p>For rapid deployment, utilize the <strong>Express Tokens</strong> located next to each destination in the Directory. Inserting a token bypasses manual entry and sequentially locks the chevrons for you.</p>
+                    <h3>Advanced Routing</h3>
+                    <p>Toggle Advanced Routing in the input console for deep-space 8-symbol addressing. This utilizes all 8 address chevrons on the ring.</p>
                 </div>
             </div>
             <button id="close-reference-btn" class="btn btn-primary">Close Guide</button>
         </div>
     </div>
 
-    <!-- Header -->
     <header class="pavilion-header">
         <h1>Astro-Transit Pavilion</h1>
         <div class="subtitle">Tomorrow's Gateway, Today!</div>
     </header>
 
-    <!-- Main Dashboard -->
     <main class="dashboard">
-        
         <!-- Left Cluster: Directory & Logs -->
         <section class="control-cluster" id="cluster-left">
             <div class="panel tabbed-panel directory-panel">
@@ -66,36 +62,34 @@
             <div class="panel log-panel">
                 <h2>Activity Log</h2>
                 <div class="log-container">
-                    <ul id="activity-log" class="log-list">
-                    </ul>
+                    <ul id="activity-log" class="log-list"></ul>
                 </div>
             </div>
         </section>
 
-        <!-- Center Stage: The Ring Display -->
+        <!-- Center Stage: Mechanical Gate -->
         <section id="center-stage" class="center-stage">
             <div class="ring-container">
-                <!-- Chevrons -->
-                <div class="chevron chevron-0" id="chev-0"><div class="chev-inner"></div></div>
-                <div class="chevron chevron-1" id="chev-1"><div class="chev-inner"></div></div>
-                <div class="chevron chevron-2" id="chev-2"><div class="chev-inner"></div></div>
-                <div class="chevron chevron-3" id="chev-3"><div class="chev-inner"></div></div>
+                <div class="ring-track-bg"></div>
+                <div class="ring-rotator" id="ring-rotator"></div>
 
-                <div class="ring-track">
-                    <div id="ring-energy-fill" class="ring-energy-fill"></div>
-                    <div class="ring-inner-track">
-                        <div class="ring-center-portal">
-                            <div id="portal-surface" class="portal-surface"></div>
-                            <div class="portal-content">
-                                <div id="ring-status" class="ring-status">AWAITING INPUT</div>
-                                <div id="sequence-display" class="sequence-display">
-                                    <div class="sequence-slot"></div>
-                                    <div class="sequence-slot"></div>
-                                    <div class="sequence-slot"></div>
-                                    <div class="sequence-slot"></div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="chevron final-chevron" id="chev-0"><div class="chev-bracket"></div><div class="chev-indicator"></div></div>
+                <div class="chevron address-chevron" id="chev-1"><div class="chev-bracket"></div><div class="chev-indicator"></div></div>
+                <div class="chevron address-chevron" id="chev-2"><div class="chev-bracket"></div><div class="chev-indicator"></div></div>
+                <div class="chevron address-chevron" id="chev-3"><div class="chev-bracket"></div><div class="chev-indicator"></div></div>
+                <div class="chevron address-chevron" id="chev-4"><div class="chev-bracket"></div><div class="chev-indicator"></div></div>
+                <div class="chevron address-chevron" id="chev-5"><div class="chev-bracket"></div><div class="chev-indicator"></div></div>
+                <div class="chevron address-chevron" id="chev-6"><div class="chev-bracket"></div><div class="chev-indicator"></div></div>
+                <div class="chevron address-chevron" id="chev-7"><div class="chev-bracket"></div><div class="chev-indicator"></div></div>
+                <div class="chevron address-chevron" id="chev-8"><div class="chev-bracket"></div><div class="chev-indicator"></div></div>
+
+                <div class="energy-discharge" id="energy-discharge"></div>
+
+                <div class="ring-center-portal">
+                    <div id="portal-surface" class="portal-surface"></div>
+                    <div class="portal-content">
+                        <div id="ring-status" class="ring-status">STANDBY</div>
+                        <div id="sequence-display" class="sequence-display"></div>
                     </div>
                 </div>
             </div>
@@ -105,7 +99,15 @@
         <section class="control-cluster" id="cluster-right">
             <div class="panel input-panel">
                 <h2>Sequence Input Console</h2>
-                <p class="panel-desc">Input 4-symbol transit coordinate.</p>
+                
+                <div class="advanced-routing-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="adv-route-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span>Advanced Routing (8-Symbol)</span>
+                </div>
+
                 <div class="symbol-grid" id="symbol-grid"></div>
                 <div class="action-buttons">
                     <button id="btn-clear" class="btn btn-secondary">CLEAR</button>
@@ -115,13 +117,10 @@
         </section>
     </main>
 
-    <!-- Floating animated symbol container (managed by JS) -->
-    <div id="animation-layer"></div>
-
     <div class="corner-attribution corner-bottom-left">
         <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
     </div>
-    <div class="corner-attribution corner-bottom-right">v1.1.0</div>
+    <div class="corner-attribution corner-bottom-right">v1.2.0</div>
 
     <script src="js/app.js"></script>
 </body>
