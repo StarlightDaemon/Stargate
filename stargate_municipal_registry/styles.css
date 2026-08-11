@@ -97,10 +97,30 @@ html, body {
    TERMINAL WRAPPER & MAIN LAYOUT (Single Screen 1920x1080 Baseline)
    ========================================================================== */
 
+/* The terminal is authored at a fixed 1920x1080 design box and scaled as one
+   proportional unit. Without this the wrapper simply stretched: every glyph,
+   chevron, button and label stayed at its 1080p pixel size, so a 3840x2160
+   panel rendered the whole terminal at half apparent size in a stretched
+   layout. Exactly 1:1 at 1080p, a clean 2x at 4K.
+   `scale()` needs a unitless number — divide length by length (`/ 1920px`),
+   not by a bare number, or the declaration is invalid and silently dropped. */
+.fit-stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 10;
+}
+
 .terminal-wrapper {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 1920px;
+  height: 1080px;
+  flex: 0 0 auto;
+  transform-origin: center center;
+  transform: scale(min(calc(100vw / 1920px), calc(100vh / 1080px)));
   display: flex;
   flex-direction: column;
   padding: 10px 14px 6px 14px;
