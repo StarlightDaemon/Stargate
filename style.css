@@ -107,7 +107,19 @@ body {
     max-width: 1400px;
     width: 100%;
     padding: 20px;
-    transform: scale(min(1, calc(100vw / 1100), calc(100vh / 850)));
+    /* Scale the grove as one proportional unit against its 1920x1080 design
+       box: exactly 1:1 at 1080p, a clean 2x at 4K.
+
+       Two bugs in the previous expression,
+       `scale(min(1, calc(100vw / 1100), calc(100vh / 850)))`:
+       1. `scale()` takes a unitless <number>, and `100vw / 1100` is a length
+          divided by a number — still a length, so the whole declaration was
+          invalid and silently dropped. The scaling never applied at all.
+          Dividing length by length (`/ 1920px`) yields the required number.
+       2. The `min(1, ...)` cap meant it could only ever shrink, so even had it
+          parsed, a 3840x2160 display would have rendered the same 1400x878
+          layout marooned in dead space. */
+    transform: scale(min(calc(100vw / 1920px), calc(100vh / 1080px)));
 }
 
 /* Ring System */

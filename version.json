@@ -1,3 +1,7 @@
 {
-  "version": "1.1.0"
+  "name": "stargate_lumina_grove",
+  "device": "Lumina Grove — Bioluminescent Conduit Lattice",
+  "version": "1.2.0",
+  "date": "2026-08-11",
+  "model": "Gemini 3.1 Pro (high reasoning)"
 }
