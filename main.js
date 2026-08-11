@@ -136,8 +136,8 @@ async function selectSymbol(symbolIdx) {
     targetChevronEl.classList.add('locked');
     sequence.push(symbolIdx);
     
-    updateUI();
     isBusy = false;
+    updateUI();
 }
 
 async function toggleEngage() {
@@ -202,8 +202,8 @@ async function engage() {
 
     Synth.playHum();
     isConnected = true;
-    updateUI();
     isBusy = false;
+    updateUI();
 }
 
 function disengage() {
@@ -267,3 +267,31 @@ async function quickDial(addressString) {
 window.addEventListener('click', () => {
     Synth.init();
 }, {once: true});
+
+/* --- Terminal fit -------------------------------------------------------
+   The terminal is authored at a fixed 1920x1080 design box; scale it as one
+   proportional unit so it fills the display from 1080p through 4K instead of
+   stranding the control clusters at the edges of a large panel. */
+const FIT_W = 1920, FIT_H = 1080;
+let fitK = 0;
+
+function fitTerminal() {
+    const stage = document.getElementById('fit-stage');
+    const box = document.getElementById('fit');
+    if (!stage || !box) return;
+    const availW = stage.clientWidth, availH = stage.clientHeight;
+    // stylesheet may not have applied yet — retry on a timer, not an animation
+    // frame (rAF is starved in hidden/background viewers)
+    if (availW <= 0 || availH <= 0) { setTimeout(fitTerminal, 60); return; }
+    const k = Math.min(availW / FIT_W, availH / FIT_H);
+    if (k === fitK) return;
+    fitK = k;
+    box.style.transform = k === 1 ? 'none' : `scale(${k})`;
+}
+
+fitTerminal();
+window.addEventListener('resize', fitTerminal);
+if (window.ResizeObserver) new ResizeObserver(fitTerminal).observe(document.getElementById('fit-stage'));
+// resize events and ResizeObserver both ride the rendering lifecycle, which is
+// starved in hidden/throttled viewers; this poll is a no-op when k is unchanged
+setInterval(fitTerminal, 500);

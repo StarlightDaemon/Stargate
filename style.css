@@ -5,7 +5,10 @@
     --warning: #ffaa00;
     --glitch-red: rgba(255,0,0,0.7);
     --glitch-cyan: rgba(0,255,255,0.7);
-    --gate-size: 65vh;
+    /* design-box pixels, not vh: #fit is a fixed 1920x1080 box that gets
+       scaled, so viewport units inside it would compound with the scale factor.
+       1vh of the design box = 10.8px; 65vh = 702px, identical at 1080p. */
+    --gate-size: 702px;
 }
 
 body {
@@ -62,12 +65,35 @@ body.breakthrough-flash {
 }
 
 /* App Layout */
+
+/* The terminal is authored at a fixed 1920x1080 design box and scaled as one
+   proportional unit by fitTerminal(). Without this the gate ring (sized in
+   vh) grew with the viewport while the UPLINK COMMAND and SIGNAL ARCHIVE
+   clusters stayed at 320px, stranding them at the far edges of a 4K panel.
+   The help control and footers live OUTSIDE #fit — a transform on an ancestor
+   would redefine the containing block for their fixed positioning. */
+#fit-stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    z-index: 10;
+}
+#fit {
+    width: 1920px;
+    height: 1080px;
+    flex: 0 0 auto;
+    transform-origin: center center;
+}
+
 .app-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     padding: 2rem;
     box-sizing: border-box;
     position: relative;
@@ -238,10 +264,10 @@ body.seeking .gate-container {
 }
 .chevron {
     position: absolute;
-    width: 3vh; height: 4vh;
-    left: -1.5vh;
+    width: 32.4px; height: 43.2px;
+    left: -16.2px;
     top: calc(var(--gate-size) * -0.54);
-    border: 0.3vh solid var(--text);
+    border: 3.24px solid var(--text);
     background: #000;
     clip-path: polygon(50% 0%, 100% 25%, 100% 100%, 50% 75%, 0 100%, 0 25%);
     transition: background 0.3s, box-shadow 0.3s, border-color 0.3s;
@@ -279,11 +305,11 @@ body.seeking .gate-container {
 }
 .glyph {
     position: absolute;
-    left: -2vh; top: calc(var(--gate-size) * -0.42);
-    width: 4vh; height: 4vh;
+    left: -21.6px; top: calc(var(--gate-size) * -0.42);
+    width: 43.2px; height: 43.2px;
     text-align: center;
-    line-height: 4vh;
-    font-size: 3.5vh;
+    line-height: 43.2px;
+    font-size: 37.8px;
     font-weight: bold;
     text-shadow: 0 0 5px rgba(152,251,152,0.5);
 }
