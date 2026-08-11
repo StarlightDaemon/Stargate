@@ -17,7 +17,23 @@
 body {
     margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden;
     background: radial-gradient(circle at center, #0b2c45 0%, var(--bg-color) 100%);
-    font-family: 'Outfit', sans-serif; color: var(--text-main); display: flex; flex-direction: column;
+    font-family: 'Outfit', sans-serif; color: var(--text-main);
+}
+
+/* The pavilion is authored at a fixed 1920x1080 design box and scaled as one
+   proportional unit by fitPavilion(), so it fills a 4K concourse display
+   instead of sitting at 1080p size in dead space. The operator-reference
+   control and the corner attributions live OUTSIDE #fit — a transform on an
+   ancestor would redefine the containing block for their fixed positioning. */
+#fit-stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+#fit {
+    width: 1920px; height: 1080px; flex: 0 0 auto;
+    display: flex; flex-direction: column;
+    transform-origin: center center;
 }
 
 .pavilion-header { text-align: center; padding: 2.5rem 0 1rem 0; flex-shrink: 0; z-index: 10; }
@@ -30,7 +46,10 @@ body {
 }
 
 .control-cluster { width: 380px; height: 750px; display: flex; flex-direction: column; gap: 1.5rem; z-index: 10; }
-.panel { background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid var(--panel-border); border-radius: 24px; padding: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.1); display: flex; flex-direction: column; }
+/* min-height:0 on every link of the flex chain: without it each panel is floored
+   at its content height and the Directory / Activity Log spill past the bottom
+   of the cluster (and off the viewport) instead of scrolling inside themselves */
+.panel { background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid var(--panel-border); border-radius: 24px; padding: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.1); display: flex; flex-direction: column; min-height: 0; }
 .panel h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin: 0 0 0.5rem 0; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); border-bottom: 2px solid rgba(124, 209, 249, 0.1); padding-bottom: 0.5rem; }
 .panel-desc { font-size: 0.85rem; color: var(--text-muted); margin: 0 0 1rem 0; }
 
@@ -38,12 +57,12 @@ body {
 .tab-btn { background: none; border: none; font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; cursor: pointer; padding: 0.4rem 0.8rem; border-radius: 12px; transition: all 0.2s; }
 .tab-btn:hover { color: var(--accent-blue); background: rgba(124, 209, 249, 0.1); }
 .tab-btn.active { background: var(--accent-blue); color: #041421; }
-.tab-content { display: none; flex: 1; overflow-y: auto; flex-direction: column; }
+.tab-content { display: none; flex: 1; min-height: 0; overflow-y: auto; flex-direction: column; }
 .tab-content.active { display: flex; }
 
-.directory-panel { flex: 3; }
-.log-panel { flex: 2; }
-.dest-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex: 1; }
+.directory-panel { flex: 3; min-height: 0; }
+.log-panel { flex: 2; min-height: 0; }
+.dest-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex: 1; min-height: 0; }
 .dest-item { background: rgba(15, 30, 50, 0.6); border: 1px solid #1e293b; border-radius: 16px; padding: 12px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; flex-wrap: wrap; }
 .dest-item:hover { border-color: var(--accent-blue); box-shadow: 0 4px 15px rgba(124, 209, 249, 0.15); transform: translateX(4px); background: rgba(20, 40, 65, 0.8); }
 .dest-info { flex: 1; min-width: 60%; }
@@ -58,7 +77,7 @@ body {
 .sc-link { stroke: rgba(124, 209, 249, 0.2); stroke-width: 0.5; }
 .sc-label { fill: #94a3b8; font-size: 4px; font-family: 'Space Grotesk'; text-anchor: middle; pointer-events: none; }
 
-.log-container { background: rgba(0,0,0,0.3); border: 1px inset #1e293b; border-radius: 12px; padding: 10px; flex: 1; overflow-y: auto; font-family: 'Space Grotesk', monospace; font-size: 0.8rem; }
+.log-container { background: rgba(0,0,0,0.3); border: 1px inset #1e293b; border-radius: 12px; padding: 10px; flex: 1; min-height: 0; overflow-y: auto; font-family: 'Space Grotesk', monospace; font-size: 0.8rem; }
 .log-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
 .log-list li { color: var(--text-muted); border-bottom: 1px dashed #334155; padding-bottom: 4px; }
 .log-list li:last-child { border-bottom: none; }
@@ -66,7 +85,7 @@ body {
 .log-list li.error { color: var(--accent-coral); }
 .log-list li.warn { color: #fcd34d; }
 
-.input-panel { flex: 1; }
+.input-panel { flex: 1; min-height: 0; }
 .advanced-routing-toggle { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; font-weight: 600; color: var(--text-main); background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 8px; border: 1px solid #1e293b; margin-bottom: 1rem; }
 .switch { position: relative; display: inline-block; width: 34px; height: 20px; }
 .switch input { opacity: 0; width: 0; height: 0; }
