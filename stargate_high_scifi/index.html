@@ -10,6 +10,9 @@
 </head>
 <body>
 
+<div id="fitStage">
+<div id="fit">
+
 <header id="topbar">
   <div class="station-id">
     <span class="lamp" id="statusLamp"></span>
@@ -79,6 +82,87 @@
 
   </aside>
 </main>
+
+</div><!-- /#fit -->
+</div><!-- /#fitStage -->
+
+<!-- ————— operator reference (collapsed by default) ————— -->
+<button id="opRefBtn" class="opref-btn" type="button" aria-expanded="false"
+        aria-controls="opRefOverlay" title="Operator reference" aria-label="Operator reference">?</button>
+
+<div id="opRefOverlay" class="opref-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="opRefTitle">
+  <div class="opref-card" role="document">
+    <header class="opref-head">
+      <h2 id="opRefTitle">STANDING ORDER 4 · CONSOLE OPERATION</h2>
+      <button id="opRefClose" class="ctl small" type="button">DISMISS</button>
+    </header>
+    <div class="opref-body">
+      <p class="opref-lede">
+        L4 Annex duty card. Read it once; the Artifact is patient but the roster is not.
+        Meridian does not <em>store</em> addresses — it <em>solves</em> them. Nothing you do
+        at this console commands the torus. You propose a metric; it decides.
+      </p>
+
+      <h3>1 · Choose how you will address it</h3>
+      <p>
+        <strong>Surveyed route.</strong> The ROUTE CATALOG lists manifolds the Annex has
+        already surveyed. Press <strong>DIAL</strong> beside one and the console hands
+        Meridian a known-good nine-glyph signature. This is the normal duty method.
+      </p>
+      <p>
+        <strong>Manual entry.</strong> Use the SIGNATURE COMPOSER when you are working from
+        a paper survey. Tap eight glyphs from the palette into the slots; the ninth is
+        <em>ERIDU</em>, our own local invariant, and it is welded in place — every solution
+        Meridian relaxes has to terminate here or there is nowhere to come back to. Tap a
+        filled slot to strike it and everything after it. <strong>CLEAR</strong> empties the
+        rail. When all eight are laid, <strong>COMPILE METRIC</strong> lights.
+      </p>
+
+      <h3>2 · Let it relax the solution</h3>
+      <p>
+        The bands search solution space and confirm nine topological invariants one at a
+        time — an anchor lights per invariant. Expect fifteen to twenty seconds on a
+        <strong>COLD SOLVE</strong>. Do not read this as a countdown; it is a convergence,
+        and it takes what it takes. <strong>ABORT SOLVE</strong> stands the bands down at
+        any point without prejudice.
+      </p>
+      <p>
+        A route Meridian has solved before is imprinted permanently in the lattice.
+        A catalog entry carrying the <strong>RECALL</strong> badge triggers
+        <strong>LATTICE RECALL</strong> instead: one memory sweep, solution streamed back in
+        under four seconds. The lattice holds eight such imprints. Engineering may purge
+        them; the routes remain, only the shortcut is lost.
+      </p>
+
+      <h3>3 · Divergence</h3>
+      <p>
+        A composed signature that matches no surveyed manifold will still be attempted, and
+        will diverge. This is normal, non-damaging, and logged. One catalogued route has been
+        <em>declined</em> by the Artifact on every attempt since recovery. It is left in the
+        catalog because Standing Order 4 says we do not quietly delete things we do not
+        understand. Do not treat a refusal as a fault.
+      </p>
+
+      <h3>4 · Aperture standing</h3>
+      <p>
+        On convergence the rim brightens and the aperture holds open. Where survey allows it,
+        <strong>LAUNCH PROBE</strong> sends an instrumented package through and streams its
+        telemetry to the STATION LOG. <strong>COLLAPSE APERTURE</strong> closes the throat
+        cleanly. Leave no aperture standing at end of watch.
+      </p>
+
+      <p class="opref-fine">
+        Readouts: lattice temperature, vacuum strain, solution residual and geodesic cache
+        occupancy report in LATTICE TELEMETRY. Everything on this console is local to this
+        page — the Annex has no line out.
+      </p>
+    </div>
+  </div>
+</div>
+
+<a class="corner-credit" href="https://github.com/StarlightDaemon" target="_blank"
+   rel="noopener noreferrer">StarlightDaemon</a>
+<span class="corner-version" id="cornerVersion">v1.1.0</span>
 
 <dialog id="aboutDialog">
   <h2>TRANSIT ARTIFACT M-1 · “MERIDIAN”</h2>

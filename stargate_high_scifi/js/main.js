@@ -196,6 +196,62 @@ probeBtn.addEventListener('click', async () => {
   probeBtn.disabled = false;
 });
 
+// ---------- fit stage ----------
+// The console is authored at a fixed 1920x1080 design box; scale it as one
+// proportional unit so it fills the viewport from 1080p through 4K instead of
+// centering in dead space.
+
+const FIT_W = 1920, FIT_H = 1080;
+const fitEl = $('fit');
+const fitStageEl = $('fitStage');
+let fitK = 0;
+
+function fitStage() {
+  if (!fitEl || !fitStageEl) return;
+  if (matchMedia('(max-width: 900px)').matches) {
+    if (fitK !== 1) { fitEl.style.transform = ''; fitK = 1; }
+    return;
+  }
+  const availW = fitStageEl.clientWidth;
+  const availH = fitStageEl.clientHeight;
+  // stylesheet may not have applied yet: retry on a timer, not rAF — rAF is
+  // starved in hidden/background viewers and would never fire the retry
+  if (availW <= 0 || availH <= 0) { setTimeout(fitStage, 60); return; }
+  const k = Math.min(availW / FIT_W, availH / FIT_H);
+  if (k === fitK) return;
+  fitK = k;
+  fitEl.style.transform = k === 1 ? 'none' : `scale(${k})`;
+}
+
+fitStage();
+window.addEventListener('resize', fitStage);
+// ResizeObserver and the resize event both ride the rendering lifecycle, which
+// is starved in hidden/throttled viewers — a coarse polling backstop keeps the
+// stage correctly scaled there too. fitStage() is a no-op when k is unchanged.
+if (window.ResizeObserver) new ResizeObserver(fitStage).observe(fitStageEl);
+setInterval(fitStage, 500);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitStage).catch(() => {});
+
+// ---------- operator reference ----------
+
+const opRefBtn = $('opRefBtn');
+const opRefOverlay = $('opRefOverlay');
+const opRefClose = $('opRefClose');
+
+function setOpRef(open) {
+  opRefOverlay.hidden = !open;
+  opRefBtn.setAttribute('aria-expanded', String(open));
+  if (open) opRefClose.focus();
+  else opRefBtn.focus();
+}
+
+opRefBtn.addEventListener('click', () => { audio.click(); setOpRef(opRefOverlay.hidden); });
+opRefClose.addEventListener('click', () => { audio.click(); setOpRef(false); });
+opRefOverlay.addEventListener('click', (e) => { if (e.target === opRefOverlay) setOpRef(false); });
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !opRefOverlay.hidden) { e.preventDefault(); setOpRef(false); }
+});
+
 // ---------- top bar ----------
 
 $('aboutBtn').addEventListener('click', () => { audio.click(); $('aboutDialog').showModal(); });

@@ -39,6 +39,32 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ---------- fit stage ----------
+   The console is authored at a fixed 1920x1080 design box and scaled as one
+   proportional unit to whatever viewport it lands in, so it fills a 4K panel
+   instead of sitting in dead space. Anything meant to stay pinned to the real
+   viewport (corner credit, operator-reference button) must live OUTSIDE #fit —
+   a transform on an ancestor redefines the containing block for fixed
+   descendants. */
+
+#fitStage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#fit {
+  width: 1920px;
+  height: 1080px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  transform-origin: center center;
+}
+
 /* ---------- top bar ---------- */
 
 #topbar {
@@ -46,7 +72,8 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 18px;
+  flex: 0 0 auto;
+  padding: 10px 60px 10px 18px;
   border-bottom: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(12,19,29,.95), rgba(9,15,23,.75));
 }
@@ -127,7 +154,8 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 380px;
   gap: 0;
-  height: calc(100vh - 49px);
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 #stageWrap {
@@ -143,7 +171,9 @@ body {
 
 #stage {
   position: relative;
-  width: min(78vmin, 100%, 780px);
+  /* design-box units, not vmin: #fit is a fixed 1920x1080 box that gets scaled,
+     so viewport units inside it would fight the scale factor */
+  width: min(100%, 780px);
   aspect-ratio: 1;
 }
 
@@ -216,7 +246,8 @@ body {
 #console {
   border-left: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(8,13,20,.9), rgba(6,10,16,.9));
-  overflow-y: auto;
+  overflow: hidden;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   scrollbar-width: thin;
@@ -226,7 +257,18 @@ body {
 .panel {
   padding: 14px 16px;
   border-bottom: 1px solid var(--line);
+  flex: 0 0 auto;
 }
+
+/* the catalog absorbs the slack so the column never overruns the viewport;
+   the route list scrolls inside its own panel instead */
+#catalogPanel {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 120px;
+}
+#catalogPanel h2 { flex: 0 0 auto; }
 
 .panel h2 {
   margin: 0 0 10px;
@@ -239,7 +281,16 @@ body {
 
 /* catalog */
 
-#catalog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+#catalog {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 6px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-bright) transparent;
+}
+#catalog > .route { flex: 0 0 auto; }
 
 .route {
   display: grid;
@@ -283,7 +334,9 @@ body {
 
 #palette {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  /* minmax(0,1fr): the default `auto` minimum lets the glyph SVGs push the
+     track wider than the panel, spilling the last column past the edge */
+  grid-template-columns: repeat(9, minmax(0, 1fr));
   gap: 4px;
   margin-bottom: 10px;
 }
@@ -313,7 +366,7 @@ body {
 
 /* log */
 
-#logPanel { flex: 1; display: flex; flex-direction: column; min-height: 140px; }
+#logPanel { flex: 0 0 148px; display: flex; flex-direction: column; min-height: 0; }
 #log {
   flex: 1;
   overflow-y: auto;
@@ -349,12 +402,123 @@ body {
 .dossier.fine { color: var(--amber-dim); font-size: 11px; border-top: 1px solid var(--line); padding-top: 10px; }
 #aboutDialog form { text-align: right; margin-top: 8px; }
 
+/* ---------- corner marks ---------- */
+
+.corner-credit,
+.corner-version {
+  position: fixed;
+  bottom: 6px;
+  z-index: 40;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  color: var(--amber-faint, #8a6a44);
+  opacity: .62;
+  pointer-events: auto;
+}
+.corner-credit { left: 10px; text-decoration: none; }
+.corner-credit:hover,
+.corner-credit:focus-visible { opacity: 1; color: var(--ice); text-decoration: underline; }
+.corner-version { right: 10px; }
+
+/* ---------- operator reference ---------- */
+
+.opref-btn {
+  position: fixed;
+  top: 10px;
+  right: 12px;
+  z-index: 60;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--line-bright);
+  background: rgba(10,17,26,.92);
+  color: var(--ice);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.opref-btn:hover,
+.opref-btn:focus-visible { border-color: var(--ice); background: rgba(23,41,58,.9); color: var(--ice-bright); }
+
+.opref-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(2,4,8,.78);
+}
+.opref-overlay[hidden] { display: none; }
+
+.opref-card {
+  width: min(720px, 100%);
+  max-height: min(82vh, 780px);
+  display: flex;
+  flex-direction: column;
+  background: #0a111a;
+  border: 1px solid var(--line-bright);
+  box-shadow: 0 0 34px rgba(0,0,0,.7);
+}
+
+.opref-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+.opref-head h2 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  color: var(--ice);
+}
+
+.opref-body {
+  padding: 16px 20px 20px;
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-bright) transparent;
+}
+.opref-body h3 {
+  margin: 18px 0 6px;
+  font-size: 11px;
+  letter-spacing: .18em;
+  color: var(--amber-bright);
+}
+.opref-body h3:first-of-type { margin-top: 6px; }
+.opref-body p { margin: 0 0 9px; font-size: 12px; color: #d8b98a; }
+.opref-body strong { color: var(--amber-bright); }
+.opref-body em { color: var(--ice); font-style: normal; }
+.opref-lede { color: var(--ice-dim) !important; }
+.opref-fine {
+  color: var(--amber-dim) !important;
+  font-size: 11px !important;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: 14px;
+}
+
 /* ---------- narrow screens ---------- */
 
 @media (max-width: 900px) {
   body { overflow: auto; }
+  #fitStage { position: static; display: block; overflow: visible; }
+  #fit { width: auto; height: auto; transform: none !important; }
   #layout { grid-template-columns: 1fr; height: auto; }
-  #console { border-left: none; border-top: 1px solid var(--line); }
+  #console { border-left: none; border-top: 1px solid var(--line); overflow: visible; }
+  #catalog { overflow-y: visible; }
+  #logPanel { flex: 0 0 auto; min-height: 140px; }
   #stage { width: min(92vmin, 92vw); }
 }
 
