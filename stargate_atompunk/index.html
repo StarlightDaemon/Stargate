@@ -121,7 +121,81 @@
   </main>
 
   <a class="credit" href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
-  <div class="version">v1.0.0</div>
+  <div class="version">v1.1.0</div>
+
+  <!-- ==================== OPERATOR REFERENCE ==================== -->
+  <button class="opref-btn" id="opRefBtn" type="button" aria-expanded="false" aria-controls="opRefOverlay"
+          title="Watch Officer's card" aria-label="Operator reference">?</button>
+
+  <div class="opref-overlay" id="opRefOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="opRefTitle">
+    <div class="opref-card" role="document">
+      <div class="opref-head">
+        <h2 id="opRefTitle">BCAD FORM 9&ndash;C &middot; WATCH OFFICER&rsquo;S CARD &middot; INDUCTION DRILL</h2>
+        <button class="opref-close" id="opRefClose" type="button">STOW CARD</button>
+      </div>
+      <div class="opref-body">
+        <p class="opref-lede">
+          Station 3 &ldquo;Bluff Creek&rdquo;, Continental Threshold Warning Line. You are the
+          watch. The scope in front of you is not a display of the aperture &mdash; it
+          <em>is</em> the aperture, seen down the tube. Nothing opens until the Bureau is
+          satisfied it knows what is on the other end. Work the card in order.
+        </p>
+
+        <h3>1 &middot; Bring the set up</h3>
+        <p>
+          Raise <strong>H.T.</strong> The scope will not paint on a cold set; the sweep runs but
+          the phosphor takes nothing. Give it the moment it asks for.
+        </p>
+
+        <h3>2 &middot; Lay the gates on the station</h3>
+        <p>
+          Read the bearing and range of your intended station off the <strong>TARGET LOG</strong>,
+          then walk the <strong>BEARING</strong> cursor and the <strong>RANGE</strong> gate onto it.
+          The grid is coarse &mdash; fifteen degrees, twenty-five miles &mdash; and the gates must
+          straddle the station exactly. Close enough is not on the card.
+        </p>
+
+        <h3>3 &middot; Build a firm track</h3>
+        <p>
+          Now wait, and let the sweep do it. Each pass that finds the blip inside both gates
+          paints it once. <strong>Three paints and the track is firm</strong> &mdash; the LOCK
+          legend lights. Move either knob before that and you drop the track and start the count
+          again; that is the interlock working, not a fault.
+        </p>
+
+        <h3>4 &middot; Challenge it</h3>
+        <p>
+          A firm track is not an identified station. Press <strong>CHALLENGE</strong> and the
+          interrogator puts the question to it; a valid station returns its four-figure signature
+          and VERIFY lights. One station on the log, <strong>CHARLIE GLASS</strong>, has been
+          dark since fifty-four. It will paint, it will track, and it will answer
+          <strong>NO JOY</strong> every time. Log it and move on.
+        </p>
+
+        <h3>5 &middot; Induct</h3>
+        <p>
+          Lift the cover by its <strong>latch</strong> and throw <strong>INDUCT</strong>. The
+          aperture opens in the tube. The cover is not decoration &mdash; while it is down it
+          physically shields the switch, and an unverified induct springs the switch straight
+          back. Drop the cover when you are done.
+        </p>
+
+        <h3>Fast dial &mdash; the drum store</h3>
+        <p>
+          Every verified firing solution writes itself to the <strong>magnetic drum</strong>, four
+          slots deep; slot 1 ships pre-seeded with <strong>ABLE ORCHARD</strong> from the
+          acceptance trials. <strong>RECALL</strong> slews the gates by servo and replays the
+          stored signature off the drum, skipping sweep acquisition entirely. An empty slot
+          refuses recall. This is the only sanctioned way to skip the drill.
+        </p>
+
+        <p class="opref-fine">
+          All stations, signatures and coordinates on this console are fictional. Nothing leaves
+          this page.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
 <script type="module" src="js/main.js"></script>
 </body>

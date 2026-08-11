@@ -1,6 +1,7 @@
 {
   "name": "stargate_atompunk",
   "device": "VANTAGE — Type 9 Aperture Surveillance & Induction Console",
-  "version": "1.0.0",
-  "date": "2026-07-22"
+  "version": "1.1.0",
+  "date": "2026-08-11",
+  "model": "Claude Fable 5"
 }

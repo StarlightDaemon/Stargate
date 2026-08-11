@@ -5,7 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-11
+
+**Built by:** Claude Fable 5
+
+Compliance pass: model attribution and operator reference.
+
+### Added
+
+- Operator reference: a collapsed circular `?` control fixed top-right opens
+  "BCAD Form 9-C · Watch Officer's Card", an in-universe induction drill for
+  Station 3 "Bluff Creek" — H.T. up, laying the bearing cursor and range gate to
+  straddle the station on the coarse 15°/25 mi grid, three sweep paints to a firm
+  track, the interrogator CHALLENGE (and CHARLIE GLASS, dark since fifty-four,
+  answering NO JOY every time), the covered INDUCT switch, and the four-slot
+  magnetic drum RECALL as the only sanctioned way to skip the drill. Dismissable
+  by the STOW CARD button, backdrop click, or `Escape`.
+- `model` field in `version.json` and a **Built by** line per version here,
+  derived from the `Co-Authored-By: Claude Fable 5` trailer on commit `2077019`.
+
+### Verified (no change required)
+
+- Corner marks already correct: `StarlightDaemon` bottom-left linking to
+  <https://github.com/StarlightDaemon> with `target="_blank"` and
+  `rel="noopener noreferrer"`, version label bottom-right, both `position: fixed`
+  outside the scaled console subtree.
+- Single-viewport fit: the 1840x1000 design console scales to 1.035x at
+  1920x1080 and 2.078x at 3840x2160 with zero overflow and no document scroll.
+
 ## [1.0.0] - 2026-07-22
+
+**Built by:** Claude Fable 5
 
 ### Added
 

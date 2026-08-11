@@ -230,3 +230,23 @@ const drillParam = new URLSearchParams(location.search).get('drill');
 if (new URLSearchParams(location.search).has('drill')) {
   window.__vantage.drill(drillParam || 'all');
 }
+
+// --- operator reference (Watch Officer's card) -------------------------------
+{
+  const btn = document.getElementById('opRefBtn');
+  const overlay = document.getElementById('opRefOverlay');
+  const closeBtn = document.getElementById('opRefClose');
+
+  const setOpRef = (open) => {
+    overlay.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) closeBtn.focus(); else btn.focus();
+  };
+
+  btn.addEventListener('click', () => setOpRef(overlay.hidden));
+  closeBtn.addEventListener('click', () => setOpRef(false));
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) setOpRef(false); });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !overlay.hidden) { e.preventDefault(); setOpRef(false); }
+  });
+}
