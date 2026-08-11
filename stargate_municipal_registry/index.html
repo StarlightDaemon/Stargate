@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DITMCO // Municipal Conduit Registry Terminal - Form 1099-TX</title>
+  <meta name="description" content="Department of Interzonal Transit & Municipal Conduit Oversight - Mainframe Terminal Sub-Annex 4-B. Form 1099-TX Conduit Clearance Registry & Routing Gateway.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;600;700;800&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="crt-screen">
+  <div class="screen-flicker"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <!-- MAIN TERMINAL CONTAINER -->
+  <main class="terminal-wrapper" id="terminalRoot">
+    
+    <!-- TOP STATUS HEADER -->
+    <header class="terminal-header" id="terminalHeader">
+      <div class="header-left">
+        <div class="dept-badge">
+          <span class="badge-icon">🏛</span>
+          <div class="dept-title-group">
+            <span class="dept-name">DEPT. OF INTERZONAL TRANSIT & MUNICIPAL CONDUIT OVERSIGHT</span>
+            <span class="dept-sub">REGISTRY DIVISION // TERMINAL SUB-ANNEX 4-B // MAINFRAME REVISION 8.41</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="system-telemetry">
+          <div class="telemetry-pill">
+            <span class="label">SYS-STAT:</span>
+            <span class="val status-online" id="sysStatusText">OPERATIONAL [IDLE]</span>
+          </div>
+          <div class="telemetry-pill">
+            <span class="label">SESSION CLOCK:</span>
+            <span class="val" id="sessionClock">00:00:00.00</span>
+          </div>
+          <div class="telemetry-pill">
+            <span class="label">STATION ID:</span>
+            <span class="val">DITMCO-TRM-8840-C</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button class="audio-toggle-btn" id="audioToggleBtn" title="Toggle Terminal Audio" aria-label="Toggle Terminal Audio">
+          <span class="audio-icon" id="audioIcon">🔊</span>
+          <span class="audio-label" id="audioLabel">AUDIO: ON</span>
+        </button>
+        <button class="help-btn" id="operatorHelpBtn" title="Operator Reference Manual (Form 0-A)" aria-label="Operator Reference Manual">
+          ?
+        </button>
+      </div>
+    </header>
+
+    <!-- FORM 1099-TX CLEARANCE MANIFEST BAR -->
+    <section class="manifest-bar" id="manifestBar">
+      <div class="form-tag">FORM 1099-TX : CONDUIT TRANSIT CLEARANCE APPLICATION</div>
+      <div class="manifest-meta">
+        <div class="meta-item">
+          <span class="meta-lbl">DOCKET REF:</span>
+          <span class="meta-val" id="docketRefId">DKT-884-9021-A</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-lbl">CLEARANCE TIER:</span>
+          <span class="meta-val highlight" id="clearanceTierText">STANDARD MUNICIPAL (8-FIELD)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-lbl">QUEUE POSITION:</span>
+          <span class="meta-val" id="queuePosition">#01 IN BATCH</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-lbl">COMMISSIONER SEAL:</span>
+          <span class="meta-val stamp-pending" id="commissionerSealText">PENDING FILING</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKSPACE GRID: UPPER DISPLAY & LOWER CONTROLS -->
+    <div class="terminal-body">
+      
+      <!-- UPPER SECTION: CRT CONDUIT OSCILLOSCOPE & DOCKET CHEVRONS -->
+      <section class="conduit-deck" id="conduitDeck">
+        
+        <!-- RADIAL CONDUIT VECTOR SCOPE CONTAINER -->
+        <div class="scope-container" id="scopeContainer">
+          <div class="scope-bezel">
+            <div class="scope-crosshairs"></div>
+            <div class="scope-reticle-rings"></div>
+            
+            <!-- Canvas Vector Oscilloscope -->
+            <canvas id="conduitCanvas" width="560" height="420"></canvas>
+            
+            <!-- 12 Radial Chevron Docket Stations (8 Active + 4 Reserved Priority) -->
+            <div class="radial-stations-ring" id="radialStationsRing">
+              <!-- Rendered dynamically in JS with precise geometric radial placement -->
+            </div>
+
+            <!-- Central HUD Stamp Overlay (Appears on engagement or rejection) -->
+            <div class="center-stamp-overlay" id="centerStampOverlay">
+              <div class="stamp-inner" id="stampInner">
+                <div class="stamp-title" id="stampTitle">FORM 1099-TX</div>
+                <div class="stamp-status" id="stampStatus">APPROVED</div>
+                <div class="stamp-sub" id="stampSub">CONDUIT TRANSIT CLEARED</div>
+                <div class="stamp-meta" id="stampMeta">DITMCO // SEC 4-B</div>
+              </div>
+            </div>
+
+            <div class="conduit-status-banner" id="conduitStatusBanner">
+              <span class="pulse-light" id="conduitStatusLight"></span>
+              <span class="status-msg" id="conduitStatusMsg">CONDUIT APERTURE DORMANT // AWAITING 8-FIELD ROUTING MANIFEST</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LINEAR DOCKET STAGING MATRIX RIBBON (12 CHEVRONS HORIZONTAL STATUS) -->
+        <div class="docket-staging-panel">
+          <div class="panel-header-mini">
+            <span>CHEVRON DOCKET REGISTER // BATCH VALIDATION LEDGER</span>
+            <span class="dim-note">[8 REQUIRED STANDARD // 4 RESERVED PRIORITY]</span>
+          </div>
+          <div class="chevron-slots-grid" id="chevronSlotsGrid">
+            <!-- 12 Chevron Slots generated here -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- LOWER SECTION: ACTION DECKS (SYMBOL SELECTOR + QUICK-DIAL + AUTHORIZATION CONSOLE) -->
+      <section class="action-deck">
+
+        <!-- LEFT CONSOLE: SYMBOL SELECTION DECK & QUICK-DIAL FILE CABINET -->
+        <div class="control-console selector-console" id="selectorConsole">
+          <div class="console-tab-header">
+            <div class="console-title">
+              <span class="sec-num">CLUSTER 01 :</span> MUNICIPAL JURISDICTIONAL ROUTING GLYPHS
+            </div>
+            <div class="selection-counter" id="selectionCounter">
+              FIELDS ENTERED: <span class="counter-num" id="counterCurrent">0</span> / <span class="counter-total">8</span>
+            </div>
+          </div>
+
+          <!-- 32 Municipal Bureaucratic Section Glyphs -->
+          <div class="glyph-grid-wrapper">
+            <div class="glyph-grid" id="glyphGrid">
+              <!-- 32 buttons populated by app.js -->
+            </div>
+          </div>
+
+          <!-- QUICK-DIAL FILE CABINET (2 TIERS: APPROVED MUNICIPAL VS FLAGGED REVIEW) -->
+          <div class="quick-dial-cabinet" id="quickDialCabinet">
+            <div class="cabinet-header">
+              <span>PRELOADED DOCKET DIRECTORY (SINGLE-CLICK BATCH INPUT):</span>
+            </div>
+            <div class="quick-dial-tiers">
+              
+              <!-- TIER 1: APPROVED MUNICIPAL CORRIDORS -->
+              <div class="tier-group tier-approved">
+                <div class="tier-label">TIER I : EXPEDITED MUNICIPAL CLEARANCE</div>
+                <div class="tier-buttons">
+                  <button class="qd-btn" id="qdRoute1" data-qd-id="qd1">
+                    <span class="qd-code">[01-A]</span>
+                    <span class="qd-name">City Hall Archives Annex</span>
+                  </button>
+                  <button class="qd-btn" id="qdRoute2" data-qd-id="qd2">
+                    <span class="qd-code">[04-W]</span>
+                    <span class="qd-name">Water Works Hydro-Vector</span>
+                  </button>
+                  <button class="qd-btn" id="qdRoute3" data-qd-id="qd3">
+                    <span class="qd-code">[09-P]</span>
+                    <span class="qd-name">Postal Pneumatic Transit Hub</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- TIER 2: FLAGGED / UNDER REGULATORY REVIEW -->
+              <div class="tier-group tier-flagged">
+                <div class="tier-label">TIER II : FLAGGED / AUDITED CORRIDORS</div>
+                <div class="tier-buttons">
+                  <button class="qd-btn flagged" id="qdRoute4" data-qd-id="qd4">
+                    <span class="qd-code">[13-X]</span>
+                    <span class="qd-name">Sub-Level 13 Hazardous Sump</span>
+                  </button>
+                  <button class="qd-btn flagged" id="qdRoute5" data-qd-id="qd5">
+                    <span class="qd-code">[99-Z]</span>
+                    <span class="qd-name">Off-Grid Perimeter Outpost 9</span>
+                  </button>
+                  <button class="qd-btn flagged" id="qdRoute6" data-qd-id="qd6">
+                    <span class="qd-code">[??-Ω]</span>
+                    <span class="qd-name">Unregistered Deep Sector</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT CONSOLE: CONDUIT AUTHORIZATION & COMPLIANCE CONSOLE -->
+        <div class="control-console auth-console" id="authConsole">
+          <div class="console-tab-header">
+            <div class="console-title">
+              <span class="sec-num">CLUSTER 02 :</span> CONDUIT AUTHORIZATION & COMPLIANCE
+            </div>
+            <div class="auth-status-pill" id="authStatusPill">AWAITING FILING</div>
+          </div>
+
+          <div class="auth-controls-body">
+            
+            <!-- LOCKOUT CONTROL: ADMINISTRATIVE COMPLIANCE FREEZE -->
+            <div class="lockout-panel" id="lockoutPanel">
+              <div class="lockout-header">
+                <span class="lockout-badge">RULE 9-B</span>
+                <span class="lockout-title">ADMINISTRATIVE COMPLIANCE FREEZE</span>
+              </div>
+              <div class="lockout-desc">
+                When engaged, statutory audit freezes all conduit apertures regardless of docket completeness.
+              </div>
+              <div class="lockout-toggle-container">
+                <button class="lockout-switch-btn" id="lockoutToggleBtn" aria-pressed="false">
+                  <span class="switch-handle"></span>
+                  <span class="switch-text" id="lockoutSwitchText">FREEZE: INACTIVE [TRANSIT PERMITTED]</span>
+                </button>
+              </div>
+              <div class="lockout-indicator" id="lockoutIndicator">
+                <span class="lockout-led" id="lockoutLed"></span>
+                <span class="lockout-status-label" id="lockoutStatusLabel">AUDIT HOLD CLEARED</span>
+              </div>
+            </div>
+
+            <!-- PRIMARY ACTIONS: ENGAGE & DISENGAGE -->
+            <div class="primary-actuator-group">
+              
+              <!-- ENGAGE BUTTON -->
+              <button class="btn-actuator btn-engage" id="engageBtn" disabled>
+                <div class="btn-inner">
+                  <span class="btn-glyph">⚡</span>
+                  <div class="btn-text-block">
+                    <span class="btn-main-label">SUBMIT CLEARANCE & ENGAGE</span>
+                    <span class="btn-sub-label">TRANSMIT FORM 1099-TX TO APERTURE</span>
+                  </div>
+                </div>
+              </button>
+
+              <!-- HARD REQUIREMENT: CLEARLY VISIBLE, ALWAYS-REACHABLE DISENGAGE CONTROL -->
+              <button class="btn-actuator btn-disengage" id="disengageBtn" title="Immediately revoke transit authorization and terminate active conduit session">
+                <div class="btn-inner">
+                  <span class="btn-glyph">🛑</span>
+                  <div class="btn-text-block">
+                    <span class="btn-main-label">REVOKE PERMIT / DISENGAGE</span>
+                    <span class="btn-sub-label">TERMINATE ACTIVE SESSION & RESET DOCKET</span>
+                  </div>
+                </div>
+              </button>
+
+            </div>
+
+            <!-- ACTIVE CONDUIT TELEMETRY MONITOR -->
+            <div class="telemetry-monitor" id="telemetryMonitor">
+              <div class="mon-row">
+                <span class="mon-lbl">PACKET FLUX:</span>
+                <span class="mon-val" id="monFlux">0.00 MB/s</span>
+              </div>
+              <div class="mon-row">
+                <span class="mon-lbl">CORRIDOR INTEGRITY:</span>
+                <span class="mon-val" id="monIntegrity">100.0% NOMINAL</span>
+              </div>
+              <div class="mon-row">
+                <span class="mon-lbl">ACTIVE TRANSIT DURATION:</span>
+                <span class="mon-val highlight" id="monDuration">00:00:00</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- TELEPRINTER PROCEDURAL AUDIT STREAM LOG -->
+          <div class="teleprinter-log-container">
+            <div class="log-header">
+              <span>MUNICIPAL AUDIT TRAIL // REAL-TIME EVENT TELEPRINTER:</span>
+              <span class="log-indicator">● LIVE REC</span>
+            </div>
+            <div class="log-stream" id="logStream">
+              <div class="log-line system">[00:00:00] DITMCO MAIN TERMINAL 8840-C INITIALIZED.</div>
+              <div class="log-line">[00:00:01] FORM 1099-TX DOCKET TEMPLATE GENERATED. READY FOR 8-FIELD ENTRY.</div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- TERMINAL FOOTER BAR -->
+    <footer class="terminal-footer">
+      <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="starlight-link" id="starlightLink" title="StarlightDaemon GitHub Profile">
+          <span class="terminal-prompt">&gt;</span> StarlightDaemon
+        </a>
+      </div>
+      <div class="footer-center">
+        <span class="copyright-notice">MUNICIPAL CONDUIT CODE §144.2 // ALL DIAL REQUESTS LOGGED TO PERMANENT MICROFICHE</span>
+      </div>
+      <div class="footer-right">
+        <span class="version-tag" id="versionTag">v1.0.0</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- OPERATOR REFERENCE MODAL OVERLAY (?) -->
+  <div class="modal-backdrop" id="helpModalBackdrop" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">📜</span>
+          <span class="modal-title" id="helpModalTitle">DITMCO OPERATOR MANUAL // FORM 0-A (STANDARD OPERATING PROCEDURES)</span>
+        </div>
+        <button class="modal-close-btn" id="helpModalCloseBtn" aria-label="Close Manual">✕ [ESC]</button>
+      </div>
+
+      <div class="modal-content">
+        <div class="doc-section">
+          <h3>1. PURPOSE & JURISDICTION</h3>
+          <p>
+            The <strong>Department of Interzonal Transit & Municipal Conduit Oversight (DITMCO)</strong> regulates all spatial transport apertures within municipal boundaries. Operators must process conduit clearance applications in strict compliance with <em>Municipal Code §144.2</em>.
+          </p>
+        </div>
+
+        <div class="doc-section">
+          <h3>2. CORE DIALING PROCEDURE (8-FIELD ROUTING MANIFEST)</h3>
+          <ol>
+            <li><strong>Select 8 Routing Glyphs</strong> from Control Cluster 01. Each selection advances the ledger carriage and imprints a certified bureau docket stamp onto the corresponding chevron position.</li>
+            <li><strong>Chevron Status Sequence</strong>:
+              <ul>
+                <li><code>[DORMANT]</code> — Empty docket slot awaiting assignment.</li>
+                <li><code>[SEEKING]</code> — Active registry ledger indexing and validation scan.</li>
+                <li><code>[FILED]</code> — Official bureau stamp affixed; routing coordinate locked.</li>
+              </ul>
+            </li>
+            <li><strong>Review Authorization</strong>: Once all 8 fields are verified, Cluster 02 will unlock the <strong>[SUBMIT CLEARANCE & ENGAGE]</strong> actuator.</li>
+            <li><strong>Aperture Connection</strong>: Press Engage to transmit the manifest. The CRT vector oscilloscope will initialize the municipal transit plane.</li>
+          </ol>
+        </div>
+
+        <div class="doc-section">
+          <h3>3. DISENGAGE & DOCKET RESET</h3>
+          <p>
+            The <strong>[REVOKE PERMIT / DISENGAGE]</strong> control is permanently active. Actuating this control immediately revokes transit clearance, discharges the conduit carrier wave, stamps the docket <code>[SESSION VOIDED]</code>, and resets the terminal to <code>DORMANT</code> for a fresh filing.
+          </p>
+        </div>
+
+        <div class="doc-section">
+          <h3>4. ADMINISTRATIVE COMPLIANCE FREEZE (LOCKOUT CONTROL)</h3>
+          <p>
+            Under <em>Municipal Rule 9-B / Section 44</em>, municipal auditors may engage the <strong>Compliance Freeze</strong> toggle. When active, all conduit transmissions are unconditionally blocked. Attempting to engage an active route during a compliance freeze will generate a statutory rejection stamp and sounding alert.
+          </p>
+        </div>
+
+        <div class="doc-section">
+          <h3>5. PRELOADED QUICK-DIAL DIRECTORY</h3>
+          <ul>
+            <li><strong>Tier I (Expedited Municipal Clearance)</strong>: Pre-approved municipal routes including City Hall Archives, Water Works, and Postal Hub.</li>
+            <li><strong>Tier II (Flagged / Audited Corridors)</strong>: High-risk or quarantine transit lines subject to frequent auditor scrutiny.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span class="stamp-inline">AUTHORITY SEAL: VERIFIED DITMCO 1984-2026</span>
+        <button class="btn-modal-dismiss" id="modalDismissBtn">ACKNOWLEDGE & RETURN TO TERMINAL</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
