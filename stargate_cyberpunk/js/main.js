@@ -137,3 +137,22 @@ if (rig != null) {
     console.log('BENCH', JSON.stringify(window.__benchResult));
   })();
 }
+
+// ---- operator reference (the card taped inside the lid) --------------------
+
+const opRefBtn = document.getElementById('opRefBtn');
+const opRefOverlay = document.getElementById('opRefOverlay');
+const opRefClose = document.getElementById('opRefClose');
+
+function setOpRef(open) {
+  opRefOverlay.hidden = !open;
+  opRefBtn.setAttribute('aria-expanded', String(open));
+  if (open) opRefClose.focus(); else opRefBtn.focus();
+}
+
+opRefBtn.addEventListener('click', () => setOpRef(opRefOverlay.hidden));
+opRefClose.addEventListener('click', () => setOpRef(false));
+opRefOverlay.addEventListener('click', (e) => { if (e.target === opRefOverlay) setOpRef(false); });
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !opRefOverlay.hidden) { e.preventDefault(); setOpRef(false); }
+});

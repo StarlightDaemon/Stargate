@@ -216,6 +216,46 @@ function buildSegment(g, s) {
   }
 }
 
+// A chain is links, not a dashed line: alternate face-on ovals and edge-on
+// bars along the run, each sitting a little loose on its neighbour, upper
+// edges catching the cage lamp.
+function chainRun(parent, f, { pitch = 13, seed = 0, dim = false } = {}) {
+  const N = 32;
+  const pts = [];
+  for (let i = 0; i <= N; i++) pts.push(f(i / N));
+  const seg = [0];
+  let len = 0;
+  for (let i = 1; i <= N; i++) {
+    len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+    seg.push(len);
+  }
+  const at = (s) => {
+    let i = 1;
+    while (i < N && seg[i] < s) i++;
+    const u = (s - seg[i - 1]) / Math.max(1e-6, seg[i] - seg[i - 1]);
+    return [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * u,
+            pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * u,
+            Math.atan2(pts[i][1] - pts[i - 1][1], pts[i][0] - pts[i - 1][0]) / D2R];
+  };
+  const g = el('g', dim ? { opacity: 0.85 } : {}, parent);
+  const n = Math.max(2, Math.round(len / pitch));
+  for (let k = 0; k < n; k++) {
+    const s = Math.min(len - 2, Math.max(2, (k + 0.5) * (len / n) + jit(k * 7 + seed, 2.4) - 1.2));
+    const [x, y, ang] = at(s);
+    const a = ang + jit(k * 3 + seed, 12) - 6;
+    const lg = el('g', { transform: `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${a.toFixed(1)})` }, g);
+    if (k % 2 === 0) {
+      // face-on link: open oval, lamp on its upper rim
+      el('ellipse', { cx: 0, cy: 0, rx: 7.6, ry: 4.4, fill: 'none', stroke: '#31353b', 'stroke-width': 2.7 }, lg);
+      el('path', { d: 'M-5.4 -3.4 Q 0 -5.9 5.4 -3.4', fill: 'none', stroke: '#5a6067', 'stroke-width': 1.1, opacity: 0.75 }, lg);
+    } else {
+      // edge-on link: a stubby bar threading the ovals
+      el('line', { x1: -4.4, y1: 0, x2: 4.4, y2: 0, stroke: '#1e2126', 'stroke-width': 4, 'stroke-linecap': 'round' }, lg);
+      el('line', { x1: -3.4, y1: -1.1, x2: 3.4, y2: -1.1, stroke: '#484d54', 'stroke-width': 1, 'stroke-linecap': 'round', opacity: 0.6 }, lg);
+    }
+  }
+}
+
 export function buildFront(svg) {
   // gantry beam
   el('rect', { x: 228, y: 40, width: 600, height: 42, fill: 'url(#gBeam)' }, svg);
@@ -234,12 +274,19 @@ export function buildFront(svg) {
   };
   const [ax, ay] = rp(P(R_OUT + 14, -112)), [bx, by] = rp(P(R_OUT + 14, -57));
   for (const [x, y] of [[ax, ay], [bx, by]]) {
-    el('line', { x1: x, y1: 82, x2: x, y2: y, stroke: '#2c3036', 'stroke-width': 7 }, svg);
-    el('line', { x1: x, y1: 82, x2: x, y2: y, stroke: '#5a6067', 'stroke-width': 3, 'stroke-dasharray': '7 5' }, svg);
+    // taut hoist run: near-straight under load, one lazy bow
+    chainRun(svg, t => [x + Math.sin(t * Math.PI) * 1.4, 82 + (y - 82) * t], { pitch: 12.5, seed: Math.round(x) });
     el('circle', { cx: x, cy: y, r: 7, fill: 'none', stroke: '#454a51', 'stroke-width': 4 }, svg);
   }
   // slack chain looped over the beam — insurance after the second drop
-  el('path', { d: `M${ax + 14} 82 q 40 120 ${bx - ax - 40} ${by - 96}`, stroke: '#24282d', 'stroke-width': 5, fill: 'none', 'stroke-dasharray': '6 5', opacity: 0.85 }, svg);
+  {
+    const q0 = [ax + 14, 82], qc = [ax + 54, 202], q1 = [bx - 26, by - 14];
+    chainRun(svg, t => {
+      const u = 1 - t;
+      return [u * u * q0[0] + 2 * u * t * qc[0] + t * t * q1[0],
+              u * u * q0[1] + 2 * u * t * qc[1] + t * t * q1[1]];
+    }, { pitch: 12, seed: 9, dim: true });
+  }
 
   // inner rim ignition glow (behind segments, over the portal canvas edge)
   innerGlow = el('circle', { cx: CX, cy: CY, r: R_IN - 4, fill: 'none', stroke: '#7de9ff', 'stroke-width': 30, filter: 'url(#fGlowBig)', opacity: 0 }, svg);
