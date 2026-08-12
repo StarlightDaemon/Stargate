@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doppler NEXRAD Meteorology // Stargate Console</title>
+  <meta name="description" content="Meteorological Doppler radar console tracking severe storm systems and routing cyclone vortex quantum stargate conduits.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="viewport-root">
+    <!-- Top Telemetry Header -->
+    <header class="console-header">
+      <div class="header-left">
+        <div class="meteo-badge">NEXRAD-WX</div>
+        <div class="header-title-group">
+          <h1>DOPPLER METEOROLOGICAL RADAR CONSOLE</h1>
+          <span class="sub-title">SEVERE CYCLONE CONDUIT TRACKING // SGC-STORM-06</span>
+        </div>
+      </div>
+
+      <div class="telemetry-bar">
+        <div class="telem-item">
+          <span class="telem-label">CENTRAL PRESSURE</span>
+          <span class="telem-val" id="tele-press">932.4 hPa</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">MAX WIND SUSTAINED</span>
+          <span class="telem-val" id="tele-wind">165 KTS [CAT-5]</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">RAIN REFLECTIVITY</span>
+          <span class="telem-val" id="tele-dbz">68.5 dBZ EXTREME</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">RADAR STATE</span>
+          <span class="telem-val status-idle" id="tele-state">DUAL-POL SWEEP</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button id="btn-help" class="help-btn" aria-label="Operator Reference Manual" title="Operator Reference Manual">?</button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <main class="console-workspace">
+      <!-- Left Stage: Doppler Radar Scope & Storm Sectors Ring -->
+      <section class="wx-stage-container">
+        <div class="nexrad-scope-wrapper" id="scope-wrapper">
+          <!-- Outer Azimuth / Isobar Graticule -->
+          <div class="isobar-graticule" id="isobar-graticule"></div>
+
+          <!-- Real-Time Doppler NEXRAD Precipitation & Vortex Canvas -->
+          <canvas id="nexrad-canvas" width="680" height="680"></canvas>
+
+          <!-- 9 Storm Sector Chevrons (N, NE, E, SE, S, SW, W, NW, EYE) -->
+          <div class="sectors-ring" id="sectors-ring">
+            <!-- Injected via JS -->
+          </div>
+
+          <!-- Central Cyclone Eye Aperture -->
+          <div class="eye-core" id="eye-core">
+            <div class="core-reticle"></div>
+            <div class="core-status" id="eye-status">CALM EYE STABLE</div>
+          </div>
+        </div>
+
+        <!-- 7-Slot Meteorological Vector Buffer Display -->
+        <div class="address-strip">
+          <div class="strip-header">
+            <span class="strip-title">BAROMETRIC VECTOR BUFFER</span>
+            <span class="strip-counter" id="address-counter">0 / 7 LOCKED</span>
+          </div>
+          <div class="glyph-slots" id="glyph-slots">
+            <div class="slot" data-index="0"><span class="slot-idx">S-1</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="1"><span class="slot-idx">S-2</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="2"><span class="slot-idx">S-3</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="3"><span class="slot-idx">S-4</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="4"><span class="slot-idx">S-5</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="5"><span class="slot-idx">S-6</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="6"><span class="slot-idx">S-7</span><span class="slot-val">---</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Stage: Dual Named Clusters -->
+      <section class="controls-container">
+        <!-- Cluster 1: Barometric Vector Matrix -->
+        <div class="control-cluster" id="cluster-vector-matrix">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 01</span>
+            <h2>BAROMETRIC VECTOR MATRIX</h2>
+          </div>
+          <div class="cluster-desc">Select 7 meteorological vectors to track and isolate the cyclone vortex pathway.</div>
+          
+          <div class="glyph-grid" id="glyph-grid">
+            <button class="glyph-btn" data-glyph="SUPERCELL-MESO" data-symbol="🌀-MESO">
+              <span class="glyph-icon">🌀</span>
+              <span class="glyph-label">SUPERCELL MESO</span>
+              <span class="glyph-meta">70 dBZ // TORNADIC</span>
+            </button>
+            <button class="glyph-btn" data-glyph="CYCLONE-VORTEX" data-symbol="☈-VTX">
+              <span class="glyph-icon">☈</span>
+              <span class="glyph-label">CYCLONE VORTEX</span>
+              <span class="glyph-meta">930 hPa // EYEWALL</span>
+            </button>
+            <button class="glyph-btn" data-glyph="BAROMETRIC-SHEAR" data-symbol="⇋-SHR">
+              <span class="glyph-icon">⇋</span>
+              <span class="glyph-label">WIND SHEAR</span>
+              <span class="glyph-meta">85 KTS // 0-6KM</span>
+            </button>
+            <button class="glyph-btn" data-glyph="ISOBAR-GRADIENT" data-symbol="≋-ISO">
+              <span class="glyph-icon">≋</span>
+              <span class="glyph-label">ISOBAR GRADIENT</span>
+              <span class="glyph-meta">4.2 hPa/KM // TIGHT</span>
+            </button>
+            <button class="glyph-btn" data-glyph="MICROBURST-DOWNDRAFT" data-symbol="⇓-MB">
+              <span class="glyph-icon">⇓</span>
+              <span class="glyph-label">MICROBURST</span>
+              <span class="glyph-meta">110 KTS // DOWNDRAFT</span>
+            </button>
+            <button class="glyph-btn" data-glyph="CORIOLIS-FRONT" data-symbol="↻-COR">
+              <span class="glyph-icon">↻</span>
+              <span class="glyph-label">CORIOLIS FRONT</span>
+              <span class="glyph-meta">OCCLUDED // LOW</span>
+            </button>
+            <button class="glyph-btn" data-glyph="SQUALL-LINE" data-symbol="⚡-SQL">
+              <span class="glyph-icon">⚡</span>
+              <span class="glyph-label">SQUALL LINE</span>
+              <span class="glyph-meta">DERECHO // GALE</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cluster 2: Storm Conduit Dispatch & Radar Control -->
+        <div class="control-cluster" id="cluster-dispatch-control">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 02</span>
+            <h2>STORM CONDUIT DISPATCH &amp; RADAR CONTROL</h2>
+          </div>
+
+          <!-- Action Triggers -->
+          <div class="action-grid">
+            <button id="btn-activate" class="action-btn btn-engage" disabled>
+              <span class="btn-icon">⚡</span>
+              <span class="btn-text">ENGAGE CYCLONE VORTEX CONDUIT</span>
+              <span class="btn-subtext">TRANSMIT THROUGH STORM EYE</span>
+            </button>
+
+            <button id="btn-disengage" class="action-btn btn-abort">
+              <span class="btn-icon">⏹</span>
+              <span class="btn-text">DE-ENERGIZE RADAR / ABORT</span>
+              <span class="btn-subtext">PURGE BAROMETRIC BUFFER</span>
+            </button>
+          </div>
+
+          <!-- Barometric Overpressure Safety Hold Subsystem -->
+          <div class="safety-hold-panel" id="safety-panel">
+            <div class="safety-info">
+              <div class="safety-title">BAROMETRIC OVERPRESSURE HOLD</div>
+              <div class="safety-desc">Inhibits microwave pulses during severe tornadic shear. Defaults to RELEASED.</div>
+            </div>
+            <label class="switch-control" for="safety-hold-toggle">
+              <input type="checkbox" id="safety-hold-toggle">
+              <span class="slider"></span>
+              <span class="switch-label" id="safety-toggle-status">RELEASED</span>
+            </label>
+          </div>
+
+          <!-- Quick-Dial Severe Storm Systems -->
+          <div class="presets-section">
+            <div class="presets-header">
+              <span class="presets-title">PRELOADED STORM SYSTEMS</span>
+              <span class="presets-hint">CLICK TO TRACK</span>
+            </div>
+
+            <!-- Tier 1: Supercell Tornado Clusters -->
+            <div class="preset-tier">
+              <div class="tier-label">TIER I // SUPERCELL TORNADO CLUSTERS</div>
+              <div class="tier-grid">
+                <button class="preset-btn tier-1" data-preset="moore-ef5">
+                  <span class="preset-name">MOORE SUPERCELL</span>
+                  <span class="preset-meta">EF-5 // 210 MPH</span>
+                </button>
+                <button class="preset-btn tier-1" data-preset="tri-state">
+                  <span class="preset-name">TRI-STATE VORTEX</span>
+                  <span class="preset-meta">Long-Track // 73 MPH</span>
+                </button>
+                <button class="preset-btn tier-1" data-preset="plainfield">
+                  <span class="preset-name">PLAINFIELD MESO</span>
+                  <span class="preset-meta">Rain-Wrapped // High V</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tier 2: Oceanic Super Typhoons -->
+            <div class="preset-tier">
+              <div class="tier-label">TIER II // OCEANIC SUPER TYPHOONS</div>
+              <div class="tier-grid">
+                <button class="preset-btn tier-2" data-preset="tip-1979">
+                  <span class="preset-name">SUPER TYPHOON TIP</span>
+                  <span class="preset-meta">870 hPa // Record Low</span>
+                </button>
+                <button class="preset-btn tier-2" data-preset="haiyan-2013">
+                  <span class="preset-name">TYPHOON HAIYAN</span>
+                  <span class="preset-meta">195 MPH // 895 hPa</span>
+                </button>
+                <button class="preset-btn tier-2" data-preset="patricia-2015">
+                  <span class="preset-name">HURRICANE PATRICIA</span>
+                  <span class="preset-meta">215 MPH // 872 hPa</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Interlock Banner -->
+    <div class="interlock-banner" id="interlock-banner">
+      <div class="banner-icon">🌪️</div>
+      <div class="banner-text">
+        <strong>INTERLOCK ENGAGED: OVERPRESSURE SAFETY HOLD ACTIVE</strong>
+        <span>Release barometric safety switch in Cluster 02 before initiating cyclone conduit transmission.</span>
+      </div>
+      <button class="banner-dismiss" id="banner-dismiss">DISMISS</button>
+    </div>
+
+    <!-- Operator Reference Modal -->
+    <div class="modal-overlay" id="help-modal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-tag">METEOROLOGICAL STANDARD OPERATING PROCEDURE</span>
+            <h2>DOPPLER NEXRAD RADAR MANUAL (SGC-STORM-06)</h2>
+          </div>
+          <button class="modal-close" id="btn-close-modal" aria-label="Close modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="manual-section">
+            <h3>1. METEOROLOGICAL RADAR TRACKING</h3>
+            <p>The Doppler NEXRAD Console scans severe cyclone vortices across 9 storm sectors (N, NE, E, SE, S, SW, W, NW, EYE at 40° intervals). Locking 7 barometric vectors aligns the eye aperture.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>2. LOCKING &amp; ACTIVATION PROTOCOL</h3>
+            <p><strong>Universal Safety Rule:</strong> Locking the 7th vector transitions the console into a <em>PENDING READY</em> state. The radar will <strong>NEVER auto-fire</strong> upon the 7th lock. The meteorologist must explicitly press the glowing <strong>ENGAGE CYCLONE VORTEX CONDUIT</strong> button to initiate wormhole transit.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>3. DE-ENERGIZE RADAR / ABORT</h3>
+            <p>The <strong>DE-ENERGIZE RADAR / ABORT</strong> control is always reachable and operational, immediately cutting transmitter power and resetting all 9 storm sectors.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>4. BAROMETRIC OVERPRESSURE HOLD</h3>
+            <p>Defaults to <strong>RELEASED</strong>. When engaged, inhibits radar emissions to avoid transmitter arc-over. Blocked actions trigger visual interlock warning and NOAA alert tones.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="console-footer">
+      <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="daemon-link">
+          <span class="daemon-icon">🌪️</span>
+          <span>StarlightDaemon</span>
+        </a>
+      </div>
+      <div class="footer-center">
+        <span class="status-dot"></span>
+        <span id="footer-status-text">NEXRAD RADAR ONLINE // DUAL-POL POLARIMETRY ACTIVE</span>
+      </div>
+      <div class="footer-right">
+        <span class="version-tag">v1.0.0 // METEO-NEXRAD-06</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

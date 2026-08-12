@@ -1,0 +1,11 @@
+{
+  "name": "stargate_meteorological_nexrad",
+  "version": "1.0.0",
+  "description": "Meteorological Doppler NEXRAD Radar Stargate Console",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test_build.js"
+  },
+  "model": "Gemini 3.6 Flash (high reasoning)"
+}
