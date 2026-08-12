@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orbital Air Traffic Control // Stargate Radar Console</title>
+  <meta name="description" content="Modern aerospace and space-traffic management radar console routing orbital quantum stargate corridors.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="viewport-root">
+    <!-- Top Telemetry Header -->
+    <header class="console-header">
+      <div class="header-left">
+        <div class="atc-badge">ORB-ATC</div>
+        <div class="header-title-group">
+          <h1>ORBITAL AIR TRAFFIC CONTROL CONSOLE</h1>
+          <span class="sub-title">AEROSPACE TRANSIT ROUTING // SGC-ORBIT-04</span>
+        </div>
+      </div>
+
+      <div class="telemetry-bar">
+        <div class="telem-item">
+          <span class="telem-label">APOGEE / PERIGEE</span>
+          <span class="telem-val" id="tele-alt">420 x 412 KM</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">ORBITAL VELOCITY</span>
+          <span class="telem-val" id="tele-vel">7.66 KM/S</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">INCLINATION</span>
+          <span class="telem-val" id="tele-inc">51.64° LEO</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">CORRIDOR STATE</span>
+          <span class="telem-val status-idle" id="tele-state">RADAR MONITORING</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button id="btn-help" class="help-btn" aria-label="Operator Reference Manual" title="Operator Reference Manual">?</button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <main class="console-workspace">
+      <!-- Left Stage: Multi-Band Radar Scope & Waypoints Ring -->
+      <section class="radar-stage-container">
+        <div class="radar-scope-wrapper" id="radar-wrapper">
+          <!-- Outer Compass Azimuth Graticule -->
+          <div class="azimuth-graticule" id="azimuth-graticule"></div>
+
+          <!-- Real-Time Aerospace Radar Canvas -->
+          <canvas id="radar-canvas" width="680" height="680"></canvas>
+
+          <!-- 12 Orbital Waypoint Chevrons (Zulu-01 to Zulu-12) -->
+          <div class="waypoints-ring" id="waypoints-ring">
+            <!-- Injected via JS -->
+          </div>
+
+          <!-- Central Flight Corridor Aperture -->
+          <div class="corridor-core" id="corridor-core">
+            <div class="core-reticle"></div>
+            <div class="core-status" id="corridor-status">ORBITAL CORRIDOR CLEAR</div>
+          </div>
+        </div>
+
+        <!-- 9-Slot Flight Corridor Buffer Display -->
+        <div class="address-strip">
+          <div class="strip-header">
+            <span class="strip-title">FLIGHT STRIP WAYPOINT BUFFER</span>
+            <span class="strip-counter" id="address-counter">0 / 9 LOCKED</span>
+          </div>
+          <div class="glyph-slots" id="glyph-slots">
+            <div class="slot" data-index="0"><span class="slot-idx">Z-1</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="1"><span class="slot-idx">Z-2</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="2"><span class="slot-idx">Z-3</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="3"><span class="slot-idx">Z-4</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="4"><span class="slot-idx">Z-5</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="5"><span class="slot-idx">Z-6</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="6"><span class="slot-idx">Z-7</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="7"><span class="slot-idx">Z-8</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="8"><span class="slot-idx">Z-9</span><span class="slot-val">---</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Stage: Dual Named Clusters -->
+      <section class="controls-container">
+        <!-- Cluster 1: Flight Strip Vector Matrix -->
+        <div class="control-cluster" id="cluster-flight-matrix">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 01</span>
+            <h2>FLIGHT STRIP VECTOR MATRIX</h2>
+          </div>
+          <div class="cluster-desc">Select 9 orbital waypoint vectors to sequence flight corridor trajectory clearance.</div>
+          
+          <div class="glyph-grid" id="glyph-grid">
+            <button class="glyph-btn" data-glyph="CORRIDOR-GEO" data-symbol="⌖-GEO">
+              <span class="glyph-icon">⌖</span>
+              <span class="glyph-label">CORRIDOR GEO</span>
+              <span class="glyph-meta">35,786 KM // 0.0°</span>
+            </button>
+            <button class="glyph-btn" data-glyph="APOGEE-VECTOR" data-symbol="△-APO">
+              <span class="glyph-icon">△</span>
+              <span class="glyph-label">APOGEE VECTOR</span>
+              <span class="glyph-meta">1,200 KM // BURN</span>
+            </button>
+            <button class="glyph-btn" data-glyph="PERIGEE-BURN" data-symbol="▽-PER">
+              <span class="glyph-icon">▽</span>
+              <span class="glyph-label">PERIGEE BURN</span>
+              <span class="glyph-meta">180 KM // RETRO</span>
+            </button>
+            <button class="glyph-btn" data-glyph="HOHMANN-TRANSFER" data-symbol="⟲-HT">
+              <span class="glyph-icon">⟲</span>
+              <span class="glyph-label">HOHMANN ARC</span>
+              <span class="glyph-meta">ΔV: 3.92 KM/S</span>
+            </button>
+            <button class="glyph-btn" data-glyph="LEO-POLAR" data-symbol="⌕-POL">
+              <span class="glyph-icon">⌕</span>
+              <span class="glyph-label">LEO POLAR</span>
+              <span class="glyph-meta">98.2° // SSO</span>
+            </button>
+            <button class="glyph-btn" data-glyph="MOLNIYA-ARC" data-symbol="⌒-MOL">
+              <span class="glyph-icon">⌒</span>
+              <span class="glyph-label">MOLNIYA ARC</span>
+              <span class="glyph-meta">63.4° // HEO</span>
+            </button>
+            <button class="glyph-btn" data-glyph="EQUATORIAL-SLOT" data-symbol="⊝-EQ">
+              <span class="glyph-icon">⊝</span>
+              <span class="glyph-label">EQUATORIAL SLOT</span>
+              <span class="glyph-meta">0.0° // SYNC</span>
+            </button>
+            <button class="glyph-btn" data-glyph="ESCAPE-TRAJECTORY" data-symbol="⇗-ESC">
+              <span class="glyph-icon">⇗</span>
+              <span class="glyph-label">ESCAPE TRAJECT</span>
+              <span class="glyph-meta">11.18 KM/S // C3</span>
+            </button>
+            <button class="glyph-btn" data-glyph="LAGRANGE-L1" data-symbol="⊙-L1">
+              <span class="glyph-icon">⊙</span>
+              <span class="glyph-label">LAGRANGE L-1</span>
+              <span class="glyph-meta">1.5M KM // HALO</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cluster 2: Vector Authorization & Dispatch Panel -->
+        <div class="control-cluster" id="cluster-dispatch-panel">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 02</span>
+            <h2>VECTOR AUTHORIZATION &amp; DISPATCH</h2>
+          </div>
+
+          <!-- Action Triggers -->
+          <div class="action-grid">
+            <button id="btn-activate" class="action-btn btn-engage" disabled>
+              <span class="btn-icon">🚀</span>
+              <span class="btn-text">AUTHORIZE ORBITAL INSERTION</span>
+              <span class="btn-subtext">TRANSMIT CORRIDOR CLEARANCE</span>
+            </button>
+
+            <button id="btn-disengage" class="action-btn btn-abort">
+              <span class="btn-icon">🛑</span>
+              <span class="btn-text">FLIGHT ABORT / VECTOR HOLD</span>
+              <span class="btn-subtext">PURGE RADAR FLIGHT STRIP</span>
+            </button>
+          </div>
+
+          <!-- Orbital Collision Safety Hold Subsystem -->
+          <div class="safety-hold-panel" id="safety-panel">
+            <div class="safety-info">
+              <div class="safety-title">ORBITAL COLLISION SAFETY HOLD</div>
+              <div class="safety-desc">Inhibits trajectory firing during orbital conjunctions. Defaults to RELEASED.</div>
+            </div>
+            <label class="switch-control" for="safety-hold-toggle">
+              <input type="checkbox" id="safety-hold-toggle">
+              <span class="slider"></span>
+              <span class="switch-label" id="safety-toggle-status">RELEASED</span>
+            </label>
+          </div>
+
+          <!-- Quick-Dial Flight Plans -->
+          <div class="presets-section">
+            <div class="presets-header">
+              <span class="presets-title">PRELOADED FLIGHT PLANS</span>
+              <span class="presets-hint">CLICK TO FILE STRIP</span>
+            </div>
+
+            <!-- Tier 1: Sovereign Space Stations -->
+            <div class="preset-tier">
+              <div class="tier-label">TIER I // SOVEREIGN SPACE HABITAT STATIONS</div>
+              <div class="tier-grid">
+                <button class="preset-btn tier-1" data-preset="iss-corridor">
+                  <span class="preset-name">ISS ALPHA HABITAT</span>
+                  <span class="preset-meta">420 KM // 51.6°</span>
+                </button>
+                <button class="preset-btn tier-1" data-preset="tiangong-station">
+                  <span class="preset-name">TIANGONG CORE</span>
+                  <span class="preset-meta">390 KM // 41.5°</span>
+                </button>
+                <button class="preset-btn tier-1" data-preset="gateway-orbit">
+                  <span class="preset-name">LUNAR GATEWAY NRHO</span>
+                  <span class="preset-meta">NRHO // 9:2 Res</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tier 2: Orbital Relay & Lagrange Constellations -->
+            <div class="preset-tier">
+              <div class="tier-label">TIER II // ORBITAL RELAY &amp; LAGRANGE STATIONS</div>
+              <div class="tier-grid">
+                <button class="preset-btn tier-2" data-preset="jwst-l2">
+                  <span class="preset-name">WEBB L-2 HALO</span>
+                  <span class="preset-meta">1.5M KM // L2</span>
+                </button>
+                <button class="preset-btn tier-2" data-preset="starlink-ring">
+                  <span class="preset-name">STARLINK HIGH-SHELL</span>
+                  <span class="preset-meta">550 KM // 53.0°</span>
+                </button>
+                <button class="preset-btn tier-2" data-preset="gps-constellation">
+                  <span class="preset-name">GPS BLOCK-III MEO</span>
+                  <span class="preset-meta">20,200 KM // 55°</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Interlock Banner -->
+    <div class="interlock-banner" id="interlock-banner">
+      <div class="banner-icon">⚠️</div>
+      <div class="banner-text">
+        <strong>INTERLOCK ENGAGED: COLLISION SAFETY HOLD ACTIVE</strong>
+        <span>Release orbital safety switch in Cluster 02 before initiating corridor clearance.</span>
+      </div>
+      <button class="banner-dismiss" id="banner-dismiss">DISMISS</button>
+    </div>
+
+    <!-- Operator Reference Modal -->
+    <div class="modal-overlay" id="help-modal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-tag">AEROSPACE STANDARD OPERATING PROCEDURE</span>
+            <h2>ORBITAL AIR TRAFFIC CONTROL MANUAL (SGC-ORBIT-04)</h2>
+          </div>
+          <button class="modal-close" id="btn-close-modal" aria-label="Close modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="manual-section">
+            <h3>1. ORBITAL RADAR ROUTING</h3>
+            <p>The Orbital ATC Console tracks aerospace flight corridors using 12 radial Waypoints (Zulu-01 to Zulu-12 at 30° azimuth intervals). Locking 9 flight strip waypoints authorizes transit.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>2. LOCKING &amp; ACTIVATION PROTOCOL</h3>
+            <p><strong>Universal Safety Rule:</strong> Locking the 9th waypoint enters a <em>PENDING READY</em> state. The radar console will <strong>NEVER auto-fire</strong> upon the 9th lock. The flight controller must deliberately click the glowing <strong>AUTHORIZE ORBITAL INSERTION</strong> control to transmit clearance.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>3. FLIGHT ABORT / VECTOR HOLD</h3>
+            <p>The <strong>FLIGHT ABORT / VECTOR HOLD</strong> control is always reachable, instantly terminating the radar clearance and purging the active flight strip.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>4. ORBITAL COLLISION SAFETY HOLD</h3>
+            <p>Defaults to <strong>RELEASED</strong>. When engaged, inhibits trajectory firing. Attempting to dial or activate while engaged triggers an audible double-beep alarm and warning banner.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="console-footer">
+      <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="daemon-link">
+          <span class="daemon-icon">🛰</span>
+          <span>StarlightDaemon</span>
+        </a>
+      </div>
+      <div class="footer-center">
+        <span class="status-dot"></span>
+        <span id="footer-status-text">RADAR SCOPE ACTIVE // 12 ORBITAL SECTORS MONITORED</span>
+      </div>
+      <div class="footer-right">
+        <span class="version-tag">v1.0.0 // ORBITAL-ATC-04</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

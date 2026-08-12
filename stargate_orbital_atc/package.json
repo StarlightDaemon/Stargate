@@ -1,0 +1,11 @@
+{
+  "name": "stargate_orbital_atc",
+  "version": "1.0.0",
+  "description": "Orbital Air Traffic Control Radar Stargate Console",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test_build.js"
+  },
+  "model": "Gemini 3.6 Flash (high reasoning)"
+}
