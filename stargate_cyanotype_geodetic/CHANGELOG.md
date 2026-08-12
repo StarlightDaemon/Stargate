@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Known Issues (Post-1.1.0 Operator Testing)
+
+- **Confirmed Working**: Direct operator testing confirms that the auto-activation fix in v1.1.0 is working as intended under real operator use — the dialing sequence correctly requires an intentional click on `VALIDATE & COMMIT` and no longer fires automatically upon scribing the 7th node.
+- **Unresolved Portal Visual Effect**: Separately, operator testing found that clicking `VALIDATE & COMMIT` produces the approval stamp, but the described portal/aperture connection effect (rotating compass rose, drafting spirals, and radiating cyanotype particle streams) does not actually appear or render perceptibly to a real viewer — only the stamp is visible.
+- **Build Status**: Root cause has not been investigated; this build is closed as-is without further iteration.
+
 ## [1.1.0] - 2026-08-12
 
 **Built by:** Gemini 3.6 Flash (high reasoning)
