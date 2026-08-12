@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HM Imperial Aetheric Telegraph & Pneumatic Dispatch Registry</title>
+  <meta name="description" content="Victorian patent drafting instrument panel and glowing vector schematic portal ring dispatch terminal.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="viewport-frame">
+    <main id="app-scaler">
+      
+      <!-- ==================================================================
+           HEADER SECTION: Imperial Registry & Chronometer
+           ================================================================== -->
+      <header id="terminal-header">
+        <div class="header-left">
+          <svg class="crest-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+            <circle cx="50" cy="50" r="45" stroke-width="2" stroke-dasharray="3 3"/>
+            <circle cx="50" cy="50" r="38" stroke-width="1.5"/>
+            <polygon points="50,15 80,75 20,75" stroke-width="2"/>
+            <circle cx="50" cy="50" r="14" stroke-width="2"/>
+            <line x1="50" y1="5" x2="50" y2="95" stroke-width="1.5"/>
+            <line x1="5" y1="50" x2="95" y2="50" stroke-width="1.5"/>
+          </svg>
+          <div class="header-title-group">
+            <h1>IMPERIAL AETHERIC TELEGRAPH &amp; PNEUMATIC DISPATCH</h1>
+            <div class="sub-title">Terminal No. VIII-B • Whitehall Subterranean Manifold • Est. 1888</div>
+          </div>
+        </div>
+
+        <div class="header-center-telemetry">
+          <div class="telemetry-node">
+            <span class="telemetry-label">CHRONO-DATUM (GMT)</span>
+            <span class="telemetry-value" id="telemetry-clock">12:00:00</span>
+          </div>
+          <div class="telemetry-node">
+            <span class="telemetry-label">MANIFOLD PRESSURE</span>
+            <span class="telemetry-value" id="telemetry-pressure">29.92 inHg</span>
+          </div>
+          <div class="telemetry-node">
+            <span class="telemetry-label">GALVANIC TENSION</span>
+            <span class="telemetry-value" id="telemetry-voltage">2,400 V</span>
+          </div>
+          <div class="telemetry-node">
+            <span class="telemetry-label">AETHER FLUX</span>
+            <span class="telemetry-value" id="telemetry-flux">0.00 μTorr</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button id="audio-mute-toggle" class="hud-btn" title="Toggle Sound Synthesizer">
+            <span id="mute-status-text">AUDIO: ON</span>
+          </button>
+          <button id="manual-modal-open-btn" class="hud-btn manual-btn-circle" title="Operator Dispatch Manual &amp; Patent Guide">?</button>
+        </div>
+      </header>
+
+      <!-- ==================================================================
+           MAIN INSTRUMENT DECK (3-Bay Grid Layout)
+           ================================================================== -->
+      <div id="instrument-deck">
+
+        <!-- ================================================================
+             LEFT BAY: Pneumatic Ledger & Auxiliary Gauges
+             ================================================================ -->
+        <section id="left-bay">
+          <!-- Pneumatic Quick-Dial Ledger -->
+          <div class="ledger-container schematic-bay">
+            <div class="bay-header">
+              <h2>Pneumatic Routing Ledger</h2>
+              <span class="bay-tag">PRE-CALIBRATED CONDUITS</span>
+            </div>
+
+            <div class="tier-tab-bar">
+              <button class="tier-tab active" data-filter="all" id="tab-filter-all">All Conduits (7)</button>
+              <button class="tier-tab" data-filter="1" id="tab-filter-tier1">Tier I: Imperial (3)</button>
+              <button class="tier-tab" data-filter="2" id="tab-filter-tier2">Tier II: Deep Bore (4)</button>
+            </div>
+
+            <div class="ledger-scroll-area" id="quick-dial-list">
+              <!-- Dynamically Populated Quick Dial Cards -->
+            </div>
+          </div>
+
+          <!-- Auxiliary Diagnostic Gauges -->
+          <div class="gauge-cluster-container schematic-bay">
+            <div class="bay-header">
+              <h2>Differential Diagnostics</h2>
+              <span class="bay-tag">PATENT VERNIERS</span>
+            </div>
+
+            <div class="gauges-layout">
+              <!-- Mercury Tube -->
+              <div class="mercury-tube-gauge">
+                <div class="tube-housing">
+                  <div class="tube-ticks"></div>
+                  <div class="mercury-level" id="mercury-bar-level"></div>
+                </div>
+                <div class="gauge-caption">Torricelli inHg</div>
+              </div>
+
+              <!-- Galvanic Dial Gauge -->
+              <div class="dial-gauge-svg-wrap">
+                <svg viewBox="0 0 100 75" fill="none" stroke="currentColor">
+                  <path d="M15 65 A40 40 0 0 1 85 65" stroke="#3b4e6b" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M22 65 A32 32 0 0 1 78 65" stroke="#e28743" stroke-width="1.5" stroke-dasharray="2 3"/>
+                  <line x1="50" y1="65" x2="30" y2="25" stroke="#ffc107" stroke-width="2" id="galvanic-needle" stroke-linecap="round"/>
+                  <circle cx="50" cy="65" r="4" fill="#e28743"/>
+                  <text x="50" y="55" fill="#9c8e76" font-family="'JetBrains Mono'" font-size="6" text-anchor="middle">GALVANO-VOLTS</text>
+                </svg>
+                <div class="gauge-caption" id="galvanic-readout-text">2,400 V</div>
+              </div>
+
+              <!-- Escapement Hertz Sync -->
+              <div class="hertz-sync-box">
+                <div class="telemetry-label">ESCAPEMENT SYNC</div>
+                <div class="hertz-digits" id="hertz-display">60.00</div>
+                <div class="telemetry-label">HERTZ CYCLES</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             CENTER BAY: Multi-Annular Schematic Portal Ring Display
+             ================================================================ -->
+        <section id="center-bay" class="schematic-bay">
+          <!-- Staged Sequence Bar -->
+          <div class="staged-sequence-bar">
+            <span class="staged-label">MERIDIAN COORDINATE STAGING [7 GLYPHS]:</span>
+            <div class="staged-slots" id="sequence-slots-container">
+              <div class="sequence-slot" data-slot="0"><span class="slot-idx">I</span></div>
+              <div class="sequence-slot" data-slot="1"><span class="slot-idx">II</span></div>
+              <div class="sequence-slot" data-slot="2"><span class="slot-idx">III</span></div>
+              <div class="sequence-slot" data-slot="3"><span class="slot-idx">IV</span></div>
+              <div class="sequence-slot" data-slot="4"><span class="slot-idx">V</span></div>
+              <div class="sequence-slot" data-slot="5"><span class="slot-idx">VI</span></div>
+              <div class="sequence-slot" data-slot="6"><span class="slot-idx">VII</span></div>
+            </div>
+          </div>
+
+          <!-- Master Schematic Ring Stage -->
+          <div id="ring-stage-container">
+            <!-- Dynamic Aetheric Vortex & Flyball Streamlines Canvas -->
+            <canvas id="vortex-canvas" width="280" height="280"></canvas>
+
+            <!-- Vector Schematic SVG Ring Display -->
+            <svg id="ring-svg-schematic" viewBox="0 0 640 640">
+              <defs>
+                <!-- Radial Glow Filters -->
+                <filter id="vector-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <filter id="intense-spark" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="6" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Outer Technical Drafting Calibration Grids & Vernier Track -->
+              <circle cx="320" cy="320" r="310" class="compass-tick-track" stroke-dasharray="1 5"/>
+              <circle cx="320" cy="320" r="298" stroke="#3b4e6b" stroke-width="1.5" fill="none"/>
+              <circle cx="320" cy="320" r="286" stroke="#243042" stroke-width="1" stroke-dasharray="4 2" fill="none"/>
+
+              <!-- Outer Radial Degree Tick Marks -->
+              <g id="outer-degree-ticks" stroke="#3b4e6b" stroke-width="1"></g>
+
+              <!-- Gear Pitch Annotations & Patent Drafting Linework -->
+              <circle cx="320" cy="320" r="260" stroke="#79441c" stroke-width="1.5" fill="none"/>
+              <circle cx="320" cy="320" r="252" stroke="#e28743" stroke-width="0.75" stroke-dasharray="2 6" fill="none"/>
+              
+              <!-- Rotating Differential Code-Ring with 16 Glyph Stations -->
+              <g id="rotating-differential-ring" class="rotating-differential-ring">
+                <!-- Outer Differential Ring Body -->
+                <circle cx="320" cy="320" r="240" stroke="#3b4e6b" stroke-width="2" fill="rgba(16, 21, 31, 0.4)"/>
+                <circle cx="320" cy="320" r="170" stroke="#3b4e6b" stroke-width="2" fill="none"/>
+                <!-- Glyph Vector Schematic Stations (Generated via JS) -->
+                <g id="differential-glyph-stations"></g>
+              </g>
+
+              <!-- Inner Annular Caliper Track -->
+              <circle cx="320" cy="320" r="162" stroke="#e28743" stroke-width="1.5" stroke-dasharray="3 3" fill="none"/>
+              <circle cx="320" cy="320" r="144" stroke="#ffc107" stroke-width="2" fill="rgba(7, 9, 14, 0.75)" filter="url(#vector-glow)"/>
+
+              <!-- 9 Radial Meridian Escapements (Nodes I to IX) -->
+              <g id="meridian-escapements-group"></g>
+
+              <!-- Central Aperture Bezel & Iris Border -->
+              <circle cx="320" cy="320" r="140" stroke="#e28743" stroke-width="2" fill="none"/>
+              <circle cx="320" cy="320" r="136" stroke="#ffc107" stroke-width="1" stroke-dasharray="6 3" fill="none"/>
+            </svg>
+          </div>
+
+          <!-- Bottom Ring Operational Status Bar -->
+          <div class="ring-bottom-status">
+            <div>
+              <span class="status-indicator-dot idle" id="ring-status-dot"></span>
+              <span id="ring-status-text">MERIDIAN STATUS: IDLE - AWAITING COORDINATE INPUT</span>
+            </div>
+            <div id="ring-active-lock-count" style="color: var(--copper-glow); font-weight: 700;">ESCAPEMENTS LOCKED: 0 / 7</div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             RIGHT BAY: Control Clusters & Telegraph Transcript
+             ================================================================ -->
+        <section id="right-bay">
+
+          <!-- Control Cluster 1: 16-Glyph Meridian Dialing Array -->
+          <div class="dialing-array-panel schematic-bay">
+            <div class="bay-header">
+              <h2>Meridian Dialing Array</h2>
+              <span class="bay-tag">16-PATENT MATRIX</span>
+            </div>
+
+            <div class="glyph-matrix-grid" id="glyph-matrix-container">
+              <!-- Dynamically Populated 16 Glyph Buttons -->
+            </div>
+          </div>
+
+          <!-- Control Cluster 2: Dispatch Throttle & Interlock Manifold -->
+          <div class="throttle-manifold-panel schematic-bay">
+            <div class="bay-header">
+              <h2>Dispatch Throttle &amp; Interlock</h2>
+              <span class="bay-tag">MANIFOLD CONTROL</span>
+            </div>
+
+            <!-- Review / Boiler Safety Interlock Switch -->
+            <div class="interlock-control-bar">
+              <div class="interlock-label-wrap">
+                <span class="interlock-title">BOILER SAFETY INTERLOCK</span>
+                <span class="interlock-desc" id="interlock-status-desc">CHIEF DISPATCHER'S HOLD [ENGAGED]</span>
+              </div>
+              <div class="switch-toggle-housing">
+                <button id="safety-hold-toggle-btn" class="safety-switch-btn" title="Toggle Safety Interlock Hold">
+                  HOLD: ENGAGED
+                </button>
+              </div>
+            </div>
+
+            <!-- Primary Dispatch Throttle Button -->
+            <div class="throttle-button-container">
+              <button id="dispatch-throttle-btn" disabled>
+                <span id="throttle-btn-label">ENGAGE DISPATCH THROTTLE</span>
+              </button>
+            </div>
+
+            <!-- Disengage Purge & Clear Actions -->
+            <div class="action-sub-row">
+              <button id="emergency-vent-btn" title="Always Active: Emergency Vent Steam &amp; Disengage Conduit">
+                DISENGAGE / VENT STEAM [ESC]
+              </button>
+              <button id="clear-staged-btn" title="Clear staged coordinate sequence">
+                PURGE STAGED
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Telegraph Transcript & Telemetry Ticker -->
+          <div class="telegraph-ticker-panel schematic-bay">
+            <div class="bay-header">
+              <h2>Telegraph Dispatch Log</h2>
+              <span class="bay-tag">TICKER TRANSCRIPT</span>
+            </div>
+            <div class="ticker-log-box" id="ticker-log-box">
+              <div class="log-entry">
+                <span class="log-time">[1888.08]</span>
+                <span class="log-msg">Terminal VIII-B online. Meridian escapements calibrated to Greenwich prime datum.</span>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- ==================================================================
+           FOOTER SECTION: Corner Display & Model Info
+           ================================================================== -->
+      <footer id="terminal-footer">
+        <div>
+          <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="footer-link">
+            StarlightDaemon
+          </a>
+        </div>
+        <div class="footer-version">
+          <span>v1.0.0 [Aetheric-Dispatch-Core] • Imperial Registry</span>
+        </div>
+      </footer>
+
+      <!-- ==================================================================
+           OPERATOR REFERENCE & MANUAL MODAL
+           ================================================================== -->
+      <div id="manual-modal-backdrop">
+        <div id="manual-modal-window">
+          <div class="modal-header">
+            <h3>OPERATOR'S DISPATCH MANUAL &amp; PATENT REFERENCE</h3>
+            <button id="manual-modal-close-btn" class="modal-close-btn" title="Close Manual">✕</button>
+          </div>
+
+          <div class="modal-nav-tabs">
+            <button class="modal-tab-btn active" data-tab="tab-ops">Operating Procedures</button>
+            <button class="modal-tab-btn" data-tab="tab-escapements">9 Meridian Escapements</button>
+            <button class="modal-tab-btn" data-tab="tab-safety">Safety Interlock Protocol</button>
+            <button class="modal-tab-btn" data-tab="tab-codex">Patent Glyph Codex</button>
+          </div>
+
+          <div class="modal-body-content">
+            <!-- Tab 1: Operating Procedures -->
+            <div class="manual-section active" id="tab-ops">
+              <h4>Standard Operating Procedures: Conduit Dialing &amp; Ignition</h4>
+              <p>Welcome to Terminal No. VIII-B of the Imperial Aetheric Telegraph &amp; Pneumatic Dispatch Registry. Operators are tasked with establishing harmonic conduit linkages across the British Empire and research outposts.</p>
+              <ul>
+                <li><strong>1. Inputting Meridian Coordinates:</strong> Select 7 glyphs sequentially from the 16-Patent Meridian Dialing Array or inject a pre-calibrated conduit from the Pneumatic Routing Ledger.</li>
+                <li><strong>2. Differential Escapement Engagement:</strong> As each glyph is keyed, the differential code-ring advances and the corresponding radial Escapement snaps into alignment with steam-relief pressure stabilization.</li>
+                <li><strong>3. Review &amp; Safety Hold Verification:</strong> Once 7 coordinates are staged, the terminal enters <em>COORDINATES STAGED</em> state. If the Boiler Safety Interlock is ENGAGED, the throttle is mechanically blocked. Disengage the hold to proceed.</li>
+                <li><strong>4. Conduit Ignition:</strong> Depress the <em>ENGAGE DISPATCH THROTTLE</em>. High-voltage galvanic arc excitation initiates a sustained aetheric streamline vortex.</li>
+                <li><strong>5. Emergency Vent / Disengage:</strong> Depress <em>DISENGAGE / VENT STEAM [ESC]</em> at any time to instantly dump manifold steam pressure, extinguish galvanic arcs, and restore idle balance.</li>
+              </ul>
+            </div>
+
+            <!-- Tab 2: 9 Meridian Escapements -->
+            <div class="manual-section" id="tab-escapements">
+              <h4>The 9 Meridian Escapements &amp; Steam-Galvanic Balance</h4>
+              <p>The circular instrument display utilizes 9 discrete radial escapement valves arranged radially at 40-degree intervals. Each escapement serves as a harmonic balancing node:</p>
+              <ul>
+                <li><strong>Escapement I (0° Zenith):</strong> Centrifugal Sol-Governor - Master rotational timing datum.</li>
+                <li><strong>Escapement II (40°):</strong> Aetheric Flux Gland - Regulates micro-Torr aetheric vacuum density.</li>
+                <li><strong>Escapement III (80°):</strong> Harmonic Waveguide Valve - Synchronizes acoustic resonance to 60.00 Hz.</li>
+                <li><strong>Escapement IV (120°):</strong> Galvanic Induction Stator - Delivers 2,400V - 6,000V excitation tension.</li>
+                <li><strong>Escapement V (160°):</strong> Torricellian Baro-Needle - Monitors barometric column pressure.</li>
+                <li><strong>Escapement VI (200°):</strong> Pneumatic Carrier Gate - Diverts high-pressure carrier capsule bore.</li>
+                <li><strong>Escapement VII (240°):</strong> Leyden Condenser Bank - Balances electrostatic charge differential.</li>
+                <li><strong>Escapement VIII (280°):</strong> Spark Gap Exciter - Triggers high-frequency arc breakdown.</li>
+                <li><strong>Escapement IX (320°):</strong> Meridian Gimbal Caliper - Stabilizes triaxial planetary datum.</li>
+              </ul>
+            </div>
+
+            <!-- Tab 3: Safety Interlock Protocol -->
+            <div class="manual-section" id="tab-safety">
+              <h4>Boiler Safety Interlock &amp; Overpressure Protocols</h4>
+              <p>Under Admiralty Directive 44-B, all high-tension aetheric ignitions require Chief Dispatcher review to prevent explosive boiler manifold ruptures and aether back-drafts.</p>
+              <ul>
+                <li><strong>Safety Interlock Switch:</strong> When engaged (Crimson Warning), the Primary Dispatch Throttle cannot be depressed, preventing premature conduit ignition while coordinates are verified.</li>
+                <li><strong>Manual Hold Release:</strong> Click the interlock switch to toggle between <em>HOLD: ENGAGED</em> and <em>HOLD: DISENGAGED (CLEAR)</em>.</li>
+                <li><strong>Always-Reachable Disengage:</strong> The Emergency Vent button remains active across all states, guaranteeing fail-safe decompression.</li>
+              </ul>
+            </div>
+
+            <!-- Tab 4: Patent Glyph Codex -->
+            <div class="manual-section" id="tab-codex">
+              <h4>Imperial Patent Registry: 16 Meridian Glyphs</h4>
+              <p>Each glyph represents an original patent drafting schematic calibrated for harmonic resonance:</p>
+              <div class="patent-glyph-grid" id="patent-codex-grid">
+                <!-- Dynamically populated via JS -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

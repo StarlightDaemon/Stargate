@@ -1,0 +1,1279 @@
+/* ==========================================================================
+   HM IMPERIAL AETHERIC TELEGRAPH & PNEUMATIC DISPATCH REGISTRY
+   Technical Patent Schematic & Glowing Vector Instrument Panel
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600;800&display=swap');
+
+:root {
+  /* Dynamic Unitless Viewport Scaling */
+  --ui-scale: 1;
+
+  /* Victorian Patent Blueprint & Luminescent Vector Palette */
+  --bg-slate-deep: #0a0d13;
+  --bg-slate-panel: #10151f;
+  --bg-slate-inset: #07090e;
+  --border-slate: #243042;
+  --border-slate-bright: #3b4e6b;
+
+  /* Warm Luminescent Amber / Copper / Brass Schematic Vectors */
+  --copper-glow: #e28743;
+  --copper-dim: #79441c;
+  --amber-bright: #ffc107;
+  --amber-light: #ffe082;
+  --brass-vector: #e6a23c;
+  --brass-dark: #4a3412;
+  --sepia-text: #e8d8b8;
+  --sepia-dim: #9c8e76;
+  --sepia-muted: #5e5443;
+
+  /* Aetheric Resonance & Interlock Accents */
+  --aether-cyan: #4ecdc4;
+  --aether-glow: rgba(78, 205, 196, 0.6);
+  --warning-crimson: #e63946;
+  --warning-glow: rgba(230, 57, 70, 0.7);
+  --success-emerald: #2ec4b6;
+
+  /* Typography */
+  --font-serif: 'Cinzel', serif;
+  --font-mono: 'Courier Prime', monospace;
+  --font-tech: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-slate-deep);
+  color: var(--sepia-text);
+  font-family: var(--font-mono);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Base Canvas & CRT / Drafting Grid Overlay */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: 
+    linear-gradient(rgba(226, 135, 67, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226, 135, 67, 0.03) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, rgba(226, 135, 67, 0.05) 0%, transparent 80%);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+body::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.7;
+}
+
+/* Master Fixed Scaler Container */
+#viewport-frame {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#app-scaler {
+  width: 1920px;
+  height: 1080px;
+  min-width: 1920px;
+  min-height: 1080px;
+  max-width: 1920px;
+  max-height: 1080px;
+  position: relative;
+  transform-origin: center center;
+  transform: scale(var(--ui-scale));
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-slate-panel);
+  border: 2px solid var(--border-slate-bright);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.85), inset 0 0 30px rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+/* ==========================================================================
+   HEADER SECTION: Imperial Institution & Telegraph Banner
+   ========================================================================== */
+#terminal-header {
+  height: 72px;
+  border-bottom: 2px solid var(--border-slate-bright);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: linear-gradient(180deg, rgba(26, 35, 48, 0.9) 0%, rgba(16, 21, 31, 0.95) 100%);
+  position: relative;
+}
+
+#terminal-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--copper-glow), transparent);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.crest-icon {
+  width: 44px;
+  height: 44px;
+  color: var(--amber-bright);
+  filter: drop-shadow(0 0 6px rgba(255, 193, 7, 0.5));
+}
+
+.header-title-group h1 {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--amber-bright);
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+  line-height: 1.2;
+}
+
+.header-title-group .sub-title {
+  font-family: var(--font-tech);
+  font-size: 11px;
+  color: var(--sepia-dim);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.header-center-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  background: var(--bg-slate-inset);
+  padding: 6px 20px;
+  border: 1px solid var(--border-slate);
+  border-radius: 4px;
+}
+
+.telemetry-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.telemetry-label {
+  font-size: 9px;
+  font-family: var(--font-tech);
+  color: var(--sepia-muted);
+  letter-spacing: 1px;
+}
+
+.telemetry-value {
+  font-size: 13px;
+  font-family: var(--font-tech);
+  font-weight: 600;
+  color: var(--copper-glow);
+  letter-spacing: 1px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hud-btn {
+  background: var(--bg-slate-inset);
+  border: 1px solid var(--copper-dim);
+  color: var(--sepia-text);
+  font-family: var(--font-tech);
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 8px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.hud-btn:hover {
+  background: rgba(226, 135, 67, 0.15);
+  border-color: var(--copper-glow);
+  color: var(--amber-bright);
+  box-shadow: 0 0 10px rgba(226, 135, 67, 0.3);
+}
+
+.manual-btn-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--amber-bright);
+  border: 1.5px solid var(--brass-vector);
+}
+
+/* ==========================================================================
+   MAIN INSTRUMENT DECK (3-Bay Grid Layout)
+   ========================================================================== */
+#instrument-deck {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 460px 1fr 520px;
+  gap: 16px;
+  padding: 16px 20px;
+  height: calc(1080px - 72px - 36px);
+  overflow: hidden;
+}
+
+/* General Panel Styling */
+.schematic-bay {
+  background: rgba(16, 21, 31, 0.7);
+  border: 1px solid var(--border-slate);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.bay-header {
+  height: 36px;
+  background: var(--bg-slate-inset);
+  border-bottom: 1px solid var(--border-slate);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+}
+
+.bay-header h2 {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brass-vector);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.bay-tag {
+  font-family: var(--font-tech);
+  font-size: 10px;
+  color: var(--sepia-dim);
+  border: 1px solid var(--border-slate);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   LEFT BAY: Pneumatic Ledger & Auxiliary Gauges
+   ========================================================================== */
+#left-bay {
+  display: grid;
+  grid-template-rows: 1fr 220px;
+  gap: 14px;
+}
+
+.ledger-container {
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 13, 19, 0.85);
+  border: 1px solid var(--border-slate);
+}
+
+.tier-tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border-slate);
+  background: var(--bg-slate-inset);
+}
+
+.tier-tab {
+  flex: 1;
+  padding: 8px 4px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border-slate);
+  color: var(--sepia-dim);
+  font-family: var(--font-tech);
+  font-size: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.tier-tab:last-child {
+  border-right: none;
+}
+
+.tier-tab.active {
+  background: rgba(226, 135, 67, 0.12);
+  color: var(--amber-bright);
+  font-weight: 700;
+  border-bottom: 2px solid var(--amber-bright);
+}
+
+.ledger-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ledger-scroll-area::-webkit-scrollbar {
+  width: 5px;
+}
+.ledger-scroll-area::-webkit-scrollbar-thumb {
+  background: var(--border-slate-bright);
+}
+
+.quick-dial-card {
+  background: var(--bg-slate-panel);
+  border: 1px solid var(--border-slate);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.quick-dial-card:hover {
+  border-color: var(--copper-glow);
+  box-shadow: 0 0 12px rgba(226, 135, 67, 0.25);
+  transform: translateX(2px);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.route-badge {
+  font-family: var(--font-tech);
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-tier-1 {
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px solid var(--amber-bright);
+  color: var(--amber-bright);
+}
+
+.badge-tier-2 {
+  background: rgba(78, 205, 196, 0.15);
+  border: 1px solid var(--aether-cyan);
+  color: var(--aether-cyan);
+}
+
+.card-name {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sepia-text);
+}
+
+.card-jurisdiction {
+  font-size: 10px;
+  color: var(--sepia-dim);
+}
+
+.card-specs {
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-tech);
+  font-size: 10px;
+  color: var(--copper-glow);
+  background: var(--bg-slate-inset);
+  padding: 3px 6px;
+  border-radius: 2px;
+}
+
+.card-glyphs-preview {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.mini-glyph-pill {
+  font-family: var(--font-tech);
+  font-size: 8px;
+  color: var(--sepia-dim);
+  background: var(--bg-slate-inset);
+  border: 1px solid var(--border-slate);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.inject-btn {
+  background: rgba(226, 135, 67, 0.15);
+  border: 1px solid var(--copper-dim);
+  color: var(--amber-bright);
+  font-family: var(--font-tech);
+  font-size: 10px;
+  padding: 4px 8px;
+  cursor: pointer;
+  margin-top: 4px;
+  align-self: flex-end;
+  transition: all 0.2s;
+}
+
+.inject-btn:hover {
+  background: var(--copper-glow);
+  color: #000;
+  font-weight: 700;
+}
+
+/* Auxiliary Gauge Cluster */
+.gauge-cluster-container {
+  background: var(--bg-slate-inset);
+  border: 1px solid var(--border-slate);
+  display: flex;
+  flex-direction: column;
+}
+
+.gauges-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 100px 1fr 120px;
+  padding: 10px;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Barometric Mercury Column */
+.mercury-tube-gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.tube-housing {
+  width: 24px;
+  height: 120px;
+  border: 2px solid var(--border-slate-bright);
+  border-radius: 12px;
+  background: #05070a;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 6px #000;
+}
+
+.mercury-level {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 45%;
+  background: linear-gradient(90deg, #b0bec5 0%, #eceff1 50%, #90a4ae 100%);
+  box-shadow: 0 0 10px rgba(236, 239, 241, 0.8);
+  transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tube-ticks {
+  position: absolute;
+  top: 0; right: 0; width: 6px; height: 100%;
+  background: repeating-linear-gradient(0deg, var(--sepia-dim), var(--sepia-dim) 1px, transparent 1px, transparent 8px);
+}
+
+.gauge-caption {
+  font-family: var(--font-tech);
+  font-size: 9px;
+  color: var(--sepia-dim);
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* Galvanic Dial Gauge */
+.dial-gauge-svg-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dial-gauge-svg-wrap svg {
+  width: 120px;
+  height: 90px;
+}
+
+/* Escapement Hertz Synchronizer */
+.hertz-sync-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-slate);
+  background: var(--bg-slate-panel);
+  height: 100%;
+  padding: 8px;
+}
+
+.hertz-digits {
+  font-family: var(--font-tech);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--amber-bright);
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
+}
+
+/* ==========================================================================
+   CENTER BAY: Multi-Annular Circular Instrument Display (The Ring)
+   ========================================================================== */
+#center-bay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: radial-gradient(circle at 50% 50%, rgba(26, 35, 48, 0.8) 0%, rgba(10, 13, 19, 0.95) 75%);
+  border: 1px solid var(--border-slate-bright);
+  position: relative;
+}
+
+.staged-sequence-bar {
+  width: 100%;
+  height: 48px;
+  background: var(--bg-slate-inset);
+  border: 1px solid var(--border-slate);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+
+.staged-label {
+  font-family: var(--font-tech);
+  font-size: 11px;
+  color: var(--sepia-dim);
+  letter-spacing: 1px;
+}
+
+.staged-slots {
+  display: flex;
+  gap: 8px;
+}
+
+.sequence-slot {
+  width: 44px;
+  height: 36px;
+  border: 1px solid var(--border-slate);
+  background: var(--bg-slate-panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-tech);
+  font-size: 10px;
+  color: var(--sepia-muted);
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.sequence-slot.active {
+  border-color: var(--amber-bright);
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+}
+
+.sequence-slot.locked {
+  border-color: var(--copper-glow);
+  background: rgba(226, 135, 67, 0.18);
+  color: var(--amber-bright);
+  box-shadow: 0 0 8px rgba(226, 135, 67, 0.5);
+  font-weight: 700;
+}
+
+.sequence-slot.locked svg {
+  width: 24px;
+  height: 24px;
+  color: var(--amber-bright);
+}
+
+/* Master Schematic Ring Canvas / SVG Display */
+#ring-stage-container {
+  width: 640px;
+  height: 640px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#ring-svg-schematic {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Ring Concentric Elements */
+.compass-tick-track {
+  stroke: var(--border-slate-bright);
+  stroke-width: 1;
+  fill: none;
+}
+
+.rotating-differential-ring {
+  transform-origin: 320px 320px;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 9 Meridian Escapements */
+.escapement-node-group {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.escapement-needle {
+  transform-origin: 320px 320px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.escapement-lamp {
+  transition: fill 0.3s, filter 0.3s;
+}
+
+.escapement-lamp.active-lamp {
+  fill: var(--amber-bright);
+  filter: drop-shadow(0 0 6px var(--amber-bright));
+}
+
+.escapement-lamp.locked-lamp {
+  fill: var(--copper-glow);
+  filter: drop-shadow(0 0 10px var(--copper-glow));
+}
+
+/* Central Aetheric Transit Conduit (Vortex / Streamlines) */
+#vortex-canvas {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Centrifugal Flyball Governor Schematic inside ring center */
+.central-governor-assembly {
+  transform-origin: 320px 320px;
+}
+
+/* Status Banner under Ring */
+.ring-bottom-status {
+  width: 100%;
+  height: 38px;
+  background: var(--bg-slate-inset);
+  border: 1px solid var(--border-slate);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-family: var(--font-tech);
+  font-size: 11px;
+}
+
+.status-indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sepia-muted);
+  box-shadow: none;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.status-indicator-dot.idle {
+  background: var(--copper-glow);
+  box-shadow: 0 0 6px var(--copper-glow);
+}
+
+.status-indicator-dot.dialing {
+  background: var(--amber-bright);
+  box-shadow: 0 0 10px var(--amber-bright);
+  animation: pulse-dot 1s infinite alternate;
+}
+
+.status-indicator-dot.active {
+  background: var(--aether-cyan);
+  box-shadow: 0 0 14px var(--aether-cyan);
+  animation: pulse-dot 0.5s infinite alternate;
+}
+
+.status-indicator-dot.locked-hold {
+  background: var(--warning-crimson);
+  box-shadow: 0 0 12px var(--warning-crimson);
+  animation: blink-crimson 0.6s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+@keyframes blink-crimson {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* ==========================================================================
+   RIGHT BAY: Control Clusters (Dialing Array & Throttle Manifold)
+   ========================================================================== */
+#right-bay {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 12px;
+  height: 100%;
+}
+
+/* Control Cluster 1: 16-Glyph Meridian Dialing Array */
+.dialing-array-panel {
+  background: rgba(10, 13, 19, 0.85);
+  border: 1px solid var(--border-slate);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.glyph-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.glyph-button {
+  height: 58px;
+  background: var(--bg-slate-panel);
+  border: 1px solid var(--border-slate);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 3px;
+  transition: all 0.2s ease;
+  position: relative;
+  color: var(--sepia-text);
+}
+
+.glyph-button:hover {
+  border-color: var(--amber-bright);
+  background: rgba(255, 193, 7, 0.08);
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+  transform: translateY(-1px);
+}
+
+.glyph-button.selected {
+  border-color: var(--copper-glow);
+  background: rgba(226, 135, 67, 0.2);
+  box-shadow: 0 0 12px rgba(226, 135, 67, 0.5);
+  color: var(--amber-bright);
+}
+
+.glyph-button.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.glyph-button svg {
+  width: 28px;
+  height: 28px;
+  color: inherit;
+}
+
+.glyph-code-tag {
+  font-family: var(--font-tech);
+  font-size: 8px;
+  color: var(--sepia-dim);
+  margin-top: 1px;
+}
+
+.glyph-name-label {
+  font-family: var(--font-tech);
+  font-size: 7px;
+  color: var(--sepia-muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 95px;
+}
+
+/* Control Cluster 2: Dispatch Throttle & Interlock Manifold */
+.throttle-manifold-panel {
+  background: var(--bg-slate-inset);
+  border: 1px solid var(--border-slate);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.interlock-control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-slate-panel);
+  border: 1px solid var(--border-slate);
+  padding: 8px 12px;
+}
+
+.interlock-label-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.interlock-title {
+  font-family: var(--font-serif);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sepia-text);
+  letter-spacing: 1px;
+}
+
+.interlock-desc {
+  font-family: var(--font-tech);
+  font-size: 9px;
+  color: var(--sepia-dim);
+}
+
+/* Heavy Mechanical Safety Hold Switch */
+.switch-toggle-housing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.safety-switch-btn {
+  padding: 6px 14px;
+  font-family: var(--font-tech);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border: 1px solid var(--warning-crimson);
+  background: rgba(230, 57, 70, 0.15);
+  color: var(--warning-crimson);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 2px;
+}
+
+.safety-switch-btn.disengaged {
+  border-color: var(--success-emerald);
+  background: rgba(46, 196, 182, 0.15);
+  color: var(--success-emerald);
+}
+
+.safety-switch-btn:hover {
+  filter: brightness(1.2);
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* Primary Dispatch Throttle Button */
+.throttle-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#dispatch-throttle-btn {
+  height: 56px;
+  background: linear-gradient(180deg, #2a1f10 0%, #150f08 100%);
+  border: 2px solid var(--copper-glow);
+  color: var(--amber-bright);
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 0 15px rgba(226, 135, 67, 0.3), inset 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+#dispatch-throttle-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #44321b 0%, #20170c 100%);
+  border-color: var(--amber-bright);
+  box-shadow: 0 0 25px rgba(255, 193, 7, 0.6);
+  transform: translateY(-1px);
+}
+
+#dispatch-throttle-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+#dispatch-throttle-btn.blocked-hold {
+  border-color: var(--warning-crimson);
+  color: var(--warning-crimson);
+  background: linear-gradient(180deg, #2b1114 0%, #170709 100%);
+  box-shadow: 0 0 20px rgba(230, 57, 70, 0.5);
+  animation: pulse-hold-btn 1s infinite alternate;
+}
+
+#dispatch-throttle-btn.conduit-active {
+  border-color: var(--aether-cyan);
+  color: var(--aether-cyan);
+  background: linear-gradient(180deg, #0f2b2b 0%, #071717 100%);
+  box-shadow: 0 0 25px var(--aether-glow);
+}
+
+@keyframes pulse-hold-btn {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; box-shadow: 0 0 30px rgba(230, 57, 70, 0.8); }
+}
+
+/* Secondary Action Row: Disengage Purge & Reset */
+.action-sub-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 8px;
+}
+
+#emergency-vent-btn {
+  height: 42px;
+  background: rgba(230, 57, 70, 0.12);
+  border: 1.5px solid var(--warning-crimson);
+  color: #ff8b94;
+  font-family: var(--font-tech);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+#emergency-vent-btn:hover {
+  background: var(--warning-crimson);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(230, 57, 70, 0.7);
+}
+
+#clear-staged-btn {
+  height: 42px;
+  background: var(--bg-slate-panel);
+  border: 1px solid var(--border-slate);
+  color: var(--sepia-dim);
+  font-family: var(--font-tech);
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#clear-staged-btn:hover {
+  border-color: var(--copper-glow);
+  color: var(--sepia-text);
+}
+
+/* Active Telemetry & Telegraph Ledger Ticker */
+.telegraph-ticker-panel {
+  background: var(--bg-slate-inset);
+  border: 1px solid var(--border-slate);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ticker-log-box {
+  flex: 1;
+  padding: 8px 12px;
+  overflow-y: auto;
+  font-family: var(--font-tech);
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: var(--sepia-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ticker-log-box::-webkit-scrollbar {
+  width: 4px;
+}
+.ticker-log-box::-webkit-scrollbar-thumb {
+  background: var(--border-slate-bright);
+}
+
+.log-entry {
+  display: flex;
+  gap: 8px;
+}
+
+.log-time {
+  color: var(--copper-dim);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.log-msg {
+  color: var(--sepia-text);
+}
+
+.log-msg.highlight {
+  color: var(--amber-bright);
+  font-weight: 700;
+}
+
+.log-msg.warning {
+  color: var(--warning-crimson);
+  font-weight: 700;
+}
+
+.log-msg.success {
+  color: var(--aether-cyan);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   FOOTER SECTION: Corner Labels & Metadata
+   ========================================================================== */
+#terminal-footer {
+  height: 36px;
+  border-top: 1px solid var(--border-slate);
+  background: var(--bg-slate-inset);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  font-family: var(--font-tech);
+  font-size: 10px;
+  color: var(--sepia-dim);
+}
+
+.footer-link {
+  color: var(--copper-glow);
+  text-decoration: none;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+
+.footer-link:hover {
+  color: var(--amber-bright);
+  text-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
+}
+
+.footer-version {
+  letter-spacing: 1.5px;
+}
+
+/* ==========================================================================
+   OPERATOR REFERENCE & MANUAL MODAL
+   ========================================================================== */
+#manual-modal-backdrop {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(5, 8, 12, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+#manual-modal-backdrop.open {
+  display: flex;
+}
+
+#manual-modal-window {
+  width: 900px;
+  max-height: 780px;
+  background: var(--bg-slate-panel);
+  border: 2px solid var(--border-slate-bright);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  height: 52px;
+  background: var(--bg-slate-inset);
+  border-bottom: 1px solid var(--border-slate);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.modal-header h3 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--amber-bright);
+  letter-spacing: 1.5px;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: 1px solid var(--border-slate);
+  color: var(--sepia-dim);
+  font-family: var(--font-tech);
+  font-size: 14px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.modal-close-btn:hover {
+  border-color: var(--warning-crimson);
+  color: var(--warning-crimson);
+}
+
+.modal-nav-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-slate);
+  background: var(--bg-slate-inset);
+}
+
+.modal-tab-btn {
+  flex: 1;
+  padding: 10px 8px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border-slate);
+  color: var(--sepia-dim);
+  font-family: var(--font-tech);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-tab-btn.active {
+  background: rgba(226, 135, 67, 0.15);
+  color: var(--amber-bright);
+  font-weight: 700;
+  border-bottom: 2px solid var(--amber-bright);
+}
+
+.modal-tab-btn:last-child {
+  border-right: none;
+}
+
+.modal-body-content {
+  padding: 24px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--sepia-text);
+  max-height: 600px;
+}
+
+.manual-section {
+  display: none;
+}
+
+.manual-section.active {
+  display: block;
+}
+
+.manual-section h4 {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  color: var(--brass-vector);
+  margin-bottom: 12px;
+  border-bottom: 1px dashed var(--border-slate);
+  padding-bottom: 4px;
+}
+
+.manual-section p {
+  margin-bottom: 12px;
+}
+
+.manual-section ul {
+  margin-left: 20px;
+  margin-bottom: 12px;
+}
+
+.manual-section li {
+  margin-bottom: 6px;
+}
+
+.patent-glyph-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.patent-glyph-item {
+  display: flex;
+  gap: 12px;
+  background: var(--bg-slate-inset);
+  border: 1px solid var(--border-slate);
+  padding: 8px;
+}
+
+.patent-glyph-item svg {
+  width: 48px;
+  height: 48px;
+  color: var(--amber-bright);
+  flex-shrink: 0;
+}
+
+.patent-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.patent-name {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sepia-text);
+}
+
+.patent-code {
+  font-family: var(--font-tech);
+  font-size: 9px;
+  color: var(--copper-glow);
+}
+
+.patent-desc {
+  font-size: 10px;
+  color: var(--sepia-dim);
+  margin-top: 2px;
+}

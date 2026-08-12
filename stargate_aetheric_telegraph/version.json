@@ -1,0 +1,7 @@
+{
+  "name": "stargate-aetheric-telegraph",
+  "version": "1.0.0",
+  "description": "Imperial Aetheric Telegraph & Pneumatic Portal Dispatch Terminal",
+  "model": "Gemini 3.6 Flash (High)",
+  "private": true
+}
