@@ -2,6 +2,8 @@
 
 An interactive Victorian technical drafting instrument panel and glowing vector schematic portal ring dispatch terminal.
 
+> **Status Note:** Core operational loop (manual coordinate dialing, meridian escapement locking, safety hold interlock, conduit ignition/vortex, and emergency vent disengage) has been verified and confirmed functional through direct operator testing. Minor technical rough edges remain unaddressed as this build is closed.
+
 ## Architecture
 - **Vector Patent Schematics:** Glowing vector linework, patent annotations, and annular vernier scales on a dark drafting board plane.
 - **The Ring as a Functioning Instrument:** Multi-annular differential chronograph with 9 radial Escapements and central aetheric singularity.
