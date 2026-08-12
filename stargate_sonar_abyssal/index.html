@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abyssal Sonar Command // Stargate Dialing Console</title>
+  <meta name="description" content="Deep-sea hydro-acoustic sonar command terminal for quantum bathymetric stargate routing.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="viewport-root">
+    <!-- Top Telemetry Header -->
+    <header class="console-header">
+      <div class="header-left">
+        <div class="radar-badge">SONAR-CMD</div>
+        <div class="header-title-group">
+          <h1>ABYSSAL HYDRO-ACOUSTIC CONSOLE</h1>
+          <span class="sub-title">QUANTUM BATHYMETRIC TRANSDUCER ARRAY // SGC-NAUT-01</span>
+        </div>
+      </div>
+
+      <div class="telemetry-bar">
+        <div class="telem-item">
+          <span class="telem-label">DEPTH SOUNDING</span>
+          <span class="telem-val" id="tele-depth">10,928 M</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">HYDROSTATIC P</span>
+          <span class="telem-val" id="tele-pressure">1,086.4 BAR</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">CARRIER FREQ</span>
+          <span class="telem-val" id="tele-freq">37.50 kHz</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">ACOUSTIC STATE</span>
+          <span class="telem-val status-idle" id="tele-state">PASSIVE SWEEP</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button id="btn-help" class="help-btn" aria-label="Operator Reference Manual" title="Operator Reference Manual">?</button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="console-workspace">
+      <!-- Left Stage: Sonar Sweep Scope & Transducer Ring -->
+      <section class="sonar-stage-container">
+        <div class="sonar-scope-wrapper" id="sonar-wrapper">
+          <!-- Bearing Compass Rose Ring -->
+          <div class="bearing-rose" id="bearing-rose"></div>
+
+          <!-- Canvas for real-time sonar sweep, bathymetry vectors, echo returns, cavitation portal -->
+          <canvas id="sonar-canvas" width="680" height="680"></canvas>
+
+          <!-- 8 Hydrophone Transducers (Lock Points) rendered around the ring -->
+          <div class="transducer-ring" id="transducer-ring">
+            <!-- Hydrophones 000° to 315° injected via JS -->
+          </div>
+
+          <!-- Central Aperture Status Overlay -->
+          <div class="aperture-core" id="aperture-core">
+            <div class="core-reticle"></div>
+            <div class="core-status" id="aperture-status">TRANSDUCER IDLE</div>
+          </div>
+        </div>
+
+        <!-- Address Sequence Indicator Bar -->
+        <div class="address-strip">
+          <div class="strip-header">
+            <span class="strip-title">ACOUSTIC SEQUENCE BUFFER</span>
+            <span class="strip-counter" id="address-counter">0 / 6 LOCKED</span>
+          </div>
+          <div class="glyph-slots" id="glyph-slots">
+            <div class="slot" data-index="0"><span class="slot-idx">1</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="1"><span class="slot-idx">2</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="2"><span class="slot-idx">3</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="3"><span class="slot-idx">4</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="4"><span class="slot-idx">5</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="5"><span class="slot-idx">6</span><span class="slot-val">---</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Control Stage: Dual Named Clusters -->
+      <section class="controls-container">
+        <!-- Cluster 1: Acoustic Frequency Selector (Glyph Input Matrix) -->
+        <div class="control-cluster" id="cluster-frequency-selector">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 01</span>
+            <h2>ACOUSTIC FREQUENCY SELECTOR</h2>
+          </div>
+          <div class="cluster-desc">Select 6 acoustic frequency signatures to establish bathymetric jump coordinates.</div>
+          
+          <div class="glyph-grid" id="glyph-grid">
+            <!-- 8 Hydro-Acoustic Frequency Glyphs -->
+            <button class="glyph-btn" data-glyph="ALPHA-TRENCH" data-symbol="𝛂-TR">
+              <span class="glyph-icon">⎈</span>
+              <span class="glyph-label">ALPHA TRENCH</span>
+              <span class="glyph-freq">12.4 kHz</span>
+            </button>
+            <button class="glyph-btn" data-glyph="HADAL-VORTEX" data-symbol="⧖-VX">
+              <span class="glyph-icon">⧖</span>
+              <span class="glyph-label">HADAL VORTEX</span>
+              <span class="glyph-freq">18.9 kHz</span>
+            </button>
+            <button class="glyph-btn" data-glyph="BATHY-RIDGE" data-symbol="⍡-RD">
+              <span class="glyph-icon">⍡</span>
+              <span class="glyph-label">BATHY RIDGE</span>
+              <span class="glyph-freq">24.2 kHz</span>
+            </button>
+            <button class="glyph-btn" data-glyph="THERMOCLINE" data-symbol="≋-TC">
+              <span class="glyph-icon">≋</span>
+              <span class="glyph-label">THERMOCLINE</span>
+              <span class="glyph-freq">29.7 kHz</span>
+            </button>
+            <button class="glyph-btn" data-glyph="PELAGIC-SURGE" data-symbol="⌖-PS">
+              <span class="glyph-icon">⌖</span>
+              <span class="glyph-label">PELAGIC SURGE</span>
+              <span class="glyph-freq">33.1 kHz</span>
+            </button>
+            <button class="glyph-btn" data-glyph="BENTHIC-CHASM" data-symbol="⍚-BC">
+              <span class="glyph-icon">⍚</span>
+              <span class="glyph-label">BENTHIC CHASM</span>
+              <span class="glyph-freq">38.6 kHz</span>
+            </button>
+            <button class="glyph-btn" data-glyph="ABYSSAL-VENT" data-symbol="⌬-AV">
+              <span class="glyph-icon">⌬</span>
+              <span class="glyph-label">ABYSSAL VENT</span>
+              <span class="glyph-freq">42.0 kHz</span>
+            </button>
+            <button class="glyph-btn" data-glyph="OCEANIC-TRENCH" data-symbol="⟐-OT">
+              <span class="glyph-icon">⟐</span>
+              <span class="glyph-label">OCEANIC TRENCH</span>
+              <span class="glyph-freq">47.8 kHz</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cluster 2: Hydrophone Transducer Control (Activation, Disengage, Interlock, Presets) -->
+        <div class="control-cluster" id="cluster-transducer-control">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 02</span>
+            <h2>HYDROPHONE TRANSDUCER CONTROL</h2>
+          </div>
+
+          <!-- Primary Operational Trigger Row -->
+          <div class="action-grid">
+            <button id="btn-activate" class="action-btn btn-engage" disabled>
+              <div class="btn-pulse-glow"></div>
+              <span class="btn-icon">⚡</span>
+              <span class="btn-text">EMIT ABYSSAL RESONANCE</span>
+              <span class="btn-subtext">ENGAGE CAVITATION CONDUIT</span>
+            </button>
+
+            <button id="btn-disengage" class="action-btn btn-abort">
+              <span class="btn-icon">⏹</span>
+              <span class="btn-text">ABORT / DECAVITATE</span>
+              <span class="btn-subtext">PURGE HYDROPHONES</span>
+            </button>
+          </div>
+
+          <!-- Review / Safety Hold Subsystem -->
+          <div class="safety-hold-panel" id="safety-panel">
+            <div class="safety-info">
+              <div class="safety-title">CAVITATION SAFETY INTERLOCK</div>
+              <div class="safety-desc">Prevents acoustic overpressure during conduit formation. Defaults to RELEASED.</div>
+            </div>
+            <label class="switch-control" for="safety-hold-toggle">
+              <input type="checkbox" id="safety-hold-toggle">
+              <span class="slider"></span>
+              <span class="switch-label" id="safety-toggle-status">RELEASED</span>
+            </label>
+          </div>
+
+          <!-- Quick-Dial Acoustic Preset Directory -->
+          <div class="presets-section">
+            <div class="presets-header">
+              <span class="presets-title">PRESET ACOUSTIC CONTACTS</span>
+              <span class="presets-hint">CLICK TO LOAD SIGNATURE</span>
+            </div>
+
+            <!-- Tier 1: Class-A Sovereign Trenches -->
+            <div class="preset-tier">
+              <div class="tier-label">TIER I // SOVEREIGN TRENCHES (DEEP HADAL)</div>
+              <div class="tier-grid">
+                <button class="preset-btn tier-1" data-preset="mariana">
+                  <span class="preset-name">MARIANA CHASM</span>
+                  <span class="preset-depth">10,994m</span>
+                </button>
+                <button class="preset-btn tier-1" data-preset="challenger">
+                  <span class="preset-name">CHALLENGER DEEP</span>
+                  <span class="preset-depth">10,928m</span>
+                </button>
+                <button class="preset-btn tier-1" data-preset="puerto-rico">
+                  <span class="preset-name">PUERTO RICO ABYSS</span>
+                  <span class="preset-depth">8,376m</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tier 2: Class-B Subsea Rifts -->
+            <div class="preset-tier">
+              <div class="tier-label">TIER II // SUBSEA RIFTS &amp; TECTONICS</div>
+              <div class="tier-grid">
+                <button class="preset-btn tier-2" data-preset="kermadec">
+                  <span class="preset-name">KERMADEC RIFT</span>
+                  <span class="preset-depth">10,047m</span>
+                </button>
+                <button class="preset-btn tier-2" data-preset="kuril">
+                  <span class="preset-name">KURIL-KAMCHATKA</span>
+                  <span class="preset-depth">9,603m</span>
+                </button>
+                <button class="preset-btn tier-2" data-preset="java">
+                  <span class="preset-name">JAVA SUBDUCTION</span>
+                  <span class="preset-depth">7,290m</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Interlock Warning Banner -->
+    <div class="interlock-banner" id="interlock-banner">
+      <div class="banner-icon">⚠️</div>
+      <div class="banner-text">
+        <strong>INTERLOCK ENGAGED: CAVITATION SAFETY ACTIVE</strong>
+        <span>Release safety switch in Cluster 02 before initiating acoustic resonance.</span>
+      </div>
+      <button class="banner-dismiss" id="banner-dismiss">DISMISS</button>
+    </div>
+
+    <!-- Operator Reference Modal -->
+    <div class="modal-overlay" id="help-modal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-tag">STANDARD OPERATING PROCEDURE</span>
+            <h2>ABYSSAL SONAR COMMAND MANUAL (SGC-NAUT-01)</h2>
+          </div>
+          <button class="modal-close" id="btn-close-modal" aria-label="Close modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="manual-section">
+            <h3>1. ACOUSTIC DIALING OVERVIEW</h3>
+            <p>The Abyssal Sonar Console routes quantum bathymetric conduits by tuning 8 circular hydrophone transducers stationed along the perimeter (000° to 315°). Locking 6 acoustic frequency signatures prepares the conduit.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>2. LOCKING &amp; ACTIVATION PROTOCOL</h3>
+            <p><strong>Crucial Rule:</strong> Selecting the 6th signature enters a <em>PENDING READY</em> state. The gate will <strong>NEVER auto-fire</strong> upon the 6th lock. The operator must deliberately press the illuminated <strong>EMIT ABYSSAL RESONANCE</strong> control to form the cavitation conduit.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>3. DISENGAGE &amp; ABORT CONTROLS</h3>
+            <p>The <strong>ABORT / DECAVITATE</strong> control is always active and reachable at any point during calibration or active wormhole transit. Pressing it instantly collapses the acoustic conduit and resets the hydrophone array.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>4. CAVITATION SAFETY HOLD</h3>
+            <p>Defaulted to <strong>RELEASED</strong>. When toggled ON, acoustic emission is physically inhibited to prevent transducer cavitation fatigue. Any attempt to engage with the safety on will trigger an audible claxon and visual interlock banner.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Footer Bar -->
+    <footer class="console-footer">
+      <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="daemon-link">
+          <span class="daemon-icon">⎈</span>
+          <span>StarlightDaemon</span>
+        </a>
+      </div>
+      <div class="footer-center">
+        <span class="status-dot"></span>
+        <span id="footer-status-text">HYDROPHONE ARRAY ONLINE // SENSORS NOMINAL</span>
+      </div>
+      <div class="footer-right">
+        <span class="version-tag">v1.0.0 // SUB-SONAR-CMD</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

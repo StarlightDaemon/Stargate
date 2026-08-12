@@ -1,0 +1,11 @@
+{
+  "name": "stargate_sonar_abyssal",
+  "version": "1.0.0",
+  "description": "Deep-Sea Nautical Sonar Command Console Stargate Interface",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test_build.js"
+  },
+  "model": "Gemini 3.6 Flash (high reasoning)"
+}
