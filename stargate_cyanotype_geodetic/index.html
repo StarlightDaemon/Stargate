@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vance & Sterling Geodetic Survey Bureau · Plate IV-B: Resonant Toroid Apparatus</title>
+  <meta name="description" content="Plate No. IV-B: Resonant Toroid Apparatus (Azimuth Transit Conduit) - Vance & Sterling Geodetic Survey Bureau, Imperial Draughting Works (1888). Interactive physical cyanotype portal drafting apparatus.">
+  
+  <!-- Typography: Authentic Victorian / Drafting Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Root Drafting Table Stage (1920x1080 native scaled canvas) -->
+  <div id="drafting-table-stage" class="drafting-stage">
+
+    <!-- Ambient Wood Drafting Desk Base -->
+    <div class="wood-table-surface" aria-hidden="true"></div>
+
+    <!-- Master Physical Cyanotype Blueprint Sheet -->
+    <main class="cyanotype-sheet" id="cyanotype-sheet" role="main" aria-label="Cyanotype Blueprint Sheet: Plate No. IV-B Resonant Toroid Apparatus">
+      
+      <!-- Brass Corner Drafting Tacks & Tape Repairs -->
+      <div class="tack tack-tl" title="Brass Drafting Pin (Top-Left)"></div>
+      <div class="tack tack-tr" title="Brass Drafting Pin (Top-Right)"></div>
+      <div class="tack tack-bl" title="Brass Drafting Pin (Bottom-Left)"></div>
+      <div class="tack tack-br" title="Brass Drafting Pin (Bottom-Right)"></div>
+      
+      <div class="tape-patch tape-tl" aria-hidden="true"></div>
+      <div class="tape-patch tape-br" aria-hidden="true"></div>
+
+      <!-- Irregular Non-Uniform Wear & Age Artifacts -->
+      <div class="wear-layer" aria-hidden="true">
+        <!-- SVG Coffee Ring Stain (Procedural asymmetric fluid gradient) -->
+        <svg class="coffee-stain" viewBox="0 0 200 200" width="180" height="180">
+          <defs>
+            <radialGradient id="coffee-grad" cx="48%" cy="52%" r="50%">
+              <stop offset="0%" stop-color="rgba(38, 20, 8, 0)" />
+              <stop offset="70%" stop-color="rgba(45, 24, 10, 0.08)" />
+              <stop offset="85%" stop-color="rgba(58, 28, 10, 0.28)" />
+              <stop offset="92%" stop-color="rgba(35, 16, 5, 0.65)" />
+              <stop offset="97%" stop-color="rgba(60, 30, 12, 0.40)" />
+              <stop offset="100%" stop-color="rgba(30, 15, 5, 0)" />
+            </radialGradient>
+            <filter id="coffee-rough">
+              <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
+          <ellipse cx="100" cy="100" rx="78" ry="74" fill="url(#coffee-grad)" filter="url(#coffee-rough)" />
+          <ellipse cx="98" cy="103" rx="83" ry="79" fill="none" stroke="rgba(45, 20, 6, 0.35)" stroke-width="2" filter="url(#coffee-rough)" />
+          <!-- Coffee droplets and spill marks -->
+          <circle cx="165" cy="130" r="4.5" fill="rgba(45, 20, 8, 0.45)" filter="url(#coffee-rough)" />
+          <circle cx="178" cy="115" r="2.2" fill="rgba(45, 20, 8, 0.35)" filter="url(#coffee-rough)" />
+          <circle cx="35" cy="65" r="3.2" fill="rgba(45, 20, 8, 0.25)" filter="url(#coffee-rough)" />
+        </svg>
+
+        <!-- Irregular Crease Fold Lines (Quadrant and Diagonal Folds) -->
+        <svg class="fold-lines" viewBox="0 0 1840 980" preserveAspectRatio="none">
+          <!-- Horizontal Fold -->
+          <path d="M 0,488 Q 460,491 920,486 T 1840,490" class="fold-path fold-shadow" />
+          <path d="M 0,487 Q 460,490 920,485 T 1840,489" class="fold-path fold-highlight" />
+          <!-- Vertical Fold -->
+          <path d="M 915,0 Q 918,245 913,490 T 917,980" class="fold-path fold-shadow" />
+          <path d="M 914,0 Q 917,245 912,490 T 916,980" class="fold-path fold-highlight" />
+          <!-- Diagonal Handling Crease -->
+          <path d="M 1420,0 Q 1550,180 1840,320" class="fold-path fold-shadow" />
+          <path d="M 1419,0 Q 1549,180 1839,320" class="fold-path fold-highlight" />
+          <!-- Water / Bleach Droplets -->
+          <circle cx="340" cy="780" r="14" class="bleach-spot" />
+          <circle cx="355" cy="795" r="7" class="bleach-spot" />
+          <circle cx="1280" cy="190" r="11" class="bleach-spot" />
+          <!-- Graphite Handling Patina -->
+          <ellipse cx="920" cy="940" rx="180" ry="25" class="graphite-smudge" />
+          <ellipse cx="140" cy="500" rx="40" ry="120" class="graphite-smudge" />
+        </svg>
+      </div>
+
+      <!-- Blueprint Header Banner -->
+      <header class="sheet-header">
+        <div class="bureau-seal">
+          <svg viewBox="0 0 80 80" width="60" height="60" class="bureau-crest-svg">
+            <circle cx="40" cy="40" r="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2" />
+            <circle cx="40" cy="40" r="30" fill="none" stroke="currentColor" stroke-width="1" />
+            <path d="M 40,12 L 40,68 M 12,40 L 68,40 M 20,20 L 60,60 M 20,60 L 60,20" stroke="currentColor" stroke-width="0.75" />
+            <polygon points="40,22 46,36 60,40 46,44 40,58 34,44 20,40 34,36" fill="none" stroke="currentColor" stroke-width="1" />
+          </svg>
+        </div>
+        <div class="header-titles">
+          <h1 class="main-title">VANCE &amp; STERLING GEODETIC SURVEY BUREAU</h1>
+          <p class="sub-title">IMPERIAL CARTOGRAPHIC &amp; SUB-SURFACE CONDUIT DIVISION · EST. 1888</p>
+          <p class="plate-title">PLATE NO. IV-B: RESONANT TOROID APPARATUS (AZIMUTH TRANSIT CONDUIT)</p>
+        </div>
+        <div class="header-meta">
+          <span class="meta-tag">COMMISSION: IMP-884-X</span>
+          <span class="meta-tag">SECURITY: CLASS-I TOPOGRAPHICAL</span>
+        </div>
+      </header>
+
+      <!-- Main Drafting Area (Split into Left Tool/Site Plan Shelf, Center Apparatus Schematic, Right Title Block/Inspector Shelf) -->
+      <div class="drafting-workspace">
+        
+        <!-- Left Side: Control Cluster 2 (Draughtsman's Action Tools & Site Plan Folio) -->
+        <section class="draughtsman-action-shelf" id="action-tools-cluster" aria-label="Control Cluster: Draughtsman's Action Tools">
+          
+          <div class="shelf-header">
+            <h2 class="shelf-title">DRAUGHTSMAN'S TOOLS</h2>
+            <span class="shelf-subtitle">FIELD CONTROL CLUSTER B</span>
+          </div>
+
+          <!-- Tool 1: Scribe & Lock Node -->
+          <button id="btn-scribe-lock" class="drafting-tool-btn primary-action-btn" title="Scribe Currently Indexed Azimuth Glyph to Next Geodetic Node">
+            <span class="btn-tool-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                <path d="M2 2l7.586 7.586"/>
+                <circle cx="11" cy="11" r="2"/>
+              </svg>
+            </span>
+            <div class="btn-label-group">
+              <span class="btn-main-label">SCRIBE &amp; LOCK NODE</span>
+              <span class="btn-sub-label">ENGAGE GREASE PENCIL</span>
+            </div>
+          </button>
+
+          <!-- Tool 2: Disengage / Expunge Draft (Always Accessible) -->
+          <button id="btn-disengage" class="drafting-tool-btn disengage-btn" title="Disengage All Clamps and Expunge Current Blueprint Inscription">
+            <span class="btn-tool-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728"/>
+                <circle cx="12" cy="12" r="10"/>
+              </svg>
+            </span>
+            <div class="btn-label-group">
+              <span class="btn-main-label">DISENGAGE / EXPUNGE</span>
+              <span class="btn-sub-label">RELEASE HARMONIC NODES</span>
+            </div>
+          </button>
+
+          <!-- Tool 3: Structural Review / Safety Hold Toggle -->
+          <button id="btn-permit-hold" class="drafting-tool-btn hold-toggle-btn" aria-pressed="false" title="Toggle Structural Review / Field Permit Safety Hold">
+            <span class="btn-tool-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+            <div class="btn-label-group">
+              <span class="btn-main-label">FIELD PERMIT HOLD</span>
+              <span class="btn-sub-label" id="hold-status-indicator">PERMIT STATUS: UNRESTRICTED</span>
+            </div>
+          </button>
+
+          <!-- Tool 4: Preloaded Site Plan Archives Drawer -->
+          <div class="site-plan-drawer">
+            <button id="btn-toggle-archives" class="drafting-tool-btn drawer-toggle-btn" aria-expanded="false" title="Open Pre-Approved Imperial Site Plan Archives">
+              <span class="btn-tool-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+              </span>
+              <div class="btn-label-group">
+                <span class="btn-main-label">SITE PLAN ARCHIVES</span>
+                <span class="btn-sub-label">6 PRE-APPROVED FOLIOS</span>
+              </div>
+            </button>
+
+            <!-- Slide-out Archive Menu (2 Visual Tiers) -->
+            <div id="archives-panel" class="archives-panel" aria-hidden="true">
+              <div class="archive-tier tier-approved">
+                <h3 class="tier-title">TIER I: APPROVED IMPERIAL TRANSIT (CLASS A)</h3>
+                <div class="site-plan-list">
+                  <button class="site-plan-item" data-site-index="0" title="Dial Gibraltar Sub-Oceanic Trench">
+                    <span class="site-code">SITE 01-A</span>
+                    <span class="site-name">Gibraltar Sub-Oceanic Trench</span>
+                    <span class="site-coords">7-NODE APPROVED</span>
+                  </button>
+                  <button class="site-plan-item" data-site-index="1" title="Dial Ben Nevis Telluric Station">
+                    <span class="site-code">SITE 04-B</span>
+                    <span class="site-name">Ben Nevis Telluric Station</span>
+                    <span class="site-coords">7-NODE APPROVED</span>
+                  </button>
+                  <button class="site-plan-item" data-site-index="2" title="Dial Ceylon Equinoctial Baseline">
+                    <span class="site-code">SITE 07-C</span>
+                    <span class="site-name">Ceylon Equinoctial Baseline</span>
+                    <span class="site-coords">7-NODE APPROVED</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="archive-tier tier-restricted">
+                <h3 class="tier-title">TIER II: DEEP ABYSS &amp; HARMONIC VORTEX (CLASS C)</h3>
+                <div class="site-plan-list">
+                  <button class="site-plan-item" data-site-index="3" title="Dial Mariana Abyssal Fracture">
+                    <span class="site-code">SITE 11-X</span>
+                    <span class="site-name">Mariana Abyssal Fracture</span>
+                    <span class="site-coords">RESTRICTED DRAWING</span>
+                  </button>
+                  <button class="site-plan-item" data-site-index="4" title="Dial Atacama Sub-Lithic Vault">
+                    <span class="site-code">SITE 15-K</span>
+                    <span class="site-name">Atacama Sub-Lithic Vault</span>
+                    <span class="site-coords">RESTRICTED DRAWING</span>
+                  </button>
+                  <button class="site-plan-item" data-site-index="5" title="Dial Novaya Zemlya Static Node">
+                    <span class="site-code">SITE 19-Z</span>
+                    <span class="site-name">Novaya Zemlya Static Node</span>
+                    <span class="site-coords">RESTRICTED DRAWING</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scribed Address Sequence Tape -->
+          <div class="scribed-address-monitor" aria-label="Scribed Coordinate Tape">
+            <div class="tape-header">
+              <span class="tape-title">CURRENT SCRIBED COORDINATES</span>
+              <span class="tape-count" id="node-progress-counter">0 / 7 NODES LOCKED</span>
+            </div>
+            <div class="tape-slots" id="address-slots-container">
+              <div class="address-slot" data-slot="0"><span class="slot-idx">I</span><span class="slot-val">---</span></div>
+              <div class="address-slot" data-slot="1"><span class="slot-idx">II</span><span class="slot-val">---</span></div>
+              <div class="address-slot" data-slot="2"><span class="slot-idx">III</span><span class="slot-val">---</span></div>
+              <div class="address-slot" data-slot="3"><span class="slot-idx">IV</span><span class="slot-val">---</span></div>
+              <div class="address-slot" data-slot="4"><span class="slot-idx">V</span><span class="slot-val">---</span></div>
+              <div class="address-slot" data-slot="5"><span class="slot-idx">VI</span><span class="slot-val">---</span></div>
+              <div class="address-slot" data-slot="6"><span class="slot-idx">VII</span><span class="slot-val">---</span></div>
+            </div>
+          </div>
+
+          <!-- Redline Revision Annotations -->
+          <div class="redline-notes-block" aria-hidden="true">
+            <p class="redline-text">REV. 4 NOTE: ALL 9 GEODETIC NODES MUST REMAIN BALANCED AT 40° INTERVALS.</p>
+            <p class="redline-text">DO NOT ENGAGE WITHOUT VERIFYING ANCHOR TENSION.</p>
+          </div>
+
+        </section>
+
+        <!-- Center: Control Cluster 1 (The Astrometric Azimuth Dial & Resonant Toroid Schematic) -->
+        <section class="schematic-center-stage" id="azimuth-dial-cluster" aria-label="Control Cluster: Astrometric Azimuth Dial & Resonant Toroid Schematic">
+          
+          <!-- Master Schematic Frame Container -->
+          <div class="toroid-schematic-container" id="toroid-container">
+            
+            <!-- Dynamic Drafting Ink Canvas for Gateway Activation (Pure cyanotype drafting style) -->
+            <canvas id="conduit-ink-canvas" width="620" height="620" class="conduit-canvas" aria-hidden="true"></canvas>
+
+            <!-- SVG Vector Technical Linework for Ring, Stator, Nodes, and Dimension Lines -->
+            <svg id="toroid-schematic-svg" class="toroid-svg" viewBox="0 0 700 700" width="620" height="620">
+              <defs>
+                <!-- 45-degree Cross-Hatching Pattern for Engineering Cross-Sections -->
+                <pattern id="crosshatch-pattern" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                  <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(200, 235, 255, 0.45)" stroke-width="0.8" />
+                </pattern>
+                <pattern id="crosshatch-dense" width="4" height="4" patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+                  <line x1="0" y1="0" x2="0" y2="4" stroke="rgba(200, 235, 255, 0.3)" stroke-width="0.6" />
+                </pattern>
+
+                <!-- Arrowhead Markers for Dimension Lines -->
+                <marker id="dim-arrow-start" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 10 0 L 0 5 L 10 10 z" fill="rgba(215, 240, 255, 0.8)" />
+                </marker>
+                <marker id="dim-arrow-end" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(215, 240, 255, 0.8)" />
+                </marker>
+
+                <!-- Redline Arrow Marker -->
+                <marker id="redline-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(210, 45, 45, 0.9)" />
+                </marker>
+              </defs>
+
+              <!-- Outer Dimension Guides & Leader Lines -->
+              <g class="dimension-group" opacity="0.85">
+                <!-- Bore Diameter Dimension Line -->
+                <line x1="30" y1="50" x2="670" y2="50" stroke="rgba(215, 240, 255, 0.7)" stroke-width="0.75" marker-start="url(#dim-arrow-start)" marker-end="url(#dim-arrow-end)" />
+                <line x1="30" y1="40" x2="30" y2="350" stroke="rgba(215, 240, 255, 0.4)" stroke-width="0.5" stroke-dasharray="4 3" />
+                <line x1="670" y1="40" x2="670" y2="350" stroke="rgba(215, 240, 255, 0.4)" stroke-width="0.5" stroke-dasharray="4 3" />
+                <text x="350" y="44" fill="rgba(215, 240, 255, 0.9)" font-family="'Space Mono', monospace" font-size="9" text-anchor="middle">Ø 8,450 mm CLEAR BORE (DATUM A-A)</text>
+
+                <!-- Section Callout -->
+                <text x="70" y="650" fill="rgba(215, 240, 255, 0.75)" font-family="'Space Mono', monospace" font-size="8.5">SECTION B-B: TOROIDAL STATOR FLANGE</text>
+                <text x="490" y="650" fill="rgba(215, 240, 255, 0.75)" font-family="'Space Mono', monospace" font-size="8.5">DETAIL 'C': VERNIER MESH</text>
+              </g>
+
+              <!-- Outer Stator Ring & Structural Flanges -->
+              <g class="stator-ring">
+                <!-- Outer Bolted Flange with Crosshatching -->
+                <circle cx="350" cy="350" r="320" fill="url(#crosshatch-pattern)" stroke="rgba(220, 245, 255, 0.9)" stroke-width="1.8" />
+                <circle cx="350" cy="350" r="295" fill="rgba(12, 33, 56, 0.95)" stroke="rgba(220, 245, 255, 0.75)" stroke-width="1.2" />
+                <circle cx="350" cy="350" r="285" fill="none" stroke="rgba(220, 245, 255, 0.5)" stroke-width="0.75" stroke-dasharray="6 3" />
+                
+                <!-- 36 Flange Assembly Bolts around Outer Rim -->
+                <g id="stator-bolts" stroke="rgba(220, 245, 255, 0.8)" stroke-width="1" fill="none"></g>
+              </g>
+
+              <!-- Master Apex Vernier Micrometer Index (0° / Top Datum) -->
+              <g class="vernier-apex" transform="translate(350, 48)">
+                <polygon points="0,0 -10,-18 10,-18" fill="rgba(235, 250, 255, 0.95)" stroke="#0c2138" stroke-width="1" />
+                <line x1="0" y1="-18" x2="0" y2="12" stroke="rgba(235, 250, 255, 0.95)" stroke-width="1.5" />
+                <text x="0" y="-22" fill="rgba(240, 250, 255, 0.95)" font-family="'Space Mono', monospace" font-size="9" font-weight="bold" text-anchor="middle">VERNIER DATUM 0°</text>
+                <!-- Micrometer Scale Marks -->
+                <line x1="-8" y1="-10" x2="-8" y2="-14" stroke="#0c2138" stroke-width="1" />
+                <line x1="-4" y1="-10" x2="-4" y2="-16" stroke="#0c2138" stroke-width="1" />
+                <line x1="4" y1="-10" x2="4" y2="-16" stroke="#0c2138" stroke-width="1" />
+                <line x1="8" y1="-10" x2="8" y2="-14" stroke="#0c2138" stroke-width="1" />
+              </g>
+
+              <!-- The 9 Geodetic Locking Nodes (Nonagonal Placement: 0°, 40°, 80°, 120°, 160°, 200°, 240°, 280°, 320°) -->
+              <g id="geodetic-nodes-layer" class="geodetic-nodes-group">
+                <!-- Node 0: Alpha (0°) -->
+                <!-- Node 1: Beta (40°) -->
+                <!-- Node 2: Gamma (80°) -->
+                <!-- Node 3: Delta (120°) -->
+                <!-- Node 4: Epsilon (160°) -->
+                <!-- Node 5: Zeta (200°) -->
+                <!-- Node 6: Eta (240°) -->
+                <!-- Node 7: Theta (280°) -->
+                <!-- Node 8: Iota (320°) -->
+              </g>
+
+              <!-- Dynamic Redline Grease-Pencil Inscription Overlay (Ink & Grease annotations) -->
+              <g id="redline-scribes-layer" class="redline-scribes-group"></g>
+
+              <!-- Rotating Astrometric Azimuth Ring (Interactive Wheel with 24 Glyphs) -->
+              <g id="rotating-azimuth-armature" class="azimuth-armature" transform="rotate(0 350 350)">
+                <!-- Rotor Body & Track Rings -->
+                <circle cx="350" cy="350" r="275" fill="none" stroke="rgba(215, 240, 255, 0.85)" stroke-width="1.5" />
+                <circle cx="350" cy="350" r="235" fill="url(#crosshatch-dense)" stroke="rgba(215, 240, 255, 0.7)" stroke-width="1" />
+                <circle cx="350" cy="350" r="200" fill="none" stroke="rgba(215, 240, 255, 0.8)" stroke-width="1.2" stroke-dasharray="3 2" />
+
+                <!-- 24 Glyph Nodes and Degree Graduations -->
+                <g id="azimuth-glyphs-group" class="azimuth-glyphs"></g>
+              </g>
+
+              <!-- Inner Aperture Stator & Mechanical Diaphragm (Idle Technical Linework) -->
+              <g id="aperture-diaphragm" class="aperture-diaphragm">
+                <circle cx="350" cy="350" r="195" fill="rgba(9, 24, 42, 0.88)" stroke="rgba(215, 240, 255, 0.75)" stroke-width="1.2" />
+                <!-- 12 Diaphragm Leaves and Iris Hatching -->
+                <g id="iris-blades-group" stroke="rgba(200, 235, 255, 0.55)" stroke-width="0.8" fill="none"></g>
+                <circle cx="350" cy="350" r="120" fill="none" stroke="rgba(215, 240, 255, 0.6)" stroke-width="0.75" stroke-dasharray="4 4" />
+                <circle cx="350" cy="350" r="50" fill="none" stroke="rgba(215, 240, 255, 0.8)" stroke-width="1" />
+                <!-- Center Crosshairs -->
+                <line x1="320" y1="350" x2="380" y2="350" stroke="rgba(215, 240, 255, 0.85)" stroke-width="0.75" />
+                <line x1="350" y1="320" x2="350" y2="380" stroke="rgba(215, 240, 255, 0.85)" stroke-width="0.75" />
+                <text x="350" y="342" fill="rgba(215, 240, 255, 0.6)" font-family="'Space Mono', monospace" font-size="7" text-anchor="middle">OPTICAL AXIS</text>
+              </g>
+
+            </svg>
+
+            <!-- Physical Structural Review Hold Stamp Overlay (Appears when Hold is active) -->
+            <div id="hold-stamp-seal" class="hold-stamp-seal hidden" aria-hidden="true">
+              <div class="stamp-border">
+                <span class="stamp-top-txt">STRUCTURAL AUDIT IN PROGRESS</span>
+                <span class="stamp-main-txt">PERMIT HOLD</span>
+                <span class="stamp-bot-txt">FIELD COMMISSION DIRECTIVE NO. 448-B</span>
+              </div>
+            </div>
+
+            <!-- Inspector Final Validation Stamp Overlay (Lands on Activation) -->
+            <div id="validated-stamp-seal" class="validated-stamp-seal hidden" aria-hidden="true">
+              <div class="val-stamp-border">
+                <span class="val-stamp-star">★ ★ ★</span>
+                <span class="val-stamp-main">SURVEY VALIDATED</span>
+                <span class="val-stamp-sub">APPARATUS ALIGNED &amp; COMMENCED</span>
+                <span class="val-stamp-date">VANCE &amp; STERLING · 1888</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Azimuth Dial Navigation Controls (Cluster 1 sub-tools: Manual Step & Readout) -->
+          <div class="azimuth-controller-bar">
+            <button id="btn-step-prev" class="dial-step-btn" title="Rotate Azimuth Counter-Clockwise (Previous Glyph)">
+              <span class="step-arrow">◄</span>
+              <span class="step-label">PREV GLYPH (-15°)</span>
+            </button>
+
+            <div class="azimuth-readout-card">
+              <div class="readout-header">
+                <span class="readout-label">APEX VERNIER INDEX</span>
+                <span class="readout-angle" id="azimuth-angle-readout">000° 00' 00"</span>
+              </div>
+              <div class="readout-glyph-info">
+                <span class="glyph-icon-preview" id="active-glyph-icon">✦</span>
+                <span class="glyph-name-display" id="active-glyph-name">THE ASTROLABE (DATUM)</span>
+              </div>
+            </div>
+
+            <button id="btn-step-next" class="dial-step-btn" title="Rotate Azimuth Clockwise (Next Glyph)">
+              <span class="step-label">NEXT GLYPH (+15°)</span>
+              <span class="step-arrow">►</span>
+            </button>
+          </div>
+
+        </section>
+
+        <!-- Right Side: Victorian Engineering Title Block & Physical Hardware -->
+        <aside class="draughting-side-panel">
+          
+          <!-- Authentic Victorian Draughting Title Block -->
+          <div class="title-block-card" id="title-block">
+            <div class="tb-row tb-header">
+              <span class="tb-cell tb-bureau">VANCE &amp; STERLING GEODETIC SURVEY BUREAU</span>
+            </div>
+            <div class="tb-row">
+              <div class="tb-cell tb-half">
+                <span class="tb-label">PLATE TITLE:</span>
+                <span class="tb-val tb-val-bold">RESONANT TOROID APPARATUS</span>
+              </div>
+              <div class="tb-cell tb-half">
+                <span class="tb-label">DRAWING NO:</span>
+                <span class="tb-val tb-val-mono">IMP-1888-IV-B</span>
+              </div>
+            </div>
+            <div class="tb-row">
+              <div class="tb-cell tb-third">
+                <span class="tb-label">SCALE:</span>
+                <span class="tb-val">1:25 NATURAL</span>
+              </div>
+              <div class="tb-cell tb-third">
+                <span class="tb-label">DATE:</span>
+                <span class="tb-val">12 AUG 1888</span>
+              </div>
+              <div class="tb-cell tb-third">
+                <span class="tb-label">SHEET:</span>
+                <span class="tb-val">04 OF 12</span>
+              </div>
+            </div>
+            <div class="tb-row">
+              <div class="tb-cell tb-half">
+                <span class="tb-label">DRAUGHTSMAN:</span>
+                <span class="tb-val-script">H. Sterling, A.M.I.C.E.</span>
+              </div>
+              <div class="tb-cell tb-half">
+                <span class="tb-label">CHIEF SURVEYOR:</span>
+                <span class="tb-val-script">T. C. Vance, F.R.G.S.</span>
+              </div>
+            </div>
+            <div class="tb-row tb-status-row">
+              <div class="tb-cell tb-full">
+                <span class="tb-label">APPARATUS OPERATIONAL STATUS:</span>
+                <span class="tb-val-status" id="title-block-status">IDLE · FIELD SURVEY PENDING</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Physical Drafting Compass Sitting on Sheet Border (Real depth, occlusion, cast shadow) -->
+          <div class="physical-tool compass-tool" aria-hidden="true" title="Brass & Steel Drafting Divider (Resting Tool)">
+            <svg viewBox="0 0 120 280" width="110" height="260" class="compass-svg">
+              <defs>
+                <linearGradient id="brass-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f5d77f"/>
+                  <stop offset="35%" stop-color="#d4a342"/>
+                  <stop offset="70%" stop-color="#8a6119"/>
+                  <stop offset="100%" stop-color="#54370a"/>
+                </linearGradient>
+                <linearGradient id="steel-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="50%" stop-color="#b0b8c2"/>
+                  <stop offset="100%" stop-color="#5b6573"/>
+                </linearGradient>
+              </defs>
+              <!-- Head Hinge / Knob -->
+              <circle cx="60" cy="30" r="14" fill="url(#brass-grad)" stroke="#3a2505" stroke-width="1.5"/>
+              <circle cx="60" cy="30" r="7" fill="#2d1c04"/>
+              <rect x="56" y="10" width="8" height="12" rx="2" fill="url(#brass-grad)"/>
+              <!-- Thumbscrew Threaded Arc -->
+              <path d="M 25,120 Q 60,135 95,120" stroke="url(#steel-grad)" stroke-width="4" fill="none"/>
+              <circle cx="60" cy="128" r="8" fill="url(#brass-grad)" stroke="#3a2505" stroke-width="1"/>
+              <!-- Left Brass Leg -->
+              <polygon points="56,36 50,150 54,152 60,40" fill="url(#brass-grad)"/>
+              <!-- Left Steel Needle -->
+              <polygon points="50,150 42,250 45,250 54,152" fill="url(#steel-grad)"/>
+              <!-- Right Brass Leg -->
+              <polygon points="64,36 70,150 66,152 60,40" fill="url(#brass-grad)"/>
+              <!-- Right Steel Needle (Lead Scribe) -->
+              <polygon points="70,150 78,250 75,250 66,152" fill="url(#steel-grad)"/>
+            </svg>
+          </div>
+
+          <!-- Physical Red Grease Pencil Sitting on Right Margin -->
+          <div class="physical-tool grease-pencil-tool" aria-hidden="true" title="Imperial Drafting Redline Grease Pencil">
+            <div class="pencil-body">
+              <div class="pencil-tip"></div>
+              <div class="pencil-shaft">
+                <span class="pencil-imprint">VANCE &amp; STERLING · REDLINE No. 2</span>
+              </div>
+              <div class="pencil-end"></div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+      <!-- Bottom Physical Boxwood Scale Ruler Sitting Along Blueprint Footer -->
+      <div class="physical-tool boxwood-ruler" aria-hidden="true">
+        <div class="ruler-brass-cap cap-left"></div>
+        <div class="ruler-body">
+          <div class="ruler-ticks"></div>
+          <span class="ruler-title">ARCHITECT'S IMPERIAL REDUCTION SCALE · 1:25 GEODETIC BASELINE</span>
+        </div>
+        <div class="ruler-brass-cap cap-right"></div>
+      </div>
+
+    </main>
+
+    <!-- Top-Right Circular Operator Reference Guide Toggle (?) -->
+    <button id="btn-operator-manual" class="operator-guide-trigger" aria-label="Open Draughtsman's Operational Compendium" title="Draughtsman's Field Directives &amp; Operational Manual">
+      <span class="guide-q-mark">?</span>
+    </button>
+
+    <!-- Operator Manual Modal Dialog (Collapsed by default) -->
+    <div id="operator-modal" class="operator-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-guide-title">
+      <div class="operator-modal-parchment">
+        <button id="btn-close-modal" class="modal-close-btn" aria-label="Close Reference Manual">✕</button>
+        
+        <header class="modal-header">
+          <h2 id="modal-guide-title" class="modal-title">VANCE &amp; STERLING DRAUGHTSMAN'S COMPENDIUM</h2>
+          <p class="modal-subtitle">OPERATIONAL DIRECTIVE NO. 88-A · RESONANT TOROID APPARATUS</p>
+        </header>
+
+        <div class="modal-body-content">
+          <section class="manual-section">
+            <h3>I. THEORETICAL PRINCIPLE</h3>
+            <p>The Resonant Toroid Apparatus establishes a trans-spatial conduit by aligning <strong>seven harmonic azimuth coordinates</strong> across a <strong>nine-point nonagonal geodetic anchor stator</strong>. Each coordinate vector couples the local telluric baseline to the remote cartographic target.</p>
+          </section>
+
+          <section class="manual-section">
+            <h3>II. DIALING PROCEDURE</h3>
+            <ol>
+              <li><strong>Index Azimuth Glyph:</strong> Rotate the rotating azimuth ring by clicking any glyph or using the step controls (Cluster 1) to align the desired cartographic symbol with the master 0° vernier datum at the apex.</li>
+              <li><strong>Scribe &amp; Lock Node:</strong> Depress the <em>SCRIBE &amp; LOCK NODE</em> tool (Cluster 2). The draftsman's grease pencil marks the node with a redline checkmark, locking that coordinate vector.</li>
+              <li><strong>Repeat for 7 Nodes:</strong> Complete the 7-symbol address sequence.</li>
+              <li><strong>Final Activation:</strong> Upon locking the 7th node, the inspector verification seal stamps the drawing, initiating toroidal aperture flow.</li>
+            </ol>
+          </section>
+
+          <section class="manual-section">
+            <h3>III. SAFETY REVIEW &amp; FIELD HOLD</h3>
+            <p>Engaging the <em>FIELD PERMIT HOLD</em> tool stamps a structural review embargo over the plate. While held, all 7 nodes may be scribed, but final aperture activation remains inhibited until the hold is lifted.</p>
+          </section>
+
+          <section class="manual-section">
+            <h3>IV. PRE-APPROVED SITE PLANS</h3>
+            <p>Access the <em>SITE PLAN ARCHIVES</em> to load pre-calculated Class-A imperial routes or Class-C restricted deep-fracture drawings.</p>
+          </section>
+
+          <section class="manual-section">
+            <h3>V. DISENGAGEMENT &amp; ERASURE</h3>
+            <p>The <em>DISENGAGE / EXPUNGE</em> tool is accessible at all times to release node clamps, erase grease-pencil annotations, and reset the azimuth armature.</p>
+          </section>
+        </div>
+
+        <footer class="modal-footer">
+          <p>PRINTED AT THE IMPERIAL SURVEY DRAUGHTING WORKS, WHITEHALL, LONDON (1888)</p>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Persistent Corner Displays -->
+    <footer class="corner-footer-left">
+      <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="corner-link" title="StarlightDaemon on GitHub">StarlightDaemon</a>
+    </footer>
+
+    <footer class="corner-footer-right">
+      <span class="version-label">v1.0.0 · Vance &amp; Sterling Geodetic Survey Bureau</span>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "stargate_cyanotype_geodetic",
+  "version": "1.0.0",
+  "description": "Vance & Sterling Geodetic Survey Bureau - Cyanotype Blueprint Portal",
+  "main": "app.js",
+  "scripts": {
+    "test": "node verify.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^22.15.0"
+  }
+}

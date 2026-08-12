@@ -1,0 +1,24 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2026-08-12
+
+**Built by:** Gemini 3.6 Flash (High)
+
+### Added
+- **Bureau Identity & Lore**: Initial release of the Vance & Sterling Geodetic Survey Bureau (Est. 1888) cartographic blueprint portal: *PLATE NO. IV-B: RESONANT TOROID APPARATUS (AZIMUTH TRANSIT CONDUIT)*.
+- **Physical-Material Cyanotype Aesthetic**: Authentic deep Prussian-blue paper, pale cyan ink linework, dark walnut drafting table surface, directional top-left lighting with realistic drop shadows on all drafting tools and hardware.
+- **Irregular Wear System**: Zero repeating tiled textures. Procedural creased fold lines, realistic coffee-ring stain on the drafting margin, frayed deckled paper borders, translucent drafting tape repairs, water droplet bleach marks, and smudged graphite dust.
+- **Drafting Tool Controls & Depth**: Brass and steel drafting compass, boxwood architect's scale with brass ferrule, hexagonal redline grease pencil, and heavy rubber validation inspector stamp with physical depth and occlusion.
+- **9-Node Astrometric Locking Mechanism**: Nonagonal harmonic triangulation framework with 9 physical node pins and 7-symbol coordinate address length. Redline grease-pencil checkmarks and dimension callouts scribed directly onto the cyanotype upon each lock.
+- **Synthesized Drafting Audio Engine**: Web Audio API synthesizer generating realistic graphite pencil lead friction, rubber stamp thud & mechanical clack, parchment paper rustle, and vernier ratchet clinking.
+- **Drafting-Style Gateway Activation**: Dynamic technical ink vortex, cross-hatching, radiating compass rose vectors, logarithmic spiral drafting arcs, and flowing cyanotype linework upon 7-node lock completion.
+- **Safety Subsystem - Field Permit Hold**: Physical inspection stamp toggle that prohibits portal activation during ongoing structural audits.
+- **Site Plan Archives**: 6 preloaded quick-dial site plans across 2 distinct visual tiers (Approved Imperial Survey Conduits Class A, and Deep Abyss & Uncharted Harmonic Conduits Class C).
+- **Responsive Viewport Engine**: Full-screen 1920x1080 fit without vertical or horizontal scroll, smoothly scaling to 3840x2160 (4K) with unitless CSS transform calculations.
+- **Operator Reference Guide**: Collapsible weathered drafting manual modal accessible via the top-right "?" button.
+- **Corner Attribution**: StarlightDaemon GitHub link at bottom-left and version indicator at bottom-right.
