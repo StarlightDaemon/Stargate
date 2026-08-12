@@ -389,6 +389,83 @@ html, body {
   border-color: #bae6fd;
 }
 
+/* Certify & Commit Activation Button (New Distinct Activation Control) */
+.certify-action-btn {
+  transition: all 0.25s ease;
+}
+
+.certify-action-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  background: rgba(9, 24, 42, 0.45);
+  border-color: rgba(165, 216, 247, 0.2);
+  box-shadow: none;
+  transform: none !important;
+}
+
+.certify-action-btn:disabled .btn-main-label {
+  color: rgba(240, 249, 255, 0.4);
+}
+
+.certify-action-btn:disabled .btn-sub-label {
+  color: rgba(165, 216, 247, 0.3);
+}
+
+.certify-action-btn:disabled .btn-tool-icon {
+  border-color: rgba(165, 216, 247, 0.2);
+  color: rgba(165, 216, 247, 0.3);
+  background: rgba(6, 16, 28, 0.6);
+}
+
+.certify-action-btn:not(:disabled) {
+  opacity: 1;
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(22, 70, 120, 0.95) 0%, rgba(12, 40, 72, 0.95) 100%);
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.55), inset 1px 1px 0 rgba(255, 255, 255, 0.35);
+  animation: certifyPulse 2.2s infinite ease-in-out;
+}
+
+.certify-action-btn:not(:disabled) .btn-main-label {
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(56, 189, 248, 0.8);
+}
+
+.certify-action-btn:not(:disabled) .btn-sub-label {
+  color: #7dd3fc;
+  font-weight: bold;
+}
+
+.certify-action-btn:not(:disabled) .btn-tool-icon {
+  border-color: #38bdf8;
+  color: #38bdf8;
+  background: rgba(10, 35, 65, 0.9);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.certify-action-btn:not(:disabled):hover {
+  background: linear-gradient(135deg, rgba(30, 90, 150, 1) 0%, rgba(18, 55, 95, 1) 100%);
+  border-color: #bae6fd;
+  box-shadow: 0 0 28px rgba(56, 189, 248, 0.85), inset 1px 1px 0 rgba(255, 255, 255, 0.5);
+  transform: translate(-1px, -1px);
+}
+
+.certify-action-btn:not(:disabled):active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6), inset 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes certifyPulse {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.45), inset 1px 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: #38bdf8;
+  }
+  50% {
+    box-shadow: 0 0 26px rgba(56, 189, 248, 0.8), inset 1px 1px 0 rgba(255, 255, 255, 0.55);
+    border-color: #bae6fd;
+  }
+}
+
 /* Disengage Button */
 .disengage-btn {
   border-color: rgba(239, 68, 68, 0.65);

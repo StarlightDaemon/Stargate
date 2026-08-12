@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-12
+
+**Built by:** Gemini 3.6 Flash (high reasoning)
+
+### Fixed
+- **Resolved Automatic Portal Activation on 7th Node**: Fixed root-cause issue where scribing the 7th geodetic node automatically triggered validation stamping and aperture animation without an intentional, deliberate activation step.
+- **Added Dedicated Activation Control (`VALIDATE & COMMIT`)**: Introduced a distinct deliberate activation button (`#btn-certify-activate`) inside Cluster 2 (Draughtsman's Action Tools) that remains visually inert/disabled (`REQUIRES 7 SCRIBED NODES`) until all 7 nodes are scribed, and becomes clearly enabled and highlighted (`READY · CLICK TO COMMIT CONDUIT`) upon 7th node completion.
+- **Field Permit Hold Safety Flow**: Ensured that releasing a permit hold after dialing 7 nodes does not auto-activate the conduit on release, but requires an intentional click on `VALIDATE & COMMIT`.
+- **Quick-Dial Preset Flow**: Preset site plans now sequence through all 7 nodes, log coordinates, and enable `VALIDATE & COMMIT` without auto-activating.
+
 ## [1.0.0] - 2026-08-12
 
 **Built by:** Gemini 3.6 Flash (High)

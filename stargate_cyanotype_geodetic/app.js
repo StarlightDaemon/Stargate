@@ -326,6 +326,8 @@
     
     // Cluster 2 Controls
     btnScribeLock: document.getElementById('btn-scribe-lock'),
+    btnCertifyActivate: document.getElementById('btn-certify-activate'),
+    certifyBtnSublabel: document.getElementById('certify-btn-sublabel'),
     btnDisengage: document.getElementById('btn-disengage'),
     btnPermitHold: document.getElementById('btn-permit-hold'),
     holdStatusIndicator: document.getElementById('hold-status-indicator'),
@@ -476,8 +478,8 @@
   }
 
   // --- 7. Azimuth Ring Rotation & Index Alignment ---
-  function rotateToGlyphIndex(targetIndex) {
-    if (state.isDialingSequence) return;
+  function rotateToGlyphIndex(targetIndex, force = false) {
+    if (state.isDialingSequence && !force) return;
     
     // Normalize target index within 0..23
     targetIndex = (targetIndex + TOTAL_GLYPHS) % TOTAL_GLYPHS;
@@ -520,8 +522,8 @@
   });
 
   // --- 8. Locking Mechanism (Scribe & Lock Action) ---
-  function scribeCurrentGlyph() {
-    if (state.isDialingSequence) return;
+  function scribeCurrentGlyph(force = false) {
+    if (state.isDialingSequence && !force) return;
     if (state.lockedGlyphs.length >= REQUIRED_ADDRESS_LENGTH) {
       // Already fully locked
       return;
@@ -544,13 +546,8 @@
     // Scribe Redline Annotation on Blueprint
     drawRedlineScribe(lockSlotIndex, currentGlyph);
 
-    // Update Address Monitor Tape Slot
+    // Update Address Monitor Tape Slot & Certify Button state (DO NOT auto-activate!)
     updateAddressSlots();
-
-    // Check if 7 nodes are now fully locked
-    if (state.lockedGlyphs.length === REQUIRED_ADDRESS_LENGTH) {
-      handleAddressComplete();
-    }
   }
 
   // Draw authentic redline grease-pencil checkmarks & dimension arcs onto the blueprint
@@ -603,7 +600,7 @@
     DOM.redlineScribesLayer.appendChild(scribeGroup);
   }
 
-  // Update Address Monitor Tape UI
+  // Update Address Monitor Tape UI & Activation Control Status
   function updateAddressSlots() {
     DOM.nodeProgressCounter.textContent = `${state.lockedGlyphs.length} / ${REQUIRED_ADDRESS_LENGTH} NODES LOCKED`;
 
@@ -620,19 +617,46 @@
       }
     });
 
-    // Update Title Block Status
+    // Update Certify & Commit Activation Button and Title Block Status
     if (state.lockedGlyphs.length === 0) {
       DOM.titleBlockStatus.textContent = 'IDLE · FIELD SURVEY PENDING';
+      if (DOM.btnCertifyActivate) {
+        DOM.btnCertifyActivate.disabled = true;
+        DOM.certifyBtnSublabel.textContent = 'REQUIRES 7 SCRIBED NODES';
+      }
     } else if (state.lockedGlyphs.length < REQUIRED_ADDRESS_LENGTH) {
       DOM.titleBlockStatus.textContent = `SCRIBING · NODE ${state.lockedGlyphs.length} OF 7 LOCKED`;
+      if (DOM.btnCertifyActivate) {
+        DOM.btnCertifyActivate.disabled = true;
+        DOM.certifyBtnSublabel.textContent = `${state.lockedGlyphs.length} / 7 NODES LOCKED`;
+      }
+    } else if (state.lockedGlyphs.length === REQUIRED_ADDRESS_LENGTH) {
+      if (!state.isActive) {
+        DOM.titleBlockStatus.textContent = 'COORDINATES LOCKED · PENDING OPERATOR CERTIFICATION';
+        if (DOM.btnCertifyActivate) {
+          DOM.btnCertifyActivate.disabled = false;
+          DOM.certifyBtnSublabel.textContent = 'READY · CLICK TO COMMIT CONDUIT';
+        }
+      } else {
+        DOM.titleBlockStatus.textContent = 'CONDUIT ACTIVE · APERTURE RESONATING';
+        if (DOM.btnCertifyActivate) {
+          DOM.btnCertifyActivate.disabled = true;
+          DOM.certifyBtnSublabel.textContent = 'CONDUIT ACTIVE';
+        }
+      }
     }
   }
 
-  // --- 9. Final Activation & Technical Ink Vortex Canvas ---
-  function handleAddressComplete() {
+  // --- 9. Final Activation & Technical Ink Vortex Canvas (TRIGGERED ONLY VIA CERTIFY BUTTON) ---
+  function activateConduit() {
+    if (state.lockedGlyphs.length !== REQUIRED_ADDRESS_LENGTH || state.isActive) {
+      return;
+    }
+
     if (state.isHoldActive) {
       // Activation inhibited by Field Permit Hold
       DOM.titleBlockStatus.textContent = 'ACTIVATION INHIBITED: STRUCTURAL HOLD ACTIVE';
+      audio.playClampLock();
       return;
     }
 
@@ -643,6 +667,11 @@
     // Set Active State
     state.isActive = true;
     DOM.titleBlockStatus.textContent = 'CONDUIT ACTIVE · APERTURE RESONATING';
+
+    if (DOM.btnCertifyActivate) {
+      DOM.btnCertifyActivate.disabled = true;
+      DOM.certifyBtnSublabel.textContent = 'CONDUIT ACTIVE';
+    }
 
     // Start Pure Technical Cyanotype Canvas Animation
     startConduitAnimation();
@@ -833,6 +862,10 @@
         stopConduitAnimation();
         DOM.validatedStampSeal.classList.add('hidden');
         DOM.titleBlockStatus.textContent = 'CONDUIT SUSPENDED: REVIEW HOLD ACTIVE';
+        if (DOM.btnCertifyActivate && state.lockedGlyphs.length === REQUIRED_ADDRESS_LENGTH) {
+          DOM.btnCertifyActivate.disabled = false;
+          DOM.certifyBtnSublabel.textContent = 'READY · CLICK TO COMMIT CONDUIT';
+        }
       }
     } else {
       DOM.holdStampSeal.classList.add('hidden');
@@ -840,9 +873,14 @@
       DOM.holdStatusIndicator.style.color = '';
       audio.playPaperRustle();
 
-      // If already fully dialed, activate now
+      // DO NOT auto-activate when hold is released!
+      // If all 7 nodes are already locked and inactive, simply ensure button is enabled for deliberate activation.
       if (state.lockedGlyphs.length === REQUIRED_ADDRESS_LENGTH && !state.isActive) {
-        handleAddressComplete();
+        DOM.titleBlockStatus.textContent = 'COORDINATES LOCKED · PENDING OPERATOR CERTIFICATION';
+        if (DOM.btnCertifyActivate) {
+          DOM.btnCertifyActivate.disabled = false;
+          DOM.certifyBtnSublabel.textContent = 'READY · CLICK TO COMMIT CONDUIT';
+        }
       }
     }
   }
@@ -868,20 +906,22 @@
     function executeNextStep() {
       if (step >= plan.sequence.length) {
         state.isDialingSequence = false;
+        // Update slots & enable Certify button (DO NOT auto-activate!)
+        updateAddressSlots();
         return;
       }
 
       const glyphIndex = plan.sequence[step];
-      rotateToGlyphIndex(glyphIndex);
+      rotateToGlyphIndex(glyphIndex, true);
 
       setTimeout(() => {
-        scribeCurrentGlyph();
+        scribeCurrentGlyph(true);
         step++;
-        setTimeout(executeNextStep, 350);
-      }, 250);
+        setTimeout(executeNextStep, 260);
+      }, 180);
     }
 
-    setTimeout(executeNextStep, 200);
+    setTimeout(executeNextStep, 150);
   }
 
   // --- 13. Event Listeners Wiring ---
@@ -889,6 +929,11 @@
   // Scribe & Lock Button
   DOM.btnScribeLock.addEventListener('click', () => {
     scribeCurrentGlyph();
+  });
+
+  // Validate & Commit Button (Deliberate Final Activation Action)
+  DOM.btnCertifyActivate.addEventListener('click', () => {
+    activateConduit();
   });
 
   // Disengage Button (Hard Requirement: Always Accessible)

@@ -127,7 +127,21 @@
             </div>
           </button>
 
-          <!-- Tool 2: Disengage / Expunge Draft (Always Accessible) -->
+          <!-- Tool 2: Validate & Commit Conduit (Distinct Deliberate Activation Control) -->
+          <button id="btn-certify-activate" class="drafting-tool-btn certify-action-btn" disabled title="Certify Inscribed Blueprint &amp; Open Transit Conduit (Requires 7 Locked Nodes)">
+            <span class="btn-tool-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </span>
+            <div class="btn-label-group">
+              <span class="btn-main-label">VALIDATE &amp; COMMIT</span>
+              <span class="btn-sub-label" id="certify-btn-sublabel">REQUIRES 7 SCRIBED NODES</span>
+            </div>
+          </button>
+
+          <!-- Tool 3: Disengage / Expunge Draft (Always Accessible) -->
           <button id="btn-disengage" class="drafting-tool-btn disengage-btn" title="Disengage All Clamps and Expunge Current Blueprint Inscription">
             <span class="btn-tool-icon">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
@@ -141,7 +155,7 @@
             </div>
           </button>
 
-          <!-- Tool 3: Structural Review / Safety Hold Toggle -->
+          <!-- Tool 4: Structural Review / Safety Hold Toggle -->
           <button id="btn-permit-hold" class="drafting-tool-btn hold-toggle-btn" aria-pressed="false" title="Toggle Structural Review / Field Permit Safety Hold">
             <span class="btn-tool-icon">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
@@ -538,7 +552,7 @@
               <li><strong>Index Azimuth Glyph:</strong> Rotate the rotating azimuth ring by clicking any glyph or using the step controls (Cluster 1) to align the desired cartographic symbol with the master 0° vernier datum at the apex.</li>
               <li><strong>Scribe &amp; Lock Node:</strong> Depress the <em>SCRIBE &amp; LOCK NODE</em> tool (Cluster 2). The draftsman's grease pencil marks the node with a redline checkmark, locking that coordinate vector.</li>
               <li><strong>Repeat for 7 Nodes:</strong> Complete the 7-symbol address sequence.</li>
-              <li><strong>Final Activation:</strong> Upon locking the 7th node, the inspector verification seal stamps the drawing, initiating toroidal aperture flow.</li>
+              <li><strong>Validate &amp; Commit:</strong> Once all 7 nodes are scribed, depress the newly enabled <em>VALIDATE &amp; COMMIT</em> tool (Cluster 2) to stamp inspector validation and initiate toroidal aperture flow.</li>
             </ol>
           </section>
 
