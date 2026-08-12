@@ -1,0 +1,11 @@
+{
+  "name": "stargate_epigraphic_spectrometry",
+  "version": "1.0.0",
+  "description": "Ancient Mythic Epigraphic Laser Spectrometry Stargate Dialing Console",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test_build.js"
+  },
+  "model": "Gemini 3.6 Flash (high reasoning)"
+}
