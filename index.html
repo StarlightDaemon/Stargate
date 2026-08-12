@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aeon Structural Dynamics - Orbital Infrastructure Bureau</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="viewport-scaler">
+        <div class="drafting-board">
+            <!-- Background Grid Pattern -->
+            <div class="grid-overlay"></div>
+
+            <!-- Title Block -->
+            <div class="title-block">
+                <div class="tb-row tb-header">
+                    <h2>AEON STRUCTURAL DYNAMICS</h2>
+                    <span>ORBITAL INFRASTRUCTURE BUREAU</span>
+                </div>
+                <div class="tb-row">
+                    <div class="tb-cell">PROJECT: <span>SPATIAL GATEWAY</span></div>
+                    <div class="tb-cell">SCALE: <span>1:100</span></div>
+                    <div class="tb-cell">REV: <span id="rev-number">01</span></div>
+                </div>
+                <div class="tb-row">
+                    <div class="tb-cell">DRAWN BY: <span>CAD-SYS-7</span></div>
+                    <div class="tb-cell">DATE: <span>2026.08.11</span></div>
+                    <div class="tb-cell">STATUS: <span id="drawing-status">DRAFT</span></div>
+                </div>
+            </div>
+
+            <!-- Gate Drawing Area -->
+            <div class="drawing-area">
+                <svg class="gate-svg" viewBox="-500 -500 1000 1000" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="hatch" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+                            <line x1="0" y1="0" x2="0" y2="10" stroke="rgba(173, 216, 230, 0.3)" stroke-width="1" />
+                        </pattern>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--line-color)" />
+                        </marker>
+                    </defs>
+                    
+                    <!-- Structural Rings -->
+                    <circle class="base-ring" cx="0" cy="0" r="350" fill="none" stroke="var(--line-color)" stroke-width="2" stroke-dasharray="10 5" />
+                    <circle class="base-ring" cx="0" cy="0" r="400" fill="url(#hatch)" stroke="var(--line-color)" stroke-width="4" />
+                    <circle class="base-ring inner" cx="0" cy="0" r="280" fill="none" stroke="var(--line-color)" stroke-width="2" />
+                    <circle class="base-ring inner-solid" cx="0" cy="0" r="250" fill="none" stroke="var(--line-color)" stroke-width="8" opacity="0.5" />
+                    
+                    <!-- Dimension Lines -->
+                    <g class="dimensions">
+                        <!-- Outer Diameter -->
+                        <line x1="-400" y1="-430" x2="400" y2="-430" stroke="var(--line-color)" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+                        <line x1="-400" y1="-400" x2="-400" y2="-440" stroke="var(--line-color)" stroke-width="1.5"/>
+                        <line x1="400" y1="-400" x2="400" y2="-440" stroke="var(--line-color)" stroke-width="1.5"/>
+                        <text x="0" y="-440" class="dim-text" text-anchor="middle">∅ 8000mm</text>
+                        
+                        <!-- Inner Diameter -->
+                        <line x1="-280" y1="320" x2="280" y2="320" stroke="var(--line-color)" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+                        <line x1="-280" y1="280" x2="-280" y2="330" stroke="var(--line-color)" stroke-width="1.5"/>
+                        <line x1="280" y1="280" x2="280" y2="330" stroke="var(--line-color)" stroke-width="1.5"/>
+                        <text x="0" y="310" class="dim-text" text-anchor="middle">∅ 5600mm</text>
+                    </g>
+                    
+                    <!-- Dynamic Lock Points (Chevrons) -->
+                    <g id="lock-points-container"></g>
+                    
+                    <!-- Inner active portal area (Event Horizon placeholder) -->
+                    <circle id="portal-event-horizon" cx="0" cy="0" r="240" fill="none" stroke="var(--highlight-color)" stroke-width="2" opacity="0" />
+                    <g id="portal-lines"></g>
+
+                    <!-- Large Approval Stamp -->
+                    <g id="approval-stamp" transform="translate(0,0) rotate(-15) scale(0)">
+                        <rect x="-250" y="-80" width="500" height="160" fill="none" stroke="#ff4444" stroke-width="8" rx="20"/>
+                        <rect x="-240" y="-70" width="480" height="140" fill="none" stroke="#ff4444" stroke-width="2" rx="15"/>
+                        <text x="0" y="-10" class="stamp-text" text-anchor="middle" fill="#ff4444">APPROVED FOR</text>
+                        <text x="0" y="50" class="stamp-text" text-anchor="middle" fill="#ff4444">CONSTRUCTION</text>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- UI Controls -->
+            <div class="controls-panel">
+                <!-- Control Cluster 1: Symbol Dialing -->
+                <div class="control-cluster" id="cluster-dialing">
+                    <h3>GEOMETRIC ADDRESS INPUT</h3>
+                    <div class="symbol-grid" id="symbol-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="current-address-display">
+                        <span>BUFFER: </span>
+                        <div id="address-buffer" class="address-buffer"></div>
+                    </div>
+                </div>
+
+                <!-- Control Cluster 2: Execution & Safety -->
+                <div class="control-cluster execution-cluster">
+                    <div class="execution-row">
+                        <button id="btn-disengage" class="danger-btn" disabled>DISENGAGE / CANCEL</button>
+                    </div>
+                    <div class="execution-row">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-review-hold">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label">PERMIT REVIEW HOLD</span>
+                    </div>
+                </div>
+                
+                <!-- Quick Dial Tier 1 -->
+                <div class="quick-dial-panel top-tier">
+                    <div class="panel-header">APPROVED SITE PLANS - TIER I</div>
+                    <div class="qd-buttons" id="qd-tier1"></div>
+                </div>
+
+                <!-- Quick Dial Tier 2 -->
+                <div class="quick-dial-panel bottom-tier">
+                    <div class="panel-header">APPROVED SITE PLANS - TIER II</div>
+                    <div class="qd-buttons" id="qd-tier2"></div>
+                </div>
+            </div>
+
+            <!-- Operator Reference Button -->
+            <button id="btn-operator-ref" class="operator-ref-btn">?</button>
+
+            <!-- Operator Reference Overlay -->
+            <div id="operator-overlay" class="overlay hidden">
+                <div class="overlay-content">
+                    <div class="overlay-header">
+                        <h2>CAD TERMINAL MANUAL</h2>
+                        <button id="btn-close-overlay" class="close-btn">×</button>
+                    </div>
+                    <div class="overlay-body">
+                        <p><strong>DIALING:</strong> Select 8 geometric symbols from the input cluster to draft an address sequence. Lock points will be annotated on the drawing.</p>
+                        <p><strong>QUICK-DIAL:</strong> Select any pre-approved site plan to auto-draft the corresponding 8-symbol sequence.</p>
+                        <p><strong>PERMIT REVIEW HOLD:</strong> An active safety interlock. When engaged, sequences may be drafted but final construction approval is blocked.</p>
+                        <p><strong>DISENGAGE:</strong> Immediately halts the current drafting process or active connection, returning the structural drawing to draft state.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Corner Labels -->
+            <div class="corner-label bottom-left">
+                <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+            </div>
+            <div class="corner-label bottom-right">v1.0.0</div>
+
+        </div>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
