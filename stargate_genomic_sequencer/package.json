@@ -1,0 +1,11 @@
+{
+  "name": "stargate_genomic_sequencer",
+  "version": "1.0.0",
+  "description": "Genomic Biotech Sequencing Lab Console Stargate Interface",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test_build.js"
+  },
+  "model": "Gemini 3.6 Flash (high reasoning)"
+}
