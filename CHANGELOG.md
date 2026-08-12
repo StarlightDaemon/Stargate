@@ -17,3 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Always-visible disengage safety interlock.
 
 **Built by:** Gemini 3.1 Pro (High)
+
+### Known Issues
+- **Manual Dialing Unresolved:** The original build shipped with non-functional manual dialing. A dedicated fix pass diagnosed and addressed two specific issues (missing manual ENGAGE control, a Quick Dial state-wipe race condition) and verified the fix via real dispatched pointer events in automated testing. However, operator testing after that fix found dialing still does not work. The root cause remains unresolved and this build is closed without further iteration.
