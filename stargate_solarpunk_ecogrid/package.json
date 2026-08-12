@@ -1,0 +1,11 @@
+{
+  "name": "stargate_solarpunk_ecogrid",
+  "version": "1.0.0",
+  "description": "Solarpunk Smart Eco-Grid Dispatch Terminal Stargate Interface",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test_build.js"
+  },
+  "model": "Gemini 3.6 Flash (high reasoning)"
+}

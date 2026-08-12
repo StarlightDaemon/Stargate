@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solarpunk Eco-Grid Dispatch // Stargate Dialing Terminal</title>
+  <meta name="description" content="Solarpunk smart eco-grid dispatch console routing renewable biosphere energy through quantum stargate conduits.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="viewport-root">
+    <!-- Top Telemetry Header -->
+    <header class="console-header">
+      <div class="header-left">
+        <div class="grid-badge">ECO-GRID</div>
+        <div class="header-title-group">
+          <h1>SOLARPUNK ECO-GRID DISPATCH TERMINAL</h1>
+          <span class="sub-title">QUANTUM BIOSPHERE ENERGY ROUTING // SGC-SOLAR-03</span>
+        </div>
+      </div>
+
+      <div class="telemetry-bar">
+        <div class="telem-item">
+          <span class="telem-label">GRID LOAD</span>
+          <span class="telem-val" id="tele-load">4,850 GW</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">BUS FREQUENCY</span>
+          <span class="telem-val" id="tele-freq">60.000 Hz</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">GRID STABILITY</span>
+          <span class="telem-val" id="tele-stability">99.98%</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-label">DISPATCH STATE</span>
+          <span class="telem-val status-idle" id="tele-state">AUTONOMOUS FLOW</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button id="btn-help" class="help-btn" aria-label="Operator Reference Manual" title="Operator Reference Manual">?</button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <main class="console-workspace">
+      <!-- Left Stage: Microgrid Synchroscope Ring & Flow Network -->
+      <section class="grid-stage-container">
+        <div class="synchroscope-wrapper" id="synchroscope-wrapper">
+          <!-- Outer Grid Bus Graticule -->
+          <div class="bus-graticule" id="bus-graticule"></div>
+
+          <!-- Real-Time Microgrid Power Flow Canvas -->
+          <canvas id="grid-canvas" width="680" height="680"></canvas>
+
+          <!-- 10 Microgrid Substations (Chevrons) -->
+          <div class="substations-ring" id="substations-ring">
+            <!-- Injected via JS -->
+          </div>
+
+          <!-- Central Fusion-Solar Core Aperture -->
+          <div class="synchro-core" id="synchro-core">
+            <div class="core-rotor"></div>
+            <div class="core-status" id="synchro-status">MICROGRID EQUILIBRIUM</div>
+          </div>
+        </div>
+
+        <!-- 8-Slot Route Sequence Indicator -->
+        <div class="address-strip">
+          <div class="strip-header">
+            <span class="strip-title">ECO-GRID ROUTE BUFFER</span>
+            <span class="strip-counter" id="address-counter">0 / 8 LOCKED</span>
+          </div>
+          <div class="glyph-slots" id="glyph-slots">
+            <div class="slot" data-index="0"><span class="slot-idx">α</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="1"><span class="slot-idx">β</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="2"><span class="slot-idx">γ</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="3"><span class="slot-idx">δ</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="4"><span class="slot-idx">ε</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="5"><span class="slot-idx">ζ</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="6"><span class="slot-idx">η</span><span class="slot-val">---</span></div>
+            <div class="slot" data-index="7"><span class="slot-idx">θ</span><span class="slot-val">---</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Stage: Dual Named Clusters -->
+      <section class="controls-container">
+        <!-- Cluster 1: Eco-Grid Topology Matrix -->
+        <div class="control-cluster" id="cluster-topology-matrix">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 01</span>
+            <h2>ECO-GRID TOPOLOGY MATRIX</h2>
+          </div>
+          <div class="cluster-desc">Select 8 renewable resource vectors to route quantum power flow across the biosphere.</div>
+          
+          <div class="glyph-grid" id="glyph-grid">
+            <button class="glyph-btn" data-glyph="PV-ARRAY-CORE" data-symbol="☼-PV">
+              <span class="glyph-icon">☼</span>
+              <span class="glyph-label">PV ARRAY CORE</span>
+              <span class="glyph-meta">1,200 MW // SOLAR</span>
+            </button>
+            <button class="glyph-btn" data-glyph="HYDRO-TURBINE" data-symbol="♒-HY">
+              <span class="glyph-icon">♒</span>
+              <span class="glyph-label">HYDRO TURBINE</span>
+              <span class="glyph-meta">850 MW // HYDRO</span>
+            </button>
+            <button class="glyph-btn" data-glyph="GEOTHERMAL-VENT" data-symbol="♨-GT">
+              <span class="glyph-icon">♨</span>
+              <span class="glyph-label">GEOTHERMAL VENT</span>
+              <span class="glyph-meta">640 MW // GEO</span>
+            </button>
+            <button class="glyph-btn" data-glyph="AERO-VORTEX" data-symbol="𓂂-AV">
+              <span class="glyph-icon">𓂂</span>
+              <span class="glyph-label">AERO VORTEX</span>
+              <span class="glyph-meta">910 MW // WIND</span>
+            </button>
+            <button class="glyph-btn" data-glyph="BIOMASS-DIGESTER" data-symbol="𖡡-BD">
+              <span class="glyph-icon">𖡡</span>
+              <span class="glyph-label">BIOMASS DIGESTER</span>
+              <span class="glyph-meta">420 MW // BIO</span>
+            </button>
+            <button class="glyph-btn" data-glyph="MHD-CONVERTER" data-symbol="⚡-MH">
+              <span class="glyph-icon">⚡</span>
+              <span class="glyph-label">MHD CONVERTER</span>
+              <span class="glyph-meta">780 MW // MAGNETO</span>
+            </button>
+            <button class="glyph-btn" data-glyph="FLYWHEEL-STORAGE" data-symbol="◎-FW">
+              <span class="glyph-icon">◎</span>
+              <span class="glyph-label">FLYWHEEL BANK</span>
+              <span class="glyph-meta">500 MWh // KINETIC</span>
+            </button>
+            <button class="glyph-btn" data-glyph="SUPERCONDUCTING-BUS" data-symbol="⧉-SC">
+              <span class="glyph-icon">⧉</span>
+              <span class="glyph-label">SUPERCONDUCT BUS</span>
+              <span class="glyph-meta">0.00 Ω // CRYOGRID</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cluster 2: Substation Power Routing & Dispatch -->
+        <div class="control-cluster" id="cluster-dispatch-control">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 02</span>
+            <h2>SUBSTATION POWER ROUTING &amp; DISPATCH</h2>
+          </div>
+
+          <!-- Action Triggers -->
+          <div class="action-grid">
+            <button id="btn-activate" class="action-btn btn-engage" disabled>
+              <span class="btn-icon">⚡</span>
+              <span class="btn-text">ENGAGE BIOSPHERE CONDUIT</span>
+              <span class="btn-subtext">TRANSMIT RENEWABLE POWER</span>
+            </button>
+
+            <button id="btn-disengage" class="action-btn btn-abort">
+              <span class="btn-icon">⏻</span>
+              <span class="btn-text">GRID SCRAM / BUS PURGE</span>
+              <span class="btn-subtext">DISCONNECT SUBSTATIONS</span>
+            </button>
+          </div>
+
+          <!-- Superconducting Bus Overload Safety Hold Subsystem -->
+          <div class="safety-hold-panel" id="safety-panel">
+            <div class="safety-info">
+              <div class="safety-title">SUPERCONDUCTING BUS OVERLOAD HOLD</div>
+              <div class="safety-desc">Inhibits quantum load surges during transmission. Defaults to RELEASED.</div>
+            </div>
+            <label class="switch-control" for="safety-hold-toggle">
+              <input type="checkbox" id="safety-hold-toggle">
+              <span class="slider"></span>
+              <span class="switch-label" id="safety-toggle-status">RELEASED</span>
+            </label>
+          </div>
+
+          <!-- Quick-Dispatch Biosphere Habitats -->
+          <div class="presets-section">
+            <div class="presets-header">
+              <span class="presets-title">PRESET BIOSPHERE HABITATS</span>
+              <span class="presets-hint">CLICK TO ROUTE</span>
+            </div>
+
+            <!-- Tier 1: Solar Arcologies -->
+            <div class="preset-tier">
+              <div class="tier-label">TIER I // HIGH-CAPACITY SOLAR ARCOLOGIES</div>
+              <div class="tier-grid">
+                <button class="preset-btn tier-1" data-preset="valencia-sol">
+                  <span class="preset-name">VALENCIA ARCOLOGY</span>
+                  <span class="preset-meta">3,400 GW // Solar</span>
+                </button>
+                <button class="preset-btn tier-1" data-preset="sahara-canopy">
+                  <span class="preset-name">SAHARA SUN CANOPY</span>
+                  <span class="preset-meta">5,200 GW // Heliostat</span>
+                </button>
+                <button class="preset-btn tier-1" data-preset="amazon-canopy">
+                  <span class="preset-name">AMAZON BIODOME</span>
+                  <span class="preset-meta">2,800 GW // Biohydro</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tier 2: Biosphere Sanctuaries -->
+            <div class="preset-tier">
+              <div class="tier-label">TIER II // REGENERATIVE ECO-SANCTUARIES</div>
+              <div class="tier-grid">
+                <button class="preset-btn tier-2" data-preset="nordic-fjord">
+                  <span class="preset-name">NORDIC FJORD TIDAL</span>
+                  <span class="preset-meta">1,950 GW // Kinetic</span>
+                </button>
+                <button class="preset-btn tier-2" data-preset="iceland-geothermal">
+                  <span class="preset-name">HEKLA GEO BASIN</span>
+                  <span class="preset-meta">2,100 GW // Thermal</span>
+                </button>
+                <button class="preset-btn tier-2" data-preset="kyoto-bamboo">
+                  <span class="preset-name">KYOTO ECO-GROVE</span>
+                  <span class="preset-meta">1,400 GW // Microgrid</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Interlock Banner -->
+    <div class="interlock-banner" id="interlock-banner">
+      <div class="banner-icon">⚡</div>
+      <div class="banner-text">
+        <strong>INTERLOCK ENGAGED: BUS OVERLOAD HOLD ACTIVE</strong>
+        <span>Release superconducting bus switch in Cluster 02 before routing quantum power conduit.</span>
+      </div>
+      <button class="banner-dismiss" id="banner-dismiss">DISMISS</button>
+    </div>
+
+    <!-- Operator Reference Modal -->
+    <div class="modal-overlay" id="help-modal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-tag">ECO-GRID OPERATING PROCEDURE</span>
+            <h2>SOLARPUNK SMART DISPATCH MANUAL (SGC-SOLAR-03)</h2>
+          </div>
+          <button class="modal-close" id="btn-close-modal" aria-label="Close modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="manual-section">
+            <h3>1. ECO-GRID ROUTING OVERVIEW</h3>
+            <p>The Solarpunk Eco-Grid Dispatch Console synchronizes 10 microgrid substations stationed at 36° intervals (α through κ). Selecting 8 renewable resource vectors builds the quantum power pathway.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>2. LOCKING &amp; ACTIVATION PROTOCOL</h3>
+            <p><strong>Crucial Rule:</strong> Synchronizing the 8th vector enters a <em>PENDING READY</em> state. The gate will <strong>NEVER auto-fire</strong> upon the 8th lock. The grid operator must manually press the glowing <strong>ENGAGE BIOSPHERE CONDUIT</strong> button to initiate power transit.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>3. GRID SCRAM &amp; BUS PURGE</h3>
+            <p>The <strong>GRID SCRAM / BUS PURGE</strong> button is always reachable and active, instantly de-energizing all 10 substations and returning the system to idle equilibrium.</p>
+          </div>
+
+          <div class="manual-section">
+            <h3>4. SUPERCONDUCTING BUS OVERLOAD HOLD</h3>
+            <p>Defaults to <strong>RELEASED</strong>. When toggled ON, power surge is inhibited to protect cryogenic bus lines. Blocked actions trigger visual interlock warning and alarm tones.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="console-footer">
+      <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="daemon-link">
+          <span class="daemon-icon">☼</span>
+          <span>StarlightDaemon</span>
+        </a>
+      </div>
+      <div class="footer-center">
+        <span class="status-dot"></span>
+        <span id="footer-status-text">MICROGRID ONLINE // 10 SUBSTATIONS COUPLED</span>
+      </div>
+      <div class="footer-right">
+        <span class="version-tag">v1.0.0 // ECO-GRID-03</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
