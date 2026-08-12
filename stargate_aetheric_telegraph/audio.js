@@ -11,6 +11,18 @@ class AethericSoundEngine {
     this.isMuted = false;
     this.activeVortexDrone = null;
     this.activeGovernorWhirl = null;
+
+    // Attach global user-gesture unlock
+    if (typeof window !== 'undefined') {
+      const unlockAudio = () => {
+        this.init();
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      };
+      window.addEventListener('pointerdown', unlockAudio, { passive: true });
+      window.addEventListener('keydown', unlockAudio, { passive: true });
+    }
   }
 
   init() {
@@ -19,7 +31,7 @@ class AethericSoundEngine {
       if (AudioContextClass) {
         this.ctx = new AudioContextClass();
         this.masterGain = this.ctx.createGain();
-        this.masterGain.gain.setValueAtTime(0.35, this.ctx.currentTime);
+        this.masterGain.gain.setValueAtTime(0.5, this.ctx.currentTime);
         this.masterGain.connect(this.ctx.destination);
       }
     }

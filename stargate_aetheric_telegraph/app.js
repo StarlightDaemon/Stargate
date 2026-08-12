@@ -547,7 +547,13 @@ class StargateAethericTerminal {
     if (this.state === AppState.STAGED) {
       if (this.isSafetyHoldEngaged) {
         soundEngine.playInterlockSwitch(true);
-        this.logTelemetry("Ignition Refused: Boiler Safety Interlock is ENGAGED. Clear hold switch to fire.", "warning");
+        this.logTelemetry("IGNITION BLOCKED: Boiler Safety Interlock is ENGAGED. Toggle switch to CLEAR to fire.", "warning");
+        
+        // Prominently highlight & shake the Safety Hold Switch to guide operator
+        this.safetyHoldToggleBtn.classList.add('flash-warning');
+        setTimeout(() => {
+          this.safetyHoldToggleBtn.classList.remove('flash-warning');
+        }, 1200);
         return;
       }
 
@@ -559,13 +565,16 @@ class StargateAethericTerminal {
     this.state = AppState.IGNITING;
     this.updateControlsState();
     this.ringStatusDot.className = 'status-indicator-dot active';
-    this.ringStatusText.textContent = 'CONDUIT IGNITION: GALVANIC ARC EXCITATION IN PROGRESS...';
+    this.ringStatusText.textContent = 'CONDUIT IGNITION: HIGH-TENSION GALVANIC ARC BREAKDOWN IN PROGRESS...';
     this.logTelemetry("Primary Throttle engaged. High-tension galvanic spark breakdown occurring!", "highlight");
 
     soundEngine.startConduitVortex();
 
+    // Render active SVG lightning energy beams from all locked escapements
+    this.renderActiveConduitEnergyBeams(true);
+
     // Spawn high-energy ignition particles
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 60; i++) {
       this.vortexParticles.push(this.createVortexParticle(true));
     }
 
@@ -575,7 +584,47 @@ class StargateAethericTerminal {
       this.ringStatusText.textContent = 'CONDUIT ESTABLISHED: LUMINIFEROUS AETHER TRANSIT OPEN';
       this.logTelemetry("HARMONIC SINGULARITY ESTABLISHED. Aetheric waveguide locked at 60.00 Hz.", "success");
       this.updateControlsState();
-    }, 1000);
+    }, 800);
+  }
+
+  renderActiveConduitEnergyBeams(isActive) {
+    const beamsGroup = document.getElementById('active-conduit-energy-beams');
+    if (!beamsGroup) return;
+
+    if (!isActive) {
+      beamsGroup.innerHTML = '';
+      beamsGroup.setAttribute('opacity', '0');
+      return;
+    }
+
+    beamsGroup.setAttribute('opacity', '1');
+    const cx = 320, cy = 320;
+    let html = '';
+
+    // Draw radiant energy beams from each locked escapement node into aperture center
+    this.lockedEscapements.forEach(nodeId => {
+      const node = ESCAPEMENT_NODES.find(n => n.id === nodeId);
+      if (!node) return;
+
+      const angleDeg = node.angle;
+      const rad = (angleDeg * Math.PI) / 180;
+      const nx = cx + 250 * Math.sin(rad);
+      const ny = cy - 250 * Math.cos(rad);
+
+      // Jagged dynamic electric lightning arc path
+      const midX1 = cx + 180 * Math.sin(rad) + (Math.random() - 0.5) * 15;
+      const midY1 = cy - 180 * Math.cos(rad) + (Math.random() - 0.5) * 15;
+      const midX2 = cx + 90 * Math.sin(rad) + (Math.random() - 0.5) * 20;
+      const midY2 = cy - 90 * Math.cos(rad) + (Math.random() - 0.5) * 20;
+
+      html += `
+        <path d="M${nx.toFixed(1)} ${ny.toFixed(1)} L${midX1.toFixed(1)} ${midY1.toFixed(1)} L${midX2.toFixed(1)} ${midY2.toFixed(1)} L${cx} ${cy}" 
+              stroke="#4ecdc4" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <line x1="${nx.toFixed(1)}" y1="${ny.toFixed(1)}" x2="${cx}" y2="${cy}" stroke="#ffffff" stroke-width="1.2" opacity="0.85"/>
+      `;
+    });
+
+    beamsGroup.innerHTML = html;
   }
 
   // =========================================================================
@@ -594,6 +643,7 @@ class StargateAethericTerminal {
     this.state = AppState.IDLE;
     this.stagedGlyphs = [];
     this.activeConduit = null;
+    this.renderActiveConduitEnergyBeams(false);
 
     // Reset Escapements
     for (let i = 1; i <= 9; i++) {
@@ -740,39 +790,88 @@ class StargateAethericTerminal {
     const isActive = this.state === AppState.ACTIVE || this.state === AppState.IGNITING;
     const isDialing = this.state === AppState.DIALING || this.state === AppState.STAGED;
 
-    // Background Aperture Glow
-    const glowRad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 138);
+    // 1. Background Aperture Singularity Glow & Horizon
     if (isActive) {
-      glowRad.addColorStop(0, 'rgba(78, 205, 196, 0.45)');
-      glowRad.addColorStop(0.5, 'rgba(226, 135, 67, 0.25)');
-      glowRad.addColorStop(1, 'rgba(10, 13, 19, 0.85)');
-    } else if (isDialing) {
-      glowRad.addColorStop(0, 'rgba(255, 193, 7, 0.15)');
-      glowRad.addColorStop(0.6, 'rgba(226, 135, 67, 0.08)');
-      glowRad.addColorStop(1, 'rgba(10, 13, 19, 0.9)');
-    } else {
-      glowRad.addColorStop(0, 'rgba(226, 135, 67, 0.05)');
-      glowRad.addColorStop(1, 'rgba(10, 13, 19, 0.95)');
-    }
-    ctx.fillStyle = glowRad;
-    ctx.beginPath();
-    ctx.arc(cx, cy, 138, 0, Math.PI * 2);
-    ctx.fill();
+      // Powerful radiant cyan & solar horizon
+      const glowRad = ctx.createRadialGradient(cx, cy, 5, cx, cy, 138);
+      glowRad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+      glowRad.addColorStop(0.2, 'rgba(78, 205, 196, 0.9)');
+      glowRad.addColorStop(0.5, 'rgba(226, 135, 67, 0.7)');
+      glowRad.addColorStop(0.85, 'rgba(23, 42, 69, 0.9)');
+      glowRad.addColorStop(1, 'rgba(10, 13, 19, 0.98)');
+      ctx.fillStyle = glowRad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 138, 0, Math.PI * 2);
+      ctx.fill();
 
-    // Render Streamlines
-    const speedMult = isActive ? 3.5 : (isDialing ? 1.8 : 0.6);
+      // High-energy pulsating concentric shockwave rings
+      const pulseT = Date.now() / 300;
+      for (let r = 0; r < 3; r++) {
+        const ringR = ((pulseT + r * 35) % 110) + 15;
+        ctx.strokeStyle = `rgba(78, 205, 196, ${(1 - ringR / 125).toFixed(2)})`;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, ringR, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Galvanic lightning arc discharges inside portal throat
+      if (Math.random() < 0.85) {
+        ctx.strokeStyle = '#ffffff';
+        ctx.shadowColor = '#4ecdc4';
+        ctx.shadowBlur = 12;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const arcTheta = Math.random() * Math.PI * 2;
+        const xStart = cx + Math.cos(arcTheta) * (15 + Math.random() * 20);
+        const yStart = cy + Math.sin(arcTheta) * (15 + Math.random() * 20);
+        ctx.moveTo(xStart, yStart);
+        let curX = xStart, curY = yStart;
+        for (let seg = 0; seg < 4; seg++) {
+          curX += (Math.random() - 0.5) * 45 + Math.cos(arcTheta) * 25;
+          curY += (Math.random() - 0.5) * 45 + Math.sin(arcTheta) * 25;
+          ctx.lineTo(curX, curY);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+    } else if (isDialing) {
+      const glowRad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 138);
+      glowRad.addColorStop(0, 'rgba(255, 193, 7, 0.35)');
+      glowRad.addColorStop(0.5, 'rgba(226, 135, 67, 0.2)');
+      glowRad.addColorStop(1, 'rgba(10, 13, 19, 0.9)');
+      ctx.fillStyle = glowRad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 138, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      const glowRad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 138);
+      glowRad.addColorStop(0, 'rgba(226, 135, 67, 0.08)');
+      glowRad.addColorStop(1, 'rgba(10, 13, 19, 0.95)');
+      ctx.fillStyle = glowRad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 138, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 2. Render High-Velocity Streamlines
+    const speedMult = isActive ? 5.5 : (isDialing ? 1.8 : 0.6);
     this.streamlines.forEach(line => {
       line.angle += line.speed * speedMult;
-      ctx.strokeStyle = line.color + (isActive ? '0.85)' : '0.45)');
-      ctx.lineWidth = isActive ? 2 : 1;
+      ctx.strokeStyle = line.color + (isActive ? '0.95)' : '0.45)');
+      ctx.lineWidth = isActive ? 2.5 : 1;
       ctx.beginPath();
       ctx.arc(cx, cy, line.radius, line.angle, line.angle + line.length);
       ctx.stroke();
     });
 
-    // Particle Emitter
-    if (isActive || isDialing || Math.random() < 0.2) {
-      this.vortexParticles.push(this.createVortexParticle(isActive));
+    // 3. Particle Emitter
+    if (isActive) {
+      for (let k = 0; k < 3; k++) {
+        this.vortexParticles.push(this.createVortexParticle(true));
+      }
+    } else if (isDialing || Math.random() < 0.2) {
+      this.vortexParticles.push(this.createVortexParticle(false));
     }
 
     for (let i = this.vortexParticles.length - 1; i >= 0; i--) {
@@ -788,42 +887,43 @@ class StargateAethericTerminal {
 
       ctx.fillStyle = p.isCyan 
         ? `rgba(78, 205, 196, ${p.life.toFixed(2)})` 
-        : `rgba(255, 193, 7, ${p.life.toFixed(2)})`;
+        : `rgba(255, 224, 130, ${p.life.toFixed(2)})`;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.size * (isActive ? 1.5 : 1), 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Centrifugal Sol-Governor Flyball Rendering in Central Spindle
-    const govSpeed = isActive ? 0.09 : (isDialing ? 0.04 : 0.015);
+    // 4. Centrifugal Sol-Governor Flyball Rendering in Central Spindle
+    const govSpeed = isActive ? 0.14 : (isDialing ? 0.04 : 0.015);
     this.flyballAngle += govSpeed;
-    const armSpread = isActive ? 45 : (isDialing ? 30 : 18);
+    const armSpread = isActive ? 55 : (isDialing ? 30 : 18);
 
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(this.flyballAngle);
 
     // Spindle Hub
-    ctx.strokeStyle = '#e28743';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = isActive ? '#4ecdc4' : '#e28743';
+    ctx.lineWidth = 2.5;
     ctx.fillStyle = '#10151f';
     ctx.beginPath();
-    ctx.arc(0, 0, 8, 0, Math.PI * 2);
+    ctx.arc(0, 0, 9, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
 
-    // Dual Flyball Governor Arms
+    // Dual Flyball Governor Arms with High-Velocity Deflection
     for (let side = -1; side <= 1; side += 2) {
       const bx = side * armSpread;
       const by = 0;
+      ctx.strokeStyle = isActive ? '#ffffff' : '#e28743';
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.lineTo(bx, by);
       ctx.stroke();
 
-      ctx.fillStyle = '#ffc107';
+      ctx.fillStyle = isActive ? '#4ecdc4' : '#ffc107';
       ctx.beginPath();
-      ctx.arc(bx, by, 5, 0, Math.PI * 2);
+      ctx.arc(bx, by, isActive ? 6.5 : 5, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
     }

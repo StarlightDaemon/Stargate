@@ -897,6 +897,20 @@ body::after {
   border-radius: 2px;
 }
 
+.safety-switch-btn.flash-warning {
+  animation: shake-flash 0.5s ease 2;
+  box-shadow: 0 0 20px var(--warning-crimson) !important;
+  border-color: #ff8b94 !important;
+  color: #fff !important;
+  background: var(--warning-crimson) !important;
+}
+
+@keyframes shake-flash {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
 .safety-switch-btn.disengaged {
   border-color: var(--success-emerald);
   background: rgba(46, 196, 182, 0.15);
