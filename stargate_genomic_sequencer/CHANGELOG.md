@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-08-13
+
+### Operator Evaluation & Status Note
+- **Functional Status:** Confirmed functionally solid via live operator testing. Base-pair nucleotide dialing, chromosome loci PCR hybridization locking, quantum helix synthesis activation, thermal overheat safety hold, and flowcell flush disengage all perform as intended with no functional defects reported.
+- **Batch Evaluation Note:** Operator review noted that across the six-build batch, the overall layout composition exhibits a shared underlying arrangement reskinned per build. While chevron counts (11 loci), address lengths (8 base-pairs), locking gestures, pipette/fluorescent audio synthesis, and thematic vocabulary are genuinely differentiated, the overall page layout/composition was less differentiated across the batch than claimed.
+- **Batch Status:** Batch closed. No further iteration planned.
+
 ## [1.0.0] - 2026-08-12
 
 **Built by:** Gemini 3.6 Flash (high reasoning)
