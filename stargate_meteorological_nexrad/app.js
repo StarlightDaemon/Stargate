@@ -480,6 +480,7 @@
 
   // --- DISENGAGE / ABORT TRIGGER ---
   function disengageConduit() {
+    cancelPresetReplay(); // abort any in-flight storm-track replay
     SoundFX.deenergizePurge();
 
     state.mode = 'IDLE';
@@ -506,6 +507,19 @@
   }
 
   // --- PRESET QUICK-DIAL LOADER ---
+  // ARCHIVED STORM-TRACK REPLAY: presets re-acquire each stored vector on
+  // successive antenna sweeps — the volume scan runs at radar cadence, far
+  // faster than manual isolation, but every vector still passes through the
+  // same lockGlyph barometric contour lock (radar ping, chevron lock, telemetry)
+  // as a manually dialed glyph. The 7th lock lands in PENDING_READY; the
+  // conduit NEVER engages on its own.
+  let presetReplayTimers = [];
+
+  function cancelPresetReplay() {
+    presetReplayTimers.forEach(t => clearTimeout(t));
+    presetReplayTimers = [];
+  }
+
   function loadPreset(presetKey) {
     if (state.safetyHoldEngaged) {
       triggerInterlockAlert();
@@ -514,12 +528,21 @@
     const preset = PRESETS[presetKey];
     if (!preset) return;
 
-    disengageConduit();
+    disengageConduit(); // also cancels any in-flight replay
 
-    preset.glyphs.forEach(glyphName => {
-      const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
-      const sym = btn ? btn.dataset.symbol : '🌪️';
-      lockGlyph(glyphName, sym);
+    const SWEEP_STEP_MS = 280; // radar sweep cadence: faster than manual, one vector per sweep
+    preset.glyphs.forEach((glyphName, i) => {
+      const timer = setTimeout(() => {
+        if (state.safetyHoldEngaged) {
+          cancelPresetReplay();
+          triggerInterlockAlert();
+          return;
+        }
+        const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
+        const sym = btn ? btn.dataset.symbol : '🌪️';
+        lockGlyph(glyphName, sym);
+      }, SWEEP_STEP_MS * (i + 1));
+      presetReplayTimers.push(timer);
     });
   }
 
