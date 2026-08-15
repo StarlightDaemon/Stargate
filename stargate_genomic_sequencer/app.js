@@ -462,6 +462,7 @@
 
   // --- DISENGAGE / ABORT TRIGGER ---
   function disengageConduit() {
+    cancelPresetReplay(); // abort any in-flight thermocycler replay
     SoundFX.flushPurge();
 
     state.mode = 'IDLE';
@@ -488,6 +489,19 @@
   }
 
   // --- PRESET QUICK-DIAL LOADER ---
+  // THERMOCYCLER PROGRAM REPLAY: presets anneal a validated primer library
+  // one locus per PCR cycle — the thermocycler runs at machine speed, far
+  // faster than manual pipetting, but every base still passes through the
+  // same lockGlyph hybridization lock (pipette click, fluorescence lock,
+  // locus chevron, telemetry) as a manually dialed glyph. The 8th lock lands
+  // in PENDING_READY; synthesis NEVER starts on its own.
+  let presetReplayTimers = [];
+
+  function cancelPresetReplay() {
+    presetReplayTimers.forEach(t => clearTimeout(t));
+    presetReplayTimers = [];
+  }
+
   function loadPreset(presetKey) {
     if (state.safetyHoldEngaged) {
       triggerInterlockAlert();
@@ -496,12 +510,21 @@
     const preset = PRESETS[presetKey];
     if (!preset) return;
 
-    disengageConduit();
+    disengageConduit(); // also cancels any in-flight replay
 
-    preset.glyphs.forEach(glyphName => {
-      const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
-      const sym = btn ? btn.dataset.symbol : '🧬';
-      lockGlyph(glyphName, sym);
+    const CYCLE_STEP_MS = 260; // thermocycler cadence: faster than pipetting, one locus per cycle
+    preset.glyphs.forEach((glyphName, i) => {
+      const timer = setTimeout(() => {
+        if (state.safetyHoldEngaged) {
+          cancelPresetReplay();
+          triggerInterlockAlert();
+          return;
+        }
+        const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
+        const sym = btn ? btn.dataset.symbol : '🧬';
+        lockGlyph(glyphName, sym);
+      }, CYCLE_STEP_MS * (i + 1));
+      presetReplayTimers.push(timer);
     });
   }
 

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-15
+
+**Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.6 Flash (high reasoning))
+
+### Fixed
+- **Preset Quick-Dial Instant-Jump Bug**: loading a synthetic-chromosome preset previously hybridized all 8 base glyphs in one synchronous forEach, jumping straight to `PENDING_READY` and bypassing the per-locus pipette click, fluorescence lock, chevron animation, and `SEQUENCING` telemetry progression that manual dialing uses.
+- **Thermocycler Program Replay**: presets now anneal each base through the exact same `lockGlyph` hybridization lock as a manual dial, one locus every 260ms — in-universe, the thermocycler runs a validated primer library at machine speed: far faster than manual pipetting, but every base still requires its own hybridization cycle.
+- Replay lands in the identical `PENDING_READY` state as manual dialing and **never starts synthesis on its own** (asserted at completion +1.2s).
+- `FLUSH FLOWCELL / ABORT` remains fully functional **during** a replay: aborting mid-sequence cancels all pending cycle timers and resets cleanly (new automated test). Engaging the Thermal Overheat Hold mid-replay halts the remaining cycles with a single interlock alert.
+
+### Changed
+- Verification suite: staged-replay sampling with in-progress screenshots, mid-replay abort test; preset assertion re-timed for the ~2.1s replay.
+
 ## [1.0.1] - 2026-08-13
 
 ### Operator Evaluation & Status Note
