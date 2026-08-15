@@ -1,0 +1,26 @@
+# Changelog
+
+All notable changes to the **Caïssa Neural Recursion Workstation** (`stargate_caissa_workstation`) will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2026-08-15
+
+**Built by:** Gemini 3.7 Flash (High reasoning)
+
+### Added
+- **Search-Tree Ring Instrument**: Radial minimax tree canvas visualizer with 8 concentric search-depth plies, live sprouting candidate branches, dynamic alpha-beta pruning sweeps, and principal variation (PV) node anchoring.
+- **Minimax Alpha-Beta Locking Mechanism**: 12 original tactical candidate glyphs locking into a 7-ply critical combination sequence with algebraic notation stamping and live centipawn evaluation bar spring physics.
+- **Three-Stage Staged Activation**:
+  - **Stage 1 (Buildup)**: 2.5-second accelerated search depth ramp (D:32 -> D:128+), 48M+ nodes/sec surge, oscillating evaluation bar, and rising harmonic audio sweep.
+  - **Stage 2 (Breakthrough)**: Forced mate aperture singularity burst, checkmate crown shockwave lattice, and synchronized resonant acoustic strike.
+  - **Stage 3 (Sustained Active)**: Connected hyper-space wormhole conduit with swirling streamline particles and live PV telemetry stream.
+- **Negative Auto-Fire Safeguard**: Full 7-move completion transitions system strictly to `PENDING COMMIT` ready state without auto-activating.
+- **Safety Interlock Subsystem**: `BLUNDER-CHECK HOLD` retrograde validation interlock, defaulting to RELEASED (unlocked), with explicit audio-visual warnings when engaged.
+- **Disengage & Abort Control**: Always-accessible `RESIGN LINE // ABORT` button supporting clean resets and rapid redialing cycles.
+- **Preloaded Tactical Presets**: 6 combinations across 2 distinct tiers (Tier 1: Verified Grandmaster Mate Canon, Tier 2: Speculative Neural Hypotheses).
+- **Procedural Web Audio Engine**: 100% synthesized soundscape using the Web Audio API (tactile clock-press plunges, notation pencil ticks, FM confirm blips, pruning cutoff zaps, buildup sirens, and breakthrough checkmate bursts).
+- **Operator Reference Guide**: Dismissible modal overlay (`?` button) detailing workstation architecture, minimax notation, and activation protocols.
+- **Responsive 16:9 1080p -> 4K Scale Engine**: Unitless JavaScript-computed CSS transform scaling cleanly without scrolling or aspect distortion.
+- **Corner Attribution & Branding**: Dedicated links for StarlightDaemon repository and version identifier.

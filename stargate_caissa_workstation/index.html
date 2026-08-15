@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CAÏSSA-9 // Neural Recursion Strategy Analysis Workstation</title>
+  <meta name="description" content="Deep combinatorial strategy engine analysis workstation featuring live search-tree visualization, minimax alpha-beta pruning, and three-stage portal aperture activation.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Fixed 1920x1080 Viewport Scaling Wrapper -->
+  <div id="viewport-wrapper">
+
+    <!-- Top Bar: Institute Branding & Live Search Telemetry -->
+    <header class="top-bar">
+      <div class="brand-block">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>CAÏSSA-9 <span>NEURAL RECURSION WORKSTATION</span></h1>
+          <div class="subtitle">Institute for Deep Combinatorial Analysis // Minimax Core v9.42-AVX512</div>
+        </div>
+      </div>
+
+      <div class="telemetry-strip">
+        <div class="tele-item">
+          <span class="label">SEARCH DEPTH</span>
+          <span class="value" id="tele-depth-val">D:32</span>
+        </div>
+        <div class="tele-item">
+          <span class="label">EVAL HORIZON</span>
+          <span class="value emerald">8 PLIES</span>
+        </div>
+        <div class="tele-item">
+          <span class="label">NODES / SEC</span>
+          <span class="value" id="tele-nodes-val">48.2M/s</span>
+        </div>
+        <div class="tele-item">
+          <span class="label">α-β PRUNE RATIO</span>
+          <span class="value amber">99.98%</span>
+        </div>
+        <div class="status-pill" id="engine-status-pill">
+          <span class="indicator-dot"></span>
+          <span id="engine-status-text">STANDBY // IDLE</span>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-btn" id="help-operator-btn" title="Operator Reference Manual" aria-label="Help and Documentation">?</button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Stage -->
+    <main class="main-stage">
+
+      <!-- LEFT: The Search-Tree Ring Instrument -->
+      <section class="ring-instrument-container" aria-label="Search-Tree Ring Instrument">
+        <div class="instrument-header">
+          <div class="instrument-title">
+            <span>RADIAL SEARCH-TREE VISUALIZER</span>
+            <span class="tag">LIVE MINIMAX</span>
+          </div>
+          <div class="instrument-stats">
+            <span>HORIZON: 7-PLY TACTICAL COMBINATION</span>
+            <span>TOPOLOGY: 12-SECTOR RADIAL MATRIX</span>
+          </div>
+        </div>
+
+        <div class="ring-viewport">
+          <!-- Canvas for radiating tree spokes, sprouting, and alpha-beta pruning -->
+          <canvas id="tree-canvas" width="960" height="800"></canvas>
+
+          <!-- SVG Reticle & Calibration HUD Overlays -->
+          <div class="radial-reticle"></div>
+
+          <!-- Center Portal Aperture HUD Core -->
+          <div class="aperture-core-hud">
+            <span class="core-label">EVENT HORIZON</span>
+            <span class="core-state" id="aperture-state-text">D:32 IDLE</span>
+            <span class="core-nodes" id="aperture-nodes-text">48.2M NPS</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: Telemetry, PV Recorder & 2 Named Control Clusters -->
+      <section class="control-telemetry-stage" aria-label="Engine Telemetry and Controls">
+
+        <!-- 1. Live Centipawn Evaluation Bar -->
+        <div class="eval-telemetry-panel">
+          <div class="eval-score-box">
+            <span class="score-label">EVAL SCORE</span>
+            <span class="score-val" id="eval-score-num">0.00</span>
+          </div>
+
+          <div class="eval-bar-track">
+            <div class="eval-bar-labels">
+              <span>-10.0 (BLACK FORCED)</span>
+              <span>0.00 (EQUAL)</span>
+              <span>+10.0 (WHITE FORCED)</span>
+            </div>
+            <div class="eval-bar-shell">
+              <div class="eval-bar-center-mark"></div>
+              <div class="eval-bar-fill" id="eval-bar-fill"></div>
+            </div>
+          </div>
+
+          <div class="eval-meta-stats">
+            <div class="eval-meta-row"><span class="k">WDL WIN:</span><span class="v" id="wdl-win">50.0%</span></div>
+            <div class="eval-meta-row"><span class="k">TABLEBASE:</span><span class="v" id="tb-status">SYZYGY-8</span></div>
+            <div class="eval-meta-row"><span class="k">CUTOFFS:</span><span class="v" id="cutoff-stat">ACTIVE</span></div>
+          </div>
+        </div>
+
+        <!-- 2. Principal Variation (PV) Move Timeline Recorder -->
+        <div class="pv-recorder-panel">
+          <div class="pv-header">
+            <span class="title">PRINCIPAL VARIATION (PV) RECORDER</span>
+            <span class="pv-status">7-PLY CRITICAL SEQUENCE</span>
+          </div>
+          <div class="pv-slots-grid" id="pv-slots-grid">
+            <!-- Dynamically populated 7 ply slots -->
+          </div>
+        </div>
+
+        <!-- CLUSTER 1: CANDIDATE MOVE MATRIX (Dialing Glyph Pad) -->
+        <div class="cluster-container" id="candidate-move-matrix-cluster">
+          <div class="cluster-title">
+            <span>CLUSTER A: CANDIDATE MOVE MATRIX</span>
+            <span class="cluster-badge">12 TACTICAL GLYPHS</span>
+          </div>
+          <div class="move-matrix-grid" id="move-matrix-grid">
+            <!-- Dynamically populated 12 tactical buttons -->
+          </div>
+        </div>
+
+        <!-- CLUSTER 2: ENGINE EXECUTION CONSOLE (Commit, Resign, Interlock, Presets) -->
+        <div class="cluster-container execution-console" id="engine-execution-console-cluster">
+          <div class="cluster-title">
+            <span>CLUSTER B: ENGINE EXECUTION CONSOLE</span>
+            <span class="cluster-badge">ACTIVATION &amp; SAFETY</span>
+          </div>
+
+          <!-- Quick-Dial Presets Row (2 Tiers) -->
+          <div class="preset-selector-row">
+            <div class="preset-labels">
+              <span>PRELOADED COMBINATION PRESETS (TIER 1: VERIFIED MATE // TIER 2: QUANTUM GAMBIT)</span>
+            </div>
+            <div class="preset-buttons-grid" id="preset-buttons-grid">
+              <!-- Dynamically populated 6 preset buttons -->
+            </div>
+          </div>
+
+          <!-- Core Action Controls (Commit, Resign, Safety Interlock) -->
+          <div class="core-action-row">
+            <!-- Primary Execution Control -->
+            <button class="action-btn commit-btn" id="commit-line-btn">
+              <span class="main-label">COMMIT LINE</span>
+              <span class="sub-label">0/7 PLIES DIALED</span>
+            </button>
+
+            <!-- Safety Interlock Subsystem Toggle -->
+            <div class="interlock-control released" id="interlock-control" role="switch" aria-checked="false" title="Click to toggle blunder-check hold">
+              <div class="interlock-header">
+                <span class="title">BLUNDER-CHECK HOLD</span>
+                <div class="state-indicator"></div>
+              </div>
+              <div class="interlock-body">
+                <span class="status-text" id="interlock-status-label">RELEASED (SAFE)</span>
+                <div class="interlock-switch">
+                  <div class="toggle-knob"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Disengage & Abort Control -->
+            <button class="action-btn resign-btn" id="resign-line-btn">
+              <span class="main-label">RESIGN LINE</span>
+              <span class="sub-label">ABORT &amp; RESET</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- Bottom Bar: Corner Links & Attribution -->
+    <footer class="bottom-bar">
+      <div class="corner-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+      </div>
+      <div class="status-readout">
+        <span>CAÏSSA NEURAL DYNAMICS // COMBINATORIAL HORIZON ENGINE</span>
+      </div>
+      <div class="corner-right">
+        <span>v1.0.0</span>
+      </div>
+    </footer>
+
+    <!-- High-Priority Blunder Warning Banner -->
+    <div id="blunder-warning-banner">
+      [CRITICAL INTERLOCK] BLUNDER-CHECK HOLD ACTIVE: RETROGRADE VERIFICATION BLOCKED COMMIT. RELEASE INTERLOCK TO PROCEED.
+    </div>
+
+    <!-- Staged Activation Visual Overlay -->
+    <div id="activation-stage-overlay"></div>
+
+    <!-- Operator Reference Modal Overlay (? Button) -->
+    <div class="modal-backdrop" id="operator-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>OPERATOR REFERENCE MANUAL <span>// CAÏSSA-9 WORKSTATION</span></h2>
+          <button class="close-modal-btn" id="close-modal-btn" aria-label="Close Reference">&times;</button>
+        </div>
+
+        <div class="modal-content">
+          <div class="modal-section">
+            <h3>1. Workstation Identity &amp; Architecture</h3>
+            <p>
+              The <strong>Caïssa-9 Neural Recursion Workstation</strong> is an experimental strategy analysis console engineered by the <em>Institute for Deep Combinatorial Analysis (IDCA)</em>. It evaluates high-dimensional move trajectories, collapses candidate game trees, and channels dimensional portal apertures through verified forced combinations.
+            </p>
+          </div>
+
+          <div class="modal-section">
+            <h3>2. Search-Tree Ring Instrument</h3>
+            <p>
+              The radial ring functions as a genuine live minimax search-tree instrument. As candidate move glyphs are selected, candidate sub-branches visibly sprout into concentric depth plies (Plies 1 through 7). The engine evaluates candidate lines in real-time, executing alpha-beta pruning sweeps (<code>α-cut</code>, <code>β-prune</code>) that dissolve suboptimal branches while anchoring the optimal Principal Variation (PV) spine.
+            </p>
+          </div>
+
+          <div class="modal-section">
+            <h3>3. Move Slots &amp; Locking Mechanism</h3>
+            <p>
+              The interface features <strong>12 candidate tactical glyphs</strong> and a <strong>7-ply critical combination length</strong>. Locking each move stamps the algebraic notation into the PV Recorder, snaps the Centipawn Evaluation Bar to the new horizon score, and triggers tactile acoustic plunges and FM confirm blips.
+            </p>
+          </div>
+
+          <div class="modal-section">
+            <h3>4. Three-Stage Staged Activation Protocol</h3>
+            <ul>
+              <li><strong>Negative Auto-Fire Guarantee:</strong> Completing the 7th ply places the system in <code>READY // PENDING COMMIT</code> state. The portal will NEVER auto-activate.</li>
+              <li><strong>Stage 1 - Buildup (2.5s):</strong> Search depth accelerates to D:128+, nodes/sec surge to 140M+, evaluation bar oscillates rapidly, and the ascending acoustic whine ramps up.</li>
+              <li><strong>Stage 2 - Breakthrough (Instant):</strong> Checkmate shockwave burst, dimensional aperture dilation, and crystalline chord crescendo.</li>
+              <li><strong>Stage 3 - Sustained Active:</strong> Connected multidimensional wormhole singularity with continuous PV telemetry flow.</li>
+            </ul>
+          </div>
+
+          <div class="modal-section">
+            <h3>5. Safety Interlock Subsystem</h3>
+            <p>
+              The <strong>Blunder-Check Hold</strong> toggle serves as a retrograde position-verification interlock. It <strong>defaults to RELEASED (unlocked)</strong>. When engaged, clicking "Commit Line" is blocked with a flashing high-priority warning banner and dissonant tritone alarm buzzer.
+            </p>
+          </div>
+
+          <div class="modal-section">
+            <h3>6. Quick-Dial Presets (2 Distinct Tiers)</h3>
+            <ul>
+              <li><strong>Tier 1: Verified Grandmaster Mate Canon</strong> (e.g., <em>Immortal Queen Deflection</em>, <em>Opera House Pin Collapse</em>, <em>Greek Gift Sacrifice</em>).</li>
+              <li><strong>Tier 2: Speculative Neural Hypotheses</strong> (e.g., <em>Hyper-Positional Pawn Storm</em>, <em>Centaur Asymmetric Breach</em>, <em>Quantum King Clearance</em>).</li>
+            </ul>
+          </div>
+
+          <div class="modal-section">
+            <h3>7. Disengage Protocol</h3>
+            <p>
+              The <strong>Resign Line // Abort</strong> control is always accessible and never disabled during active states, enabling immediate gateway shutdown and clean resets.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/engine_state.js"></script>
+  <script src="js/ring_renderer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
