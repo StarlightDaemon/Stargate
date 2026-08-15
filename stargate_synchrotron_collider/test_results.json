@@ -7,5 +7,8 @@
   "visibleActivationSuccess": true,
   "twoDialDisengageCyclesPassed": true,
   "quickDialSuccess": true,
+  "stagedQuickDialReplay": true,
+  "midReplayScreenshotsDistinct": true,
+  "midReplayDumpClean": true,
   "cornerAttributionValid": true
 }

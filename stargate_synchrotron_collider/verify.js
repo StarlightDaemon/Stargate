@@ -303,7 +303,7 @@ async function runVerification() {
     const loadButtons = await page.$$('.table-action-btn');
     if (loadButtons.length > 5) {
       await loadButtons[5].click();
-      await new Promise(r => setTimeout(r, 400));
+      await new Promise(r => setTimeout(r, 2500)); // injection sequencer: 6 sectors x 300ms
     }
 
     const quickDialLoaded = await page.evaluate(() => {
@@ -317,6 +317,89 @@ async function runVerification() {
     console.log('Quick-Dial Loaded Target:', quickDialLoaded.currentTarget);
     console.log('Quick-Dial Armed State (Negative Check):', quickDialLoaded.state);
     testResults.quickDialSuccess = (quickDialLoaded.lockedCount === 6 && quickDialLoaded.state === 'ARMED');
+
+    // -------------------------------------------------------------
+    // TEST 7.5: STAGED INJECTION-SEQUENCER REPLAY (per-sector locks)
+    // -------------------------------------------------------------
+    console.log('\n--- TEST 7.5: Staged Quick-Dial Replay (per-sector, no instant jump) ---');
+    await clickElementByRealHitTest('#btn-beam-dump');
+    await new Promise(r => setTimeout(r, 300));
+
+    // Trigger a quick-dial preset with a real pointer click, sample DURING replay
+    await clickElementByRealHitTest('.quick-dial-btn');
+    const replayStart = Date.now();
+    const replaySamples = [];
+    for (const off of [450, 1000, 1550]) {
+      const rem = replayStart + off - Date.now();
+      if (rem > 0) await new Promise(r => setTimeout(r, rem));
+      const s = await page.evaluate(() => ({
+        state: window.arcApp.state,
+        locked: window.arcApp.lockedSectors.length,
+        portalRadius: window.arcApp.physicsCanvas.portalHorizonRadius
+      }));
+      replaySamples.push(s);
+      console.log(`  t=${Date.now() - replayStart}ms: state=${s.state}, locked=${s.locked}/6`);
+    }
+    const seqCounts = replaySamples.map(s => s.locked);
+    const stagedOk = seqCounts.every((v, i) => i === 0 || v > seqCounts[i - 1]) &&
+                     replaySamples.every(s => s.locked > 0 && s.locked < 6 && s.state === 'STANDBY' && s.portalRadius < 0.01);
+
+    // Completion: ARMED, no auto-fire even 1s past final lock
+    const toEnd = replayStart + 2800 - Date.now();
+    if (toEnd > 0) await new Promise(r => setTimeout(r, toEnd));
+    const replayEnd = await page.evaluate(() => ({
+      state: window.arcApp.state,
+      locked: window.arcApp.lockedSectors.length,
+      portalRadius: window.arcApp.physicsCanvas.portalHorizonRadius,
+      triggerDisabled: document.getElementById('btn-trigger-collision').disabled
+    }));
+    console.log('Replay End:', JSON.stringify(replayEnd));
+    testResults.stagedQuickDialReplay = stagedOk &&
+      replayEnd.state === 'ARMED' && replayEnd.locked === 6 &&
+      replayEnd.portalRadius < 0.01 && replayEnd.triggerDisabled === false;
+    console.log('STAGED REPLAY TEST RESULT:', testResults.stagedQuickDialReplay ? 'PASSED' : 'FAILED');
+    await page.screenshot({ path: path.join(SCREENSHOT_DIR, '10_quickdial_replay_armed.png') });
+
+    // In-progress screenshots: one mid-replay frame per pass, two passes at offsets
+    const midStates = [];
+    for (const [off, label] of [[450, 'early'], [1100, 'late']]) {
+      await clickElementByRealHitTest('#btn-beam-dump');
+      await new Promise(r => setTimeout(r, 200));
+      await clickElementByRealHitTest('.quick-dial-btn');
+      const passStart = Date.now();
+      const rem2 = passStart + off - Date.now();
+      if (rem2 > 0) await new Promise(r => setTimeout(r, rem2));
+      const st = await page.evaluate(() => ({ state: window.arcApp.state, locked: window.arcApp.lockedSectors.length }));
+      await page.screenshot({ path: path.join(SCREENSHOT_DIR, `10_quickdial_replay_${label}.png`) });
+      midStates.push(st);
+      console.log(`  Mid-replay screenshot (${label}): state=${st.state}, locked=${st.locked}/6`);
+      const settle = passStart + 2600 - Date.now();
+      if (settle > 0) await new Promise(r => setTimeout(r, settle));
+    }
+    testResults.midReplayScreenshotsDistinct =
+      midStates[0].locked > 0 && midStates[0].locked < 6 &&
+      midStates[1].locked > midStates[0].locked && midStates[1].locked < 6;
+    console.log('MID-REPLAY SCREENSHOTS DISTINCT:', testResults.midReplayScreenshotsDistinct ? 'PASSED' : 'FAILED');
+
+    // -------------------------------------------------------------
+    // TEST 7.6: BEAM DUMP DURING REPLAY (mid-sequence disengage)
+    // -------------------------------------------------------------
+    console.log('\n--- TEST 7.6: Beam Dump DURING quick-dial replay ---');
+    await clickElementByRealHitTest('#btn-beam-dump');
+    await new Promise(r => setTimeout(r, 200));
+    await clickElementByRealHitTest('.quick-dial-btn');
+    await new Promise(r => setTimeout(r, 750)); // ~2 sectors locked
+    const midDump = await page.evaluate(() => ({ state: window.arcApp.state, locked: window.arcApp.lockedSectors.length }));
+    console.log('Mid-replay before dump:', JSON.stringify(midDump));
+    await clickElementByRealHitTest('#btn-beam-dump');
+    await new Promise(r => setTimeout(r, 2000)); // past when remaining sequencer steps would fire
+    const afterDump = await page.evaluate(() => ({ state: window.arcApp.state, locked: window.arcApp.lockedSectors.length }));
+    console.log('After mid-replay dump (+2s):', JSON.stringify(afterDump));
+    testResults.midReplayDumpClean =
+      midDump.locked > 0 && midDump.locked < 6 &&
+      afterDump.state === 'STANDBY' && afterDump.locked === 0;
+    console.log('MID-REPLAY DUMP TEST RESULT:', testResults.midReplayDumpClean ? 'PASSED' : 'FAILED');
+    await page.screenshot({ path: path.join(SCREENSHOT_DIR, '11_mid_replay_beam_dump.png') });
 
     // -------------------------------------------------------------
     // TEST 8: OPERATOR REFERENCE MODAL & ATTRIBUTIONS
@@ -361,7 +444,7 @@ async function runVerification() {
       cornerChecks.attrHref === 'https://github.com/StarlightDaemon' &&
       cornerChecks.attrText === 'StarlightDaemon' &&
       cornerChecks.attrRel.includes('noopener') &&
-      cornerChecks.version === 'v1.0.0'
+      cornerChecks.version === 'v1.1.0'
     );
 
     console.log('\n=== ALL TEST RESULTS SUMMARY ===');

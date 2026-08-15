@@ -5,6 +5,19 @@ All notable changes to the Aethel-Ring Collider (ARC) Synchrotron Portal Gateway
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-15
+
+**Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.7 Flash (High Reasoning))
+
+### Fixed
+- **Quick-Dial Instant-Jump Bug**: `loadTargetCoordinates` previously assigned all 6 locked sectors wholesale and set `ARMED` synchronously, bypassing the per-sector dipole lock audio, coil-intensity ramp, and canvas lock progression that manual steering uses.
+- **Injection Sequencer Replay**: quick-dial targets now step each sector through the exact same select/engage lock path as a manual dial (`selectSector` + `engageSelectedSector`), one dipole every 300ms — in-universe, even with pre-computed target optics the superconducting dipoles must energize in ring order; the injection sequencer steps them at machine cadence rather than operator speed.
+- Replay lands in the identical `COLLISION ARMED` state as manual steering and **never auto-fires** the collision (asserted at completion +1s, portal radius 0, trigger enabled but unpressed).
+- `EMERGENCY BEAM DUMP` (and lattice clear / step-back) remains fully functional **during** a replay: aborting mid-sequence cancels all pending sequencer steps and returns cleanly to `STANDBY` (new automated test).
+
+### Changed
+- Verification suite: added staged-replay sampling test, two mid-replay screenshots at distinct lock counts, and a mid-replay beam-dump test; registry quick-dial assertion re-timed for the ~1.8s sequencer; corner version tag assertions updated to v1.1.0.
+
 ## [1.0.0] - 2026-08-15
 
 **Built by:** Gemini 3.7 Flash (High Reasoning)

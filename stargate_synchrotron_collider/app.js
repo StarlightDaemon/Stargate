@@ -11,6 +11,7 @@ class SynchrotronApp {
     this.state = 'STANDBY'; // 'STANDBY', 'ARMED', 'ACTIVATING', 'ACTIVE_COLLISION', 'QUENCH_TRIPPED', 'BEAM_DUMPED'
     this.currentTarget = null;
     this.quenchInterlockActive = false; // MUST DEFAULT TO RELEASED (false)
+    this.coordinateReplayTimers = []; // pending injection-sequencer steps for a quick-dial replay
 
     // Telemetry base values
     this.telemetry = {
@@ -180,6 +181,7 @@ class SynchrotronApp {
 
   stepBackSector() {
     if (this.lockedSectors.length === 0) return;
+    this.cancelCoordinateReplay();
     synchrotronAudio.playUiClick();
     this.lockedSectors.pop();
     this.selectedSector = null;
@@ -193,6 +195,7 @@ class SynchrotronApp {
   }
 
   clearLattice() {
+    this.cancelCoordinateReplay();
     synchrotronAudio.playUiClick();
     this.lockedSectors = [];
     this.selectedSector = null;
@@ -226,23 +229,42 @@ class SynchrotronApp {
     });
   }
 
+  /**
+   * INJECTION SEQUENCER REPLAY: even with pre-computed target optics, the
+   * superconducting dipoles must energize in ring order — the sequencer steps
+   * each sector through the same select/engage lock path as a manual dial
+   * (full dipole audio, coil ramp, canvas lock), at machine cadence rather
+   * than operator speed. Locking the 6th sector arms the beam;
+   * it NEVER auto-fires the collision.
+   */
   loadTargetCoordinates(target) {
     synchrotronAudio.playUiClick();
+    this.cancelCoordinateReplay();
+
     this.currentTarget = target;
-    this.lockedSectors = [...target.coordinates];
+    this.lockedSectors = [];
     this.selectedSector = null;
 
     if (this.physicsCanvas) {
-      this.physicsCanvas.setLockedSectors(this.lockedSectors.map(s => s - 1));
-      this.physicsCanvas.setState('ARMED', target);
+      this.physicsCanvas.setLockedSectors([]);
     }
-
-    synchrotronAudio.updateCoilIntensity(1.0, 6);
-    synchrotronAudio.setDetectorClickRate(35);
-
-    // CRITICAL: Transitions to ARMED, NEVER AUTO-FIRES!
-    this.setState('ARMED');
+    this.setState('STANDBY');
     this.updateUIState();
+
+    const SEQUENCER_STEP_MS = 300; // machine cadence: faster than an operator, one dipole at a time
+    target.coordinates.forEach((secNum, i) => {
+      const timer = setTimeout(() => {
+        if (this.currentTarget !== target) return; // replay aborted or superseded
+        this.selectSector(secNum);
+        this.engageSelectedSector();
+      }, SEQUENCER_STEP_MS * (i + 1));
+      this.coordinateReplayTimers.push(timer);
+    });
+  }
+
+  cancelCoordinateReplay() {
+    this.coordinateReplayTimers.forEach(t => clearTimeout(t));
+    this.coordinateReplayTimers = [];
   }
 
   // --- 4. BEAM COLLISION ACTIVATION (Explicit trigger required) ---
@@ -290,6 +312,7 @@ class SynchrotronApp {
 
   // --- 5. BEAM DUMP / ABORT (Disengage) ---
   triggerBeamDump() {
+    this.cancelCoordinateReplay();
     synchrotronAudio.playBeamDump();
     synchrotronAudio.setDetectorClickRate(3);
     synchrotronAudio.updateCoilIntensity(0, 0);
