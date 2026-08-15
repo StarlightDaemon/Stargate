@@ -489,6 +489,7 @@
 
   // --- DISENGAGE / ABORT TRIGGER (Real cycle tested) ---
   function disengageConduit() {
+    cancelPresetReplay(); // abort any in-flight bearing-track replay
     SoundFX.disengageWhoosh();
 
     state.mode = 'IDLE';
@@ -516,6 +517,19 @@
   }
 
   // --- PRESET QUICK-DIAL LOADER ---
+  // CHARTED BEARING-TRACK REPLAY: presets re-tune a surveyed acoustic track
+  // from the expedition chart — the array steps each hydrophone bearing at
+  // beamformer cadence, far faster than manual tuning, but every bearing
+  // still passes through the same lockGlyph phase lock (sonar ping, lock
+  // chime, transducer chevron, telemetry) as a manually dialed glyph. The
+  // 6th lock lands in PENDING_READY; emission NEVER starts on its own.
+  let presetReplayTimers = [];
+
+  function cancelPresetReplay() {
+    presetReplayTimers.forEach(t => clearTimeout(t));
+    presetReplayTimers = [];
+  }
+
   function loadPreset(presetKey) {
     if (state.safetyHoldEngaged) {
       triggerInterlockAlert();
@@ -524,12 +538,21 @@
     const preset = PRESETS[presetKey];
     if (!preset) return;
 
-    disengageConduit();
+    disengageConduit(); // also cancels any in-flight replay
 
-    preset.glyphs.forEach(glyphName => {
-      const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
-      const sym = btn ? btn.dataset.symbol : '⎈';
-      lockGlyph(glyphName, sym);
+    const BEAM_STEP_MS = 300; // beamformer cadence: faster than manual tuning, one bearing at a time
+    preset.glyphs.forEach((glyphName, i) => {
+      const timer = setTimeout(() => {
+        if (state.safetyHoldEngaged) {
+          cancelPresetReplay();
+          triggerInterlockAlert();
+          return;
+        }
+        const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
+        const sym = btn ? btn.dataset.symbol : '⎈';
+        lockGlyph(glyphName, sym);
+      }, BEAM_STEP_MS * (i + 1));
+      presetReplayTimers.push(timer);
     });
   }
 

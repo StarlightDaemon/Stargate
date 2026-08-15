@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-15
+
+**Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.6 Flash (high reasoning))
+
+### Fixed
+- **Preset Quick-Dial Instant-Jump Bug**: loading a charted preset previously locked all 6 bearing glyphs in one synchronous forEach, jumping straight to `PENDING_READY` and bypassing the per-bearing sonar ping, lock chime, transducer chevron animation, and `DIALING` telemetry progression that manual tuning uses.
+- **Charted Bearing-Track Replay**: presets now re-tune each hydrophone bearing through the exact same `lockGlyph` phase lock as manual dialing, one bearing every 300ms — in-universe, the array steps a surveyed acoustic track at beamformer cadence: far faster than manual tuning, but every bearing still requires its own phase lock.
+- Replay lands in the identical `PENDING_READY` state as manual dialing and **never starts emission on its own** (asserted at completion +1.2s).
+- `DISENGAGE / ABORT` remains fully functional **during** a replay: aborting mid-sequence cancels all pending beam timers and resets cleanly (new automated test). Engaging the Cavitation Safety Hold mid-replay halts the remaining beam steps with a single interlock alert.
+
+### Changed
+- Verification suite: staged-replay sampling with in-progress screenshots, mid-replay abort test; preset assertion re-timed for the ~1.8s replay.
+
 ## [1.0.1] - 2026-08-13
 
 ### Operator Evaluation & Status Note
