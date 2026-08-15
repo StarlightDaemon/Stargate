@@ -232,7 +232,7 @@ async function runTests() {
     // --- TEST CYCLE 2: PRESET -> NEGATIVE CHECK -> ACTIVATE -> ACTIVE VERIFICATION -> DISENGAGE ---
     console.log('\n--- EXECUTING DIAL-ACTIVATE-DISENGAGE CYCLE 2 ---');
     await hitAndClick('.preset-btn[data-preset="valencia-sol"]');
-    await sleep(600);
+    await sleep(2600); // dispatch-schedule replay: 8 substations x 260ms relay cadence
 
     const stateAfterPreset = await cdp.eval(`(() => {
       const counter = document.getElementById('address-counter').textContent;
@@ -272,6 +272,67 @@ async function runTests() {
       return document.getElementById('address-counter').textContent;
     })()`);
     console.log(`[Cycle 2 - After Disengage]: ${stateAfterDisengage2}`);
+
+    // --- TEST STAGED DISPATCH-SCHEDULE REPLAY (per-substation locks, no instant jump) ---
+    console.log('\n--- TESTING STAGED PRESET REPLAY ---');
+    await hitAndClick('.preset-btn[data-preset="valencia-sol"]');
+    // hitAndClick sleeps 250ms after the click; sample on an absolute clock
+    const clickT0 = Date.now() - 250;
+
+    const replaySamples = [];
+    for (const off of [400, 950, 1500]) {
+      const rem = clickT0 + off - Date.now();
+      if (rem > 0) await sleep(rem);
+      const s = await cdp.eval(`(() => ({
+        locked: (document.getElementById('address-counter').textContent.match(/^(\\d+)/) || [0,0])[1],
+        teleState: document.getElementById('tele-state').textContent,
+        activateDisabled: document.getElementById('btn-activate').hasAttribute('disabled')
+      }))()`);
+      s.locked = parseInt(s.locked, 10);
+      replaySamples.push(s);
+      console.log(`  t=${Date.now() - clickT0}ms:`, JSON.stringify(s));
+      await cdp.screenshot(path.join(__dirname, `screenshot_replay_t${off}.png`));
+    }
+    const rCounts = replaySamples.map(s => s.locked);
+    const stagedOk = rCounts.every((v, i) => i === 0 || v > rCounts[i - 1]) &&
+      replaySamples.every(s => s.locked > 0 && s.locked < 8 && s.activateDisabled &&
+        !s.teleState.includes('BIOSPHERE POWER CONDUIT ACTIVE'));
+    if (!stagedOk) {
+      throw new Error(`FAIL: Preset replay is not visibly staged: ${JSON.stringify(replaySamples)}`);
+    }
+
+    // Completion +1.2s: PENDING, activate enabled, NOT active
+    const toEnd = clickT0 + 2080 + 1200 - Date.now();
+    if (toEnd > 0) await sleep(toEnd);
+    const replayEnd = await cdp.eval(`(() => ({
+      counter: document.getElementById('address-counter').textContent,
+      teleState: document.getElementById('tele-state').textContent,
+      activateDisabled: document.getElementById('btn-activate').hasAttribute('disabled')
+    }))()`);
+    console.log('[Replay End]:', JSON.stringify(replayEnd));
+    if (!replayEnd.counter.includes('8 / 8') || replayEnd.activateDisabled ||
+        replayEnd.teleState.includes('BIOSPHERE POWER CONDUIT ACTIVE')) {
+      throw new Error('FAIL: Replay did not land in PENDING_READY without auto-fire.');
+    }
+    console.log('>>> STAGED REPLAY CONFIRMED: per-substation locks, PENDING at end, no auto-fire.');
+
+    // --- TEST DISENGAGE DURING REPLAY ---
+    console.log('\n--- TESTING SCRAM DURING PRESET REPLAY ---');
+    await hitAndClick('#btn-disengage');
+    await sleep(200);
+    await hitAndClick('.preset-btn[data-preset="valencia-sol"]');
+    await sleep(450); // ~2 substations coupled (250ms already slept in hitAndClick)
+    const midAbortState = await cdp.eval(`document.getElementById('address-counter').textContent`);
+    console.log(`[Mid-replay before SCRAM]: ${midAbortState}`);
+    await hitAndClick('#btn-disengage');
+    await sleep(2000); // past when remaining relay steps would have fired
+    const afterAbortState = await cdp.eval(`document.getElementById('address-counter').textContent`);
+    console.log(`[After mid-replay SCRAM +2s]: ${afterAbortState}`);
+    if (!afterAbortState.includes('0 / 8')) {
+      throw new Error('FAIL: SCRAM during replay left orphaned relay timers still coupling substations.');
+    }
+    await cdp.screenshot(path.join(__dirname, 'screenshot_mid_replay_abort.png'));
+    console.log('>>> MID-REPLAY SCRAM CONFIRMED: no orphaned locks after disengage.');
 
     // --- TEST SUPERCONDUCTING BUS OVERLOAD HOLD ---
     console.log('\n--- TESTING SUPERCONDUCTING BUS OVERLOAD HOLD ---');

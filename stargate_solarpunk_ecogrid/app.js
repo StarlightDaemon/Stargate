@@ -443,6 +443,7 @@
 
   // --- DISENGAGE / SCRAM TRIGGER ---
   function disengageConduit() {
+    cancelPresetReplay(); // abort any in-flight dispatch-schedule replay
     SoundFX.scramPurge();
 
     state.mode = 'IDLE';
@@ -469,6 +470,19 @@
   }
 
   // --- PRESET QUICK-DIAL LOADER ---
+  // STORED DISPATCH-SCHEDULE REPLAY: presets run a pre-balanced grid dispatch
+  // schedule — the grid controller couples the substations at relay cadence,
+  // far faster than manual switching, but every substation still passes
+  // through the same lockGlyph phase-lock (grid pulse, phase-lock chime,
+  // substation chevron, telemetry) as a manually coupled glyph. The 8th lock
+  // lands in PENDING_READY; power dispatch is NEVER transmitted on its own.
+  let presetReplayTimers = [];
+
+  function cancelPresetReplay() {
+    presetReplayTimers.forEach(t => clearTimeout(t));
+    presetReplayTimers = [];
+  }
+
   function loadPreset(presetKey) {
     if (state.safetyHoldEngaged) {
       triggerInterlockAlert();
@@ -477,12 +491,21 @@
     const preset = PRESETS[presetKey];
     if (!preset) return;
 
-    disengageConduit();
+    disengageConduit(); // also cancels any in-flight replay
 
-    preset.glyphs.forEach(glyphName => {
-      const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
-      const sym = btn ? btn.dataset.symbol : '⚡';
-      lockGlyph(glyphName, sym);
+    const RELAY_STEP_MS = 260; // relay cadence: faster than manual switching, one substation at a time
+    preset.glyphs.forEach((glyphName, i) => {
+      const timer = setTimeout(() => {
+        if (state.safetyHoldEngaged) {
+          cancelPresetReplay();
+          triggerInterlockAlert();
+          return;
+        }
+        const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
+        const sym = btn ? btn.dataset.symbol : '⚡';
+        lockGlyph(glyphName, sym);
+      }, RELAY_STEP_MS * (i + 1));
+      presetReplayTimers.push(timer);
     });
   }
 
