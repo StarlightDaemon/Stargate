@@ -1,0 +1,62 @@
+:root {
+  /* Core Obsidian Console Theme */
+  --bg-primary: #070a10;
+  --bg-surface-1: #0d121c;
+  --bg-surface-2: #141b29;
+  --bg-surface-3: #1b2436;
+  --bg-surface-inset: #05070a;
+  
+  /* Console Bevels & Metal Trim */
+  --border-subtle: #1e283c;
+  --border-medium: #2e3d5b;
+  --border-bright: #445982;
+  --border-highlight: #708cb8;
+  
+  /* Accent Colors */
+  --color-cyan: #00f0ff;
+  --color-cyan-glow: rgba(0, 240, 255, 0.35);
+  --color-cyan-dim: #007780;
+  
+  --color-amber: #ffaa00;
+  --color-amber-glow: rgba(255, 170, 0, 0.4);
+  --color-amber-dim: #885500;
+  
+  --color-orange: #ff5522;
+  --color-orange-glow: rgba(255, 85, 34, 0.4);
+  
+  --color-green: #00ff88;
+  --color-green-dim: #006633;
+  
+  --color-yellow: #ffee00;
+  --color-yellow-dim: #776600;
+  
+  --color-red: #ff2244;
+  --color-red-glow: rgba(255, 34, 68, 0.5);
+  --color-red-dim: #801020;
+  
+  /* Text Telemetry */
+  --text-main: #e2ebf8;
+  --text-dim: #7f93b5;
+  --text-muted: #495a75;
+  --text-glow-cyan: 0 0 10px rgba(0, 240, 255, 0.6);
+  --text-glow-amber: 0 0 10px rgba(255, 170, 0, 0.6);
+  --text-glow-red: 0 0 12px rgba(255, 34, 68, 0.7);
+
+  /* Fonts */
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  --font-display: 'Rajdhani', 'Segoe UI', -apple-system, sans-serif;
+  --font-sans: 'Inter', 'Segoe UI', -apple-system, sans-serif;
+
+  /* Sizing & Transitions */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  
+  --transition-fast: 0.12s cubic-bezier(0.2, 0, 0, 1);
+  --transition-normal: 0.25s cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Global UI scale (computed dynamically by JS for 1080p->4K) */
+  --app-scale: 1;
+}

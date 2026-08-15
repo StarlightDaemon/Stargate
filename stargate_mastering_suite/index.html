@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axiom Sound Labs // Quantum Mastering Array MK-IX</title>
+  <meta name="description" content="Axiom Sound Labs - Quantum Mastering Array MK-IX. An interactive novelty audio mastering console and harmonic portal dialing interface.">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="console-viewport">
+    <div class="console-workspace" id="console-workspace">
+      
+      <!-- SVG Layer for Dynamic Animated Patch Cables -->
+      <svg id="patch-cables-svg" aria-hidden="true"></svg>
+
+      <!-- Console Header -->
+      <header class="console-header">
+        <div class="facility-branding">
+          <div class="facility-logo-mark">AX</div>
+          <div class="facility-titles">
+            <h1>Axiom Sound Labs // Quantum Mastering Array MK-IX</h1>
+            <div class="facility-sub">HARMONIC SUMMING & SPATIAL APERTURE CONSOLE // BAY-04</div>
+          </div>
+        </div>
+
+        <div class="header-status-strip">
+          <div id="master-status-telemetry" class="status-display status-idle">
+            CONSOLE STANDBY // 60Hz IDLE BUS // READY FOR HARMONIC ROUTING
+          </div>
+        </div>
+
+        <div class="header-tools">
+          <button id="btn-audio-mute" class="icon-btn" title="Toggle Audio Engine Mute" aria-label="Toggle Audio Engine Mute">
+            🔊
+          </button>
+          <button id="btn-operator-help" class="help-circle-btn" title="Operator Reference Manual" aria-label="Operator Reference Manual">
+            ?
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Console Layout: 3 Columns -->
+      <main class="console-main-grid">
+        
+        <!-- Left Panel: Named Cluster 1 -> Harmonic Channel Patchbay -->
+        <section class="rack-panel" id="cluster-harmonic-patchbay">
+          <div class="cluster-title">
+            <span>Harmonic Channel Patchbay</span>
+            <span class="cluster-badge">10 NODES</span>
+          </div>
+
+          <div class="patchbay-grid">
+            <!-- Channel 0 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="0" id="patch-jack-0" title="Patch Channel 0: Sub-Bass (32 Hz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">∿ CH-00</span>
+                <span class="jack-freq">32 Hz [SUB]</span>
+              </div>
+            </div>
+
+            <!-- Channel 1 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="1" id="patch-jack-1" title="Patch Channel 1: Resonance (65 Hz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">⎍ CH-01</span>
+                <span class="jack-freq">65 Hz [RES]</span>
+              </div>
+            </div>
+
+            <!-- Channel 2 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="2" id="patch-jack-2" title="Patch Channel 2: Low-Mid (130 Hz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">⋔ CH-02</span>
+                <span class="jack-freq">130 Hz [LOW]</span>
+              </div>
+            </div>
+
+            <!-- Channel 3 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="3" id="patch-jack-3" title="Patch Channel 3: Mid-Core (260 Hz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">◈ CH-03</span>
+                <span class="jack-freq">260 Hz [MID]</span>
+              </div>
+            </div>
+
+            <!-- Channel 4 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="4" id="patch-jack-4" title="Patch Channel 4: Upper-Mid (520 Hz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">⨁ CH-04</span>
+                <span class="jack-freq">520 Hz [UPR]</span>
+              </div>
+            </div>
+
+            <!-- Channel 5 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="5" id="patch-jack-5" title="Patch Channel 5: Presence (1.04 kHz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">∾ CH-05</span>
+                <span class="jack-freq">1.04 kHz [PRS]</span>
+              </div>
+            </div>
+
+            <!-- Channel 6 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="6" id="patch-jack-6" title="Patch Channel 6: Brilliance (2.08 kHz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">⨂ CH-06</span>
+                <span class="jack-freq">2.08 kHz [BRL]</span>
+              </div>
+            </div>
+
+            <!-- Channel 7 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="7" id="patch-jack-7" title="Patch Channel 7: Air-Band (4.18 kHz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">⋇ CH-07</span>
+                <span class="jack-freq">4.18 kHz [AIR]</span>
+              </div>
+            </div>
+
+            <!-- Channel 8 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="8" id="patch-jack-8" title="Patch Channel 8: Hyper-Harmonic (8.37 kHz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">⨀ CH-08</span>
+                <span class="jack-freq">8.37 kHz [HYP]</span>
+              </div>
+            </div>
+
+            <!-- Channel 9 -->
+            <div class="patch-jack-unit">
+              <div class="patch-jack" data-channel="9" id="patch-jack-9" title="Patch Channel 9: Quantum-Flux (12.5 kHz)">
+                <div class="jack-core"></div>
+              </div>
+              <div class="jack-info">
+                <span class="jack-glyph">⨝ CH-09</span>
+                <span class="jack-freq">12.5 kHz [QNT]</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Master Waveform Oscilloscope -->
+          <div class="deck-telemetry-box" style="margin-top: auto;">
+            <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); display: flex; justify-content: space-between;">
+              <span>OSCILLOSCOPE TELEMETRY</span>
+              <span>SAMPLING: 96 kHz</span>
+            </div>
+            <canvas id="master-waveform-canvas" width="420" height="100"></canvas>
+          </div>
+        </section>
+
+        <!-- Center Stage: Polar Spectrum Ring & Portal Aperture -->
+        <section class="center-instrument-stage">
+          <div class="ring-outer-assembly" id="ring-assembly">
+            <!-- Canvas: Functioning Polar Spectrum Meter Ring -->
+            <canvas id="ring-canvas" width="700" height="700"></canvas>
+
+            <!-- Center Aperture: Vectorscope / Spatial Singularity Portal -->
+            <div class="center-aperture-housing" id="center-aperture-housing">
+              <canvas id="center-aperture-canvas" width="360" height="360"></canvas>
+            </div>
+
+            <!-- 10 Perimeter Channel Nodes along the ring -->
+            <button class="ring-channel-node" data-channel="0" id="ring-node-0" style="left: 328px; top: 16px;" title="Channel 0: Sub-Bass (32 Hz)">
+              <span class="node-glyph">∿</span>
+              <span class="node-idx">0</span>
+            </button>
+            <button class="ring-channel-node" data-channel="1" id="ring-node-1" style="left: 511px; top: 76px;" title="Channel 1: Resonance (65 Hz)">
+              <span class="node-glyph">⎍</span>
+              <span class="node-idx">1</span>
+            </button>
+            <button class="ring-channel-node" data-channel="2" id="ring-node-2" style="left: 625px; top: 232px;" title="Channel 2: Low-Mid (130 Hz)">
+              <span class="node-glyph">⋔</span>
+              <span class="node-idx">2</span>
+            </button>
+            <button class="ring-channel-node" data-channel="3" id="ring-node-3" style="left: 625px; top: 424px;" title="Channel 3: Mid-Core (260 Hz)">
+              <span class="node-glyph">◈</span>
+              <span class="node-idx">3</span>
+            </button>
+            <button class="ring-channel-node" data-channel="4" id="ring-node-4" style="left: 511px; top: 580px;" title="Channel 4: Upper-Mid (520 Hz)">
+              <span class="node-glyph">⨁</span>
+              <span class="node-idx">4</span>
+            </button>
+            <button class="ring-channel-node" data-channel="5" id="ring-node-5" style="left: 328px; top: 640px;" title="Channel 5: Presence (1.04 kHz)">
+              <span class="node-glyph">∾</span>
+              <span class="node-idx">5</span>
+            </button>
+            <button class="ring-channel-node" data-channel="6" id="ring-node-6" style="left: 145px; top: 580px;" title="Channel 6: Brilliance (2.08 kHz)">
+              <span class="node-glyph">⨂</span>
+              <span class="node-idx">6</span>
+            </button>
+            <button class="ring-channel-node" data-channel="7" id="ring-node-7" style="left: 31px; top: 424px;" title="Channel 7: Air-Band (4.18 kHz)">
+              <span class="node-glyph">⋇</span>
+              <span class="node-idx">7</span>
+            </button>
+            <button class="ring-channel-node" data-channel="8" id="ring-node-8" style="left: 31px; top: 232px;" title="Channel 8: Hyper-Harmonic (8.37 kHz)">
+              <span class="node-glyph">⨀</span>
+              <span class="node-idx">8</span>
+            </button>
+            <button class="ring-channel-node" data-channel="9" id="ring-node-9" style="left: 145px; top: 76px;" title="Channel 9: Quantum-Flux (12.5 kHz)">
+              <span class="node-glyph">⨝</span>
+              <span class="node-idx">9</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Right Panel: Named Cluster 2 -> Master Transport & Summing Deck -->
+        <section class="rack-panel" id="cluster-master-transport-deck">
+          <div class="cluster-title">
+            <span>Master Transport & Summing Deck</span>
+            <span class="cluster-badge">7-BUS SUM</span>
+          </div>
+
+          <!-- Address Sequence Badge -->
+          <div class="deck-telemetry-box">
+            <span id="address-sequence-badge">ROUTING SEQUENCE: [NONE]</span>
+          </div>
+
+          <!-- Master VU Meters -->
+          <div class="vu-meters-container">
+            <canvas id="vu-meters-canvas" width="340" height="140"></canvas>
+          </div>
+
+          <!-- Stereo Segmented Peak LED Ladders -->
+          <div class="led-ladders-strip">
+            <div class="ladder-col">
+              <div class="led-ladder" id="led-ladder-l">
+                <div class="led-seg seg-red"></div>
+                <div class="led-seg seg-red"></div>
+                <div class="led-seg seg-yellow"></div>
+                <div class="led-seg seg-yellow"></div>
+                <div class="led-seg seg-yellow"></div>
+                <div class="led-seg seg-green"></div>
+                <div class="led-seg seg-green"></div>
+                <div class="led-seg seg-green"></div>
+                <div class="led-seg seg-green"></div>
+                <div class="led-seg seg-green"></div>
+              </div>
+              <span class="ladder-label">L-PEAK</span>
+            </div>
+            <div class="ladder-col">
+              <div class="led-ladder" id="led-ladder-r">
+                <div class="led-seg seg-red"></div>
+                <div class="led-seg seg-red"></div>
+                <div class="led-seg seg-yellow"></div>
+                <div class="led-seg seg-yellow"></div>
+                <div class="led-seg seg-yellow"></div>
+                <div class="led-seg seg-green"></div>
+                <div class="led-seg seg-green"></div>
+                <div class="led-seg seg-green"></div>
+                <div class="led-seg seg-green"></div>
+                <div class="led-seg seg-green"></div>
+              </div>
+              <span class="ladder-label">R-PEAK</span>
+            </div>
+          </div>
+
+          <!-- Safety Interlock (Limiter Safety Ceiling) - DEFAULTS TO RELEASED -->
+          <div class="safety-limiter-panel">
+            <div class="limiter-info">
+              <span class="limiter-title">MASTER LIMITER INTERLOCK</span>
+              <span class="limiter-sub" id="limiter-status-indicator">LIMITER RELEASED (ARMED)</span>
+            </div>
+            <div class="limiter-switch-wrap">
+              <div class="led-dot led-good" id="limiter-led"></div>
+              <label class="toggle-switch" title="Toggle Safety Limiter (Defaults to Released)">
+                <input type="checkbox" id="limiter-safety-toggle" aria-label="Toggle Safety Limiter">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Transport Actions (Bounce / Print & Feed Cut) -->
+          <div class="transport-actions-row">
+            <button id="btn-print-master" class="btn-transport btn-print" title="Engage Master Harmonic Summing & Open Portal">
+              BOUNCE / PRINT MASTER
+            </button>
+            <button id="btn-feed-cut" class="btn-transport btn-cut" title="Emergency Master Feed Cut & Disengage">
+              FEED CUT / UNPATCH
+            </button>
+          </div>
+
+          <!-- Preloaded Quick-Dial Presets (2 Tiers, 6 Presets) -->
+          <div class="presets-section">
+            <div style="font-family: var(--font-display); font-size: 11px; color: var(--text-dim); letter-spacing: 1px;">
+              PRELOADED SESSION PRESETS:
+            </div>
+            <select id="preset-selector" class="preset-dropdown" aria-label="Select Preloaded Session Preset">
+              <option value="">-- SELECT SESSION PRESET --</option>
+              <optgroup label="Tier 1: Calibrated Broadcast Stems">
+                <option value="p1">P1: Axiom Broadcast Standard (Clean 96k)</option>
+                <option value="p2">P2: Sub-Harmonic Deep Core (Low Res)</option>
+                <option value="p3">P3: Crystal Air Spatial Print (High Shimmer)</option>
+              </optgroup>
+              <optgroup label="Tier 2: Experimental & Overdriven Routing">
+                <option value="p4">P4: Overdriven Sidechain Vortex (Saturated)</option>
+                <option value="p5">P5: Phase-Inverted Dark Matrix (Anomalous)</option>
+                <option value="p6">P6: Quantum Glitch Harmonic (Formant Shift)</option>
+              </optgroup>
+            </select>
+
+            <div class="preset-quick-grid">
+              <button class="btn-quick-preset" data-preset="p1">P1: CALIB</button>
+              <button class="btn-quick-preset" data-preset="p2">P2: CORE</button>
+              <button class="btn-quick-preset" data-preset="p3">P3: AIR</button>
+              <button class="btn-quick-preset" data-preset="p4">P4: OVD</button>
+              <button class="btn-quick-preset" data-preset="p5">P5: PHASE</button>
+              <button class="btn-quick-preset" data-preset="p6">P6: GLITCH</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Bottom Console Strip: 7-Bus Master Summing Array -->
+      <footer class="console-bottom-summing-strip">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-family: var(--font-display); font-size: 12px; color: var(--color-cyan); letter-spacing: 1px; text-transform: uppercase;">
+            7-STAGE POLYPHONIC MASTER SUMMING ARRAY
+          </span>
+          <span style="font-family: var(--font-mono); font-size: 10px; color: var(--text-dim);">
+            DYNAMIC SVG CABLE TERMINALS
+          </span>
+        </div>
+        <div class="bus-sequence-container" id="master-bus-sequence">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </footer>
+
+      <!-- Bottom Corner Displays & Attribution -->
+      <div class="console-footer">
+        <div class="footer-attribution">
+          <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+        </div>
+        <div class="footer-center-meta">
+          AXIOM AUDIO RESEARCH & MASTERING FACILITY // MK-IX MATRIX
+        </div>
+        <div class="footer-version">v1.0.0</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Operator Reference (?) Overlay Modal -->
+  <div class="modal-overlay" id="operator-help-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>OPERATOR REFERENCE MANUAL // AXIOM MK-IX</h2>
+        <button id="btn-close-modal" class="modal-close-btn" aria-label="Close Operator Reference">✕</button>
+      </div>
+      <div class="modal-content">
+        <div class="modal-section-title">1. FACILITY IDENTITY & HARMONIC SUMMING</div>
+        <p>
+          The Axiom Sound Labs MK-IX Quantum Mastering Array is a precision 10-channel polyphonic routing console that focuses discrete harmonic frequencies into a 7-stage master summing bus to synthesize an open spatial wormhole aperture.
+        </p>
+
+        <div class="modal-section-title">2. THE RING INSTRUMENT & POLAR METERS</div>
+        <p>
+          The central ring is an active multi-band spectrum analyzer. The 10 perimeter nodes represent discrete frequency bands (32 Hz to 12.5 kHz). As channels are patched into the master bus, their respective radial LED segments illuminate and reflect live synthesizer telemetry. The inner aperture displays real-time Lissajous phase correlation in standby, and blossoms into a high-energy quantum aperture during master summing.
+        </p>
+
+        <div class="modal-section-title">3. 7-STAGE BUS LOCKING SEQUENCE</div>
+        <table class="modal-table">
+          <thead>
+            <tr>
+              <th>Bus Stage</th>
+              <th>Function</th>
+              <th>Locking Feedback</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>01: PHASE-ALIGN</td><td>Vector Phase Alignment</td><td>Relay Thud + Harmonic C1 Tone</td></tr>
+            <tr><td>02: SUB-CARRIER</td><td>Sub-Harmonic Fundamental</td><td>Relay Thud + Harmonic C2 Tone</td></tr>
+            <tr><td>03: MODULATOR</td><td>Formant Filter Dispersion</td><td>Relay Thud + Harmonic C3 Tone</td></tr>
+            <tr><td>04: RESONATOR</td><td>Harmonic Core Density</td><td>Relay Thud + Harmonic C4 Tone</td></tr>
+            <tr><td>05: SPATIAL-BUS</td><td>Stereo Field Panning</td><td>Relay Thud + Harmonic C5 Tone</td></tr>
+            <tr><td>06: SIDECHAIN</td><td>Dynamic Spectral Ducking</td><td>Relay Thud + Harmonic C6 Tone</td></tr>
+            <tr><td>07: MASTER-GATE</td><td>Singularity Threshold Gate</td><td>Relay Thud + Harmonic C7 Tone</td></tr>
+          </tbody>
+        </table>
+
+        <div class="modal-section-title">4. STRICT NO-AUTO-FIRE & ACTIVATION</div>
+        <p>
+          Completing the 7th harmonic patch arms the console in <code>ARMED_READY</code> status without auto-firing. The operator must explicitly engage the illuminated <strong>"BOUNCE / PRINT MASTER"</strong> button to open the quantum aperture.
+        </p>
+
+        <div class="modal-section-title">5. SAFETY LIMITER & FEED CUT</div>
+        <p>
+          The <strong>Master Limiter Interlock</strong> defaults to <em>RELEASED (OFF)</em>. If engaged, it clamps the signal ceiling and prevents master activation with visible and audible alarms. The <strong>"FEED CUT / UNPATCH"</strong> button provides immediate emergency disconnection and resets all patch cables.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio_engine.js"></script>
+  <script src="js/visualizers.js"></script>
+  <script src="js/patchbay.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
