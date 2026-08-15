@@ -5,6 +5,19 @@ All notable changes to the **Caïssa Neural Recursion Workstation** (`stargate_c
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-15
+
+**Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.7 Flash)
+
+### Fixed
+- **Preset Quick-Dial Instant-Jump Bug**: selecting a tactical preset previously pushed all 7 plies into the Principal Variation synchronously, jumping straight from idle to `PENDING COMMIT` and bypassing the per-ply alpha-beta lock animation and audio that manual dialing uses.
+- **Transposition-Table Cache Replay**: presets now replay their line through the exact same per-ply lock path as manual dialing (`dialMove`), one ply every 280ms — in-universe, the engine replays a retrograde-verified canon line from its transposition table at full internal clock speed, but every ply still passes through individual alpha-beta confirmation with the full lock visual, clock-plunge/notation-tick/confirm-blip audio, and ring prune burst.
+- Replay lands in the identical `LINE_PENDING_COMMIT` armed state as manual dialing and **never auto-commits** (negative auto-fire guarantee preserved and re-verified).
+- `RESIGN LINE // ABORT` remains fully functional **during** the replay: aborting mid-sequence cancels all pending ply timers and returns cleanly to `IDLE` (new automated test).
+
+### Changed
+- Verification suite: added staged-replay test with in-progress screenshot sampling (Test 8) and mid-replay disengage test (Test 9); preset assertions re-timed for the ~2s replay; three-stage activation sampling moved to an absolute clock to remove screenshot-latency flakiness in Test 4.
+
 ## [1.0.0] - 2026-08-15
 
 **Built by:** Gemini 3.7 Flash (High reasoning)

@@ -130,22 +130,30 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial UI Render
   updateUIFromState(window.CaissaState);
 
-  // Core Event Handlers
-  function handleMoveSelection(moveId, btnElem) {
-    if (!window.CaissaState) return;
-
+  // Shared per-ply lock feedback (audio + ring burst) — used by manual
+  // dialing AND by the preset cache replay, so both paths lock identically.
+  function playPlyLockFeedback(plyIndex) {
     if (window.CaissaAudio) {
       window.CaissaAudio.playClockPlunge();
       setTimeout(() => window.CaissaAudio.playNotationTick(), 40);
-      setTimeout(() => window.CaissaAudio.playConfirmBlip(1.0 + window.CaissaState.history.length * 0.1), 80);
+      setTimeout(() => window.CaissaAudio.playConfirmBlip(1.0 + plyIndex * 0.1), 80);
     }
-
-    // Trigger ring visual effects
     if (ringRenderer) {
-      const rect = btnElem.getBoundingClientRect();
       ringRenderer.triggerPruneBurst(480, 400, "α-cut");
     }
+  }
 
+  // Per-ply feedback hook fired by the engine's preset cache replay
+  if (window.CaissaState) {
+    window.CaissaState.onPresetPlyLocked = (moveId, idx) => {
+      playPlyLockFeedback(idx);
+    };
+  }
+
+  // Core Event Handlers
+  function handleMoveSelection(moveId, btnElem) {
+    if (!window.CaissaState) return;
+    playPlyLockFeedback(window.CaissaState.history.length);
     window.CaissaState.dialMove(moveId);
   }
 

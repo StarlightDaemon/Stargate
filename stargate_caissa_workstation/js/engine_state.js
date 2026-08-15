@@ -90,6 +90,8 @@ class CaissaEngineState {
     this.listeners = [];
     this.activationTimer = null;
     this.activePresetId = null;
+    this.presetReplayTimers = [];
+    this.onPresetPlyLocked = null; // UI hook: per-ply lock feedback during preset replay
   }
 
   subscribe(listener) {
@@ -147,7 +149,13 @@ class CaissaEngineState {
   }
 
   /**
-   * Load a pre-defined tactical preset
+   * Load a pre-defined tactical preset.
+   *
+   * TRANSPOSITION-TABLE CACHE REPLAY: canon lines are already
+   * retrograde-verified, so the engine replays them from cache at full
+   * internal clock speed — but every ply still passes through the same
+   * alpha-beta lock (dialMove) as a manually dialed move. The line arms
+   * only when the final ply locks; it NEVER auto-commits.
    */
   loadPreset(presetId) {
     if (this.status === "STAGE_BUILDUP" || this.status === "STAGE_BREAKTHROUGH" || this.status === "STAGE_SUSTAINED") {
@@ -157,32 +165,36 @@ class CaissaEngineState {
     const preset = PRESETS.find(p => p.id === presetId);
     if (!preset) return false;
 
+    this.cancelPresetReplay();
     this.activePresetId = presetId;
     this.history = [];
     this.currentEval = 0.0;
+    this.currentDepth = 32;
+    this.currentNodes = 48.2;
+    this.status = "DIALING";
+    this.notify();
 
+    const REPLAY_PLY_INTERVAL_MS = 280; // cache-replay clock: faster than any human, each lock still distinct
     preset.moves.forEach((moveId, idx) => {
-      const moveDef = CANDIDATE_MOVES.find(m => m.id === moveId);
-      if (moveDef) {
-        let evalDelta = parseFloat(moveDef.delta) || 1.2;
-        if (moveDef.delta === "+M0") {
-          this.currentEval = 99.9;
-        } else {
-          this.currentEval = Math.min(15.0, Math.round((this.currentEval + evalDelta) * 100) / 100);
+      const timer = setTimeout(() => {
+        if (this.activePresetId !== presetId) return; // replay cancelled or superseded
+        const locked = this.dialMove(moveId);
+        if (locked && typeof this.onPresetPlyLocked === "function") {
+          this.onPresetPlyLocked(moveId, idx);
         }
-        this.history.push({
-          ply: idx + 1,
-          move: moveDef,
-          evalAtPly: this.currentEval
-        });
-      }
+      }, REPLAY_PLY_INTERVAL_MS * (idx + 1));
+      this.presetReplayTimers.push(timer);
     });
 
-    this.currentDepth = 68;
-    this.currentNodes = 88.5;
-    this.status = "LINE_PENDING_COMMIT"; // Loaded ready to commit, NOT auto-fired!
-    this.notify();
     return true;
+  }
+
+  /**
+   * Cancel any in-flight preset cache replay (abort-safe at every ply)
+   */
+  cancelPresetReplay() {
+    this.presetReplayTimers.forEach(t => clearTimeout(t));
+    this.presetReplayTimers = [];
   }
 
   /**
@@ -263,6 +275,8 @@ class CaissaEngineState {
       clearTimeout(this.activationTimer);
       this.activationTimer = null;
     }
+
+    this.cancelPresetReplay();
 
     if (window.CaissaAudio) {
       window.CaissaAudio.playResignSwoosh();

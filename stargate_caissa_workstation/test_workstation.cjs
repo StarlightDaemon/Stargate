@@ -214,9 +214,16 @@ async function runTests() {
 
     // Click Commit Line with interlock released
     await hitTestClick(page, '#commit-line-btn');
+    // Absolute-clock sampling: screenshot latency must not push samples out
+    // of each stage's window (buildup 0-2.5s, breakthrough 2.5-3.5s, sustained 3.5s+)
+    const commitStart = Date.now();
+    const sleepUntil = async (offsetMs) => {
+      const remaining = commitStart + offsetMs - Date.now();
+      if (remaining > 0) await sleep(remaining);
+    };
 
     // Sample Stage 1: Buildup (at t = 1.2s)
-    await sleep(1200);
+    await sleepUntil(1200);
     const stage1State = await page.evaluate(() => {
       return {
         status: window.CaissaState.status,
@@ -232,8 +239,8 @@ async function runTests() {
       throw new Error(`Expected STAGE_BUILDUP, got: ${stage1State.status}`);
     }
 
-    // Sample Stage 2: Breakthrough Instant (at t = 2.8s total, +1.6s from buildup sample)
-    await sleep(1600);
+    // Sample Stage 2: Breakthrough Instant (at t = 2.8s on the absolute commit clock)
+    await sleepUntil(2800);
     const stage2State = await page.evaluate(() => {
       return {
         status: window.CaissaState.status,
@@ -249,8 +256,8 @@ async function runTests() {
       throw new Error(`Expected STAGE_BREAKTHROUGH, got: ${stage2State.status}`);
     }
 
-    // Sample Stage 3: Sustained Active (at t = 4.2s total, +1.4s from breakthrough)
-    await sleep(1400);
+    // Sample Stage 3: Sustained Active (at t = 4.2s on the absolute commit clock)
+    await sleepUntil(4200);
     const stage3State = await page.evaluate(() => {
       return {
         status: window.CaissaState.status,
@@ -284,9 +291,9 @@ async function runTests() {
       throw new Error(`Disengage Cycle 1 reset failed: status=${resetState.status}`);
     }
 
-    // Redial via Preset Tier 1 (Opera House)
+    // Redial via Preset Tier 1 (Opera House) — cache replay takes ~2s to lock all 7 plies
     await hitTestClick(page, '#preset-btn-preset_opera');
-    await sleep(200);
+    await sleep(2500);
     let presetLoaded = await page.evaluate(() => window.CaissaState.status);
     if (presetLoaded !== 'LINE_PENDING_COMMIT') {
       throw new Error(`Preset load failed in cycle 1: ${presetLoaded}`);
@@ -311,7 +318,7 @@ async function runTests() {
     }
 
     await hitTestClick(page, '#preset-btn-preset_king_walk');
-    await sleep(200);
+    await sleep(2500);
     let preset2Loaded = await page.evaluate(() => window.CaissaState.status);
     if (preset2Loaded !== 'LINE_PENDING_COMMIT') {
       throw new Error(`Preset load failed in cycle 2: ${preset2Loaded}`);
@@ -334,7 +341,7 @@ async function runTests() {
     // -------------------------------------------------------------
     console.log('\n[TEST 6] Testing Quick-Dial Preset Tiers (Tier 1 vs Tier 2)...');
     await hitTestClick(page, '#preset-btn-preset_greek_gift');
-    await sleep(150);
+    await sleep(2500);
 
     const tier1Data = await page.evaluate(() => ({
       status: window.CaissaState.status,
@@ -347,7 +354,7 @@ async function runTests() {
     }
 
     await hitTestClick(page, '#preset-btn-preset_pawn_storm');
-    await sleep(150);
+    await sleep(2500);
 
     const tier2Data = await page.evaluate(() => ({
       status: window.CaissaState.status,
@@ -393,6 +400,91 @@ async function runTests() {
     if (!modalClosed) {
       throw new Error('Operator modal failed to close');
     }
+
+    // -------------------------------------------------------------
+    // TEST 8: STAGED PRESET CACHE REPLAY (PER-PLY LOCK SEQUENCE)
+    // -------------------------------------------------------------
+    console.log('\n[TEST 8] Testing Staged Preset Cache Replay (per-ply locks, no instant jump)...');
+    await page.evaluate(() => window.CaissaState.reset());
+    await sleep(200);
+
+    // Click preset with a real pointer event, then sample DURING the replay
+    // on an absolute clock so screenshot latency cannot skew the sample points
+    await hitTestClick(page, '#preset-btn-preset_immortal');
+    const presetStart = Date.now();
+
+    const replaySamples = [];
+    const sampleOffsets = [420, 950, 1500]; // replay locks ply k at ~280*k ms
+    for (const off of sampleOffsets) {
+      const remaining = presetStart + off - Date.now();
+      if (remaining > 0) await sleep(remaining);
+      const actualT = Date.now() - presetStart;
+      const s = await page.evaluate(() => ({
+        status: window.CaissaState.status,
+        plies: window.CaissaState.history.length
+      }));
+      const snapMid = path.join(SCREENSHOT_DIR, `11_replay_progress_t${off}.png`);
+      await page.screenshot({ path: snapMid });
+      replaySamples.push({ t: actualT, ...s, screenshot: snapMid });
+      console.log(`  t=${actualT}ms: status=${s.status}, plies=${s.plies}/7`);
+    }
+
+    // Must be genuinely staged: strictly increasing ply counts, DIALING mid-sequence
+    const plyCounts = replaySamples.map(s => s.plies);
+    const strictlyIncreasing = plyCounts.every((v, i) => i === 0 || v > plyCounts[i - 1]);
+    const midDialing = replaySamples.every(s => s.status === 'DIALING' && s.plies > 0 && s.plies < 7);
+    if (!strictlyIncreasing || !midDialing) {
+      throw new Error(`Replay not staged: samples=${JSON.stringify(plyCounts)}, statuses=${replaySamples.map(s => s.status)}`);
+    }
+
+    // Completion: armed but NOT auto-fired, even 1.2s after final lock (~1.96s)
+    const remainingToEnd = presetStart + 3300 - Date.now();
+    if (remainingToEnd > 0) await sleep(remainingToEnd);
+    const replayEnd = await page.evaluate(() => ({
+      status: window.CaissaState.status,
+      plies: window.CaissaState.history.length
+    }));
+    console.log(`  After replay + 1.2s: status=${replayEnd.status}, plies=${replayEnd.plies}/7`);
+    if (replayEnd.status !== 'LINE_PENDING_COMMIT' || replayEnd.plies !== 7) {
+      throw new Error(`Replay end state wrong: ${replayEnd.status} (${replayEnd.plies}/7) — expected LINE_PENDING_COMMIT, no auto-fire`);
+    }
+    const snapReplayDone = path.join(SCREENSHOT_DIR, '12_replay_complete_pending.png');
+    await page.screenshot({ path: snapReplayDone });
+    testLogs.push({ test: 'Staged Preset Cache Replay', screenshot: snapReplayDone, status: 'PASSED' });
+
+    // -------------------------------------------------------------
+    // TEST 9: DISENGAGE MID-REPLAY (ABORT DURING AUTO-DIAL)
+    // -------------------------------------------------------------
+    console.log('\n[TEST 9] Testing Disengage DURING preset replay...');
+    await page.evaluate(() => window.CaissaState.reset());
+    await sleep(200);
+
+    await hitTestClick(page, '#preset-btn-preset_opera');
+    await sleep(700); // ~2 plies locked, replay in flight
+    const midState = await page.evaluate(() => ({ status: window.CaissaState.status, plies: window.CaissaState.history.length }));
+    console.log(`  Mid-replay before abort: status=${midState.status}, plies=${midState.plies}`);
+    if (midState.status !== 'DIALING' || midState.plies === 0 || midState.plies >= 7) {
+      throw new Error(`Mid-replay state unexpected: ${midState.status} (${midState.plies})`);
+    }
+
+    await hitTestClick(page, '#resign-line-btn');
+    await sleep(200);
+    let abortState = await page.evaluate(() => ({ status: window.CaissaState.status, plies: window.CaissaState.history.length }));
+    console.log(`  Immediately after abort: status=${abortState.status}, plies=${abortState.plies}`);
+    if (abortState.status !== 'IDLE' || abortState.plies !== 0) {
+      throw new Error(`Mid-replay disengage failed: ${abortState.status} (${abortState.plies})`);
+    }
+
+    // Ensure no orphaned replay timers keep locking plies after the abort
+    await sleep(1800);
+    abortState = await page.evaluate(() => ({ status: window.CaissaState.status, plies: window.CaissaState.history.length }));
+    console.log(`  1.8s after abort: status=${abortState.status}, plies=${abortState.plies}`);
+    if (abortState.status !== 'IDLE' || abortState.plies !== 0) {
+      throw new Error(`Orphaned replay timers fired after abort: ${abortState.status} (${abortState.plies})`);
+    }
+    const snapMidAbort = path.join(SCREENSHOT_DIR, '13_mid_replay_disengage.png');
+    await page.screenshot({ path: snapMidAbort });
+    testLogs.push({ test: 'Mid-Replay Disengage', screenshot: snapMidAbort, status: 'PASSED' });
 
     console.log('\n=== ALL AUTOMATED VERIFICATION TESTS PASSED SUCCESSFULLY! ===\n');
     console.log(JSON.stringify(testLogs, null, 2));
