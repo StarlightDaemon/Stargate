@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aethel-Ring Collider (ARC) | Synchrotron Inversion Control</title>
+  <meta name="description" content="Superconducting Synchrotron Particle Collider & Quantum Topological Collision Gateway Control Interface.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@600;700;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Fixed Top-Right Operator Reference Button -->
+  <button id="operator-ref-btn" title="Operator Manual & System Guide" aria-label="Operator Reference">?</button>
+
+  <div id="app-scaler">
+    <div class="crt-overlay"></div>
+
+    <!-- 1. CONTROL ROOM HEADER -->
+    <header id="control-header">
+      <div class="facility-branding">
+        <div class="collider-badge">ARC</div>
+        <div class="brand-text">
+          <h1>AETHEL-RING COLLIDER</h1>
+          <div class="sub-title">AETHELGARD HIGH-ENERGY INVERSION LABORATORY (AHEIL)</div>
+        </div>
+      </div>
+
+      <!-- Live Header Telemetry Ticker -->
+      <div class="header-telemetry-ticker">
+        <div class="tel-cell">
+          <span class="tel-label">LATTICE STATE</span>
+          <span class="tel-val state-text" id="tel-header-state">STANDBY</span>
+        </div>
+        <div class="tel-divider"></div>
+        <div class="tel-cell">
+          <span class="tel-label">BEAM ENERGY</span>
+          <span class="tel-val" id="tel-header-energy">0.45 TeV</span>
+        </div>
+        <div class="tel-divider"></div>
+        <div class="tel-cell">
+          <span class="tel-label">LUMINOSITY</span>
+          <span class="tel-val" id="tel-header-lumi">0.12×10³⁴</span>
+        </div>
+        <div class="tel-divider"></div>
+        <div class="tel-cell">
+          <span class="tel-label">CRYO TEMP</span>
+          <span class="tel-val" id="tel-header-temp">1.86 K</span>
+        </div>
+        <div class="tel-divider"></div>
+        <div class="tel-cell">
+          <span class="tel-label">VACUUM</span>
+          <span class="tel-val" id="tel-header-vac">1.1×10⁻¹⁰ mbar</span>
+        </div>
+      </div>
+
+      <!-- Secondary Navigation Tabs -->
+      <nav class="header-nav" aria-label="Secondary views">
+        <button class="nav-tab-btn" id="btn-nav-registry">
+          <span>◈</span> TARGET REGISTRY
+        </button>
+        <button class="nav-tab-btn" id="btn-nav-schematic">
+          <span>⬡</span> TUNNEL MAP
+        </button>
+        <button class="nav-tab-btn" id="btn-nav-history">
+          <span>≡</span> EVENT LOG
+        </button>
+        <button class="nav-tab-btn" id="btn-nav-settings">
+          <span>⚙</span> SETTINGS
+        </button>
+      </nav>
+    </header>
+
+    <!-- 2. MAIN OPERATIONAL WORKSPACE -->
+    <main id="main-workspace">
+      
+      <!-- CORE CLUSTER 1: LATTICE VECTOR STEERING -->
+      <section class="control-cluster-panel" id="cluster-lattice-steering" aria-label="Lattice Vector Steering">
+        <div class="cluster-header">
+          <h2>1. LATTICE VECTOR STEERING</h2>
+          <span class="cluster-tag">FODO DIPOLE LATTICE</span>
+        </div>
+        
+        <div class="cluster-body">
+          <!-- 6-Sector Target Coordinate Readout -->
+          <div class="sector-readout-strip">
+            <div class="readout-title">
+              <span>ACTIVE LATTICE VECTOR (6 SECTORS)</span>
+              <span id="slots-count-label">0 / 6 LOCKED</span>
+            </div>
+            <div class="address-slots" id="address-slots-container">
+              <div class="address-slot next-target" data-index="0">--</div>
+              <div class="address-slot" data-index="1">--</div>
+              <div class="address-slot" data-index="2">--</div>
+              <div class="address-slot" data-index="3">--</div>
+              <div class="address-slot" data-index="4">--</div>
+              <div class="address-slot" data-index="5">--</div>
+            </div>
+          </div>
+
+          <!-- 16 Superconducting Sector Dipole Selector Grid -->
+          <div class="sector-grid-container">
+            <div class="grid-label">SELECT SECTOR CORRECTION CELL</div>
+            <div class="sector-button-grid" id="sector-selector-grid">
+              <!-- Rendered dynamically by app.js: 16 buttons (S-01 to S-16) -->
+            </div>
+          </div>
+
+          <!-- Engage Action Button -->
+          <button class="engage-sector-btn" id="btn-engage-sector" disabled>
+            <span>⚡</span> ENGAGE SECTOR DIPOLE
+          </button>
+
+          <!-- Quick Actions -->
+          <div style="display: flex; gap: 8px;">
+            <button class="nav-tab-btn" id="btn-clear-lattice" style="flex: 1; justify-content: center;">
+              RESET LATTICE
+            </button>
+            <button class="nav-tab-btn" id="btn-step-back" style="flex: 1; justify-content: center;">
+              STEP BACK
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- CENTER: SYNCHROTRON BEAM PIPE & DETECTOR VIEWPORT -->
+      <section id="center-viewport-panel" aria-label="Synchrotron Ring Canvas">
+        <div class="viewport-overlay-header">
+          <div class="chamber-tag">VACUUM CHAMBER ARC-101 // SUPERCONDUCTING MAGNET RING</div>
+          <div class="chamber-tag" id="beam-optics-tag">OPTICS: BETA-X 0.15m // TUNE 64.31</div>
+        </div>
+
+        <div class="canvas-container">
+          <canvas id="synchrotron-canvas"></canvas>
+
+          <!-- Visual Quench Protection Trip Banner -->
+          <div class="quench-trip-banner" id="quench-trip-banner">
+            <h3>⚠ QUENCH PROTECTION INTERLOCK ACTIVE ⚠</h3>
+            <p>Cryogenic Safety Limiter Engaged. Beam Injection Blocked.</p>
+            <p style="margin-top: 6px; font-size: 11px; color: #ffd0d0;">Release the Quench Interlock Switch in Cluster 2 to permit collision activation.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CORE CLUSTER 2: BEAM INJECTION & COLLISION TRIGGER -->
+      <section class="control-cluster-panel" id="cluster-beam-trigger" aria-label="Beam Injection and Collision Trigger">
+        <div class="cluster-header">
+          <h2>2. BEAM INJECTION & TRIGGER</h2>
+          <span class="cluster-tag">APERTURE ZERO</span>
+        </div>
+
+        <div class="cluster-body">
+          <!-- Status Monitor Card -->
+          <div class="status-monitor-card">
+            <div class="status-row">
+              <span class="tel-label">COLLIDER STATUS</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="status-indicator-dot standby" id="status-dot"></div>
+                <span class="tel-val" id="monitor-state-text" style="font-size: 12px;">STANDBY</span>
+              </div>
+            </div>
+            <div class="status-row">
+              <span class="tel-label">RF CAVITY PHASE LOCK</span>
+              <span class="tel-val" id="monitor-rf-lock" style="font-size: 12px; color: var(--neon-cyan);">STANDBY (0°)</span>
+            </div>
+            <div class="status-row">
+              <span class="tel-label">MAGNET CURRENT</span>
+              <span class="tel-val" id="monitor-magnet-current" style="font-size: 12px;">1.20 kA</span>
+            </div>
+          </div>
+
+          <!-- Activation Trigger (Never auto-fires; must be clicked by operator) -->
+          <button class="trigger-collision-btn" id="btn-trigger-collision" disabled>
+            <span>TRIGGER BEAM COLLISION</span>
+            <span class="btn-subtext" id="trigger-subtext">AWAITING 6-SECTOR LATTICE LOCK</span>
+          </button>
+
+          <!-- Always-Reachable Disengage Control (Beam Dump) -->
+          <button class="beam-dump-btn" id="btn-beam-dump">
+            <span>⏏</span> BEAM DUMP / ABORT
+          </button>
+
+          <!-- Safety Quench Interlock Switch (Defaults to RELEASED/UNCHECKED) -->
+          <div class="interlock-switch-box">
+            <div class="interlock-info">
+              <h4>QUENCH PROTECTION INTERLOCK</h4>
+              <p id="interlock-status-label">STATUS: RELEASED (READY FOR INJECTION)</p>
+            </div>
+            <div class="toggle-switch-container">
+              <input type="checkbox" id="quench-interlock-toggle" class="toggle-switch-input">
+              <label for="quench-interlock-toggle" class="toggle-switch-label" title="Toggle Quench Protection Interlock"></label>
+            </div>
+          </div>
+
+          <!-- Preloaded Quick-Dial Shortcuts (Curated 6 targets across 2+ tiers) -->
+          <div class="quick-dial-strip">
+            <div class="grid-label">CALIBRATED QUICK-DIAL PRESETS</div>
+            <div class="quick-dial-grid" id="quick-dial-container">
+              <!-- Rendered dynamically by app.js -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 3. MODAL OVERLAYS (SECONDARY PANELS) -->
+    
+    <!-- A. Collision Target Registry Modal -->
+    <div class="modal-overlay" id="modal-registry">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h2>COLLISION TARGET REGISTRY // CALIBRATED DESTINATIONS</h2>
+          <button class="modal-close-btn" data-close="modal-registry">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="registry-controls">
+            <input type="text" id="registry-search-input" class="search-input" placeholder="Search by designation, ID, tier, or resonance...">
+            <div class="filter-btn-group">
+              <button class="filter-btn active" data-filter="all">ALL TIERS</button>
+              <button class="filter-btn" data-filter="tier-1">TIER 1: LEPTONIC</button>
+              <button class="filter-btn" data-filter="tier-2">TIER 2: HADRONIC</button>
+              <button class="filter-btn" data-filter="tier-3">TIER 3: SINGULARITY</button>
+            </div>
+          </div>
+
+          <div class="registry-table-container">
+            <table class="registry-table">
+              <thead>
+                <tr>
+                  <th>DESIGNATION & ID</th>
+                  <th>TIER CLASSIFICATION</th>
+                  <th>COORDINATES</th>
+                  <th>BEAM ENERGY</th>
+                  <th>B-FIELD</th>
+                  <th>STABILITY</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="registry-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B. Synoptic Tunnel Schematic Modal -->
+    <div class="modal-overlay" id="modal-schematic">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h2>SYNCHOPTIC TUNNEL SCHEMATIC // ACCELERATOR COMPLEX & BETATRON PHASE SPACE</h2>
+          <button class="modal-close-btn" data-close="modal-schematic">&times;</button>
+        </div>
+        <div class="modal-body">
+          <canvas id="synoptic-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- C. Event History Log Modal -->
+    <div class="modal-overlay" id="modal-history">
+      <div class="modal-window" style="width: 800px;">
+        <div class="modal-header">
+          <h2>COLLISION EVENT HISTORY & INTEGRATED LUMINOSITY LEDGER</h2>
+          <button class="modal-close-btn" data-close="modal-history">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="event-log-list" id="event-log-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D. Facility Settings Modal -->
+    <div class="modal-overlay" id="modal-settings">
+      <div class="modal-window" style="width: 680px;">
+        <div class="modal-header">
+          <h2>FACILITY CONTROL ROOM SETTINGS</h2>
+          <button class="modal-close-btn" data-close="modal-settings">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="settings-grid">
+            <div class="setting-item">
+              <label for="setting-master-vol">MASTER AUDIO VOLUME</label>
+              <input type="range" id="setting-master-vol" min="0" max="1" step="0.05" value="0.7">
+            </div>
+            <div class="setting-item">
+              <label for="setting-mute-toggle">SYNTHESIS AUDIO MUTE</label>
+              <button class="nav-tab-btn" id="btn-toggle-audio-mute" style="width: fit-content;">AUDIO ACTIVE (UNMUTED)</button>
+            </div>
+            <div class="setting-item">
+              <label for="setting-bloom-intensity">SYNCHROTRON BLOOM INTENSITY</label>
+              <input type="range" id="setting-bloom-intensity" min="0.2" max="1.8" step="0.1" value="1.0">
+            </div>
+            <div class="setting-item">
+              <label>MOTION REDUCTION</label>
+              <button class="nav-tab-btn" id="btn-toggle-motion" style="width: fit-content;">FULL RELATIVISTIC MOTION</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E. Operator Reference Guide Modal -->
+    <div class="modal-overlay" id="modal-operator-guide">
+      <div class="modal-window" style="width: 850px;">
+        <div class="modal-header">
+          <h2>ARC OPERATOR REFERENCE MANUAL // STANDARD OPERATING PROCEDURES</h2>
+          <button class="modal-close-btn" data-close="modal-operator-guide">&times;</button>
+        </div>
+        <div class="modal-body" style="font-family: var(--font-sans); line-height: 1.6; font-size: 13px;">
+          <h3 style="color: var(--neon-cyan); font-family: var(--font-display); font-size: 14px; margin-bottom: 8px;">1. MANUAL LATTICE STEERING (CORE CLUSTER 1)</h3>
+          <p>The Aethel-Ring Collider uses 16 superconducting bending sectors (S-01 through S-16). To steer the beam toward a destination, select a sector button, then click <strong>ENGAGE SECTOR DIPOLE</strong>. A complete trajectory vector requires exactly 6 sector corrections to cancel sextupole resonances and align the beam at Aperture Zero.</p>
+
+          <h3 style="color: var(--neon-amber); font-family: var(--font-display); font-size: 14px; margin-top: 16px; margin-bottom: 8px;">2. BEAM COLLISION ACTIVATION (CORE CLUSTER 2)</h3>
+          <p><strong>NEVER AUTO-FIRES:</strong> Completing the 6th sector enters the <em>BEAM READY / COLLISION ARMED</em> state. The operator must explicitly press the highlighted <strong>TRIGGER BEAM COLLISION</strong> button to initiate counter-rotating bunch collision and establish the topological inversion portal.</p>
+
+          <h3 style="color: var(--neon-crimson); font-family: var(--font-display); font-size: 14px; margin-top: 16px; margin-bottom: 8px;">3. SAFETY QUENCH PROTECTION & BEAM DUMP</h3>
+          <p><strong>Quench Interlock:</strong> Defaults to <em>RELEASED</em>. When toggled on, it simulates a cryogenic thermal trip and blocks beam injection with audible/visual alarms.<br>
+          <strong>Beam Dump / Abort:</strong> Permanently available at all times to immediately dump beam energy into the absorber blocks and reset the lattice.</p>
+
+          <h3 style="color: var(--neon-green); font-family: var(--font-display); font-size: 14px; margin-top: 16px; margin-bottom: 8px;">4. PRELOADED QUICK-DIAL & REGISTRY</h3>
+          <p>Access calibrated targets across Tier 1 (Validated Leptonic), Tier 2 (Heavy Hadronic), and Tier 3 (Exotic Singularity) via the Target Registry or quick-dial shortcut buttons to instantly load pre-calculated steering vectors into the lattice.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANDATORY CORNER DISPLAYS -->
+    <div id="corner-attribution">
+      <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+    </div>
+    <div id="corner-version">v1.0.0</div>
+
+  </div>
+
+  <!-- Application Logic Scripts -->
+  <script src="audio.js"></script>
+  <script src="registry.js"></script>
+  <script src="synchrotron.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
