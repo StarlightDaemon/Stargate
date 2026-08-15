@@ -95,8 +95,8 @@ async function runTests() {
     if (cornerChecks.linkText !== 'StarlightDaemon' || cornerChecks.linkHref !== 'https://github.com/StarlightDaemon' || cornerChecks.linkRel !== 'noopener noreferrer') {
       throw new Error('FAIL: Attribution link metadata is incorrect!');
     }
-    if (cornerChecks.versionText !== 'v1.0.0') {
-      throw new Error('FAIL: Version string is not v1.0.0!');
+    if (cornerChecks.versionText !== 'v1.1.0') {
+      throw new Error('FAIL: Version string is not v1.1.0!');
     }
 
     // Test Operator Reference Modal
@@ -166,6 +166,9 @@ async function runTests() {
     console.log('\n--- Testing Master Print Activation ---');
     await hitTestClick('#btn-print-master');
     await new Promise(r => setTimeout(r, 500)); // allow portal energy to ramp
+    // Ensure at least two rendered frames so the energy ramp has provably started
+    // (headless rAF scheduling is otherwise nondeterministic within the wait)
+    await page.evaluate(() => new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res))));
 
     const activeCheck = await page.evaluate(() => {
       return {
@@ -220,7 +223,7 @@ async function runTests() {
     // 6. Dial-Disengage-Redial Cycle 2 (via Quick Preset)
     console.log('\n--- Testing Dial-Disengage-Redial Cycle 2 (Preset P1) ---');
     await hitTestClick('.btn-quick-preset[data-preset="p1"]');
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 2400)); // servo recall: 7 channels x 280ms
 
     const presetArmedCheck = await page.evaluate(() => {
       return {
@@ -243,9 +246,104 @@ async function runTests() {
     await new Promise(r => setTimeout(r, 200));
     console.log('PASS: Cycle 2 completed successfully.');
 
+    // 6.5 Staged Servo Recall Test (per-channel locks, no instant jump)
+    console.log('\n--- Testing Staged Servo Recall (preset patches one channel at a time) ---');
+    await hitTestClick('.btn-quick-preset[data-preset="p2"]');
+    const recallStart = Date.now();
+
+    const recallSamples = [];
+    for (const off of [420, 950, 1500]) {
+      const remaining = recallStart + off - Date.now();
+      if (remaining > 0) await new Promise(r => setTimeout(r, remaining));
+      const actualT = Date.now() - recallStart;
+      const s = await page.evaluate(() => ({
+        state: window.AxiomApp.state,
+        patched: window.AxiomApp.patchedChannels.length,
+        cables: window.AxiomBay.cables.length,
+        portalActive: window.AxiomVisuals.portalActive
+      }));
+      recallSamples.push(s);
+      console.log(`  t=${actualT}ms: state=${s.state}, patched=${s.patched}/7, cables=${s.cables}`);
+    }
+    const counts = recallSamples.map(s => s.patched);
+    const staged = counts.every((v, i) => (i === 0 || v > counts[i - 1])) &&
+                   recallSamples.every(s => s.state === 'PATCHING' && s.patched > 0 && s.patched < 7 && !s.portalActive);
+    if (!staged) {
+      throw new Error(`FAIL: Preset recall is not visibly staged: ${JSON.stringify(recallSamples)}`);
+    }
+
+    // Completion: ARMED_READY, no auto-fire even 1s after the final lock
+    const toEnd = recallStart + 3000 - Date.now();
+    if (toEnd > 0) await new Promise(r => setTimeout(r, toEnd));
+    const recallEnd = await page.evaluate(() => ({
+      state: window.AxiomApp.state,
+      patched: window.AxiomApp.patchedChannels.length,
+      portalActive: window.AxiomVisuals.portalActive
+    }));
+    console.log('Recall End Status:', recallEnd);
+    if (recallEnd.state !== 'ARMED_READY' || recallEnd.patched !== 7 || recallEnd.portalActive) {
+      throw new Error('FAIL: Staged recall did not land in ARMED_READY without auto-fire!');
+    }
+    await page.screenshot({ path: path.join(screenshotsDir, '06_recall_complete_armed.png') });
+    console.log('PASS: Servo recall is staged, lands ARMED_READY, no auto-fire.');
+
+    // In-progress screenshot evidence: screenshots on this canvas-heavy page take
+    // ~2s in headless, so capture ONE mid-recall frame per pass at two different
+    // offsets across two fresh recall passes (state is recorded just before capture).
+    const midShots = [];
+    for (const [off, label] of [[400, 'early'], [1000, 'late']]) {
+      await hitTestClick('#btn-feed-cut');
+      await new Promise(r => setTimeout(r, 150));
+      await hitTestClick('.btn-quick-preset[data-preset="p2"]');
+      const passStart = Date.now();
+      const rem = passStart + off - Date.now();
+      if (rem > 0) await new Promise(r => setTimeout(r, rem));
+      const stateAtShot = await page.evaluate(() => ({
+        state: window.AxiomApp.state,
+        patched: window.AxiomApp.patchedChannels.length
+      }));
+      await page.screenshot({ path: path.join(screenshotsDir, `06_recall_progress_${label}.png`) });
+      midShots.push(stateAtShot);
+      console.log(`  Mid-recall screenshot (${label}, ~t=${off}ms): state=${stateAtShot.state}, patched=${stateAtShot.patched}/7`);
+      // let this pass finish before the next
+      const settle = passStart + 3000 - Date.now();
+      if (settle > 0) await new Promise(r => setTimeout(r, settle));
+    }
+    if (!(midShots[0].patched > 0 && midShots[0].patched < 7 && midShots[0].state === 'PATCHING' &&
+          midShots[1].patched > midShots[0].patched && midShots[1].patched < 7 && midShots[1].state === 'PATCHING')) {
+      throw new Error(`FAIL: Mid-recall screenshots do not show distinct in-progress states: ${JSON.stringify(midShots)}`);
+    }
+    console.log('PASS: Two distinct in-progress recall states captured on screenshot.');
+
+    // 6.6 Mid-Recall Disengage Test (FEED CUT during servo recall)
+    console.log('\n--- Testing FEED CUT during servo recall ---');
+    await hitTestClick('#btn-feed-cut');
+    await new Promise(r => setTimeout(r, 100));
+    await hitTestClick('.btn-quick-preset[data-preset="p3"]');
+    await new Promise(r => setTimeout(r, 700)); // ~2 channels seated
+    const midRecall = await page.evaluate(() => ({ state: window.AxiomApp.state, patched: window.AxiomApp.patchedChannels.length }));
+    console.log('Mid-recall state before abort:', midRecall);
+    if (midRecall.state !== 'PATCHING' || midRecall.patched === 0 || midRecall.patched >= 7) {
+      throw new Error(`FAIL: Unexpected mid-recall state: ${JSON.stringify(midRecall)}`);
+    }
+    await hitTestClick('#btn-feed-cut');
+    await new Promise(r => setTimeout(r, 1900)); // past when remaining servo steps would have fired
+    const afterAbort = await page.evaluate(() => ({
+      state: window.AxiomApp.state,
+      patched: window.AxiomApp.patchedChannels.length,
+      cables: window.AxiomBay.cables.length
+    }));
+    console.log('After mid-recall abort (+1.9s):', afterAbort);
+    if (afterAbort.state !== 'IDLE_STANDBY' || afterAbort.patched !== 0 || afterAbort.cables !== 0) {
+      throw new Error('FAIL: FEED CUT during recall left orphaned servo steps or cables!');
+    }
+    await page.screenshot({ path: path.join(screenshotsDir, '06_mid_recall_feedcut.png') });
+    console.log('PASS: FEED CUT aborts an in-flight recall cleanly.');
+
     // 7. Test Tier 2 Preset (Experimental P4)
     console.log('\n--- Testing Tier 2 Preset (P4: Overdriven) ---');
     await hitTestClick('.btn-quick-preset[data-preset="p4"]');
+    await new Promise(r => setTimeout(r, 2400)); // wait for servo recall to arm
     await hitTestClick('#btn-print-master');
     await new Promise(r => setTimeout(r, 200));
     const tier2Active = await page.evaluate(() => window.AxiomApp.state === 'MASTER_SUMMING_ACTIVE');

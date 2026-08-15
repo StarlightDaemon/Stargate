@@ -21,6 +21,9 @@ class AxiomApp {
     // Safety Limiter Interlock - MUST DEFAULT TO RELEASED (false)
     this.limiterEngaged = false;
 
+    // Pending servo-recall timers for an in-flight preset patch sequence
+    this.presetRecallTimers = [];
+
     // Presets (2 distinct tiers, 6 total)
     this.presets = [
       // Tier 1: Calibrated Broadcast Stems (Clean Mastered Arrays)
@@ -230,27 +233,31 @@ class AxiomApp {
     this.updateUI();
   }
 
+  /**
+   * SERVO PATCHBAY RECALL: presets replay a stored routing snapshot through
+   * the motorized patchbay — each cable is re-seated by the same per-channel
+   * lock path as a manual patch (toggleChannelPatch: relay audio, SVG cable,
+   * state machine), at servo speed rather than hand speed. The 7th cable
+   * leaves the console in ARMED_READY; it NEVER auto-prints.
+   */
   loadPreset(presetId) {
     const preset = this.presets.find(p => p.id === presetId);
     if (!preset) return;
 
-    this.disengageMasterFeed();
+    this.disengageMasterFeed(); // also cancels any in-flight recall
 
-    // Patch channels in sequence
+    const RECALL_STEP_MS = 280; // servo speed: faster than hands, one jack at a time
     preset.channels.forEach((chIdx, i) => {
-      this.patchedChannels.push(chIdx);
-      if (window.AxiomBay) {
-        window.AxiomBay.addCable(chIdx, i);
-      }
+      const timer = setTimeout(() => {
+        this.toggleChannelPatch(chIdx);
+      }, RECALL_STEP_MS * (i + 1));
+      this.presetRecallTimers.push(timer);
     });
+  }
 
-    if (window.AxiomAudio) {
-      window.AxiomAudio.playChannelLock(preset.channels[0], 0);
-    }
-
-    // 7/7 channels patched -> Leaves system in ARMED_READY (NO AUTO-FIRE)
-    this.state = ConsoleState.ARMED_READY;
-    this.updateUI();
+  cancelPresetRecall() {
+    this.presetRecallTimers.forEach(t => clearTimeout(t));
+    this.presetRecallTimers = [];
   }
 
   engageMasterPrint() {
@@ -284,7 +291,8 @@ class AxiomApp {
   }
 
   disengageMasterFeed() {
-    // Full disengage & reset
+    // Full disengage & reset — abort any in-flight preset servo recall first
+    this.cancelPresetRecall();
     this.state = ConsoleState.IDLE_STANDBY;
     this.patchedChannels = [];
 
