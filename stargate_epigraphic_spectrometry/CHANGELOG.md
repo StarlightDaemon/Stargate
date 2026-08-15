@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-15
+
+**Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.6 Flash (high reasoning))
+
+### Fixed
+- **Preset Quick-Dial Instant-Jump Bug**: loading a catalogue preset previously locked all 7 glyphs in one synchronous forEach, jumping straight to `PENDING_READY` and bypassing the per-glyph laser scan tone, crystal chime, locus chevron animation, and `SCANNING` telemetry progression that manual dialing uses.
+- **Catalogued Cartouche Replay**: presets now re-scan each glyph through the exact same `lockGlyph` spectral lock as manual dialing, one glyph every 280ms — in-universe, the spectrometer traverses a fully translated cartouche from the expedition catalogue at servo-stage speed: far faster than manual transcription, but every glyph still requires its own spectral scan lock.
+- Replay lands in the identical `PENDING_READY` state as manual dialing and **never opens the golden conduit on its own** (asserted at completion +1.2s).
+- `PURGE / DISENGAGE` remains fully functional **during** a replay: purging mid-sequence cancels all pending scan timers and resets cleanly (new automated test). Engaging the Laser Overload Hold mid-replay halts the remaining scans with a single interlock alert.
+
+### Changed
+- Verification suite: staged-replay sampling with in-progress screenshots, mid-replay purge test; preset assertion re-timed for the ~2s replay.
+
 ## [1.0.1] - 2026-08-13
 
 ### Operator Evaluation & Status Note

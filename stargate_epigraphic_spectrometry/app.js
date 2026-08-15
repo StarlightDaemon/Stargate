@@ -454,6 +454,7 @@
 
   // --- DISENGAGE / PURGE TRIGGER ---
   function disengageConduit() {
+    cancelPresetReplay(); // abort any in-flight cartouche replay
     SoundFX.purgeDisengage();
 
     state.mode = 'IDLE';
@@ -480,6 +481,20 @@
   }
 
   // --- PRESET QUICK-DIAL LOADER ---
+  // CATALOGUED CARTOUCHE REPLAY: presets re-scan a fully translated cartouche
+  // from the expedition catalogue — the spectrometer traverses the glyph
+  // sequence at servo-stage speed, far faster than manual transcription, but
+  // every glyph still passes through the same lockGlyph spectral lock (laser
+  // scan tone, crystal chime, locus chevron, telemetry) as a manually dialed
+  // glyph. The 7th lock lands in PENDING_READY; the golden conduit NEVER
+  // opens on its own.
+  let presetReplayTimers = [];
+
+  function cancelPresetReplay() {
+    presetReplayTimers.forEach(t => clearTimeout(t));
+    presetReplayTimers = [];
+  }
+
   function loadPreset(presetKey) {
     if (state.safetyHoldEngaged) {
       triggerInterlockAlert();
@@ -488,12 +503,21 @@
     const preset = PRESETS[presetKey];
     if (!preset) return;
 
-    disengageConduit();
+    disengageConduit(); // also cancels any in-flight replay
 
-    preset.glyphs.forEach(glyphName => {
-      const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
-      const sym = btn ? btn.dataset.symbol : '𓇳';
-      lockGlyph(glyphName, sym);
+    const SCAN_STEP_MS = 280; // servo-stage cadence: faster than transcription, one glyph per scan
+    preset.glyphs.forEach((glyphName, i) => {
+      const timer = setTimeout(() => {
+        if (state.safetyHoldEngaged) {
+          cancelPresetReplay();
+          triggerInterlockAlert();
+          return;
+        }
+        const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
+        const sym = btn ? btn.dataset.symbol : '𓇳';
+        lockGlyph(glyphName, sym);
+      }, SCAN_STEP_MS * (i + 1));
+      presetReplayTimers.push(timer);
     });
   }
 
