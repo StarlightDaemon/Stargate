@@ -459,6 +459,7 @@
 
   // --- DISENGAGE / ABORT TRIGGER ---
   function disengageConduit() {
+    cancelPresetReplay(); // abort any in-flight flight-plan replay
     SoundFX.abortPurge();
 
     state.mode = 'IDLE';
@@ -485,6 +486,19 @@
   }
 
   // --- PRESET QUICK-DIAL LOADER ---
+  // FILED FLIGHT-PLAN REPLAY: presets execute a pre-filed departure route —
+  // the flight computer sequences the waypoints at autopilot cadence, far
+  // faster than manual vectoring, but every waypoint still passes through
+  // the same lockGlyph acquisition (transponder chirp, radar lock beep,
+  // waypoint chevron, telemetry) as a manually vectored glyph. The 9th lock
+  // lands in PENDING_READY; insertion clearance is NEVER transmitted on its own.
+  let presetReplayTimers = [];
+
+  function cancelPresetReplay() {
+    presetReplayTimers.forEach(t => clearTimeout(t));
+    presetReplayTimers = [];
+  }
+
   function loadPreset(presetKey) {
     if (state.safetyHoldEngaged) {
       triggerInterlockAlert();
@@ -493,12 +507,21 @@
     const preset = PRESETS[presetKey];
     if (!preset) return;
 
-    disengageConduit();
+    disengageConduit(); // also cancels any in-flight replay
 
-    preset.glyphs.forEach(glyphName => {
-      const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
-      const sym = btn ? btn.dataset.symbol : '⌖';
-      lockGlyph(glyphName, sym);
+    const AUTOPILOT_STEP_MS = 240; // autopilot cadence: faster than manual vectoring, one waypoint at a time
+    preset.glyphs.forEach((glyphName, i) => {
+      const timer = setTimeout(() => {
+        if (state.safetyHoldEngaged) {
+          cancelPresetReplay();
+          triggerInterlockAlert();
+          return;
+        }
+        const btn = document.querySelector(`.glyph-btn[data-glyph="${glyphName}"]`);
+        const sym = btn ? btn.dataset.symbol : '⌖';
+        lockGlyph(glyphName, sym);
+      }, AUTOPILOT_STEP_MS * (i + 1));
+      presetReplayTimers.push(timer);
     });
   }
 

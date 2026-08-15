@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-15
+
+**Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.6 Flash (high reasoning))
+
+### Fixed
+- **Preset Quick-Dial Instant-Jump Bug**: loading an orbital preset previously locked all 9 waypoint glyphs in one synchronous forEach, jumping straight to `PENDING_READY` and bypassing the per-waypoint transponder chirp, radar lock beep, chevron animation, and `ROUTING` telemetry progression that manual vectoring uses.
+- **Filed Flight-Plan Replay**: presets now acquire each waypoint through the exact same `lockGlyph` acquisition as manual vectoring, one waypoint every 240ms — in-universe, the flight computer executes a pre-filed departure route at autopilot cadence: far faster than manual vectoring, but every waypoint still requires its own radar lock.
+- Replay lands in the identical `PENDING_READY` state as manual vectoring and **never transmits insertion clearance on its own** (asserted at completion +1.2s).
+- `ABORT / FLIGHT CANCEL` remains fully functional **during** a replay: aborting mid-sequence cancels all pending autopilot steps and resets cleanly (new automated test). Engaging the Collision Safety Hold mid-replay halts the remaining steps with a single interlock alert.
+
+### Changed
+- Verification suite: staged-replay sampling with in-progress screenshots, mid-replay abort test; preset assertion re-timed for the ~2.2s replay.
+
 ## [1.0.1] - 2026-08-13
 
 ### Operator Evaluation & Status Note
