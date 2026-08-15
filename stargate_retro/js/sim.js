@@ -84,6 +84,7 @@ function findTunedDest() {
 
 export function togglePower() {
   if (state.power) {
+    cancelRecall('MAINS CUT');
     state.power = false; state.htReady = false;
     state.latch = null; state.latchPendingAt = null;
     state.live = null; state.register = null;
@@ -105,6 +106,7 @@ export function togglePower() {
 // knob by hand — no end stop.
 export function setRatioIdx(i) {
   if (!state.power) return;
+  if (!servoActing) cancelRecall('MANUAL OVERRIDE');   // operator grabs the knob back
   i = ((i % RATIOS.length) + RATIOS.length) % RATIOS.length;
   if (i === state.ratioIdx) return;
   state.ratioIdx = i;
@@ -114,6 +116,7 @@ export const nudgeRatio = d => setRatioIdx(state.ratioIdx + d);
 
 export function setPhase(v) {
   if (!state.power) return;
+  if (!servoActing) cancelRecall('MANUAL OVERRIDE');   // operator grabs the knob back
   state.phase = ((v % 360) + 360) % 360;
   if (state.latch && Math.abs(wrapDiff(state.phase, DESTS[state.latch.destIdx].phase)) > PHASE_HOLD) {
     breakLatch('PHASE PULLED OFF');
@@ -159,14 +162,89 @@ export function strike() {
   return true;
 }
 
+// RECALL — the retained trace drives the AFC servo. The mesh can't repaint the
+// deflection state wholesale: it feeds the stored figure to the oscillator's
+// servo motors, which re-turn the FIGURE and PHASE controls at servo speed —
+// far faster than hand-tuning, one detent/notch at a time — through the exact
+// same setRatioIdx/setPhase path, the same tick() AFC latch (sustained-
+// tolerance capture), and the same strike() commit a manual dial uses. It ends
+// in the same struck-live state, and it NEVER throws ENERGIZE by itself.
+export const RECALL_RATIO_STEP_MS = 150;  // servo detent cadence
+export const RECALL_PHASE_STEP_MS = 45;   // servo notch cadence (6 deg per notch)
+
+let recallRun = null;    // { timer } while the servo retune is driving
+let servoActing = false; // true only while the servo itself turns a knob
+
+export function recallActive() { return recallRun != null; }
+
+export function cancelRecall(why) {
+  if (!recallRun) return;
+  clearTimeout(recallRun.timer);
+  recallRun = null;
+  if (why) log(`SERVO RETUNE ABANDONED — ${why}`, 'warn');
+}
+
+function servoTurn(fn) { servoActing = true; try { fn(); } finally { servoActing = false; } }
+
 export function recall(slotIdx) {
   if (!state.power || !state.htReady) { fault('RECALL REFUSED — HT NOT UP'); return false; }
   if (state.aperture.st !== 'closed') { fault('RECALL REFUSED — MESH ENGAGED'); return false; }
   const slot = state.slots[slotIdx];
   if (!slot) return false;
-  state.live = { destIdx: slot.destIdx, at: now(), source: 'recalled' };
-  const d = DESTS[slot.destIdx];
-  log(`MESH RECALL — ${d.id} ${d.name} FLOODED BACK`, 'hot');
+
+  cancelRecall();
+  const destIdx = slot.destIdx;
+  const d = DESTS[destIdx];
+  const targetRatioIdx = RATIOS.findIndex(([a, b]) => a === d.a && b === d.b);
+  log(`MESH RECALL — ${d.id} ${d.name} — TRACE DRIVES AFC SERVO`, 'hot');
+
+  const interlocked = () => {
+    if (!state.power || !state.htReady || state.aperture.st !== 'closed') {
+      recallRun = null;
+      log('SERVO RETUNE ABANDONED — INTERLOCK', 'warn');
+      return true;
+    }
+    return false;
+  };
+
+  const stepRatio = () => {
+    if (!recallRun || interlocked()) return;
+    if (state.ratioIdx !== targetRatioIdx) {
+      const n = RATIOS.length;
+      const fwd = (targetRatioIdx - state.ratioIdx + n) % n;
+      servoTurn(() => nudgeRatio(fwd <= n - fwd ? 1 : -1));
+      recallRun = { timer: setTimeout(stepRatio, RECALL_RATIO_STEP_MS) };
+    } else {
+      recallRun = { timer: setTimeout(stepPhase, RECALL_PHASE_STEP_MS) };
+    }
+  };
+
+  const stepPhase = () => {
+    if (!recallRun || interlocked()) return;
+    const diff = wrapDiff(d.phase, state.phase);
+    if (Math.abs(diff) > 0.01) {
+      servoTurn(() => nudgePhase(Math.sign(diff) * Math.min(PHASE_CLICK_STEP, Math.abs(diff))));
+      recallRun = { timer: setTimeout(stepPhase, RECALL_PHASE_STEP_MS) };
+    } else {
+      // in tolerance — the ordinary tick() AFC latch takes it from here
+      recallRun = { timer: setTimeout(waitLatch, 100) };
+    }
+  };
+
+  const waitLatch = () => {
+    if (!recallRun || interlocked()) return;
+    if (state.latch && state.latch.destIdx === destIdx) {
+      recallRun = null;
+      if (strike()) {
+        state.live = { ...state.live, source: 'recalled' };
+        log(`SERVO RETUNE COMPLETE — ${d.id} STANDING — AWAITING ENERGIZE`, 'hot');
+      }
+      return;
+    }
+    recallRun = { timer: setTimeout(waitLatch, 100) };
+  };
+
+  recallRun = { timer: setTimeout(stepRatio, RECALL_RATIO_STEP_MS) };
   return true;
 }
 

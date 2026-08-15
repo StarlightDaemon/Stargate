@@ -13,8 +13,11 @@ it into the 2.4 kV storage mesh, and energize: the mesh floods, the figure unwin
 into a circular luminous aperture, and the far side shimmers through.
 
 Because the storage phosphor genuinely retains a struck trace, a previously-plotted
-address never needs re-plotting — **recall floods it back instantly**. That is the
-fast-dial mechanism, and it is exactly how storage scopes really worked.
+address never needs re-plotting by hand — **recall lets the retained trace drive
+the AFC servo**: the mesh feeds the stored figure to the oscillator's servo
+motors, which re-turn the knobs at machine speed, the AFC latches, and the mesh
+re-strikes. Far faster than hand-tuning, but the tube still walks through every
+stage of the dial. That is the fast-dial mechanism.
 
 ## Operating it
 
@@ -34,8 +37,12 @@ fast-dial mechanism, and it is exactly how storage scopes really worked.
 Clicking a TRACE TABLE row draws that destination as a faint dashed graticule mask —
 an optional plotting aid. A standing aperture bleeds the mesh dry after 90 s.
 
-**Fast dial:** click a retained trace on the STORAGE MESH screen (`[RECALL]`), then
-cover + ENERGIZE. Retained traces survive a mains cycle — the mesh holds its charge.
+**Fast dial:** click a retained trace on the STORAGE MESH screen — the servo
+retunes the oscillator to the stored figure (watch the knobs and the scope walk
+through the dial), the AFC latches, and the trace re-strikes (`[RECALL]`). Then
+cover + ENERGIZE as usual; the retune never energizes on its own, and MAINS CUT
+or grabbing a knob aborts it mid-flight. Retained traces survive a mains cycle —
+the mesh holds its charge.
 
 ## Running
 

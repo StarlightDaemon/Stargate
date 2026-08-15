@@ -231,10 +231,41 @@ async function scenarioRecall() {
   check('retained traces survive mains cycle', state.slots.length === kept, `${kept} slots`);
   await waitFor(() => state.htReady, 120);
 
+  // detune with real knob clicks so the servo genuinely has ground to cover
+  async function detune() {
+    realClick($('knob-ratio'));
+    await pump(20);
+    for (let i = 0; i < 10; i++) { realClick($('knob-phase')); await pump(15); }
+  }
+  await detune();
+
   const slotRow = document.querySelector('.store-row.filled');
+  const recalledIdx = Number(slotRow.dataset.slot);
+  const recalledDest = state.slots[recalledIdx].destIdx;
   const rTop = realClick(slotRow);                                       // fast action 2
   check('recall click lands on stored slot', clickLanded(slotRow, rTop));
-  check('mesh recall floods trace back instantly', !!state.live && state.live.source === 'recalled');
+
+  // servo retune must be STAGED: no instant live, tuning visibly in motion
+  check('recall does not flood instantly (servo retune, no jump)', !state.live);
+  const tuningSnaps = [];
+  for (let i = 0; i < 40 && !state.live; i++) {
+    tuningSnaps.push({ ratioIdx: state.ratioIdx, phase: state.phase, latched: !!state.latch });
+    await pump(120);
+  }
+  const distinctTuning = new Set(tuningSnaps.map(s => `${s.ratioIdx}:${s.phase.toFixed(0)}`)).size;
+  check('servo retune passes through multiple distinct tuning states',
+    distinctTuning >= 3, `${distinctTuning} distinct states over ${tuningSnaps.length} samples`);
+  check('AFC latch captured recalled figure before strike',
+    tuningSnaps.some(s => s.latched));
+
+  check('servo retune ends with live recalled trace',
+    await waitFor(() => !!state.live && state.live.source === 'recalled', 100) &&
+    state.live.destIdx === recalledDest);
+
+  // negative auto-fire: trace stands but the machine must NOT energize itself
+  await pump(700);
+  check('recalled trace stands without self-energize',
+    !state.energize && state.aperture.st === 'closed');
 
   await ensureCover(true);                                               // fast action 3
   realClick($('energize-switch'));                                       // fast action 4
@@ -242,6 +273,22 @@ async function scenarioRecall() {
     await waitFor(() => state.aperture.st === 'open', 120));
   realClick($('energize-switch'));
   await waitFor(() => state.aperture.st === 'closed', 100);
+
+  // abort DURING the servo retune: mains cut mid-sequence, nothing orphaned
+  log('BENCH — MAINS CUT DURING SERVO RETUNE', 'warn');
+  await waitFor(() => !state.live, 60);                                  // collapse clears mesh
+  await detune();
+  const slotRow2 = document.querySelector('.store-row.filled');
+  realClick(slotRow2);
+  await pump(500);                                                       // servo mid-flight
+  const midTune = { live: state.live, phase: state.phase };
+  await setPowerViaClick(false);                                         // the abort control
+  check('mains cut lands during retune (no live trace yet)', !midTune.live && !state.live);
+  await pump(2500);                                                      // past when servo would finish
+  check('no orphaned servo steps after mains cut', !state.live && !state.power);
+  await setPowerViaClick(true);
+  await waitFor(() => state.htReady, 120);
+  check('after aborted retune, mesh still recallable', !!document.querySelector('.store-row.filled'));
 }
 
 async function scenarioGuards() {

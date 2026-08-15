@@ -4,6 +4,38 @@ All notable changes to AUGUR (stargate_retro) are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-08-15
+
+**Built by:** Claude Opus (auto-dial staging fix; original build by Claude Fable)
+
+### Fixed
+
+- **Recall Instant-Jump Bug**: clicking a retained STORAGE MESH trace previously
+  set `state.live` synchronously, teleporting from idle straight to a standing
+  struck trace and bypassing the entire tune → latch → strike chain that manual
+  dialing exercises.
+- **Servo Retune Recall**: the retained trace now *drives the AFC servo* — the
+  mesh feeds the stored figure to the oscillator's servo motors, which re-turn
+  FIGURE (one detent per 150ms) and PHASE (one 6° notch per 45ms) through the
+  exact same `setRatioIdx`/`setPhase` path as hand-tuning, wait for the ordinary
+  `tick()` AFC latch (the same sustained-tolerance capture), and commit with the
+  same `strike()`. Far faster than hand-tuning (~2–3s vs tens of seconds), but
+  every stage remains its own visible moment on the tube.
+- Recall ends in the identical struck-live state as a manual dial (tagged
+  `[RECALL]` with the flood flash) and **never throws ENERGIZE by itself**.
+- Abort remains available **throughout** the retune: MAINS CUT cancels the servo
+  mid-flight (no orphaned steps), interlocks (HT drop, mesh engaged) halt it,
+  and grabbing either knob mid-retune abandons the servo with a MANUAL OVERRIDE
+  log — the operator always wins.
+
+### Changed
+
+- README fast-dial description updated to match (recall is a servo retune, not
+  an instant flood). Bench `scenarioRecall` now proves the retune is staged
+  (multiple distinct tuning states, AFC latch before strike, no self-energize)
+  and adds a mains-cut-during-retune abort scenario; knobs are detuned with
+  real clicks first so the servo genuinely has ground to cover.
+
 ## [1.0.2] - 2026-07-22
 
 ### Changed
