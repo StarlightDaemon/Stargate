@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSCR // STATION VORTEX-9 — Cryptanalysis & Key Recovery Workstation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="viewport-scaler">
+    <div id="console-root" class="console-container">
+      
+      <!-- Top Station Header & Telemetry Bar -->
+      <header class="station-header">
+        <div class="header-left">
+          <div class="sigint-badge">
+            <span class="badge-icon">⬢</span>
+            <span class="badge-text">DSCR / SIGINT-08</span>
+          </div>
+          <div class="facility-meta">
+            <h1 class="facility-title">STATION VORTEX-9 <span class="facility-sub">// QUANTUM APERTURE CRYPTANALYSIS WORKSTATION</span></h1>
+            <div class="telemetry-tags">
+              <span class="tag tag-class">RESTRICTED // SPECTRUM-KEY</span>
+              <span class="tag tag-node">NODE: VX9-ORBITAL-7</span>
+              <span class="tag tag-carrier" id="carrier-indicator">CARRIER: IDLE SCAN</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-center">
+          <div class="crypto-stat">
+            <span class="stat-label">SEARCH SPACE</span>
+            <span class="stat-val" id="stat-keyspace">4.295 × 10⁹ KEYS</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="crypto-stat">
+            <span class="stat-label">SHANNON ENTROPY</span>
+            <span class="stat-val stat-entropy" id="stat-entropy">32.000 BITS</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="crypto-stat">
+            <span class="stat-label">PHASE COHERENCE</span>
+            <span class="stat-val" id="stat-coherence">0.00%</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="timecode-box">
+            <span class="tc-label">CYCLE TIME</span>
+            <span class="tc-val" id="clock-display">00:00:00.000 UTC</span>
+          </div>
+          <!-- Operator Reference Button -->
+          <button id="op-ref-btn" class="op-ref-button" title="Operator Reference Manual" aria-label="Open Operator Reference">
+            <span>?</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Workstation Layout (3 Columns) -->
+      <main class="console-main">
+        
+        <!-- LEFT COLUMN: Intercept Presets & Live Spectral Stream -->
+        <aside class="panel-column panel-left">
+          
+          <!-- Intercepted Transmission Drawer -->
+          <section class="hud-panel preset-panel">
+            <div class="panel-header">
+              <div class="ph-left">
+                <span class="ph-dot"></span>
+                <h2 class="ph-title">INTERCEPTED TRANSMISSIONS</h2>
+              </div>
+              <span class="ph-badge">6 PRESETS</span>
+            </div>
+
+            <div class="preset-tiers">
+              <!-- Tier 1: Verified / High Confidence -->
+              <div class="tier-group">
+                <div class="tier-label">
+                  <span class="tier-icon">◈</span>
+                  <span>TIER 1 // VERIFIED DECRYPTED NODES</span>
+                </div>
+                <div class="preset-list" id="tier1-presets">
+                  <!-- Injected via JS or semantic HTML -->
+                  <button class="preset-card" data-preset-id="p1" id="preset-btn-p1">
+                    <div class="pc-top">
+                      <span class="pc-callsign">ORION-ALPHA // RELAY 01</span>
+                      <span class="pc-freq">842.10 MHz</span>
+                    </div>
+                    <div class="pc-bottom">
+                      <span class="pc-key-preview">Ω-7F-3A-C9-12-88-B4-E0</span>
+                      <span class="pc-tier-badge verified">VERIFIED</span>
+                    </div>
+                  </button>
+                  <button class="preset-card" data-preset-id="p2" id="preset-btn-p2">
+                    <div class="pc-top">
+                      <span class="pc-callsign">CYGNUS-DEEP // ARRAY 04</span>
+                      <span class="pc-freq">915.44 MHz</span>
+                    </div>
+                    <div class="pc-bottom">
+                      <span class="pc-key-preview">Δ-08-9C-F2-55-A1-33-7D</span>
+                      <span class="pc-tier-badge verified">VERIFIED</span>
+                    </div>
+                  </button>
+                  <button class="preset-card" data-preset-id="p3" id="preset-btn-p3">
+                    <div class="pc-top">
+                      <span class="pc-callsign">KEPLER-GRID // NODE 19</span>
+                      <span class="pc-freq">433.82 MHz</span>
+                    </div>
+                    <div class="pc-bottom">
+                      <span class="pc-key-preview">Ψ-E4-11-8B-67-D3-09-FA</span>
+                      <span class="pc-tier-badge verified">VERIFIED</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Tier 2: Suspect / Hostile Streams -->
+              <div class="tier-group">
+                <div class="tier-label suspect">
+                  <span class="tier-icon">⚠</span>
+                  <span>TIER 2 // SUSPECT & ANOMALOUS INTERCEPTS</span>
+                </div>
+                <div class="preset-list" id="tier2-presets">
+                  <button class="preset-card suspect-card" data-preset-id="p4" id="preset-btn-p4">
+                    <div class="pc-top">
+                      <span class="pc-callsign">SHADOW-VECTOR // UNK-09</span>
+                      <span class="pc-freq">1204.6 MHz</span>
+                    </div>
+                    <div class="pc-bottom">
+                      <span class="pc-key-preview">Ξ-CC-40-78-99-1F-E2-05</span>
+                      <span class="pc-tier-badge suspect">UNRESOLVED</span>
+                    </div>
+                  </button>
+                  <button class="preset-card suspect-card" data-preset-id="p5" id="preset-btn-p5">
+                    <div class="pc-top">
+                      <span class="pc-callsign">PHANTOM-CASCADE // ECHO</span>
+                      <span class="pc-freq">612.08 MHz</span>
+                    </div>
+                    <div class="pc-bottom">
+                      <span class="pc-key-preview">Σ-2B-84-DE-71-6A-50-3C</span>
+                      <span class="pc-tier-badge suspect">VOLATILE</span>
+                    </div>
+                  </button>
+                  <button class="preset-card suspect-card" data-preset-id="p6" id="preset-btn-p6">
+                    <div class="pc-top">
+                      <span class="pc-callsign">BLACK-SKY // VECTOR-X</span>
+                      <span class="pc-freq">2488.9 MHz</span>
+                    </div>
+                    <div class="pc-bottom">
+                      <span class="pc-key-preview">Φ-FE-D1-80-34-5B-77-A9</span>
+                      <span class="pc-tier-badge suspect">ANOMALOUS</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Spectral Stream & Ciphertext Rolling Matrix -->
+          <section class="hud-panel stream-panel">
+            <div class="panel-header">
+              <div class="ph-left">
+                <span class="ph-dot live-dot"></span>
+                <h2 class="ph-title">CIPHERTEXT / SPECTRUM CASCADE</h2>
+              </div>
+              <span class="ph-badge" id="stream-rate">32.4 kB/s</span>
+            </div>
+
+            <div class="stream-container">
+              <div class="stream-subhead">
+                <span>INTERCEPT BUFFER</span>
+                <span id="buffer-status">SAMPLING...</span>
+              </div>
+              <div class="stream-feed" id="ciphertext-feed">
+                <!-- Live scrolling ciphertext lines -->
+              </div>
+              <div class="decrypted-result-box" id="decrypted-box">
+                <div class="dec-label">LIVE PLAINTEXT RESOLUTION:</div>
+                <div class="dec-content" id="decrypted-content">[ AWAITING APERTURE DECRYPTION ]</div>
+              </div>
+            </div>
+          </section>
+
+        </aside>
+
+        <!-- CENTER COLUMN: The Key-Space Search Ring & Aperture Display -->
+        <section class="panel-column panel-center">
+          
+          <div class="hud-panel ring-stage-panel">
+            <div class="ring-status-header">
+              <div class="rsh-item">
+                <span class="rsh-k">ROTOR TOPOLOGY:</span>
+                <span class="rsh-v">10-SECTOR PERMUTATION MATRIX</span>
+              </div>
+              <div class="rsh-item">
+                <span class="rsh-k">KEY REGISTER:</span>
+                <span class="rsh-v" id="register-count-status">0 OF 8 SUB-KEYS PINNED</span>
+              </div>
+              <div class="rsh-item">
+                <span class="rsh-k">COLLAPSING KEY-SPACE:</span>
+                <span class="rsh-v highlight" id="ring-uncertainty-readout">100.00% UNKNOWN</span>
+              </div>
+            </div>
+
+            <!-- Central Canvas Ring -->
+            <div class="canvas-wrapper" id="canvas-wrapper">
+              <canvas id="aperture-canvas" width="640" height="640"></canvas>
+              
+              <!-- Center State Overlay Badge -->
+              <div class="aperture-center-overlay" id="aperture-center-overlay">
+                <div class="center-hud-state" id="center-hud-state">
+                  <div class="state-indicator-ring"></div>
+                  <div class="state-label" id="state-text-primary">SEARCH MATRIX IDLE</div>
+                  <div class="state-sub" id="state-text-secondary">INPUT KEY SEQUENCE</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 8-Sub-Key Register Slot Bar -->
+            <div class="key-registers-container">
+              <div class="register-bar-label">
+                <span>SUB-KEY REGISTERS [8 ROUNDS]</span>
+                <span id="slot-focus-indicator">ACTIVE SLOT: 1</span>
+              </div>
+              <div class="register-slots-grid" id="register-slots-grid">
+                <!-- 8 slots: KEY-0 to KEY-7 -->
+                <div class="reg-slot active-slot" data-slot="0" id="slot-0">
+                  <div class="slot-header">R-0</div>
+                  <div class="slot-glyph" id="slot-glyph-0">--</div>
+                  <div class="slot-hex" id="slot-hex-0">0x00</div>
+                  <div class="slot-status" id="slot-status-0">SEEKING</div>
+                </div>
+                <div class="reg-slot" data-slot="1" id="slot-1">
+                  <div class="slot-header">R-1</div>
+                  <div class="slot-glyph" id="slot-glyph-1">--</div>
+                  <div class="slot-hex" id="slot-hex-1">0x00</div>
+                  <div class="slot-status" id="slot-status-1">UNSET</div>
+                </div>
+                <div class="reg-slot" data-slot="2" id="slot-2">
+                  <div class="slot-header">R-2</div>
+                  <div class="slot-glyph" id="slot-glyph-2">--</div>
+                  <div class="slot-hex" id="slot-hex-2">0x00</div>
+                  <div class="slot-status" id="slot-status-2">UNSET</div>
+                </div>
+                <div class="reg-slot" data-slot="3" id="slot-3">
+                  <div class="slot-header">R-3</div>
+                  <div class="slot-glyph" id="slot-glyph-3">--</div>
+                  <div class="slot-hex" id="slot-hex-3">0x00</div>
+                  <div class="slot-status" id="slot-status-3">UNSET</div>
+                </div>
+                <div class="reg-slot" data-slot="4" id="slot-4">
+                  <div class="slot-header">R-4</div>
+                  <div class="slot-glyph" id="slot-glyph-4">--</div>
+                  <div class="slot-hex" id="slot-hex-4">0x00</div>
+                  <div class="slot-status" id="slot-status-4">UNSET</div>
+                </div>
+                <div class="reg-slot" data-slot="5" id="slot-5">
+                  <div class="slot-header">R-5</div>
+                  <div class="slot-glyph" id="slot-glyph-5">--</div>
+                  <div class="slot-hex" id="slot-hex-5">0x00</div>
+                  <div class="slot-status" id="slot-status-5">UNSET</div>
+                </div>
+                <div class="reg-slot" data-slot="6" id="slot-6">
+                  <div class="slot-header">R-6</div>
+                  <div class="slot-glyph" id="slot-glyph-6">--</div>
+                  <div class="slot-hex" id="slot-hex-6">0x00</div>
+                  <div class="slot-status" id="slot-status-6">UNSET</div>
+                </div>
+                <div class="reg-slot" data-slot="7" id="slot-7">
+                  <div class="slot-header">R-7</div>
+                  <div class="slot-glyph" id="slot-glyph-7">--</div>
+                  <div class="slot-hex" id="slot-hex-7">0x00</div>
+                  <div class="slot-status" id="slot-status-7">UNSET</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- RIGHT COLUMN: Control Clusters (Key Matrix & Execution/OPSEC) -->
+        <aside class="panel-column panel-right">
+          
+          <!-- CONTROL CLUSTER 1: KEY-MATRIX DIAL PAD / ROTOR COMMUTATOR -->
+          <section class="hud-panel commutator-panel">
+            <div class="panel-header">
+              <div class="ph-left">
+                <span class="ph-dot"></span>
+                <h2 class="ph-title">CLUSTER 1: ROTOR COMMUTATOR</h2>
+              </div>
+              <span class="ph-badge">16 SYMBOLS</span>
+            </div>
+
+            <div class="cluster-subhead">
+              <span>HYPOTHESIS SAMPLING MATRIX</span>
+              <span class="subhead-inst">CLICK GLYPH TO PIN SUB-KEY</span>
+            </div>
+
+            <div class="glyph-pad-grid" id="glyph-pad">
+              <!-- 16 original cryptographic glyph keys -->
+              <button class="glyph-btn" data-glyph="Ω" data-val="0" id="glyph-btn-0">
+                <span class="g-symbol">Ω</span>
+                <span class="g-label">OMEGA / 0x0</span>
+              </button>
+              <button class="glyph-btn" data-glyph="Ψ" data-val="1" id="glyph-btn-1">
+                <span class="g-symbol">Ψ</span>
+                <span class="g-label">PSI / 0x1</span>
+              </button>
+              <button class="glyph-btn" data-glyph="Δ" data-val="2" id="glyph-btn-2">
+                <span class="g-symbol">Δ</span>
+                <span class="g-label">DELTA / 0x2</span>
+              </button>
+              <button class="glyph-btn" data-glyph="Ξ" data-val="3" id="glyph-btn-3">
+                <span class="g-symbol">Ξ</span>
+                <span class="g-label">XI / 0x3</span>
+              </button>
+              <button class="glyph-btn" data-glyph="Σ" data-val="4" id="glyph-btn-4">
+                <span class="g-symbol">Σ</span>
+                <span class="g-label">SIGMA / 0x4</span>
+              </button>
+              <button class="glyph-btn" data-glyph="Φ" data-val="5" id="glyph-btn-5">
+                <span class="g-symbol">Φ</span>
+                <span class="g-label">PHI / 0x5</span>
+              </button>
+              <button class="glyph-btn" data-glyph="Θ" data-val="6" id="glyph-btn-6">
+                <span class="g-symbol">Θ</span>
+                <span class="g-label">THETA / 0x6</span>
+              </button>
+              <button class="glyph-btn" data-glyph="Λ" data-val="7" id="glyph-btn-7">
+                <span class="g-symbol">Λ</span>
+                <span class="g-label">LAMBDA / 0x7</span>
+              </button>
+              <button class="glyph-btn" data-glyph="Γ" data-val="8" id="glyph-btn-8">
+                <span class="g-symbol">Γ</span>
+                <span class="g-label">GAMMA / 0x8</span>
+              </button>
+              <button class="glyph-btn" data-glyph="Π" data-val="9" id="glyph-btn-9">
+                <span class="g-symbol">Π</span>
+                <span class="g-label">PI / 0x9</span>
+              </button>
+              <button class="glyph-btn" data-glyph="⟁" data-val="10" id="glyph-btn-10">
+                <span class="g-symbol">⟁</span>
+                <span class="g-label">PRISM / 0xA</span>
+              </button>
+              <button class="glyph-btn" data-glyph="⨂" data-val="11" id="glyph-btn-11">
+                <span class="g-symbol">⨂</span>
+                <span class="g-label">TENSOR / 0xB</span>
+              </button>
+              <button class="glyph-btn" data-glyph="⬡" data-val="12" id="glyph-btn-12">
+                <span class="g-symbol">⬡</span>
+                <span class="g-label">LATTICE / 0xC</span>
+              </button>
+              <button class="glyph-btn" data-glyph="✦" data-val="13" id="glyph-btn-13">
+                <span class="g-symbol">✦</span>
+                <span class="g-label">VECTOR / 0xD</span>
+              </button>
+              <button class="glyph-btn" data-glyph="∿" data-val="14" id="glyph-btn-14">
+                <span class="g-symbol">∿</span>
+                <span class="g-label">SINE / 0xE</span>
+              </button>
+              <button class="glyph-btn" data-glyph="⧫" data-val="15" id="glyph-btn-15">
+                <span class="g-symbol">⧫</span>
+                <span class="g-label">NIBBLE / 0xF</span>
+              </button>
+            </div>
+
+            <div class="pad-aux-controls">
+              <button class="btn-aux" id="btn-backspace">
+                <span>⌫ BACKSPACE</span>
+              </button>
+              <button class="btn-aux" id="btn-clear-keys">
+                <span>✕ CLEAR REGISTER</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- CONTROL CLUSTER 2: EXECUTION & OPSEC INTERLOCK CONSOLE -->
+          <section class="hud-panel execution-panel">
+            <div class="panel-header">
+              <div class="ph-left">
+                <span class="ph-dot"></span>
+                <h2 class="ph-title">CLUSTER 2: EXECUTION & OPSEC</h2>
+              </div>
+              <span class="ph-badge" id="system-readiness-badge">DISARMED</span>
+            </div>
+
+            <!-- OPSEC Channel Compromise Interlock -->
+            <div class="interlock-module" id="interlock-module">
+              <div class="interlock-info">
+                <div class="il-title">OPSEC COMPROMISE INTERLOCK</div>
+                <div class="il-desc">CHANNEL SAFETY LOCKOUT // INHIBITS FINAL APERTURE FIRING</div>
+              </div>
+              
+              <div class="interlock-toggle-wrap">
+                <button type="button" class="interlock-toggle released" id="safety-interlock" aria-pressed="false" role="switch">
+                  <span class="il-switch-track">
+                    <span class="il-switch-thumb"></span>
+                  </span>
+                  <span class="il-status-label" id="interlock-status-text">RELEASED [DISARMED]</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Interlock Alert Warning Banner -->
+            <div class="interlock-alert-banner" id="interlock-alert" style="display: none;">
+              <span class="alert-icon">⚠</span>
+              <span class="alert-text">OPSEC INTERLOCK ACTIVE: TRANSMISSION INHIBITED</span>
+            </div>
+
+            <!-- Activation / Decryption Trigger (SEPARATE CONTROL, NEVER AUTO-FIRED) -->
+            <div class="action-btn-wrap">
+              <button class="btn-action-primary" id="btn-activate" disabled>
+                <div class="btn-primary-inner">
+                  <span class="btn-icon">⚡</span>
+                  <div class="btn-text-block">
+                    <span class="btn-main-title">EXECUTE APERTURE DECRYPTION</span>
+                    <span class="btn-sub-title" id="btn-activate-sub">REQUIRES ALL 8 SUB-KEYS LOCKED</span>
+                  </div>
+                </div>
+                <div class="btn-progress-bar" id="activation-progress"></div>
+              </button>
+            </div>
+
+            <!-- Emergency Disengage / Sever Connection Button (ALWAYS REACHABLE) -->
+            <div class="disengage-wrap">
+              <button class="btn-action-disengage" id="btn-disengage" title="Emergency Disengage / Sever Connection">
+                <span class="disengage-icon">⏻</span>
+                <span class="disengage-label">SEVER CONNECTION // PURGE KEYSTREAM</span>
+              </button>
+            </div>
+
+            <!-- Operational Log Console -->
+            <div class="op-log-box">
+              <div class="op-log-header">
+                <span>SYSTEM ACTIVITY LOG</span>
+                <span id="log-status-dot">● NORMAL</span>
+              </div>
+              <div class="op-log-content" id="op-log">
+                <div class="log-entry sys">[00:00:00] DSCR CRYPTANALYSIS OS v1.0.0 INITIALIZED</div>
+                <div class="log-entry sys">[00:00:00] ROTOR TOPOLOGY: 10-SECTOR MATRIX READY</div>
+                <div class="log-entry sys">[00:00:00] OPSEC INTERLOCK: RELEASED (SAFE TO ENGAGE)</div>
+              </div>
+            </div>
+
+          </section>
+
+        </aside>
+
+      </main>
+
+      <!-- Bottom Status Bar & Attribution Link -->
+      <footer class="station-footer">
+        <div class="footer-left">
+          <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="attribution-link">
+            StarlightDaemon
+          </a>
+          <span class="footer-sep">|</span>
+          <span class="footer-classification">TOP SECRET // SI-GCHQ // VORTEX-9 ARRAY</span>
+        </div>
+
+        <div class="footer-center">
+          <span class="footer-mode" id="footer-mode-text">MODE: AMBIENT KEY-SPACE SCAN</span>
+        </div>
+
+        <div class="footer-right">
+          <span class="footer-latency" id="footer-latency">LATENCY: 1.4ms</span>
+          <span class="footer-sep">|</span>
+          <span class="version-label">v1.0.0</span>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Operator Reference Modal Overlay -->
+  <div class="modal-backdrop" id="ref-modal" aria-hidden="true" style="display: none;">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge">MANUAL // REF-99</span>
+          <h2 class="modal-title">DSCR CRYPTANALYSIS WORKSTATION OPERATING GUIDE</h2>
+        </div>
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="Close Reference Manual">✕</button>
+      </div>
+      <div class="modal-body">
+        
+        <section class="modal-sec">
+          <h3>1. FACILITY & SYSTEM IDENTITY</h3>
+          <p>This terminal represents <strong>Station VORTEX-9</strong> of the <strong>Directorate of Signal Cryptanalysis & Key Recovery (DSCR)</strong>. It is a modern signals-intelligence aperture workstation designed for real-time key-space resolution, carrier phase synchronization, and high-energy quantum aperture decryption.</p>
+        </section>
+
+        <section class="modal-sec">
+          <h3>2. THE KEY-SPACE APERTURE RING</h3>
+          <p>The central ring represents the live unconstrained key search space. At 0 locked sub-keys, the search space equals $16^8 = 4.29\times 10^9$ possible permutations, shown as a full 360° red/amber entropy field ($H = 32.0\text{ bits}$). As each rotor sub-key is pinned, the entropy field contracts exponentially, shrinking the uncertainty arc down to zero at full 8-key resolution.</p>
+        </section>
+
+        <section class="modal-sec">
+          <h3>3. HYPOTHESIS SAMPLING & EIGENVALUE LOCKING</h3>
+          <p>Dials operate via <strong>Hypothesis Sampling</strong>: when a cryptographic glyph is selected, the corresponding rotor tests candidate eigenvalues at high frequency (60Hz strobe), resolving and pinning with an acoustic crystal confirmation chirp and cryptographic lock bracket.</p>
+        </section>
+
+        <section class="modal-sec">
+          <h3>4. THREE-STAGE ACTIVATION PIPELINE</h3>
+          <p>Completing all 8 sub-key registers places the system into a <strong>KEY-LOCKED READY</strong> state. It will <strong>NEVER auto-fire</strong>. Activation must be triggered manually via the primary execution control:</p>
+          <ul>
+            <li><strong>Stage 1 (Buildup - 2.5s):</strong> Rapid decryption cascade, surging oscilloscope waves, collapsing entropy arc, and rising audio pitch sweep.</li>
+            <li><strong>Stage 2 (Breakthrough):</strong> Instantaneous aperture flash, sub-bass resonance punch, and immediate decipherment of ciphertext into verified plaintext.</li>
+            <li><strong>Stage 3 (Sustained Active):</strong> Coherent quantum plasma wormhole tunnel, continuous telemetry stream, and locked carrier bandwidth (14.4 Gb/s).</li>
+          </ul>
+        </section>
+
+        <section class="modal-sec">
+          <h3>5. OPSEC INTERLOCK & EMERGENCY SEVER</h3>
+          <p>The <strong>OPSEC Compromise Interlock</strong> defaults to <strong>RELEASED</strong>. When engaged, it prevents transmission even if the key is resolved. The <strong>SEVER CONNECTION</strong> button acts as a failsafe kill-switch to immediately collapse active translocations and purge registers.</p>
+        </section>
+
+      </div>
+      <div class="modal-footer">
+        <span>PRESS ESC OR CLICK CLOSE TO RETURN TO CONSOLE</span>
+        <button class="modal-dismiss-btn" id="modal-dismiss-btn">ACKNOWLEDGE & DISMISS</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
