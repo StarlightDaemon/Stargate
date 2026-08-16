@@ -389,6 +389,90 @@ body {
 .help-fine { margin-top: 0.7rem; font-size: 0.66rem !important; color: var(--parchment-dim) !important; font-style: italic; }
 #btn-help-close { margin-top: 1.1rem; flex: none; padding: 0.55rem 1.2rem; }
 
+/* ---------------- corner display ---------------- */
+
+.credit {
+  position: fixed; left: 14px; bottom: 10px; z-index: 40;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.72rem; letter-spacing: 0.14em;
+  color: rgba(216, 207, 192, 0.4);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.credit:hover { color: var(--sunfire); }
+
+.version {
+  position: fixed; right: 14px; bottom: 10px; z-index: 40;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.72rem; letter-spacing: 0.14em;
+  color: rgba(216, 207, 192, 0.28);
+  pointer-events: none;
+}
+
+/* ---------------- operator reference ---------------- */
+
+.opref-btn {
+  position: fixed; top: 14px; right: 14px; z-index: 70;
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid var(--brass-lo);
+  background: var(--ink-2);
+  color: var(--brass);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.85rem; line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.12s, color 0.12s, box-shadow 0.12s;
+}
+.opref-btn:hover { color: var(--brass-hi); border-color: var(--brass); box-shadow: 0 0 10px #e8c98a33; }
+
+.opref-overlay {
+  position: fixed; inset: 0; z-index: 120;
+  background: #05070acc;
+  backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center;
+}
+.opref-overlay[hidden] { display: none; }
+
+#opref-card {
+  position: relative;
+  width: min(560px, 92vw); max-height: 86vh; overflow-y: auto;
+  margin: 20px;
+  background: var(--ink-2);
+  border: 1px solid var(--brass-lo); border-radius: 4px;
+  padding: 1.6rem 1.9rem;
+  box-shadow: 0 0 60px #00000099, 0 0 24px #b08d5722;
+}
+#opref-card h2 {
+  font-weight: 400; letter-spacing: 0.22em; font-size: 1.0rem;
+  color: var(--brass-hi); margin-bottom: 0.9rem; padding-right: 1.6rem;
+}
+#opref-card h3 {
+  font-weight: 400; letter-spacing: 0.1em; font-size: 0.72rem; text-transform: uppercase;
+  color: var(--verdigris); margin: 1rem 0 0.35rem;
+}
+#opref-card h3:first-of-type { margin-top: 0; }
+#opref-card p { font-size: 0.83rem; line-height: 1.65; color: var(--parchment); }
+#opref-card strong { color: var(--brass-hi); font-weight: 400; }
+#opref-card em { color: var(--sunfire); font-style: normal; }
+#opref-card kbd {
+  border: 1px solid var(--brass-lo); border-radius: 3px;
+  padding: 0 0.35em; font-family: "Consolas", monospace; font-size: 0.9em;
+  color: var(--brass-hi);
+}
+#opref-close {
+  position: absolute; top: 12px; right: 14px;
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid var(--brass-lo);
+  background: var(--ink-3);
+  color: var(--parchment-dim);
+  font-size: 1rem; line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.12s, color 0.12s;
+}
+#opref-close:hover { border-color: var(--brass); color: var(--brass-hi); }
+#opref-card #opref-close-btn { margin-top: 1.1rem; flex: none; padding: 0.55rem 1.2rem; }
+
 /* ---------------- narrow layout ---------------- */
 
 @media (max-width: 880px) {

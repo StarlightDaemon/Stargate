@@ -397,6 +397,22 @@ helpOverlay.addEventListener("click", (e) => {
   if (e.target === helpOverlay) toggleHelp(false);
 });
 
+// ---------------- operator reference overlay ----------------
+const oprefBtn = $("#opref-btn");
+const oprefOverlay = $("#opref-overlay");
+function openOpref() {
+  oprefOverlay.hidden = false;
+  oprefBtn.setAttribute("aria-expanded", "true");
+}
+function closeOpref() {
+  oprefOverlay.hidden = true;
+  oprefBtn.setAttribute("aria-expanded", "false");
+}
+oprefBtn.addEventListener("click", () => { audio.unlock(); audio.uiTap(); openOpref(); });
+$("#opref-close").addEventListener("click", () => { audio.uiTap(); closeOpref(); });
+$("#opref-close-btn").addEventListener("click", () => { audio.uiTap(); closeOpref(); });
+oprefOverlay.addEventListener("click", (e) => { if (e.target === oprefOverlay) closeOpref(); });
+
 document.addEventListener("keydown", (e) => {
   if (e.repeat) return;
   audio.unlock();
@@ -406,7 +422,8 @@ document.addEventListener("keydown", (e) => {
     case "m": btnMute.click(); break;
     case "h": toggleHelp(); break;
     case "escape":
-      if (!helpOverlay.hidden) toggleHelp(false);
+      if (!oprefOverlay.hidden) closeOpref();
+      else if (!helpOverlay.hidden) toggleHelp(false);
       else if (!btnAbort.disabled) releaseCant();
       break;
   }

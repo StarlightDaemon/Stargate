@@ -63,6 +63,66 @@
 
     </main>
 
+    <!-- ============ CORNER DISPLAY ============ -->
+    <a class="credit" href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+    <div class="version">v1.1.0</div>
+
+    <!-- ============ OPERATOR REFERENCE ============ -->
+    <button id="opref-btn" class="opref-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="opref-overlay" title="Operator reference">?</button>
+    <div id="opref-overlay" class="opref-overlay" hidden>
+      <div id="opref-card" role="dialog" aria-modal="true" aria-labelledby="opref-title">
+        <button id="opref-close" class="opref-close" aria-label="Close operator reference">&times;</button>
+        <h2 id="opref-title">OPERATOR REFERENCE &middot; HELIORA</h2>
+
+        <h3>Writing a cant by hand</h3>
+        <p>Click sigils on the band in the order you want them written. Each
+        accepted sigil sends the band seeking under the Meridian Claw,
+        alternating direction sigil to sigil, and seats the next Annular
+        Seal (I through VII) when it settles. The annulus enforces the same
+        rules whether you dial by hand or by Codex: no sigil may repeat
+        within a cant, and <strong>Solyn</strong>, the origin sigil, may
+        only take the seventh seat &mdash; offer it early and the ring
+        refuses it outright. A cant is not attuned until Solyn closes it.</p>
+
+        <h3>Codex &amp; drift cants</h3>
+        <p>Selecting an entry from the <strong>CODEX OF KNOWN CANTS</strong>
+        auto-dials its seven sigils in sequence, seal by seal, the same way
+        a hand-dial would. <strong>DRIFT CANT</strong> (<kbd>R</kbd>)
+        composes a fresh, previously-unwritten cant on the spot &mdash; six
+        random waypoints closed by Solyn &mdash; then dials it through the
+        same rotate-and-lock sequence. Nothing about the instrument's motion
+        is ever skipped for a shortcut.</p>
+
+        <h3>Sunstrike &amp; the Wellglass</h3>
+        <p>When the seventh seal locks, the annulus draws breath and then
+        strikes: the Wellglass opens in a burst of molten light. The open
+        well is not stable indefinitely &mdash; <strong>APERTURE
+        STABILITY</strong> counts down from thirty-eight seconds. Inside the
+        last ten, the status lamp shifts to danger and the well itself
+        begins to fray; let the count reach zero and the aperture tears
+        itself shut in an uncontrolled collapse.</p>
+
+        <h3>Sealing &amp; releasing</h3>
+        <p><strong>SEAL THRESHOLD</strong> (<kbd>S</kbd>) is the proper
+        close: it sends the <strong>Umbral Occulter</strong> &mdash; a dark
+        eclipse-disc &mdash; transiting across the open well to quench it
+        cleanly before the seals release. <strong>RELEASE</strong>
+        (<kbd>Esc</kbd>) instead abandons a cant that is still being
+        written, mid-dial, before any strike; it stands the ring down
+        without opening anything.</p>
+
+        <h3>Other controls</h3>
+        <p>The speaker glyph (<kbd>M</kbd>) mutes the instrument's
+        synthesized ratchets, bells, and drone without touching anything
+        else. The <strong>ATTUNEMENT TRANSCRIPT</strong> timestamps every
+        seal, strike, and seal-release for the session. One codex entry,
+        <em>Cor-Avenna</em>, is recorded lost &mdash; its cant still locks
+        seal for seal, but the strike finds nothing on the far side.</p>
+
+        <button id="opref-close-btn" class="act-btn">RETURN TO THE RING</button>
+      </div>
+    </div>
+
     <div id="help-overlay" hidden>
       <div id="help-card">
         <h2>Operator&rsquo;s Primer</h2>
