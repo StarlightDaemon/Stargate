@@ -187,10 +187,26 @@ btnHelp.addEventListener("click", () => { $("help").hidden = false; });
 $("btn-help-close").addEventListener("click", () => { $("help").hidden = true; });
 $("help").addEventListener("click", (e) => { if (e.target.id === "help") $("help").hidden = true; });
 
+// ---------------- operator reference overlay ----------------
+const oprefBtn = $("opref-btn"), oprefOverlay = $("opref-overlay");
+function openOpref() {
+  oprefOverlay.hidden = false;
+  oprefBtn.setAttribute("aria-expanded", "true");
+}
+function closeOpref() {
+  oprefOverlay.hidden = true;
+  oprefBtn.setAttribute("aria-expanded", "false");
+}
+oprefBtn.addEventListener("click", openOpref);
+$("opref-close").addEventListener("click", closeOpref);
+$("opref-close-btn").addEventListener("click", closeOpref);
+oprefOverlay.addEventListener("click", (e) => { if (e.target.id === "opref-overlay") closeOpref(); });
+
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !btnEngage.disabled) dialer.engage();
   else if (e.key === "Escape") {
-    if (!$("help").hidden) $("help").hidden = true;
+    if (!oprefOverlay.hidden) closeOpref();
+    else if (!$("help").hidden) $("help").hidden = true;
     else if (dialer.state === "dialing") dialer.abort();
     else if (dialer.state === "active") dialer.shutdown();
   } else if ((e.key === "r" || e.key === "R") && dialer.canEdit()) btnRandom.click();

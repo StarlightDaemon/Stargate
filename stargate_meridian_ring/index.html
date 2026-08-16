@@ -80,6 +80,52 @@
   </aside>
 </main>
 
+<!-- ============ CORNER DISPLAY ============ -->
+<a class="credit" href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+<div class="version">v1.1.0</div>
+
+<!-- ============ OPERATOR REFERENCE ============ -->
+<button id="opref-btn" class="opref-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="opref-overlay" title="Operator reference">?</button>
+<div id="opref-overlay" class="opref-overlay" hidden>
+  <div id="opref-card" role="dialog" aria-modal="true" aria-labelledby="opref-title">
+    <button id="opref-close" class="opref-close" aria-label="Close operator reference">&times;</button>
+    <h2 id="opref-title">OPERATOR REFERENCE — MERIDIAN RING</h2>
+
+    <h3>Manual dial</h3>
+    <p>Build a seven-sigil address on the <strong>SIGIL INPUT MATRIX</strong>, or
+    click sigils straight off the ring face — either fills the same
+    <strong>ADDRESS REGISTER</strong> slots. Press <strong>ENGAGE</strong> (or
+    <kbd>Enter</kbd>) once all seven are set. The inner glyph band rotates each
+    sigil under the apex reader in turn, alternating direction sigil to sigil,
+    and a hold-clamp seats after every acquisition. The eight clamps close in
+    symmetric order, finishing on the bottom keystone — that seat triggers
+    conduit ignition.</p>
+
+    <h3>Fast dial</h3>
+    <p>Click any entry under <strong>REGISTERED DESTINATIONS</strong> to load a
+    known-good address in one step, or press <strong>RANDOM</strong>
+    (<kbd>R</kbd>) to compose an unregistered vector — the matrix and register
+    fill instantly, but the ring still runs its full rotate-and-clamp sequence
+    on ENGAGE; nothing skips the physical dial.</p>
+
+    <h3>Conduit &amp; transit</h3>
+    <p>Once the event horizon settles, click it off-centre to send a probe, or
+    dead centre to transit through. <strong>CONDUIT STABILITY</strong> ticks
+    down from ignition and auto-seals the ring at zero; <strong>SEAL
+    RING</strong> (<kbd>Esc</kbd>) closes the twelve-plate iris early. Mid-dial,
+    before ignition, <strong>ABORT</strong> (<kbd>Esc</kbd>) releases every
+    seated clamp and stands the ring down.</p>
+
+    <h3>Other controls</h3>
+    <p><strong>CLEAR</strong> empties an unlocked register; the small
+    <strong>SND</strong> toggle mutes the synthesized servo, clamp, ignition,
+    and horizon audio; the <strong>SYSTEM LOG</strong> panel timestamps every
+    dial event for the session.</p>
+
+    <button id="opref-close-btn" class="ctl">CLOSE</button>
+  </div>
+</div>
+
 <!-- ============ HELP OVERLAY ============ -->
 <div id="help" hidden>
   <div id="help-card">
