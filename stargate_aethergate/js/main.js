@@ -39,7 +39,10 @@
     btnAudio: document.getElementById("btn-audio"),
     btnHelp: document.getElementById("btn-help"),
     btnHelpClose: document.getElementById("btn-help-close"),
-    help: document.getElementById("help")
+    help: document.getElementById("help"),
+    opRefBtn: document.getElementById("op-ref-btn"),
+    opRefClose: document.getElementById("op-ref-close"),
+    opRef: document.getElementById("op-ref")
   };
 
   let state = "idle";           // idle | dialing | active | closing
@@ -413,8 +416,24 @@
   el.btnHelpClose.addEventListener("click", () => { el.help.hidden = true; });
   el.help.addEventListener("click", e => { if (e.target === el.help) el.help.hidden = true; });
 
+  function openOpRef() {
+    el.opRef.hidden = false;
+    el.opRefBtn.setAttribute("aria-expanded", "true");
+  }
+  function closeOpRef() {
+    el.opRef.hidden = true;
+    el.opRefBtn.setAttribute("aria-expanded", "false");
+  }
+  el.opRefBtn.addEventListener("click", openOpRef);
+  el.opRefClose.addEventListener("click", closeOpRef);
+  el.opRef.addEventListener("click", e => { if (e.target === el.opRef) closeOpRef(); });
+
   document.addEventListener("keydown", e => {
     if (e.target instanceof HTMLInputElement) return;
+    if (!el.opRef.hidden) {
+      if (e.key === "Escape") closeOpRef();
+      return;
+    }
     if (!el.help.hidden) {
       if (e.key === "Escape") el.help.hidden = true;
       return;

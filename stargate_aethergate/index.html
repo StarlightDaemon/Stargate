@@ -108,6 +108,56 @@
   </div>
 </div>
 
+<button id="op-ref-btn" class="op-ref-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="op-ref" title="Operator Reference">?</button>
+
+<div id="op-ref" class="modal op-ref-modal" hidden role="dialog" aria-modal="true" aria-labelledby="op-ref-title">
+  <div class="modal-card">
+    <h2 id="op-ref-title">Operator Reference — Console 7</h2>
+
+    <div class="op-ref-section">
+      <h3>Manual dial</h3>
+      <p>Tap seven distinct sigils on the Sigil Pad to fill the Destination
+        Sequence, one glyph per slot, in the order you want them encoded.
+        Press <strong>ENGAGE RING</strong> — the sigil track spins to each
+        queued glyph under the crown marker, and a mechanical seal clamps
+        shut the moment it settles. Seven route seals lock in turn, then the
+        prime seal arms and engages: the aperture will surge outward before
+        the event horizon settles into an open lane.</p>
+    </div>
+
+    <div class="op-ref-section">
+      <h3>Fast dial</h3>
+      <p><strong>RANDOM COORDS</strong> (<kbd>R</kbd>) drafts seven random
+        sigils in one press. The <strong>Charted Destinations</strong> list
+        loads a full known sequence with a single click — no pad-tapping
+        required. <strong>CLEAR</strong> (<kbd>C</kbd>) wipes the buffer
+        while the ring is idle.</p>
+    </div>
+
+    <div class="op-ref-section">
+      <h3>Lane open</h3>
+      <p>Aperture stability starts draining the instant the horizon forms —
+        watch the meter beneath the ring. Under 40% wrap up your business;
+        under 15% expect an automatic emergency seal. <strong>LAUNCH
+        PROBE</strong> sends a telemetry drone through the horizon for
+        seeded survey readings. <strong>SEAL PORTAL</strong>
+        (<kbd>Esc</kbd>) closes the lane on your own terms.</p>
+    </div>
+
+    <div class="op-ref-section">
+      <h3>Abort</h3>
+      <p>While dialing, <strong>ABORT</strong> (<kbd>Esc</kbd>) halts the
+        sequence, releases any seals already clamped, and spins the track
+        down before anything locks.</p>
+    </div>
+
+    <button id="op-ref-close" class="btn primary">CLOSE REFERENCE</button>
+  </div>
+</div>
+
+<a class="credit" href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+<div class="version">v1.1.0</div>
+
 <noscript><p class="noscript">The transit ring needs JavaScript to spin. Please enable it.</p></noscript>
 
 <script src="js/glyphs.js"></script>
