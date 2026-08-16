@@ -110,6 +110,10 @@
   </footer>
 </div>
 
+<a class="credit" href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+<div class="version">v1.1.0</div>
+<button id="btn-op-ref" class="op-ref-btn" aria-label="Operator reference" title="Operator reference">?</button>
+
 <div id="tunnel-overlay" hidden><canvas id="tunnel-canvas"></canvas><div id="tunnel-label"></div></div>
 
 <div id="help-overlay" hidden>
@@ -135,6 +139,45 @@
       <tr><td><kbd>R</kbd></td><td>Dial random archive entry</td><td><kbd>H</kbd></td><td>This manual</td></tr>
     </table>
     <button id="btn-help-close" class="btn primary">CLOSE</button>
+  </div>
+</div>
+
+<div id="op-ref-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="op-ref-title">
+  <div class="op-ref-card">
+    <h2 id="op-ref-title">OPERATOR REFERENCE — TERMINAL VII</h2>
+
+    <h3>MANUAL DIAL</h3>
+    <p>Select six destination glyphs on the Glyph Input Matrix, in address order, then close the
+      register with the ◈ <strong>Solyn</strong> point-of-origin glyph — every outbound vector from
+      this terminal resolves through it as the seventh lock. Hit <strong>INITIATE DIAL</strong>
+      (or <kbd>Enter</kbd>) once all seven slots are filled. The inner ring rotates each glyph under
+      the primary lock in turn, alternating direction lock to lock, and one of the nine lock lugs
+      engages on every pass. On the seventh lock the vector resolves: a registered archive address
+      blooms into a breach surge, an unregistered one faults and the ring spins back down to idle.</p>
+
+    <h3>FAST ADDRESSING</h3>
+    <p><strong>SURVEY DIAL</strong> fills the register with six unverified glyphs drawn at random —
+      a gambler's throw against the archive, likely to fault on the seventh lock, though the lugs
+      still engage for the attempt. <kbd>R</kbd> is the sure bet: it pulls a genuine address straight
+      from the Destination Archive and dials it immediately, register or no register. Clicking any
+      Destination Archive entry loads its address into the register without dialing it.</p>
+
+    <h3>ABORT &amp; DISENGAGE</h3>
+    <p><strong>ABORT</strong>, live only while the ring is turning, halts a manual dial mid-sequence
+      and spins the ring back to idle — use it if a locked glyph looks wrong before the seventh lock.
+      Once a conduit is open, <strong>DISENGAGE CONDUIT</strong> (or <kbd>Esc</kbd>) collapses it on
+      command; left alone, conduit stability bleeds down on its own and the ring performs an emergency
+      disengage at zero. Every survey probe launched through the event surface — <kbd>P</kbd>, or a
+      click on the open conduit itself — costs stability too, so don't over-probe a fading vector.</p>
+
+    <h3>APERTURE SHIELD &amp; UNSCHEDULED BREACHES</h3>
+    <p>The <strong>APERTURE SHIELD</strong> (<kbd>I</kbd>) seals the ring at any time, outbound or
+      idle. It is the only thing standing between the station and an <em>unscheduled inbound
+      breach</em> — an off-schedule dial-in the station occasionally detects while the ring sits
+      idle. Sealed, the breach blooms uselessly against the shield and dissipates; unsealed, an
+      unregistered inbound conduit opens on its own and has to be watched like any other.</p>
+
+    <button id="btn-op-ref-close" class="btn primary">CLOSE</button>
   </div>
 </div>
 

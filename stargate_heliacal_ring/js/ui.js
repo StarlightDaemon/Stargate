@@ -31,7 +31,9 @@ HG.ui = (function () {
     btnClear: $("btn-clear"), btnUndo: $("btn-undo"), btnSurvey: $("btn-survey"),
     btnShutdown: $("btn-shutdown"), btnProbe: $("btn-probe"), btnIris: $("btn-iris"),
     btnMute: $("btn-mute"), btnHelp: $("btn-help"), btnHelpClose: $("btn-help-close"),
-    helpOverlay: $("help-overlay")
+    helpOverlay: $("help-overlay"),
+    btnOpRef: $("btn-op-ref"), btnOpRefClose: $("btn-op-ref-close"),
+    opRefOverlay: $("op-ref-overlay")
   };
 
   let register = [];          // selected glyph indices, max 7
@@ -312,6 +314,11 @@ HG.ui = (function () {
     if (show) HG.audio.uiClick();
   }
 
+  function showOpRef(show) {
+    els.opRefOverlay.hidden = !show;
+    if (show) HG.audio.uiClick();
+  }
+
   function bind() {
     els.btnDial.addEventListener("click", () => seq.dial([...register]));
     els.btnAbort.addEventListener("click", () => { HG.audio.uiClick(); seq.abort(); });
@@ -328,6 +335,11 @@ HG.ui = (function () {
     els.helpOverlay.addEventListener("click", (e) => {
       if (e.target === els.helpOverlay) showHelp(false);
     });
+    els.btnOpRef.addEventListener("click", () => showOpRef(true));
+    els.btnOpRefClose.addEventListener("click", () => showOpRef(false));
+    els.opRefOverlay.addEventListener("click", (e) => {
+      if (e.target === els.opRefOverlay) showOpRef(false);
+    });
 
     window.addEventListener("keydown", (e) => {
       if (e.repeat) return;
@@ -339,6 +351,7 @@ HG.ui = (function () {
           break;
         case "Escape":
           if (!els.helpOverlay.hidden) { showHelp(false); break; }
+          if (!els.opRefOverlay.hidden) { showOpRef(false); break; }
           if (seq.getState() === "dialing" || seq.getState() === "resolving") seq.abort();
           else if (seq.getState() === "active" || seq.getState() === "inbound") seq.shutdown();
           break;
