@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Erebus Signal Intercept</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="noise-overlay"></div>
+    <div class="tracking-line"></div>
+    
+    <button class="help-btn" onclick="document.getElementById('help-modal').classList.remove('hidden')">?</button>
+    <div id="help-modal" class="hidden">
+        <div class="help-content">
+            <button class="close-btn" onclick="document.getElementById('help-modal').classList.add('hidden')">X</button>
+            <h2>OPERATOR MANUAL</h2>
+            <p>TERMINAL: EREBUS SIGNAL INTERCEPT</p>
+            <p>1. UPLINK COMMAND: Select exactly 4 symbols from the keypad to input a spatial coordinate.</p>
+            <p>2. ENGAGE LINK: After dialing, engage the lock to attempt connection.</p>
+            <p>3. SIGNAL ARCHIVE: Use preloaded frequencies for verified, unconfirmed, or flagged connections.</p>
+            <p>4. SECURITY OVERRIDE (SIGNAL LOCKOUT): When enabled, actively rejects any completed dial sequence to prevent hazardous material breakthrough. Independent toggle.</p>
+            <p style="font-size:0.8rem; opacity:0.7;">Note: Ensure local audio hardware is unmuted for telemetry signaling.</p>
+        </div>
+    </div>
+
+    <div id="fit-stage">
+    <div id="fit">
+    <div class="app-container">
+        <!-- LEFT PANEL -->
+        <div class="panel left-panel">
+            <div class="cluster">
+                <h3>UPLINK COMMAND</h3>
+                <div class="keypad">
+                    <button class="symbol-btn" onclick="selectSymbol(0)">∅</button>
+                    <button class="symbol-btn" onclick="selectSymbol(1)">‡</button>
+                    <button class="symbol-btn" onclick="selectSymbol(2)">⍚</button>
+                    <button class="symbol-btn" onclick="selectSymbol(3)">⍎</button>
+                    <button class="symbol-btn" onclick="selectSymbol(4)">⍭</button>
+                    <button class="symbol-btn" onclick="selectSymbol(5)">⍲</button>
+                    <button class="symbol-btn" onclick="selectSymbol(6)">⍷</button>
+                    <button class="symbol-btn" onclick="selectSymbol(7)">⍼</button>
+                    <button class="symbol-btn" onclick="selectSymbol(8)">⎈</button>
+                </div>
+                <button class="engage-btn" id="engage-btn" onclick="toggleEngage()" disabled>ENGAGE_LINK</button>
+                
+                <div class="separator"></div>
+
+                <label class="lockout-toggle">
+                    <input type="checkbox" id="signal-lockout">
+                    <span class="toggle-slider"></span>
+                    SIGNAL LOCKOUT
+                </label>
+            </div>
+        </div>
+
+        <!-- CENTER PANEL -->
+        <div class="gate-panel">
+            <div class="gate-container" id="gate">
+                <div class="transmission-surface" id="surface"></div>
+                
+                <div class="chevrons">
+                    <div class="chevron-wrapper" style="transform: rotate(0deg)"><div class="chevron origin"></div></div>
+                    <div class="chevron-wrapper" style="transform: rotate(40deg)"><div class="chevron"></div></div>
+                    <div class="chevron-wrapper" style="transform: rotate(80deg)"><div class="chevron"></div></div>
+                    <div class="chevron-wrapper" style="transform: rotate(120deg)"><div class="chevron"></div></div>
+                    <div class="chevron-wrapper" style="transform: rotate(160deg)"><div class="chevron"></div></div>
+                    <div class="chevron-wrapper" style="transform: rotate(200deg)"><div class="chevron"></div></div>
+                    <div class="chevron-wrapper" style="transform: rotate(240deg)"><div class="chevron"></div></div>
+                    <div class="chevron-wrapper" style="transform: rotate(280deg)"><div class="chevron"></div></div>
+                    <div class="chevron-wrapper" style="transform: rotate(320deg)"><div class="chevron"></div></div>
+                </div>
+
+                <div class="inner-ring" id="inner-ring">
+                    <div class="symbol-wrapper" style="transform: rotate(0deg)"><div class="glyph">∅</div></div>
+                    <div class="symbol-wrapper" style="transform: rotate(40deg)"><div class="glyph">‡</div></div>
+                    <div class="symbol-wrapper" style="transform: rotate(80deg)"><div class="glyph">⍚</div></div>
+                    <div class="symbol-wrapper" style="transform: rotate(120deg)"><div class="glyph">⍎</div></div>
+                    <div class="symbol-wrapper" style="transform: rotate(160deg)"><div class="glyph">⍭</div></div>
+                    <div class="symbol-wrapper" style="transform: rotate(200deg)"><div class="glyph">⍲</div></div>
+                    <div class="symbol-wrapper" style="transform: rotate(240deg)"><div class="glyph">⍷</div></div>
+                    <div class="symbol-wrapper" style="transform: rotate(280deg)"><div class="glyph">⍼</div></div>
+                    <div class="symbol-wrapper" style="transform: rotate(320deg)"><div class="glyph">⎈</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="panel right-panel">
+            <div class="cluster">
+                <h3>SIGNAL ARCHIVE</h3>
+                <div class="tier verified">
+                    <h4>[ VERIFIED ]</h4>
+                    <button class="quick-dial-btn" onclick="quickDial('0,1,2,3')">ECHO-4</button>
+                    <button class="quick-dial-btn" onclick="quickDial('4,5,6,7')">NULL-PT</button>
+                </div>
+                <div class="tier unconfirmed">
+                    <h4>[ UNCONFIRMED ]</h4>
+                    <button class="quick-dial-btn" onclick="quickDial('8,0,4,2')">STATIC-A</button>
+                    <button class="quick-dial-btn" onclick="quickDial('1,7,3,5')">DRIFTER</button>
+                </div>
+                <div class="tier flagged">
+                    <h4>[ CORRUPTED / THREAT ]</h4>
+                    <button class="quick-dial-btn" onclick="quickDial('6,6,6,6')">VOID-1</button>
+                    <button class="quick-dial-btn" onclick="quickDial('2,8,2,8')">BLACK_BOX</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div><!-- /#fit -->
+    </div><!-- /#fit-stage -->
+
+    <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+    </div>
+    <div class="footer-right">
+        <span class="version">v1.1.0</span>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
