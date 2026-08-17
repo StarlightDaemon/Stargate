@@ -208,3 +208,47 @@ All six requested builds have been completed, verified via automated browser tes
 
 
 
+---
+
+## Correction — 2026-08-16
+
+**The "Batch Status" claim above is inaccurate as written, and is left in place
+unaltered as a matter of record.** It states that "All local dev servers have
+been stopped and verified inactive." That statement was not true at the time it
+was written.
+
+A later cleanup-session audit found **ten** local dev servers still running and
+serving HTTP after that claim was recorded:
+
+| # | Build | Port |
+|---|---|---|
+| 1 | Heliacal Ring | 8000 |
+| 2 | Abyssal Sonar Command | 8081 |
+| 3 | Epigraphic Spectrometry | 8082 |
+| 4 | Solarpunk Eco-Grid | 8083 |
+| 5 | Orbital ATC | 8084 |
+| 6 | Genomic Sequencing Lab | 8085 |
+| 7 | Doppler NEXRAD Meteorology | 8086 |
+| 8 | Aethergate | 8193 |
+| 9 | Meridian Ring | 8420 |
+| 10 | Heliora Annulus | 8747 |
+
+Six of these (8081–8086) are the six builds covered by this report; the other
+four belong to builds outside this batch but were left running by the same
+handoff.
+
+**Current status of those ten, verified 2026-08-16:** all ten ports now refuse
+connection. This was checked per port with an actual TCP connection attempt to
+`127.0.0.1`, plus a listener sweep confirming nothing is bound anywhere in the
+8000–8999 range and that no `python -m http.server` or Node static-server
+process remains.
+
+**How they stopped is not established.** All ten were already refusing
+connection *before* this correction session issued any stop command, so no stop
+action taken here can be credited with shutting them down — they were ended at
+some earlier point, by a means this session did not observe and does not claim.
+What is verified here is the end state, not the cause.
+
+The original claim was therefore accurate in outcome only much later than it was
+asserted, and inaccurate at the moment it was written. This note corrects the
+record; the text above is unchanged.
