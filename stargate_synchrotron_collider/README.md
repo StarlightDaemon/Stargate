@@ -1,0 +1,5 @@
+# Aethel-Ring Collider (ARC) — Synchrotron Inversion Control
+
+An interactive novelty portal-dialing website built around the Aethel-Ring Collider (ARC), the synchrotron control room of the Aethelgard High-Energy Inversion Laboratory (AHEIL). Dialing means steering six transverse-lattice dipoles into lock, one at a time, around a 16-sector superconducting bending-magnet ring, with the circulating relativistic bunch and its synchrotron radiation rendered live on the beam channel. Locking the sixth sector only arms COLLISION ARMED / PENDING — the operator still has to trigger the beam, and EMERGENCY BEAM DUMP is reachable at every stage. A Quench Protection interlock, released by default, blocks injection with trip banners and cryogenic alarms when engaged. The Collision Target Registry carries fourteen calibrated destinations across validated leptonic, heavy hadronic, and exotic singularity tiers.
+
+Everything here is fictional and fully client-side: no backend, no server process, no network calls, no real destinations.
