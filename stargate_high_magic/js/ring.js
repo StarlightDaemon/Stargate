@@ -60,6 +60,27 @@
     el("feMergeNode", { in: "b" }, sgm);
     el("feMergeNode", { in: "SourceGraphic" }, sgm);
 
+    // Keystone bevel: a mounted boss catching light from the same upper-left
+    // source as the rest of the ring, rather than a flat mandala fill.
+    const bevel = el("radialGradient", { id: "keystoneBevel", cx: "34%", cy: "28%", r: "78%" }, defs);
+    el("stop", { offset: "0%", "stop-color": "#3c3468" }, bevel);
+    el("stop", { offset: "55%", "stop-color": "#211a3f" }, bevel);
+    el("stop", { offset: "100%", "stop-color": "#0c0918" }, bevel);
+    const bevelAwake = el("radialGradient", { id: "keystoneBevelAwake", cx: "34%", cy: "28%", r: "78%" }, defs);
+    el("stop", { offset: "0%", "stop-color": "#5c4f98" }, bevelAwake);
+    el("stop", { offset: "55%", "stop-color": "#332a5c" }, bevelAwake);
+    el("stop", { offset: "100%", "stop-color": "#130f26" }, bevelAwake);
+
+    // One directional light source across the whole ring: a warm glare
+    // upper-left, a soft shadow lower-right — so the stonework reads with
+    // real highlight/shadow contrast instead of flat, even illumination.
+    const ringHi = el("radialGradient", { id: "ringHighlight", cx: "50%", cy: "50%", r: "50%" }, defs);
+    el("stop", { offset: "0%", "stop-color": "rgba(255,238,196,0.4)" }, ringHi);
+    el("stop", { offset: "100%", "stop-color": "rgba(255,238,196,0)" }, ringHi);
+    const ringSh = el("radialGradient", { id: "ringShadow", cx: "50%", cy: "50%", r: "50%" }, defs);
+    el("stop", { offset: "0%", "stop-color": "rgba(0,0,0,0.5)" }, ringSh);
+    el("stop", { offset: "100%", "stop-color": "rgba(0,0,0,0)" }, ringSh);
+
     // circular path for the engraved law (rendered twice, top and bottom arcs)
     el("path", {
       id: "lawArc",
@@ -67,8 +88,18 @@
       fill: "none",
     }, defs);
 
+    // Aperture mask: the stonework below is painted as solid filled discs
+    // (simplest way to layer concentric rims), but plain circles have no
+    // hole — left unmasked they blot out the veil canvas entirely, since
+    // #ringSvg paints over #portalCanvas. Punch a hole matching the veil's
+    // aperture (portal.js APERTURE = 236) so the stone reads as a true
+    // ring with an open center, not a solid disc sitting over the veil.
+    const apertureMask = el("mask", { id: "apertureMask", maskUnits: "userSpaceOnUse", x: "0", y: "0", width: "900", height: "900" }, defs);
+    el("rect", { x: 0, y: 0, width: 900, height: 900, fill: "#fff" }, apertureMask);
+    el("circle", { cx: CX, cy: CY, r: 237, fill: "#000" }, apertureMask);
+
     // ————— stonework: concentric rims —————
-    const stone = el("g", { class: "decor" }, svg);
+    const stone = el("g", { class: "decor", mask: "url(#apertureMask)" }, svg);
     el("circle", { cx: CX, cy: CY, r: 434, fill: "none", stroke: "rgba(232,192,106,0.22)", "stroke-width": 3 }, stone);
     el("circle", { cx: CX, cy: CY, r: 424, fill: "rgba(20,16,38,0.92)", stroke: "rgba(207,216,255,0.14)", "stroke-width": 1.5 }, stone);
     el("circle", { cx: CX, cy: CY, r: 386, fill: "none", stroke: "rgba(232,192,106,0.3)", "stroke-width": 2 }, stone);
@@ -78,10 +109,6 @@
     // inner rim around the aperture — the veil (canvas) lies beneath this hole
     el("circle", { cx: CX, cy: CY, r: 244, fill: "none", stroke: "rgba(232,192,106,0.5)", "stroke-width": 3 }, stone);
     el("circle", { cx: CX, cy: CY, r: 237, fill: "none", stroke: "rgba(207,216,255,0.2)", "stroke-width": 1 }, stone);
-
-    // aperture cut: paint over canvas OUTSIDE r=237 so the veil shows only inside.
-    // (ring stonework circles above are opaque; the region 254..322 etc. already cover.)
-    // The gap 237..254 ring area is stone: filled by the 254 circle already.
 
     // fine tick marks on the outer rim — 84 graduations, every 4th gilded
     for (let i = 0; i < 84; i++) {
@@ -103,6 +130,32 @@
       el("line", {
         x1: x1.toFixed(1), y1: y1.toFixed(1), x2: x2.toFixed(1), y2: y2.toFixed(1),
         stroke: "rgba(207,216,255,0.1)", "stroke-width": 6,
+      }, stone);
+    }
+
+    // mounting rivets bolting the outer plate down — functional hardware,
+    // not just ornament, evenly set but reading as engineered fastenings
+    for (let i = 0; i < 16; i++) {
+      const deg = (i * 360) / 16 + 11;
+      const [x, y] = polar(409, deg);
+      el("circle", { cx: x.toFixed(1), cy: y.toFixed(1), r: 3.2, class: "rim-rivet" }, stone);
+    }
+
+    // irregular tarnish: a handful of localized, unevenly-sized blotches —
+    // never a uniform tint — scattered on the outer plate as if age and
+    // handling settled unevenly across the stone
+    const TARNISH = [
+      [40, 405, 30, 0.16], [205, 396, 22, 0.12], [260, 418, 34, 0.14],
+      [318, 402, 18, 0.1], [140, 420, 26, 0.13], [-30, 398, 20, 0.11],
+      [-110, 412, 28, 0.15], [172, 388, 16, 0.09],
+    ];
+    for (const [deg, r, size, a] of TARNISH) {
+      const [x, y] = polar(r, deg);
+      el("ellipse", {
+        cx: x.toFixed(1), cy: y.toFixed(1),
+        rx: size.toFixed(1), ry: (size * 0.62).toFixed(1),
+        transform: `rotate(${(deg * 1.7).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})`,
+        fill: `rgba(18,22,14,${a})`,
       }, stone);
     }
 
@@ -176,9 +229,26 @@
       transform: `translate(${lx} ${ly}) scale(0.62) translate(-50 -50)`,
     }, svg);
 
+    // ————— one directional light across the whole plate —————
+    // Sits above the stone/wards/band so highlight and shadow read
+    // consistently across every mounted piece, not just the base rim.
+    const lightLayer = el("g", { class: "decor", mask: "url(#apertureMask)" }, svg);
+    el("ellipse", {
+      cx: CX - 150, cy: CY - 170, rx: 300, ry: 260,
+      fill: "url(#ringHighlight)", style: "mix-blend-mode:screen",
+    }, lightLayer);
+    el("ellipse", {
+      cx: CX + 160, cy: CY + 180, rx: 320, ry: 270,
+      fill: "url(#ringShadow)", style: "mix-blend-mode:multiply",
+    }, lightLayer);
+
     // ————— the Keystone —————
     const keystone = el("g", { id: "keystone", role: "button", tabindex: "-1" }, svg);
     el("circle", { class: "keystone-boss", cx: CX, cy: CY, r: 86 }, keystone);
+    for (let i = 0; i < 6; i++) {
+      const [rx, ry] = polar(78, i * 60 - 90);
+      el("circle", { cx: rx.toFixed(1), cy: ry.toFixed(1), r: 3, class: "keystone-rivet" }, keystone);
+    }
     el("circle", { class: "keystone-star", cx: CX, cy: CY, r: 70, "stroke-width": 1 }, keystone);
     el("path", { class: "keystone-star", d: heptagramPath(62) }, keystone);
     el("circle", { class: "keystone-star", cx: CX, cy: CY, r: 12 }, keystone);
