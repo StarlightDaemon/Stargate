@@ -20,37 +20,37 @@
     },
     {
       "id": "stargate-fable",
-      "folder": "Stargate_fable",
+      "folder": "stargate_meridian_ring",
       "title": "MERIDIAN RING — Gateway Operations Console",
       "blurb": "An original, fully client-side interactive novelty site: a ring-shaped dialing apparatus that acquires a seven-sigil address, seats eight mechanical hold-clamps one by one, ignites a violent energy surge, and settles…",
-      "link": "../Stargate_fable/index.html",
+      "link": "../stargate_meridian_ring/index.html",
       "preview": null,
       "status": "live"
     },
     {
       "id": "stargate-fable-02",
-      "folder": "Stargate_fable_02",
+      "folder": "stargate_heliacal_ring",
       "title": "Heliacal Ring — Gate Command · Terminal VII",
       "blurb": "An original, fully client-side interactive novelty site: a ring-shaped dialing device that opens a shimmering travel conduit. Compose a seven-glyph address, watch the inner ring spin each glyph to the primary lock, see…",
-      "link": "../Stargate_fable_02/index.html",
+      "link": "../stargate_heliacal_ring/index.html",
       "preview": null,
       "status": "live"
     },
     {
       "id": "stargate-fable-03",
-      "folder": "Stargate_fable_03",
+      "folder": "stargate_aethergate",
       "title": "AETHERGATE — Transit Ring Console",
       "blurb": "An original, fully client-side interactive tribute to ring-portal science fiction. Compose a seven-sigil destination address, watch the sigil track spin each glyph under the crown marker while mechanical seals clamp…",
-      "link": "../Stargate_fable_03/index.html",
+      "link": "../stargate_aethergate/index.html",
       "preview": null,
       "status": "live"
     },
     {
       "id": "stargate-fable-u",
-      "folder": "Stargate_fable_u",
+      "folder": "stargate_heliora_annulus",
       "title": "HELIORA · Threshold Annulus",
       "blurb": "An interactive novelty website: a ring-shaped dialing instrument that attunes seven-sigil addresses (\"cants\"), locks seven Annular Seals one by one, strikes open a molten travel-well (the Wellglass) with a dramatic…",
-      "link": "../Stargate_fable_u/index.html",
+      "link": "../stargate_heliora_annulus/index.html",
       "preview": null,
       "status": "live"
     },
