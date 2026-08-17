@@ -1,0 +1,5 @@
+# DITMCO — Municipal Conduit Registry Terminal (Form 1099-TX)
+
+An interactive novelty portal-dialing website for the Department of Interzonal Transit & Municipal Conduit Oversight (DITMCO), Registry Division Annex 4-B. Dialing means filing a Form 1099-TX Clearance Application: an 8-symbol address stamped one glyph at a time into a 12-slot chevron lock matrix (8 standard fields, 4 reserved priority positions), tracked live on a vector CRT oscilloscope showing the conduit raster and event-horizon authorization plane. The Quick-Dial Cabinet carries three Tier-1 Approved Corridors and three Tier-2 Flagged Routes, and a basic dial completes in two actions from cold start. An Administrative Compliance Freeze (Section 44 Lockout Hold) can halt the desk mid-filing; REVOKE PERMIT / DISENGAGE tears down and redials cleanly. Consult the DITMCO Operator Manual (Form 0-A) via the top-right `?`.
+
+Everything here is fictional and fully client-side: no backend, no server process, no network calls, no real destinations.
