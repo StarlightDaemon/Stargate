@@ -1,0 +1,312 @@
+/* ==========================================================================
+   D.S.T.C.L. TERMINAL OS/88-V - CONDUIT RING & TELEMETRY STYLES
+   Visual styling for the Conduit Buffer Commutator, Oscilloscope, & Horizon
+   ========================================================================== */
+
+.ring-panel-container {
+  background: var(--crt-bg-panel);
+  border: 1px solid var(--crt-border);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 6px 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ring Header Telemetry Strip */
+.ring-header-strip {
+  display: flex;
+  justify-content: space-between;
+  background: var(--crt-bg-panel-dark);
+  border: 1px solid var(--crt-border);
+  padding: 4px 10px;
+  font-family: var(--font-code);
+  font-size: 11px;
+  flex-shrink: 0;
+  margin-bottom: 4px;
+}
+
+.strip-item {
+  display: flex;
+  gap: 6px;
+}
+
+.strip-label {
+  color: var(--crt-text-dim);
+}
+
+.strip-val {
+  color: var(--crt-primary-bright);
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   RING VIEWPORT WRAPPER & LAYERS
+   ========================================================================== */
+
+.ring-viewport-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#ring-canvas {
+  position: absolute;
+  width: min(58vh, 580px);
+  height: min(58vh, 580px);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ring-svg-overlay {
+  position: absolute;
+  width: min(58vh, 580px);
+  height: min(58vh, 580px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* SVG Tracks & Shapes */
+.svg-ring-outer-border {
+  fill: none;
+  stroke: var(--crt-border-bright);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 4px var(--crt-primary-glow));
+}
+
+.svg-ring-track {
+  fill: none;
+  stroke: var(--crt-border);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 2;
+}
+
+.svg-ring-track-mid {
+  fill: none;
+  stroke: var(--crt-primary-dim);
+  stroke-width: 1;
+  stroke-opacity: 0.6;
+}
+
+.svg-ring-track-inner {
+  fill: none;
+  stroke: var(--crt-border);
+  stroke-width: 2;
+  stroke-dasharray: 6 3;
+}
+
+.svg-ring-aperture-rim {
+  fill: none;
+  stroke: var(--crt-border-bright);
+  stroke-width: 3;
+}
+
+/* Sector Segments */
+.sector-segment {
+  fill: rgba(30, 20, 0, 0.4);
+  stroke: var(--crt-border);
+  stroke-width: 1;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all var(--transition-fast);
+}
+
+.sector-segment:hover {
+  fill: rgba(255, 170, 0, 0.3);
+  stroke: var(--crt-primary-bright);
+}
+
+.sector-segment.locked {
+  fill: rgba(255, 170, 0, 0.7);
+  stroke: var(--crt-text-bright);
+  filter: url(#amber-glow);
+}
+
+.sector-label {
+  font-family: var(--font-code);
+  font-size: 8px;
+  fill: var(--crt-text-dim);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.sector-label.locked {
+  fill: #000;
+  font-weight: bold;
+}
+
+/* Hydraulic Solenoid Chevrons (7 Locks) */
+.chevron-clamp {
+  fill: #150e02;
+  stroke: var(--crt-border-bright);
+  stroke-width: 2;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.chevron-lamp {
+  fill: #332000;
+  stroke: var(--crt-border);
+  stroke-width: 1;
+  transition: all var(--transition-fast);
+}
+
+.chevron-group.locked .chevron-clamp {
+  fill: #3a2200;
+  stroke: var(--crt-primary-bright);
+  filter: url(#intense-glow);
+}
+
+.chevron-group.locked .chevron-lamp {
+  fill: var(--crt-primary-bright);
+  filter: url(#intense-glow);
+}
+
+.chevron-group.engaged .chevron-clamp {
+  stroke: var(--crt-text-bright);
+  animation: chevron-pulse 0.8s infinite alternate;
+}
+
+@keyframes chevron-pulse {
+  from { filter: url(#amber-glow); }
+  to { filter: url(#intense-glow); }
+}
+
+/* Mechanical Iris Blades */
+.iris-blade {
+  fill: #0a0601;
+  stroke: var(--crt-border);
+  stroke-width: 1.5;
+  transform-origin: 310px 310px;
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reticle Lines */
+.reticle-line {
+  stroke: var(--crt-primary-dim);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+
+.reticle-center {
+  fill: none;
+  stroke: var(--crt-primary-dim);
+  stroke-width: 1;
+}
+
+/* ==========================================================================
+   CENTER HUD OVERLAY
+   ========================================================================== */
+
+.ring-center-hud {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(28vh, 260px);
+  height: min(28vh, 260px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(13, 9, 1, 0.85) 0%, rgba(13, 9, 1, 0.4) 65%, transparent 100%);
+}
+
+.hud-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px;
+}
+
+.hud-badge {
+  font-family: var(--font-code);
+  font-size: 10px;
+  color: #000;
+  background: var(--crt-primary-dim);
+  padding: 1px 6px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.hud-badge.active {
+  background: var(--crt-success-green);
+  color: #000;
+  animation: pulse-status 1s infinite;
+}
+
+.hud-dest-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--crt-primary-bright);
+  text-shadow: var(--text-glow);
+  max-width: 180px;
+  line-height: 1.15;
+}
+
+.hud-coords-string {
+  font-family: var(--font-code);
+  font-size: 11px;
+  color: var(--crt-text);
+  letter-spacing: 1px;
+}
+
+.hud-timer {
+  font-family: var(--font-code);
+  font-size: 10px;
+  color: var(--crt-text-dim);
+  margin-top: 2px;
+}
+
+.hud-timer.counting {
+  color: var(--crt-primary-bright);
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   FOOTER DIAGNOSTICS READOUTS
+   ========================================================================== */
+
+.ring-footer-readouts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.readout-card {
+  background: var(--crt-bg-panel-dark);
+  border: 1px solid var(--crt-border);
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+}
+
+.ro-title {
+  font-size: 8px;
+  color: var(--crt-text-dim);
+  font-family: var(--font-code);
+  letter-spacing: 0.5px;
+}
+
+.ro-val {
+  font-family: var(--font-code);
+  font-size: 11px;
+  color: var(--crt-primary-bright);
+  font-weight: bold;
+  white-space: nowrap;
+}

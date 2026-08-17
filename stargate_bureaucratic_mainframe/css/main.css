@@ -1,0 +1,220 @@
+/* ==========================================================================
+   D.S.T.C.L. TERMINAL OS/88-V - MAIN STYLESHEET
+   Core Design System, Themes, Scanlines, Typography & Viewport Setup
+   ========================================================================== */
+
+:root {
+  /* Amber Phosphor Monochrome Palette (Default) */
+  --crt-bg: #0d0901;
+  --crt-bg-panel: rgba(22, 14, 2, 0.92);
+  --crt-bg-panel-dark: #080501;
+  --crt-border: #995c00;
+  --crt-border-bright: #ff9d00;
+  --crt-primary: #ffaa00;
+  --crt-primary-dim: #b37400;
+  --crt-primary-bright: #ffd000;
+  --crt-primary-glow: rgba(255, 170, 0, 0.45);
+  --crt-primary-glow-intense: rgba(255, 190, 0, 0.85);
+  --crt-text-dim: #996814;
+  --crt-text: #ffb833;
+  --crt-text-bright: #fff2b2;
+  --crt-alert-red: #ff3333;
+  --crt-alert-glow: rgba(255, 51, 51, 0.6);
+  --crt-success-green: #33ff66;
+
+  /* Font Families */
+  --font-mono: 'Share Tech Mono', 'Fira Code', monospace, Courier;
+  --font-display: 'VT323', monospace;
+  --font-code: 'Fira Code', monospace;
+
+  /* Shadows & Bloom */
+  --glow-sm: 0 0 5px var(--crt-primary-glow);
+  --glow-md: 0 0 12px var(--crt-primary-glow);
+  --glow-lg: 0 0 24px var(--crt-primary-glow-intense);
+  --text-glow: 0 0 8px var(--crt-primary-glow);
+  --text-glow-intense: 0 0 12px var(--crt-primary-glow-intense), 0 0 20px var(--crt-primary);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-med: 0.3s ease;
+}
+
+/* Green Phosphor Monochrome Theme Option */
+body.theme-green {
+  --crt-bg: #010d04;
+  --crt-bg-panel: rgba(2, 22, 8, 0.92);
+  --crt-bg-panel-dark: #010802;
+  --crt-border: #00802b;
+  --crt-border-bright: #00e64d;
+  --crt-primary: #33ff77;
+  --crt-primary-dim: #009933;
+  --crt-primary-bright: #80ffaa;
+  --crt-primary-glow: rgba(51, 255, 119, 0.45);
+  --crt-primary-glow-intense: rgba(80, 255, 140, 0.85);
+  --crt-text-dim: #1a8c3d;
+  --crt-text: #47ff85;
+  --crt-text-bright: #d9ffe3;
+}
+
+/* CSS Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+  color: var(--crt-text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.35;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   CRT MONITOR EFFECTS (Scanlines, Vignette, Phosphor Bloom)
+   ========================================================================== */
+
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+
+/* Scanline Lines */
+.crt-scanlines {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.4) 50%
+  );
+  background-size: 100% 3px;
+  opacity: 0.85;
+}
+
+/* Phosphor Screen Vignette */
+.crt-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(0, 0, 0, 0) 65%,
+    rgba(0, 0, 0, 0.7) 92%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+}
+
+/* Subtle CRT Screen Flicker */
+.crt-flicker {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 170, 0, 0.015);
+  opacity: 0.5;
+  animation: crt-flicker 0.12s infinite;
+}
+
+body.theme-green .crt-flicker {
+  background: rgba(51, 255, 119, 0.015);
+}
+
+@keyframes crt-flicker {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.65; }
+  100% { opacity: 0.45; }
+}
+
+/* ==========================================================================
+   MAIN TERMINAL FRAME (Single Screen 1920x1080 Baseline with Clean Scale)
+   ========================================================================== */
+
+.terminal-frame {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--crt-bg);
+  border: 4px solid var(--crt-border);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9), 0 0 15px var(--crt-primary-glow);
+  position: relative;
+  overflow: hidden;
+  padding: 6px;
+}
+
+/* ==========================================================================
+   OPERATOR REFERENCE BUTTON (Fixed Top-Right)
+   ========================================================================== */
+
+.operator-ref-btn {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 1001;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--crt-bg-panel);
+  border: 2px solid var(--crt-border-bright);
+  color: var(--crt-primary-bright);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--crt-primary-glow);
+  transition: all var(--transition-fast);
+}
+
+.operator-ref-btn:hover {
+  background: var(--crt-primary);
+  color: var(--crt-bg);
+  box-shadow: 0 0 20px var(--crt-primary-glow-intense);
+  transform: scale(1.1);
+}
+
+.ref-tooltip {
+  position: absolute;
+  right: 44px;
+  background: var(--crt-bg-panel-dark);
+  border: 1px solid var(--crt-border-bright);
+  color: var(--crt-primary-bright);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+  box-shadow: var(--glow-sm);
+}
+
+.operator-ref-btn:hover .ref-tooltip {
+  opacity: 1;
+}
+
+/* Custom Scrollbar for Terminal Panels */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--crt-bg-panel-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--crt-border);
+  border: 1px solid var(--crt-border-bright);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--crt-primary);
+}

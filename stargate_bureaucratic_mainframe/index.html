@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D.S.T.C.L. Terminal OS/88-V | Municipal Conduit & Transit Authority</title>
+  <meta name="description" content="Official Bureaucratic Mainframe Portal Terminal for the Department of Sub-Aetheric Transit & Conduit Licensure. Form 44-A Filing, Commutator Buffer Telemetry, and Expedited Conduit Dispatch.">
+  
+  <!-- Fonts: Retro Monospace & Technical Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/terminal.css">
+  <link rel="stylesheet" href="css/ring.css">
+  <link rel="stylesheet" href="css/docket.css">
+</head>
+<body class="crt-amber theme-amber">
+  <!-- CRT Screen Overlay Effects -->
+  <div class="crt-overlay">
+    <div class="crt-scanlines"></div>
+    <div class="crt-vignette"></div>
+    <div class="crt-flicker"></div>
+    <div class="crt-curvature"></div>
+  </div>
+
+  <!-- Operator Reference Modal Trigger (Fixed Top-Right) -->
+  <button id="btn-operator-ref" class="operator-ref-btn" title="Open D.S.T.C.L. Operator Manual (Circular Memorandum 88-A)" aria-label="Operator Reference Help">
+    <span class="ref-icon">?</span>
+    <span class="ref-tooltip">OPERATOR REF [MEMO 88-A]</span>
+  </button>
+
+  <!-- Main Viewport Container (Single-Screen 1920x1080 Baseline) -->
+  <div class="terminal-frame" id="terminal-frame">
+    
+    <!-- Top System Header Bar -->
+    <header class="system-header" id="system-header">
+      <div class="header-branding">
+        <div class="dept-seal">
+          <span class="seal-icon">⎈</span>
+          <span class="seal-text">D.S.T.C.L.</span>
+        </div>
+        <div class="dept-titles">
+          <h1 class="system-title">DEPT. OF SUB-AETHERIC TRANSIT & CONDUIT LICENSURE</h1>
+          <div class="system-sub">MUNICIPAL COMMUTER & FREIGHT ROUTING TERMINAL // OS/88-V (REV 4.19.8) // STATION: CONDUIT-04E</div>
+        </div>
+      </div>
+      <div class="header-telemetry">
+        <div class="telemetry-pill">
+          <span class="tel-label">SYSTEM CLOCK:</span>
+          <span class="tel-val" id="sys-clock">--:--:-- Z</span>
+        </div>
+        <div class="telemetry-pill">
+          <span class="tel-label">GRID LOAD:</span>
+          <span class="tel-val" id="grid-load">98.42% NOMINAL</span>
+        </div>
+        <div class="telemetry-pill">
+          <span class="tel-label">BUFFER STATE:</span>
+          <span class="tel-val status-idle" id="conduit-status-indicator">STANDBY / UNCOMMITTED</span>
+        </div>
+        <!-- Color Scheme Toggle -->
+        <div class="theme-toggle-group">
+          <button id="btn-theme-amber" class="theme-btn active" title="Amber Monochrome Phosphor">AMB</button>
+          <button id="btn-theme-green" class="theme-btn" title="Green Monochrome Phosphor">GRN</button>
+          <button id="btn-audio-toggle" class="audio-btn" title="Toggle Synthesized CRT/Relay Audio">
+            <span id="audio-icon">🔊 SOUND ON</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Grid (3-Column Layout: Left Controls, Center Ring Visualizer, Right Queue & Audit Log) -->
+    <main class="terminal-workspace" id="terminal-workspace">
+      
+      <!-- LEFT COLUMN: Control Cluster 1 & Cluster 2 -->
+      <section class="panel-column left-controls" id="left-controls">
+        
+        <!-- CONTROL CLUSTER 1: Form 44-A Filing & Routing Parameters -->
+        <div class="control-cluster-box" id="cluster-form-44a">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 01</span>
+            <h2 class="cluster-title">FORM 44-A: SUB-VECTOR TRANSIT FILING</h2>
+            <span class="form-badge">REQ-2184-B</span>
+          </div>
+          
+          <div class="form-body">
+            <!-- Destination Municipal Route Selector -->
+            <div class="form-group">
+              <label for="route-selector" class="form-label">
+                <span class="label-code">01.1</span> DESTINATION ROUTING VECTOR & MUNICIPAL JURISDICTION:
+              </label>
+              <div class="select-wrapper">
+                <select id="route-selector" class="terminal-select">
+                  <option value="" disabled selected>-- SELECT PRE-REGISTERED JURISDICTION --</option>
+                  <!-- Populated dynamically via JS with rich procedural destinations -->
+                </select>
+              </div>
+            </div>
+
+            <!-- 7-Glyph Sub-Vector Coordinate Input Slots -->
+            <div class="form-group">
+              <div class="label-split">
+                <label class="form-label"><span class="label-code">01.2</span> 7-STAGE COMMUTATOR BUFFER COORDINATES:</label>
+                <button type="button" id="btn-clear-coords" class="text-action-btn" title="Clear entered buffer slots">[CLEAR]</button>
+              </div>
+              <div class="glyph-slots-container" id="glyph-slots-container">
+                <div class="glyph-slot" data-index="0">
+                  <span class="slot-idx">S-1</span>
+                  <span class="slot-val" id="slot-0">--</span>
+                  <span class="slot-name" id="slot-name-0">ORIGIN</span>
+                </div>
+                <div class="glyph-slot" data-index="1">
+                  <span class="slot-idx">S-2</span>
+                  <span class="slot-val" id="slot-1">--</span>
+                  <span class="slot-name" id="slot-name-1">AXIS</span>
+                </div>
+                <div class="glyph-slot" data-index="2">
+                  <span class="slot-idx">S-3</span>
+                  <span class="slot-val" id="slot-2">--</span>
+                  <span class="slot-name" id="slot-name-2">NODE</span>
+                </div>
+                <div class="glyph-slot" data-index="3">
+                  <span class="slot-idx">S-4</span>
+                  <span class="slot-val" id="slot-3">--</span>
+                  <span class="slot-name" id="slot-name-3">FLUX</span>
+                </div>
+                <div class="glyph-slot" data-index="4">
+                  <span class="slot-idx">S-5</span>
+                  <span class="slot-val" id="slot-4">--</span>
+                  <span class="slot-name" id="slot-name-4">AZIMUTH</span>
+                </div>
+                <div class="glyph-slot" data-index="5">
+                  <span class="slot-idx">S-6</span>
+                  <span class="slot-val" id="slot-5">--</span>
+                  <span class="slot-name" id="slot-name-5">PARITY</span>
+                </div>
+                <div class="glyph-slot" data-index="6">
+                  <span class="slot-idx">S-7</span>
+                  <span class="slot-val" id="slot-6">--</span>
+                  <span class="slot-name" id="slot-name-6">LOCK</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Quick Coordinate Keypad Grid (36 Sectors) -->
+            <div class="form-group keypad-group">
+              <div class="label-split">
+                <label class="form-label"><span class="label-code">01.3</span> RADIAL SECTOR ENCODER KEYPAD (0x01 - 0x24):</label>
+                <span class="sub-counter" id="keypad-selection-counter">0 / 7 SLOTS LOCKED</span>
+              </div>
+              <div class="sector-keypad-grid" id="sector-keypad-grid">
+                <!-- 36 sector buttons injected via JS -->
+              </div>
+            </div>
+
+            <!-- Cargo Classification & Quarantine Attestation -->
+            <div class="form-row-split">
+              <div class="form-group half-group">
+                <label for="cargo-classification" class="form-label">
+                  <span class="label-code">01.4</span> CARGO / MASS CLASS:
+                </label>
+                <select id="cargo-classification" class="terminal-select">
+                  <option value="CLASS_B_PASSENGER">Class B: Commuter Mass (Standard)</option>
+                  <option value="CLASS_A_HEAVY_FREIGHT">Class A: Heavy Bulk Freight & Slag</option>
+                  <option value="CLASS_C_PRIORITY_COURIER">Class C: Diplomatic Dispatch (Priority)</option>
+                  <option value="CLASS_D_HAZMAT">Class D: Hazardous Isotope Manifest</option>
+                  <option value="CLASS_E_LIVESTOCK">Class E: Regulated Bio-Flora / Fauna</option>
+                </select>
+              </div>
+
+              <div class="form-group half-group">
+                <label class="form-label">
+                  <span class="label-code">01.5</span> COMPLIANCE ATTESTATION:
+                </label>
+                <label class="terminal-checkbox-label" for="chk-quarantine">
+                  <input type="checkbox" id="chk-quarantine" class="terminal-checkbox" checked>
+                  <span class="chk-custom"></span>
+                  <span class="chk-text">I certify compliance under Municipal Conduit Code § 88-12B.</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- CONTROL CLUSTER 2: Conduit Dispatch & Docket Processing Unit -->
+        <div class="control-cluster-box" id="cluster-dispatch">
+          <div class="cluster-header">
+            <span class="cluster-tag">CLUSTER 02</span>
+            <h2 class="cluster-title">CONDUIT DISPATCH & PROCESSING UNIT</h2>
+            <span class="form-badge">RELAY-04</span>
+          </div>
+
+          <div class="dispatch-body">
+            <!-- Status Message Ticker -->
+            <div class="docket-status-banner" id="docket-status-banner">
+              <span class="banner-icon">▶</span>
+              <span class="banner-text" id="status-banner-text">AWAITING FORM 44-A FILING & COORDINATE VERIFICATION...</span>
+            </div>
+
+            <!-- Primary Dispatch Action Controls -->
+            <div class="dispatch-actions-grid">
+              <!-- Primary Manual Dial / Buffer Commit Button -->
+              <button type="button" id="btn-dial-manual" class="action-btn btn-primary-dial">
+                <span class="btn-subtext">MUNICIPAL FILING</span>
+                <span class="btn-maintext">▶ SUBMIT FORM 44-A & ENGAGE</span>
+              </button>
+
+              <!-- Fast-Dial Expedited Bypass Button -->
+              <button type="button" id="btn-dial-fast" class="action-btn btn-fast-dial">
+                <span class="btn-subtext">PRIORITY STAMP EX-1</span>
+                <span class="btn-maintext">⚡ EXPEDITED DIPLOMATIC BYPASS</span>
+              </button>
+
+              <!-- Abort / Purge Conduit Button -->
+              <button type="button" id="btn-abort-dial" class="action-btn btn-abort-dial" disabled>
+                <span class="btn-subtext">CONDUIT OVERRIDE</span>
+                <span class="btn-maintext">⏹ ABORT / DISENGAGE BUFFER</span>
+              </button>
+
+              <!-- Print Docket Receipt Button -->
+              <button type="button" id="btn-print-receipt" class="action-btn btn-print-receipt">
+                <span class="btn-subtext">MUNICIPAL RECEIPT</span>
+                <span class="btn-maintext">🖨 PRINT TRANSIT DOCKET</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- CENTER COLUMN: Real Functional Conduit Ring & Telemetry Visualizer -->
+      <section class="panel-column center-visualizer" id="center-visualizer">
+        <div class="ring-panel-container">
+          
+          <!-- Ring Header Telemetry Strip -->
+          <div class="ring-header-strip">
+            <div class="strip-item">
+              <span class="strip-label">COMMUTATOR:</span>
+              <span class="strip-val" id="ring-commutator-state">STANDBY [36 SECTORS]</span>
+            </div>
+            <div class="strip-item">
+              <span class="strip-label">FIELD RESONANCE:</span>
+              <span class="strip-val" id="ring-resonance-val">0.000 GHz</span>
+            </div>
+            <div class="strip-item">
+              <span class="strip-label">APERTURE FLUX:</span>
+              <span class="strip-val" id="ring-aperture-flux">0.00 %</span>
+            </div>
+          </div>
+
+          <!-- THE FUNCTIONAL RING VISUALIZER (SVG + Canvas Layers) -->
+          <div class="ring-viewport-wrapper" id="ring-viewport-wrapper">
+            
+            <!-- Canvas for Oscilloscope Carrier Waves & Particle Horizon -->
+            <canvas id="ring-canvas" width="620" height="620"></canvas>
+
+            <!-- SVG Overlay for Mechanical Solenoid Chevrons, Sector Marks, and Calibrations -->
+            <svg id="ring-svg" viewBox="0 0 620 620" class="ring-svg-overlay">
+              <defs>
+                <!-- Phosphor Glow Filters -->
+                <filter id="amber-glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="3.5" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <filter id="intense-glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="6" result="blur1" />
+                  <feGaussianBlur stdDeviation="2" result="blur2" />
+                  <feMerge>
+                    <feMergeNode in="blur1" />
+                    <feMergeNode in="blur2" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <!-- Center Horizon Radial Gradient -->
+                <radialGradient id="horizon-gradient" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#fff4cc" stop-opacity="0.9" />
+                  <stop offset="40%" stop-color="#ffb000" stop-opacity="0.7" />
+                  <stop offset="75%" stop-color="#e65100" stop-opacity="0.4" />
+                  <stop offset="100%" stop-color="#1a0a00" stop-opacity="0.0" />
+                </radialGradient>
+              </defs>
+
+              <!-- Outer Dial Rim & Tick Tracks -->
+              <circle cx="310" cy="310" r="290" class="svg-ring-outer-border" />
+              <circle cx="310" cy="310" r="280" class="svg-ring-track" />
+              <circle cx="310" cy="310" r="240" class="svg-ring-track-mid" />
+              <circle cx="310" cy="310" r="170" class="svg-ring-track-inner" />
+              <circle cx="310" cy="310" r="110" class="svg-ring-aperture-rim" />
+
+              <!-- 36 Commutator Sector Segments & Index Labels Group -->
+              <g id="svg-commutator-sectors"></g>
+
+              <!-- 7 Radial Solenoid Clamp Chevrons Group -->
+              <g id="svg-chevrons-group"></g>
+
+              <!-- Mechanical Iris Aperture Blades -->
+              <g id="svg-iris-blades" class="iris-blades-group"></g>
+
+              <!-- Center Reticle & Vector Crosshair -->
+              <g id="svg-reticle-group">
+                <line x1="310" y1="20" x2="310" y2="40" class="reticle-line" />
+                <line x1="310" y1="580" x2="310" y2="600" class="reticle-line" />
+                <line x1="20" y1="310" x2="40" y2="310" class="reticle-line" />
+                <line x1="580" y1="310" x2="600" y2="310" class="reticle-line" />
+                <circle cx="310" cy="310" r="10" class="reticle-center" />
+              </g>
+            </svg>
+
+            <!-- Ring Center Overlay HUD (Displays real-time conduit stats & countdown when open) -->
+            <div class="ring-center-hud" id="ring-center-hud">
+              <div class="hud-content-wrapper">
+                <div class="hud-badge" id="hud-badge">STANDBY</div>
+                <div class="hud-dest-title" id="hud-dest-title">NO TARGET CONDUIT</div>
+                <div class="hud-coords-string" id="hud-coords-string">-- · -- · -- · -- · -- · -- · --</div>
+                <div class="hud-timer" id="hud-timer">BUFFER: READY</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Ring Footer Diagnostics Readout -->
+          <div class="ring-footer-readouts">
+            <div class="readout-card">
+              <span class="ro-title">POLARITY CHECK</span>
+              <span class="ro-val" id="ro-polarity">EVEN [0x4A2]</span>
+            </div>
+            <div class="readout-card">
+              <span class="ro-title">MASS CAPACITY</span>
+              <span class="ro-val" id="ro-mass">450.0 METRIC TONS</span>
+            </div>
+            <div class="readout-card">
+              <span class="ro-title">STABILIZER DRIFT</span>
+              <span class="ro-val" id="ro-drift">±0.002 ARC-SEC</span>
+            </div>
+            <div class="readout-card">
+              <span class="ro-title">MUNICIPAL PERMIT</span>
+              <span class="ro-val" id="ro-permit">VALID (MUNI-88)</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Queue of Prior/Pending Requests & Audit Log -->
+      <section class="panel-column right-records" id="right-records">
+        
+        <!-- PENDING & RECENT DOCKET QUEUE -->
+        <div class="records-panel-box queue-box" id="panel-queue">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon">📋</span>
+              <h2 class="panel-title">MUNICIPAL TRANSIT QUEUE & DOCKETS</h2>
+            </div>
+            <span class="queue-count-badge" id="queue-badge">4 ACTIVE</span>
+          </div>
+
+          <div class="panel-sub-header">
+            <span>DOCKET #</span>
+            <span>DESTINATION</span>
+            <span>STATUS</span>
+          </div>
+
+          <!-- Scrollable Queue Roster -->
+          <div class="docket-queue-list" id="docket-queue-list">
+            <!-- Populated via JS with procedural pending/cleared municipal dockets -->
+          </div>
+        </div>
+
+        <!-- LIVE BUREAUCRATIC AUDIT & ACTIVITY LOG -->
+        <div class="records-panel-box log-box" id="panel-audit-log">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon">📟</span>
+              <h2 class="panel-title">AUDIT TELEMETRY & REGULATORY LOG</h2>
+            </div>
+            <button type="button" id="btn-clear-log" class="text-action-btn" title="Clear log output">[PURGE]</button>
+          </div>
+
+          <!-- Log Content Feed -->
+          <div class="terminal-log-feed" id="terminal-log-feed">
+            <!-- Real-time timecoded entries inserted here -->
+          </div>
+          
+          <div class="log-footer-input">
+            <span class="cli-prompt">D.S.T.C.L.&gt;</span>
+            <span class="cli-typing" id="cli-typing">BUFFER PARITY SCANNER IDLE</span>
+            <span class="cursor-blink">█</span>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Bottom System Status & Attribution Footer -->
+    <footer class="system-footer" id="system-footer">
+      <!-- Bottom-Left Attribution Link -->
+      <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="starlight-link" id="attribution-link">
+          StarlightDaemon
+        </a>
+        <span class="footer-divider">|</span>
+        <span class="footer-subtext">TERMINAL OS/88-V · BUREAU OF TRANSIT LICENSURE · RESTRICTED USE ONLY</span>
+      </div>
+
+      <!-- Bottom-Center Quick Notice -->
+      <div class="footer-center" id="footer-notice">
+        <span>SUB-SECTION 12.4 NOTICE: ALL TELEPORTATION CONDUITS MONITORED BY MUNICIPAL COMMUTER POLICE</span>
+      </div>
+
+      <!-- Bottom-Right Version Label -->
+      <div class="footer-right">
+        <span class="version-label" id="version-label">v1.0.0</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- OPERATOR REFERENCE MODAL (CIRCULAR MEMORANDUM 88-ALPHA) -->
+  <div class="modal-backdrop" id="modal-operator-ref" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">📜</span>
+          <h2 class="modal-title">D.S.T.C.L. OPERATOR INSTRUCTION MANUAL</h2>
+        </div>
+        <button type="button" id="btn-close-modal-ref" class="modal-close-btn" aria-label="Close Operator Reference">&times;</button>
+      </div>
+
+      <div class="modal-body doc-content">
+        <div class="memo-header-block">
+          <div class="memo-row"><span class="memo-label">DOCUMENT:</span> CIRCULAR MEMORANDUM 88-ALPHA (REV 2)</div>
+          <div class="memo-row"><span class="memo-label">TO:</span> CERTIFIED MUNICIPAL CONDUIT DISPATCH OFFICERS</div>
+          <div class="memo-row"><span class="memo-label">FROM:</span> OFFICE OF SUB-AETHERIC CONDUIT REGULATION & TARIFFS</div>
+          <div class="memo-row"><span class="memo-label">SUBJECT:</span> STANDARD OPERATING PROCEDURES FOR FORM 44-A FILING & EXPEDITED BYPASS</div>
+        </div>
+
+        <hr class="memo-divider">
+
+        <h3>1. STANDARD MANUAL CONDUIT FILING (FORM 44-A)</h3>
+        <p>Operators must adhere strictly to the 5-step filing sequence to establish a municipal transit conduit:</p>
+        <ol class="memo-ordered-list">
+          <li><strong>Step 1 (Select Route Vector):</strong> Choose a registered municipal transit sector from the <code>01.1 ROUTING VECTOR</code> roster or input a custom coordinate sequence.</li>
+          <li><strong>Step 2 (Select Cargo / Mass Tier):</strong> Classify passenger or freight payload (Class A through E) to calibrate buffer mass capacitors.</li>
+          <li><strong>Step 3 (Quarantine Attestation):</strong> Certify compliance with Municipal Health & Parasitic Contagion Code § 88-12B by verifying the checkbox.</li>
+          <li><strong>Step 4 (Commit Buffer Coordinates):</strong> Ensure all 7 radial sector tokens (Origin, Axis, Node, Flux, Azimuth, Parity, Lock) are seated in the buffer slots.</li>
+          <li><strong>Step 5 (Submit & Engage):</strong> Depress <code>[▶ SUBMIT FORM 44-A & ENGAGE]</code> to initiate sequential commutator indexing, radial solenoid clamping, and event horizon dilation.</li>
+        </ol>
+
+        <h3>2. EXPEDITED DIPLOMATIC BYPASS (PRIORITY STAMP EX-1)</h3>
+        <p>In cases of urgent municipal courier transit, executive dispatches, or emergency cargo transit, operators may depress the <code>[⚡ EXPEDITED DIPLOMATIC BYPASS]</code> control. This action:</p>
+        <ul class="memo-bullet-list">
+          <li>Automatically applies Municipal Priority Seal EX-1.</li>
+          <li>Pre-authorizes buffer parity and bypasses standard regulatory queue lag.</li>
+          <li>Rapid-indexes all 7 commutator sectors in high-speed harmonic burst mode.</li>
+        </ul>
+
+        <h3>3. SAFETY REGULATIONS & EMERGENCY DISENGAGEMENT</h3>
+        <p>If conduit stability falls below 90.0% or uncertified bio-matter is detected in the aperture focal point, immediately engage <code>[⏹ ABORT / DISENGAGE BUFFER]</code> to vent buffer capacitors to the municipal heat sink.</p>
+
+        <div class="memo-footer-stamp">
+          <div class="stamp-box">
+            <span>OFFICIAL MUNICIPAL SEAL</span>
+            <strong>AUTHORIZED DISPATCH</strong>
+            <span>D.S.T.C.L. REGULATORY BD.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span class="footer-tip">PRESS ESC OR CLICK [DISMISS] TO RETURN TO CONSOLE</span>
+        <button type="button" id="btn-dismiss-modal-ref" class="action-btn btn-modal-dismiss">DISMISS MEMORANDUM</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THERMAL TRANSIT DOCKET RECEIPT MODAL -->
+  <div class="modal-backdrop" id="modal-docket-receipt" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-window receipt-modal">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">🖨</span>
+          <h2 class="modal-title">MUNICIPAL TRANSIT DOCKET SLIP</h2>
+        </div>
+        <button type="button" id="btn-close-modal-receipt" class="modal-close-btn" aria-label="Close Receipt Modal">&times;</button>
+      </div>
+
+      <div class="modal-body receipt-body">
+        <div class="thermal-receipt-paper" id="thermal-receipt-paper">
+          <div class="receipt-header">
+            <div class="receipt-star">★ ★ ★ ★ ★</div>
+            <div class="receipt-title">MUNICIPAL CONDUIT AUTHORITY</div>
+            <div class="receipt-subtitle">DEPT. OF SUB-AETHERIC TRANSIT LICENSURE</div>
+            <div class="receipt-meta">TERMINAL 04-EAST // STATION REF #4419</div>
+          </div>
+
+          <div class="receipt-divider">----------------------------------------</div>
+
+          <div class="receipt-fields" id="receipt-fields-content">
+            <!-- Dynamically injected current docket parameters -->
+          </div>
+
+          <div class="receipt-divider">----------------------------------------</div>
+
+          <div class="receipt-barcode">
+            <div class="barcode-lines">||| | |||| || ||| |||| | || |||||| | |||</div>
+            <div class="barcode-num" id="receipt-barcode-num">*DKT-2184-4419-EX*</div>
+          </div>
+
+          <div class="receipt-stamp-approved">
+            <span class="stamp-text">MUNICIPAL TRANSIT GRANTED</span>
+            <span class="stamp-sub">FORM 44-A COMPLIANT</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="btn-print-slip" class="action-btn btn-print-action">PRINT DOCKET SLIP</button>
+        <button type="button" id="btn-close-receipt" class="action-btn btn-modal-dismiss">CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/dockets.js"></script>
+  <script src="js/ring.js"></script>
+  <script src="js/form.js"></script>
+  <script src="js/queue.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

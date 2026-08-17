@@ -1,0 +1,331 @@
+/* ==========================================================================
+   D.S.T.C.L. TERMINAL OS/88-V - MODALS & DOCKET SLIP STYLES
+   Operator Manual Modal, Thermal Paper Slip, Barcode & Stamp Effects
+   ========================================================================== */
+
+/* Modal Backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(3px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-med);
+}
+
+.modal-backdrop.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Modal Window */
+.modal-window {
+  width: 90%;
+  max-width: 680px;
+  max-height: 88vh;
+  background: var(--crt-bg);
+  border: 2px solid var(--crt-border-bright);
+  box-shadow: 0 0 30px var(--crt-primary-glow-intense), inset 0 0 20px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.96);
+  transition: transform var(--transition-med);
+  overflow: hidden;
+}
+
+.modal-backdrop.active .modal-window {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: var(--crt-bg-panel-dark);
+  border-bottom: 2px solid var(--crt-border-bright);
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--crt-primary-bright);
+  letter-spacing: 1px;
+}
+
+.modal-close-btn {
+  background: none;
+  border: 1px solid var(--crt-border);
+  color: var(--crt-text);
+  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  background: var(--crt-border-bright);
+  color: #000;
+}
+
+.modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--crt-text);
+}
+
+/* Document & Memo Content */
+.memo-header-block {
+  background: var(--crt-bg-panel-dark);
+  border: 1px solid var(--crt-border);
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-family: var(--font-code);
+  font-size: 11px;
+}
+
+.memo-row {
+  margin-bottom: 3px;
+}
+
+.memo-label {
+  color: var(--crt-primary-dim);
+  font-weight: bold;
+  display: inline-block;
+  width: 90px;
+}
+
+.memo-divider {
+  border: 0;
+  border-top: 1px dashed var(--crt-border);
+  margin: 12px 0;
+}
+
+.doc-content h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--crt-primary-bright);
+  margin: 12px 0 6px 0;
+  letter-spacing: 0.8px;
+}
+
+.memo-ordered-list, .memo-bullet-list {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.memo-ordered-list li, .memo-bullet-list li {
+  margin-bottom: 5px;
+}
+
+.doc-content code {
+  font-family: var(--font-code);
+  background: rgba(255, 170, 0, 0.15);
+  color: var(--crt-primary-bright);
+  padding: 1px 5px;
+  border: 1px solid var(--crt-border);
+}
+
+.memo-footer-stamp {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.stamp-box {
+  border: 2px dashed var(--crt-border-bright);
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--crt-primary-bright);
+  transform: rotate(-3deg);
+}
+
+.stamp-box strong {
+  font-size: 18px;
+  letter-spacing: 2px;
+  margin: 2px 0;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--crt-bg-panel-dark);
+  border-top: 1px solid var(--crt-border);
+}
+
+.footer-tip {
+  font-size: 10px;
+  color: var(--crt-text-dim);
+}
+
+.btn-modal-dismiss {
+  padding: 5px 14px;
+}
+
+/* ==========================================================================
+   THERMAL RECEIPT PAPER MODAL & SLIP
+   ========================================================================== */
+
+.receipt-modal {
+  max-width: 440px;
+}
+
+.receipt-body {
+  display: flex;
+  justify-content: center;
+  background: #050300;
+  padding: 20px;
+}
+
+.thermal-receipt-paper {
+  background: #fff8e7;
+  color: #1a1505;
+  width: 100%;
+  max-width: 360px;
+  padding: 20px 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  border-top: 4px dashed #ccc;
+  border-bottom: 4px dashed #ccc;
+  position: relative;
+  animation: receipt-feed 0.6s ease-out;
+}
+
+@keyframes receipt-feed {
+  from { transform: translateY(-40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.receipt-star {
+  font-size: 12px;
+  color: #665220;
+  letter-spacing: 3px;
+}
+
+.receipt-title {
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.receipt-subtitle {
+  font-size: 10px;
+  color: #554411;
+}
+
+.receipt-meta {
+  font-size: 9px;
+  color: #776633;
+  margin-top: 2px;
+}
+
+.receipt-divider {
+  text-align: center;
+  font-size: 10px;
+  color: #887744;
+  margin: 6px 0;
+  overflow: hidden;
+}
+
+.receipt-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rcpt-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.rcpt-lbl {
+  font-weight: bold;
+  color: #332600;
+}
+
+.rcpt-val {
+  text-align: right;
+  font-family: 'Fira Code', monospace;
+}
+
+.receipt-barcode {
+  text-align: center;
+  margin: 12px 0 6px 0;
+}
+
+.barcode-lines {
+  font-size: 22px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.barcode-num {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  margin-top: 3px;
+}
+
+.receipt-stamp-approved {
+  border: 2px solid #b32400;
+  color: #b32400;
+  padding: 4px 8px;
+  text-align: center;
+  margin: 12px auto 4px auto;
+  max-width: 220px;
+  transform: rotate(-5deg);
+  font-family: var(--font-display);
+}
+
+.receipt-stamp-approved .stamp-text {
+  display: block;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+.receipt-stamp-approved .stamp-sub {
+  display: block;
+  font-size: 9px;
+}
+
+.btn-print-action {
+  background: var(--crt-primary);
+  color: #000;
+  font-weight: bold;
+  border-color: var(--crt-primary-bright);
+}
