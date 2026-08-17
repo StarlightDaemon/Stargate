@@ -15,6 +15,7 @@ class AerisContainmentIris {
     this.openProgress = 1.0; // 1.0 = fully open (retracted), 0.0 = fully sealed
     this.targetProgress = 1.0;
     this.bladeCount = 12;
+    this.onStateSettled = null; // fired when a seal/retract stroke completes
 
     this.width = 720;
     this.height = 720;
@@ -27,9 +28,9 @@ class AerisContainmentIris {
   }
 
   initCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = this.container.getBoundingClientRect();
-    const size = Math.min(rect.width, rect.height) || 720;
+    // Layout px, not getBoundingClientRect - see ring.js initCanvas note.
+    const dpr = (window.devicePixelRatio || 1) * (window.__aerisStageScale || 1);
+    const size = Math.min(this.container.clientWidth, this.container.clientHeight) || 720;
 
     this.width = size;
     this.height = size;
@@ -101,11 +102,13 @@ class AerisContainmentIris {
       this.openProgress = Math.max(0.0, this.openProgress - speed);
       if (this.openProgress <= 0.0) {
         this.state = 'SEALED';
+        if (this.onStateSettled) this.onStateSettled(this.state);
       }
     } else if (this.state === 'OPENING') {
       this.openProgress = Math.min(1.0, this.openProgress + speed);
       if (this.openProgress >= 1.0) {
         this.state = 'OPEN';
+        if (this.onStateSettled) this.onStateSettled(this.state);
       }
     }
 

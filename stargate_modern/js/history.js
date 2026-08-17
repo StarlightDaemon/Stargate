@@ -61,9 +61,17 @@ class AerisHistoryLogger {
       if (!this.container) return;
     }
 
+    // Filter groups: categories without their own filter button fold into
+    // the nearest button (DISENGAGE under IGNITE; telemetry INFO/WARN
+    // alerts under SYSTEM) so no ledger entry is unreachable by filter.
+    const filterGroups = {
+      IGNITE: ['IGNITE', 'DISENGAGE'],
+      SYSTEM: ['SYSTEM', 'INFO', 'WARN']
+    };
     const filtered = this.logs.filter(e => {
       if (this.filter === 'ALL') return true;
-      return e.category === this.filter;
+      const group = filterGroups[this.filter];
+      return group ? group.includes(e.category) : e.category === this.filter;
     });
 
     this.container.innerHTML = filtered.map(e => `

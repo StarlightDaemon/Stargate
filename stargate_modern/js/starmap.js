@@ -38,10 +38,10 @@ class AerisStarMap {
   }
 
   initCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = this.canvas.parentElement.getBoundingClientRect();
-    this.width = rect.width || 800;
-    this.height = rect.height || 600;
+    // Layout px, not getBoundingClientRect - see ring.js initCanvas note.
+    const dpr = (window.devicePixelRatio || 1) * (window.__aerisStageScale || 1);
+    this.width = this.canvas.parentElement.clientWidth || 800;
+    this.height = this.canvas.parentElement.clientHeight || 600;
 
     this.canvas.width = this.width * dpr;
     this.canvas.height = this.height * dpr;
@@ -108,15 +108,17 @@ class AerisStarMap {
     window.addEventListener('resize', () => this.initCanvas());
 
     this.canvas.addEventListener('mousedown', (e) => {
+      const k = window.__aerisStageScale || 1;
       this.isDragging = true;
-      this.dragStartX = e.clientX - this.offsetX;
-      this.dragStartY = e.clientY - this.offsetY;
+      this.dragStartX = e.clientX / k - this.offsetX;
+      this.dragStartY = e.clientY / k - this.offsetY;
     });
 
     window.addEventListener('mousemove', (e) => {
+      const k = window.__aerisStageScale || 1;
       if (this.isDragging) {
-        this.offsetX = e.clientX - this.dragStartX;
-        this.offsetY = e.clientY - this.dragStartY;
+        this.offsetX = e.clientX / k - this.dragStartX;
+        this.offsetY = e.clientY / k - this.dragStartY;
       }
       this.checkHover(e);
     });
@@ -132,9 +134,10 @@ class AerisStarMap {
     });
 
     this.canvas.addEventListener('click', (e) => {
+      const k = window.__aerisStageScale || 1;
       const rect = this.canvas.getBoundingClientRect();
-      const mouseX = (e.clientX - rect.left - this.offsetX) / this.scale;
-      const mouseY = (e.clientY - rect.top - this.offsetY) / this.scale;
+      const mouseX = ((e.clientX - rect.left) / k - this.offsetX) / this.scale;
+      const mouseY = ((e.clientY - rect.top) / k - this.offsetY) / this.scale;
 
       const hit = this.mapNodes.find(node => {
         const dx = node.mapX - mouseX;
@@ -149,9 +152,10 @@ class AerisStarMap {
   }
 
   checkHover(e) {
+    const k = window.__aerisStageScale || 1;
     const rect = this.canvas.getBoundingClientRect();
-    const mouseX = (e.clientX - rect.left - this.offsetX) / this.scale;
-    const mouseY = (e.clientY - rect.top - this.offsetY) / this.scale;
+    const mouseX = ((e.clientX - rect.left) / k - this.offsetX) / this.scale;
+    const mouseY = ((e.clientY - rect.top) / k - this.offsetY) / this.scale;
 
     this.hoveredDest = this.mapNodes.find(node => {
       const dx = node.mapX - mouseX;

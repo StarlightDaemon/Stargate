@@ -13,9 +13,15 @@ class AerisApplication {
     this.dialBuffer = [];
     this.targetDestination = null;
     this.activeDestination = null;
+    this.lockedDestination = null; // destination committed by the last lock
 
     // Fast-dial lock in progress flag
     this.isAutomatedSequence = false;
+
+    // Generation token: every new lock sequence (or anything that cancels
+    // one - disengage, power-off) bumps this, so async callbacks belonging
+    // to a superseded sequence can detect they are stale and stop.
+    this.dialSequenceId = 0;
 
     // Subsystems
     this.ring = null;
@@ -35,10 +41,15 @@ class AerisApplication {
   }
 
   init() {
+    // 0. Proportional stage scaling for viewports beyond the 1920x1080 design box
+    this.fitStage();
+    window.addEventListener('resize', () => this.fitStage());
+
     // 1. Initialize Subsystems
     this.ring = new VectorRingEngine('vector-ring-container');
     this.iris = new AerisContainmentIris('vector-ring-container');
-    
+    this.iris.onStateSettled = () => this.updateIrisUI();
+
     // 2. Render Core UI Components
     this.renderDialpad();
     this.renderBuffer();
@@ -60,6 +71,25 @@ class AerisApplication {
         window.aerisAudio.ensureContext();
       }
     }, { once: true });
+  }
+
+  // Scale the whole console up proportionally on viewports larger than the
+  // 1920x1080 design box (e.g. 4K). At or below 1080p the native flex/grid
+  // layout is used unchanged (scale factor clamps to 1).
+  fitStage() {
+    const stage = document.getElementById('app-stage');
+    if (!stage) return;
+    const k = Math.max(1, Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
+    window.__aerisStageScale = k;
+    if (k > 1) {
+      stage.style.width = `${window.innerWidth / k}px`;
+      stage.style.height = `${window.innerHeight / k}px`;
+      stage.style.transform = `scale(${k})`;
+    } else {
+      stage.style.width = '';
+      stage.style.height = '';
+      stage.style.transform = '';
+    }
   }
 
   startClock() {
@@ -300,7 +330,15 @@ class AerisApplication {
     }
 
     if (!online) {
-      this.disengageAperture();
+      // Only run the full disengage routine if something was actually in
+      // progress; a cold, idle gate should just stay idle without flashing
+      // a DISENGAGING badge and logging a phantom bridge collapse.
+      if (this.gateState !== 'IDLE') {
+        this.disengageAperture();
+      } else {
+        this.dialSequenceId++;
+        this.ring.resetClamps();
+      }
     }
   }
 
@@ -310,8 +348,18 @@ class AerisApplication {
     if (this.gateState === 'LOCKING' || this.gateState === 'ACTIVE') return;
 
     this.gateState = 'LOCKING';
+    const seq = ++this.dialSequenceId;
     if (window.aerisTelemetry) window.aerisTelemetry.setGateState('ROTATING');
     this.updateStatusBadge('LOCKING VECTOR...', 'badge-locking');
+
+    // Reset the engage control - it may carry state from a wormhole this
+    // sequence just superseded (fast-dial redial skips the idle settle).
+    const engageBtnReset = document.getElementById('btn-engage-aperture');
+    if (engageBtnReset) {
+      engageBtnReset.disabled = true;
+      engageBtnReset.classList.remove('ready', 'active-wormhole');
+      engageBtnReset.innerHTML = '<span class="engage-icon">⚡</span> ENGAGE APERTURE';
+    }
 
     const totalGlyphs = this.dialBuffer.length;
     let currentStep = 0;
@@ -321,8 +369,12 @@ class AerisApplication {
     }
 
     const processNextGlyph = () => {
+      if (seq !== this.dialSequenceId) return; // superseded by a newer sequence
       if (currentStep >= totalGlyphs) {
-        // Final lock completed!
+        // Final lock completed! Capture the destination the lock committed
+        // to - the input buffer may be cleared/edited while LOCKED without
+        // changing what the stators are actually holding.
+        this.lockedDestination = this.targetDestination;
         this.gateState = 'LOCKED';
         if (window.aerisTelemetry) window.aerisTelemetry.setGateState('LOCKED');
         this.updateStatusBadge('VECTOR LOCKED', 'badge-locked');
@@ -347,8 +399,10 @@ class AerisApplication {
 
       // 1. Rotate Ring to align glyph
       this.ring.rotateToGlyph(glyphId, () => {
+        if (seq !== this.dialSequenceId) return;
         // 2. Lock stator clamp
         this.ring.lockClamp(clampIndex, () => {
+          if (seq !== this.dialSequenceId) return;
           currentStep++;
           setTimeout(processNextGlyph, 250);
         });
@@ -362,8 +416,20 @@ class AerisApplication {
   engageAperture() {
     if (this.gateState !== 'LOCKED') return;
 
+    // Containment interlock: no outbound transit through a deployed iris.
+    if (this.iris && !this.iris.isOpen()) {
+      if (window.aerisAudio) window.aerisAudio.playError();
+      if (window.aerisTelemetry) {
+        window.aerisTelemetry.showAlert('Ignition interlock: containment iris not fully retracted. Retract iris to permit outbound aperture transit.', 'warn');
+      }
+      if (window.aerisHistory) {
+        window.aerisHistory.log('SHIELD', 'ENGAGE blocked by safety interlock: containment iris deployed during ignition request.');
+      }
+      return;
+    }
+
     this.gateState = 'IGNITING';
-    this.activeDestination = this.targetDestination || { designation: 'CUSTOM-VEC', name: 'Deep Space Coordinate' };
+    this.activeDestination = this.lockedDestination || this.targetDestination || { designation: 'CUSTOM-VEC', name: 'Deep Space Coordinate' };
     
     if (window.aerisTelemetry) window.aerisTelemetry.setGateState('IGNITING');
     this.updateStatusBadge('IGNITING APERTURE...', 'badge-igniting');
@@ -380,6 +446,8 @@ class AerisApplication {
     }
 
     setTimeout(() => {
+      // Aborted (or powered off) mid-ignition - do not resurrect ACTIVE.
+      if (this.gateState !== 'IGNITING') return;
       this.gateState = 'ACTIVE';
       if (window.aerisTelemetry) window.aerisTelemetry.setGateState('ACTIVE');
       this.updateStatusBadge('WORMHOLE ACTIVE', 'badge-active');
@@ -399,6 +467,7 @@ class AerisApplication {
 
   // Disengage Aperture
   disengageAperture() {
+    this.dialSequenceId++; // cancel any in-flight lock sequence
     this.gateState = 'DISENGAGING';
     if (window.aerisTelemetry) window.aerisTelemetry.setGateState('DISENGAGING');
     this.updateStatusBadge('DISENGAGING...', 'badge-idle');
@@ -413,8 +482,11 @@ class AerisApplication {
     }
 
     setTimeout(() => {
+      // A newer sequence (fast-dial redial) may already own the gate.
+      if (this.gateState !== 'DISENGAGING') return;
       this.gateState = 'IDLE';
       this.activeDestination = null;
+      this.lockedDestination = null;
       if (window.aerisTelemetry) window.aerisTelemetry.setGateState('IDLE');
       this.updateStatusBadge(this.powerOnline ? 'SYSTEM ONLINE' : 'STANDBY', this.powerOnline ? 'badge-online' : 'badge-idle');
 
@@ -481,18 +553,28 @@ class AerisApplication {
   updateIrisUI() {
     const irisBtn = document.getElementById('btn-iris-toggle');
     const irisStatus = document.getElementById('iris-status-val');
-    const isSealed = this.iris.isSealed();
+    // Drive the UI from the commanded direction, not from openProgress -
+    // at click time the blades have not moved yet, so reading progress here
+    // showed the pre-click state (inverted labels) for the whole stroke.
+    const state = this.iris.state; // 'OPEN' | 'CLOSING' | 'SEALED' | 'OPENING'
+    const sealing = state === 'CLOSING' || state === 'SEALED';
 
     if (irisBtn) {
-      irisBtn.classList.toggle('shield-active', isSealed);
-      irisBtn.innerHTML = isSealed
+      irisBtn.classList.toggle('shield-active', sealing);
+      irisBtn.innerHTML = sealing
         ? '<span class="shield-icon">🛡️</span> RETRACT IRIS'
         : '<span class="shield-icon">🛡️</span> SEAL IRIS';
     }
 
     if (irisStatus) {
-      irisStatus.textContent = isSealed ? 'SEALED (TITANIUM ARMORED)' : 'OPEN / RETRACTED';
-      irisStatus.style.color = isSealed ? '#ff4b72' : '#38bdf8';
+      const labels = {
+        OPEN: 'OPEN / RETRACTED',
+        OPENING: 'RETRACTING...',
+        CLOSING: 'SEALING...',
+        SEALED: 'SEALED (TITANIUM ARMORED)'
+      };
+      irisStatus.textContent = labels[state] || state;
+      irisStatus.style.color = sealing ? '#ff4b72' : '#38bdf8';
     }
   }
 
@@ -539,6 +621,11 @@ class AerisApplication {
 
       if (tabId === 'STARMAP' && !this.starMap) {
         this.starMap = new AerisStarMap('starmap-canvas');
+        // Seed the lazily-created map with any wormhole that is already up,
+        // otherwise its live transit conduit beam never appears.
+        if (this.activeDestination && (this.gateState === 'ACTIVE' || this.gateState === 'IGNITING')) {
+          this.starMap.setActiveDestination(this.activeDestination);
+        }
       }
     }
   }

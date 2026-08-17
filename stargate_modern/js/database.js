@@ -579,13 +579,14 @@ class AerisDatabase {
         const q = query.toLowerCase();
         const matchName = dest.name.toLowerCase().includes(q);
         const matchDesig = dest.designation.toLowerCase().includes(q);
+        const matchSector = dest.sector.toLowerCase().includes(q);
         const matchEnv = dest.environment.toLowerCase().includes(q);
         const matchNotes = dest.notes.toLowerCase().includes(q);
         const matchGlyphs = dest.coords.some(id => {
           const g = this.getGlyph(id);
           return g && (g.name.toLowerCase().includes(q) || g.code.toLowerCase().includes(q));
         });
-        return matchName || matchDesig || matchEnv || matchNotes || matchGlyphs;
+        return matchName || matchDesig || matchSector || matchEnv || matchNotes || matchGlyphs;
       }
       return true;
     });

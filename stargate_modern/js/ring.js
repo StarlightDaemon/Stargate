@@ -60,10 +60,12 @@ class VectorRingEngine {
   }
 
   initCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = this.container.getBoundingClientRect();
-    const size = Math.min(rect.width, rect.height) || 720;
-    
+    // clientWidth/Height are layout px, unaffected by the 4K stage scale
+    // transform (getBoundingClientRect would return visually-scaled sizes
+    // and blow the canvas up out of its container).
+    const dpr = (window.devicePixelRatio || 1) * (window.__aerisStageScale || 1);
+    const size = Math.min(this.container.clientWidth, this.container.clientHeight) || 720;
+
     this.width = size;
     this.height = size;
     this.canvas.width = size * dpr;
@@ -101,7 +103,9 @@ class VectorRingEngine {
 
     // Normalize relative to current angle to minimize or force cinematic multi-spin
     // Always do at least one full spin + offset for cinematic mechanical effect
-    const spinCount = 1 + Math.floor(Math.random() * 2);
+    // (skip the extra spins entirely in Reduced Motion mode)
+    const reducedMotion = document.body.classList.contains('reduced-motion');
+    const spinCount = reducedMotion ? 0 : 1 + Math.floor(Math.random() * 2);
     const direction = (Math.random() > 0.5 ? 1 : -1);
     
     let delta = desiredAngle - (this.ringAngle % (2 * Math.PI));
@@ -131,6 +135,9 @@ class VectorRingEngine {
     }
 
     setTimeout(() => {
+      // A disengage/reset may have cleared this clamp while the lock impulse
+      // was still in flight - do not resurrect a stale lock.
+      if (this.clampStates[clampIndex] !== 'STROBE') return;
       this.clampStates[clampIndex] = 'LOCKED';
       this.clampGlows[clampIndex] = 1.0;
       this.clampDepths[clampIndex] = 1.0;
@@ -198,6 +205,9 @@ class VectorRingEngine {
         chromaticOffset: 4
       };
       setTimeout(() => {
+        // Only settle to IDLE if nothing new (e.g. a fast-dial redial)
+        // has taken over the gate in the meantime.
+        if (this.gateState !== 'DISENGAGING') return;
         this.resetClamps();
         this.gateState = 'IDLE';
       }, 700);
@@ -249,10 +259,12 @@ class VectorRingEngine {
     if (this.isSpinning) {
       const diff = this.targetRingAngle - this.ringAngle;
       const absDiff = Math.abs(diff);
+      // Dynamic acceleration/braking. Snap once the remaining distance is
+      // within one step, otherwise a fixed minimum step can orbit the target
+      // forever without ever entering a smaller snap window.
+      const speed = Math.max(0.015, Math.min(0.085, absDiff * 0.065));
 
-      if (absDiff > 0.005) {
-        // Dynamic acceleration/braking
-        const speed = Math.max(0.015, Math.min(0.085, absDiff * 0.065));
+      if (absDiff > speed) {
         this.angularVelocity = Math.sign(diff) * speed;
         this.ringAngle += this.angularVelocity;
 

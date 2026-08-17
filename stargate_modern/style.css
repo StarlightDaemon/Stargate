@@ -57,6 +57,28 @@ html, body {
   flex-direction: column;
 }
 
+/* Scale stage: the whole console lives in here. app.js fitStage() sets an
+   explicit width/height + scale transform on viewports beyond 1920x1080 so
+   the console upscales proportionally to 4K; at or below the design box it
+   is a plain full-size flex column. */
+#app-stage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transform-origin: top left;
+}
+
+/* Reduced Motion Mode: neutralize decorative pulse/slide animations and
+   transitions (the ring also skips its cinematic multi-spins in JS). */
+body.reduced-motion *,
+body.reduced-motion *::before,
+body.reduced-motion *::after {
+  animation-duration: 0.001s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001s !important;
+}
+
 /* CRT Scanline Filter Toggle */
 body.crt-scanlines::after {
   content: " ";
@@ -1375,6 +1397,8 @@ body.crt-scanlines::after {
 .log-badge-shield { background: rgba(16, 185, 129, 0.15); color: var(--emerald); }
 .log-badge-power { background: rgba(0, 240, 255, 0.15); color: var(--cyan); }
 .log-badge-system { background: rgba(100, 116, 139, 0.2); color: var(--text-secondary); }
+.log-badge-info { background: rgba(56, 189, 248, 0.12); color: var(--blue-bright); }
+.log-badge-warn { background: rgba(245, 158, 11, 0.2); color: var(--amber); }
 
 .log-msg {
   color: var(--text-primary);
