@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CARAVELLE — Pan-Continental Travelways Portal Salon</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%23101418'/><circle cx='16' cy='16' r='9' fill='none' stroke='%23e8d9a8' stroke-width='1.5'/><circle cx='16' cy='16' r='3' fill='%23c9a44a'/></svg>">
+</head>
+<body>
+<div id="salon">
+  <!-- room ambience layers -->
+  <div id="wall"></div>
+  <div id="keylight"></div>
+  <div id="floor"></div>
+
+  <div id="cabinet" aria-label="Caravelle portal cabinet">
+    <!-- streamline speedline bands run the full cabinet width -->
+    <div class="speedline sl1"></div>
+    <div class="speedline sl2"></div>
+    <div class="speedline sl3"></div>
+
+    <!-- ============ LEFT: TRAVELER DOORWAY ============ -->
+    <section id="doorway-wing">
+      <div id="marquee">
+        <svg id="sunburst" viewBox="0 0 340 92" aria-hidden="true"></svg>
+        <div id="nameplate"><span>CARAVELLE</span></div>
+        <div id="marque-sub">PAN-CONTINENTAL&nbsp;TRAVELWAYS</div>
+      </div>
+
+      <div id="arch">
+        <div id="arch-frame">
+          <canvas id="portal" width="640" height="900"></canvas>
+          <svg id="iris" viewBox="0 0 640 900" aria-hidden="true"></svg>
+          <div id="arch-glass"></div>
+        </div>
+        <div id="arch-sill"></div>
+      </div>
+
+      <div id="doorplate">TRAVELER&nbsp;DOORWAY&nbsp;·&nbsp;STAND&nbsp;CLEAR&nbsp;OF&nbsp;THRESHOLD</div>
+    </section>
+
+    <!-- ============ RIGHT: CONSOLE FASCIA ============ -->
+    <section id="fascia">
+
+      <!-- ——— Cluster 1 · TUNING GROUP ——— -->
+      <div id="tuning-group" class="cluster">
+        <div class="cluster-tag"><i>①</i> TUNING&nbsp;GROUP</div>
+
+        <div id="dial-bay">
+          <div id="dial-escutcheon">
+            <svg id="bigdial" viewBox="0 0 400 400" role="slider" tabindex="0"
+                 aria-label="Main tuning dial, wavelength in metres"
+                 aria-valuemin="150" aria-valuemax="350" aria-valuenow="250"></svg>
+          </div>
+          <div id="dial-caption">CONTINENTAL&nbsp;TRAVEL&nbsp;BANDS&nbsp;·&nbsp;METRES</div>
+        </div>
+
+        <div id="tune-side">
+          <div id="band-bay">
+            <svg id="bandsel" viewBox="0 0 120 120" role="slider" tabindex="0"
+                 aria-label="Travel band selector" aria-valuemin="0" aria-valuemax="2" aria-valuenow="1"></svg>
+            <div class="mini-caption">BAND</div>
+          </div>
+          <div id="shadow-bay">
+            <svg id="shadowmeter" viewBox="0 0 150 84" aria-hidden="true"></svg>
+            <div class="mini-caption">RESONANCE&nbsp;SHADOW</div>
+            <div id="jewel" title="Resonance jewel"></div>
+          </div>
+          <div id="vernier-bay">
+            <svg id="vernier" viewBox="0 0 140 140" role="slider" tabindex="0"
+                 aria-label="Vernier fine tuning" aria-valuemin="-40" aria-valuemax="40" aria-valuenow="0"></svg>
+            <div class="mini-caption">VERNIER</div>
+          </div>
+        </div>
+
+        <div id="presel-rack">
+          <div id="presel-keys"></div>
+          <div id="presel-plate">PRESEL<br>CAM&nbsp;MEMORY</div>
+        </div>
+      </div>
+
+      <!-- ——— Cluster 2 · LINE & PORTAL GROUP ——— -->
+      <div id="line-group" class="cluster">
+        <div class="cluster-tag"><i>②</i> LINE&nbsp;&amp;&nbsp;PORTAL&nbsp;GROUP</div>
+        <div id="line-row">
+          <div id="line-switch-bay">
+            <button id="linesw" aria-pressed="false" aria-label="Line power switch">
+              <span class="paddle"></span>
+            </button>
+            <div class="mini-caption">LINE</div>
+          </div>
+          <div id="voltmeter-bay">
+            <svg id="voltmeter" viewBox="0 0 170 96" aria-hidden="true"></svg>
+            <div class="mini-caption">LINE&nbsp;VOLTS</div>
+          </div>
+          <div id="status-bay">
+            <div id="statusplate"><span id="statustext">SALON&nbsp;CLOSED</span></div>
+            <div class="mini-caption">ANNUNCIATOR</div>
+          </div>
+          <div id="lever-bay">
+            <div id="lever-slot">
+              <button id="travel-lever" aria-pressed="false" aria-label="Travel engage lever">
+                <span id="lever-handle"></span>
+              </button>
+            </div>
+            <div class="mini-caption">TRAVEL</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ——— informational · DIRECTORY (read-only) ——— -->
+      <aside id="directory">
+        <div id="dir-head">DIRECTORY&nbsp;OF&nbsp;TERMINI</div>
+        <ol id="dir-list"></ol>
+        <div id="dir-foot">Presel&nbsp;keys&nbsp;1–5&nbsp;are&nbsp;cam-cut&nbsp;at&nbsp;the&nbsp;works.<br>
+        ★&nbsp;New&nbsp;terminus&nbsp;—&nbsp;tune&nbsp;by&nbsp;hand&nbsp;until&nbsp;cams&nbsp;arrive.</div>
+      </aside>
+
+    </section>
+
+    <!-- cabinet maker's plate -->
+    <div id="makers-plate">BELMONT&nbsp;INSTRUMENT&nbsp;WORKS&nbsp;·&nbsp;CABINET&nbsp;No.&nbsp;9&nbsp;·&nbsp;1937</div>
+  </div>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
