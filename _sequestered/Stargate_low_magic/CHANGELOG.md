@@ -3,6 +3,18 @@
 All notable changes to the Wayband of Wren Alderwick are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## Known Issues (retroactively documented)
+
+- **Cartoonish, non-physical appearance**: operator review found the build
+  read as flat and toy-like — built of shapes in a way that resembled a
+  child's video game rather than a physical device. Motion-easing and
+  color-palette fixes were tried and did not resolve it.
+- **Root cause**: machine-perfect, evenly-spaced, identically-sized repeated
+  elements (uniform grids, symmetric icon-like arrangements) that read as
+  mobile-app UI-kit grammar rather than diegetic physical objects.
+- No release entry below captures this; recorded here retroactively rather
+  than dated to a specific version.
+
 ## [Unreleased]
 Pending operator review — not yet committed or tagged.
 
