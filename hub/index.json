@@ -5,7 +5,7 @@
       "folder": "stargate_cyberpunk",
       "title": "DEADRINGER — salvaged transit aperture A7-113",
       "blurb": "An interactive, fully fictional portal-dialing console. Cyberpunk build of the Stargate-inspired series: a decommissioned Kessler-Voss Orbital \"SPINDLE\" transit aperture, cut out of a bankrupt megacorp's tower and…",
-      "link": "../stargate_cyberpunk/index.html",
+      "link": "../_sequestered/stargate_cyberpunk/index.html",
       "preview": null,
       "status": "live"
     },
@@ -14,7 +14,7 @@
       "folder": "stargate_dieselpunk",
       "title": "STENTOR — Resonance Alternator No. 3",
       "blurb": "An original dieselpunk portal-dialing console: the Halvorsen & Krag Type 88 resonance alternator, worked by the fictional Overland Wireless Traction Board, alternate 1931. The paradigm is the great mechanical longwave…",
-      "link": "../stargate_dieselpunk/index.html",
+      "link": "../_sequestered/stargate_dieselpunk/index.html",
       "preview": null,
       "status": "live"
     },
@@ -77,7 +77,7 @@
       "folder": "Stargate_low_magic",
       "title": "The Wayband of Wren Alderwick",
       "blurb": "An interactive novelty website: a ring-shaped, portal-opening device built in a low-magic register — hedge-craft, not high sorcery. The Wayband is a threshold wheel kept by Wren Alderwick, a hedge-dialer of the…",
-      "link": "../Stargate_low_magic/index.html",
+      "link": "../_sequestered/Stargate_low_magic/index.html",
       "preview": null,
       "status": "live"
     },
@@ -86,7 +86,7 @@
       "folder": "stargate_low_magicv2",
       "title": "The Hollowbeck Six — a lych-ring",
       "blurb": "An interactive novelty website in a low-magic register: not sorcery, just an old practice that works if you do it properly. Hollowbeck's church tower keeps a ring of six bells — Lark, Tansy, Dole, Mattock, Hobb, and…",
-      "link": "../stargate_low_magicv2/index.html",
+      "link": "../_sequestered/stargate_low_magicv2/index.html",
       "preview": null,
       "status": "live"
     },
@@ -95,7 +95,7 @@
       "folder": "stargate_low_scifi_maintenance",
       "title": "Panel K — Conduit Routing & Service",
       "blurb": "A fictional, fully client-side, interactive portal-dialing site in the register of grounded, workaday low-tech science fiction. Portals here are not relics or ritual instruments — they are municipal infrastructure,…",
-      "link": "../stargate_low_scifi_maintenance/index.html",
+      "link": "../_sequestered/stargate_low_scifi_maintenance/index.html",
       "preview": null,
       "status": "live"
     },
@@ -113,7 +113,7 @@
       "folder": "stargate_steampunk",
       "title": "Old Punctual — Vane & Harrow Transit Engine №7",
       "blurb": "An interactive, entirely fictional portal-dialing exhibit in a Victorian steampunk idiom: a punched-card æther correspondence engine built in 1894 by the (equally fictional) firm of Vane & Harrow, Blackfriars, for the…",
-      "link": "../stargate_steampunk/index.html",
+      "link": "../_sequestered/stargate_steampunk/index.html",
       "preview": null,
       "status": "live"
     },
