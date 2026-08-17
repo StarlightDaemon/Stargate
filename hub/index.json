@@ -1,5 +1,91 @@
 {
+  "featured": {
+    "title": "STARGATE — Gate Interface",
+    "blurb": "A client-side interactive Stargate gate interface: dial fictional in-universe addresses on a 39-glyph ring, watch the per-chevron encoding sequence, the Kawoosh Burst, and a stable event horizon — with a fully wired…",
+    "link": "../Stargate_OG/index.html",
+    "testStatus": "Test script present (npm test -> vitest run); no independently verifiable pass count found in this session or repo docs"
+  },
   "entries": [
+    {
+      "id": "stargate-aethergate",
+      "folder": "stargate_aethergate",
+      "title": "AETHERGATE — Transit Ring Console",
+      "blurb": "An original, fully client-side interactive tribute to ring-portal science fiction. Compose a seven-sigil destination address, watch the sigil track spin each glyph under the crown marker while mechanical seals clamp…",
+      "link": "../stargate_aethergate/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-aetheric-telegraph",
+      "folder": "stargate_aetheric_telegraph",
+      "title": "HM Imperial Aetheric Telegraph & Pneumatic Dispatch Registry",
+      "blurb": "An interactive Victorian technical drafting instrument panel and glowing vector schematic portal ring dispatch terminal.",
+      "link": "../stargate_aetheric_telegraph/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-atompunk",
+      "folder": "stargate_atompunk",
+      "title": "VANTAGE — Type 9 Aperture Surveillance & Induction Console",
+      "blurb": "stargate_atompunk — an interactive novelty portal-dialing website. Atompunk: Cold War civil-defense radar room, alt-1959. Station 3 \"Bluff Creek\" on the Continental Threshold Warning Line, Bureau of Civil Aperture…",
+      "link": "../_sequestered/stargate_atompunk/index.html",
+      "preview": null,
+      "status": "deprioritized",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-blueprint-alpha",
+      "folder": "stargate_blueprint_alpha",
+      "title": "Vossen-Klein Topological Drafting Station Alpha (stargate_blueprint_alpha)",
+      "blurb": "> [!WARNING] > Known Issues / Current State Note: > Operator testing found that manual dialing is non-functional. This contradicts this session's automated verification report (which reported two passing…",
+      "link": "../stargate_blueprint_alpha/index.html",
+      "preview": null,
+      "status": "known-issue",
+      "version": "1.0.0"
+    },
+    {
+      "id": "stargate-blueprint-drafting",
+      "folder": "stargate_blueprint_drafting",
+      "title": "Aeon Structural Dynamics CAD Drafting Terminal",
+      "blurb": "> [!WARNING] > UNRESOLVED ISSUE - BUILD CLOSED AS-IS > The original build shipped with non-functional manual dialing. A dedicated fix pass diagnosed and addressed two specific issues (a missing manual ENGAGE control,…",
+      "link": "../stargate_blueprint_drafting/index.html",
+      "preview": null,
+      "status": "known-issue",
+      "version": "1.0.0"
+    },
+    {
+      "id": "stargate-bureaucratic-mainframe",
+      "folder": "stargate_bureaucratic_mainframe",
+      "title": "D.S.T.C.L. Terminal OS/88-V — Municipal Conduit & Transit Authority",
+      "blurb": "An interactive novelty portal-dialing website in a bureaucratic-terminal register: the public dialing terminal of the Department of Sub-Aetheric Transit & Conduit Licensure (D.S.T.C.L.), running Terminal OS/88-V (Rev…",
+      "link": "../stargate_bureaucratic_mainframe/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.0.0"
+    },
+    {
+      "id": "stargate-caissa-workstation",
+      "folder": "stargate_caissa_workstation",
+      "title": "CAÏSSA-9 — Neural Recursion Strategy Analysis Workstation",
+      "blurb": "An interactive novelty portal-dialing website built around CAÏSSA-9, a neural-recursion strategy workstation of the Institute for Deep Combinatorial Analysis (Minimax Core v9.42-AVX512). A destination is dialed as a…",
+      "link": "../stargate_caissa_workstation/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-cyanotype-geodetic",
+      "folder": "stargate_cyanotype_geodetic",
+      "title": "Vance & Sterling Geodetic Survey Bureau (Plate No. IV-B)",
+      "blurb": "> CURRENT STATUS NOTE (POST-1.1.0 OPERATOR AUDIT): > - Confirmed Working: Direct operator testing confirms the v1.1.0 auto-activation fix is genuinely resolved — dialing requires a deliberate click on VALIDATE & COMMIT…",
+      "link": "../_sequestered/stargate_cyanotype_geodetic/index.html",
+      "preview": null,
+      "status": "retired",
+      "version": "1.1.0"
+    },
     {
       "id": "stargate-cyberpunk",
       "folder": "stargate_cyberpunk",
@@ -7,7 +93,8 @@
       "blurb": "An interactive, fully fictional portal-dialing console. Cyberpunk build of the Stargate-inspired series: a decommissioned Kessler-Voss Orbital \"SPINDLE\" transit aperture, cut out of a bankrupt megacorp's tower and…",
       "link": "../_sequestered/stargate_cyberpunk/index.html",
       "preview": null,
-      "status": "live"
+      "status": "deprioritized",
+      "version": "1.1.0"
     },
     {
       "id": "stargate-dieselpunk",
@@ -16,43 +103,58 @@
       "blurb": "An original dieselpunk portal-dialing console: the Halvorsen & Krag Type 88 resonance alternator, worked by the fictional Overland Wireless Traction Board, alternate 1931. The paradigm is the great mechanical longwave…",
       "link": "../_sequestered/stargate_dieselpunk/index.html",
       "preview": null,
-      "status": "live"
+      "status": "deprioritized",
+      "version": null
     },
     {
-      "id": "stargate-fable",
-      "folder": "stargate_meridian_ring",
-      "title": "MERIDIAN RING — Gateway Operations Console",
-      "blurb": "An original, fully client-side interactive novelty site: a ring-shaped dialing apparatus that acquires a seven-sigil address, seats eight mechanical hold-clamps one by one, ignites a violent energy surge, and settles…",
-      "link": "../stargate_meridian_ring/index.html",
+      "id": "stargate-epigraphic-spectrometry",
+      "folder": "stargate_epigraphic_spectrometry",
+      "title": "Ancient Mythic Epigraphic Spectrometry Console (`stargate_epigraphic_spectrometry`)",
+      "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
+      "link": "../stargate_epigraphic_spectrometry/index.html",
       "preview": null,
-      "status": "live"
+      "status": "live",
+      "version": "1.1.0"
     },
     {
-      "id": "stargate-fable-02",
+      "id": "stargate-erebus-signal",
+      "folder": "stargate_erebus_signal",
+      "title": "Erebus Signal Intercept",
+      "blurb": "An interactive novelty portal-dialing website built as the Erebus Signal Intercept terminal, a signal-degradation aesthetic worked in CRT scanlines, tracking artifacts, and chromatic aberration. Dialing runs a 9-chevron…",
+      "link": "../stargate_erebus_signal/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-genomic-sequencer",
+      "folder": "stargate_genomic_sequencer",
+      "title": "Genomic Biotech Sequencing Lab Console (`stargate_genomic_sequencer`)",
+      "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
+      "link": "../stargate_genomic_sequencer/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-heliacal-ring",
       "folder": "stargate_heliacal_ring",
       "title": "Heliacal Ring — Gate Command · Terminal VII",
       "blurb": "An original, fully client-side interactive novelty site: a ring-shaped dialing device that opens a shimmering travel conduit. Compose a seven-glyph address, watch the inner ring spin each glyph to the primary lock, see…",
       "link": "../stargate_heliacal_ring/index.html",
       "preview": null,
-      "status": "live"
+      "status": "live",
+      "version": "1.1.0"
     },
     {
-      "id": "stargate-fable-03",
-      "folder": "stargate_aethergate",
-      "title": "AETHERGATE — Transit Ring Console",
-      "blurb": "An original, fully client-side interactive tribute to ring-portal science fiction. Compose a seven-sigil destination address, watch the sigil track spin each glyph under the crown marker while mechanical seals clamp…",
-      "link": "../stargate_aethergate/index.html",
-      "preview": null,
-      "status": "live"
-    },
-    {
-      "id": "stargate-fable-u",
+      "id": "stargate-heliora-annulus",
       "folder": "stargate_heliora_annulus",
       "title": "HELIORA · Threshold Annulus",
       "blurb": "An interactive novelty website: a ring-shaped dialing instrument that attunes seven-sigil addresses (\"cants\"), locks seven Annular Seals one by one, strikes open a molten travel-well (the Wellglass) with a dramatic…",
       "link": "../stargate_heliora_annulus/index.html",
       "preview": null,
-      "status": "live"
+      "status": "live",
+      "version": "1.1.0"
     },
     {
       "id": "stargate-high-magic",
@@ -61,7 +163,8 @@
       "blurb": "An interactive novelty website: a ring-shaped portal-activation artifact of the Astrolith Order, a fictional tradition of sidereal high magic — magic written in the grammar of constellations, inlaid in silver and gold…",
       "link": "../stargate_high_magic/index.html",
       "preview": null,
-      "status": "in-progress"
+      "status": "live",
+      "version": "1.1.0"
     },
     {
       "id": "stargate-high-scifi",
@@ -70,7 +173,8 @@
       "blurb": "An interactive novelty portal-dialing website. High Sci-Fi theme, ancient-megastructure register: Transit Artifact M-1 “Meridian” is a 2.1-million-year-old torus of scale-invariant grey glass recovered at Sol–Earth L4,…",
       "link": "../stargate_high_scifi/index.html",
       "preview": null,
-      "status": "live"
+      "status": "live",
+      "version": "1.1.0"
     },
     {
       "id": "stargate-low-magic",
@@ -79,7 +183,8 @@
       "blurb": "An interactive novelty website: a ring-shaped, portal-opening device built in a low-magic register — hedge-craft, not high sorcery. The Wayband is a threshold wheel kept by Wren Alderwick, a hedge-dialer of the…",
       "link": "../_sequestered/Stargate_low_magic/index.html",
       "preview": null,
-      "status": "live"
+      "status": "deprioritized",
+      "version": "1.3.0"
     },
     {
       "id": "stargate-low-magicv2",
@@ -88,7 +193,8 @@
       "blurb": "An interactive novelty website in a low-magic register: not sorcery, just an old practice that works if you do it properly. Hollowbeck's church tower keeps a ring of six bells — Lark, Tansy, Dole, Mattock, Hobb, and…",
       "link": "../_sequestered/stargate_low_magicv2/index.html",
       "preview": null,
-      "status": "live"
+      "status": "deprioritized",
+      "version": "1.0.0"
     },
     {
       "id": "stargate-low-scifi-maintenance",
@@ -97,7 +203,78 @@
       "blurb": "A fictional, fully client-side, interactive portal-dialing site in the register of grounded, workaday low-tech science fiction. Portals here are not relics or ritual instruments — they are municipal infrastructure,…",
       "link": "../_sequestered/stargate_low_scifi_maintenance/index.html",
       "preview": null,
-      "status": "live"
+      "status": "deprioritized",
+      "version": "1.0.0"
+    },
+    {
+      "id": "stargate-lumina-grove",
+      "folder": "stargate_lumina_grove",
+      "title": "Lumina Grove — Bioluminescent Conduit Lattice",
+      "blurb": "An interactive novelty portal-dialing website built as the Lumina Grove portal interface: a bioluminescent conduit lattice dialed through a 9-chevron system that wakes a living-surface portal effect on activation. Six…",
+      "link": "../stargate_lumina_grove/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.2.0"
+    },
+    {
+      "id": "stargate-mastering-suite",
+      "folder": "stargate_mastering_suite",
+      "title": "Axiom Sound Labs — Quantum Mastering Array MK-IX",
+      "blurb": "An interactive novelty portal-dialing website staged as an audio mastering console: the Quantum Mastering Array MK-IX at Axiom Sound Labs, a 10-channel Harmonic Patchbay running custom sonic glyphs from 32 Hz to 16 kHz.…",
+      "link": "../stargate_mastering_suite/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-meridian-ring",
+      "folder": "stargate_meridian_ring",
+      "title": "MERIDIAN RING — Gateway Operations Console",
+      "blurb": "An original, fully client-side interactive novelty site: a ring-shaped dialing apparatus that acquires a seven-sigil address, seats eight mechanical hold-clamps one by one, ignites a violent energy surge, and settles…",
+      "link": "../stargate_meridian_ring/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-meteorological-nexrad",
+      "folder": "stargate_meteorological_nexrad",
+      "title": "Meteorological Doppler NEXRAD Radar Stargate Console (`stargate_meteorological_nexrad`)",
+      "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
+      "link": "../stargate_meteorological_nexrad/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-modern",
+      "folder": "stargate_modern",
+      "title": "AERIS // Astraea Subspace Gateway Control Console",
+      "blurb": "AERIS (Aperture Executive Resonance Interface System) v4.8.2 is a high-fidelity, ultra-modern dark-mode mission-control interface for operating the Series-IX Harmonic Vector Annulus (HVA-900 / \"The Vector Ring\") under…",
+      "link": "../stargate_modern/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.0.0"
+    },
+    {
+      "id": "stargate-municipal-registry",
+      "folder": "stargate_municipal_registry",
+      "title": "DITMCO — Municipal Conduit Registry Terminal (Form 1099-TX)",
+      "blurb": "An interactive novelty portal-dialing website for the Department of Interzonal Transit & Municipal Conduit Oversight (DITMCO), Registry Division Annex 4-B. Dialing means filing a Form 1099-TX Clearance Application: an…",
+      "link": "../stargate_municipal_registry/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-orbital-atc",
+      "folder": "stargate_orbital_atc",
+      "title": "Orbital Air Traffic Control Radar Stargate Console (`stargate_orbital_atc`)",
+      "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
+      "link": "../stargate_orbital_atc/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
     },
     {
       "id": "stargate-retro",
@@ -106,7 +283,38 @@
       "blurb": "A single-session novelty portal-dialing toy in the Retro register: an early-1960s storage-oscilloscope installation at the (fictional) Physical Establishment, Nine Elms. Fully client-side; all destinations are…",
       "link": "../stargate_retro/index.html",
       "preview": null,
-      "status": "live"
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-sigint-cryptanalysis",
+      "folder": "stargate_sigint_cryptanalysis",
+      "title": "Station VORTEX-9 — Cryptanalysis & Key Recovery Workstation",
+      "blurb": "An interactive novelty portal-dialing website run from Station VORTEX-9, the signals-intelligence workstation of the Directorate of Signal Cryptanalysis & Key Recovery (DSCR). Dialing is a key-recovery hunt: eight…",
+      "link": "../stargate_sigint_cryptanalysis/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.0.0"
+    },
+    {
+      "id": "stargate-solarpunk-ecogrid",
+      "folder": "stargate_solarpunk_ecogrid",
+      "title": "Solarpunk Smart Eco-Grid Dispatch Terminal (`stargate_solarpunk_ecogrid`)",
+      "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
+      "link": "../stargate_solarpunk_ecogrid/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
+    },
+    {
+      "id": "stargate-sonar-abyssal",
+      "folder": "stargate_sonar_abyssal",
+      "title": "Deep-Sea Nautical Sonar Command Console (`stargate_sonar_abyssal`)",
+      "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
+      "link": "../stargate_sonar_abyssal/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.1.0"
     },
     {
       "id": "stargate-steampunk",
@@ -115,16 +323,18 @@
       "blurb": "An interactive, entirely fictional portal-dialing exhibit in a Victorian steampunk idiom: a punched-card æther correspondence engine built in 1894 by the (equally fictional) firm of Vane & Harrow, Blackfriars, for the…",
       "link": "../_sequestered/stargate_steampunk/index.html",
       "preview": null,
-      "status": "live"
+      "status": "deprioritized",
+      "version": null
     },
     {
-      "id": "stargate-modern",
-      "folder": "stargate_modern",
-      "title": "AERIS — Astraea Subspace Gateway Console",
-      "blurb": "An ultra-modern dark-mode mission control interface for the Astraea Deep Resonance Laboratory (ADRL-04). Features a functioning motorized rotating glyph ring, harmonic stator clamps, radial oscilloscope, and 1-click fast-dial EAFP protocol.",
-      "link": "../stargate_modern/index.html",
+      "id": "stargate-synchrotron-collider",
+      "folder": "stargate_synchrotron_collider",
+      "title": "Aethel-Ring Collider (ARC) — Synchrotron Inversion Control",
+      "blurb": "An interactive novelty portal-dialing website built around the Aethel-Ring Collider (ARC), the synchrotron control room of the Aethelgard High-Energy Inversion Laboratory (AHEIL). Dialing means steering six…",
+      "link": "../stargate_synchrotron_collider/index.html",
       "preview": null,
-      "status": "live"
+      "status": "live",
+      "version": "1.1.0"
     }
   ]
 }
