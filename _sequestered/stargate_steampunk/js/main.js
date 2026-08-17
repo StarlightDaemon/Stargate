@@ -151,16 +151,17 @@ export function render(t = now()) {
   /* firebox */
   const flick = 0.08 * Math.sin(t * 9.7) + 0.05 * Math.sin(t * 23.3 + 1);
   $('fire-glow').style.opacity =
-    clamp((S.damperOpen ? 0.8 : 0.13) + flick * (S.damperOpen ? 1 : 0.3), 0, 1);
+    clamp((S.damperOpen ? 0.62 : 0.1) + flick * (S.damperOpen ? 1 : 0.3), 0, 1);
 
   /* steam wisps */
   const ventBoost = Math.max(0, 1 - (t - S.ventT) / 1.6);
   const wispBase = clamp((p - 30) / 130, 0, 1) * 0.4 + ventBoost * 0.75;
   wisps.forEach((w, i) => {
     const k = ((t / (3.2 + i * 0.9) + i * 0.37) % 1);
-    w.style.opacity = Math.max(0, wispBase * (1 - k) * k * 3.2).toFixed(3);
+    w.style.opacity = Math.max(0, wispBase * (1 - k) * k * 2.2).toFixed(3);
+    /* rise and thin out — vapour streaks, not inflating bubbles */
     w.style.transform =
-      `translate(${(Math.sin((t + i * 7) * 0.9) * 26 - 35).toFixed(1)}px, ${(-k * 150).toFixed(1)}px) scale(${(0.7 + k).toFixed(2)})`;
+      `translate(${(Math.sin((t + i * 7) * 0.55) * 14 - 27).toFixed(1)}px, ${(-k * 150).toFixed(1)}px) scale(${(0.75 + k * 0.35).toFixed(2)}, ${(0.9 + k * 1.1).toFixed(2)})`;
   });
 
   /* reader card */

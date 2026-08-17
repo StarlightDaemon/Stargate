@@ -18,11 +18,8 @@ function el(name, attrs, parent) {
 
 const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
 const easeOutCubic = (k) => 1 - Math.pow(1 - clamp(k, 0, 1), 3);
-function easeOutBack(k) {
-  k = clamp(k, 0, 1);
-  const c1 = 1.70158, c3 = c1 + 1;
-  return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2);
-}
+/* gravity fall: accelerate into a dead stop — no overshoot, no spring */
+const easeInQuad = (k) => { k = clamp(k, 0, 1); return k * k; };
 
 /* ---------------- pressure gauge ---------------- */
 
@@ -42,9 +39,27 @@ function arcPath(cx, cy, r, rot0, rot1) {
 
 export function buildGauge() {
   const svg = $('gauge');
+  const defs = el('defs', {}, svg);
+  /* needle: tapered brass rod — dark at the pivot, a highlight along
+     the shaft, dark again toward the tip so it reads as round metal
+     rather than a flat wedge */
+  const needleGrad = el('linearGradient', {
+    id: 'needleBrass', gradientUnits: 'userSpaceOnUse', x1: 100, y1: 112, x2: 100, y2: 28,
+  }, defs);
+  el('stop', { offset: '0%',  'stop-color': '#1c130a' }, needleGrad);
+  el('stop', { offset: '30%', 'stop-color': '#6b5424' }, needleGrad);
+  el('stop', { offset: '55%', 'stop-color': '#e6c583' }, needleGrad);
+  el('stop', { offset: '78%', 'stop-color': '#6b5424' }, needleGrad);
+  el('stop', { offset: '100%','stop-color': '#2a1c0a' }, needleGrad);
+  const needleShadow = el('filter', {
+    id: 'needleShadow', x: '-50%', y: '-50%', width: '200%', height: '200%',
+  }, defs);
+  el('feDropShadow', {
+    dx: 1.2, dy: 1.6, stdDeviation: 1.1, 'flood-color': '#000', 'flood-opacity': 0.55,
+  }, needleShadow);
   el('circle', { cx: 100, cy: 100, r: 96, fill: '#241a0c' }, svg);
-  el('circle', { cx: 100, cy: 100, r: 92, fill: '#b6934a' }, svg);
-  el('circle', { cx: 100, cy: 100, r: 86, fill: '#ece1c2', stroke: '#6f5524', 'stroke-width': 2 }, svg);
+  el('circle', { cx: 100, cy: 100, r: 92, fill: '#96783c' }, svg);
+  el('circle', { cx: 100, cy: 100, r: 86, fill: '#e2d5b2', stroke: '#5e481f', 'stroke-width': 2 }, svg);
 
   el('path', { d: arcPath(100, 100, 78, rotFor(sim.P.WORKING_MIN), rotFor(sim.P.WORKING_MAX)),
     fill: 'none', stroke: '#4e7d6d', 'stroke-width': 6, 'stroke-linecap': 'butt' }, svg);
@@ -72,15 +87,19 @@ export function buildGauge() {
     fill: '#6a552a', 'font-family': 'Georgia, serif' }, svg);
   t2.textContent = 'LB. PER SQ. INCH';
 
-  needle = el('g', { transform: 'rotate(-135,100,100)' }, svg);
-  el('line', { x1: 100, y1: 112, x2: 100, y2: 28, stroke: '#26180a', 'stroke-width': 3.4,
+  needle = el('g', { transform: 'rotate(-135,100,100)', filter: 'url(#needleShadow)' }, svg);
+  el('line', { x1: 100, y1: 112, x2: 100, y2: 28, stroke: 'url(#needleBrass)', 'stroke-width': 3.4,
     'stroke-linecap': 'round' }, needle);
-  el('circle', { cx: 100, cy: 100, r: 7, fill: '#8a6b2c', stroke: '#26180a', 'stroke-width': 1.5 }, needle);
+  el('circle', { cx: 100, cy: 100, r: 7, fill: '#77602a', stroke: '#26180a', 'stroke-width': 1.5 }, needle);
+  el('circle', { cx: 100, cy: 100, r: 2.6, fill: '#e6c583' }, needle);
+  /* glass glint over the face — a hint of a real lens, kept faint */
+  el('path', { d: arcPath(100, 100, 56, -110, -30), fill: 'none',
+    stroke: 'rgba(255,255,255,0.06)', 'stroke-width': 13, 'stroke-linecap': 'round' }, svg);
 }
 
 export function renderGauge(t) {
   const p = sim.pressureAt(t);
-  const jit = clamp((p - 25) / 40, 0, 1) * (0.7 * Math.sin(t * 13.1) + 0.4 * Math.sin(t * 7.3));
+  const jit = clamp((p - 25) / 40, 0, 1) * (0.45 * Math.sin(t * 13.1) + 0.25 * Math.sin(t * 7.3));
   needle.setAttribute('transform', `rotate(${(rotFor(p) + jit).toFixed(2)},100,100)`);
 }
 
@@ -90,17 +109,26 @@ let gov = { arms: [], balls: [], angle: 0, lastT: 0 };
 
 export function buildGovernor() {
   const svg = $('governor');
+  const defs = el('defs', {}, svg);
+  /* flyball sphere: highlight offset from center, dark toward the
+     rim — objectBoundingBox tracks the circle's own box as cx/cy
+     move each frame, so it stays correctly centered with no per-
+     frame gradient math needed */
+  const ballGrad = el('radialGradient', { id: 'flyballBrass', cx: '35%', cy: '30%', r: '65%' }, defs);
+  el('stop', { offset: '0%',  'stop-color': '#ecd692' }, ballGrad);
+  el('stop', { offset: '45%', 'stop-color': '#a3874a' }, ballGrad);
+  el('stop', { offset: '100%','stop-color': '#2a1e0a' }, ballGrad);
   el('rect', { x: 30, y: 138, width: 60, height: 9, rx: 2, fill: '#3a2c10' }, svg);
-  el('rect', { x: 56, y: 42, width: 8, height: 98, rx: 3,
-    fill: '#8a6b2c', stroke: '#26180a', 'stroke-width': 1 }, svg);
-  el('circle', { cx: 60, cy: 38, r: 6, fill: '#b6934a', stroke: '#26180a', 'stroke-width': 1 }, svg);
+  el('rect', { x: 56, y: 42, width: 8, height: 98, rx: 1,
+    fill: '#77602a', stroke: '#26180a', 'stroke-width': 1 }, svg);
+  el('circle', { cx: 60, cy: 38, r: 6, fill: '#96783c', stroke: '#26180a', 'stroke-width': 1 }, svg);
   for (let i = 0; i < 2; i++) {
     gov.arms.push(el('line', { x1: 60, y1: 38, x2: 60, y2: 84,
-      stroke: '#7a5c26', 'stroke-width': 2.6, 'stroke-linecap': 'round' }, svg));
+      stroke: '#6a5424', 'stroke-width': 2.6, 'stroke-linecap': 'round' }, svg));
   }
   for (let i = 0; i < 2; i++) {
     gov.balls.push(el('circle', { cx: 60, cy: 84, r: 7,
-      fill: '#a8853d', stroke: '#26180a', 'stroke-width': 1.2 }, svg));
+      fill: 'url(#flyballBrass)', stroke: '#26180a', 'stroke-width': 1.2 }, svg));
   }
   gov.lastT = now();
 }
@@ -125,7 +153,9 @@ export function renderGovernor(t) {
     gov.balls[i].setAttribute('cx', x.toFixed(1));
     gov.balls[i].setAttribute('cy', by.toFixed(1));
     gov.balls[i].setAttribute('r', (7 + z * 1.1).toFixed(2));
-    gov.balls[i].setAttribute('fill', z > 0 ? '#c9a55a' : '#7a5c26');
+    /* depth cue now lives in opacity, not a flat-color swap — the
+       sphere gradient itself stays consistent front and back */
+    gov.balls[i].setAttribute('opacity', (0.82 + z * 0.18).toFixed(2));
   }
 }
 
@@ -151,8 +181,8 @@ export function renderFlags(t) {
   for (let i = 0; i < 6; i++) {
     let ang = -104;
     if (S.draw && t >= S.draw.cols[i].lockT) {
-      const k = (t - S.draw.cols[i].lockT) / 0.5;
-      ang = -104 + 104 * easeOutBack(k);
+      const k = (t - S.draw.cols[i].lockT) / 0.26;
+      ang = -104 + 104 * easeInQuad(k);
     } else if (!S.draw && i < (S.lastResetLocks || 0)) {
       const k = (t - S.lastResetT) / 0.45;
       if (k < 1) ang = 0 - 104 * easeOutCubic(k);
@@ -274,10 +304,10 @@ export function leverAngle(elx, t, targetDeg) {
   let a = leverAnims.get(elx);
   if (!a) { a = { from: targetDeg, to: targetDeg, t0: t - 1 }; leverAnims.set(elx, a); }
   if (a.to !== targetDeg) {
-    const cur = a.from + (a.to - a.from) * easeOutCubic((t - a.t0) / 0.22);
+    const cur = a.from + (a.to - a.from) * easeOutCubic((t - a.t0) / 0.14);
     a.from = cur; a.to = targetDeg; a.t0 = t;
   }
-  return a.from + (a.to - a.from) * easeOutCubic((t - a.t0) / 0.22);
+  return a.from + (a.to - a.from) * easeOutCubic((t - a.t0) / 0.14);
 }
 
 export function renderLever(id, t, thrown) {
@@ -293,7 +323,7 @@ export function renderMomentary(id, t, throwT) {
   const arm = btn.querySelector('.lever-arm');
   const k = t - throwT;
   let ang = -32;
-  if (k >= 0 && k < 0.2) ang = -32 + 64 * easeOutCubic(k / 0.2);
-  else if (k < 0.7) ang = 32 - 64 * easeOutCubic((k - 0.2) / 0.5);
+  if (k >= 0 && k < 0.16) ang = -32 + 64 * easeOutCubic(k / 0.16);
+  else if (k < 0.6) ang = 32 - 64 * easeOutCubic((k - 0.16) / 0.44);
   arm.style.transform = `rotate(${ang.toFixed(1)}deg)`;
 }
