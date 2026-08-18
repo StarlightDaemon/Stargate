@@ -107,6 +107,16 @@
       "version": null
     },
     {
+      "id": "stargate-dieselpunkv2",
+      "folder": "stargate_dieselpunkv2",
+      "title": "CARAVELLE — Pan-Continental Travelways Portal Salon",
+      "blurb": "An interactive novelty portal-dialing website: the Caravelle, a Pan-Continental Travelways portal salon built into a 1937 cabinet (Belmont Instrument Works, Cabinet No. 9). The salon's directory carries a short board of…",
+      "link": "../_sequestered/stargate_dieselpunkv2/index.html",
+      "preview": null,
+      "status": "retired",
+      "version": "1.0.0"
+    },
+    {
       "id": "stargate-epigraphic-spectrometry",
       "folder": "stargate_epigraphic_spectrometry",
       "title": "Ancient Mythic Epigraphic Spectrometry Console (`stargate_epigraphic_spectrometry`)",
@@ -183,7 +193,7 @@
       "blurb": "An interactive novelty website: a ring-shaped, portal-opening device built in a low-magic register — hedge-craft, not high sorcery. The Wayband is a threshold wheel kept by Wren Alderwick, a hedge-dialer of the…",
       "link": "../_sequestered/Stargate_low_magic/index.html",
       "preview": null,
-      "status": "deprioritized",
+      "status": "retired",
       "version": "1.3.0"
     },
     {
@@ -323,7 +333,7 @@
       "blurb": "An interactive, entirely fictional portal-dialing exhibit in a Victorian steampunk idiom: a punched-card æther correspondence engine built in 1894 by the (equally fictional) firm of Vane & Harrow, Blackfriars, for the…",
       "link": "../_sequestered/stargate_steampunk/index.html",
       "preview": null,
-      "status": "deprioritized",
+      "status": "retired",
       "version": null
     },
     {
