@@ -296,19 +296,36 @@ a.card:hover, a.card:focus-visible {
   color: var(--cyan);
   background: rgba(88, 230, 255, 0.08);
   white-space: nowrap;
+  position: relative;
 }
 
-/* known-issue: amber, pulsing — functional but flagged, wants attention */
+/* known-issue: amber, pulsing — functional but flagged, wants attention.
+   The pulse animates opacity on a static-shadow ::after (compositor-only)
+   instead of animating box-shadow directly on the badge itself — profiling
+   showed animating box-shadow forces a main-thread repaint every frame,
+   for as long as the page is open (this was the confirmed cause of
+   measured scroll jank, not the starfield canvas or the retired-card
+   grayscale filter). */
 .status-badge.known-issue {
   border-color: var(--amber);
   color: var(--amber);
   background: rgba(255, 180, 84, 0.1);
+}
+
+.status-badge.known-issue::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 4px rgba(255, 180, 84, 0.35);
+  opacity: 0;
+  pointer-events: none;
   animation: badge-pulse-amber 2.4s ease-in-out infinite;
 }
 
 @keyframes badge-pulse-amber {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 180, 84, 0.35); }
-  50% { box-shadow: 0 0 0 4px rgba(255, 180, 84, 0); }
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 
 /* retired: solid red, no animation — closed, not coming back */
