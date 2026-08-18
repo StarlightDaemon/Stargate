@@ -33,7 +33,7 @@
       "blurb": "stargate_atompunk — an interactive novelty portal-dialing website. Atompunk: Cold War civil-defense radar room, alt-1959. Station 3 \"Bluff Creek\" on the Continental Threshold Warning Line, Bureau of Civil Aperture…",
       "link": "../_sequestered/stargate_atompunk/index.html",
       "preview": null,
-      "status": "deprioritized",
+      "status": "retired",
       "version": "1.1.0"
     },
     {
@@ -93,7 +93,7 @@
       "blurb": "An interactive, fully fictional portal-dialing console. Cyberpunk build of the Stargate-inspired series: a decommissioned Kessler-Voss Orbital \"SPINDLE\" transit aperture, cut out of a bankrupt megacorp's tower and…",
       "link": "../_sequestered/stargate_cyberpunk/index.html",
       "preview": null,
-      "status": "deprioritized",
+      "status": "retired",
       "version": "1.1.0"
     },
     {
@@ -103,7 +103,7 @@
       "blurb": "An original dieselpunk portal-dialing console: the Halvorsen & Krag Type 88 resonance alternator, worked by the fictional Overland Wireless Traction Board, alternate 1931. The paradigm is the great mechanical longwave…",
       "link": "../_sequestered/stargate_dieselpunk/index.html",
       "preview": null,
-      "status": "deprioritized",
+      "status": "retired",
       "version": null
     },
     {
@@ -203,7 +203,7 @@
       "blurb": "An interactive novelty website in a low-magic register: not sorcery, just an old practice that works if you do it properly. Hollowbeck's church tower keeps a ring of six bells — Lark, Tansy, Dole, Mattock, Hobb, and…",
       "link": "../_sequestered/stargate_low_magicv2/index.html",
       "preview": null,
-      "status": "deprioritized",
+      "status": "retired",
       "version": "1.0.0"
     },
     {
@@ -213,7 +213,7 @@
       "blurb": "A fictional, fully client-side, interactive portal-dialing site in the register of grounded, workaday low-tech science fiction. Portals here are not relics or ritual instruments — they are municipal infrastructure,…",
       "link": "../_sequestered/stargate_low_scifi_maintenance/index.html",
       "preview": null,
-      "status": "deprioritized",
+      "status": "retired",
       "version": "1.0.0"
     },
     {

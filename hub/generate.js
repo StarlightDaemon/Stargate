@@ -12,10 +12,10 @@
 // favor of the next real paragraph). Everything is re-derived from
 // disk on every run — this script holds no hand-maintained entry list.
 //
-// Status model: four values — live (default), known-issue, retired,
-// deprioritized. Every folder is "live" unless explicitly overridden
-// below; overrides are hand-verified against that folder's own
-// CHANGELOG.md/README.md, never inferred from folder name or content.
+// Status model: three values — live (default), known-issue, retired.
+// Every folder is "live" unless explicitly overridden below; overrides
+// are hand-verified against that folder's own CHANGELOG.md/README.md,
+// never inferred from folder name or content.
 //
 // _sequestered/<folder> entries are scanned the same way as top-level
 // folders (one level deep) and get their status from SEQUESTERED_STATUS,
@@ -70,9 +70,10 @@ const STATUS_OVERRIDES = {
 };
 
 // _sequestered/<folder> dispositions, decided from each folder's OWN
-// CHANGELOG.md/README.md. "retired" = own docs name a real unresolved
-// defect. "deprioritized" = folder was moved here with no defect
-// documented in its own docs (ordering/scope reasons, not a bug).
+// CHANGELOG.md/README.md. All folders here are "retired"; the note on
+// each explains what, if anything, its own docs name as the reason —
+// a real documented defect where one exists, or plainly no defect
+// recorded where none does (never inferred or invented).
 const SEQUESTERED_STATUS = {
   // Own CHANGELOG.md "Known Issues (Post-1.1.0 Operator Testing)":
   // portal/aperture visual effect confirmed by operator testing to not
@@ -83,10 +84,12 @@ const SEQUESTERED_STATUS = {
   // machine-perfect uniform repeated elements; fixes attempted, did not
   // resolve it.
   Stargate_low_magic: "retired",
-  stargate_low_magicv2: "deprioritized",
-  // Own README.md (no CHANGELOG.md exists) documents features only, no
+  // Own CHANGELOG.md documents only a [1.0.0] "Added" section — no
+  // Known Issues/Fixed section, no defect named.
+  stargate_low_magicv2: "retired",
+  // No CHANGELOG.md exists; own README.md documents features only, no
   // defect named.
-  stargate_dieselpunk: "deprioritized",
+  stargate_dieselpunk: "retired",
   // Own CHANGELOG.md "Known Issues (retroactively documented)": same
   // cartoonish/non-physical defect as Stargate_low_magic, same root
   // cause, confirmed unresolved by the retirement commit itself.
@@ -97,11 +100,13 @@ const SEQUESTERED_STATUS = {
   stargate_dieselpunkv2: "retired",
   // Own CHANGELOG.md documents features/compliance passes only, no
   // defect named.
-  stargate_atompunk: "deprioritized",
-  stargate_cyberpunk: "deprioritized",
+  stargate_atompunk: "retired",
+  // Own CHANGELOG.md documents features/compliance/polish passes only,
+  // no defect named.
+  stargate_cyberpunk: "retired",
   // Own CHANGELOG.md's [Unreleased] "Fixed" section lists items already
-  // resolved, not an open defect.
-  stargate_low_scifi_maintenance: "deprioritized",
+  // resolved during a cleanup pass, not an open defect.
+  stargate_low_scifi_maintenance: "retired",
 };
 
 const BLURB_MAX_CHARS = 220;
