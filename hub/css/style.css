@@ -1,23 +1,33 @@
 /* ============================================================
    STARGATE BUILDS — Gallery Hub
-   Palette: deep-space slate, conduit cyan, clamp amber, fault red.
+   Palette: near-black blueprint, phosphor amber, muted teal,
+   warm fault amber-red, dead-channel gray.
+   Perf rule (fb3658b): never animate box-shadow — pulses animate
+   opacity on a static-shadow pseudo-element instead.
    ============================================================ */
 
 :root {
-  --bg-0: #05070c;
-  --bg-1: #0a0f18;
-  --panel: #0d1420cc;
-  --panel-edge: #1d2c3f;
-  --ink: #b8cadb;
-  --ink-dim: #5f7488;
-  --ink-bright: #e7f1fa;
-  --cyan: #58e6ff;
-  --cyan-dim: #1d5a6e;
-  --amber: #ffb454;
-  --amber-dim: #6e4a1d;
-  --red: #ff5d5d;
-  --red-dim: #6e1d1d;
-  --mono: "Cascadia Code", "Consolas", "SF Mono", "Menlo", monospace;
+  --bg-0: #0a0a0d;
+  --bg-1: #101014;
+  --panel: #101014cc;
+  --panel-edge: #26262c;
+  --grid-line: rgba(158, 168, 178, 0.05);
+  --bracket: rgba(158, 168, 178, 0.32);
+  --ink: #b9bdc4;
+  --ink-dim: #7c828a;
+  --ink-bright: #ecedef;
+  --live: #e8a33d;          /* phosphor amber */
+  --live-dim: #5f451e;
+  --teal: #6aa9a4;          /* muted, desaturated teal */
+  --teal-dim: #2d4a47;
+  --warn: #d9634a;          /* warm amber-red */
+  --warn-dim: #56291f;
+  --retired: #75605a;       /* flat gray, slight red tint (lightened from
+                               #6b5550: 2.86:1 on bg-0 missed even the 3:1
+                               graphics threshold; #75605a is 3.37:1) */
+  --retired-ink: #94807a;   /* label-text variant: #75605a is too dark for
+                               10px text (needs >=4.5:1; this is 5.3:1) */
+  --mono: "IBM Plex Mono", "JetBrains Mono", "Cascadia Code", "Consolas", "SF Mono", "Menlo", monospace;
   --disp: "Segoe UI", "Avenir Next", system-ui, sans-serif;
 }
 
@@ -26,10 +36,25 @@
 html, body { height: 100%; }
 
 body {
-  background: radial-gradient(120% 90% at 50% 10%, #0b1322 0%, var(--bg-0) 60%);
+  background: var(--bg-0);
   color: var(--ink);
   font-family: var(--disp);
   min-height: 100vh;
+}
+
+/* Blueprint grid: a fixed backdrop layer (like the starfield canvas)
+   rather than background-attachment:fixed on body, which can defeat
+   composited scrolling. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
 #stars {
@@ -72,7 +97,40 @@ body {
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--ink-dim);
+}
+
+/* ---------------- corner brackets ----------------
+   Technical-readout frame: thin hairline border on the element itself
+   plus L-shaped corner marks. The marks are 8 tiny no-repeat
+   linear-gradient strokes (2 per corner) on ONE ::after overlay per
+   card — no extra DOM nodes for the 34-card grid, and the overlay
+   paints above the preview image, which the card's own background
+   could not. Bracket color comes from --bk so statuses can tint it. */
+
+.card::after,
+.featured-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--bk), var(--bk)), linear-gradient(var(--bk), var(--bk)),
+    linear-gradient(var(--bk), var(--bk)), linear-gradient(var(--bk), var(--bk)),
+    linear-gradient(var(--bk), var(--bk)), linear-gradient(var(--bk), var(--bk)),
+    linear-gradient(var(--bk), var(--bk)), linear-gradient(var(--bk), var(--bk));
+  background-repeat: no-repeat;
+  background-size:
+    12px 1px, 1px 12px,
+    12px 1px, 1px 12px,
+    12px 1px, 1px 12px,
+    12px 1px, 1px 12px;
+  background-position:
+    left top, left top,
+    right top, right top,
+    left bottom, left bottom,
+    right bottom, right bottom;
 }
 
 /* ---------------- featured (Stargate_OG hero) ---------------- */
@@ -82,32 +140,25 @@ body {
 }
 
 .featured-card {
+  --bk: rgba(232, 163, 61, 0.55);
   display: block;
   position: relative;
   padding: 28px 30px;
-  border-radius: 10px;
   background:
-    radial-gradient(140% 160% at 8% 0%, rgba(88, 230, 255, 0.14) 0%, transparent 55%),
-    linear-gradient(160deg, #101c2c 0%, #0a1420 100%);
-  border: 1px solid var(--cyan-dim);
+    radial-gradient(140% 160% at 8% 0%, rgba(232, 163, 61, 0.07) 0%, transparent 55%),
+    linear-gradient(160deg, #131210 0%, #0d0d0f 100%);
+  border: 1px solid var(--live-dim);
   text-decoration: none;
   color: inherit;
   overflow: hidden;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
-}
-
-.featured-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: 10px;
-  box-shadow: inset 0 0 0 1px rgba(88, 230, 255, 0.12);
+  /* hover feedback via border-color + compositor-friendly filter/transform
+     — no box-shadow transitions anywhere (fb3658b) */
+  transition: border-color 0.18s ease, filter 0.18s ease, transform 0.18s ease;
 }
 
 a.featured-card:hover, a.featured-card:focus-visible {
-  border-color: var(--cyan);
-  box-shadow: 0 14px 40px -16px rgba(88, 230, 255, 0.35);
+  border-color: var(--live);
+  filter: brightness(1.15);
   transform: translateY(-2px);
 }
 
@@ -115,12 +166,9 @@ a.featured-card:hover, a.featured-card:focus-visible {
   display: inline-block;
   font-family: var(--mono);
   font-size: 10.5px;
-  letter-spacing: 0.14em;
-  color: var(--cyan);
-  border: 1px solid var(--cyan-dim);
-  background: rgba(88, 230, 255, 0.08);
-  padding: 3px 10px;
-  border-radius: 3px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--live);
   margin-bottom: 14px;
 }
 
@@ -162,7 +210,8 @@ a.featured-card:hover, a.featured-card:focus-visible {
 .filter-label {
   font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--ink-dim);
 }
 
@@ -177,25 +226,27 @@ a.featured-card:hover, a.featured-card:focus-visible {
   color: var(--ink);
   font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   padding: 7px 14px;
-  border-radius: 3px;
+  border-radius: 2px;
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 
-.filter-btn:hover { border-color: var(--cyan-dim); color: var(--ink-bright); }
+.filter-btn:hover { border-color: var(--teal); color: var(--ink-bright); }
 
 .filter-btn.active {
-  border-color: var(--cyan);
+  border-color: var(--live);
   color: var(--bg-0);
-  background: var(--cyan);
+  background: var(--live);
   font-weight: 600;
 }
 
 .filter-count {
   font-family: var(--mono);
   font-size: 11px;
+  letter-spacing: 0.06em;
   color: var(--ink-dim);
   margin-left: auto;
 }
@@ -209,22 +260,22 @@ a.featured-card:hover, a.featured-card:focus-visible {
 }
 
 .card {
+  --bk: var(--bracket);
   position: relative;
   display: flex;
   flex-direction: column;
   background: var(--panel);
   border: 1px solid var(--panel-edge);
-  border-radius: 6px;
+  border-radius: 2px;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.18s ease, border-color 0.18s ease;
 }
 
 a.card:hover, a.card:focus-visible {
   transform: translateY(-3px);
-  border-color: var(--cyan-dim);
-  box-shadow: 0 10px 30px -12px rgba(88, 230, 255, 0.25);
+  border-color: var(--teal);
 }
 
 .card:not(a) { cursor: default; }
@@ -282,85 +333,77 @@ a.card:hover, a.card:focus-visible {
   min-width: 0;
 }
 
-/* Status badges — "live" cards render no badge at all (see gallery.js).
-   The other two each get their own color and animation so they read
-   as distinct from one another, not just from "live". */
+/* ---------------- status badges ----------------
+   Indicator dot + label (replaces the old bordered pill). All three
+   statuses render a badge now, including "live". Dot color and label
+   color are set independently (--badge-dot / color) because retired's
+   dot tone is deliberately too dark to double as text. */
 
 .status-badge {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.08em;
-  padding: 3px 8px;
-  border-radius: 3px;
-  border: 1px solid var(--cyan-dim);
-  color: var(--cyan);
-  background: rgba(88, 230, 255, 0.08);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   white-space: nowrap;
   position: relative;
 }
 
-/* known-issue: amber, pulsing — functional but flagged, wants attention.
-   The pulse animates opacity on a static-shadow ::after (compositor-only)
-   instead of animating box-shadow directly on the badge itself — profiling
-   showed animating box-shadow forces a main-thread repaint every frame,
-   for as long as the page is open (this was the confirmed cause of
-   measured scroll jank, not the starfield canvas or the retired-card
-   grayscale filter). */
-.status-badge.known-issue {
-  border-color: var(--amber);
-  color: var(--amber);
-  background: rgba(255, 180, 84, 0.1);
+.status-badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--badge-dot, currentColor);
+  flex-shrink: 0;
 }
+
+.status-badge.live { color: var(--live); }
+
+/* known-issue: warm amber-red, pulsing — functional but flagged.
+   The pulse rings the indicator dot: opacity animates on a ::after
+   that carries a STATIC box-shadow (compositor-only; fb3658b) —
+   never animate box-shadow itself. */
+.status-badge.known-issue { color: var(--warn); }
 
 .status-badge.known-issue::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: 0 0 0 4px rgba(255, 180, 84, 0.35);
+  left: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(217, 99, 74, 0.35);
   opacity: 0;
   pointer-events: none;
-  animation: badge-pulse-amber 2.4s ease-in-out infinite;
+  animation: badge-pulse 2.4s ease-in-out infinite;
 }
 
-@keyframes badge-pulse-amber {
+@keyframes badge-pulse {
   0%, 100% { opacity: 0; }
   50% { opacity: 1; }
 }
 
-/* retired: solid red, no animation — closed, not coming back */
+/* retired: flat dead-channel gray, no animation */
 .status-badge.retired {
-  border-color: var(--red);
-  color: var(--red);
-  background: rgba(255, 93, 93, 0.12);
+  color: var(--retired-ink);
+  --badge-dot: var(--retired);
 }
 
 .card.status-known-issue {
-  border-color: var(--amber-dim);
-}
-
-.card.status-known-issue::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: 6px;
-  box-shadow: inset 0 0 0 1px rgba(255, 180, 84, 0.18);
+  --bk: rgba(217, 99, 74, 0.45);
+  border-color: var(--warn-dim);
 }
 
 .card.status-retired {
-  border-color: var(--red-dim);
+  --bk: rgba(117, 96, 90, 0.4);
+  border-color: #322b29;
   filter: grayscale(0.5);
   opacity: 0.85;
-}
-
-.card.status-retired::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: 6px;
-  box-shadow: inset 0 0 0 1px rgba(255, 93, 93, 0.16);
 }
 
 .card-folder {
@@ -376,7 +419,8 @@ a.card:hover, a.card:focus-visible {
   font-family: var(--mono);
   font-size: 10px;
   color: var(--ink-dim);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   white-space: nowrap;
   flex-shrink: 0;
 }

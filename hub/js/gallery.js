@@ -2,16 +2,16 @@
 // gallery.js — loads hub/index.json and renders the featured hero
 // section plus the card grid.
 //
-// Status model: three values. "live" gets no badge and the default
-// card border (no special treatment needed). "known-issue" and
-// "retired" each get their own badge color, border treatment, and
-// card class so they're visibly distinct from each other, not just
-// from "live".
+// Status model: three values. Every status renders an indicator-dot
+// badge (dot + uppercase label); "known-issue" and "retired"
+// additionally get their own card border/bracket tint so they read
+// as distinct from each other, not just from "live".
 // ============================================================
 
 const PLACEHOLDER_PREVIEW = "assets/preview-placeholder.svg";
 
 const STATUS_LABELS = {
+  live: "LIVE",
   "known-issue": "KNOWN ISSUE",
   retired: "RETIRED",
 };
@@ -65,7 +65,7 @@ export class Gallery {
 
     const eyebrow = document.createElement("span");
     eyebrow.className = "featured-eyebrow";
-    eyebrow.textContent = "FEATURED BUILD";
+    eyebrow.textContent = "FEATURED SYSTEM";
 
     const title = document.createElement("h2");
     title.className = "featured-title";
@@ -90,7 +90,6 @@ export class Gallery {
   }
 
   _buildCard(entry) {
-    const isLive = entry.status === "live";
     const tag = entry.link ? "a" : "div";
     const card = document.createElement(tag);
     card.className = `card status-${entry.status}`;
@@ -128,12 +127,10 @@ export class Gallery {
     const tags = document.createElement("div");
     tags.className = "card-tags";
 
-    if (!isLive) {
-      const badge = document.createElement("span");
-      badge.className = `status-badge ${entry.status}`;
-      badge.textContent = STATUS_LABELS[entry.status] || entry.status;
-      tags.appendChild(badge);
-    }
+    const badge = document.createElement("span");
+    badge.className = `status-badge ${entry.status}`;
+    badge.textContent = STATUS_LABELS[entry.status] || entry.status;
+    tags.appendChild(badge);
 
     const folder = document.createElement("span");
     folder.className = "card-folder";

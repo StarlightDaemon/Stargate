@@ -1,29 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" role="img" aria-label="No preview image available">
   <defs>
     <radialGradient id="bg" cx="50%" cy="38%" r="75%">
-      <stop offset="0%" stop-color="#141b2c"/>
-      <stop offset="100%" stop-color="#05070c"/>
+      <stop offset="0%" stop-color="#141416"/>
+      <stop offset="100%" stop-color="#0a0a0d"/>
     </radialGradient>
     <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#58e6ff"/>
-      <stop offset="100%" stop-color="#2d5b74"/>
+      <stop offset="0%" stop-color="#6aa9a4"/>
+      <stop offset="100%" stop-color="#37544f"/>
     </linearGradient>
   </defs>
   <rect width="480" height="300" fill="url(#bg)"/>
-  <g opacity="0.55">
-    <circle cx="70" cy="48" r="1.4" fill="#cfe2f3"/>
-    <circle cx="140" cy="26" r="1" fill="#cfe2f3"/>
-    <circle cx="230" cy="54" r="1.6" fill="#cfe2f3"/>
-    <circle cx="330" cy="30" r="1" fill="#cfe2f3"/>
-    <circle cx="410" cy="60" r="1.4" fill="#cfe2f3"/>
-    <circle cx="45" cy="240" r="1.2" fill="#cfe2f3"/>
-    <circle cx="410" cy="250" r="1.2" fill="#cfe2f3"/>
-    <circle cx="360" cy="270" r="1" fill="#cfe2f3"/>
+  <g opacity="0.4">
+    <circle cx="70" cy="48" r="1.4" fill="#a89f92"/>
+    <circle cx="140" cy="26" r="1" fill="#a89f92"/>
+    <circle cx="230" cy="54" r="1.6" fill="#a89f92"/>
+    <circle cx="330" cy="30" r="1" fill="#a89f92"/>
+    <circle cx="410" cy="60" r="1.4" fill="#a89f92"/>
+    <circle cx="45" cy="240" r="1.2" fill="#a89f92"/>
+    <circle cx="410" cy="250" r="1.2" fill="#a89f92"/>
+    <circle cx="360" cy="270" r="1" fill="#a89f92"/>
   </g>
-  <circle cx="240" cy="150" r="72" fill="none" stroke="url(#ringGrad)" stroke-width="10" opacity="0.85"/>
-  <circle cx="240" cy="150" r="72" fill="none" stroke="#0d1420" stroke-width="10" stroke-dasharray="2 16" opacity="0.9"/>
-  <circle cx="240" cy="150" r="46" fill="#0a0f18"/>
-  <circle cx="240" cy="150" r="46" fill="none" stroke="#1d2c3f" stroke-width="1.5"/>
-  <circle cx="240" cy="106" r="6" fill="#ffb454"/>
-  <text x="240" y="242" text-anchor="middle" font-family="'Segoe UI', 'Avenir Next', system-ui, sans-serif" font-size="13" letter-spacing="2" fill="#5f7488">NO PREVIEW ON FILE</text>
+  <circle cx="240" cy="150" r="72" fill="none" stroke="url(#ringGrad)" stroke-width="10" opacity="0.8"/>
+  <circle cx="240" cy="150" r="72" fill="none" stroke="#101014" stroke-width="10" stroke-dasharray="2 16" opacity="0.9"/>
+  <circle cx="240" cy="150" r="46" fill="#101014"/>
+  <circle cx="240" cy="150" r="46" fill="none" stroke="#26262c" stroke-width="1.5"/>
+  <circle cx="240" cy="106" r="6" fill="#e8a33d"/>
+  <text x="240" y="242" text-anchor="middle" font-family="'IBM Plex Mono', 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace" font-size="12" letter-spacing="3" fill="#7c828a">NO PREVIEW ON FILE</text>
 </svg>

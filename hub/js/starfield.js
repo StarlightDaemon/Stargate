@@ -1,7 +1,13 @@
 // ============================================================
 // starfield.js — subtle animated starfield backdrop, kept dim so
 // it never competes with the card grid in front of it.
+// Points are a dim mix of the phosphor-amber live accent and
+// neutral gray tones (was uniform blue-white), at roughly half the
+// old density and brightness. The twinkle math and the rAF-driven
+// render cadence are unchanged.
 // ============================================================
+
+const TONES = ["#a08a5f", "#8a7a5f", "#7d7a72", "#6f6d66"];
 
 export class Starfield {
   constructor(canvas) {
@@ -16,23 +22,24 @@ export class Starfield {
   _resize() {
     this.canvas.width = innerWidth;
     this.canvas.height = innerHeight;
-    const count = Math.floor((innerWidth * innerHeight) / 9000);
+    const count = Math.floor((innerWidth * innerHeight) / 16000);
     this.stars = Array.from({ length: count }, () => ({
       x: Math.random() * innerWidth,
       y: Math.random() * innerHeight,
       r: Math.random() * 1.1 + 0.25,
       ph: Math.random() * Math.PI * 2,
       sp: 0.25 + Math.random() * 0.7,
+      c: TONES[Math.floor(Math.random() * TONES.length)],
     }));
   }
 
   render(t) {
     const { ctx, canvas, stars } = this;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#cfe2f3";
     for (const s of stars) {
-      const a = 0.12 + 0.22 * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph));
+      const a = 0.06 + 0.12 * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph));
       ctx.globalAlpha = a;
+      ctx.fillStyle = s.c;
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
       ctx.fill();
