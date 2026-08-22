@@ -1,0 +1,1476 @@
+/*
+ * Stargate Orthographic CAD Terminal - Design System & Stylesheet
+ * Bureau: Aethelgard-Voss Structural Telemetrics & CAD Engineering Bureau
+ * Spec: AV-CAD-STG-9042-REV-D
+ * Clean screen-native vector drafting blueprint aesthetics in Deep Prussian Blue.
+ */
+
+:root {
+  --app-scale: 1;
+  --bg-prussian-deep: #050e1a;
+  --bg-prussian-panel: #071526;
+  --bg-prussian-card: #0a1f38;
+  --bg-prussian-card-hover: #0e2a4d;
+  --bg-prussian-active: #133966;
+  
+  --cyan-bright: #5de6ff;
+  --cyan-radiant: #9ef3ff;
+  --cyan-subtle: #22a6db;
+  --cyan-faint: rgba(93, 230, 255, 0.15);
+  --cyan-border: rgba(93, 230, 255, 0.35);
+  --cyan-border-active: #5de6ff;
+  --white-drafting: #e0f7ff;
+  --white-pure: #ffffff;
+  --text-dim: #7da5c4;
+  --text-muted: #537594;
+
+  --accent-amber: #ffb703;
+  --accent-amber-glow: rgba(255, 183, 3, 0.35);
+  --accent-red: #ff3366;
+  --accent-red-glow: rgba(255, 51, 102, 0.4);
+  --accent-green: #00f0aa;
+
+  --font-mono: 'IBM Plex Mono', 'Space Mono', monospace;
+  --font-display: 'Space Mono', monospace;
+  --font-ui: 'Inter', sans-serif;
+
+  --shadow-vector-glow: 0 0 12px rgba(93, 230, 255, 0.45);
+  --shadow-vector-intense: 0 0 24px rgba(93, 230, 255, 0.8), 0 0 48px rgba(93, 230, 255, 0.4);
+  --shadow-panel: 0 8px 32px rgba(2, 6, 12, 0.75);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #02070e;
+  font-family: var(--font-ui);
+  color: var(--white-drafting);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Master 1920x1080 Scaler Container */
+#cad-viewport-scaler {
+  width: 1920px;
+  height: 1080px;
+  transform: scale(var(--app-scale));
+  transform-origin: center center;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#cad-terminal-app {
+  width: 1920px;
+  height: 1080px;
+  background-color: var(--bg-prussian-deep);
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(11, 32, 61, 0.6) 0%, rgba(5, 14, 26, 0.95) 100%),
+    linear-gradient(rgba(93, 230, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(93, 230, 255, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  display: grid;
+  grid-template-rows: 64px 1fr 56px;
+  overflow: hidden;
+  border: 1px solid var(--cyan-border);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 100px rgba(7, 21, 38, 0.5);
+  position: relative;
+}
+
+/* ==========================================================================
+   HEADER SECTION
+   ========================================================================== */
+#cad-header {
+  height: 64px;
+  background-color: rgba(7, 21, 38, 0.95);
+  border-bottom: 1px solid var(--cyan-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.cad-bureau-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge-icon {
+  font-size: 24px;
+  color: var(--cyan-bright);
+  text-shadow: var(--shadow-vector-glow);
+  animation: pulse-icon 4s infinite ease-in-out;
+}
+
+@keyframes pulse-icon {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.badge-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.bureau-name {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--white-pure);
+}
+
+.bureau-sub {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 1px;
+  color: var(--cyan-bright);
+  opacity: 0.85;
+}
+
+.cad-drawing-meta {
+  display: flex;
+  gap: 14px;
+  background-color: rgba(5, 14, 26, 0.8);
+  padding: 4px 12px;
+  border-radius: 2px;
+  border: 1px solid var(--cyan-faint);
+}
+
+.meta-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.meta-lbl {
+  color: var(--cyan-subtle);
+  font-weight: 600;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+}
+
+.telemetry-pill {
+  background-color: rgba(4, 12, 24, 0.9);
+  border: 1px solid var(--cyan-border);
+  padding: 6px 16px;
+  border-radius: 4px;
+  display: flex;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.pill-label {
+  color: var(--cyan-bright);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.pill-val {
+  color: var(--white-drafting);
+  min-width: 80px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cad-system-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(5, 14, 26, 0.8);
+  padding: 6px 12px;
+  border: 1px solid var(--cyan-faint);
+  border-radius: 4px;
+}
+
+.status-led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--cyan-subtle);
+  box-shadow: 0 0 8px var(--cyan-subtle);
+}
+
+.status-led.idle {
+  background-color: var(--cyan-subtle);
+  box-shadow: 0 0 8px var(--cyan-subtle);
+}
+
+.status-led.ready {
+  background-color: var(--accent-amber);
+  box-shadow: 0 0 12px var(--accent-amber);
+  animation: led-blink 1s infinite alternate;
+}
+
+.status-led.active {
+  background-color: var(--accent-green);
+  box-shadow: 0 0 16px var(--accent-green);
+}
+
+.status-led.hold {
+  background-color: var(--accent-red);
+  box-shadow: 0 0 16px var(--accent-red);
+  animation: led-blink 0.4s infinite alternate;
+}
+
+@keyframes led-blink {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.status-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 1px;
+  color: var(--white-drafting);
+}
+
+.cad-icon-btn {
+  background: rgba(7, 21, 38, 0.8);
+  border: 1px solid var(--cyan-border);
+  color: var(--cyan-bright);
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.cad-icon-btn:hover {
+  background: var(--bg-prussian-card-hover);
+  border-color: var(--cyan-bright);
+  box-shadow: var(--shadow-vector-glow);
+}
+
+/* Standing Convention: Small circular ? button, fixed top-right, styled to palette */
+.cad-help-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(7, 21, 38, 0.9);
+  border: 1.5px solid var(--cyan-bright);
+  color: var(--white-pure);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-vector-glow);
+  transition: all 0.25s ease;
+}
+
+.cad-help-btn:hover {
+  background: var(--cyan-bright);
+  color: var(--bg-prussian-deep);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-vector-intense);
+}
+
+/* ==========================================================================
+   WORKSPACE 3-COLUMN GRID
+   ========================================================================== */
+#cad-workspace-grid {
+  display: grid;
+  grid-template-columns: 460px 1fr 460px;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.cad-panel {
+  background-color: rgba(7, 21, 38, 0.85);
+  backdrop-filter: blur(6px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.cluster-1 {
+  border-right: 1px solid var(--cyan-border);
+}
+
+.cluster-2 {
+  border-left: 1px solid var(--cyan-border);
+}
+
+.panel-header {
+  border-bottom: 1px solid var(--cyan-border);
+  padding-bottom: 8px;
+}
+
+.panel-num {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--cyan-bright);
+  letter-spacing: 1.2px;
+  display: block;
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--white-pure);
+  margin-top: 2px;
+}
+
+.panel-sub {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--text-dim);
+  letter-spacing: 0.8px;
+}
+
+/* CAD Subcards */
+.cad-subcard {
+  background: rgba(10, 31, 56, 0.7);
+  border: 1px solid var(--cyan-border);
+  border-radius: 4px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subcard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed rgba(93, 230, 255, 0.2);
+  padding-bottom: 6px;
+}
+
+.subcard-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--cyan-bright);
+}
+
+.subcard-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 6px;
+  background: rgba(5, 14, 26, 0.8);
+  border: 1px solid var(--cyan-faint);
+  border-radius: 2px;
+  color: var(--white-drafting);
+}
+
+.subcard-hint {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  color: var(--text-dim);
+}
+
+/* Address Register 7-Slot Row */
+.address-slots-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.address-slot {
+  height: 48px;
+  background: rgba(4, 12, 24, 0.9);
+  border: 1px dashed var(--cyan-border);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.address-slot.locked {
+  background: rgba(93, 230, 255, 0.15);
+  border: 1.5px solid var(--cyan-bright);
+  box-shadow: 0 0 10px rgba(93, 230, 255, 0.35);
+}
+
+.address-slot.active-target {
+  border-color: var(--accent-amber);
+  box-shadow: 0 0 8px rgba(255, 183, 3, 0.4);
+}
+
+.slot-index-tag {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font-family: var(--font-mono);
+  font-size: 7px;
+  color: var(--text-dim);
+}
+
+.slot-caliper-tag {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  font-family: var(--font-mono);
+  font-size: 7px;
+  color: var(--cyan-bright);
+}
+
+.slot-glyph-svg {
+  width: 22px;
+  height: 22px;
+  margin-top: 8px;
+}
+
+.slot-empty-dash {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: rgba(93, 230, 255, 0.25);
+  margin-top: 8px;
+}
+
+/* 25-Glyph Palette Grid */
+.glyph-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.glyph-key-btn {
+  height: 46px;
+  background: rgba(7, 20, 38, 0.85);
+  border: 1px solid var(--cyan-border);
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.glyph-key-btn:hover {
+  background: var(--bg-prussian-card-hover);
+  border-color: var(--cyan-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 0 8px rgba(93, 230, 255, 0.4);
+}
+
+.glyph-key-btn:active {
+  background: var(--cyan-bright);
+  transform: translateY(0);
+}
+
+.glyph-key-btn:active svg path {
+  stroke: var(--bg-prussian-deep);
+}
+
+.glyph-key-svg {
+  width: 22px;
+  height: 22px;
+}
+
+.glyph-key-code {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  color: var(--cyan-subtle);
+  margin-top: 2px;
+}
+
+.glyph-key-btn.used-in-address {
+  border-color: rgba(93, 230, 255, 0.7);
+  background: rgba(93, 230, 255, 0.12);
+}
+
+/* Caliper Status Tracker Pills */
+.caliper-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.caliper-status-pill {
+  background: rgba(4, 12, 24, 0.8);
+  border: 1px solid var(--cyan-faint);
+  border-radius: 2px;
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.caliper-status-pill.locked {
+  border-color: var(--cyan-bright);
+  background: rgba(93, 230, 255, 0.12);
+}
+
+.pill-node-title {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--cyan-bright);
+}
+
+.pill-node-state {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  color: var(--text-dim);
+}
+
+.caliper-status-pill.locked .pill-node-state {
+  color: var(--white-pure);
+}
+
+/* ==========================================================================
+   CENTER DRAWING VIEWPORT
+   ========================================================================== */
+#panel-drawing-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #040d1a;
+  overflow: hidden;
+}
+
+.cad-frame-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid var(--cyan-bright);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.cad-frame-corner.top-left { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+.cad-frame-corner.top-right { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+.cad-frame-corner.bottom-left { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+.cad-frame-corner.bottom-right { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+.drawing-watermark-title {
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.wm-main {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: rgba(93, 230, 255, 0.4);
+}
+
+.wm-sub {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 1px;
+  color: rgba(93, 230, 255, 0.25);
+}
+
+/* Dynamic 3-Stage Canvas Layer */
+.portal-canvas-layer {
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* SVG Technical Drawing Wrapper */
+.svg-ring-wrapper {
+  position: relative;
+  width: 900px;
+  height: 900px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cad-svg-viewport {
+  width: 100%;
+  height: 100%;
+}
+
+/* Section Callout Inset Box */
+.cad-section-inset {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  width: 170px;
+  height: 110px;
+  background: rgba(7, 21, 38, 0.9);
+  border: 1px solid var(--cyan-border);
+  border-radius: 3px;
+  padding: 6px 8px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+}
+
+.inset-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--cyan-faint);
+  padding-bottom: 3px;
+  margin-bottom: 4px;
+}
+
+.inset-title {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: bold;
+  color: var(--cyan-bright);
+}
+
+.inset-code {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  color: var(--text-dim);
+}
+
+.inset-svg {
+  width: 100%;
+  height: 80px;
+}
+
+/* High-Priority Warning / Alert Overlay Banner */
+.cad-alert-overlay {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(180, 20, 50, 0.95);
+  border: 2px solid #ff3366;
+  border-radius: 4px;
+  padding: 10px 24px;
+  box-shadow: 0 0 24px rgba(255, 51, 102, 0.8);
+  z-index: 100;
+  animation: banner-pulse 0.4s infinite alternate;
+}
+
+.cad-alert-overlay.hidden {
+  display: none !important;
+}
+
+@keyframes banner-pulse {
+  0% { transform: translateX(-50%) scale(0.98); }
+  100% { transform: translateX(-50%) scale(1.02); }
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.alert-icon {
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.alert-text {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #ffffff;
+}
+
+/* 3-Stage Indicator Overlay */
+.stage-overlay {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: rgba(7, 21, 38, 0.95);
+  border: 1.5px solid var(--cyan-bright);
+  border-radius: 4px;
+  padding: 8px 16px;
+  z-index: 50;
+  box-shadow: var(--shadow-vector-glow);
+}
+
+.stage-overlay.hidden {
+  display: none !important;
+}
+
+.stage-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 220px;
+}
+
+.stage-step {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent-amber);
+  letter-spacing: 1px;
+}
+
+.stage-name {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--white-pure);
+  letter-spacing: 1px;
+}
+
+.stage-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(4, 12, 24, 0.8);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--cyan-bright);
+  box-shadow: 0 0 8px var(--cyan-bright);
+  transition: width 0.1s linear;
+}
+
+/* ==========================================================================
+   CLUSTER 2: COMMAND & APERTURE CONTROLS
+   ========================================================================== */
+.action-execution-subcard {
+  border-color: rgba(93, 230, 255, 0.5);
+  background: rgba(11, 34, 61, 0.8);
+}
+
+/* Primary Execution Button */
+.cad-btn-primary-action {
+  width: 100%;
+  height: 64px;
+  background: linear-gradient(135deg, rgba(14, 46, 82, 0.9) 0%, rgba(8, 28, 51, 0.95) 100%);
+  border: 1.5px solid var(--cyan-border);
+  border-radius: 4px;
+  color: var(--text-dim);
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 0 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cad-btn-primary-action.ready {
+  background: linear-gradient(135deg, rgba(22, 77, 138, 0.95) 0%, rgba(12, 44, 82, 0.98) 100%);
+  border-color: var(--cyan-bright);
+  color: var(--white-pure);
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(93, 230, 255, 0.6), inset 0 0 15px rgba(93, 230, 255, 0.3);
+  animation: ready-pulse-glow 1.8s infinite alternate;
+}
+
+@keyframes ready-pulse-glow {
+  0% {
+    box-shadow: 0 0 15px rgba(93, 230, 255, 0.5), inset 0 0 10px rgba(93, 230, 255, 0.2);
+    border-color: var(--cyan-bright);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(93, 230, 255, 0.9), inset 0 0 25px rgba(93, 230, 255, 0.5);
+    border-color: #ffffff;
+  }
+}
+
+.cad-btn-primary-action.active-running {
+  background: linear-gradient(135deg, #0088aa 0%, #004466 100%);
+  border-color: #ffffff;
+  color: #ffffff;
+  box-shadow: 0 0 30px #00f0aa;
+}
+
+.btn-icon {
+  font-size: 24px;
+}
+
+.btn-text-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.btn-main-label {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.btn-sub-label {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.8px;
+  opacity: 0.85;
+}
+
+.btn-glimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: skewX(-25deg);
+}
+
+.cad-btn-primary-action.ready .btn-glimmer {
+  animation: glimmer-slide 2.5s infinite;
+}
+
+@keyframes glimmer-slide {
+  0% { left: -100%; }
+  40%, 100% { left: 180%; }
+}
+
+/* Safety Interlock Container */
+.safety-interlock-container {
+  background: rgba(5, 14, 26, 0.9);
+  border: 1px solid var(--cyan-border);
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.interlock-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.interlock-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+}
+
+.interlock-badge {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.badge-released {
+  color: var(--accent-green);
+}
+
+.badge-engaged {
+  color: var(--accent-red);
+}
+
+.cad-toggle-btn {
+  background: rgba(7, 21, 38, 0.9);
+  border: 1px solid var(--cyan-border);
+  border-radius: 3px;
+  padding: 6px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.cad-toggle-btn.released {
+  border-color: var(--accent-green);
+}
+
+.cad-toggle-btn.engaged {
+  border-color: var(--accent-red);
+  background: rgba(255, 51, 102, 0.15);
+  box-shadow: 0 0 10px rgba(255, 51, 102, 0.4);
+}
+
+.toggle-track {
+  width: 28px;
+  height: 14px;
+  background: rgba(4, 12, 24, 0.9);
+  border-radius: 7px;
+  border: 1px solid var(--cyan-border);
+  position: relative;
+}
+
+.toggle-handle {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cad-toggle-btn.engaged .toggle-handle {
+  transform: translateX(12px);
+  background: var(--accent-red);
+}
+
+.toggle-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--white-drafting);
+}
+
+/* Disengage Button */
+.cad-btn-disengage {
+  width: 100%;
+  height: 44px;
+  background: rgba(8, 24, 44, 0.9);
+  border: 1px solid var(--cyan-border);
+  border-radius: 4px;
+  color: var(--white-drafting);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.cad-btn-disengage:hover {
+  background: rgba(180, 20, 50, 0.4);
+  border-color: var(--accent-red);
+  box-shadow: 0 0 12px rgba(255, 51, 102, 0.4);
+}
+
+.cad-btn-disengage:active {
+  background: rgba(180, 20, 50, 0.8);
+}
+
+/* Quick-Dial Presets & Tiers */
+.quickdial-tier-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.tier-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px dashed rgba(93, 230, 255, 0.2);
+  padding-bottom: 3px;
+}
+
+.tier-tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+.tag-t1 {
+  background: rgba(0, 240, 170, 0.15);
+  border: 1px solid var(--accent-green);
+  color: var(--accent-green);
+}
+
+.tag-t2 {
+  background: rgba(255, 183, 3, 0.15);
+  border: 1px solid var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.tier-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--white-drafting);
+}
+
+.preset-buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.preset-card-btn {
+  background: rgba(5, 16, 30, 0.85);
+  border: 1px solid var(--cyan-border);
+  border-radius: 3px;
+  padding: 6px 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.preset-card-btn:hover {
+  background: var(--bg-prussian-card-hover);
+  border-color: var(--cyan-bright);
+  transform: translateX(2px);
+  box-shadow: 0 0 8px rgba(93, 230, 255, 0.35);
+}
+
+.preset-card-btn.active-preset {
+  background: rgba(93, 230, 255, 0.2);
+  border-color: var(--cyan-bright);
+  box-shadow: 0 0 12px rgba(93, 230, 255, 0.5);
+}
+
+.preset-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.preset-name {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--white-pure);
+}
+
+.preset-sub {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-dim);
+}
+
+.preset-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.preset-energy {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--cyan-bright);
+  font-weight: 600;
+}
+
+.preset-status {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  color: var(--accent-green);
+}
+
+/* Telemetric Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.metric-cell {
+  background: rgba(4, 12, 24, 0.85);
+  border: 1px solid var(--cyan-faint);
+  border-radius: 3px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-lbl {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.metric-val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cyan-bright);
+  text-shadow: 0 0 6px rgba(93, 230, 255, 0.4);
+}
+
+/* ==========================================================================
+   FOOTER SECTION & TITLE BLOCK
+   ========================================================================== */
+#cad-footer {
+  height: 56px;
+  background-color: rgba(5, 16, 30, 0.95);
+  border-top: 1px solid var(--cyan-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 100;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Standing Convention: Bottom-left StarlightDaemon link */
+.starlight-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--cyan-bright);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  padding: 4px 8px;
+  background: rgba(7, 21, 38, 0.8);
+  border: 1px solid var(--cyan-border);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.starlight-link:hover {
+  background: var(--cyan-bright);
+  color: var(--bg-prussian-deep);
+  box-shadow: var(--shadow-vector-glow);
+}
+
+.starlight-icon {
+  font-size: 12px;
+}
+
+.cad-status-stream {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.stream-prefix {
+  color: var(--cyan-subtle);
+  font-weight: 700;
+}
+
+.stream-text {
+  color: var(--text-dim);
+}
+
+/* ISO Title Block */
+.iso-title-block {
+  display: flex;
+  border: 1px solid var(--cyan-border);
+  background: rgba(4, 12, 24, 0.9);
+}
+
+.title-cell {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 10px;
+  border-right: 1px solid var(--cyan-border);
+}
+
+.title-cell:last-child {
+  border-right: none;
+}
+
+.cell-k {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  color: var(--text-muted);
+}
+
+.cell-v {
+  font-family: var(--font-display);
+  font-size: 8.5px;
+  font-weight: 700;
+  color: var(--white-pure);
+  letter-spacing: 0.5px;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cad-render-mode {
+  display: flex;
+  gap: 8px;
+}
+
+.mode-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 3px 6px;
+  background: rgba(7, 20, 38, 0.6);
+  border: 1px solid var(--cyan-faint);
+  border-radius: 2px;
+  color: var(--text-muted);
+}
+
+.mode-tag.active {
+  color: var(--cyan-bright);
+  border-color: var(--cyan-border);
+  background: rgba(93, 230, 255, 0.1);
+}
+
+/* Standing Convention: Bottom-right small version label */
+.version-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cyan-bright);
+  background: rgba(4, 12, 24, 0.9);
+  padding: 4px 8px;
+  border: 1px solid var(--cyan-border);
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   OPERATOR GUIDE MODAL OVERLAY
+   ========================================================================== */
+.cad-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(2, 6, 12, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.cad-modal-overlay.hidden {
+  display: none !important;
+}
+
+.modal-card {
+  width: 780px;
+  max-height: 85vh;
+  background: var(--bg-prussian-panel);
+  border: 1.5px solid var(--cyan-bright);
+  border-radius: 6px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), var(--shadow-vector-glow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  background: rgba(5, 16, 30, 0.95);
+  border-bottom: 1px solid var(--cyan-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-icon {
+  font-size: 20px;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--white-pure);
+}
+
+.modal-sub {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--cyan-bright);
+}
+
+.modal-close-btn {
+  background: none;
+  border: 1px solid var(--cyan-border);
+  color: var(--white-drafting);
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+  color: #ffffff;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-section h4 {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  color: var(--cyan-bright);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  border-bottom: 1px dashed rgba(93, 230, 255, 0.25);
+  padding-bottom: 3px;
+}
+
+.modal-section p, .modal-section li {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.modal-section strong {
+  color: var(--white-pure);
+}
+
+.modal-section code {
+  font-family: var(--font-mono);
+  background: rgba(4, 12, 24, 0.8);
+  padding: 1px 4px;
+  border: 1px solid var(--cyan-faint);
+  border-radius: 2px;
+  color: var(--cyan-bright);
+  font-size: 11px;
+}
+
+.modal-section ul {
+  padding-left: 20px;
+  margin-top: 4px;
+}
+
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 8px 12px;
+  align-items: center;
+  background: rgba(4, 12, 24, 0.8);
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--cyan-faint);
+  margin-top: 6px;
+}
+
+.key-combo kbd {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  background: rgba(7, 21, 38, 0.9);
+  border: 1px solid var(--cyan-border);
+  padding: 3px 6px;
+  border-radius: 3px;
+  color: var(--cyan-bright);
+}
+
+.key-desc {
+  font-family: var(--font-ui);
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+
+.modal-footer {
+  padding: 12px 20px;
+  background: rgba(5, 16, 30, 0.95);
+  border-top: 1px solid var(--cyan-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-footer-meta {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  color: var(--text-muted);
+}
+
+.cad-btn-secondary {
+  background: rgba(7, 21, 38, 0.9);
+  border: 1px solid var(--cyan-border);
+  color: var(--cyan-bright);
+  padding: 6px 14px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cad-btn-secondary:hover {
+  background: var(--cyan-bright);
+  color: var(--bg-prussian-deep);
+}
