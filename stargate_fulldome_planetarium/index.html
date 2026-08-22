@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VXD-9000 Chrono-Celestial Projector Console | Mount Tycho Fulldome</title>
+  <meta name="description" content="Mount Tycho Zenith Fulldome Observatory & Public Sky Theatre - VXD-9000 Optomechanical Celestial Ephemeris Dialing Console">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Orbitron:wght@400;600;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Scaled Root Viewport -->
+  <div id="app-viewport">
+    
+    <!-- Fulldome Projection Backdrop Canvas -->
+    <canvas id="dome-canvas" width="1920" height="1080"></canvas>
+    <div id="dome-vignette"></div>
+    <div id="laser-reticle-overlay"></div>
+    <div id="shockwave-bloom"></div>
+
+    <!-- Header Navigation & Facility Telemetry -->
+    <header id="console-header">
+      <div class="header-left">
+        <div class="facility-badge">
+          <div class="pulse-beacon"></div>
+          <span class="facility-org">MOUNT TYCHO ZENITH OBSERVATORY</span>
+        </div>
+        <h1 class="console-title">VXD-9000 CHRONO-CELESTIAL PROJECTOR</h1>
+        <div class="console-subtext">FULLDOME OPTOMECHANICAL STAR-BALL & HEX-LASER APERTURE SYSTEM</div>
+      </div>
+
+      <div class="header-center">
+        <div class="header-telemetry-item">
+          <span class="tele-label">SIDEREAL EPOCH</span>
+          <span class="tele-val" id="sidereal-time">18h 42m 19s</span>
+        </div>
+        <div class="header-telemetry-item">
+          <span class="tele-label">ZENITH ZENITH</span>
+          <span class="tele-val" id="zenith-angle">+89° 58' 22"</span>
+        </div>
+        <div class="header-telemetry-item">
+          <span class="tele-label">OPTICAL SYSTEM</span>
+          <span class="tele-val highlight-cyan" id="system-status-pill">STANDBY // READY</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button id="btn-sound-toggle" class="header-btn" title="Toggle Synthesized Audio" aria-label="Toggle Audio">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.08"></path>
+          </svg>
+          <span id="sound-label">AUDIO: ON</span>
+        </button>
+        
+        <button id="btn-operator-reference" class="header-btn circular-help" title="Operator Reference & System Manual" aria-label="Operator Reference">
+          ?
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Panoramic Workspace (3-Column Architecture) -->
+    <main id="console-workspace">
+      
+      <!-- Left Column: Ephemeris Address Buffer & Real-Time Optical Telemetry -->
+      <section id="panel-left" class="console-column">
+        
+        <!-- Ephemeris Vector Buffer (5 Nodes) -->
+        <div class="glass-card" id="ephemeris-buffer-card">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <span class="card-tag">ADDRESS REGISTRY</span>
+              <h2 class="card-title">EPHEMERIS BUFFER</h2>
+            </div>
+            <div class="buffer-capacity">
+              <span id="buffer-count">0</span>/5 VECTORS
+            </div>
+          </div>
+
+          <div class="buffer-slots-container" id="buffer-slots">
+            <!-- Slot 1 -->
+            <div class="buffer-slot" data-slot="0">
+              <div class="slot-idx">V1</div>
+              <div class="slot-content empty">
+                <span class="slot-symbol">---</span>
+                <span class="slot-name">EMPTY VECTOR</span>
+                <span class="slot-az">AZ: 000.0°</span>
+              </div>
+              <div class="slot-lock-indicator"></div>
+            </div>
+            <!-- Slot 2 -->
+            <div class="buffer-slot" data-slot="1">
+              <div class="slot-idx">V2</div>
+              <div class="slot-content empty">
+                <span class="slot-symbol">---</span>
+                <span class="slot-name">EMPTY VECTOR</span>
+                <span class="slot-az">AZ: 000.0°</span>
+              </div>
+              <div class="slot-lock-indicator"></div>
+            </div>
+            <!-- Slot 3 -->
+            <div class="buffer-slot" data-slot="2">
+              <div class="slot-idx">V3</div>
+              <div class="slot-content empty">
+                <span class="slot-symbol">---</span>
+                <span class="slot-name">EMPTY VECTOR</span>
+                <span class="slot-az">AZ: 000.0°</span>
+              </div>
+              <div class="slot-lock-indicator"></div>
+            </div>
+            <!-- Slot 4 -->
+            <div class="buffer-slot" data-slot="3">
+              <div class="slot-idx">V4</div>
+              <div class="slot-content empty">
+                <span class="slot-symbol">---</span>
+                <span class="slot-name">EMPTY VECTOR</span>
+                <span class="slot-az">AZ: 000.0°</span>
+              </div>
+              <div class="slot-lock-indicator"></div>
+            </div>
+            <!-- Slot 5 -->
+            <div class="buffer-slot" data-slot="4">
+              <div class="slot-idx">V5</div>
+              <div class="slot-content empty">
+                <span class="slot-symbol">---</span>
+                <span class="slot-name">EMPTY VECTOR</span>
+                <span class="slot-az">AZ: 000.0°</span>
+              </div>
+              <div class="slot-lock-indicator"></div>
+            </div>
+          </div>
+
+          <div class="buffer-action-bar">
+            <div class="collimator-lock-status" id="buffer-lock-msg">
+              SELECT 5 CELESTIAL SECTORS TO ENGAGE APERTURE
+            </div>
+            <button id="btn-clear-buffer" class="btn-micro" title="Clear Buffer Slots">CLEAR BUFFER</button>
+          </div>
+        </div>
+
+        <!-- Telemetry & Optomechanical Diagnostics -->
+        <div class="glass-card" id="telemetry-card">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <span class="card-tag">INSTRUMENT METRICS</span>
+              <h2 class="card-title">PROJECTOR TELEMETRY</h2>
+            </div>
+            <div class="live-dot-pulse"></div>
+          </div>
+
+          <div class="telemetry-grid">
+            <div class="telemetry-box">
+              <div class="tele-box-label">XENON ARC FLUX</div>
+              <div class="tele-box-val" id="tele-flux">0.0 kW</div>
+              <div class="tele-bar"><div class="tele-bar-fill" id="bar-flux" style="width: 0%;"></div></div>
+            </div>
+            <div class="telemetry-box">
+              <div class="tele-box-label">FIBER STARBEADS</div>
+              <div class="tele-box-val" id="tele-stars">10,800</div>
+              <div class="tele-bar"><div class="tele-bar-fill" id="bar-stars" style="width: 100%;"></div></div>
+            </div>
+            <div class="telemetry-box">
+              <div class="tele-box-label">LENS IRIS DILATION</div>
+              <div class="tele-box-val" id="tele-iris">f/1.2 - 18mm</div>
+              <div class="tele-bar"><div class="tele-bar-fill" id="bar-iris" style="width: 15%;"></div></div>
+            </div>
+            <div class="telemetry-box">
+              <div class="tele-box-label">COLLIMATOR RPM</div>
+              <div class="tele-box-val" id="tele-rpm">0.0 RPM</div>
+              <div class="tele-bar"><div class="tele-bar-fill" id="bar-rpm" style="width: 0%;"></div></div>
+            </div>
+          </div>
+
+          <div class="telemetry-footer-stats">
+            <div class="stat-line">
+              <span>DOME THEATRE AMBIENT:</span>
+              <span class="stat-val" id="tele-temp">18.4°C / 42% RH</span>
+            </div>
+            <div class="stat-line">
+              <span>AUDIENCE LUX LEVEL:</span>
+              <span class="stat-val" id="tele-lux">0.04 LUX (DARK-ADAPTED)</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Center Column: The Primary Projection Instrument (Ring & Fisheye Core) -->
+      <section id="panel-center" class="console-column">
+        
+        <!-- Primary Named Cluster 1: Ephemeris Sector Dialing Array -->
+        <div id="ephemeris-sector-dialing-array" class="instrument-container">
+          
+          <!-- Outer Compass & Azimuth Vernier Rings (SVG) -->
+          <svg id="azimuth-svg" viewBox="0 0 760 760" width="760" height="760">
+            <defs>
+              <radialGradient id="starball-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="rgba(0, 240, 255, 0.35)" />
+                <stop offset="50%" stop-color="rgba(157, 78, 221, 0.15)" />
+                <stop offset="100%" stop-color="rgba(5, 10, 25, 0)" />
+              </radialGradient>
+              <filter id="neon-bloom" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Radial Background Glow -->
+            <circle cx="380" cy="380" r="375" fill="url(#starball-glow)" />
+
+            <!-- Outer Fixed Azimuth Track -->
+            <circle cx="380" cy="380" r="365" class="svg-ring-track" />
+            <circle cx="380" cy="380" r="350" class="svg-ring-subtrack" />
+            
+            <!-- Azimuth Angle Degree Ticks & Numbers -->
+            <g id="azimuth-ticks-group"></g>
+
+            <!-- Motorized Optical Cage Ring (Rotates on Slew) -->
+            <g id="motorized-cage-ring">
+              <!-- Mechanical Gear Teeth & Structural Struts -->
+              <circle cx="380" cy="380" r="325" class="svg-cage-outer" />
+              <circle cx="380" cy="380" r="235" class="svg-cage-inner" />
+              <g id="cage-struts-group"></g>
+              <g id="cage-gears-group"></g>
+
+              <!-- Target Alignment Indexer / Zenith Latch at Top (0° / 360°) -->
+              <g id="zenith-aperture-latch" transform="translate(380, 55)">
+                <polygon points="0,-18 12,-4 6,12 -6,12 -12,-4" class="latch-bezel" />
+                <circle cx="0" cy="0" r="4" class="latch-core-light" />
+                <line x1="0" y1="12" x2="0" y2="40" class="latch-laser-pointer" />
+              </g>
+            </g>
+
+            <!-- Inner Optical Collimator Grid & Reticle Blades -->
+            <circle cx="380" cy="380" r="170" class="svg-inner-optic-ring" />
+            <circle cx="380" cy="380" r="120" class="svg-inner-focal-ring" />
+            <g id="optic-crosshairs-group">
+              <line x1="210" y1="380" x2="550" y2="380" class="optic-crosshair" />
+              <line x1="380" y1="210" x2="380" y2="550" class="optic-crosshair" />
+              <circle cx="380" cy="380" r="70" class="optic-target-ring" />
+            </g>
+          </svg>
+
+          <!-- Interactive 12 Celestial Sector Nodes Container (DOM Elements over SVG) -->
+          <div id="sector-nodes-layer">
+            <!-- Dynamically populated 12 sectors with original glyph diagrams -->
+          </div>
+
+          <!-- Central Starball Optical Fisheye Iris Core -->
+          <div id="iris-core">
+            <div class="iris-aperture-blades" id="aperture-blades">
+              <div class="blade blade-1"></div>
+              <div class="blade blade-2"></div>
+              <div class="blade blade-3"></div>
+              <div class="blade blade-4"></div>
+              <div class="blade blade-5"></div>
+              <div class="blade blade-6"></div>
+            </div>
+            
+            <div class="iris-optics-lens">
+              <div class="lens-reflection"></div>
+              <div class="lens-reticle-spin" id="lens-reticle"></div>
+              
+              <!-- Core Projection Status HUD in Center -->
+              <div class="core-status-hud">
+                <div class="hud-phase-label" id="hud-phase-name">STANDBY</div>
+                <div class="hud-address-display" id="hud-address-preview">0/5 LOCKED</div>
+                <div class="hud-flux-meter" id="hud-flux-meter">
+                  <div class="hud-flux-track">
+                    <div class="hud-flux-fill" id="hud-flux-bar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Optical Stage Emitter Ring (Glows during Buildup & Active) -->
+            <div class="emitter-pulse-ring" id="emitter-ring"></div>
+          </div>
+
+          <!-- Dynamic Mode Banner underneath the Ring -->
+          <div class="instrument-status-banner" id="instrument-banner">
+            <span class="banner-icon">◈</span>
+            <span id="banner-text">COLLIMATOR SYSTEM STANDBY // SELECT CELESTIAL SECTORS TO CONFIGURE SKY</span>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Right Column: Quick-Dial Archive & Master Console -->
+      <section id="panel-right" class="console-column">
+        
+        <!-- Quick-Dial Automated Ephemeris Archive (2 Tiers, 6 Preloaded Entries) -->
+        <div class="glass-card" id="preset-archive-panel">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <span class="card-tag">ARCHIVED EPHEMERIS</span>
+              <h2 class="card-title">QUICK-DIAL PRESETS</h2>
+            </div>
+            <span class="badge-tier-count">6 ARCHIVES</span>
+          </div>
+
+          <div class="preset-tiers-container">
+            
+            <!-- Tier 1: Public Educational Sky Shows -->
+            <div class="preset-tier-section">
+              <div class="tier-header">
+                <span class="tier-num">TIER 1</span>
+                <span class="tier-name">PUBLIC SKY THEATRE SHOWS</span>
+              </div>
+              <div class="preset-list">
+                
+                <div class="preset-card" data-preset="solstice-apex">
+                  <div class="preset-card-top">
+                    <span class="preset-name">Solstice Midnight Apex</span>
+                    <span class="preset-epoch">SUMMER // 2088</span>
+                  </div>
+                  <div class="preset-glyphs">
+                    <span class="pglyph">APX</span>
+                    <span class="pglyph">CRN</span>
+                    <span class="pglyph">PLH</span>
+                    <span class="pglyph">LYR</span>
+                    <span class="pglyph">CAS</span>
+                  </div>
+                  <div class="preset-desc">Zenith hyperion cluster & northern crown meridian transit.</div>
+                  <button class="btn-preset-slew" data-preset-id="0">AUTO-SLEW TO EPHEMERIS</button>
+                </div>
+
+                <div class="preset-card" data-preset="perseid-radiant">
+                  <div class="preset-card-top">
+                    <span class="preset-name">Perseid Meteor Zenith</span>
+                    <span class="preset-epoch">ANNUAL // PEAK</span>
+                  </div>
+                  <div class="preset-glyphs">
+                    <span class="pglyph">CAS</span>
+                    <span class="pglyph">TAU</span>
+                    <span class="pglyph">VTX</span>
+                    <span class="pglyph">ORI</span>
+                    <span class="pglyph">APX</span>
+                  </div>
+                  <div class="preset-desc">High-radiant annual meteor shower with atmospheric ionized trails.</div>
+                  <button class="btn-preset-slew" data-preset-id="1">AUTO-SLEW TO EPHEMERIS</button>
+                </div>
+
+                <div class="preset-card" data-preset="boreal-aurora">
+                  <div class="preset-card-top">
+                    <span class="preset-name">Boreal Aurora Veil</span>
+                    <span class="preset-epoch">IONOSPHERE // G5</span>
+                  </div>
+                  <div class="preset-glyphs">
+                    <span class="pglyph">CRN</span>
+                    <span class="pglyph">VEL</span>
+                    <span class="pglyph">ERI</span>
+                    <span class="pglyph">HYD</span>
+                    <span class="pglyph">SGR</span>
+                  </div>
+                  <div class="preset-desc">Geomagnetic curtain emission overlaid upon equatorial field stars.</div>
+                  <button class="btn-preset-slew" data-preset-id="2">AUTO-SLEW TO EPHEMERIS</button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Tier 2: Deep-Sky Archaeo-Astrophysics -->
+            <div class="preset-tier-section">
+              <div class="tier-header">
+                <span class="tier-num">TIER 2</span>
+                <span class="tier-name">DEEP-SKY ARCHAEO-ASTROPHYSICS</span>
+              </div>
+              <div class="preset-list">
+
+                <div class="preset-card" data-preset="pleiades-void">
+                  <div class="preset-card-top">
+                    <span class="preset-name">Pleiades Void Horizon</span>
+                    <span class="preset-epoch">TAU-0441 // INFRA</span>
+                  </div>
+                  <div class="preset-glyphs">
+                    <span class="pglyph">PLH</span>
+                    <span class="pglyph">ERI</span>
+                    <span class="pglyph">VTX</span>
+                    <span class="pglyph">ORI</span>
+                    <span class="pglyph">HYD</span>
+                  </div>
+                  <div class="preset-desc">Relativistic blue reflection nebula analysis with dust veil collimation.</div>
+                  <button class="btn-preset-slew" data-preset-id="3">AUTO-SLEW TO EPHEMERIS</button>
+                </div>
+
+                <div class="preset-card" data-preset="galactic-core">
+                  <div class="preset-card-top">
+                    <span class="preset-name">Galactic Core Sagittarius-A*</span>
+                    <span class="preset-epoch">SUPERMASSIVE // S2</span>
+                  </div>
+                  <div class="preset-glyphs">
+                    <span class="pglyph">SGR</span>
+                    <span class="pglyph">APX</span>
+                    <span class="pglyph">TAU</span>
+                    <span class="pglyph">LYR</span>
+                    <span class="pglyph">VEL</span>
+                  </div>
+                  <div class="preset-desc">Gravitational accretion boundary & dense galactic center stellar orbits.</div>
+                  <button class="btn-preset-slew" data-preset-id="4">AUTO-SLEW TO EPHEMERIS</button>
+                </div>
+
+                <div class="preset-card" data-preset="carina-nursery">
+                  <div class="preset-card-top">
+                    <span class="preset-name">Carina Nebula Micro-Lensing</span>
+                    <span class="preset-epoch">PROTO-STELLAR // 8K</span>
+                  </div>
+                  <div class="preset-glyphs">
+                    <span class="pglyph">VTX</span>
+                    <span class="pglyph">HYD</span>
+                    <span class="pglyph">CAS</span>
+                    <span class="pglyph">CRN</span>
+                    <span class="pglyph">PLH</span>
+                  </div>
+                  <div class="preset-desc">Deep infrared stellar nursery collimation with high-density proto-stars.</div>
+                  <button class="btn-preset-slew" data-preset-id="5">AUTO-SLEW TO EPHEMERIS</button>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Primary Named Cluster 2: Zenith Master Console -->
+        <div class="glass-card" id="zenith-master-console">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <span class="card-tag">IGNITION & SHUTTER MASTER</span>
+              <h2 class="card-title">ZENITH MASTER CONSOLE</h2>
+            </div>
+            <div class="master-power-led" id="master-led"></div>
+          </div>
+
+          <!-- Safety Interlock Switch (DEFAULTS TO RELEASED / ARMED!) -->
+          <div class="interlock-module">
+            <div class="interlock-info">
+              <span class="interlock-title">HIGH-FLUX LASER INTERLOCK</span>
+              <span class="interlock-status" id="interlock-status-text">RELEASED // READY TO EMIT</span>
+            </div>
+            <label class="switch-container" title="Safety Interlock: Release to enable projection">
+              <input type="checkbox" id="interlock-switch" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- Master Action Controls -->
+          <div class="master-action-grid">
+            
+            <!-- Dedicated Activation Trigger Button -->
+            <button id="btn-zenith-ignition" class="btn-master-ignition" disabled>
+              <div class="btn-bg-glow"></div>
+              <div class="btn-content-wrap">
+                <span class="btn-action-icon">⏣</span>
+                <span class="btn-action-title">EMIT ZENITH SKY PROJECTION</span>
+                <span class="btn-action-sub" id="ignition-subtext">AWAITING 5/5 EPHEMERIS LOCK</span>
+              </div>
+            </button>
+
+            <!-- Always Reachable Disengage Button -->
+            <button id="btn-dome-abort" class="btn-master-abort" title="Immediately collapse aperture and reset dome projection">
+              <span class="abort-icon">✕</span>
+              <span class="abort-text">ABORT / DOME SHUTTER RESET</span>
+            </button>
+
+          </div>
+
+          <!-- Master Feedback Strip -->
+          <div class="master-telemetry-strip" id="master-strip">
+            <span class="strip-label">STAGE STATUS:</span>
+            <span class="strip-val" id="stage-status-text">SYSTEM INACTIVE // SHUTTER CLOSED</span>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Bottom Footer & Corner Display Links -->
+    <footer id="console-footer">
+      <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" id="starlight-daemon-link">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="margin-right:6px;vertical-align:-2px;">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+          </svg>
+          StarlightDaemon
+        </a>
+      </div>
+
+      <div class="footer-center">
+        <div class="realtime-status-marquee">
+          <span class="live-tag">LIVE TELEMETRY</span>
+          <span class="marquee-content" id="marquee-text">HEX-LASER COLLIMATOR SYNCHRONIZED • FIBER CHANNELS NORMAL • DOME AZIMUTH CALIBRATED • MOUNT TYCHO ZENITH EPHEMERIS ONLINE</span>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <span id="version-label">v1.0.0 // VXD-9000</span>
+      </div>
+    </footer>
+
+    <!-- Operator Technical Reference Modal (Top-Right Circular '?') -->
+    <div id="operator-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-window glass-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="card-tag">SYSTEM MANUAL & ARCHITECTURE</span>
+            <h2 id="modal-title" class="card-title">VXD-9000 OPERATOR TECHNICAL REFERENCE</h2>
+          </div>
+          <button id="btn-close-modal" class="btn-modal-close" aria-label="Close Operator Reference">✕</button>
+        </div>
+
+        <div class="modal-body-scroll">
+          
+          <div class="ref-section">
+            <h3 class="ref-heading">1. SYSTEM IDENTITY & INSTRUMENT SPECIFICATIONS</h3>
+            <p class="ref-p">
+              The <strong>VXD-9000 Chrono-Celestial Projector</strong> is the premier sky-projection instrument of the <strong>Mount Tycho Zenith Fulldome Observatory & Public Sky Theatre</strong>. Unlike navigational astrolabes designed to locate position via fixed stars, the VXD-9000 is an inverse-astronomical projection engine: it computes, aligns, and physically projects high-fidelity celestial configurations onto the 32-meter titanium-mesh fulldome.
+            </p>
+            <div class="ref-grid">
+              <div class="ref-box">
+                <span class="ref-box-title">OPTOMECHANICAL CORE</span>
+                <span class="ref-box-val">Dual-bearing 12-sector starball cage with 10,800 micro-machined fiber star channels.</span>
+              </div>
+              <div class="ref-box">
+                <span class="ref-box-title">FULDOMAL FISHEYE</span>
+                <span class="ref-box-val">Hex-laser RGB solid-state projection with 180° hemispherical collimation.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-section">
+            <h3 class="ref-heading">2. THE 12 CELESTIAL EPHEMERIS SECTORS</h3>
+            <div class="glyph-catalog-grid" id="glyph-catalog">
+              <!-- Dynamically populated glyph reference -->
+            </div>
+          </div>
+
+          <div class="ref-section">
+            <h3 class="ref-heading">3. THE 5-VECTOR LOCKING GESTURE</h3>
+            <p class="ref-p">
+              To dial an ephemeris target, the operator selects <strong>5 distinct celestial sectors</strong>. Each selection triggers an automated azimuth stepper pulse, aligns the mechanical cage, and locks the sector into the 5-slot Ephemeris Address Buffer with a mechanical focus click and glass resonance tone.
+            </p>
+            <p class="ref-p highlight-amber">
+              <strong>STANDBY / PENDING RULE:</strong> Completing the 5th vector lock locks the optical cage into PENDING state. It will <em>never auto-fire</em> without operator command.
+            </p>
+          </div>
+
+          <div class="ref-section">
+            <h3 class="ref-heading">4. THREE-STAGE ACTIVATION & EMISSION</h3>
+            <ol class="ref-list">
+              <li><strong>Stage 1: BUILDUP (~1.8s)</strong> — Xenon arc pre-charge, starball servo acceleration, laser pump spin-up, and rising audio harmonic whine.</li>
+              <li><strong>Stage 2: BREAKTHROUGH (~0.4s)</strong> — Explosive zenith iris shutter release, optical shockwave bloom, and sub-bass resonant glass chime.</li>
+              <li><strong>Stage 3: SUSTAINED ACTIVE</strong> — Real-time rendering of over 10,000 multi-spectral stars, rotating celestial coordinate grid, volumetric nebulae, and laser projection rings.</li>
+            </ol>
+          </div>
+
+          <div class="ref-section">
+            <h3 class="ref-heading">5. SAFETY INTERLOCK & DISENGAGE</h3>
+            <p class="ref-p">
+              • <strong>Safety Interlock:</strong> High-flux laser safety circuit defaults to <em>RELEASED / ARMED</em>. If manually engaged, activation is inhibited.<br>
+              • <strong>Disengage:</strong> The red <em>ABORT / DOME SHUTTER RESET</em> button is permanently active and callable during any phase to safely return the projector to standby.
+            </p>
+          </div>
+
+          <div class="ref-section">
+            <h3 class="ref-heading">6. KEYBOARD SHORTCUTS</h3>
+            <div class="shortcuts-table">
+              <div class="sc-row"><kbd>1</kbd>–<kbd>6</kbd><span>Auto-slew to Quick-Dial Preset 1 through 6</span></div>
+              <div class="sc-row"><kbd>Space</kbd> / <kbd>Enter</kbd><span>Trigger Zenith Sky Projection (when pending)</span></div>
+              <div class="sc-row"><kbd>Escape</kbd><span>Emergency Abort & Dome Shutter Reset</span></div>
+              <div class="sc-row"><kbd>I</kbd><span>Toggle Safety Interlock</span></div>
+              <div class="sc-row"><kbd>?</kbd><span>Toggle Operator Reference Manual</span></div>
+              <div class="sc-row"><kbd>M</kbd><span>Toggle Audio Synthesizer</span></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-modal-ack" class="btn-micro">ACKNOWLEDGE & RETURN TO CONSOLE</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/presets.js"></script>
+  <script src="js/dome.js"></script>
+  <script src="js/ring.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

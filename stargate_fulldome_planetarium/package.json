@@ -1,0 +1,19 @@
+{
+  "name": "stargate_fulldome_planetarium",
+  "version": "1.0.0",
+  "description": "VXD-9000 Chrono-Celestial Projector Console",
+  "main": "scripts/server.js",
+  "scripts": {
+    "start": "node scripts/server.js",
+    "test": "node scripts/verify_e2e.js"
+  },
+  "dependencies": {
+    "puppeteer": "^24.43.1"
+  },
+  "keywords": [
+    "planetarium",
+    "stargate",
+    "celestial-projection",
+    "fulldome"
+  ]
+}
