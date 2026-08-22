@@ -4,6 +4,8 @@ All notable changes to the Stargate Celestial Astrolabe build will be documented
 
 ## [1.0.0] - 2026-08-22
 
+> **Operator Verification Note:** Direct operator testing confirmed the build fully functional end-to-end — manual star-fix dialing, three-stage activation (Buildup, Breakthrough, Sustained Active), disengage field collapse, and quick-dial auto-dialing sequence were all verified working, along with all secondary telemetry panels (Horizon Sky-Dome, Dead-Reckoning Plotter, Deep Ephemeris Catalog, and Instrument Settings).
+
 ### Added
 - **Astrometric Navigation Console**: Digital Rete Astrolabe positioning instrument for the Hyperion Astronavigation Institute (*R/V Tethys-V // Bridge Series IX*).
 - **Functioning Digital Astrolabe**:
