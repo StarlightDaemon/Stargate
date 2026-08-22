@@ -1,0 +1,16 @@
+{
+  "name": "stargate_radio_interferometry",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test:e2e": "node test_e2e.mjs"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.4.0",
+    "vite": "^6.2.0"
+  }
+}

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hesperus Deep-Space Synthesis Array // RWTC Mark-IV Technosignature Console</title>
+  <meta name="description" content="Hesperus Deep-Space Synthesis Array (HDSSA) - Polar Waterfall Technosignature Correlator and 9-Station Interferometric Gateway Dialing Console.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <!-- Fixed Viewport Scaled Container (1920x1080 reference) -->
+  <div id="app-root">
+    
+    <!-- Top System Telemetry Bar -->
+    <header id="instrument-header">
+      <div class="header-left">
+        <div class="observatory-emblem">
+          <svg viewBox="0 0 28 28" class="emblem-svg">
+            <circle cx="14" cy="14" r="12" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <circle cx="14" cy="14" r="7" fill="none" stroke="#8a2be2" stroke-width="1.5"/>
+            <path d="M14 2 L14 26 M2 14 L26 14" stroke="#00f0ff" stroke-width="1" stroke-opacity="0.6"/>
+            <circle cx="14" cy="14" r="2.5" fill="#00ff9d"/>
+          </svg>
+        </div>
+        <div class="header-titles">
+          <h1 class="observatory-name">HESPERUS DEEP-SPACE SYNTHESIS ARRAY</h1>
+          <div class="sub-identifier">RADIAL WATERFALL TECHNOSIGNATURE CORRELATOR // RWTC MARK-IV // 9-STATION INTERFEROMETER</div>
+        </div>
+      </div>
+
+      <div class="header-telemetry">
+        <div class="telemetry-item">
+          <span class="telemetry-label">ARRAY STATUS</span>
+          <span class="telemetry-value status-online" id="array-status-badge">9/9 BASELINES SYNCHRONIZED</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">RECEIVER TEMP</span>
+          <span class="telemetry-value" id="cryo-temp">3.18 K (CRYO-LNA)</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">WATER HOLE BAND</span>
+          <span class="telemetry-value">1.420 – 1.666 GHz</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">UTC SIDEREAL TIME</span>
+          <span class="telemetry-value mono" id="sidereal-clock">18:42:09.4 ST</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Instrument Layout (3 Columns) -->
+    <main id="console-grid">
+
+      <!-- Column 1: Named Control Cluster 1: SPECTRAL SECTOR MATRIX & PRESET ARCHIVE -->
+      <section class="control-cluster panel glass-panel" id="cluster-spectral-matrix" aria-label="Spectral Sector Matrix and Presets">
+        <div class="cluster-header">
+          <div class="cluster-tag">CLUSTER 01</div>
+          <h2 class="cluster-title">SPECTRAL SECTOR MATRIX</h2>
+          <div class="cluster-desc">Candidate Technosignature Modulation Glyphs</div>
+        </div>
+
+        <!-- 24 Candidate Technosignature Frequency Sectors -->
+        <div class="glyphs-container">
+          <div class="glyphs-grid" id="glyphs-grid" role="group" aria-label="24 Candidate Frequency Sectors">
+            <!-- 24 Glyphs dynamically generated / template below -->
+          </div>
+        </div>
+
+        <!-- Quick-Dial Presets: 2 Distinct Tiers -->
+        <div class="preset-archive-container">
+          <div class="section-divider">
+            <span class="divider-title">ARCHIVED SIGNAL DETECTIONS (PRESETS)</span>
+            <span class="divider-sub">High-Speed Hardware Replay</span>
+          </div>
+
+          <!-- Tier 1: Confirmed Technosignatures -->
+          <div class="preset-tier">
+            <div class="tier-label tier-confirmed">TIER 1: CONFIRMED TECHNOSIGNATURES (COHERENCE L-5)</div>
+            <div class="preset-buttons-grid">
+              <button class="preset-btn" data-preset="0" id="preset-hd164595">
+                <span class="preset-name">HD 164595-B</span>
+                <span class="preset-desc">1.420 GHz Narrowband Carrier</span>
+                <span class="preset-tag">CONFIRMED</span>
+              </button>
+              <button class="preset-btn" data-preset="1" id="preset-trappist1e">
+                <span class="preset-name">TRAPPIST-1e</span>
+                <span class="preset-desc">1.428 GHz Resonant Beacon</span>
+                <span class="preset-tag">CONFIRMED</span>
+              </button>
+              <button class="preset-btn" data-preset="2" id="preset-ross128">
+                <span class="preset-name">ROSS 128</span>
+                <span class="preset-desc">1.442 GHz Phase-Locked Pulse</span>
+                <span class="preset-tag">CONFIRMED</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tier 2: Unconfirmed / Flagged Anomalies -->
+          <div class="preset-tier">
+            <div class="tier-label tier-anomaly">TIER 2: UNCONFIRMED ANOMALIES (FRINGE REVIEW L-3)</div>
+            <div class="preset-buttons-grid">
+              <button class="preset-btn" data-preset="3" id="preset-tabby">
+                <span class="preset-name">TABBY-V</span>
+                <span class="preset-desc">1.455 GHz Flux Modulation</span>
+                <span class="preset-tag">ANOMALY</span>
+              </button>
+              <button class="preset-btn" data-preset="4" id="preset-oumuamua">
+                <span class="preset-name">1I/ʻOUMUAMUA</span>
+                <span class="preset-desc">1.488 GHz Hyperbolic Drift</span>
+                <span class="preset-tag">ANOMALY</span>
+              </button>
+              <button class="preset-btn" data-preset="5" id="preset-proxima">
+                <span class="preset-name">PROXIMA BRC-1</span>
+                <span class="preset-desc">1.512 GHz Transit Burst</span>
+                <span class="preset-tag">ANOMALY</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Column: Polar Waterfall Spectrogram & Aperture Stargate Portal -->
+      <section class="center-spectrogram-display panel" id="spectrogram-section">
+        
+        <!-- Live Correlator Status Banner -->
+        <div class="correlator-banner" id="correlator-status-banner">
+          <div class="status-indicator-dot" id="banner-status-dot"></div>
+          <div class="status-text-content">
+            <div class="status-primary" id="status-primary-text">SYSTEM IDLE // SEARCHING WATER HOLE NOISE FLOOR</div>
+            <div class="status-secondary" id="status-secondary-text">SELECT CANDIDATE SECTOR GLYPHS TO INITIATE MULTI-STATION COINCIDENCE CHECK</div>
+          </div>
+          <div class="snr-metric-box">
+            <span class="snr-label">SYSTEM SNR</span>
+            <span class="snr-value" id="system-snr-readout">+3.2 dB</span>
+          </div>
+        </div>
+
+        <!-- Polar Waterfall Spectrogram Canvas Container -->
+        <div class="waterfall-canvas-wrapper" id="waterfall-container">
+          <canvas id="waterfall-canvas" width="800" height="800"></canvas>
+
+          <!-- Warning Overlay for Interlock / Coincidence Failure -->
+          <div class="interlock-warning-overlay" id="interlock-warning-overlay" style="display: none;">
+            <div class="warning-box">
+              <div class="warning-icon">⚠</div>
+              <div class="warning-title">ACTIVATION BLOCKED</div>
+              <div class="warning-msg">POST-DETECTION VERIFICATION PROTOCOL IS ENGAGED (HOLD ACTIVE).<br>DISARM PROTOCOL HOLD IN CLUSTER 02 TO TRANSMIT.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7-Stage Address Register (Candidate Technosignature Vector) -->
+        <div class="address-register-bar" id="address-register-container">
+          <div class="register-header">
+            <span class="register-title">SYNTHESIZED APERTURE ADDRESS (7 CHANNELS REQUIRED)</span>
+            <span class="register-count" id="address-counter">0 / 7 LOCKED</span>
+          </div>
+          <div class="address-slots" id="address-slots" role="group" aria-label="7 Candidate Signal Address Slots">
+            <div class="address-slot empty" data-slot="0"><span class="slot-idx">1</span><span class="slot-val">--</span></div>
+            <div class="address-slot empty" data-slot="1"><span class="slot-idx">2</span><span class="slot-val">--</span></div>
+            <div class="address-slot empty" data-slot="2"><span class="slot-idx">3</span><span class="slot-val">--</span></div>
+            <div class="address-slot empty" data-slot="3"><span class="slot-idx">4</span><span class="slot-val">--</span></div>
+            <div class="address-slot empty" data-slot="4"><span class="slot-idx">5</span><span class="slot-val">--</span></div>
+            <div class="address-slot empty" data-slot="5"><span class="slot-idx">6</span><span class="slot-val">--</span></div>
+            <div class="address-slot empty" data-slot="6"><span class="slot-idx">7</span><span class="slot-val">--</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Column 3: Named Control Cluster 2: ARRAY APERTURE & CHANNEL CONTROL -->
+      <section class="control-cluster panel glass-panel" id="cluster-aperture-control" aria-label="Array Aperture and Coincidence Synthesizer">
+        <div class="cluster-header">
+          <div class="cluster-tag">CLUSTER 02</div>
+          <h2 class="cluster-title">ARRAY APERTURE & COINCIDENCE SYNTHESIZER</h2>
+          <div class="cluster-desc">9-Station Interferometry & Transmission Stage</div>
+        </div>
+
+        <!-- 9 Baseline Stations Coincidence Telemetry Grid -->
+        <div class="array-telemetry-container">
+          <div class="section-divider">
+            <span class="divider-title">9-STATION BASELINE COINCIDENCE</span>
+            <span class="divider-sub">Real-Time RFI Rejection Monitor</span>
+          </div>
+          <div class="stations-grid" id="stations-grid">
+            <!-- 9 Station Telemetry Tiles (M-01 to M-09) -->
+          </div>
+        </div>
+
+        <!-- Safety Interlock: Post-Detection Verification Hold -->
+        <div class="safety-interlock-container">
+          <div class="interlock-card" id="interlock-card">
+            <div class="interlock-info">
+              <div class="interlock-title">POST-DETECTION VERIFICATION HOLD</div>
+              <div class="interlock-protocol">SETI PROTOCOL 01-A // INDEPENDENT OBSERVATORY CONFIRMATION</div>
+              <div class="interlock-status-text" id="interlock-status-label">STATUS: RELEASED (TRANSMISSION ARMED)</div>
+            </div>
+            <div class="interlock-toggle-wrapper">
+              <button class="interlock-toggle-btn released" id="pdvh-toggle" aria-pressed="false">
+                <span class="toggle-slider"></span>
+                <span class="toggle-text" id="pdvh-toggle-text">HOLD: OFF</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary Staged Activation & Disengage Controls -->
+        <div class="aperture-actions-container">
+          <!-- Main Staged Activation Button (Never Auto-Fires) -->
+          <button class="action-btn-engage" id="engage-btn" disabled>
+            <div class="btn-glow-ring"></div>
+            <div class="btn-content">
+              <span class="btn-icon">⚡</span>
+              <span class="btn-main-text" id="engage-btn-text">ENGAGE EMISSION BEACON</span>
+              <span class="btn-sub-text" id="engage-btn-sub">AWAITING 7/7 COHERENCE LOCK</span>
+            </div>
+          </button>
+
+          <!-- Disengage / Abort Channel Button (Always Reachable) -->
+          <button class="action-btn-disengage" id="disengage-btn">
+            <span class="disengage-icon">⏻</span>
+            <span class="disengage-text">DISENGAGE / ABORT CHANNEL</span>
+          </button>
+        </div>
+
+        <!-- Real-Time Carrier Drift & Spectral Waveform Oscilloscope -->
+        <div class="carrier-oscilloscope-container">
+          <div class="oscilloscope-header">
+            <span class="osc-title">PHASE CLOSURE / CARRIER DRIFT OSCILLOSCOPE</span>
+            <span class="osc-rate" id="drift-rate-readout">0.00 Hz/s</span>
+          </div>
+          <div class="oscilloscope-canvas-wrapper">
+            <canvas id="oscilloscope-canvas" width="360" height="75"></canvas>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Corner Displays (Bottom Bar) -->
+    <footer id="console-footer">
+      <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" id="starlight-link" class="corner-link">
+          StarlightDaemon
+        </a>
+      </div>
+      <div class="footer-center">
+        <span class="compliance-text">HESPERUS DEEP-SPACE INTERFEROMETRIC NETWORK // AUTONOMOUS SIGNAL SYNTHESIS PROTOCOL</span>
+      </div>
+      <div class="footer-right">
+        <span id="version-tag" class="corner-version">v1.0.0</span>
+      </div>
+    </footer>
+
+    <!-- Operator Reference Button (?) Fixed Top-Right -->
+    <button id="operator-ref-btn" class="operator-ref-circle-btn" aria-label="Open Operator Reference Manual">
+      <span>?</span>
+    </button>
+
+    <!-- Operator Reference Modal (Collapsed by Default) -->
+    <div id="operator-ref-modal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-window glass-panel">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-badge">INSTRUMENT MANUAL</span>
+            <h2 id="modal-title">Hesperus Deep-Space Synthesis Array (HDSSA) Operator Guide</h2>
+          </div>
+          <button id="modal-close-btn" class="modal-close-btn" aria-label="Close Reference">&times;</button>
+        </div>
+        <div class="modal-body">
+          <section class="manual-section">
+            <h3>1. Mission & Instrument Identity</h3>
+            <p>The <strong>Hesperus Deep-Space Synthesis Array (HDSSA)</strong> is a 9-station radio telescope interferometer operating across the neutral hydrogen and hydroxyl water hole band (1.420 – 1.666 GHz). The Radial Waterfall Technosignature Correlator (RWTC Mark-IV) performs real-time spatial coincidence search to detect and synthesize interstellar carrier gateways.</p>
+          </section>
+
+          <section class="manual-section">
+            <h3>2. Polar Waterfall Spectrogram</h3>
+            <p>The outer ring organizes radio frequency bins continuously from 0° to 360° across 24 discrete search sectors. Time streams radially <em>inward</em> toward the aperture core at 60 FPS. Background thermal noise appears as a fluctuating cryogenic field; true technosignature candidate signals resolve into brilliant coherent narrowband spectral arcs.</p>
+          </section>
+
+          <section class="manual-section">
+            <h3>3. Spatial Coincidence & Interferometric Locking</h3>
+            <p>To eliminate local Radio Frequency Interference (RFI), selecting a candidate sector triggers a 9-station baseline cross-correlation check across Stations M-01 through M-09. Only candidate signals verified across independent baseline stations with phase closure (&Delta;&phi; &lt; 0.05 rad) achieve sector lock.</p>
+          </section>
+
+          <section class="manual-section">
+            <h3>4. Three-Stage Non-Auto-Firing Activation</h3>
+            <p>Completing a 7-symbol address places the array in a <strong>READY</strong> state. Activation must be manually engaged and proceeds through three distinct stages:</p>
+            <ul>
+              <li><strong>Stage 1 (Buildup - 2.0s):</strong> Doppler drift locking, SNR climb (+24 dB to +96 dB), receiver gain surge.</li>
+              <li><strong>Stage 2 (Breakthrough Instant):</strong> Coherent carrier convergence, aperture iris flash, sub-bass impact boom.</li>
+              <li><strong>Stage 3 (Sustained Active):</strong> Continuous wormhole event horizon, particle stream, harmonic carrier resonance.</li>
+            </ul>
+          </section>
+
+          <section class="manual-section">
+            <h3>5. Post-Detection Verification Hold (PDVH)</h3>
+            <p>A safety interlock enforcing international SETI confirmation protocols. It defaults to <strong>RELEASED</strong>. When engaged (armed), it blocks channel transmission with visual and audible alerts until released.</p>
+          </section>
+        </div>
+        <div class="modal-footer">
+          <button id="modal-acknowledge-btn" class="modal-btn-confirm">ACKNOWLEDGE & RESUME</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
