@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASBA-VESPER // Deep-Space Interferometric Technosignature Console</title>
+  <meta name="description" content="Operational deep-space technosignature detection console featuring a 10-dish interferometric coincidence matrix and radial polar waterfall spectrogram.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body id="appBody">
+  <div id="app-viewport-wrapper">
+    <div id="app-scaler">
+      <main id="appRoot" class="console-layout" data-state="IDLE">
+        
+        <!-- HEADER TELEMETRY RIBBON -->
+        <header class="console-header" id="consoleHeader">
+          <div class="header-branding">
+            <div class="observatory-logo">
+              <svg viewBox="0 0 32 32" class="logo-svg">
+                <circle cx="16" cy="16" r="14" fill="none" stroke="#00f0ff" stroke-width="1.5"/>
+                <polygon points="16,4 28,24 4,24" fill="none" stroke="#00ffc8" stroke-width="1.5"/>
+                <circle cx="16" cy="17.5" r="3" fill="#00f0ff"/>
+              </svg>
+            </div>
+            <div class="observatory-titles">
+              <h1 class="brand-main">VESPER DEEP-APERTURE OBSERVATORY</h1>
+              <div class="brand-sub">AETHERIS 10-DISH SYNTHETIC BASELINE INTERFEROMETER // MK-VI CONSOLE</div>
+            </div>
+          </div>
+
+          <div class="header-center-telemetry">
+            <div class="telemetry-pill">
+              <span class="pill-label">COORDS:</span>
+              <span class="pill-val" id="targetCoords">RA 19h 50m 47s | Dec +08° 52' 06"</span>
+            </div>
+            <div class="telemetry-pill">
+              <span class="pill-label">CRYO LHe-4:</span>
+              <span class="pill-val highlight">3.82 K</span>
+            </div>
+            <div class="telemetry-pill">
+              <span class="pill-label">MAX BASELINE:</span>
+              <span class="pill-val">384,400 km</span>
+            </div>
+            <div class="telemetry-pill">
+              <span class="pill-val clock-val" id="utcClock">00:00:00 UTC</span>
+              <span class="pill-val clock-val" id="siderealClock">LST 00:00:00</span>
+            </div>
+          </div>
+
+          <div class="header-status-area">
+            <div class="status-badge idle" id="systemStatusBadge">RECEIVER: IDLE</div>
+          </div>
+        </header>
+
+        <!-- UPPER STRIP: 10-DISH INTERFEROMETRIC COINCIDENCE MATRIX -->
+        <section class="dish-matrix-strip" id="dishMatrixStrip" aria-label="10-Dish Coincidence Array">
+          <div class="strip-header">
+            <div class="strip-title">
+              <span class="strip-icon">☵</span>
+              <span>SYNTHETIC APERTURE COINCIDENCE ARRAY (10 DISH BASELINE ELEMENTS)</span>
+            </div>
+            <div class="strip-note">RFI REJECTION THRESHOLD: R<sub>coinc</sub> &gt; 0.950</div>
+          </div>
+          <div class="dish-grid" id="dishArrayContainer">
+            <!-- Rendered dynamically from DISH_CONFIG -->
+          </div>
+        </section>
+
+        <!-- MAIN DECK: SYMMETRICAL 3-COLUMN LAYOUT -->
+        <div class="main-deck-row" id="mainDeckRow">
+          
+          <!-- LEFT TELEMETRY COLUMN -->
+          <aside class="telemetry-col left-col" id="leftTelemetryCol">
+            <!-- Doppler Drift Analyzer -->
+            <div class="panel-card" id="dopplerPanel">
+              <div class="panel-header">
+                <span class="panel-title">DOPPLER DRIFT ANALYZER (df/dt)</span>
+                <span class="panel-badge">REAL-TIME</span>
+              </div>
+              <div class="panel-body">
+                <canvas id="driftCanvas" width="280" height="90" class="mini-canvas"></canvas>
+                <div class="data-row-compact">
+                  <span>DRIFT ESTIMATE:</span>
+                  <span class="mono-val text-cyan" id="driftRateVal">-0.142 Hz/s</span>
+                </div>
+                <div class="data-row-compact">
+                  <span>DISPERSION MEASURE (DM):</span>
+                  <span class="mono-val">2.84 pc/cm³</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Signal-to-Noise Ratio Meter -->
+            <div class="panel-card" id="snrPanel">
+              <div class="panel-header">
+                <span class="panel-title">SIGNAL-TO-NOISE RATIO (SNR)</span>
+                <span class="mono-val text-cyan font-bold" id="snrValue">14.2 dB</span>
+              </div>
+              <div class="panel-body">
+                <div class="meter-bar-container">
+                  <div class="meter-bar-fill" id="snrBarFill" style="width: 14%;"></div>
+                  <div class="meter-scale-markers">
+                    <span>0dB</span><span>25dB</span><span>50dB</span><span>75dB</span><span>100dB</span>
+                  </div>
+                </div>
+                <div class="data-row-compact mt-2">
+                  <span>NOISE FLOOR:</span>
+                  <span class="mono-val">-134.2 dBm</span>
+                </div>
+                <div class="data-row-compact">
+                  <span>RECEIVER GAIN:</span>
+                  <span class="mono-val text-green">AGC LOCKED (48 dB)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Linear Spectrogram Slice -->
+            <div class="panel-card" id="waterfallSlicePanel">
+              <div class="panel-header">
+                <span class="panel-title">LINEAR SPECTRAL SLICE (t vs f)</span>
+                <span class="panel-badge">1.42 GHz</span>
+              </div>
+              <div class="panel-body">
+                <canvas id="linearWaterfallCanvas" width="280" height="75" class="mini-canvas"></canvas>
+                <div class="data-row-compact">
+                  <span>INTEGRATION TIME:</span>
+                  <span class="mono-val">1024 ms</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- CENTER STAGE: POLAR WATERFALL SPECTROGRAM -->
+          <section class="spectrogram-center-stage" id="spectrogramStage">
+            <div class="spectrogram-header">
+              <div class="spectrogram-title">
+                <span class="radar-dot"></span>
+                <span>POLAR WATERFALL SPECTROGRAM // CIRCUMFERENTIAL FREQ × RADIAL TIME</span>
+              </div>
+              <div class="status-mode-banner" id="statusModeText">
+                AMBIENT NOISE FIELD // SCANNING HYDROGEN & HYDROXYL BANDS
+              </div>
+            </div>
+
+            <div class="canvas-wrapper" id="canvasWrapper">
+              <canvas id="polarWaterfall" width="560" height="560"></canvas>
+            </div>
+
+            <!-- Spectrogram Legend -->
+            <div class="spectrogram-legend">
+              <div class="legend-item"><span class="legend-color noise-color"></span> Textured Noise Field</div>
+              <div class="legend-item"><span class="legend-color candidate-color"></span> Narrowband Signal Arc</div>
+              <div class="legend-item"><span class="legend-color lock-color"></span> Coincidence Lock Beam</div>
+            </div>
+          </section>
+
+          <!-- RIGHT TELEMETRY COLUMN -->
+          <aside class="telemetry-col right-col" id="rightTelemetryCol">
+            
+            <!-- SAFETY INTERLOCK: POST-DETECTION VERIFICATION HOLD -->
+            <div class="panel-card hold-card" id="holdControlPanel">
+              <div class="panel-header alert-header">
+                <span class="panel-title">SAFETY INTERLOCK: PROTOCOL 7.4</span>
+                <span class="hold-indicator-led" id="holdLed"></span>
+              </div>
+              <div class="panel-body">
+                <div class="hold-status-display" id="holdStatusText">
+                  <span class="text-cyan">HOLD RELEASED</span> (TRANSMISSION PERMITTED)
+                </div>
+                <p class="hold-description">
+                  SETI Post-Detection Verification Hold: Enforces independent multi-observatory confirmation before active carrier transmission.
+                </p>
+                <div class="switch-container">
+                  <label class="switch-label" for="verificationHoldToggle">
+                    <input type="checkbox" id="verificationHoldToggle">
+                    <span class="slider"></span>
+                    <span class="switch-text">ENGAGE VERIFICATION HOLD</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Multi-Dish Coincidence Score -->
+            <div class="panel-card" id="coincidencePanel">
+              <div class="panel-header">
+                <span class="panel-title">INTERFEROMETRIC COINCIDENCE (R<sub>coinc</sub>)</span>
+                <span class="mono-val text-cyan font-bold" id="coincidenceValue">0.080</span>
+              </div>
+              <div class="panel-body">
+                <div class="meter-bar-container">
+                  <div class="meter-bar-fill green-fill" id="coincidenceBarFill" style="width: 8%;"></div>
+                  <div class="meter-scale-markers">
+                    <span>0.0</span><span>0.25</span><span>0.50</span><span>0.75</span><span>1.0</span>
+                  </div>
+                </div>
+                <div class="data-row-compact mt-2">
+                  <span>COINCIDENCE CRITERION:</span>
+                  <span class="mono-val text-green">&ge; 0.950 (10 DISHES)</span>
+                </div>
+                <div class="data-row-compact">
+                  <span>TERRESTRIAL RFI REJECTION:</span>
+                  <span class="mono-val text-cyan">&gt; 99.98%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Technosignature Classification Card -->
+            <div class="panel-card" id="classificationPanel">
+              <div class="panel-header">
+                <span class="panel-title">SPECTRAL PROFILE CLASSIFICATION</span>
+              </div>
+              <div class="panel-body">
+                <div class="data-row-compact">
+                  <span>CARRIER TYPE:</span>
+                  <span class="mono-val text-cyan">COHERENT NARROWBAND</span>
+                </div>
+                <div class="data-row-compact">
+                  <span>POLARIZATION:</span>
+                  <span class="mono-val">CIRCULAR (LEFT-HAND)</span>
+                </div>
+                <div class="data-row-compact">
+                  <span>MODULATION:</span>
+                  <span class="mono-val">RESONANT HARMONIC</span>
+                </div>
+                <div class="data-row-compact">
+                  <span>APERTURE PHASE:</span>
+                  <span class="mono-val text-green">SYNCHRONIZED (0.02 rad)</span>
+                </div>
+              </div>
+            </div>
+
+          </aside>
+        </div>
+
+        <!-- BOTTOM DECK: CANDIDATE ADDRESSING, ACTIONS & QUICK-DIAL PRESETS -->
+        <footer class="bottom-console-deck" id="bottomDeck">
+          
+          <!-- LEFT / CENTER BOTTOM: CANDIDATE FREQUENCY ADDRESSING MATRIX -->
+          <div class="control-cluster candidate-cluster" id="candidateCluster">
+            <div class="cluster-title-bar">
+              <span class="cluster-title">CANDIDATE SIGNAL ADDRESSING MATRIX (SELECT 7 HARMONICS)</span>
+              <span class="cluster-subtitle">CLICK CANDIDATE TO RUN MULTI-DISH COINCIDENCE CORRELATION</span>
+            </div>
+            
+            <!-- 10 Candidate Glyphs -->
+            <div class="candidate-grid" id="candidateGrid">
+              <!-- Rendered dynamically from CANDIDATE_SIGNALS -->
+            </div>
+
+            <!-- Dialed Address Sequence Slots -->
+            <div class="address-sequence-bar">
+              <div class="sequence-label">COINCIDENCE HARMONIC SEQUENCE:</div>
+              <div class="address-slots" id="addressSlots">
+                <!-- 7 address slots rendered dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- CENTER ACTION MODULE -->
+          <div class="control-cluster action-cluster" id="actionCluster">
+            <div class="cluster-title-bar">
+              <span class="cluster-title">TRANSMISSION COMMAND</span>
+            </div>
+
+            <div class="action-buttons-wrapper">
+              <!-- Activation Master Button (3-stage sequence, never auto-fires) -->
+              <button class="action-btn activate-btn disabled" id="activateBtn" disabled>
+                <span class="btn-label">CARRIER LOCKED [0/7]</span>
+              </button>
+
+              <!-- Primary Disengage Master Button (Always reachable) -->
+              <button class="action-btn disengage-btn" id="disengageBtn">
+                <span class="btn-icon">⏹</span>
+                <span class="btn-label">ABORT / DISENGAGE</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT BOTTOM: ARCHIVED QUICK-DIAL DATABASE -->
+          <div class="control-cluster quickdial-cluster" id="quickDialCluster">
+            <div class="cluster-title-bar">
+              <span class="cluster-title">ARCHIVED TECHNOSIGNATURE PRESETS</span>
+              <div class="tab-selectors">
+                <button class="tab-btn active" data-tab="tier1List">TIER-1 VERIFIED</button>
+                <button class="tab-btn" data-tab="tier2List">TIER-2 ANOMALIES</button>
+              </div>
+            </div>
+
+            <div class="tab-content active" id="tier1List">
+              <!-- Tier 1 Confirmed Presets -->
+            </div>
+            <div class="tab-content" id="tier2List">
+              <!-- Tier 2 Unconfirmed Presets -->
+            </div>
+          </div>
+
+        </footer>
+
+        <!-- INTERLOCK WARNING BANNER (Shows when activation attempted with Hold on) -->
+        <div class="hold-warning-banner" id="holdWarningBanner">
+          <div class="warning-box">
+            <span class="warning-icon">⚠</span>
+            <div class="warning-text">
+              <strong>ACTIVATION BLOCKED // SETI PROTOCOL 7.4 INTERLOCK ENGAGED</strong>
+              <span>Post-Detection Verification Hold must be RELEASED before initiating carrier transmission beam.</span>
+            </div>
+            <button class="warning-close-btn" id="closeWarningBtn">DISMISS</button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- FIXED OPERATOR REFERENCE BUTTON (?) & MODAL -->
+  <button class="help-circle-btn" id="helpBtn" aria-label="Open Operator Reference Guide">?</button>
+
+  <div class="modal-overlay" id="helpModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span class="modal-badge">VDATO // ASBA OPERATING MANUAL</span>
+          <h2>VESPER DEEP-APERTURE TECHNOSIGNATURE INSTRUMENT REFERENCE</h2>
+        </div>
+        <button class="modal-close-btn" id="closeHelpBtn" aria-label="Close Reference Manual">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <section class="manual-section">
+          <h3>1. THE POLAR WATERFALL SPECTROGRAM</h3>
+          <p>
+            Unlike conventional sweep-beam radars, this instrument implements a continuous <strong>polar/radial waterfall spectrogram</strong>.
+            <strong>Frequency</strong> is mapped along the 360-degree circumference, partitioned into candidate technosignature bands.
+            <strong>Time flows radially outward</strong>, preserving spectral history over integration intervals.
+            Unconfirmed cosmic microwave background and interstellar scintillation render as dynamic textured noise fields.
+            When a candidate frequency is verified, the ambiguous noise is cleared, resolving a razor-sharp, coherent narrowband emission arc.
+          </p>
+        </section>
+
+        <section class="manual-section">
+          <h3>2. INTERFEROMETRIC MULTI-DISH COINCIDENCE DETECTION</h3>
+          <p>
+            Grounding in real synthetic-aperture radio interferometry: a genuine extraterrestrial signal must arrive simultaneously across 
+            <strong>10 spatially separated baseline receivers (D-01 to D-10)</strong> across Earth and orbital Lagrange stations.
+            Terrestrial radio frequency interference (RFI) appears on only localized dishes and is automatically rejected (R<sub>coinc</sub> &lt; 0.950).
+            Selecting a candidate channel initiates a multi-dish correlation sweep, yielding a rising FM chirp and crystalline correlation-lock confirmation tone.
+          </p>
+        </section>
+
+        <section class="manual-section">
+          <h3>3. THREE-STAGE ACTIVATION SEQUENCE</h3>
+          <p>
+            Acquiring 7 candidate harmonic locks places the system in <code>READY</code> state (it <em>never</em> auto-fires).
+            Pressing <strong>ENGAGE CARRIER TRANSMISSION</strong> executes an explicit three-stage transition:
+          </p>
+          <ul>
+            <li><strong>Stage 1 (Buildup):</strong> Doppler drift locking, SNR ramping from 20dB to 99dB, receiver gain escalation, and radial time-wave expansion (2.6s).</li>
+            <li><strong>Stage 2 (Breakthrough):</strong> Instantaneous hyper-spatial carrier rupture with radiant aperture flash and harmonic impact tone.</li>
+            <li><strong>Stage 3 (Sustained Active):</strong> Coherent bilateral technosignature link with continuous carrier particle vortex and persistent resonant drone.</li>
+          </ul>
+        </section>
+
+        <section class="manual-section">
+          <h3>4. SETI PROTOCOL 7.4 VERIFICATION HOLD & QUICK-DIAL</h3>
+          <p>
+            The <strong>Post-Detection Verification Hold</strong> switch (defaults to <em>RELEASED</em>) safeguards against unauthorized active transmissions before international peer review. If engaged, carrier excitation is strictly blocked with audible and visual alerts.
+            The <strong>Archived Quick-Dial Database</strong> replays previously verified detections at high-throughput correlation speed, providing paced, multi-dish auto-dialing.
+          </p>
+        </section>
+      </div>
+
+      <div class="modal-footer">
+        <span>Vesper Deep-Aperture Technosignature Observatory // Document SETI-OP-882</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIXED CORNER LINKS -->
+  <div class="corner-display corner-left">
+    <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="starlight-link">StarlightDaemon</a>
+  </div>
+  <div class="corner-display corner-right">
+    <span class="version-label">v1.0.0</span>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

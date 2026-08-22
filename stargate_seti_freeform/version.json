@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "name": "vesper-deep-technosignature-console",
+  "model": "Gemini 3.7 Flash (High reasoning)",
+  "buildDate": "2026-08-22",
+  "observatory": "Vesper Deep-Aperture Technosignature Observatory (VDATO)",
+  "interferometer": "Aetheris Deep-Baseline Interferometric Array (ADIA)",
+  "dishCount": 10,
+  "addressLength": 7
+}
