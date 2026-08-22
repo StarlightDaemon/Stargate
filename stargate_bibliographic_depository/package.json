@@ -1,0 +1,13 @@
+{
+  "name": "stargate-bibliographic-depository",
+  "version": "1.0.0",
+  "description": "Pan-Harmonic Bibliographic Depository - Interactive Archival Retrieval Console",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["stargate", "archival", "bibliographic", "retrieval", "portal"],
+  "author": "StarlightDaemon",
+  "license": "MIT"
+}

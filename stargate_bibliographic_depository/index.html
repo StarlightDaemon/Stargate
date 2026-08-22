@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pan-Harmonic Bibliographic Institute & Depository (PBID-7) - Deep Archival Stasis Retrieval Console & Rotary Catalog Interface.">
+  <title>Pan-Harmonic Bibliographic Depository — Archival Retrieval Console</title>
+  
+  <!-- Google Fonts: Orbitron, Rajdhani, Cinzel, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-phosphor">
+  <div id="viewport-scaler">
+    <div id="app-root" class="app-container">
+      
+      <!-- TOP STATUS BAR & ARCHIVAL HEADER -->
+      <header class="depository-header" id="main-header">
+        <div class="header-branding">
+          <div class="depository-seal">
+            <svg viewBox="0 0 100 100" class="seal-svg" aria-hidden="true">
+              <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4, 2"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <polygon points="50,15 80,75 20,75" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="50" cy="50" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+              <circle cx="50" cy="50" r="4" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="header-titles">
+            <h1 class="institute-name">PAN-HARMONIC BIBLIOGRAPHIC DEPOSITORY</h1>
+            <div class="institute-sub">DEEP STASIS ARCHIVES · VALERIUS TAXONOMIC CONSOLE · PBID-7</div>
+          </div>
+        </div>
+
+        <!-- Real-time Archival Preservation Telemetry Ribbon -->
+        <div class="preservation-ribbon" id="header-telemetry">
+          <div class="telemetry-chip">
+            <span class="chip-label">VAULT ATMOSPHERE</span>
+            <span class="chip-val highlight" id="telemetry-n2">98.8% N₂</span>
+          </div>
+          <div class="telemetry-chip">
+            <span class="chip-label">STASIS TEMP</span>
+            <span class="chip-val highlight" id="telemetry-temp">77.2 K</span>
+          </div>
+          <div class="telemetry-chip">
+            <span class="chip-label">PRESERVATION INDEX</span>
+            <span class="chip-val status-good" id="telemetry-integrity">99.984%</span>
+          </div>
+          <div class="telemetry-chip">
+            <span class="chip-label">GANTRY LATENCY</span>
+            <span class="chip-val" id="telemetry-latency">14.2 ms</span>
+          </div>
+          <div class="telemetry-chip">
+            <span class="chip-label">CHRONO-STAMP</span>
+            <span class="chip-val monospace" id="telemetry-clock">2026.234.07:42:19</span>
+          </div>
+        </div>
+
+        <!-- Navigation / Mode Switches -->
+        <nav class="depository-nav" aria-label="System Navigation">
+          <button type="button" class="nav-tab active" id="btn-view-retriever" data-view="retriever">
+            <span class="tab-icon">◈</span> RETRIEVER CONSOLE
+          </button>
+          <button type="button" class="nav-tab" id="btn-view-catalog" data-view="catalog">
+            <span class="tab-icon">▤</span> MASTER CATALOG
+          </button>
+          <button type="button" class="nav-tab" id="btn-view-stacks" data-view="stacks">
+            <span class="tab-icon">◫</span> DEEP STACKS MAP
+          </button>
+          <button type="button" class="nav-tab" id="btn-view-provenance" data-view="provenance">
+            <span class="tab-icon">📜</span> PROVENANCE LEDGER
+          </button>
+          <button type="button" class="nav-tab" id="btn-view-settings" data-view="settings">
+            <span class="tab-icon">⚙</span> SETTINGS
+          </button>
+          <button type="button" class="nav-help-btn" id="btn-open-help" title="Operator Reference Manual" aria-label="Open Operator Reference">
+            ?
+          </button>
+        </nav>
+      </header>
+
+      <!-- MAIN RETRIEVAL STAGE (PRIMARY INTERFACE) -->
+      <main class="console-main-stage active-view" id="view-retriever">
+        
+        <!-- LEFT WING: QUICK-DIAL ARCHIVE INDEX & CONCORDANCE SCANNER -->
+        <aside class="console-wing left-wing" aria-label="Accession Presets & Concordance">
+          <div class="wing-panel">
+            <div class="panel-header">
+              <div class="panel-title-badge">LOG-01</div>
+              <h2 class="panel-title">ACCESSION QUICK-DIAL</h2>
+            </div>
+            <div class="panel-body">
+              <div class="quick-dial-categories">
+                
+                <!-- Tier 1: Verified Records -->
+                <div class="preset-tier-group">
+                  <div class="tier-label">
+                    <span class="tier-indicator verified">●</span> VERIFIED FOLIOS & CODICES
+                  </div>
+                  <div class="preset-grid" id="preset-list-verified">
+                    <!-- Populated dynamically / static seeds -->
+                  </div>
+                </div>
+
+                <!-- Tier 2: Provisional Records -->
+                <div class="preset-tier-group">
+                  <div class="tier-label">
+                    <span class="tier-indicator provisional">▲</span> PROVISIONAL / RESTRICTED
+                  </div>
+                  <div class="preset-grid" id="preset-list-provisional">
+                    <!-- Populated dynamically / static seeds -->
+                  </div>
+                </div>
+
+                <!-- Tier 3: Rejection Path Demonstration -->
+                <div class="preset-tier-group rejection-tier">
+                  <div class="tier-label">
+                    <span class="tier-indicator rejected">✖</span> MISFILED / CORRUPTED TEST CASE
+                  </div>
+                  <div class="preset-grid" id="preset-list-rejected">
+                    <!-- Populated dynamically / static seeds -->
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Secondary Cross-Reference Authority Telemetry Monitor -->
+          <div class="wing-panel authority-monitor-panel">
+            <div class="panel-header">
+              <div class="panel-title-badge">AUTH-CONCORDANCE</div>
+              <h3 class="panel-title">CROSS-REFERENCE SCANNER</h3>
+            </div>
+            <div class="panel-body concordance-body">
+              <div class="concordance-status-row">
+                <span class="conc-label">CONCORDANCE REGISTRY:</span>
+                <span class="conc-val active-status" id="conc-state">SYNCHRONIZED</span>
+              </div>
+              <div class="concordance-stream" id="concordance-log-stream">
+                <div class="stream-line dim">[SYS-INIT] Concordance Authority Index linked.</div>
+                <div class="stream-line dim">[VALERIUS-TAXON] 10 Divisions online.</div>
+                <div class="stream-line ready">[READY] Awaiting rotary classification input...</div>
+              </div>
+              <div class="concordance-meter-wrap">
+                <div class="meter-label-row">
+                  <span>AUTHORITY CONFIDENCE</span>
+                  <span id="conc-confidence-text">0.0%</span>
+                </div>
+                <div class="meter-bar-track">
+                  <div class="meter-bar-fill" id="conc-confidence-bar" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- CENTER STAGE: THE ROTARY CATALOG WHEEL & STASIS VAULT APERTURE -->
+        <section class="console-center-theater" aria-label="Rotary Card-Catalog Wheel & Stasis Aperture">
+          
+          <!-- Stasis Aperture & Wheel Center Assembly -->
+          <div class="wheel-aperture-container" id="wheel-assembly-container">
+            
+            <!-- Background Archival Reticle & Coordinate Calibrator -->
+            <svg class="reticle-background-svg" viewBox="0 0 800 800" aria-hidden="true">
+              <defs>
+                <radialGradient id="apertureGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.3"/>
+                  <stop offset="60%" stop-color="#00f0aa" stop-opacity="0.1"/>
+                  <stop offset="100%" stop-color="#080c10" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="activeVaultVortex" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+                  <stop offset="30%" stop-color="#00e5ff" stop-opacity="0.7"/>
+                  <stop offset="70%" stop-color="#0055ff" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#080c10" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Outer Coordinate Rings -->
+              <circle cx="400" cy="400" r="390" class="svg-ring outer-track" stroke-dasharray="8, 4"/>
+              <circle cx="400" cy="400" r="360" class="svg-ring mid-track"/>
+              <circle cx="400" cy="400" r="330" class="svg-ring fine-track" stroke-dasharray="2, 6"/>
+
+              <!-- Fixed Top Collimator Reading Window Bracket -->
+              <g class="collimator-window-bracket">
+                <path d="M 360,20 L 400,60 L 440,20 Z" class="collimator-pointer"/>
+                <rect x="340" y="5" width="120" height="30" rx="4" class="collimator-bracket"/>
+                <text x="400" y="25" class="collimator-text" text-anchor="middle">READING APERTURE</text>
+              </g>
+
+              <!-- Crosshairs and Vernier Scale -->
+              <line x1="400" y1="40" x2="400" y2="120" class="vernier-tick"/>
+              <line x1="400" y1="680" x2="400" y2="760" class="vernier-tick"/>
+              <line x1="40" y1="400" x2="120" y2="400" class="vernier-tick"/>
+              <line x1="680" y1="400" x2="760" y2="400" class="vernier-tick"/>
+            </svg>
+
+            <!-- THE ROTARY CARD-CATALOG WHEEL (ROTATES DYNAMICALLY) -->
+            <div class="rotary-catalog-wheel" id="rotary-wheel">
+              
+              <!-- 10 Radial Classification Segments (0-9) with original symbols & domain cards -->
+              <div class="wheel-segments-layer" id="wheel-segments-layer">
+                <!-- Injected dynamically for absolute precision -->
+              </div>
+
+              <!-- Inner Mechanical Ring Plate -->
+              <div class="wheel-inner-hub">
+                <div class="hub-brass-rim"></div>
+                <div class="hub-engraving">VALERIUS CONCORDANCE</div>
+              </div>
+            </div>
+
+            <!-- CENTRAL STASIS RETRIEVAL VAULT (MATERIALIZATION APERTURE) -->
+            <div class="stasis-vault-aperture" id="stasis-aperture">
+              <!-- Animated Iris Blades (12 segments that slide open) -->
+              <div class="aperture-iris-mechanism" id="aperture-iris">
+                <div class="iris-blade blade-1"></div>
+                <div class="iris-blade blade-2"></div>
+                <div class="iris-blade blade-3"></div>
+                <div class="iris-blade blade-4"></div>
+                <div class="iris-blade blade-5"></div>
+                <div class="iris-blade blade-6"></div>
+                <div class="iris-blade blade-7"></div>
+                <div class="iris-blade blade-8"></div>
+                <div class="iris-blade blade-9"></div>
+                <div class="iris-blade blade-10"></div>
+                <div class="iris-blade blade-11"></div>
+                <div class="iris-blade blade-12"></div>
+              </div>
+
+              <!-- Deep Stasis Portal Vortex (Revealed on Activation) -->
+              <div class="vault-depth-chamber" id="vault-chamber">
+                <div class="stasis-vortex-tunnel"></div>
+                <div class="stasis-energy-rings">
+                  <div class="energy-ring er-1"></div>
+                  <div class="energy-ring er-2"></div>
+                  <div class="energy-ring er-3"></div>
+                </div>
+
+                <!-- Floating Holographic Codex / Folio Projection -->
+                <div class="holographic-folio-projection" id="holo-projection">
+                  <div class="holo-shimmer"></div>
+                  <div class="holo-folio-card">
+                    <div class="holo-header" id="holo-doc-title">THE ALEXANDRIA CODEX OF LOST STARS</div>
+                    <div class="holo-glyph-display" id="holo-doc-glyph">◈ 3-ASTRO · 882.Q1 ◈</div>
+                    <div class="holo-body-lines">
+                      <div class="h-line hl-1"></div>
+                      <div class="h-line hl-2"></div>
+                      <div class="h-line hl-3"></div>
+                    </div>
+                    <div class="holo-seal-badge">AUTHENTICATED</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Central Reticle / Collimator Focus Beam -->
+              <div class="collimator-cross-laser" id="collimator-laser"></div>
+            </div>
+
+            <!-- Staged Activation HUD Warning / State Overlay -->
+            <div class="aperture-hud-state" id="aperture-hud-state">
+              <div class="hud-phase-label" id="hud-phase-label">VAULT SEALED · IDLE</div>
+              <div class="hud-phase-meter" id="hud-phase-meter">
+                <div class="hud-phase-fill" id="hud-phase-fill"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- DIALED CLASSIFICATION ACCESSION DISPLAY (7 LOCKED/PENDING FACETS) -->
+          <div class="dialed-sequence-container" aria-label="Dialed Classification Coordinates">
+            <div class="sequence-header">
+              <span class="seq-title">VALERIUS HEX-FACET ACCESSION REGISTER</span>
+              <span class="seq-status-pill" id="seq-status-pill">AWAITING FACET 1 OF 7</span>
+            </div>
+            
+            <div class="classification-slots-rack" id="classification-slots-rack">
+              <!-- Slot 1: Domain / Class -->
+              <div class="taxon-slot active-slot" id="slot-0" data-index="0">
+                <div class="slot-tier-name">1. DOMAIN</div>
+                <div class="slot-value-display">--</div>
+                <div class="slot-taxon-name">AWAITING</div>
+                <div class="slot-lock-indicator">UNLOCKED</div>
+              </div>
+              <!-- Slot 2: Division / Subclass -->
+              <div class="taxon-slot" id="slot-1" data-index="1">
+                <div class="slot-tier-name">2. DIVISION</div>
+                <div class="slot-value-display">--</div>
+                <div class="slot-taxon-name">--</div>
+                <div class="slot-lock-indicator">UNLOCKED</div>
+              </div>
+              <!-- Slot 3: Stacks Sector -->
+              <div class="taxon-slot" id="slot-2" data-index="2">
+                <div class="slot-tier-name">3. STACKS</div>
+                <div class="slot-value-display">--</div>
+                <div class="slot-taxon-name">--</div>
+                <div class="slot-lock-indicator">UNLOCKED</div>
+              </div>
+              <!-- Slot 4: Stasis Tier -->
+              <div class="taxon-slot" id="slot-3" data-index="3">
+                <div class="slot-tier-name">4. TIER</div>
+                <div class="slot-value-display">--</div>
+                <div class="slot-taxon-name">--</div>
+                <div class="slot-lock-indicator">UNLOCKED</div>
+              </div>
+              <!-- Slot 5: Sleeve Shelf -->
+              <div class="taxon-slot" id="slot-4" data-index="4">
+                <div class="slot-tier-name">5. SHELF</div>
+                <div class="slot-value-display">--</div>
+                <div class="slot-taxon-name">--</div>
+                <div class="slot-lock-indicator">UNLOCKED</div>
+              </div>
+              <!-- Slot 6: Accession Folio -->
+              <div class="taxon-slot" id="slot-5" data-index="5">
+                <div class="slot-tier-name">6. FOLIO</div>
+                <div class="slot-value-display">--</div>
+                <div class="slot-taxon-name">--</div>
+                <div class="slot-lock-indicator">UNLOCKED</div>
+              </div>
+              <!-- Slot 7: Authority Checksum -->
+              <div class="taxon-slot" id="slot-6" data-index="6">
+                <div class="slot-tier-name">7. AUTH-KEY</div>
+                <div class="slot-value-display">--</div>
+                <div class="slot-taxon-name">--</div>
+                <div class="slot-lock-indicator">UNLOCKED</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- THE TWO CORE INTERACTIVE CONTROL CLUSTERS (STRICT 2-CLUSTER LIMIT) -->
+          <div class="core-controls-wrapper" aria-label="Core Retrieval Controls">
+            
+            <!-- CLUSTER 1: TAXONOMIC CLASSIFICATION ASSEMBLY -->
+            <div class="control-cluster cluster-taxonomy" id="cluster-taxonomic-assembly">
+              <div class="cluster-badge">CLUSTER 1 // TAXONOMIC CLASSIFICATION ASSEMBLY</div>
+              <div class="taxonomy-selector-grid" id="taxonomy-btn-grid">
+                <!-- 10 Domain classification buttons (0-9) -->
+                <button type="button" class="taxon-btn" data-digit="0" id="btn-taxon-0">
+                  <span class="t-glyph">⌛</span>
+                  <span class="t-num">0</span>
+                  <span class="t-label">CHRONIC</span>
+                </button>
+                <button type="button" class="taxon-btn" data-digit="1" id="btn-taxon-1">
+                  <span class="t-glyph">⚖</span>
+                  <span class="t-num">1</span>
+                  <span class="t-label">ONTOLOG</span>
+                </button>
+                <button type="button" class="taxon-btn" data-digit="2" id="btn-taxon-2">
+                  <span class="t-glyph">☲</span>
+                  <span class="t-num">2</span>
+                  <span class="t-label">XENOLING</span>
+                </button>
+                <button type="button" class="taxon-btn" data-digit="3" id="btn-taxon-3">
+                  <span class="t-glyph">✦</span>
+                  <span class="t-num">3</span>
+                  <span class="t-label">ASTROMET</span>
+                </button>
+                <button type="button" class="taxon-btn" data-digit="4" id="btn-taxon-4">
+                  <span class="t-glyph">☥</span>
+                  <span class="t-num">4</span>
+                  <span class="t-label">BIO-ANAT</span>
+                </button>
+                <button type="button" class="taxon-btn" data-digit="5" id="btn-taxon-5">
+                  <span class="t-glyph">⚛</span>
+                  <span class="t-num">5</span>
+                  <span class="t-label">QUANTUM</span>
+                </button>
+                <button type="button" class="taxon-btn" data-digit="6" id="btn-taxon-6">
+                  <span class="t-glyph">⛭</span>
+                  <span class="t-num">6</span>
+                  <span class="t-label">CYBERNET</span>
+                </button>
+                <button type="button" class="taxon-btn" data-digit="7" id="btn-taxon-7">
+                  <span class="t-glyph">📜</span>
+                  <span class="t-num">7</span>
+                  <span class="t-label">EPIGRAPH</span>
+                </button>
+                <button type="button" class="taxon-btn" data-digit="8" id="btn-taxon-8">
+                  <span class="t-glyph">🜂</span>
+                  <span class="t-num">8</span>
+                  <span class="t-label">MYTHOPO</span>
+                </button>
+                <button type="button" class="taxon-btn" data-digit="9" id="btn-taxon-9">
+                  <span class="t-glyph">⍰</span>
+                  <span class="t-num">9</span>
+                  <span class="t-label">ANOMALON</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- CLUSTER 2: RETRIEVAL ACTUATOR & INTERLOCK CONSOLE -->
+            <div class="control-cluster cluster-actuation" id="cluster-retrieval-actuator">
+              <div class="cluster-badge">CLUSTER 2 // RETRIEVAL ACTUATOR & INTERLOCK CONSOLE</div>
+              <div class="actuator-controls-flex">
+                
+                <!-- Preservation Integrity Hold Safety Switch (Defaults to RELEASED) -->
+                <div class="safety-switch-wrapper" id="interlock-wrapper">
+                  <label class="switch-container" for="chk-integrity-hold">
+                    <input type="checkbox" id="chk-integrity-hold" aria-describedby="hold-desc">
+                    <span class="switch-slider"></span>
+                    <span class="switch-glow"></span>
+                  </label>
+                  <div class="switch-text-block">
+                    <div class="switch-title">PRESERVATION INTEGRITY HOLD</div>
+                    <div class="switch-status" id="hold-status-text">RELEASED [UNRESTRICTED]</div>
+                  </div>
+                </div>
+
+                <!-- Primary Master Activation Button -->
+                <button type="button" class="master-actuator-btn" id="btn-retrieve-vault" disabled>
+                  <span class="btn-glow-ring"></span>
+                  <span class="btn-icon">⚡</span>
+                  <span class="btn-text-main">OPEN RETRIEVAL VAULT</span>
+                  <span class="btn-text-sub" id="actuator-subtext">AWAITING 7-FACET CLASSIFICATION</span>
+                </button>
+
+                <!-- Disengage / Seal Vault Button (Always reachable) -->
+                <button type="button" class="disengage-vault-btn" id="btn-disengage-vault" title="Seal Stasis Vault and Disengage Retrieval">
+                  <span class="disengage-icon">⊘</span>
+                  <span class="disengage-text">SEAL VAULT / DISENGAGE</span>
+                </button>
+
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- RIGHT WING: RETRIEVED RECORD DOSSIER & PRESERVATION CHAMBER STATUS -->
+        <aside class="console-wing right-wing" aria-label="Preservation Chamber Dossier">
+          <div class="wing-panel record-dossier-panel">
+            <div class="panel-header">
+              <div class="panel-title-badge">RETRIEVAL-STATION</div>
+              <h2 class="panel-title">RECORD ACCESSION DOSSIER</h2>
+            </div>
+            <div class="panel-body" id="dossier-content-body">
+              
+              <!-- Idle placeholder when no record is retrieved -->
+              <div class="dossier-idle-placeholder" id="dossier-idle-view">
+                <div class="idle-seal-icon">🗎</div>
+                <div class="idle-title">NO RECORD MATERIALIZED</div>
+                <div class="idle-desc">Dial a 7-facet classification code or select a preloaded catalog accession to initiate stasis-vault retrieval.</div>
+              </div>
+
+              <!-- Active Dossier View when record is retrieved or pending -->
+              <div class="dossier-active-view hidden" id="dossier-active-view">
+                <div class="dossier-badge-row">
+                  <span class="dossier-class-tag" id="dos-class-code">3-ASTRO.882</span>
+                  <span class="dossier-condition-tag" id="dos-condition">PRISTINE (99.8%)</span>
+                </div>
+                <h3 class="dossier-heading" id="dos-title">The Alexandria Codex of Lost Stars</h3>
+                <div class="dossier-author-row" id="dos-origin">ORIGIN: Ptolemaic Astronavigators Guild · c. 248 BCE</div>
+                
+                <div class="dossier-data-grid">
+                  <div class="dossier-cell">
+                    <span class="cell-label">STACKS SECTOR</span>
+                    <span class="cell-val" id="dos-sector">SECTOR 8 (CYGNUS WING)</span>
+                  </div>
+                  <div class="dossier-cell">
+                    <span class="cell-label">STASIS TIER</span>
+                    <span class="cell-val" id="dos-tier">TIER 04 · POD 291</span>
+                  </div>
+                  <div class="dossier-cell">
+                    <span class="cell-label">MEDIUM / FORMAT</span>
+                    <span class="cell-val" id="dos-format">Illuminated Vellum / Photonic Matrix</span>
+                  </div>
+                  <div class="dossier-cell">
+                    <span class="cell-label">LAST RETRIEVED</span>
+                    <span class="cell-val" id="dos-last-retrieved">42 CYCLES AGO</span>
+                  </div>
+                </div>
+
+                <div class="dossier-synopsis">
+                  <span class="synopsis-label">BIBLIOGRAPHIC ABSTRACT</span>
+                  <p class="synopsis-text" id="dos-abstract">
+                    Comprehensive pre-telescopic star-catalog recording 1,022 stellar magnitudes, astrometric azimuths, and lost constellation boundaries observed from the Great Pharos Observatory.
+                  </p>
+                </div>
+
+                <div class="dossier-custody-summary">
+                  <span class="custody-label">PRIMARY CUSTODIAN</span>
+                  <span class="custody-val" id="dos-custodian">Curator A. Valerius (Seal: 0x9F4C-PBID)</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Stacks Preservation Chamber Environmental Telemetry -->
+          <div class="wing-panel chamber-telemetry-panel">
+            <div class="panel-header">
+              <div class="panel-title-badge">CHAMBER-SENSORS</div>
+              <h3 class="panel-title">PRESERVATION TELEMETRY</h3>
+            </div>
+            <div class="panel-body chamber-body">
+              <div class="chamber-sensor-grid">
+                <div class="sensor-card">
+                  <div class="sensor-title">NITROGEN PURGE</div>
+                  <div class="sensor-value" id="sens-n2">98.8%</div>
+                  <div class="sensor-sub">NOMINAL</div>
+                </div>
+                <div class="sensor-card">
+                  <div class="sensor-title">CRYOGENIC TEMP</div>
+                  <div class="sensor-value" id="sens-temp">77.2 K</div>
+                  <div class="sensor-sub">LIQUID N₂ LEVEL</div>
+                </div>
+                <div class="sensor-card">
+                  <div class="sensor-title">HUMIDITY (RH)</div>
+                  <div class="sensor-value" id="sens-rh">0.02%</div>
+                  <div class="sensor-sub">ANHYDROUS</div>
+                </div>
+                <div class="sensor-card">
+                  <div class="sensor-title">FLUX STABILITY</div>
+                  <div class="sensor-value" id="sens-flux">99.98%</div>
+                  <div class="sensor-sub">COHERENT</div>
+                </div>
+              </div>
+              <div class="queue-depth-bar">
+                <div class="queue-label">
+                  <span>RETRIEVAL QUEUE DEPTH</span>
+                  <span id="queue-depth-num">0 PENDING</span>
+                </div>
+                <div class="queue-track">
+                  <div class="queue-fill" id="queue-bar-fill" style="width: 5%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+      </main>
+
+      <!-- VIEW 2: MASTER CATALOG (SEARCHABLE & FILTERABLE) -->
+      <section class="modal-or-view-pane hidden" id="view-catalog" aria-label="Master Bibliographic Catalog">
+        <div class="catalog-pane-container">
+          <div class="catalog-header-bar">
+            <div class="catalog-title-group">
+              <h2 class="pane-heading">MASTER BIBLIOGRAPHIC CATALOG</h2>
+              <span class="pane-sub">OVER 24 VERIFIED ACCESSIONS IN DEEP STASIS STORAGE</span>
+            </div>
+            <div class="catalog-search-controls">
+              <input type="text" id="catalog-search-input" class="search-input" placeholder="Search by title, origin, classification code, or keyword..." aria-label="Search catalog">
+              <select id="catalog-category-filter" class="category-select" aria-label="Filter by Domain">
+                <option value="ALL">ALL DOMAINS (0-9)</option>
+                <option value="0">0: CHRONIC HISTORIOGRAPHY</option>
+                <option value="1">1: DOGMATIC ONTOLOGIES</option>
+                <option value="2">2: XENOLINGUISTIC LEXICONS</option>
+                <option value="3">3: ASTROMETRIC CATALOGS</option>
+                <option value="4">4: BIO-ANATOMICAL SCHEMATA</option>
+                <option value="5">5: QUANTUM TREATISES</option>
+                <option value="6">6: CYBERNETIC MATRICES</option>
+                <option value="7">7: EPIGRAPHIC FOLIOS</option>
+                <option value="8">8: ESOTERIC MYTHOLOGIES</option>
+                <option value="9">9: ANOMALOUS RECORDS</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="catalog-table-wrap">
+            <table class="catalog-table" id="master-catalog-table">
+              <thead>
+                <tr>
+                  <th>CLASSIFICATION CODE</th>
+                  <th>RECORD TITLE</th>
+                  <th>ORIGIN / AUTHOR</th>
+                  <th>EPOCH / CENTURY</th>
+                  <th>STACKS LOCATION</th>
+                  <th>INTEGRITY</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="catalog-table-body">
+                <!-- Populated dynamically with 24+ richly detailed records -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: DEEP STACKS 3D / ISOMETRIC SHELF MAP -->
+      <section class="modal-or-view-pane hidden" id="view-stacks" aria-label="Deep Stacks Map">
+        <div class="stacks-pane-container">
+          <div class="stacks-header-bar">
+            <div>
+              <h2 class="pane-heading">DEEP STACKS PHYSICAL LOCATION MAP</h2>
+              <span class="pane-sub">AUTOMATED ROBOTIC GANTRY & VAULT SLEEVE TOPOLOGY</span>
+            </div>
+            <div class="gantry-telemetry-badge">
+              <span>GANTRY STATUS: </span>
+              <span class="highlight" id="map-gantry-status">IDLE (SECTOR 3 · ELEVATION 42m)</span>
+            </div>
+          </div>
+
+          <div class="stacks-map-canvas-wrap">
+            <svg id="deep-stacks-svg" class="stacks-svg" viewBox="0 0 1200 650" preserveAspectRatio="xMidYMid meet">
+              <!-- Grid background & stacks silos -->
+              <defs>
+                <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0, 240, 170, 0.05)" stroke-width="1"/>
+                </pattern>
+                <linearGradient id="vaultGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.6"/>
+                  <stop offset="100%" stop-color="#00f0aa" stop-opacity="0.1"/>
+                </linearGradient>
+              </defs>
+
+              <rect width="100%" height="100%" fill="url(#gridPattern)"/>
+
+              <!-- 6 Vault Silos / Sectors -->
+              <g id="stacks-silos-layer">
+                <!-- Silo 0 to 5 -->
+              </g>
+
+              <!-- Animated Robotic Gantry Crane -->
+              <g id="robotic-gantry-arm" transform="translate(600, 300)">
+                <line x1="-1200" y1="0" x2="1200" y2="0" stroke="#00e5ff" stroke-width="2" stroke-dasharray="6, 4" opacity="0.6"/>
+                <circle cx="0" cy="0" r="14" fill="#00f0aa" stroke="#ffffff" stroke-width="2"/>
+                <line x1="0" y1="-30" x2="0" y2="30" stroke="#00e5ff" stroke-width="3"/>
+                <rect x="-24" y="-12" width="48" height="24" rx="4" fill="rgba(8,12,16,0.9)" stroke="#00f0aa"/>
+                <text x="0" y="4" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#00f0aa">GANTRY-01</text>
+              </g>
+
+              <!-- Selected Record Highlight Pod -->
+              <g id="target-pod-marker" class="hidden">
+                <circle cx="0" cy="0" r="28" fill="none" stroke="#ffb700" stroke-width="2" stroke-dasharray="4, 4" class="pod-ping"/>
+                <circle cx="0" cy="0" r="10" fill="#ffb700"/>
+                <text x="0" y="-36" text-anchor="middle" font-family="Orbitron" font-size="12" fill="#ffb700" id="pod-marker-label">TARGET POD: SECTOR 3</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: PROVENANCE & CHAIN-OF-CUSTODY LEDGER -->
+      <section class="modal-or-view-pane hidden" id="view-provenance" aria-label="Provenance & Chain-of-Custody Ledger">
+        <div class="provenance-pane-container">
+          <div class="provenance-header-bar">
+            <div>
+              <h2 class="pane-heading">CHAIN-OF-CUSTODY & CONCORDANCE LEDGER</h2>
+              <span class="pane-sub">IMMUTABLE ARCHIVAL TRANSACTION & RESTORATION AUDIT LOG</span>
+            </div>
+            <div class="ledger-security-badge">
+              <span>LEDGER INTEGRITY: </span>
+              <span class="status-good">CRYPTOGRAPHICALLY SEALED (SHA-256 PBID)</span>
+            </div>
+          </div>
+
+          <div class="provenance-table-wrap">
+            <table class="catalog-table" id="provenance-table">
+              <thead>
+                <tr>
+                  <th>TRANSACTION ID</th>
+                  <th>TIMESTAMP (EPOCH)</th>
+                  <th>ACCESSION CODE</th>
+                  <th>OPERATION TYPE</th>
+                  <th>CUSTODIAN / AUTHORITY</th>
+                  <th>INTEGRITY HASH</th>
+                  <th>CONSERVATION NOTES</th>
+                </tr>
+              </thead>
+              <tbody id="provenance-table-body">
+                <!-- Dynamically populated transaction entries -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: SETTINGS & CONFIGURATION PANEL -->
+      <section class="modal-or-view-pane hidden" id="view-settings" aria-label="System Settings">
+        <div class="settings-pane-container">
+          <h2 class="pane-heading">ARCHIVE CONSOLE CONFIGURATION</h2>
+          <span class="pane-sub">AUDIO SYNTHESIS, TELEMETRY DENSITY & MOTION PREFERENCES</span>
+
+          <div class="settings-grid">
+            
+            <!-- Audio Settings -->
+            <div class="settings-card">
+              <h3 class="settings-card-title">PROCEDURAL WEB AUDIO</h3>
+              
+              <div class="setting-row">
+                <label for="set-master-volume">MASTER VOLUME</label>
+                <input type="range" id="set-master-volume" min="0" max="100" value="75">
+                <span class="setting-val" id="val-master-vol">75%</span>
+              </div>
+
+              <div class="setting-row">
+                <label for="set-sfx-toggle">INDEX & DETENT SFX</label>
+                <input type="checkbox" id="set-sfx-toggle" checked>
+              </div>
+
+              <div class="setting-row">
+                <label for="set-drone-toggle">STASIS AMBIENT HUM</label>
+                <input type="checkbox" id="set-drone-toggle" checked>
+              </div>
+
+              <div class="setting-row">
+                <label for="set-bell-toggle">REFERENCE-DESK CHIME</label>
+                <input type="checkbox" id="set-bell-toggle" checked>
+              </div>
+            </div>
+
+            <!-- Visual & Display Settings -->
+            <div class="settings-card">
+              <h3 class="settings-card-title">DISPLAY & PHOSPHOR VISUALS</h3>
+
+              <div class="setting-row">
+                <label for="set-phosphor-theme">COLOR PHOSPHOR SCHEME</label>
+                <select id="set-phosphor-theme">
+                  <option value="theme-phosphor">EMERALD & CYAN (STANDARD PBID)</option>
+                  <option value="theme-amber">AMBER MONOCHROME (CLASSIC ARCHIVE)</option>
+                  <option value="theme-cobalt">DEEP COBALT (HIGH-STASIS CRYOPORTAL)</option>
+                </select>
+              </div>
+
+              <div class="setting-row">
+                <label for="set-scanlines-toggle">CRT SCANLINES & PHOSPHOR GLOW</label>
+                <input type="checkbox" id="set-scanlines-toggle" checked>
+              </div>
+
+              <div class="setting-row">
+                <label for="set-motion-rate">ROTARY DIAL ANIMATION SPEED</label>
+                <select id="set-motion-rate">
+                  <option value="normal">STANDARD (350ms / FACET)</option>
+                  <option value="fast">HIGH-SPEED GANTRY (180ms / FACET)</option>
+                  <option value="instant">INSTANTANEOUS VERIFICATION</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- OPERATOR REFERENCE MODAL OVERLAY ('?' BUTTON) -->
+      <div class="operator-modal-backdrop hidden" id="operator-modal" role="dialog" aria-modal="true" aria-labelledby="modal-ref-title">
+        <div class="operator-modal-box">
+          <div class="modal-header">
+            <div class="modal-title-group">
+              <h2 id="modal-ref-title" class="modal-title">OPERATOR REFERENCE MANUAL // PBID-7 CONSOLE</h2>
+              <span class="modal-sub">STANDARD RETRIEVAL PROTOCOLS & VALERIUS TAXONOMY SPECIFICATION</span>
+            </div>
+            <button type="button" class="modal-close-btn" id="btn-close-help" aria-label="Close Operator Reference">✕</button>
+          </div>
+
+          <div class="modal-body-scroll">
+            
+            <section class="modal-section">
+              <h3 class="section-title">1. THE ARCHIVE RETRIEVAL PHILOSOPHY</h3>
+              <p>
+                The <strong>Pan-Harmonic Bibliographic Institute & Depository (PBID-7)</strong> maintains an immutable stasis vault containing millions of cataloged folios, codices, epigraphs, and data tablets. Unlike spatial teleportation portals, this console operates as an <em>archival retrieval conduit</em>: dialing resolves a record's precise multi-facet accession coordinates and materializes its physical/photonic stasis capsule into the reading chamber.
+              </p>
+            </section>
+
+            <section class="modal-section">
+              <h3 class="section-title">2. THE VALERIUS HEX-FACET TAXONOMIC SYSTEM (VHFS)</h3>
+              <p>
+                Records are cataloged using a 7-facet hierarchical coordinate code:
+              </p>
+              <div class="taxonomy-ref-table">
+                <div class="ref-row"><code>0 · CHRONIC</code> <span>Historiographies, annalistic chronologies, ephemerides.</span></div>
+                <div class="ref-row"><code>1 · ONTOLOG</code> <span>Dogmatic ontologies, epistemological treaties, metaphysics.</span></div>
+                <div class="ref-row"><code>2 · XENOLING</code> <span>Xenolinguistic lexicons, semantic grammars, translation glyphs.</span></div>
+                <div class="ref-row"><code>3 · ASTROMET</code> <span>Astrometric star catalogs, galactic cartography, orbit tables.</span></div>
+                <div class="ref-row"><code>4 · BIO-ANAT</code> <span>Bio-anatomical schemata, xenobiological taxonomy, genetics.</span></div>
+                <div class="ref-row"><code>5 · QUANTUM</code> <span>Quantum relativistic treatizes, singularity dynamics.</span></div>
+                <div class="ref-row"><code>6 · CYBERNET</code> <span>Cybernetic matrices, neural network archives, logic engines.</span></div>
+                <div class="ref-row"><code>7 · EPIGRAPH</code> <span>Epigraphic tablets, illuminated codices, sacred palimpsests.</span></div>
+                <div class="ref-row"><code>8 · MYTHOPO</code> <span>Esoteric mythopoetics, folk chronicles, astrological lore.</span></div>
+                <div class="ref-row"><code>9 · ANOMALON</code> <span>Unresolved anomalous records, paradoxical data fragments.</span></div>
+              </div>
+            </section>
+
+            <section class="modal-section">
+              <h3 class="section-title">3. THE TWO-STEP ARCHIVAL LOCKING GESTURE</h3>
+              <p>
+                A classification digit is <strong>not</strong> confirmed merely by rotating into position. When a segment reaches the collimator reading window:
+              </p>
+              <ol class="modal-steps-list">
+                <li><strong>Radial Wheel Alignment:</strong> The physical rotary card wheel rotates to align the selected classification fin under the fixed reading collimator.</li>
+                <li><strong>Secondary Authority Concordance Check:</strong> The depository's automated verification scanner cross-references the candidate facet against the secondary provenance registry and authority checksum. Once verified, a mechanical detent and reference-desk chime lock the slot.</li>
+              </ol>
+            </section>
+
+            <section class="modal-section">
+              <h3 class="section-title">4. THREE-STAGE STASIS VAULT ACTIVATION</h3>
+              <p>
+                Completing all 7 facets places the console in <strong>PENDING</strong> status (never auto-fires). Pressing <strong>OPEN RETRIEVAL VAULT</strong> initiates:
+              </p>
+              <ul>
+                <li><strong>Stage 1 (Buildup - 2.0s):</strong> Cryogenic chamber pressure equalization, cross-reference confidence ramping to 100%, and acoustic resonance hum.</li>
+                <li><strong>Stage 2 (Breakthrough):</strong> Stasis iris blades flare open with pneumatic decompression and reference chime.</li>
+                <li><strong>Stage 3 (Sustained Active):</strong> Stasis vortex conduit holds open, holographic folio projection materializes, and live provenance streams.</li>
+              </ul>
+            </section>
+
+            <section class="modal-section">
+              <h3 class="section-title">5. PRESERVATION INTEGRITY HOLD (SAFETY INTERLOCK)</h3>
+              <p>
+                Fragile, endangered, or restricted codices may be protected by the <strong>Preservation Integrity Hold</strong>. When engaged, stasis retrieval is blocked with clear HUD warnings until the operator releases the hold. By depository protocol, the hold defaults to <strong>RELEASED</strong>.
+              </p>
+            </section>
+
+            <section class="modal-section">
+              <h3 class="section-title">6. DISENGAGE & ABORT PROTOCOL</h3>
+              <p>
+                The <strong>SEAL VAULT / DISENGAGE</strong> control is reachable at all times, safely closing the stasis iris, de-energizing the conduit, and returning the console to idle.
+              </p>
+            </section>
+
+            <section class="modal-section">
+              <h3 class="section-title">7. KEYBOARD SHORTCUTS</h3>
+              <div class="shortcuts-grid">
+                <div><kbd>0</kbd> - <kbd>9</kbd> : Dial Classification Facet</div>
+                <div><kbd>Enter</kbd> : Open Retrieval Vault</div>
+                <div><kbd>Escape</kbd> : Disengage / Seal Vault</div>
+                <div><kbd>H</kbd> / <kbd>?</kbd> : Toggle Operator Manual</div>
+                <div><kbd>1</kbd> - <kbd>6</kbd> (Alt) : Quick-Dial Preset</div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER & CORNER ATTRIBUTIONS -->
+      <footer class="depository-footer" id="main-footer">
+        <div class="footer-left">
+          <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="footer-link">
+            StarlightDaemon
+          </a>
+          <span class="footer-divider">·</span>
+          <span class="footer-sub">PAN-HARMONIC ARCHIVAL INTERFACE ENGINE</span>
+        </div>
+
+        <div class="footer-center" id="footer-status-ticker">
+          <span class="ticker-pulse">●</span>
+          <span id="ticker-msg">STASIS CONDUIT READY // VALERIUS CONCORDANCE ONLINE // 24 ACCESSIONS INDEXED</span>
+        </div>
+
+        <div class="footer-right">
+          <span class="version-tag" id="footer-version-tag">v1.0.0</span>
+          <span class="footer-sub">PBID-7 DEPOSITORY</span>
+        </div>
+      </footer>
+
+      <!-- CRT SCANLINE & GLOW OVERLAY -->
+      <div class="crt-overlay-layer" aria-hidden="true"></div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
