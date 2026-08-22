@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TX-77 'AURA' Fast-Neutron Annular Resonator // Digital Criticality HMI</title>
+  <meta name="description" content="Digital reactor Human-Machine Interface (HMI) for the TX-77 AURA Annular Fast-Neutron Resonator at the Kallio Deep Bore Subsurface Research Complex.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-cherenkov">
+  <div id="hmi-viewport-scaler" class="viewport-scaler">
+    <div id="app-container" class="app-container">
+      
+      <!-- Top Diagnostic Header Bar -->
+      <header class="hmi-header" id="hmi-header">
+        <div class="facility-badge">
+          <div class="facility-logo-icon">
+            <svg viewBox="0 0 32 32" width="28" height="28" fill="none">
+              <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.7"/>
+              <circle cx="16" cy="16" r="8" stroke="currentColor" stroke-width="2"/>
+              <circle cx="16" cy="16" r="3" fill="currentColor"/>
+              <line x1="16" y1="2" x2="16" y2="8" stroke="currentColor" stroke-width="2"/>
+              <line x1="16" y1="24" x2="16" y2="30" stroke="currentColor" stroke-width="2"/>
+              <line x1="2" y1="16" x2="8" y2="16" stroke="currentColor" stroke-width="2"/>
+              <line x1="24" y1="16" x2="30" y2="16" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="facility-meta">
+            <div class="facility-title">KALLIO DEEP BORE COMPLEX <span class="sec-tag">SEC-09-SUB</span></div>
+            <div class="facility-sub">TX-77 'AURA' FAST-NEUTRON ANNULAR RESONATOR // NCRD VALO ATOMIC</div>
+          </div>
+        </div>
+
+        <div class="header-status-cluster">
+          <div class="status-indicator-box">
+            <span class="status-label">REACTOR STATE</span>
+            <div class="status-value-pill" id="global-reactor-status">
+              <span class="status-beacon blink" id="status-beacon"></span>
+              <span class="status-text" id="status-text">SUBCRITICAL STANDBY</span>
+            </div>
+          </div>
+
+          <div class="status-indicator-box">
+            <span class="status-label">MULTIPLICATION (k_eff)</span>
+            <div class="k-eff-readout" id="header-keff-display">0.7500</div>
+          </div>
+
+          <div class="status-indicator-box">
+            <span class="status-label">THERMAL POWER</span>
+            <div class="power-readout" id="header-power-display">0.001 <span class="unit">MWth</span></div>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button id="audio-toggle-btn" class="header-btn" title="Toggle Synthesized Audio Engine" aria-label="Toggle Audio">
+            <svg id="audio-icon-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+            <span id="audio-btn-label">AUDIO: ACTIVE</span>
+          </button>
+
+          <button id="operator-ref-btn" class="header-btn circular-ref-btn" title="Open Operator Reference Manual" aria-label="Operator Reference">
+            <span>?</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Asymmetric Workspace Layout -->
+      <main class="hmi-workspace" id="hmi-workspace">
+        
+        <!-- Left Major Column: Annular Reactor Core Vector Scope (62% width) -->
+        <section class="core-matrix-zone" id="core-matrix-zone" aria-label="Annular Reactor Core Matrix">
+          
+          <!-- Top Rod Sequence Alignment Ribbon -->
+          <div class="alignment-ribbon" id="alignment-ribbon">
+            <div class="ribbon-header">
+              <div class="ribbon-title">CRITICALITY CONFIGURATION REGISTER // 6-CHANNEL ADDRESS</div>
+              <div class="ribbon-progress" id="alignment-progress-text">CALIBRATED: 0 / 6 CHANNELS</div>
+            </div>
+            <div class="address-slots-grid" id="address-slots-container">
+              <!-- Dynamically populated 6 slots -->
+              <div class="address-slot" id="slot-0" data-slot="0">
+                <span class="slot-idx">SLOT I</span>
+                <span class="slot-symbol">--</span>
+                <span class="slot-depth">0.0%</span>
+                <span class="slot-flux-status">OFFLINE</span>
+              </div>
+              <div class="address-slot" id="slot-1" data-slot="1">
+                <span class="slot-idx">SLOT II</span>
+                <span class="slot-symbol">--</span>
+                <span class="slot-depth">0.0%</span>
+                <span class="slot-flux-status">OFFLINE</span>
+              </div>
+              <div class="address-slot" id="slot-2" data-slot="2">
+                <span class="slot-idx">SLOT III</span>
+                <span class="slot-symbol">--</span>
+                <span class="slot-depth">0.0%</span>
+                <span class="slot-flux-status">OFFLINE</span>
+              </div>
+              <div class="address-slot" id="slot-3" data-slot="3">
+                <span class="slot-idx">SLOT IV</span>
+                <span class="slot-symbol">--</span>
+                <span class="slot-depth">0.0%</span>
+                <span class="slot-flux-status">OFFLINE</span>
+              </div>
+              <div class="address-slot" id="slot-4" data-slot="4">
+                <span class="slot-idx">SLOT V</span>
+                <span class="slot-symbol">--</span>
+                <span class="slot-depth">0.0%</span>
+                <span class="slot-flux-status">OFFLINE</span>
+              </div>
+              <div class="address-slot" id="slot-5" data-slot="5">
+                <span class="slot-idx">SLOT VI</span>
+                <span class="slot-symbol">--</span>
+                <span class="slot-depth">0.0%</span>
+                <span class="slot-flux-status">OFFLINE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Vector Scope Container -->
+          <div class="core-canvas-wrapper" id="core-canvas-wrapper">
+            <canvas id="core-vector-canvas" width="960" height="620"></canvas>
+            
+            <!-- Dynamic HUD Overlay over Core Scope -->
+            <div class="core-hud-overlay">
+              <div class="hud-corner top-left">
+                <div class="hud-tag">ANNULAR CORE GEOMETRY: 10-BANK RADIAL</div>
+                <div class="hud-val" id="hud-mesh-density">FLUX MESH: 128 SENSORS ACTIVE</div>
+              </div>
+              <div class="hud-corner top-right">
+                <div class="hud-tag">CHERENKOV DETECTOR</div>
+                <div class="hud-val" id="hud-cherenkov-level">SPECTRAL EMISSION: 0.04 cd</div>
+              </div>
+              <div class="hud-corner bottom-left">
+                <div class="hud-tag">PROMPT MULTIPLICATION</div>
+                <div class="hud-val" id="hud-keff-detail">k_eff = 0.75000 [SUBCRITICAL]</div>
+              </div>
+              <div class="hud-corner bottom-right">
+                <div class="hud-tag">REACTIVITY MARGIN</div>
+                <div class="hud-val" id="hud-reactivity-pcm">ρ = -33,333 pcm</div>
+              </div>
+            </div>
+
+            <!-- Active Rod Flux Wait Bar overlay for active calibration -->
+            <div id="flux-stabilization-hud" class="flux-stabilization-hud hidden">
+              <div class="stabilization-header">
+                <span class="st-icon">⚡</span>
+                <span class="st-title" id="stabilization-channel-title">BANK α WITHDRAWAL & FLUX STABILIZATION</span>
+              </div>
+              <div class="stabilization-bar-wrap">
+                <div class="stabilization-bar-fill" id="stabilization-bar-fill"></div>
+              </div>
+              <div class="stabilization-stats">
+                <span id="stabilization-target-flux">TARGET FLUX: 4.82 × 10¹² nv</span>
+                <span id="stabilization-variance">VARIANCE: ±0.03% [SETTLING]</span>
+              </div>
+            </div>
+
+            <!-- Activation Overlay Banner -->
+            <div id="aperture-activation-banner" class="activation-banner hidden">
+              <div class="banner-title" id="activation-banner-title">CRITICALITY ACHIEVED // APERTURE OPEN</div>
+              <div class="banner-sub" id="activation-banner-sub">PROMPT NEUTRON RESONANCE STABILIZED AT 420.0 MWth</div>
+            </div>
+          </div>
+
+          <!-- Rod Channels Interactive Matrix (Control Cluster 1) -->
+          <div class="rod-channel-bar" id="rod-channel-bar">
+            <div class="channel-bar-header">
+              <span class="cb-title">CONTROL ROD CHANNEL SELECTOR // 10 RADIAL BANKS</span>
+              <span class="cb-hint">Click channel to command calibrated withdrawal & flux stabilization</span>
+            </div>
+            <div class="channels-grid" id="channels-button-grid">
+              <!-- Dynamically populated or rendered buttons -->
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Right Column: Command Stack & Multi-Deck Telemetry (38% width) -->
+        <section class="command-deck-zone" id="command-deck-zone" aria-label="Command and Telemetry Console">
+          
+          <!-- Sector 1: Primary Criticality Execution Deck (Control Cluster 2) -->
+          <div class="primary-control-cluster" id="primary-control-cluster">
+            <div class="cluster-header">
+              <span class="cluster-title">CRITICALITY EXECUTION & SAFETY MATRIX</span>
+              <span class="cluster-badge" id="rps-status-badge">RPS: CLEAR</span>
+            </div>
+
+            <!-- RPS Interlock Toggle (Defaults to RELEASED) -->
+            <div class="rps-control-box">
+              <div class="rps-info">
+                <div class="rps-label">REACTOR PROTECTION SYSTEM (RPS) HOLD</div>
+                <div class="rps-desc" id="rps-desc-text">ADMINISTRATIVE INTERLOCK — DEFAULTS TO RELEASED</div>
+              </div>
+              <button id="rps-toggle-btn" class="rps-toggle-btn released" role="switch" aria-checked="false">
+                <span class="rps-toggle-pill"></span>
+                <span class="rps-toggle-text" id="rps-btn-text">HOLD RELEASED [READY]</span>
+              </button>
+            </div>
+
+            <!-- Main Action Buttons -->
+            <div class="action-buttons-row">
+              <button id="activate-criticality-btn" class="activate-btn disabled" disabled>
+                <div class="btn-glow-shroud"></div>
+                <div class="btn-content">
+                  <span class="btn-icon">⚛</span>
+                  <span class="btn-label" id="activate-btn-label">INITIATE CONTROLLED CRITICALITY</span>
+                  <span class="btn-subtext" id="activate-btn-sub">REQUIRES 6 CHANNELS CALIBRATED</span>
+                </div>
+              </button>
+
+              <button id="scram-disengage-btn" class="scram-btn" title="Emergency Rod Insertion & Reactor Shutdown">
+                <div class="scram-shroud"></div>
+                <div class="scram-content">
+                  <span class="scram-icon">⚠</span>
+                  <span class="scram-label">EMERGENCY SCRAM</span>
+                  <span class="scram-sub">ROD INSERTION / DISENGAGE</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Sector 2: Multi-View Subsystem Monitor Deck -->
+          <div class="subsystem-monitor-deck" id="subsystem-monitor-deck">
+            <div class="deck-tab-bar" role="tablist">
+              <button class="deck-tab active" data-tab="tab-telemetry" role="tab" id="tab-btn-telemetry" aria-selected="true">
+                TELEMETRY
+              </button>
+              <button class="deck-tab" data-tab="tab-xenon" role="tab" id="tab-btn-xenon" aria-selected="false">
+                XENON-135
+              </button>
+              <button class="deck-tab" data-tab="tab-cross-section" role="tab" id="tab-btn-cross-section" aria-selected="false">
+                AXIAL CORE
+              </button>
+              <button class="deck-tab" data-tab="tab-archive" role="tab" id="tab-btn-archive" aria-selected="false">
+                ARCHIVE
+              </button>
+              <button class="deck-tab" data-tab="tab-log" role="tab" id="tab-btn-log" aria-selected="false">
+                EVENT LOG
+              </button>
+              <button class="deck-tab" data-tab="tab-settings" role="tab" id="tab-btn-settings" aria-selected="false">
+                SETTINGS
+              </button>
+            </div>
+
+            <div class="deck-content-wrap">
+              
+              <!-- Tab 1: Live Thermal-Hydraulics & Point Kinetics -->
+              <div class="tab-panel active" id="tab-telemetry" role="tabpanel">
+                <div class="telemetry-grid">
+                  <div class="telemetry-card">
+                    <div class="t-label">CORE INLET / OUTLET TEMP</div>
+                    <div class="t-value" id="t-temp-in-out">285.4°C / 318.2°C</div>
+                    <div class="t-bar-wrap"><div class="t-bar" id="bar-temp" style="width: 45%;"></div></div>
+                  </div>
+                  <div class="telemetry-card">
+                    <div class="t-label">COOLANT MASS FLOW RATE</div>
+                    <div class="t-value" id="t-coolant-flow">14,280 <span class="t-unit">kg/s</span></div>
+                    <div class="t-bar-wrap"><div class="t-bar" id="bar-flow" style="width: 82%;"></div></div>
+                  </div>
+                  <div class="telemetry-card">
+                    <div class="t-label">PRIMARY LOOP PRESSURE</div>
+                    <div class="t-value" id="t-pressure">155.2 <span class="t-unit">bar</span></div>
+                    <div class="t-bar-wrap"><div class="t-bar" id="bar-pressure" style="width: 65%;"></div></div>
+                  </div>
+                  <div class="telemetry-card">
+                    <div class="t-label">CONTAINMENT BARRIER INTEGRITY</div>
+                    <div class="t-value nom" id="t-containment">100.0% [NOMINAL]</div>
+                    <div class="t-bar-wrap"><div class="t-bar nom" id="bar-containment" style="width: 100%;"></div></div>
+                  </div>
+                  <div class="telemetry-card">
+                    <div class="t-label">DELAYED NEUTRON FRACTION (β_eff)</div>
+                    <div class="t-value" id="t-beta-eff">0.00650 <span class="t-unit">(650 pcm)</span></div>
+                    <div class="t-bar-wrap"><div class="t-bar" id="bar-beta" style="width: 50%;"></div></div>
+                  </div>
+                  <div class="telemetry-card">
+                    <div class="t-label">PROMPT NEUTRON LIFETIME (l*)</div>
+                    <div class="t-value" id="t-lifetime">2.50 × 10⁻⁵ <span class="t-unit">s</span></div>
+                    <div class="t-bar-wrap"><div class="t-bar" id="bar-lifetime" style="width: 70%;"></div></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 2: Xenon-135 Transient Tracking -->
+              <div class="tab-panel" id="tab-xenon" role="tabpanel">
+                <div class="xenon-container">
+                  <div class="xenon-header">
+                    <div class="xh-title">IODINE-135 DECAY & XENON-135 POISONING DYNAMICS</div>
+                    <div class="xh-stats" id="xenon-stat-readout">Xe-135 WORTH: -120 pcm // I-135: 8.4 × 10¹⁴ at/cm³</div>
+                  </div>
+                  <div class="xenon-canvas-box">
+                    <canvas id="xenon-curve-canvas" width="460" height="150"></canvas>
+                  </div>
+                  <div class="xenon-legend">
+                    <span class="lg-item"><span class="lg-color xe-col"></span> Xenon-135 Poisoning Peak</span>
+                    <span class="lg-item"><span class="lg-color i-col"></span> Iodine-135 Precursor Decay</span>
+                    <span class="lg-item"><span class="lg-color pw-col"></span> Core Power History</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 3: Axial Core Cross-Section -->
+              <div class="tab-panel" id="tab-cross-section" role="tabpanel">
+                <div class="cross-section-container">
+                  <div class="cs-header">
+                    <span>ELEVATION CROSS-SECTION // FUEL PIN LATTICE & FLUX PROFILE</span>
+                    <span id="cs-active-rods-count">INSERTION: 10/10 RODS DOWN</span>
+                  </div>
+                  <div class="cs-canvas-box">
+                    <canvas id="cross-section-canvas" width="460" height="150"></canvas>
+                  </div>
+                  <div class="cs-footer-info">
+                    <span>AXIAL COSINE FLUX PROFILE (z = 0 to 4.2m)</span>
+                    <span id="cs-peak-flux">PEAK AXIAL FLUX: 1.2 × 10¹³ nv</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 4: Searchable Configuration Archive -->
+              <div class="tab-panel" id="tab-archive" role="tabpanel">
+                <div class="archive-container">
+                  <div class="archive-controls">
+                    <input type="text" id="archive-search-input" class="archive-search" placeholder="Search configs by ID, operator, power...">
+                    <select id="archive-tier-filter" class="archive-filter">
+                      <option value="all">ALL TIERS</option>
+                      <option value="verified">TIER 1: VERIFIED</option>
+                      <option value="experimental">TIER 2: EXPERIMENTAL</option>
+                    </select>
+                  </div>
+                  <div class="archive-table-scroll">
+                    <table class="archive-table" id="archive-table">
+                      <thead>
+                        <tr>
+                          <th>CONFIG ID</th>
+                          <th>TIER</th>
+                          <th>CHANNELS</th>
+                          <th>POWER</th>
+                          <th>MARGIN</th>
+                          <th>ACTION</th>
+                        </tr>
+                      </thead>
+                      <tbody id="archive-table-body">
+                        <!-- Populated by archive.js -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 5: Startup / Event Log -->
+              <div class="tab-panel" id="tab-log" role="tabpanel">
+                <div class="event-log-container">
+                  <div class="log-controls">
+                    <span class="log-title">TERMINAL TELEMETRY STREAM</span>
+                    <button id="clear-log-btn" class="log-mini-btn">CLEAR</button>
+                  </div>
+                  <div class="event-log-stream" id="event-log-stream">
+                    <!-- Dynamic log items -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 6: System & Audio Settings -->
+              <div class="tab-panel" id="tab-settings" role="tabpanel">
+                <div class="settings-container">
+                  <div class="setting-row">
+                    <span class="set-label">MASTER AUDIO VOLUME</span>
+                    <input type="range" id="vol-master-slider" min="0" max="1" step="0.05" value="0.75" class="set-slider">
+                    <span class="set-val" id="vol-master-val">75%</span>
+                  </div>
+                  <div class="setting-row">
+                    <span class="set-label">COOLANT PUMP HUM</span>
+                    <input type="range" id="vol-hum-slider" min="0" max="1" step="0.05" value="0.50" class="set-slider">
+                    <span class="set-val" id="vol-hum-val">50%</span>
+                  </div>
+                  <div class="setting-row">
+                    <span class="set-label">ROD STEPPER & FLUX RESONANCE</span>
+                    <input type="range" id="vol-fx-slider" min="0" max="1" step="0.05" value="0.80" class="set-slider">
+                    <span class="set-val" id="vol-fx-val">80%</span>
+                  </div>
+                  <div class="setting-row">
+                    <span class="set-label">INSTRUMENTATION COLOR PALETTE</span>
+                    <div class="theme-select-btns">
+                      <button class="theme-btn active" data-theme="theme-cherenkov">CHERENKOV BLUE</button>
+                      <button class="theme-btn" data-theme="theme-amber">AMBER CRT</button>
+                      <button class="theme-btn" data-theme="theme-phosphor">RAD-LAB PHOSPHOR</button>
+                    </div>
+                  </div>
+                  <div class="setting-row">
+                    <span class="set-label">REDUCE MOTION / HIGH DENSITY</span>
+                    <div class="toggle-group">
+                      <label class="check-wrap"><input type="checkbox" id="reduce-motion-check"> REDUCE MOTION</label>
+                      <label class="check-wrap"><input type="checkbox" id="high-density-check" checked> HIGH DENSITY HUD</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Sector 3: Quick-Dial Preset Deck -->
+          <div class="quick-dial-preset-deck" id="quick-dial-preset-deck">
+            <div class="preset-header">
+              <div class="preset-title">AUTOMATED STARTUP SEQUENCER // QUICK-DIAL PRESETS</div>
+              <div class="preset-indicator" id="preset-status-indicator">STANDBY</div>
+            </div>
+            
+            <div class="preset-selection-row">
+              <select id="preset-dropdown" class="preset-dropdown">
+                <optgroup label="TIER 1: VERIFIED STARTUP BASELINES">
+                  <option value="CRIT-A01">CRIT-A01 // Standard Annular Resonant Cold Start [α, γ, ε, ζ, θ, κ]</option>
+                  <option value="CRIT-B04">CRIT-B04 // Low-Beta Flux Bridge Calibration [β, δ, ε, η, ι, κ]</option>
+                  <option value="CRIT-C09">CRIT-C09 // Isotope Synthesis Steady-State [α, β, ζ, η, θ, ι]</option>
+                </optgroup>
+                <optgroup label="TIER 2: EXPERIMENTAL & PROVISIONAL REGIMES">
+                  <option value="EXP-X12">EXP-X12 // Fast-Neutron Resonance Surge [γ, δ, ζ, θ, ι, κ]</option>
+                  <option value="EXP-Y07">EXP-Y07 // Asymmetric Flux Horizon Regime [α, β, δ, ε, ζ, η]</option>
+                  <option value="EXP-Z99">EXP-Z99 // Deep Subsurface Harmonic Inversion [β, γ, ε, η, θ, κ]</option>
+                </optgroup>
+              </select>
+
+              <button id="run-preset-autodial-btn" class="run-preset-btn">
+                <span class="rp-icon">▶</span>
+                <span class="rp-text">EXECUTE AUTO-CALIBRATION</span>
+              </button>
+            </div>
+            <div class="preset-info-strip" id="preset-info-strip">
+              Replays NCRD verified automated withdrawal sequence. Lands in PENDING state awaiting manual initiation.
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- Bottom Status & Attribution Corner Display -->
+      <footer class="hmi-footer" id="hmi-footer">
+        <div class="footer-left">
+          <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="footer-author-link" id="author-link">
+            StarlightDaemon
+          </a>
+          <span class="footer-divider">//</span>
+          <span class="footer-facility">KALLIO SUBTERRANEAN STATION SECTOR 09</span>
+        </div>
+        <div class="footer-center">
+          <span class="footer-note">NCRD DIGITAL REACTOR CRITICALITY INSTRUMENT // TX-77 AURA HMI</span>
+        </div>
+        <div class="footer-right">
+          <span class="footer-version" id="version-label" title="Model: Gemini 3.7 Flash (High)">v1.0.0</span>
+        </div>
+      </footer>
+
+      <!-- Operator Reference Modal ( circular ? button ) -->
+      <div id="operator-ref-modal" class="operator-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-ref-title">
+        <div class="operator-modal-card">
+          <div class="modal-header">
+            <div class="modal-title-group">
+              <span class="modal-badge">NCRD HMI MANUAL</span>
+              <h2 id="modal-ref-title">OPERATOR OPERATING MANUAL // TX-77 'AURA' RESONATOR</h2>
+            </div>
+            <button id="close-operator-ref-btn" class="modal-close-btn" aria-label="Close Manual">✕</button>
+          </div>
+
+          <div class="modal-body-content">
+            <section class="modal-section">
+              <h3>1. CORE OPERATING PRINCIPLE</h3>
+              <p>The <strong>TX-77 'AURA'</strong> is a 420 MWth fast-neutron annular resonator core. Ten radial control rod banks (<strong>α through κ</strong>) regulate regional neutron absorption. Criticality alignment requires withdrawing a calibrated set of <strong>6 distinct control rod channels</strong>.</p>
+            </section>
+
+            <section class="modal-section">
+              <h3>2. TWO-PART CHANNEL LOCKING MECHANISM</h3>
+              <p>Selecting any control rod channel initiates a physical motor withdrawal to calibrated depth. The local neutron flux detector monitors the regional flux gradient until reading variance falls within <strong>±0.05%</strong>. A resonant harmonic confirmation tone indicates channel lock.</p>
+            </section>
+
+            <section class="modal-section">
+              <h3>3. THREE-STAGE ACTIVATION & NEGATIVE AUTO-FIRE</h3>
+              <p>Completing 6 channel calibrations leaves the resonator in <strong>PENDING CRITICALITY</strong> state. The system will <em>NEVER</em> auto-fire. To achieve gateway breakthrough, the operator must explicitly depress <strong>INITIATE CONTROLLED CRITICALITY</strong>.</p>
+              <ul class="modal-list">
+                <li><strong>Stage 1 (Buildup):</strong> Multiplication $k_{\text{eff}}$ rises toward 1.000, thermal flux climbing.</li>
+                <li><strong>Stage 2 (Breakthrough):</strong> Prompt Cherenkov blue flash ignites across annular fuel lattice.</li>
+                <li><strong>Stage 3 (Sustained Active):</strong> Sustained steady-state criticality at 420 MWth with continuous fluid vortex aperture.</li>
+              </ul>
+            </section>
+
+            <section class="modal-section">
+              <h3>4. SAFETY INTERLOCK & SCRAM</h3>
+              <p>The <strong>Reactor Protection System (RPS) Hold</strong> defaults to <em>RELEASED</em>. When engaged, it blocks activation with warning alarms. The <strong>EMERGENCY SCRAM</strong> control immediately drops all control rods to 0% insertion, extinguishing core flux within 150ms.</p>
+            </section>
+          </div>
+
+          <div class="modal-footer">
+            <button id="modal-ack-btn" class="modal-ack-btn">ACKNOWLEDGE & RETURN TO CONSOLE</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Application Logic Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/physics.js"></script>
+  <script src="js/core_canvas.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/presets.js"></script>
+  <script src="js/archive.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
