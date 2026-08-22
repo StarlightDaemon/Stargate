@@ -1,7 +1,7 @@
 # Argos DeepScope: Technosignature Interferometry Console
 
 > **Status: Confirmed Fully Functional**  
-> Direct operator testing has confirmed this build fully functional end-to-end. Manual 7-carrier dialing, 10-dish coincidence verification, the three-stage activation sequence (Buildup, Breakthrough, Sustained Active), disengage/flush cycles, and quick-dial auto-dialing are verified working as intended. Testing also validated the integrated experience beyond the core loop, including the Signal Classification & RFI Triage Lab, 10-Dish Physical Array Geometry Map, 25+ Record Historical Archive, and display/audio theme customizations.
+> Direct operator testing has confirmed this build fully functional end-to-end as part of a three-variant page composition experiment. Manual 7-carrier dialing, 10-dish coincidence verification, the three-stage activation sequence (Buildup, Breakthrough, Sustained Active), disengage/flush cycles, and quick-dial auto-dialing are verified working as intended. Testing also validated the integrated experience beyond the core loop, including the Signal Classification & RFI Triage Lab, 10-Dish Physical Array Geometry Map, 25+ Record Historical Archive, and display/audio theme customizations.
 
 ---
 
