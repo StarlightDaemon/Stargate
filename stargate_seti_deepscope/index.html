@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Argos DeepScope - Technosignature Interferometry Console</title>
+  <meta name="description" content="Flagship deep-space radio telescope signal-search console and multi-baseline technosignature coincidence detection instrument.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body>
+  <!-- CRT Scanline & Phosphor Overlay -->
+  <div class="crt-overlay" id="crt-overlay"></div>
+  <div class="vignette-overlay"></div>
+
+  <!-- Root Scale Container (Locks 1920x1080 native aspect ratio, scales to 4K without scroll) -->
+  <div id="app-scale-wrapper">
+    <div id="app-container" class="theme-cyan">
+      
+      <!-- TOP COMMAND BAR -->
+      <header class="top-command-bar">
+        <div class="header-left">
+          <div class="observatory-emblem">
+            <div class="emblem-core"></div>
+            <div class="emblem-ring"></div>
+          </div>
+          <div class="observatory-info">
+            <h1 class="observatory-title">ARGOS DEEPSCOPE INTERFEROMETRIC ARRAY</h1>
+            <div class="observatory-sub">SECTOR TAU-7 SUB-MILLIMETER SYNTHESIS OBSERVATORY &bull; 14.8km BASELINE</div>
+          </div>
+          <div class="live-status-pill">
+            <span class="pulse-dot"></span>
+            <span class="status-text" id="array-health-text">ARRAY: 10/10 DISHES SYNCHRONIZED</span>
+          </div>
+        </div>
+
+        <div class="header-center">
+          <div class="telemetry-clock-cluster">
+            <div class="clock-box">
+              <span class="clock-label">UTC TIME</span>
+              <span class="clock-value" id="utc-clock">00:00:00.000</span>
+            </div>
+            <div class="clock-box">
+              <span class="clock-label">SIDEREAL (GMST)</span>
+              <span class="clock-value" id="gmst-clock">18:42:09.12</span>
+            </div>
+            <div class="clock-box">
+              <span class="clock-label">LOCAL OSCILLATOR (LO)</span>
+              <span class="clock-value text-accent" id="lo-freq">1420.405751 MHz</span>
+            </div>
+            <div class="clock-box">
+              <span class="clock-label">HEMT CRYO</span>
+              <span class="clock-value text-emerald" id="cryo-temp">14.2 K</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Safety Interlock Switch (Defaults to RELEASED) -->
+          <div class="safety-interlock-container" id="safety-interlock-group" title="SETI Protocol Rule 4: Multi-Array Post-Detection Verification Hold. Defaults to RELEASED.">
+            <div class="interlock-label">VERIFICATION HOLD</div>
+            <button class="interlock-switch is-released" id="safety-hold-btn" aria-pressed="false">
+              <span class="switch-notch"></span>
+              <span class="switch-status" id="safety-hold-status">RELEASED</span>
+            </button>
+          </div>
+
+          <!-- Quick Navigation Tools -->
+          <div class="nav-buttons-group">
+            <button class="nav-tool-btn" id="btn-open-triage" title="Signal Triage & RFI Rejection Lab">
+              <span class="nav-icon">⚲</span>
+              <span>TRIAGE LAB</span>
+            </button>
+            <button class="nav-tool-btn" id="btn-open-array" title="10-Dish Interferometry Geometry">
+              <span class="nav-icon">◈</span>
+              <span>ARRAY MAP</span>
+            </button>
+            <button class="nav-tool-btn" id="btn-open-archive" title="Historical Technosignature Archive">
+              <span class="nav-icon">▤</span>
+              <span>ARCHIVE</span>
+            </button>
+            <button class="nav-tool-btn" id="btn-open-settings" title="Display & Audio Settings">
+              <span class="nav-icon">⚙</span>
+              <span>SETTINGS</span>
+            </button>
+            <button class="nav-tool-btn operator-manual-btn" id="btn-open-manual" title="Operator Reference Manual">
+              <span>?</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- MAIN INSTRUMENT WALL (Symmetrical 3-Column Layout) -->
+      <main class="instrument-wall">
+        
+        <!-- LEFT WING: Spectral & Time-Domain Telemetry -->
+        <section class="instrument-pillar left-pillar" aria-label="Spectral Telemetry">
+          
+          <!-- Receiver Telemetry Gauge Panel -->
+          <div class="instrument-panel telemetry-panel">
+            <div class="panel-header">
+              <span class="panel-title">RECEIVER DYNAMICS &amp; NOISE FLOOR</span>
+              <span class="panel-badge">CH-A CRYO</span>
+            </div>
+            <div class="panel-body">
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <span class="metric-lbl">SYSTEM NOISE TEMP (Tsys)</span>
+                  <span class="metric-val" id="metric-tsys">14.18 K</span>
+                  <div class="meter-bar"><div class="meter-fill" id="meter-tsys" style="width: 24%;"></div></div>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-lbl">RECEIVER GAIN</span>
+                  <span class="metric-val" id="metric-gain">78.4 dB</span>
+                  <div class="meter-bar"><div class="meter-fill" id="meter-gain" style="width: 78%;"></div></div>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-lbl">INTEGRATED SNR</span>
+                  <span class="metric-val text-accent" id="metric-snr">12.4 dB</span>
+                  <div class="meter-bar"><div class="meter-fill fill-accent" id="meter-snr" style="width: 15%;"></div></div>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-lbl">DRIFT RATE (df/dt)</span>
+                  <span class="metric-val" id="metric-drift">-0.042 Hz/s</span>
+                  <div class="meter-bar"><div class="meter-fill" id="meter-drift" style="width: 48%;"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Time-Domain & Phase Constellation Analyzer -->
+          <div class="instrument-panel oscillogram-panel">
+            <div class="panel-header">
+              <span class="panel-title">TIME-DOMAIN &amp; I/Q CONSTELLATION</span>
+              <span class="panel-badge">REAL-TIME FFT</span>
+            </div>
+            <div class="panel-body canvas-body">
+              <div class="oscillogram-dual-view">
+                <div class="sub-canvas-box">
+                  <div class="canvas-caption">I/Q PHASE SCATTER</div>
+                  <canvas id="canvas-iq-scatter" width="220" height="150"></canvas>
+                </div>
+                <div class="sub-canvas-box">
+                  <div class="canvas-caption">128-BIN POWER SPECTRUM</div>
+                  <canvas id="canvas-power-spectrum" width="220" height="150"></canvas>
+                </div>
+              </div>
+              <div class="fft-meta-bar">
+                <span>FFT BINS: 131,072</span>
+                <span>RES: 0.50 Hz</span>
+                <span>WINDOW: HANNING</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 10-Dish Baselines Synchronization State -->
+          <div class="instrument-panel baselines-panel">
+            <div class="panel-header">
+              <span class="panel-title">10-DISH BASELINE PHASE CORRELATION</span>
+              <span class="panel-badge" id="correlation-rate">100% LOCK</span>
+            </div>
+            <div class="panel-body">
+              <div class="baseline-dishes-grid" id="baseline-dishes-status">
+                <!-- D01 to D10 indicators populated via JS -->
+              </div>
+              <div class="baseline-summary">
+                <span id="active-baseline-info">SYNTHETIC APERTURE: 14.82 km &bull; UV COVERAGE OPTIMAL</span>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- CENTER HERO: Polar Waterfall Spectrogram & Coincidence Aperture Ring -->
+        <section class="instrument-pillar center-pillar" aria-label="Polar Spectrogram Gateway">
+          
+          <div class="polar-gateway-wrapper">
+            
+            <!-- Polar Waterfall Canvas Ring -->
+            <div class="polar-canvas-stage">
+              <canvas id="canvas-polar-waterfall" width="600" height="600"></canvas>
+              
+              <!-- Center Aperture Singularity Lens -->
+              <div class="aperture-singularity-hub" id="aperture-singularity-hub">
+                <canvas id="canvas-aperture-lens" width="260" height="260"></canvas>
+                <div class="aperture-lens-rings"></div>
+                <div class="aperture-status-overlay">
+                  <div class="aperture-glyph-symbol" id="aperture-active-glyph">◈</div>
+                  <div class="aperture-state-text" id="aperture-state-text">STANDBY</div>
+                  <div class="aperture-snr-text" id="aperture-snr-text">NOISE FLOOR: -118 dBm</div>
+                </div>
+              </div>
+
+              <!-- 10 Spatially Distributed Baseline Indicator Nodes ($D_{01} \dots D_{10}$) around the perimeter -->
+              <div class="dish-perimeter-ring" id="dish-perimeter-nodes">
+                <!-- Dynamic Nodes D01 to D10 positioned via polar math -->
+              </div>
+            </div>
+
+            <!-- Coincidence Resolution Banner -->
+            <div class="coincidence-status-banner" id="coincidence-banner">
+              <div class="banner-icon" id="banner-icon">☵</div>
+              <div class="banner-content">
+                <div class="banner-title" id="banner-title">POLAR SPECTROGRAM SCANNING</div>
+                <div class="banner-desc" id="banner-desc">SELECT NARROWBAND CANDIDATE CARRIERS (0/7 LOCKED)</div>
+              </div>
+              <div class="banner-counter" id="banner-counter">0 / 7</div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- RIGHT WING: Triage Monitor & Target Quick-Dial Presets -->
+        <section class="instrument-pillar right-pillar" aria-label="Candidate Triage & Targets">
+          
+          <!-- Live Candidate Signal Monitor -->
+          <div class="instrument-panel candidate-monitor-panel">
+            <div class="panel-header">
+              <span class="panel-title">LIVE DETECTED CANDIDATES</span>
+              <button class="panel-action-btn" id="btn-quick-triage-open">OPEN TRIAGE LAB</button>
+            </div>
+            <div class="panel-body">
+              <div class="candidate-stream-list" id="candidate-stream-list">
+                <!-- Candidate items populated via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick-Dial Presets Database -->
+          <div class="instrument-panel quickdial-panel">
+            <div class="panel-header">
+              <span class="panel-title">ARCHIVED TECHNOSIGNATURE PRESETS</span>
+              <span class="panel-badge">7-CARRIER REPLAY</span>
+            </div>
+            <div class="panel-body scrollable-presets">
+              
+              <!-- Tier 1: Verified Technosignatures -->
+              <div class="preset-tier-section">
+                <div class="preset-tier-title">TIER 1 &bull; VERIFIED TECHNOSIGNATURES</div>
+                <div class="preset-items-grid" id="tier1-presets">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+
+              <!-- Tier 2: Unconfirmed Anomalies -->
+              <div class="preset-tier-section">
+                <div class="preset-tier-title">TIER 2 &bull; UNCONFIRMED DEEP ANOMALIES</div>
+                <div class="preset-items-grid" id="tier2-presets">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- BOTTOM CONTROL DECK (Primary Interactive Surface - Maximum Visual Hierarchy) -->
+      <footer class="bottom-control-deck">
+        
+        <!-- Address Register Display (7 Carrier Slots) -->
+        <div class="carrier-register-housing">
+          <div class="register-header">
+            <span class="reg-title">7-SLOT PHASE-LOCKED CARRIER ADDRESS REGISTER</span>
+            <span class="reg-status" id="reg-status-badge">AWAITING CARRIER LOCKS</span>
+          </div>
+          <div class="register-slots-track" id="register-slots">
+            <!-- 7 Slots populated via JS -->
+          </div>
+        </div>
+
+        <!-- Candidate Sector Selector & Glyph Matrix -->
+        <div class="sector-dial-housing">
+          <div class="dial-header">
+            <span class="dial-title">CANDIDATE NARROWBAND SECTORS (18 HARMONIC FREQUENCIES)</span>
+            <span class="dial-hint">CLICK TO CROSS-CORRELATE ACROSS 10-DISH BASELINES</span>
+          </div>
+          <div class="sector-glyph-grid" id="sector-glyph-grid">
+            <!-- 18 Interactive Glyph Buttons populated via JS -->
+          </div>
+        </div>
+
+        <!-- Primary Execution Command Hub (Distinct Glowing Actions) -->
+        <div class="primary-action-hub">
+          
+          <!-- Engage Aperture Button (Primary Trigger - NEVER Auto-Fires) -->
+          <button class="primary-cmd-btn btn-engage" id="btn-engage-aperture" disabled>
+            <div class="btn-glow-layer"></div>
+            <div class="btn-inner">
+              <span class="btn-icon">⚡</span>
+              <div class="btn-text-block">
+                <span class="btn-title">ENGAGE COHERENCE APERTURE</span>
+                <span class="btn-subtitle" id="engage-btn-sub">AWAITING 7/7 COINCIDENCE LOCKS</span>
+              </div>
+            </div>
+          </button>
+
+          <!-- Disengage / Flush Button (Always Active) -->
+          <button class="primary-cmd-btn btn-disengage" id="btn-disengage">
+            <div class="btn-glow-layer"></div>
+            <div class="btn-inner">
+              <span class="btn-icon">✖</span>
+              <div class="btn-text-block">
+                <span class="btn-title">DISENGAGE / FLUSH</span>
+                <span class="btn-subtitle">ABORT TRANSMISSION &amp; PURGE</span>
+              </div>
+            </div>
+          </button>
+
+        </div>
+
+      </footer>
+
+      <!-- CORNER FOOTER LABELS (Standing Convention) -->
+      <div class="corner-footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="corner-link">
+          <span class="corner-icon">✦</span> StarlightDaemon
+        </a>
+      </div>
+      <div class="corner-footer-right">
+        <span class="version-tag" id="version-display">v1.0.0 (Argos DeepScope Interferometry)</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODALS & AUXILIARY VIEWS (Out of the Core Loop) -->
+
+  <!-- 1. TRIAGE & RFI REJECTION LAB MODAL -->
+  <div class="modal-backdrop" id="modal-triage" aria-hidden="true">
+    <div class="modal-window triage-modal-window">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">⚲</span>
+          <h2 class="modal-title">SIGNAL CLASSIFICATION &amp; RFI TRIAGE LAB</h2>
+        </div>
+        <button class="modal-close-btn" data-close="modal-triage">✕</button>
+      </div>
+      <div class="modal-body triage-body">
+        <div class="triage-left-col">
+          <div class="sub-heading">ACTIVE INCOMING CANDIDATES</div>
+          <div class="triage-candidate-list" id="triage-candidate-list">
+            <!-- Candidate cards -->
+          </div>
+        </div>
+        <div class="triage-right-col">
+          <div class="sub-heading">DETAILED CANDIDATE TELEMETRY &amp; INTERFERENCE ANALYSIS</div>
+          <div class="candidate-detail-card" id="triage-detail-card">
+            <div class="empty-detail-state">SELECT A CANDIDATE FROM THE LIST TO INSPECT</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="triage-stats" id="triage-stats">
+          <span>CLASSIFIED: <strong id="stat-classified">0</strong></span>
+          <span>RFI REJECTED: <strong id="stat-rfi" class="text-rose">0</strong></span>
+          <span>VERIFIED TECHNOSIGNATURES: <strong id="stat-verified" class="text-cyan">0</strong></span>
+        </div>
+        <button class="btn-secondary" data-close="modal-triage">RETURN TO CONSOLE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. INTERFEROMETRY BASELINE GEOMETRY MODAL -->
+  <div class="modal-backdrop" id="modal-array" aria-hidden="true">
+    <div class="modal-window array-modal-window">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">◈</span>
+          <h2 class="modal-title">10-DISH PHYSICAL ARRAY &amp; UV PLANE GEOMETRY</h2>
+        </div>
+        <button class="modal-close-btn" data-close="modal-array">✕</button>
+      </div>
+      <div class="modal-body array-body">
+        <div class="array-map-view">
+          <div class="sub-heading">PHYSICAL DISH DISPERSION (14.8 km Y-CONFIGURATION)</div>
+          <canvas id="canvas-array-geometry" width="480" height="380"></canvas>
+        </div>
+        <div class="array-telemetry-view">
+          <div class="sub-heading">INTERFEROMETRIC COINCIDENCE PRINCIPLE</div>
+          <div class="science-explanation-card">
+            <p><strong>Multi-Dish Spatial Coincidence:</strong> Terrestrial Radio Frequency Interference (RFI) and low-orbit satellites produce spherical near-field wavefronts with distinct parallax delays between dishes $D_{01}$ and $D_{10}$.</p>
+            <p>A genuine interstellar technosignature arrives as a planar wave with zero intra-array parallax and identical phase coherence across all 45 synthetic baseline pairs ($B_{jk} = D_j - D_k$).</p>
+            <div class="delay-table-box">
+              <div class="delay-row"><span>BASELINE D01-D05:</span><span class="text-accent">0.000 ps DELAY (PLANE WAVE)</span></div>
+              <div class="delay-row"><span>BASELINE D02-D08:</span><span class="text-accent">0.000 ps DELAY (PLANE WAVE)</span></div>
+              <div class="delay-row"><span>BASELINE D03-D10:</span><span class="text-accent">0.000 ps DELAY (PLANE WAVE)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="modal-array">CLOSE ARRAY MAP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. HISTORICAL DETECTION ARCHIVE MODAL -->
+  <div class="modal-backdrop" id="modal-archive" aria-hidden="true">
+    <div class="modal-window archive-modal-window">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">▤</span>
+          <h2 class="modal-title">HISTORICAL DETECTION ARCHIVE (25+ RECORDS)</h2>
+        </div>
+        <button class="modal-close-btn" data-close="modal-archive">✕</button>
+      </div>
+      <div class="modal-body archive-body">
+        <div class="archive-controls-bar">
+          <input type="text" id="archive-search-input" class="search-input" placeholder="Search by Target, Signal ID, Frequency, or Constellation...">
+          <div class="filter-pills">
+            <button class="filter-pill active" data-filter="all">ALL (25)</button>
+            <button class="filter-pill" data-filter="verified">VERIFIED (12)</button>
+            <button class="filter-pill" data-filter="rfi">RFI REJECTIONS (8)</button>
+            <button class="filter-pill" data-filter="anomaly">UNCONFIRMED (5)</button>
+          </div>
+        </div>
+        <div class="archive-table-wrapper">
+          <table class="archive-table">
+            <thead>
+              <tr>
+                <th>TIMESTAMP (UTC)</th>
+                <th>TARGET / ID</th>
+                <th>FREQUENCY (MHz)</th>
+                <th>DRIFT RATE</th>
+                <th>SNR</th>
+                <th>DISPERSION (DM)</th>
+                <th>CLASSIFICATION</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="archive-table-body">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="archive-count-lbl" id="archive-result-count">SHOWING 25 RECORDS</span>
+        <button class="btn-secondary" data-close="modal-archive">CLOSE ARCHIVE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. OPERATOR REFERENCE MANUAL (?) OVERLAY -->
+  <div class="modal-backdrop" id="modal-manual" aria-hidden="true">
+    <div class="modal-window manual-modal-window">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">?</span>
+          <h2 class="modal-title">ARGOS DEEPSCOPE OPERATOR REFERENCE MANUAL</h2>
+        </div>
+        <button class="modal-close-btn" data-close="modal-manual">✕</button>
+      </div>
+      <div class="modal-body manual-body">
+        <div class="manual-section">
+          <h3>1. THE CORE DIALING &amp; COINCIDENCE MECHANIC</h3>
+          <p>The console operates on <strong>10-Dish Interferometric Coincidence Verification</strong>. The Polar Waterfall Ring shows the 360-degree microwave spectrum with ambient noise drifting radially. Narrowband candidate signals cut through the noise field as coherent arcs.</p>
+          <ul>
+            <li>Select <strong>7 candidate carrier frequencies</strong> from the lower sector dial or quick-dial presets.</li>
+            <li>Selecting a candidate triggers a rapid spatial cross-check across synthetic baselines $D_{01}$ through $D_{10}$.</li>
+            <li>When all 10 baselines confirm plane-wave phase coherence, the coordinate is locked into the 7-slot register.</li>
+          </ul>
+        </div>
+        <div class="manual-section">
+          <h3>2. THREE-STAGE APERTURE ACTIVATION</h3>
+          <p>Once all 7 carriers are locked, the console enters <strong>PENDING ACTIVATION</strong>. It will <em>NEVER</em> auto-fire. Operator must press <code>ENGAGE COHERENCE APERTURE</code>.</p>
+          <ul>
+            <li><strong>Stage 1: BUILDUP (1.8s)</strong> - Cryogenic HEMT surge, SNR climbs to 99.4 dB, drift rate locks to 0.00 Hz/s.</li>
+            <li><strong>Stage 2: BREAKTHROUGH (0.8s)</strong> - Optical singularity flare, acoustic crescendo, phase breakthrough.</li>
+            <li><strong>Stage 3: SUSTAINED ACTIVE</strong> - Open aperture wormhole/carrier portal with relativistic event horizon dynamics.</li>
+          </ul>
+        </div>
+        <div class="manual-section">
+          <h3>3. SETI PROTOCOL SAFETY HOLD</h3>
+          <p>The <strong>VERIFICATION HOLD</strong> switch in the header defaults to <code>RELEASED</code>. If engaged by an operator, aperture transmission is blocked until independent secondary observatory confirmation is simulated.</p>
+        </div>
+        <div class="manual-section">
+          <h3>4. TRIAGE LAB &amp; RFI REJECTION</h3>
+          <p>In the <strong>TRIAGE LAB</strong>, incoming unknown signals can be inspected. If a candidate is identified as near-field terrestrial interference (e.g. Starlink satellite chirp or airport radar), clicking <code>DISMISS AS RFI</code> correctly rejects the signal and logs the rejection.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="modal-manual">CLOSE MANUAL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SETTINGS MODAL -->
+  <div class="modal-backdrop" id="modal-settings" aria-hidden="true">
+    <div class="modal-window settings-modal-window">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">⚙</span>
+          <h2 class="modal-title">CONSOLE &amp; INSTRUMENT SETTINGS</h2>
+        </div>
+        <button class="modal-close-btn" data-close="modal-settings">✕</button>
+      </div>
+      <div class="modal-body settings-body">
+        
+        <div class="settings-group">
+          <div class="setting-title">SYNTHESIZED WEB AUDIO ENGINE</div>
+          <div class="setting-row">
+            <span>MASTER VOLUME</span>
+            <input type="range" id="setting-volume" min="0" max="1" step="0.05" value="0.75">
+            <span id="volume-val-txt">75%</span>
+          </div>
+          <div class="setting-row">
+            <span>AMBIENT CRYO HUM &amp; SERVO PULSES</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-audio-ambient" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="setting-title">DISPLAY &amp; PHOSPHOR THEME</div>
+          <div class="theme-picker-grid">
+            <button class="theme-btn active" data-theme="theme-cyan">
+              <span class="theme-swatch swatch-cyan"></span>
+              <span>DEEP CYAN (STANDARD)</span>
+            </button>
+            <button class="theme-btn" data-theme="theme-amber">
+              <span class="theme-swatch swatch-amber"></span>
+              <span>PHOSPHOR AMBER</span>
+            </button>
+            <button class="theme-btn" data-theme="theme-emerald">
+              <span class="theme-swatch swatch-emerald"></span>
+              <span>SPECTRAL EMERALD</span>
+            </button>
+            <button class="theme-btn" data-theme="theme-violet">
+              <span class="theme-swatch swatch-violet"></span>
+              <span>SUPERNOVA VIOLET</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="setting-title">CRT EFFECTS &amp; MOTION</div>
+          <div class="setting-row">
+            <span>CRT SCANLINES &amp; PHOSPHOR GLOW</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-scanlines" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <span>REDUCE MOTION / PARTICLES</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-reduce-motion">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="modal-settings">SAVE &amp; CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. SAFETY HOLD ALERT TOAST -->
+  <div class="safety-toast-alert" id="safety-toast-alert" aria-hidden="true">
+    <div class="toast-icon">⚠</div>
+    <div class="toast-content">
+      <div class="toast-title">APERTURE TRANSMISSION BLOCKED</div>
+      <div class="toast-desc">POST-DETECTION VERIFICATION HOLD IS ENGAGED (SETI PROTOCOL RULE 4). RELEASE HOLD IN HEADER TO PROCEED.</div>
+    </div>
+    <button class="toast-release-btn" id="toast-release-btn">RELEASE HOLD NOW</button>
+  </div>
+
+  <!-- Entry Script -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
