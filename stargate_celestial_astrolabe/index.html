@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hyperion Astronavigation Console // Series IX Digital Astrolabe</title>
+  <meta name="description" content="Digital Astrolabe Stellar Position Fix System and Celestial Navigation Gateway Console for the Hyperion Astronavigation Institute (R/V Tethys-V).">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="crt-overlay"></div>
+
+  <div id="app-viewport">
+    <!-- TOP BAR: TELEMETRY & BANNER -->
+    <header id="top-bar">
+      <div class="brand-section">
+        <div class="institute-logo-badge">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="2" x2="12" y2="22"></line>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <polygon points="12,7 15,12 12,17 9,12" stroke="#ffaa00" fill="none"></polygon>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">HYPERION ASTRONAVIGATION INSTITUTE</h1>
+          <div class="brand-subtitle">R/V TETHYS-V // BRIDGE ASTROLABE SERIES-IX</div>
+        </div>
+      </div>
+
+      <div class="telemetry-strip">
+        <div class="telem-cell">
+          <span class="telem-label">SIDEREAL EPHEMERIS</span>
+          <span id="sidereal-clock" class="telem-value cyan">18:42:19.4 CST</span>
+        </div>
+        <div class="telem-cell">
+          <span class="telem-label">HEADING GYRO</span>
+          <span id="heading-val" class="telem-value amber">284.6° GYRO</span>
+        </div>
+        <div class="telem-cell">
+          <span class="telem-label">FIX CONFIDENCE</span>
+          <span id="fix-confidence" class="telem-value emerald">0.0%</span>
+        </div>
+        <div class="telem-cell">
+          <span class="telem-label">INTERCEPT RESIDUAL</span>
+          <span id="intercept-residual" class="telem-value cyan">±8.450"</span>
+        </div>
+        <div class="telem-cell">
+          <span class="telem-label">DOP INDEX</span>
+          <span id="dop-val" class="telem-value">7.80</span>
+        </div>
+      </div>
+
+      <div class="top-controls">
+        <button id="btn-help" class="help-btn" title="Operator Reference Manual" aria-label="Help">?</button>
+      </div>
+    </header>
+
+    <!-- STATUS BANNER -->
+    <div id="gate-status-banner" class="status-banner idle">
+      <span id="gate-status-text">STATUS: STANDBY // GIMBAL STABILIZED // AWAITING STELLAR SIGHTS</span>
+    </div>
+
+    <!-- MAIN CONSOLE (WALL OF DATA: FLANKING WINGS & ASTROLABE HERO) -->
+    <main id="main-console">
+      <!-- LEFT WING: [01 NAV-STAR SIGHT SELECTOR] -->
+      <section id="left-wing" class="console-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="cluster-tag">[01]</span> NAV-STAR SIGHT SELECTOR
+          </div>
+          <span class="panel-sub">PRIMARY SIGHTS</span>
+        </div>
+
+        <div class="panel-body">
+          <div id="star-buttons-container">
+            <!-- 12 Navigational Stars populated dynamically via JS -->
+          </div>
+
+          <!-- Quick Dial Preset Archive -->
+          <div class="quick-dial-wrapper">
+            <div class="cluster-tag" style="margin-top: 6px;">ARCHIVED STELLAR LOGS (AUTO-DIAL)</div>
+            <div id="quick-dial-container">
+              <!-- 6 Presets across 2 Tiers populated via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CENTER HERO: FUNCTIONING DIGITAL RETE ASTROLABE -->
+      <section id="center-hero" class="console-panel">
+        <canvas id="astrolabe-canvas"></canvas>
+
+        <div class="center-overlay-telemetry">
+          <span class="astrolabe-mode-badge">STEREOGRAPHIC RETE &amp; TYMPAN</span>
+          <span class="astrolabe-desc-line">ROTATIONAL ALIGNMENT RESOLUTION ENGINE</span>
+        </div>
+      </section>
+
+      <!-- RIGHT WING: [02 PORTAL APERTURE ACTUATION] -->
+      <section id="right-wing" class="console-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="cluster-tag">[02]</span> PORTAL ACTUATION
+          </div>
+          <span id="sighting-count" class="panel-sub">0 / 7</span>
+        </div>
+
+        <div class="panel-body">
+          <!-- Active Sights List -->
+          <div class="sights-summary-box">
+            <div class="sights-header">
+              <span>ACTIVE SIGHTING TABLE</span>
+              <span>7 SIGHTS REQUIRED</span>
+            </div>
+            <div id="active-sights-list">
+              <!-- Dynamically populated sight chips -->
+            </div>
+          </div>
+
+          <!-- Computed Fix Solution Coordinates -->
+          <div class="solution-box">
+            <div class="sights-header">
+              <span>COMPUTED POSITION VECTOR</span>
+              <span class="emerald">MARCQ SAINT-HILAIRE</span>
+            </div>
+            <div class="solution-grid">
+              <div class="sol-item">
+                <span class="sol-label">GALACTIC LATITUDE</span>
+                <span id="lat-coord" class="sol-val">+41° 52' 41.160"</span>
+              </div>
+              <div class="sol-item">
+                <span class="sol-label">GALACTIC LONGITUDE</span>
+                <span id="lon-coord" class="sol-val">-087° 37' 47.280"</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Safety Interlock: Ephemeris Verification Hold -->
+          <div class="interlock-box">
+            <div class="interlock-control-row">
+              <div class="interlock-title">EPHEMERIS VERIFICATION HOLD</div>
+              <label class="switch" title="Toggle Safety Interlock">
+                <input type="checkbox" id="interlock-toggle">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div id="interlock-warning" class="interlock-warning-msg">
+              ⚠ EPHEMERIS HOLD ENGAGED — POSITION FIX UNVERIFIED AGAINST EPHEMERIS TABLES. RELEASE HOLD TO ACTUATE.
+            </div>
+          </div>
+
+          <!-- Primary Control Cluster (Actuate & Disengage) -->
+          <div class="action-buttons-group">
+            <button id="btn-actuate" class="btn-primary-action" disabled>
+              <span class="btn-glow-ring"></span>
+              <span class="btn-text">INITIATE STELLAR GATEWAY ACTUATION</span>
+            </button>
+            <button id="btn-disengage" class="btn-disengage-action">
+              EMERGENCY DISENGAGE GATEWAY
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- BOTTOM DECK: SECONDARY NAVIGATIONAL TABS -->
+    <nav id="bottom-deck">
+      <div class="tab-nav-bar">
+        <button class="tab-btn active" data-tab="horizon-tab">HORIZON SKY-DOME</button>
+        <button class="tab-btn" data-tab="dr-tab">DEAD-RECKONING &amp; DRIFT</button>
+        <button class="tab-btn" data-tab="almanac-tab">EPHEMERIS STAR CATALOG</button>
+        <button class="tab-btn" data-tab="settings-tab">INSTRUMENT SETTINGS</button>
+      </div>
+
+      <div class="tab-viewport">
+        <!-- Tab 1: Horizon Sky-Dome -->
+        <div id="horizon-tab" class="tab-content-panel active">
+          <div class="horizon-panel-wrap">
+            <canvas id="horizon-canvas"></canvas>
+            <div class="horizon-legend">
+              <div style="color: var(--accent-cyan); font-weight: 700; font-family: var(--font-display);">AZIMUTH-ALTITUDE LOCAL HORIZON VIEW</div>
+              <p>Fish-eye stereographic projection of visible celestial hemisphere relative to vessel horizon.</p>
+              <p>Concentric rings denote 0° (true horizon), 30°, and 60° altitudes. Sighted navigational stars highlight in amber reticles.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Dead-Reckoning & Drift Plotter -->
+        <div id="dr-tab" class="tab-content-panel">
+          <div class="dr-panel-wrap">
+            <canvas id="dr-canvas"></canvas>
+            <div class="dr-meta">
+              <div style="color: var(--accent-amber); font-weight: 700; font-family: var(--font-display);">INERTIAL DRIFT VECTOR</div>
+              <div>SUB-WARP DRIFT: <span class="cyan">0.42c</span></div>
+              <div>DRIFT RATE: <span class="cyan">0.00004°/s</span></div>
+              <div>CONFIRMED FIXES: <span class="amber">GOLD NODES</span></div>
+              <div>UNCERTAINTY: <span class="crimson">DASHED ELLIPSE</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Deep Ephemeris Star Catalog -->
+        <div id="almanac-tab" class="tab-content-panel">
+          <div class="almanac-panel-wrap">
+            <div class="almanac-controls">
+              <input type="text" id="almanac-search-input" class="almanac-input" placeholder="Search stars by name, bayer, or designation...">
+              <select id="almanac-category-filter" class="almanac-select">
+                <option value="all">All Astronomical Categories</option>
+                <option value="Navigational Primary">Navigational Primaries (12)</option>
+                <option value="Supergiant">Supergiants</option>
+                <option value="Giant">Red/Orange Giants</option>
+                <option value="Cepheid">Cepheids</option>
+                <option value="Multiple">Multiple Stars</option>
+              </select>
+            </div>
+            <div class="almanac-table-container">
+              <table class="almanac-table">
+                <thead>
+                  <tr>
+                    <th>NAME</th>
+                    <th>DESIGNATION</th>
+                    <th>BAYER</th>
+                    <th>SPECTRAL</th>
+                    <th>MAG</th>
+                    <th>R.A.</th>
+                    <th>DEC.</th>
+                    <th>ALTITUDE</th>
+                    <th>CATEGORY</th>
+                  </tr>
+                </thead>
+                <tbody id="almanac-table-body">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Instrument & Synthesizer Settings -->
+        <div id="settings-tab" class="tab-content-panel">
+          <div class="settings-panel-wrap">
+            <div class="settings-card">
+              <div class="card-title">WEB AUDIO SYNTHESIZER</div>
+              <div class="setting-row">
+                <span>Master Volume</span>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8">
+              </div>
+              <div class="setting-row">
+                <span>Mute All Audio</span>
+                <input type="checkbox" id="mute-check">
+              </div>
+            </div>
+            <div class="settings-card">
+              <div class="card-title">DISPLAY &amp; PHOSPHOR</div>
+              <div class="setting-row">
+                <span>CRT Scanlines</span>
+                <input type="checkbox" id="scanlines-check" checked>
+              </div>
+              <div class="setting-row">
+                <span>Gimbal Motion Blur</span>
+                <span class="cyan">ACTIVE</span>
+              </div>
+            </div>
+            <div class="settings-card">
+              <div class="card-title">NAVIGATION EPHEMERIS</div>
+              <div class="setting-row">
+                <span>Datum Epoch</span>
+                <span class="amber">J2026.85</span>
+              </div>
+              <div class="setting-row">
+                <span>Intercept Model</span>
+                <span class="emerald">Marcq St-Hilaire 7D</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- FOOTER BAR: CORNER DISPLAYS & CREDITS -->
+    <footer id="footer-bar">
+      <div>
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="footer-link">StarlightDaemon</a>
+      </div>
+      <div>
+        <span>v1.0.0 // SERIES IX-ASTROLABE // HYPERION MERIDIAN</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- OPERATOR REFERENCE OVERLAY MODAL (?) -->
+  <div id="operator-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div id="modal-title-text" class="modal-title">HYPERION ASTROLABE — OPERATOR REFERENCE MANUAL</div>
+        <button id="btn-close-modal" class="modal-close-btn" aria-label="Close Reference Manual">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>MISSION:</strong> The Series IX Digital Astrolabe is a precision celestial positioning instrument deployed on deep void vessels where GPS/beacon networks are absent. It determines exact vessel coordinates by calculating the intersection of 7 simultaneous stellar altitude circles.</p>
+
+        <div class="modal-section-title">1. THE RETE &amp; TYMPAN ALIGNMENT MECHANISM</div>
+        <p>The console features a digital stereographic <strong>Rete</strong> (rotating star wheel) mounted over a fixed <strong>Tympan</strong> plate. Selecting any navigational star rotates the Rete until the star's marker aligns with its target altitude circle along the top sighting meridian. The rotational alignment itself locks the sight.</p>
+
+        <div class="modal-section-title">2. CORE NAVIGATION LOOP</div>
+        <div class="modal-code-box">
+          STEP 1: Select 7 Navigational Stars from the Sight Selector (Left Wing).<br>
+          STEP 2: Observe the Rete rotate and lock each sight against its altitude almucantar.<br>
+          STEP 3: When 7 sights are locked, the system enters PENDING state.<br>
+          STEP 4: Press "INITIATE STELLAR GATEWAY ACTUATION" (Right Wing) to open the transit conduit.<br>
+          STEP 5: Press "EMERGENCY DISENGAGE GATEWAY" at any time to collapse the warp field.
+        </div>
+
+        <div class="modal-section-title">3. EPHEMERIS VERIFICATION HOLD (SAFETY INTERLOCK)</div>
+        <p>The Ephemeris Verification Hold simulates cross-referencing sights against known astronomical tables. When engaged, it blocks gateway actuation to prevent misaligned transit jumps. Defaults to Released.</p>
+
+        <div class="modal-section-title">4. ARCHIVED QUICK-DIAL PRESETS</div>
+        <p>Replays pre-computed multi-star sightings at high speed. The auto-dialer moves star-by-star with visible Rete rotation, landing in PENDING ready state without auto-firing.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/audio.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/astrolabe.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
