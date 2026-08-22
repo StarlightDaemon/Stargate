@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Built by:** Gemini 3.7 Flash (High reasoning)
 
-> **Operator Verification Note:** Direct operator testing confirmed the build is fully functional end-to-end across all workflows, including manual candidate dialing, multi-dish coincidence locking, the three-stage activation sequence (buildup, breakthrough, sustained active state), disengage/reset, and paced quick-dial auto-dialing. Testing comprehensively verified the overall experience, including the 10-dish interferometric coincidence matrix, archived preset tiers, real-time Doppler/SNR telemetry racks, spectral classification panels, and the Protocol 7.4 verification hold safety interlock.
+> **Operator Verification Note:** Direct operator testing confirmed the build is fully functional end-to-end as part of a three-variant page composition experiment. All core interaction loops—manual candidate dialing, multi-dish coincidence locking, the three-stage activation sequence (buildup, breakthrough, sustained active state), disengage/reset, and paced quick-dial auto-dialing—were confirmed working. Operator testing comprehensively verified the overall console experience, including the 10-dish interferometric coincidence matrix, archived preset tiers, real-time Doppler/SNR telemetry racks, spectral classification panels, and the Protocol 7.4 verification hold safety interlock.
 
 ### Added
 - **Observatory Identity**: Vesper Deep-Aperture Technosignature Observatory (VDATO) & Aetheris Deep-Baseline Interferometric Array (ADIA).
