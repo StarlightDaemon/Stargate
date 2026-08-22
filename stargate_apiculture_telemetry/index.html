@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPATC // Precision Apiculture Telemetry Network</title>
+  <meta name="description" content="International Precision Apiculture Telemetry Consortium (IPATC) Melittological Bio-Acoustic and Brood-Nest Thermal Telemetry Array Portal Console.">
+  <meta name="keywords" content="apiculture, bioacoustics, telemetry, hive monitoring, brood temperature, FFT spectrum, stargate portal">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="app-viewport-wrapper">
+    <main id="app-stage">
+      <!-- HEADER BAR -->
+      <header id="console-header">
+        <div class="header-left">
+          <div class="brand-badge">
+            <svg class="brand-logo-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5"/>
+              <circle cx="18" cy="18" r="7"/>
+              <circle cx="18" cy="18" r="2" fill="currentColor"/>
+              <path d="M18 3v8M18 25v8M5 10.5l7 4M24 21.5l7 4M31 10.5l-7 4M12 21.5l-7 4"/>
+            </svg>
+            <div class="brand-titles">
+              <h1>IPATC // APICULTURE TELEMETRY</h1>
+              <div class="subtitle">MELITTOLOGICAL BIO-ACOUSTIC ARRAY · RADIAL-10</div>
+            </div>
+          </div>
+
+          <div class="system-status-indicator">
+            <div id="system-status-dot" class="status-dot"></div>
+            <span id="system-status-label" class="status-label">STANDBY // BIO-ACOUSTIC ARRAY IDLE</span>
+          </div>
+        </div>
+
+        <div class="header-center-telemetry">
+          <div class="telemetry-pill">
+            <span class="pill-tag">ARRAY COHERENCE</span>
+            <span class="pill-value emerald">99.4% NOMINAL</span>
+          </div>
+          <div class="telemetry-pill">
+            <span class="pill-tag">BAROMETRIC PRESSURE</span>
+            <span id="header-baro-pressure" class="pill-value cyan">1013.8 hPa</span>
+          </div>
+          <div class="telemetry-pill">
+            <span class="pill-tag">ACTIVE NODES</span>
+            <span class="pill-value amber">10 / 10 ONLINE</span>
+          </div>
+        </div>
+
+        <div class="header-right-nav">
+          <button id="btn-open-colony-dashboard" class="nav-drawer-btn" title="Open Colony Health Dashboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+            HEALTH MATRIX
+          </button>
+          <button id="btn-open-thermal-matrix" class="nav-drawer-btn" title="Open Brood Thermal Scanner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20M12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+            THERMAL SCAN
+          </button>
+          <button id="btn-open-swarm-radar" class="nav-drawer-btn" title="Open Swarm Early Warning Radar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+            SWARM RADAR
+          </button>
+          <button id="btn-open-settings" class="nav-drawer-btn" title="Console Settings">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            SETTINGS
+          </button>
+          <button id="btn-open-help" class="btn-help-circle" title="Operator Reference Manual" aria-label="Operator Guide">?</button>
+        </div>
+      </header>
+
+      <!-- MAIN ASYMMETRIC BI-FOCAL CONSOLE STAGE -->
+      <div id="console-main">
+        <!-- STAGE LEFT (58%): BIO-ACOUSTIC ANNULAR ARRAY -->
+        <section id="stage-left-telemetry" aria-label="Bio-Acoustic Array Stage">
+          <div class="panel-header-bar">
+            <div class="panel-title-group">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10zM2 12h20"/></svg>
+              <h2>BIO-ACOUSTIC ANNULAR TELEMETRY ARRAY</h2>
+            </div>
+            <span class="tag-badge">10-NODE RADIAL FIELD STAGE</span>
+          </div>
+
+          <div class="canvas-viewport-container">
+            <canvas id="ring-canvas"></canvas>
+          </div>
+
+          <!-- Real-Time Floating HUD Overlay -->
+          <div class="ring-live-telemetry-hud">
+            <div class="hud-stat-box">
+              <span class="hud-label">FUNDAMENTAL FREQ</span>
+              <span class="hud-val" style="color:var(--accent-cyan);">240.0 Hz</span>
+              <span class="hud-sub">Q-RSS Harmonic Baseline</span>
+            </div>
+            <div class="hud-stat-box">
+              <span class="hud-label">BROOD NEST TEMP</span>
+              <span id="hud-brood-temp" class="hud-val" style="color:var(--accent-amber);">34.85°C</span>
+              <span class="hud-sub">Core Homeostasis Optimal</span>
+            </div>
+            <div class="hud-stat-box">
+              <span class="hud-label">HIVE NET WEIGHT</span>
+              <span id="hud-hive-weight" class="hud-val" style="color:var(--accent-emerald);">42.68 kg</span>
+              <span class="hud-sub">+1.42 kg/day Nectar Accumulation</span>
+            </div>
+            <div class="hud-stat-box">
+              <span class="hud-label">LIDAR TRAFFIC RATE</span>
+              <span id="hud-entrance-traffic" class="hud-val">284 / 296</span>
+              <span class="hud-sub">Inbound / Outbound (bees/min)</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- STAGE RIGHT (42%): HIGH-DENSITY COMMAND MATRIX -->
+        <section id="stage-right-command" aria-label="Command and Dialing Controls">
+          <!-- SUBDECK 1: PRESETS & BIOSECURITY HOLD -->
+          <div class="command-subdeck">
+            <div class="preset-and-safety-row">
+              <div class="preset-selector-group">
+                <div class="subdeck-label">
+                  <span>QUICK-DIAL PRESET MATRIX</span>
+                  <span style="color:var(--accent-cyan);">6 PRELOADED</span>
+                </div>
+                <div class="preset-dropdown-wrap">
+                  <select id="quick-dial-select" aria-label="Select Quick Dial Preset">
+                    <!-- Populated in JS -->
+                  </select>
+                  <button id="btn-quick-dial-engage" class="btn-quick-dial-engage" title="Auto-dial selected route">
+                    AUTO-DIAL ROUTE
+                  </button>
+                </div>
+              </div>
+
+              <!-- Biosecurity Containment Hold Switch -->
+              <div class="safety-interlock-group">
+                <div class="subdeck-label">
+                  <span>BIOSECURITY HOLD (BCH-9)</span>
+                </div>
+                <div id="safety-toggle-card" class="safety-toggle-card" title="Toggle Biosecurity Pathogen Quarantine Interlock">
+                  <div class="safety-toggle-label">
+                    <span class="safety-toggle-title">QUARANTINE HOLD</span>
+                    <span id="safety-toggle-status-text" class="safety-toggle-status">RELEASED (NORMAL)</span>
+                  </div>
+                  <div class="switch-lever">
+                    <div class="switch-knob"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Active Dial Address Sequence Buffer (7 Slots) -->
+            <div class="dial-buffer-container">
+              <div class="subdeck-label">
+                <span>ACTIVE TELEMETRY VECTOR BUFFER (7 SLOTS)</span>
+                <span id="address-progress-tag" style="color:var(--accent-emerald);">0 / 7 CORRELATED</span>
+              </div>
+              <div class="dial-slots-grid">
+                <div id="dial-slot-0" class="dial-slot">
+                  <span class="slot-index">01</span>
+                  <span class="slot-symbol">—</span>
+                  <span class="slot-class">VACANT</span>
+                </div>
+                <div id="dial-slot-1" class="dial-slot">
+                  <span class="slot-index">02</span>
+                  <span class="slot-symbol">—</span>
+                  <span class="slot-class">VACANT</span>
+                </div>
+                <div id="dial-slot-2" class="dial-slot">
+                  <span class="slot-index">03</span>
+                  <span class="slot-symbol">—</span>
+                  <span class="slot-class">VACANT</span>
+                </div>
+                <div id="dial-slot-3" class="dial-slot">
+                  <span class="slot-index">04</span>
+                  <span class="slot-symbol">—</span>
+                  <span class="slot-class">VACANT</span>
+                </div>
+                <div id="dial-slot-4" class="dial-slot">
+                  <span class="slot-index">05</span>
+                  <span class="slot-symbol">—</span>
+                  <span class="slot-class">VACANT</span>
+                </div>
+                <div id="dial-slot-5" class="dial-slot">
+                  <span class="slot-index">06</span>
+                  <span class="slot-symbol">—</span>
+                  <span class="slot-class">VACANT</span>
+                </div>
+                <div id="dial-slot-6" class="dial-slot">
+                  <span class="slot-index">07</span>
+                  <span class="slot-symbol">—</span>
+                  <span class="slot-class">VACANT</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUBDECK 2: COLONY ACOUSTIC SYMBOL SELECTION MATRIX (10 KEYS) -->
+          <div class="colony-symbol-deck">
+            <div class="subdeck-label">
+              <span>COLONY BIO-ACOUSTIC CHARACTERIZATION MATRIX</span>
+              <span style="color:var(--accent-amber);">CLICK TO INITIATE CORRELATION SWEEP</span>
+            </div>
+            <div id="colony-glyph-grid" class="symbol-grid-10">
+              <!-- Dynamically populated from state.js -->
+            </div>
+          </div>
+
+          <!-- SUBDECK 3: ACTIVATION & DISENGAGE CONTROLS -->
+          <div class="activation-control-deck">
+            <!-- Biosecurity Warning Banner -->
+            <div id="biosecurity-warning-banner" class="biosecurity-warning-banner">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"/></svg>
+              <span>BIOSECURITY INTERLOCK ENGAGED: TRANSMISSION BLOCKED — PATHOGEN QUARANTINE ACTIVE</span>
+            </div>
+
+            <div class="activation-action-row">
+              <!-- Primary Activation Button -->
+              <button id="btn-activate" class="btn-primary-activation" disabled title="Engage Telemetry Aperture">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor"/></svg>
+                <div class="activation-text-group">
+                  <span class="activation-main-label">ESTABLISH TELEMETRY UPLINK</span>
+                  <span class="activation-sub-label">OPEN BIO-PHOTONIC APERTURE STREAM</span>
+                </div>
+              </button>
+
+              <!-- Disengage Button -->
+              <button id="btn-disengage" class="btn-disengage" title="Sever Telemetry Link & Reset Array">
+                <span class="disengage-main">SEVER LINK</span>
+                <span class="disengage-sub">ABORT MONITORING</span>
+              </button>
+            </div>
+
+            <!-- Correlation Confidence Progress -->
+            <div class="correlation-feedback-bar">
+              <div class="correlation-meta-row">
+                <span class="status-note">SPECTRAL HARMONIC COHERENCE</span>
+                <span id="correlation-percent-label" class="percent-note">0.0%</span>
+              </div>
+              <div class="progress-track">
+                <div id="correlation-progress-fill" class="progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- FOOTER BAR -->
+      <footer id="console-footer">
+        <div class="footer-left">
+          <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            StarlightDaemon
+          </a>
+        </div>
+        <div class="footer-center">
+          <span id="footer-session-uptime">UPTIME: 00:00</span>
+          <span>FPS: 60 (STABLE)</span>
+          <span>TELEMETRY BUS: 10 GB/S</span>
+        </div>
+        <div class="footer-right">
+          <span>v1.0.0</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- SECONDARY TELEMETRY DRAWERS / MODALS -->
+
+  <!-- Modal 1: Colony Health Dashboard -->
+  <div id="modal-colony-dashboard" class="telemetry-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-health-title">
+    <div class="telemetry-modal-window">
+      <div class="modal-header">
+        <h3 id="modal-health-title">COLONY HEALTH TELEMETRY MATRIX // 24-STATION NETWORK</h3>
+        <button class="btn-modal-close" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="dashboard-filter-bar">
+          <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search by Hive ID, Region, or Acoustic Class..." aria-label="Search Colonies">
+          </div>
+          <div class="filter-button-group">
+            <button class="filter-btn active">ALL STATIONS (24)</button>
+            <button class="filter-btn">HEALTHY (18)</button>
+            <button class="filter-btn">WARNING (4)</button>
+            <button class="filter-btn">CRITICAL (2)</button>
+          </div>
+        </div>
+        <div class="colony-table-wrap">
+          <table class="colony-telemetry-table">
+            <thead>
+              <tr>
+                <th>HIVE ID</th>
+                <th>STATION NAME</th>
+                <th>REGION</th>
+                <th>POPULATION</th>
+                <th>VARROA MITE (VMI)</th>
+                <th>QUEEN STATUS</th>
+                <th>WEIGHT TREND</th>
+                <th>BROOD TEMP</th>
+                <th>ACOUSTIC</th>
+                <th>LIDAR TRAFFIC</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody id="colony-table-body">
+              <!-- Populated in JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Brood Nest Thermal Visualizer -->
+  <div id="modal-thermal-matrix" class="telemetry-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-thermal-title">
+    <div class="telemetry-modal-window">
+      <div class="modal-header">
+        <h3 id="modal-thermal-title">BROOD NEST 2D INFRARED THERMAL SCANNER // 144-PROBE MESH</h3>
+        <button class="btn-modal-close" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="thermal-layout-grid">
+          <div class="thermal-canvas-box">
+            <canvas id="thermal-canvas"></canvas>
+          </div>
+          <div class="thermal-sidebar-telemetry">
+            <div class="thermal-metric-card">
+              <h4>PROBE INSPECTOR</h4>
+              <p id="thermal-probe-readout" style="font-family:var(--font-mono); font-size:12px; color:var(--text-bright);">HOVER OVER MESH FOR PROBE DATA</p>
+            </div>
+            <div class="thermal-metric-card">
+              <h4>THERMAL HOMEOSTASIS INDEX</h4>
+              <p style="font-family:var(--font-mono); font-size:20px; font-weight:700; color:var(--accent-emerald);">98.8% STABLE</p>
+              <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Core maintained between 34.5°C and 35.5°C across all 10 brood frames.</p>
+            </div>
+            <div class="thermal-metric-card">
+              <h4>FALSE-COLOR CALIBRATION</h4>
+              <div style="height:12px; background:linear-gradient(to right, #142878, #00f0ff, #00ff88, #ffaa00, #ffffff); border-radius:3px; margin:8px 0;"></div>
+              <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:9px; color:var(--text-muted);">
+                <span>28.0°C PERIMETER</span>
+                <span>35.2°C BROOD CORE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Swarm Prediction Early-Warning Radar -->
+  <div id="modal-swarm-radar" class="telemetry-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-swarm-title">
+    <div class="telemetry-modal-window">
+      <div class="modal-header">
+        <h3 id="modal-swarm-title">SWARM PREDICTION & BIO-ACOUSTIC EARLY-WARNING RADAR</h3>
+        <button class="btn-modal-close" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="swarm-radar-grid">
+          <div class="swarm-gauge-card">
+            <div class="swarm-risk-dial">
+              <span class="risk-number">14%</span>
+              <span class="risk-level-tag">LOW RISK</span>
+            </div>
+            <h4 style="font-family:var(--font-heading); color:var(--text-bright); font-size:16px;">SWARM PROBABILITY INDEX</h4>
+            <p style="font-size:12px; color:var(--text-muted);">No 450Hz queen piping cascade detected in active baseline nodes.</p>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div class="thermal-metric-card">
+              <h4>PRECURSOR ACOUSTIC PIPING (450 HZ DETECTOR)</h4>
+              <p style="font-family:var(--font-mono); font-size:14px; color:var(--accent-emerald);">AMPLITUDE: -48.2 dB (BELOW ALERT THRESHOLD)</p>
+            </div>
+            <div class="thermal-metric-card">
+              <h4>MASS REDUCTION GRADIENT FORECAST</h4>
+              <p style="font-family:var(--font-mono); font-size:14px; color:var(--text-bright);">DELTA: +0.08 kg/hr (NORMAL FORAGING RETENTION)</p>
+            </div>
+            <div class="thermal-metric-card">
+              <h4>ENTRANCE LIDAR CONGESTION RATIO</h4>
+              <p style="font-family:var(--font-mono); font-size:14px; color:var(--accent-cyan);">RATIO: 1.04 (BALANCED INBOUND / OUTBOUND STREAM)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Settings -->
+  <div id="modal-settings" class="telemetry-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
+    <div class="telemetry-modal-window">
+      <div class="modal-header">
+        <h3 id="modal-settings-title">CONSOLE TELEMETRY & AUDIO SYNTHESIZER SETTINGS</h3>
+        <button class="btn-modal-close" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-group">
+          <div class="setting-row">
+            <div>
+              <div style="font-weight:700; color:var(--text-bright);">MASTER SYNTHESIZER VOLUME</div>
+              <div style="font-size:11px; color:var(--text-muted);">Controls Web Audio API oscillator levels</div>
+            </div>
+            <input id="setting-master-volume" type="range" min="0" max="1" step="0.05" value="0.8" style="width:180px;" aria-label="Master Volume">
+          </div>
+          <div class="setting-row">
+            <div>
+              <div style="font-weight:700; color:var(--text-bright);">AUDIO MUTE</div>
+              <div style="font-size:11px; color:var(--text-muted);">Mute all harmonic drone and aperture soundscapes</div>
+            </div>
+            <input id="setting-mute-toggle" type="checkbox" style="width:20px; height:20px;" aria-label="Audio Mute">
+          </div>
+          <div class="setting-row">
+            <div>
+              <div style="font-weight:700; color:var(--text-bright);">DISPLAY TELEMETRY DENSITY</div>
+              <div style="font-size:11px; color:var(--text-muted);">Adjust visual information density across stages</div>
+            </div>
+            <select style="background:#0c1622; color:#fff; border:1px solid rgba(0,240,255,0.3); padding:4px 8px; border-radius:4px;" aria-label="Display Telemetry Density">
+              <option>STANDARD RESOLUTION (1080P)</option>
+              <option>ULTRA-DENSE 4K HUD</option>
+              <option>MINIMALIST OPERATOR</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Operator Reference Manual (?) -->
+  <div id="modal-operator-guide" class="telemetry-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-guide-title">
+    <div class="telemetry-modal-window">
+      <div class="modal-header">
+        <h3 id="modal-guide-title">IPATC OPERATOR REFERENCE MANUAL // PROTOCOL GUIDE</h3>
+        <button class="btn-modal-close" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="guide-section">
+          <h4>1. CONSOLE OVERVIEW & ARCHITECTURE</h4>
+          <p>The IPATC Precision Apiculture Telemetry Network monitors distributed radial hive monitoring nodes. Each node streams bio-acoustic FFT spectral signatures and brood-nest thermal gradients.</p>
+        </div>
+        <div class="guide-section">
+          <h4>2. MANUAL DIALING & TWO-PART SIGNATURE CORRELATION</h4>
+          <p>To manually dial a network telemetry vector:</p>
+          <ul>
+            <li>Select 7 Colony Glyphs from the 10-node Characterization Matrix.</li>
+            <li><strong>Signature Acquisition:</strong> The selected colony initiates a live acoustic sweep matching reference library profiles.</li>
+            <li><strong>Correlation Confirmation:</strong> As confidence crosses 99%, the node locks with a resonant crystalline chime and emerald ring indicator.</li>
+            <li>Once 7 nodes are dialed, the console enters <code>PENDING</code> state. It will <strong>never auto-fire</strong>.</li>
+          </ul>
+        </div>
+        <div class="guide-section">
+          <h4>3. THREE-STAGE ACTIVATION SEQUENCE</h4>
+          <ul>
+            <li>Click <strong>ESTABLISH TELEMETRY UPLINK</strong> to trigger the aperture sequence.</li>
+            <li><strong>Stage 1 (Buildup):</strong> 1.8s harmonic carrier climb and spinning iris pre-ionization.</li>
+            <li><strong>Stage 2 (Breakthrough):</strong> Instantaneous acoustic-photonic iris breach and shockwave flare.</li>
+            <li><strong>Stage 3 (Sustained Active):</strong> Continuous bio-photonic vortex and live streaming telemetry.</li>
+          </ul>
+        </div>
+        <div class="guide-section">
+          <h4>4. BIOSECURITY CONTAINMENT HOLD (BCH-9)</h4>
+          <p>Defaults to <strong>RELEASED</strong>. When engaged by the operator, it enforces pathogen quarantine, immediately blocking transmission and sounding a warning klaxon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT SUBSYSTEMS -->
+  <script src="js/state.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/ring_canvas.js"></script>
+  <script src="js/thermal_canvas.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

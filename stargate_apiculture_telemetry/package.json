@@ -1,0 +1,25 @@
+{
+  "name": "stargate-apiculture-telemetry",
+  "version": "1.0.0",
+  "description": "IPATC Melittological Bio-Acoustic & Brood-Nest Telemetry Array Dialing Console",
+  "main": "scripts/server.js",
+  "scripts": {
+    "start": "node scripts/server.js",
+    "test:e2e": "node tests/e2e_verification.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2"
+  },
+  "devDependencies": {
+    "puppeteer": "^22.15.0"
+  },
+  "keywords": [
+    "stargate",
+    "apiculture",
+    "bioacoustics",
+    "telemetry",
+    "portal"
+  ],
+  "author": "IPATC Consortium / Gemini 3.7 Flash (High reasoning)",
+  "license": "MIT"
+}
