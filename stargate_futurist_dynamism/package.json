@@ -1,0 +1,16 @@
+{
+  "name": "stargate-futurist-dynamism",
+  "version": "1.0.0",
+  "description": "Italian Futurist Dynamic Portal-Dialing Terminal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/verify.js"
+  },
+  "keywords": ["futurism", "portal", "dynamism", "chronophotography", "teleportation"],
+  "author": "StarlightDaemon",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^24.4.0"
+  }
+}

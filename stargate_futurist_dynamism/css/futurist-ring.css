@@ -1,0 +1,409 @@
+/* ==========================================================================
+   ISTITUTO DINAMICO DI PROPULSIONE E TRASLAZIONE (IDPT) - RING & KINETIC ENGINE
+   Artistic Technique: Chronophotographic Motion Blur, Fragmented Echoes, Force Lines
+   ========================================================================== */
+
+#center-stage {
+  grid-area: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-primary);
+  clip-path: polygon(20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px), 0 20px);
+  overflow: hidden;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.7);
+}
+
+/* Diagonal Dynamic Force Lines across the Center Canvas */
+.stage-force-lines {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  background: 
+    linear-gradient(-35deg, transparent 40%, rgba(245, 158, 11, 0.08) 49.5%, rgba(239, 68, 68, 0.15) 50%, rgba(6, 182, 212, 0.08) 50.5%, transparent 60%),
+    linear-gradient(25deg, transparent 42%, rgba(245, 158, 11, 0.06) 49%, rgba(255, 255, 255, 0.1) 50%, transparent 51%),
+    linear-gradient(-65deg, transparent 45%, rgba(139, 92, 246, 0.08) 50%, transparent 55%);
+  z-index: 1;
+  mix-blend-mode: screen;
+  transition: opacity 0.5s ease;
+}
+
+/* Stroboscopic Chronophotographic Echo Rays */
+.chronophoto-rays {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.4;
+  transition: opacity 0.4s ease;
+}
+
+/* Central Turbine & Ring Wrapper */
+.ring-assembly-wrapper {
+  position: relative;
+  width: 580px;
+  height: 580px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+/* Main SVG Ring Canvas */
+#ring-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 24px rgba(245, 158, 11, 0.25));
+  transition: filter 0.4s ease;
+}
+
+/* Concentric Gearing and Echo Layers */
+.ring-layer-outer-teeth {
+  transform-origin: 290px 290px;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ring-layer-stator-chassis {
+  transform-origin: 290px 290px;
+}
+
+.ring-layer-flywheel-core {
+  transform-origin: 290px 290px;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ring-layer-chrono-shutter {
+  transform-origin: 290px 290px;
+}
+
+/* ==========================================================================
+   CHRONOPHOTOGRAPHIC GHOST ECHOES (Motion Trails of Successive Positions)
+   ========================================================================== */
+.echo-trace {
+  opacity: 0.18;
+  transform-origin: 290px 290px;
+  mix-blend-mode: screen;
+}
+
+.echo-1 { transform: rotate(-6deg) scale(0.99); fill: var(--accent-velocity); }
+.echo-2 { transform: rotate(-12deg) scale(0.98); fill: var(--accent-speed); }
+.echo-3 { transform: rotate(-18deg) scale(0.97); fill: var(--accent-force); }
+.echo-4 { transform: rotate(-24deg) scale(0.96); fill: var(--accent-kinetic); }
+
+.echo-fwd-1 { transform: rotate(6deg) scale(0.99); fill: var(--accent-speed); opacity: 0.12; }
+.echo-fwd-2 { transform: rotate(12deg) scale(0.98); fill: var(--accent-force); opacity: 0.08; }
+
+/* Stator Nodes on the Ring Perimeter (10 Stators, 36 deg apart) */
+.ring-stator-node {
+  transform-origin: 290px 290px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ring-stator-node .stator-glyph-bg {
+  fill: #111726;
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1.5;
+  transition: all 0.3s ease;
+}
+
+.ring-stator-node .stator-glyph-icon {
+  fill: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.ring-stator-node:hover .stator-glyph-bg {
+  fill: var(--accent-speed);
+  stroke: #fff;
+  filter: drop-shadow(0 0 10px var(--accent-speed));
+}
+
+.ring-stator-node:hover .stator-glyph-icon {
+  fill: var(--text-inverse);
+}
+
+.ring-stator-node.locked .stator-glyph-bg {
+  fill: var(--accent-velocity);
+  stroke: var(--accent-gold);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 14px var(--accent-velocity));
+}
+
+.ring-stator-node.locked .stator-glyph-icon {
+  fill: #fff;
+}
+
+.ring-stator-node.active-pulsing .stator-glyph-bg {
+  fill: var(--accent-active);
+  stroke: #fff;
+  filter: drop-shadow(0 0 16px var(--accent-active));
+}
+
+/* ==========================================================================
+   PORTAL APERTURE & VORTEX CORE
+   ========================================================================== */
+.aperture-core {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #090c14 0%, #030407 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.6);
+  border: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+.portal-vortex-flux {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.9) 0%, rgba(245, 158, 11, 0.7) 40%, rgba(239, 68, 68, 0.8) 75%, transparent 100%);
+  filter: blur(4px);
+  transform: scale(0.1) rotate(0deg);
+  transition: all 0.5s ease;
+  mix-blend-mode: screen;
+}
+
+.portal-chronophoto-slices {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background: conic-gradient(
+    from 0deg,
+    rgba(245, 158, 11, 0.8) 0deg 30deg,
+    rgba(239, 68, 68, 0.9) 30deg 75deg,
+    rgba(6, 182, 212, 0.8) 75deg 120deg,
+    rgba(139, 92, 246, 0.8) 120deg 180deg,
+    rgba(245, 158, 11, 0.8) 180deg 225deg,
+    rgba(239, 68, 68, 0.9) 225deg 290deg,
+    rgba(6, 182, 212, 0.8) 290deg 360deg
+  );
+  clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0);
+  transition: opacity 0.4s ease;
+}
+
+.portal-particles-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 7;
+}
+
+.stage-tachometer-overlay {
+  position: absolute;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(10, 14, 22, 0.85);
+  border: 1px solid var(--border-primary);
+  padding: 8px 24px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  z-index: 10;
+  backdrop-filter: blur(6px);
+}
+
+.tacho-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tacho-metric .label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.tacho-metric .val {
+  font-weight: 700;
+  color: var(--accent-speed);
+  font-size: 15px;
+}
+
+/* ==========================================================================
+   DYNAMIC ACTIVATION STAGES ANIMATIONS & CLASSES
+   ========================================================================== */
+
+/* 1. IDLE STATE */
+#center-stage[data-gate-state="idle"] .ring-layer-outer-teeth {
+  animation: slow-idle-spin 60s infinite linear;
+}
+#center-stage[data-gate-state="idle"] .ring-layer-flywheel-core {
+  animation: slow-idle-spin-rev 45s infinite linear;
+}
+
+@keyframes slow-idle-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes slow-idle-spin-rev {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+/* 2. PENDING READY STATE */
+#center-stage[data-gate-state="pending"] .ring-assembly-wrapper {
+  filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.5));
+}
+#center-stage[data-gate-state="pending"] .ring-layer-outer-teeth {
+  animation: ready-vibrate 12s infinite linear;
+}
+#center-stage[data-gate-state="pending"] .aperture-core {
+  border-color: var(--accent-gold);
+  box-shadow: inset 0 0 25px rgba(245, 158, 11, 0.4), 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+@keyframes ready-vibrate {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 3. STAGE 1: BUILDUP (ACCELERAZIONE) */
+#center-stage[data-gate-state="buildup"] {
+  animation: screen-buildup-shake 0.2s infinite;
+}
+#center-stage[data-gate-state="buildup"] .stage-force-lines {
+  opacity: 0.8;
+  animation: force-line-pulse 0.4s infinite alternate;
+}
+#center-stage[data-gate-state="buildup"] .ring-layer-outer-teeth {
+  animation: fast-spin-accel 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+#center-stage[data-gate-state="buildup"] .ring-layer-flywheel-core {
+  animation: fast-spin-accel-rev 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+#center-stage[data-gate-state="buildup"] .echo-trace {
+  opacity: 0.6;
+  filter: blur(1px);
+}
+#center-stage[data-gate-state="buildup"] .portal-vortex-flux {
+  opacity: 0.6;
+  transform: scale(0.6) rotate(180deg);
+}
+
+@keyframes screen-buildup-shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(1.5px, -1px); }
+  50% { transform: translate(-1px, 1.5px); }
+  75% { transform: translate(1px, 1px); }
+  100% { transform: translate(-1.5px, -0.5px); }
+}
+@keyframes force-line-pulse {
+  from { opacity: 0.4; filter: brightness(1); }
+  to { opacity: 1; filter: brightness(1.6); }
+}
+@keyframes fast-spin-accel {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(1080deg); }
+}
+@keyframes fast-spin-accel-rev {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-1080deg); }
+}
+
+/* 4. STAGE 2: BREAKTHROUGH (FRATTURA CINEMATICA) */
+#center-stage[data-gate-state="breakthrough"] {
+  background: radial-gradient(circle at center, rgba(239, 68, 68, 0.4) 0%, rgba(245, 158, 11, 0.3) 50%, var(--bg-panel-solid) 100%);
+  animation: flash-detonate 0.8s cubic-bezier(0.1, 1, 0.2, 1);
+}
+#center-stage[data-gate-state="breakthrough"] .stage-force-lines {
+  opacity: 1;
+  filter: brightness(2.5) contrast(1.5);
+}
+#center-stage[data-gate-state="breakthrough"] .ring-assembly-wrapper {
+  filter: drop-shadow(0 0 60px rgba(239, 68, 68, 0.9)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.8));
+  transform: scale(1.06);
+}
+#center-stage[data-gate-state="breakthrough"] .portal-vortex-flux {
+  opacity: 1;
+  transform: scale(1.1) rotate(720deg);
+  filter: blur(0px) brightness(2);
+}
+#center-stage[data-gate-state="breakthrough"] .portal-chronophoto-slices {
+  opacity: 0.9;
+  animation: stroboscopic-burst 0.15s infinite linear;
+}
+
+@keyframes flash-detonate {
+  0% { filter: brightness(3) invert(0.2); }
+  50% { filter: brightness(2); }
+  100% { filter: brightness(1.2); }
+}
+@keyframes stroboscopic-burst {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.15); filter: hue-rotate(90deg); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* 5. STAGE 3: SUSTAINED ACTIVE (TRASLAZIONE DINAMICA) */
+#center-stage[data-gate-state="active"] {
+  background: radial-gradient(circle at center, rgba(6, 182, 212, 0.25) 0%, rgba(14, 20, 32, 0.9) 80%);
+}
+#center-stage[data-gate-state="active"] .stage-force-lines {
+  opacity: 0.85;
+  animation: force-line-active 2s infinite linear;
+}
+#center-stage[data-gate-state="active"] .ring-layer-outer-teeth {
+  animation: hypersonic-continuous 0.6s infinite linear;
+}
+#center-stage[data-gate-state="active"] .ring-layer-flywheel-core {
+  animation: hypersonic-continuous-rev 0.45s infinite linear;
+}
+#center-stage[data-gate-state="active"] .ring-layer-chrono-shutter {
+  animation: hypersonic-continuous 0.3s infinite linear;
+}
+#center-stage[data-gate-state="active"] .echo-trace {
+  opacity: 0.45;
+  filter: drop-shadow(0 0 10px var(--accent-force));
+}
+#center-stage[data-gate-state="active"] .portal-vortex-flux {
+  opacity: 0.95;
+  transform: scale(1) rotate(0deg);
+  animation: vortex-hyperspin 1.2s infinite linear;
+}
+#center-stage[data-gate-state="active"] .aperture-core {
+  border-color: var(--accent-force);
+  box-shadow: 0 0 40px var(--accent-force), inset 0 0 30px var(--accent-force);
+}
+
+@keyframes force-line-active {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(3deg) scale(1.03); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+@keyframes hypersonic-continuous {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes hypersonic-continuous-rev {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+@keyframes vortex-hyperspin {
+  from { transform: rotate(0deg) scale(1); filter: brightness(1.2); }
+  50% { transform: rotate(180deg) scale(1.05); filter: brightness(1.6) hue-rotate(45deg); }
+  to { transform: rotate(360deg) scale(1); filter: brightness(1.2); }
+}

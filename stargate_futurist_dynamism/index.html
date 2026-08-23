@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDPT - Istituto Dinamico di Propulsione e Traslazione</title>
+  <meta name="description" content="Terminale di traslazione cinematica e puntamento a portale dinamico ispirato al Futurismo italiano.">
+  
+  <link rel="stylesheet" href="css/futurist-core.css">
+  <link rel="stylesheet" href="css/futurist-ring.css">
+  <link rel="stylesheet" href="css/futurist-panels.css">
+</head>
+<body>
+
+  <!-- Master Scaled Viewport Container (1920x1080 Native, Responsive to 4K) -->
+  <div id="viewport-container">
+    <div id="viewport-root">
+
+      <!-- ====================================================================
+           HEADER: Brand Crest, Live State Ribbon, View Navigators, Help '?'
+           ==================================================================== -->
+      <header id="idpt-header">
+        <div class="brand-section">
+          <div class="brand-crest">IDPT</div>
+          <div class="brand-text">
+            <h1>Istituto Dinamico di Propulsione e Traslazione</h1>
+            <div class="subtitle">Regia Officina Cinematica &bull; Matricola Sperimentale 1913-B</div>
+          </div>
+        </div>
+
+        <div class="header-status-ribbon">
+          <div class="status-indicator" id="header-status-indicator" data-state="idle">
+            <span class="status-dot"></span>
+            <span id="header-status-text">IN ROTAZIONE MINIMA</span>
+          </div>
+        </div>
+
+        <nav class="header-nav">
+          <button class="nav-btn" data-open-modal="archive">
+            <span>📚</span> Archivio Dinamico
+          </button>
+          <button class="nav-btn" data-open-modal="blueprint">
+            <span>📐</span> Schema Tecnico
+          </button>
+          <button class="nav-btn" data-open-modal="telemetry">
+            <span>⚡</span> Telemetria
+          </button>
+          <button class="nav-btn" data-open-modal="logs">
+            <span>📜</span> Registro
+          </button>
+          <button class="nav-btn" data-open-modal="settings">
+            <span>⚙️</span> Config
+          </button>
+          <button id="btn-help-ref" title="Guida dell'Operatore e Manuale Tecnico">?</button>
+        </nav>
+      </header>
+
+      <!-- ====================================================================
+           LEFT PANEL: CONTROL CLUSTER 1 - CINEMATIC STATOR SELECTOR
+           ==================================================================== -->
+      <section id="panel-stator-selector">
+        <div class="panel-header-title">
+          <h3>Stazioni dei Vettori Dinamici</h3>
+          <span class="cluster-tag">CLUSTER PRIMARIO 01</span>
+        </div>
+
+        <!-- 7-Segment Address Locks Strip -->
+        <div class="address-slots-container">
+          <div class="slots-label-row">
+            <span>VETTORE DI SERRAGGIO CINEMATICO</span>
+            <span>7 POSIZIONI</span>
+          </div>
+          <div class="slots-strip">
+            <div class="address-slot" id="slot-0"><span class="slot-index">S1</span><span class="slot-val" id="slot-val-0">--</span></div>
+            <div class="address-slot" id="slot-1"><span class="slot-index">S2</span><span class="slot-val" id="slot-val-1">--</span></div>
+            <div class="address-slot" id="slot-2"><span class="slot-index">S3</span><span class="slot-val" id="slot-val-2">--</span></div>
+            <div class="address-slot" id="slot-3"><span class="slot-index">S4</span><span class="slot-val" id="slot-val-3">--</span></div>
+            <div class="address-slot" id="slot-4"><span class="slot-index">S5</span><span class="slot-val" id="slot-val-4">--</span></div>
+            <div class="address-slot" id="slot-5"><span class="slot-index">S6</span><span class="slot-val" id="slot-val-5">--</span></div>
+            <div class="address-slot" id="slot-6"><span class="slot-index">S7</span><span class="slot-val" id="slot-val-6">--</span></div>
+          </div>
+        </div>
+
+        <!-- 10 Radial Kinetic Stator Switches -->
+        <div class="stators-grid" id="stators-grid">
+          <!-- Dynamically populated via JS -->
+        </div>
+
+        <div class="stator-actions-row">
+          <button class="action-btn-sm" id="btn-reset-dial">Azzeramento Vettori</button>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           CENTER STAGE: THE GREAT DYNAMIC RING & CHRONOPHOTOGRAPHIC APERTURE
+           ==================================================================== -->
+      <main id="center-stage" data-gate-state="idle">
+        <!-- Dynamic Radiating Diagonal Force Lines -->
+        <div class="stage-force-lines"></div>
+
+        <!-- Ring Assembly Wrapper -->
+        <div class="ring-assembly-wrapper">
+          <svg id="ring-svg" viewBox="0 0 580 580">
+            <defs>
+              <radialGradient id="ringGradGold" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.9"/>
+                <stop offset="80%" stop-color="#f59e0b" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#d97706" stop-opacity="0.2"/>
+              </radialGradient>
+              <linearGradient id="forceRayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ef4444" stop-opacity="0.8"/>
+                <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Radiating Force Rays -->
+            <g class="chronophoto-rays">
+              <line x1="290" y1="290" x2="30" y2="40" stroke="url(#forceRayGrad)" stroke-width="2.5" stroke-dasharray="8 4" />
+              <line x1="290" y1="290" x2="550" y2="90" stroke="url(#forceRayGrad)" stroke-width="3" stroke-dasharray="12 6" />
+              <line x1="290" y1="290" x2="50" y2="520" stroke="url(#forceRayGrad)" stroke-width="2" stroke-dasharray="6 3" />
+              <line x1="290" y1="290" x2="530" y2="490" stroke="url(#forceRayGrad)" stroke-width="2.5" stroke-dasharray="10 5" />
+            </g>
+
+            <!-- Chronophotographic Ghost Echo Layers (Successive Positions) -->
+            <g class="echo-trace echo-4">
+              <circle cx="290" cy="290" r="248" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="14 10" />
+            </g>
+            <g class="echo-trace echo-3">
+              <circle cx="290" cy="290" r="252" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="18 12" />
+            </g>
+            <g class="echo-trace echo-2">
+              <circle cx="290" cy="290" r="256" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="24 14" />
+            </g>
+            <g class="echo-trace echo-1">
+              <circle cx="290" cy="290" r="260" fill="none" stroke="currentColor" stroke-width="7" stroke-dasharray="30 16" />
+            </g>
+
+            <!-- Outer Gear Teeth & Flywheel Gearing -->
+            <g class="ring-layer-outer-teeth">
+              <circle cx="290" cy="290" r="268" fill="none" stroke="rgba(245, 158, 11, 0.4)" stroke-width="14" stroke-dasharray="4 6" />
+              <circle cx="290" cy="290" r="262" fill="none" stroke="#f59e0b" stroke-width="3" />
+            </g>
+
+            <!-- Concentric Stator Chassis -->
+            <g class="ring-layer-stator-chassis">
+              <circle cx="290" cy="290" r="232" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="28" />
+              <circle cx="290" cy="290" r="218" fill="none" stroke="#ef4444" stroke-width="2" />
+            </g>
+
+            <!-- Flywheel Internal Counter-Rotator -->
+            <g class="ring-layer-flywheel-core">
+              <circle cx="290" cy="290" r="180" fill="none" stroke="rgba(6, 182, 212, 0.4)" stroke-width="8" stroke-dasharray="12 8" />
+              <!-- Diagonal Cross Spokes -->
+              <line x1="162" y1="162" x2="418" y2="418" stroke="rgba(245, 158, 11, 0.5)" stroke-width="3" />
+              <line x1="418" y1="162" x2="162" y2="418" stroke="rgba(245, 158, 11, 0.5)" stroke-width="3" />
+              <line x1="290" y1="110" x2="290" y2="470" stroke="rgba(239, 68, 68, 0.5)" stroke-width="3" />
+              <line x1="110" y1="290" x2="470" y2="290" stroke="rgba(239, 68, 68, 0.5)" stroke-width="3" />
+            </g>
+
+            <!-- Chronophotographic Optical Shutter Blades -->
+            <g class="ring-layer-chrono-shutter">
+              <circle cx="290" cy="290" r="130" fill="none" stroke="rgba(251, 191, 36, 0.7)" stroke-width="12" stroke-dasharray="16 22" />
+            </g>
+
+            <!-- 10 Stator Nodes on Perimeter (Populated via JS) -->
+            <g id="svg-stators-group"></g>
+          </svg>
+
+          <!-- Portal Aperture Core & Vortex -->
+          <div class="aperture-core">
+            <div class="portal-vortex-flux"></div>
+            <div class="portal-chronophoto-slices"></div>
+            <canvas class="portal-particles-canvas" id="portal-particles-canvas" width="220" height="220"></canvas>
+          </div>
+        </div>
+
+        <!-- Stage Live Tachometer Bar -->
+        <div class="stage-tachometer-overlay">
+          <div class="tacho-metric">
+            <span class="label">Velocità Angolare (ω)</span>
+            <span class="val" id="tacho-rpm">140 RPM</span>
+          </div>
+          <div class="tacho-metric">
+            <span class="label">Carico Centrifugo</span>
+            <span class="val" id="tacho-g">0.20 g</span>
+          </div>
+          <div class="tacho-metric">
+            <span class="label">Flusso Radiale (Φ)</span>
+            <span class="val" id="tacho-flux">1.20 MJ</span>
+          </div>
+        </div>
+      </main>
+
+      <!-- ====================================================================
+           RIGHT PANEL: CONTROL CLUSTER 2 - KINETIC TRANSMISSION CONSOLE
+           ==================================================================== -->
+      <section id="panel-transmission-console">
+        <div class="panel-header-title">
+          <h3>Console di Trasmissione Cinematica</h3>
+          <span class="cluster-tag">CLUSTER PRIMARIO 02</span>
+        </div>
+
+        <!-- Dedicated Actuation Lever (Primary Control) -->
+        <div class="actuation-lever-box">
+          <div class="lever-status-header">
+            <span style="font-family:var(--font-mono); color:var(--text-secondary);">LEVA DI INNESCO</span>
+            <span class="state-tag" id="lever-state-label">COLD IDLE</span>
+          </div>
+          <button id="btn-actuate-lever">
+            <span>INNESCO BLOCCATO</span>
+          </button>
+        </div>
+
+        <!-- Disengage Brake -->
+        <button id="btn-disengage-brake">
+          <span>🛑</span> Freno Centrifugo di Disimpegno
+        </button>
+
+        <!-- Safety Governor Interlock (Defaults to RELEASED) -->
+        <div class="governor-box">
+          <div class="governor-label">
+            <span class="title">Freno di Inerzia (Governor)</span>
+            <span class="desc">Blocco di sicurezza cinetica</span>
+          </div>
+          <button class="governor-toggle" id="btn-governor-toggle" data-engaged="false">
+            RILASCIATO
+          </button>
+        </div>
+
+        <div class="governor-hazard-banner" id="governor-hazard-banner">
+          ⚠️ ATTENZIONE: INNESCO BLOCCATO DAL FRENO DI INERZIA! RILASCIARE IL GOVERNOR.
+        </div>
+
+        <!-- Quick-Dial Presets Console (2 Tiers) -->
+        <div class="presets-section">
+          <div class="presets-tier-tabs">
+            <button class="tier-tab-btn active" data-tier="tier1">Tier I: Sub-Orbitale</button>
+            <button class="tier-tab-btn" data-tier="tier2">Tier II: Trans-Cosmica</button>
+          </div>
+          <div class="preset-list" id="preset-list">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           FOOTER: Attribution, Live Coordinate Status & Version
+           ==================================================================== -->
+      <footer id="idpt-footer">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" id="starlight-link">
+          ⚡ StarlightDaemon
+        </a>
+        <div id="footer-ticker">
+          ISTITUTO DINAMICO DI PROPULSIONE E TRASLAZIONE &bull; <span class="highlight">BANCO DI PROVA CINEMATICO IDPT</span>
+        </div>
+        <span id="version-badge">v1.0.0</span>
+      </footer>
+
+      <!-- ====================================================================
+           MODAL 1: RELATIONAL ARCHIVE (ARCHIVIO DINAMICO)
+           ==================================================================== -->
+      <div class="modal-overlay" id="modal-archive">
+        <div class="modal-header">
+          <h2><span>📚</span> Archivio Dinamico & Registro Storico delle Velocità</h2>
+          <button class="modal-close-btn">&times; Chiudi</button>
+        </div>
+        <div class="modal-body">
+          <div class="archive-modal-layout">
+            <div class="archive-sidebar">
+              <input type="text" class="archive-search-box" id="archive-search" placeholder="Cerca dossier, vettori, ingegneri...">
+              <div class="archive-categories">
+                <button class="category-filter-btn active" data-cat="all"><span>Tutti i Dossier</span> <span>24</span></button>
+                <button class="category-filter-btn" data-cat="velocity"><span>Record di Velocità</span> <span>6</span></button>
+                <button class="category-filter-btn" data-cat="sector"><span>Coordinate Settori</span> <span>6</span></button>
+                <button class="category-filter-btn" data-cat="apparatus"><span>Apparati Meccanici</span> <span>5</span></button>
+                <button class="category-filter-btn" data-cat="incident"><span>Rapporti di Anomalia</span> <span>3</span></button>
+                <button class="category-filter-btn" data-cat="engineer"><span>Ingegneri Cinematici</span> <span>4</span></button>
+              </div>
+              <div class="archive-items-list" id="archive-items-list"></div>
+            </div>
+            <div class="archive-dossier-view" id="archive-dossier-view"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           MODAL 2: BLUEPRINT / SCHEMA TECNICO
+           ==================================================================== -->
+      <div class="modal-overlay" id="modal-blueprint">
+        <div class="modal-header">
+          <h2><span>📐</span> Schema Tecnico e Progetto Strutturale</h2>
+          <button class="modal-close-btn">&times; Chiudi</button>
+        </div>
+        <div class="modal-body">
+          <div class="blueprint-container">
+            <div class="blueprint-canvas-wrapper">
+              <svg width="600" height="420" viewBox="0 0 600 420">
+                <circle cx="300" cy="210" r="180" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4" />
+                <circle cx="300" cy="210" r="140" fill="none" stroke="#60a5fa" stroke-width="3" />
+                <circle cx="300" cy="210" r="80" fill="none" stroke="#93c5fd" stroke-width="1.5" />
+                <!-- Callout Lines -->
+                <line x1="300" y1="30" x2="300" y2="390" stroke="#1e40af" stroke-width="1" stroke-dasharray="4 4" />
+                <line x1="120" y1="210" x2="480" y2="210" stroke="#1e40af" stroke-width="1" stroke-dasharray="4 4" />
+                <text x="320" y="45" fill="#38bdf8" font-family="monospace" font-size="11">R_EXT = 2,680 mm (Tolleranza ±0.02)</text>
+                <text x="320" y="85" fill="#93c5fd" font-family="monospace" font-size="11">DENTATURA: 120 DENTI EVOLVENTI</text>
+                <text x="320" y="145" fill="#38bdf8" font-family="monospace" font-size="11">MATRICE 10 STATORI (36° EQUIDISTANTI)</text>
+                <text x="320" y="275" fill="#60a5fa" font-family="monospace" font-size="11">TAMBURO OTTURATORE CRONOFOTOGRAFICO M-04</text>
+              </svg>
+            </div>
+            <div class="blueprint-specs-sidebar">
+              <div class="spec-group">
+                <div class="spec-title">Specifiche del Volano Primario</div>
+                <div>Diametro Esterno: 3,800 mm</div>
+                <div>Massa Totale: 4,650 kg</div>
+                <div>Lega: Acciaio al Nichel-Cromo-Molibdeno</div>
+              </div>
+              <div class="spec-group">
+                <div class="spec-title">Sincronizzazione Ottica</div>
+                <div>Velocità Otturatore: 1/25,000 sec</div>
+                <div>Prismi: Quarzo Ottico a Trasparenza Totale</div>
+                <div>Frequenza Scatto: 440 - 1,420 Hz</div>
+              </div>
+              <div class="spec-group">
+                <div class="spec-title">Freno di Emergenza</div>
+                <div>Tempo Risposta: 0.38 sec</div>
+                <div>Pressione Esercizio: 45 atm</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           MODAL 3: LIVE TELEMETRY & VIBRATION DIAGNOSTICS
+           ==================================================================== -->
+      <div class="modal-overlay" id="modal-telemetry">
+        <div class="modal-header">
+          <h2><span>⚡</span> Analisi Telemetrica e Dinamica delle Oscillazioni</h2>
+          <button class="modal-close-btn">&times; Chiudi</button>
+        </div>
+        <div class="modal-body">
+          <div style="display:grid; grid-template-columns: 1fr 340px; gap:20px; height:100%;">
+            <div style="display:flex; flex-direction:column; gap:12px; background:rgba(0,0,0,0.5); padding:16px; border:1px solid var(--border-primary);">
+              <div style="font-family:var(--font-mono); font-size:12px; color:var(--accent-speed); font-weight:700;">OSCILLOSCOPIO ARMONICO DELLE VIBRAZIONI STATORICHE (µm)</div>
+              <canvas id="telemetry-osc-canvas" width="680" height="260" style="background:#07090e; border:1px solid rgba(255,255,255,0.1); width:100%; flex:1;"></canvas>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div class="settings-card">
+                <h4>Parametri Accoppiati in Tempo Reale</h4>
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12px;">
+                  <span>Velocità Angolare (ω):</span> <strong id="diag-rpm" style="color:var(--accent-speed);">140 RPM</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12px;">
+                  <span>Carico Centrifugo (g):</span> <strong id="diag-g" style="color:var(--accent-gold);">0.20 g</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12px;">
+                  <span>Ampiezza Vibrazione (δ):</span> <strong id="diag-vibe" style="color:var(--accent-velocity);">4.2 µm</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12px;">
+                  <span>Temp. Nucleo Statori (T):</span> <strong id="diag-temp" style="color:var(--accent-force);">22.4 °C</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12px;">
+                  <span>Flusso Radiale (Φ):</span> <strong id="diag-flux" style="color:var(--accent-active);">1.20 MJ</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           MODAL 4: OPERATOR SESSION EVENT LOG
+           ==================================================================== -->
+      <div class="modal-overlay" id="modal-logs">
+        <div class="modal-header">
+          <h2><span>📜</span> Registro Cronologico delle Operazioni</h2>
+          <div style="display:flex; gap:10px;">
+            <button class="action-btn-sm" id="btn-clear-logs">Azzera Registro</button>
+            <button class="modal-close-btn">&times; Chiudi</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div id="session-log-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           MODAL 5: SETTINGS & COLOR MOODS
+           ==================================================================== -->
+      <div class="modal-overlay" id="modal-settings">
+        <div class="modal-header">
+          <h2><span>⚙️</span> Configurazione Cinetica, Cromatica e Sintesi Sonora</h2>
+          <button class="modal-close-btn">&times; Chiudi</button>
+        </div>
+        <div class="modal-body">
+          <div class="settings-grid">
+            <div class="settings-card">
+              <h4>Palette Cromatica del Futurismo</h4>
+              <div class="theme-options-grid">
+                <button class="theme-btn active" data-theme-name="boccioni">Boccioni Dinamismo</button>
+                <button class="theme-btn" data-theme-name="balla">Balla Prisma Elettrico</button>
+                <button class="theme-btn" data-theme-name="severini">Severini Carbonio & Rosso</button>
+                <button class="theme-btn" data-theme-name="santelia">Sant'Elia Industriale</button>
+              </div>
+              <div style="margin-top:14px;">
+                <div class="audio-slider-row">
+                  <span>Intensità Dinamica del Moto:</span>
+                  <input type="range" id="slider-motion-intensity" min="0.2" max="2.0" step="0.1" value="1.0">
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <h4>Mixer di Sintesi Web Audio (IDPT Synth)</h4>
+              <div class="audio-slider-row">
+                <span>Volume Generale (Master):</span>
+                <input type="range" id="slider-vol-master" min="0" max="1" step="0.05" value="0.7">
+              </div>
+              <div class="audio-slider-row">
+                <span>Accelerazione Turbina:</span>
+                <input type="range" id="slider-vol-turbine" min="0" max="1" step="0.05" value="0.6">
+              </div>
+              <div class="audio-slider-row">
+                <span>Scatto Otturatore Cronofoto:</span>
+                <input type="range" id="slider-vol-shutter" min="0" max="1" step="0.05" value="0.8">
+              </div>
+              <div class="audio-slider-row">
+                <span>Flusso Armonico e Risonanza:</span>
+                <input type="range" id="slider-vol-flux" min="0" max="1" step="0.05" value="0.5">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           MODAL 6: OPERATOR REFERENCE MANUAL
+           ==================================================================== -->
+      <div class="modal-overlay" id="modal-help">
+        <div class="modal-header">
+          <h2><span>📖</span> Guida dell'Operatore e Manifesto Tecnico</h2>
+          <button class="modal-close-btn">&times; Chiudi</button>
+        </div>
+        <div class="modal-body">
+          <div class="reference-content">
+            <div class="ref-section">
+              <h4>1. Fondamenti dell'Apparato Cinematico</h4>
+              <p>L'Istituto Dinamico di Propulsione e Traslazione (IDPT) opera mediante accelerazione centripeta dei volani statorici e sincronizzazione cronofotografica di fase. La combinazione geometrica di 7 settori vettoriali tra i 10 disponibili stabilizza un corridoio di traslazione istantanea senza attrito dell'etere.</p>
+            </div>
+            <div class="ref-section">
+              <h4>2. Sequenza di Puntamento e Blocco di Fase</h4>
+              <ul>
+                <li><strong>Selezione Manuale:</strong> Premere in successione 7 tasti statorici (V-01 a V-10) nel Cluster 01 o cliccare direttamente sui nodi dell'anello rotante.</li>
+                <li><strong>Cattura Cronofotografica:</strong> A ogni innesto, una scarica di esposizioni successive convergerà visibilmente e acusticamente nel punto di ancoraggio.</li>
+                <li><strong>Stato Pronto (Pending):</strong> Il completamento del 7° settore predispone il banco all'innesco. Il sistema <em>non si attiva mai automaticamente</em>.</li>
+              </ul>
+            </div>
+            <div class="ref-section">
+              <h4>3. Innesco a Tre Stadi</h4>
+              <ul>
+                <li><strong>Stage 1 (Accelerazione):</strong> Raggiungimento progressivo di 18,600 RPM con moltiplicazione delle ombre cinetiche.</li>
+                <li><strong>Stage 2 (Frattura):</strong> Rottura della soglia di inerzia a 24,800 RPM ed espansione radiale delle linee-forza.</li>
+                <li><strong>Stage 3 (Sostenuto):</strong> Mantenimento continuo del tunnel di traslazione ad altissima frequenza armonica.</li>
+              </ul>
+            </div>
+            <div class="ref-section">
+              <h4>4. Sistemi di Sicurezza</h4>
+              <p>Il <strong>Freno Centrifugo di Disimpegno</strong> è sempre attivo e pronto per l'arresto immediato. Il <strong>Freno di Inerzia (Governor)</strong> predefinito su <em>Rilasciato</em> blocca l'innesco in caso di attivazione manuale dell'interblocco di sicurezza.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/archive-data.js"></script>
+  <script src="js/gate-controller.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
