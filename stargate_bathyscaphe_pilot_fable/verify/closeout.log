@@ -1,0 +1,249 @@
+
+## 0. Cold start @ 1920x1080 (fresh localStorage)
+  SHOT 00_cold_start_1080p.png — phase=idle
+  PASS cold start is idle with empty profile — phase=idle seq=0
+  PASS 16 strata glyph buttons rendered
+  PASS COMMENCE disabled at cold start — AWAITING PROFILE
+
+## (e) Safety interlock (hull-integrity lockout) defaults to RELEASED on fresh load
+  PASS lockout checkbox unchecked on fresh load — checked=false
+  PASS sim.lockout === false on fresh load
+  PASS lockout label reads RELEASED — RELEASED
+  PASS lockout control has no "engaged" class — lockout
+  PASS lockout still RELEASED after a second reload — RELEASED
+
+## (a) Full manual dial — 7 real glyph clicks — must NOT auto-fire on the 7th lock
+  PASS dial#1 click glyph KEL (#1): pointer hit-test at (137,278) box 187x91 — elementFromPoint -> span
+  PASS dial#1 KEL: lock sequence started after click — phase idle -> locking
+  SHOT 01_manual_lock_in_progress_wp1.png — mid-lock of KEL
+  PASS dial#1 KEL: locked as waypoint 1 — seq=[KEL] hold=40 m phase=idle
+  PASS dial#1 KEL: phase returns to idle between locks — idle
+  PASS dial#1 click glyph THR (#2): pointer hit-test at (332,278) box 187x91 — elementFromPoint -> span.g-name
+  PASS dial#1 THR: lock sequence started after click — phase idle -> locking
+  PASS dial#1 THR: locked as waypoint 2 — seq=[KEL,THR] hold=180 m phase=idle
+  PASS dial#1 THR: phase returns to idle between locks — idle
+  PASS dial#1 click glyph DUSK (#3): pointer hit-test at (137,372) box 187x80 — elementFromPoint -> span
+  PASS dial#1 DUSK: lock sequence started after click — phase idle -> locking
+  PASS dial#1 DUSK: locked as waypoint 3 — seq=[KEL,THR,DUSK] hold=420 m phase=idle
+  PASS dial#1 DUSK: phase returns to idle between locks — idle
+  PASS dial#1 click glyph LANT (#4): pointer hit-test at (332,372) box 187x80 — elementFromPoint -> span
+  PASS dial#1 LANT: lock sequence started after click — phase idle -> locking
+  PASS dial#1 LANT: locked as waypoint 4 — seq=[KEL,THR,DUSK,LANT] hold=700 m phase=idle
+  PASS dial#1 LANT: phase returns to idle between locks — idle
+  PASS dial#1 click glyph MIDN (#5): pointer hit-test at (332,465) box 187x91 — elementFromPoint -> span
+  PASS dial#1 MIDN: lock sequence started after click — phase idle -> locking
+  PASS dial#1 MIDN: locked as waypoint 5 — seq=[KEL,THR,DUSK,LANT,MIDN] hold=1400 m phase=idle
+  PASS dial#1 MIDN: phase returns to idle between locks — idle
+  PASS dial#1 click glyph CALD (#6): pointer hit-test at (137,558) box 187x80 — elementFromPoint -> span.g-depth
+  PASS dial#1 CALD: lock sequence started after click — phase idle -> locking
+  PASS dial#1 CALD: locked as waypoint 6 — seq=[KEL,THR,DUSK,LANT,MIDN,CALD] hold=2100 m phase=idle
+  PASS dial#1 CALD: phase returns to idle between locks — idle
+  PASS dial#1 click glyph VENT (#7): pointer hit-test at (332,558) box 187x80 — elementFromPoint -> span.g-depth
+  PASS dial#1 VENT: lock sequence started after click — phase idle -> locking
+  PASS dial#1 VENT: locked as waypoint 7 — seq=[KEL,THR,DUSK,LANT,MIDN,CALD,VENT] hold=2650 m phase=pending
+  SHOT 02a_after_7th_lock_immediate.png — phase=pending aperture=0 glow=0
+  PASS immediately after 7th lock: phase is PENDING (not buildup/active) — phase=pending
+  PASS immediately after 7th lock: aperture closed, ring glow 0 — aperture=0 glow=0
+  PASS COMMENCE is enabled and demands pilot action — ARMED — PILOT ACTION REQUIRED
+  SHOT 02b_after_7th_lock_plus_3s_still_unfired.png — phase=pending aperture=0 glow=0 +3700ms
+  PASS 3 s after 7th lock: STILL pending — no auto-fire — phase=pending
+  PASS 3 s after 7th lock: aperture still 0, glow still 0 — aperture=0 glow=0
+  PASS phase observer never saw buildup/breakthrough/active before explicit engage — observed: idle > locking > pending
+  INFO pixel diff (thr 40) between immediate and +3s screenshots: 0.05 % (ambient animation only is expected to be small)
+  PASS no large-scale visual change between immediate and +3 s shots (nothing fired) — 0.05 % differing
+
+## (b) Explicit engage — three-stage activation, one screenshot per stage
+  PASS COMMENCE FINAL DESCENT real click: pointer hit-test at (883,970) box 244x114 — elementFromPoint -> span.hb-title
+  PASS buildup starts only after explicit COMMENCE click — phase=buildup (166 ms after click)
+  SHOT 03_stage1_buildup.png — phase=buildup depth=2665 dim=0.43 glow=0.18 aperture=0
+  PASS screenshot 1 taken during BUILDUP — phase=buildup
+  SHOT 04_stage2_breakthrough.png — phase=breakthrough depth=2710 dim=0.85 glow=0.35 aperture=0
+  PASS screenshot 2 capture began during BREAKTHROUGH (900 ms stage; see closeout_stages.log for page-clock bracketing + rim-ring image proof) — phase=breakthrough
+  SHOT 05_stage3_sustained_active.png — phase=active depth=2710 dim=0.5 glow=0.98 aperture=1
+  PASS screenshot 3 taken during SUSTAINED ACTIVE (aperture fully open) — phase=active aperture=1
+  PASS helm reports RING HOLD ACTIVE — RING HOLD ACTIVE
+  PASS stage screenshots are not byte-identical — sha1 a28365a9e428 / ababe2f78f84 / cbc7ce013a9a
+  INFO pixel diff fraction (>24 in any channel, 3px grid): pending->buildup 7.2 %, buildup->breakthrough 49.8 %, breakthrough->active 33.4 %, buildup->active 28.8 %
+  PASS each stage differs from the others by >5 % of sampled pixels
+  INFO mean luminance sphere region [pending, buildup, breakthrough, active] = 10.2 / 12 / 101.4 / 78.1; whole frame = 33.5 / 27.9 / 54.1 / 40.6
+  PASS BUILDUP frame is darker than the pending frame (light fading) — 27.9 < 33.5
+  PASS BREAKTHROUGH frame is brighter than buildup (flash) — 54.1 > 27.9
+  PASS ACTIVE sphere luminance differs from both earlier stages — 10.2/12/101.4/78.1
+  INFO mean RGB sphere region [pending, buildup, breakthrough, active] = 4,11,18 | 5,13,20 | 65,110,123 | 36,88,103
+  INFO observed phase sequence so far: idle > locking > idle > locking > idle > locking > idle > locking > idle > locking > idle > locking > idle > locking > pending > buildup > breakthrough > active
+  PASS observed phase order pending > buildup > breakthrough > active
+
+## (d) Disengage / redial cycles x2 (engage -> disengage -> redial -> engage -> disengage -> redial)
+  PASS cycle1 EMERGENCY ASCENT real click (disengage): pointer hit-test at (1144,970) box 250x114 — elementFromPoint -> span.hb-sub
+  PASS cycle1: ascending after disengage — ascending
+  SHOT 06_cycle1_disengage_ascending.png — phase=ascending
+  PASS cycle1: surfaced — idle, profile cleared, aperture closed — phase=idle seq=0 hold=0
+  PASS redial#1 click glyph THR (#1): pointer hit-test at (332,278) box 187x89 — elementFromPoint -> span.g-name
+  PASS redial#1 THR: lock sequence started after click — phase idle -> locking
+  PASS redial#1 THR: locked as waypoint 1 — seq=[THR] hold=180 m phase=idle
+  PASS redial#1 THR: phase returns to idle between locks — idle
+  PASS redial#1 click glyph DUSK (#2): pointer hit-test at (137,372) box 187x80 — elementFromPoint -> span
+  PASS redial#1 DUSK: lock sequence started after click — phase idle -> locking
+  PASS redial#1 DUSK: locked as waypoint 2 — seq=[THR,DUSK] hold=420 m phase=idle
+  PASS redial#1 DUSK: phase returns to idle between locks — idle
+  PASS redial#1 click glyph OXM (#3): pointer hit-test at (137,465) box 187x91 — elementFromPoint -> span.g-name
+  PASS redial#1 OXM: lock sequence started after click — phase idle -> locking
+  PASS redial#1 OXM: locked as waypoint 3 — seq=[THR,DUSK,OXM] hold=950 m phase=idle
+  PASS redial#1 OXM: phase returns to idle between locks — idle
+  PASS redial#1 click glyph MIDN (#4): pointer hit-test at (332,465) box 187x91 — elementFromPoint -> span
+  PASS redial#1 MIDN: lock sequence started after click — phase idle -> locking
+  PASS redial#1 MIDN: locked as waypoint 4 — seq=[THR,DUSK,OXM,MIDN] hold=1400 m phase=idle
+  PASS redial#1 MIDN: phase returns to idle between locks — idle
+  PASS redial#1 click glyph CALD (#5): pointer hit-test at (137,558) box 187x80 — elementFromPoint -> span.g-depth
+  PASS redial#1 CALD: lock sequence started after click — phase idle -> locking
+  PASS redial#1 CALD: locked as waypoint 5 — seq=[THR,DUSK,OXM,MIDN,CALD] hold=2100 m phase=idle
+  PASS redial#1 CALD: phase returns to idle between locks — idle
+  PASS redial#1 click glyph VENT (#6): pointer hit-test at (332,558) box 187x80 — elementFromPoint -> span.g-depth
+  PASS redial#1 VENT: lock sequence started after click — phase idle -> locking
+  PASS redial#1 VENT: locked as waypoint 6 — seq=[THR,DUSK,OXM,MIDN,CALD,VENT] hold=2650 m phase=idle
+  PASS redial#1 VENT: phase returns to idle between locks — idle
+  PASS redial#1 click glyph PLN (#7): pointer hit-test at (137,651) box 187x91 — elementFromPoint -> span.g-depth
+  PASS redial#1 PLN: lock sequence started after click — phase idle -> locking
+  PASS redial#1 PLN: locked as waypoint 7 — seq=[THR,DUSK,OXM,MIDN,CALD,VENT,PLN] hold=3800 m phase=pending
+  PASS redial#1 complete -> pending (not auto-fired) — pending
+  PASS redial#1: still pending 1.5 s later — phase=pending
+  SHOT 07_redial1_pending.png — phase=pending hold=3800
+  PASS cycle2 COMMENCE real click: pointer hit-test at (883,970) box 244x114 — elementFromPoint -> span.hb-title
+  PASS cycle2: reached sustained active — phase=active depth=3860
+  SHOT 08_cycle2_active_abyssal_plain.png — phase=active depth=3860
+  PASS cycle2 EMERGENCY ASCENT real click (disengage): pointer hit-test at (1144,970) box 250x114 — elementFromPoint -> span.hb-sub
+  PASS cycle2: ascending after disengage — ascending
+  PASS cycle2: surfaced — idle, profile cleared — phase=idle seq=0
+  PASS redial#2 click glyph DUSK (#1): pointer hit-test at (137,370) box 187x78 — elementFromPoint -> span
+  PASS redial#2 DUSK: lock sequence started after click — phase idle -> locking
+  PASS redial#2 DUSK: locked as waypoint 1 — seq=[DUSK] hold=420 m phase=idle
+  PASS redial#2 DUSK: phase returns to idle between locks — idle
+  PASS redial#2 click glyph LANT (#2): pointer hit-test at (332,372) box 187x80 — elementFromPoint -> span
+  PASS redial#2 LANT: lock sequence started after click — phase idle -> locking
+  PASS redial#2 LANT: locked as waypoint 2 — seq=[DUSK,LANT] hold=700 m phase=idle
+  PASS redial#2 LANT: phase returns to idle between locks — idle
+  PASS redial#2 click glyph MIDN (#3): pointer hit-test at (332,465) box 187x91 — elementFromPoint -> span
+  PASS redial#2 MIDN: lock sequence started after click — phase idle -> locking
+  PASS redial#2 MIDN: locked as waypoint 3 — seq=[DUSK,LANT,MIDN] hold=1400 m phase=idle
+  PASS redial#2 MIDN: phase returns to idle between locks — idle
+  PASS redial#2 click glyph CALD (#4): pointer hit-test at (137,558) box 187x80 — elementFromPoint -> span.g-depth
+  PASS redial#2 CALD: lock sequence started after click — phase idle -> locking
+  PASS redial#2 CALD: locked as waypoint 4 — seq=[DUSK,LANT,MIDN,CALD] hold=2100 m phase=idle
+  PASS redial#2 CALD: phase returns to idle between locks — idle
+  PASS redial#2 click glyph VENT (#5): pointer hit-test at (332,558) box 187x80 — elementFromPoint -> span.g-depth
+  PASS redial#2 VENT: lock sequence started after click — phase idle -> locking
+  PASS redial#2 VENT: locked as waypoint 5 — seq=[DUSK,LANT,MIDN,CALD,VENT] hold=2650 m phase=idle
+  PASS redial#2 VENT: phase returns to idle between locks — idle
+  PASS redial#2 click glyph PLN (#6): pointer hit-test at (137,651) box 187x91 — elementFromPoint -> span.g-depth
+  PASS redial#2 PLN: lock sequence started after click — phase idle -> locking
+  PASS redial#2 PLN: locked as waypoint 6 — seq=[DUSK,LANT,MIDN,CALD,VENT,PLN] hold=3800 m phase=idle
+  PASS redial#2 PLN: phase returns to idle between locks — idle
+  PASS redial#2 click glyph FRAC (#7): pointer hit-test at (332,651) box 187x91 — elementFromPoint -> span.g-name
+  PASS redial#2 FRAC: lock sequence started after click — phase idle -> locking
+  PASS redial#2 FRAC: locked as waypoint 7 — seq=[DUSK,LANT,MIDN,CALD,VENT,PLN,FRAC] hold=4700 m phase=pending
+  PASS redial#2 complete -> pending (not auto-fired) — pending
+  SHOT 09_redial2_pending.png — phase=pending hold=4700
+  PASS cycle3 COMMENCE real click (confirms redial#2 is engageable): pointer hit-test at (883,970) box 244x114 — elementFromPoint -> span.hb-title
+  PASS cycle3: redial#2 engages to active — active
+  SHOT 10_cycle3_active_fracture_terrace.png — phase=active depth=4760
+  PASS cycle3 EMERGENCY ASCENT (return to surface for replay test): pointer hit-test at (1144,970) box 250x114 — elementFromPoint -> span.hb-sub
+
+## (c) Quick-dial preset replays progressively (not an instant jump)
+  PASS open DIVE COMPUTER tab: pointer hit-test at (1445,32) box 135x33 — elementFromPoint -> button.tab
+  PASS dive computer lists 7 presets — 7
+  SHOT 11_dive_computer_panel.png — 7 presets
+  PASS click preset TL-02 Trench Lip Ring: pointer hit-test at (988,463) box 515x162 — elementFromPoint -> div.pr-seq
+  SHOT 12_replay_t0400ms.png — t+417ms phase=idle seq=0 depth=0 auto=true
+  SHOT 13_replay_t1500ms.png — t+1505ms phase=idle seq=1 depth=700 auto=true
+  SHOT 14_replay_t3000ms.png — t+3016ms phase=locking seq=2 depth=1802 auto=true
+  SHOT 15_replay_t4500ms.png — t+4504ms phase=locking seq=3 depth=2650 auto=true
+  SHOT 16_replay_t6000ms.png — t+6004ms phase=idle seq=5 depth=3800 auto=true
+  SHOT 17_replay_pending.png — t+8100ms phase=pending seq=[LANT,MIDN,CALD,VENT,PLN,SCRP,TRN]
+  INFO replay timeline: t+417ms seq=0 depth=0 idle | t+1505ms seq=1 depth=700 idle | t+3016ms seq=2 depth=1802 locking | t+4504ms seq=3 depth=2650 locking | t+6004ms seq=5 depth=3800 idle | pending at t+8100ms
+  PASS at least 3 distinct intermediate waypoint counts observed during replay — 0,1,2,3,5
+  PASS replay progresses monotonically (waypoints and depth) — seq 0->1->2->3->5, depth 0->700->1802->2650->3800
+  PASS replay is NOT instant: fewer than 7 waypoints at 0.4 s and 1.5 s — seq@0.4s=0 seq@1.5s=1
+  PASS replay took more than 4 s to reach pending — 8100 ms
+  PASS replay ends PENDING with the TL-02 sequence — LANT,MIDN,CALD,VENT,PLN,SCRP,TRN
+  PASS replay screenshots are all distinct files — 5df34a865cda/0df8749a2fb6/c993786c63be/319e89e3892b/a6d9aee9f639
+  PASS replay does NOT auto-fire: still pending 3 s after completion — phase=pending
+  PASS EMERGENCY ASCENT after replay (return to surface): pointer hit-test at (1144,970) box 250x114 — elementFromPoint -> span.hb-sub
+
+## (f) Every secondary tab / panel shows real content when clicked
+  PASS click tab ARCHIVE: pointer hit-test at (1243,32) box 87x33 — elementFromPoint -> button.tab
+  SHOT 18_panel_archive.png — 1560x900 text=2657 chars visibleEls=233 svgEls=0
+  PASS archive: panel visible after click — layerHidden=false panelHidden=false othersVisible=[]
+  PASS archive: panel has rendered size — 1560x900
+  PASS archive: panel body has real content — 2657 chars, 233 visible elements: "ALL (55) DIVE RECORD (20) CREW LOG (12) INCIDENT REPORT (7) DISCOVERY (8) MAINTENANCE (8) D-101 Shakedown to Thermocline Bench 2041-03-04 D-104 Twilight Sill ho..."
+  PASS archive: click first record: pointer hit-test at (462,307) box 514x34 — elementFromPoint -> span.ar-title
+  PASS archive: record detail populates on click — "DIVE RECORDD-101 Shakedown to Thermocline Bench DATE 2041-03-04 DEPTH 180 m PRESSURE 19 bar PILOT / AUTHOR Oriel Vance F..."
+  SHOT 18_panel_archive_detail.png — 561 chars
+  PASS archive: close button: pointer hit-test at (1696,125) box 37x35 — elementFromPoint -> button.panel-close
+  PASS archive: panel closes via its close button
+  PASS click tab VESSEL: pointer hit-test at (1332,32) box 79x33 — elementFromPoint -> button.tab
+  SHOT 18_panel_vessel.png — 1560x900 text=693 chars visibleEls=107 svgEls=111
+  PASS vessel: panel visible after click — layerHidden=false panelHidden=false othersVisible=[]
+  PASS vessel: panel has rendered size — 1560x900
+  PASS vessel: panel body has real content — svg elements=111 visible elements=107 text="SIDE ELEVATION — PORT pressure sphere forward · syntactic-foam float body aft · 4 main ballast · 2 trim · 4 thrusters · lamps under the sphere FLOAT BODY · SYNT"
+  PASS vessel: close button: pointer hit-test at (1696,125) box 37x35 — elementFromPoint -> button.panel-close
+  PASS vessel: panel closes via its close button
+  PASS click tab COMPUTER: pointer hit-test at (1445,32) box 135x33 — elementFromPoint -> button.tab
+  SHOT 18_panel_computer.png — 1560x900 text=1864 chars visibleEls=224 svgEls=49
+  PASS computer: panel visible after click — layerHidden=false panelHidden=false othersVisible=[]
+  PASS computer: panel has rendered size — 1560x900
+  PASS computer: panel body has real content — 1864 chars, 224 visible elements: "VERIFIED PROFILES surface-audited · logged dives VF-12 RING BETA Vent Field Ring RING 2 710 m HULL 24.3 % LOG D-117 O. Vance Standard hydrothermal approach. 14 ..."
+  PASS computer: close button: pointer hit-test at (1696,125) box 37x35 — elementFromPoint -> button.panel-close
+  PASS computer: panel closes via its close button
+  PASS click tab LOG: pointer hit-test at (1577,32) box 117x33 — elementFromPoint -> button.tab
+  SHOT 18_panel_log.png — 1560x900 text=8906 chars visibleEls=480 svgEls=0
+  PASS log: panel visible after click — layerHidden=false panelHidden=false othersVisible=[]
+  PASS log: panel has rendered size — 1560x900
+  PASS log: panel body has real content — 8906 chars, 480 visible elements: "ENTRIES 116 SESSION 00:01:49 HOLDS 28 ACTIVATIONS 3 ASCENTS 4 REJECTS 0 DEVICE SESSIONS 2 00:00:00.012 BOOT console online — DSV-7 Cerulean Lantern · session 2 ..."
+  PASS log: close button: pointer hit-test at (1696,125) box 37x35 — elementFromPoint -> button.panel-close
+  PASS log: panel closes via its close button
+  PASS click tab SETTINGS: pointer hit-test at (1688,32) box 93x33 — elementFromPoint -> button.tab
+  SHOT 18_panel_settings.png — 1560x900 text=1059 chars visibleEls=55 svgEls=0
+  PASS settings: panel visible after click — layerHidden=false panelHidden=false othersVisible=[]
+  PASS settings: panel has rendered size — 1560x900
+  PASS settings: panel body has real content — 1059 chars, 55 visible elements: "INSTRUMENT COLOUR MOOD Changes every instrument, the gauge, the sphere HUD and the background theme. CERULEAN AMBER DECK PHOSPHOR GLACIER VIOLET ABYSS DISPLAY D..."
+  PASS settings: close button: pointer hit-test at (1696,125) box 37x35 — elementFromPoint -> button.panel-close
+  PASS settings: panel closes via its close button
+  PASS click ? operator reference button: pointer hit-test at (1882,34) box 40x40 — elementFromPoint -> button#help-btn.corner
+  SHOT 19_operator_reference.png — text=2556 chars
+  PASS operator reference overlay shows real content — 2556 chars: "WHAT THIS CONSOLE IS The pilot console of DSV-7 Cerulean Lantern, the Hadal Threshold Institute's single-pilot bathyscap..."
+  PASS close operator reference: pointer hit-test at (1456,187) box 37x35 — elementFromPoint -> button#help-close.panel-close
+  PASS operator reference closes
+
+## (g) Background fill at non-16:9 viewports (no unstyled gaps)
+  SHOT 20_viewport_800x1200_tall.png — stage 0,375,800,450 scale 0.417 bg 0,0,800,1200
+  PASS 800x1200: screenshot dimensions — 800x1200
+  PASS 800x1200: #ocean-bg covers the whole viewport — bg rect 0,0,800,1200
+  INFO 800x1200: sampled 350 edge/gap pixels; white=0 bright(L>120)=0; brightest L=46 at (786,3,13,53,69); body bg rgb(6, 23, 34); scroll 800x1200
+  PASS 800x1200: no white/default pixels along edges or in letterbox gaps — 0 white of 350
+  PASS 800x1200: no bright (unstyled) pixels along edges or in letterbox gaps — 0 bright of 350
+  PASS 800x1200: no scroll overflow — 800x1200
+  INFO 800x1200: corner pixels TL/TR/BL/BR = 9,34,49 | 9,35,49 | 4,15,21 | 4,15,22
+  SHOT 21_viewport_1600x600_wide.png — stage 267,0,1067,600 scale 0.556 bg 0,0,1600,600
+  PASS 1600x600: screenshot dimensions — 1600x600
+  PASS 1600x600: #ocean-bg covers the whole viewport — bg rect 0,0,1600,600
+  INFO 1600x600: sampled 352 edge/gap pixels; white=0 bright(L>120)=0; brightest L=36 at (1586,3,11,42,56); body bg rgb(6, 23, 34); scroll 1600x600
+  PASS 1600x600: no white/default pixels along edges or in letterbox gaps — 0 white of 352
+  PASS 1600x600: no bright (unstyled) pixels along edges or in letterbox gaps — 0 bright of 352
+  PASS 1600x600: no scroll overflow — 1600x600
+  INFO 1600x600: corner pixels TL/TR/BL/BR = 10,36,51 | 9,34,48 | 4,15,22 | 4,16,23
+  SHOT 22_viewport_1280x1024.png — stage 0,152,1280,720 scale 0.667 bg 0,0,1280,1024
+  PASS 1280x1024: screenshot dimensions — 1280x1024
+  PASS 1280x1024: #ocean-bg covers the whole viewport — bg rect 0,0,1280,1024
+  INFO 1280x1024: sampled 448 edge/gap pixels; white=0 bright(L>120)=0; brightest L=54 at (3,194,16,63,82); body bg rgb(6, 23, 34); scroll 1280x1024
+  PASS 1280x1024: no white/default pixels along edges or in letterbox gaps — 0 white of 448
+  PASS 1280x1024: no bright (unstyled) pixels along edges or in letterbox gaps — 0 bright of 448
+  PASS 1280x1024: no scroll overflow — 1280x1024
+  INFO 1280x1024: corner pixels TL/TR/BL/BR = 9,35,50 | 9,34,48 | 4,15,21 | 4,15,22
+
+## Console / page errors captured during the whole run
+  INFO console.error + pageerror count: 0
+  INFO console.warn count: 0
+  INFO failed network requests: 0
+  PASS no application console errors / page errors (font CDN failures excluded) — none
+
+## RESULT: 185 passed, 0 failed
