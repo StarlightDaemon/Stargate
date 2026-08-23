@@ -1,0 +1,22 @@
+{
+  "name": "stargate-bathyscaphe-pilot",
+  "version": "1.0.0",
+  "description": "DSV-9 ARCHELON Bathyscaphe Pilot Console & Abyssal Gateway Interface",
+  "main": "src/js/app.js",
+  "scripts": {
+    "dev": "node server.js",
+    "test": "node test/verify.js"
+  },
+  "keywords": [
+    "bathyscaphe",
+    "submersible",
+    "cockpit",
+    "portal",
+    "hud"
+  ],
+  "author": "StarlightDaemon",
+  "license": "MIT",
+  "devDependencies": {
+    "puppeteer": "^24.43.1"
+  }
+}

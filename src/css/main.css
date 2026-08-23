@@ -1,0 +1,566 @@
+/* ==========================================================================
+   DSV-9 ARCHELON PILOT CONSOLE - MAIN DESIGN SYSTEM TOKENS & SHELL
+   ========================================================================== */
+
+:root {
+  /* Core Geometry & Scaling */
+  --hud-scale: 1;
+  --base-width: 1920px;
+  --base-height: 1080px;
+
+  /* Typography */
+  --font-mono: 'JetBrains Mono', 'Chakra Petch', monospace;
+  --font-display: 'Orbitron', 'Chakra Petch', sans-serif;
+  --font-tech: 'Chakra Petch', 'Rajdhani', sans-serif;
+  --font-readout: 'Rajdhani', sans-serif;
+
+  /* Default Abyssal Cyan Color Palette */
+  --bg-abyss-dark: #02050b;
+  --bg-cockpit-hull: #050c18;
+  --bg-card-glass: rgba(6, 17, 34, 0.78);
+  --bg-card-border: rgba(0, 229, 255, 0.22);
+  --bg-card-border-glow: rgba(0, 229, 255, 0.45);
+  --bg-control-active: rgba(0, 229, 255, 0.12);
+
+  --accent-cyan: #00e5ff;
+  --accent-cyan-dim: #008899;
+  --accent-cyan-glow: rgba(0, 229, 255, 0.35);
+
+  --accent-emerald: #00ff9d;
+  --accent-emerald-glow: rgba(0, 255, 157, 0.35);
+
+  --accent-amber: #ffaa00;
+  --accent-amber-glow: rgba(255, 170, 0, 0.4);
+
+  --accent-red: #ff2a4b;
+  --accent-red-glow: rgba(255, 42, 75, 0.5);
+
+  --text-primary: #e0f7ff;
+  --text-secondary: #7fa8c9;
+  --text-dim: #426380;
+  --text-bright: #ffffff;
+
+  /* Shadows & Glassmorphic Highlights */
+  --glow-subtle: 0 0 12px rgba(0, 229, 255, 0.25);
+  --glow-strong: 0 0 24px rgba(0, 229, 255, 0.6);
+  --glow-emerald: 0 0 18px rgba(0, 255, 157, 0.5);
+  --glow-amber: 0 0 20px rgba(255, 170, 0, 0.55);
+  --glow-red: 0 0 25px rgba(255, 42, 75, 0.65);
+
+  --glass-blur: blur(12px);
+  --transition-fast: 0.15s cubic-bezier(0.2, 0, 0, 1);
+  --transition-norm: 0.25s cubic-bezier(0.2, 0, 0, 1);
+  --transition-slow: 0.5s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ==========================================================================
+   COLOR MOOD THEMES
+   ========================================================================== */
+
+/* 1. Deep Amber (Night Dive Spec) */
+body[data-theme="amber"] {
+  --bg-abyss-dark: #080502;
+  --bg-cockpit-hull: #140d05;
+  --bg-card-glass: rgba(24, 15, 6, 0.82);
+  --bg-card-border: rgba(255, 170, 0, 0.25);
+  --bg-card-border-glow: rgba(255, 170, 0, 0.5);
+  --bg-control-active: rgba(255, 170, 0, 0.14);
+
+  --accent-cyan: #ffaa00;
+  --accent-cyan-dim: #a66e00;
+  --accent-cyan-glow: rgba(255, 170, 0, 0.35);
+
+  --text-primary: #fff0d6;
+  --text-secondary: #c49d6c;
+  --text-dim: #735431;
+  --glow-subtle: 0 0 12px rgba(255, 170, 0, 0.3);
+  --glow-strong: 0 0 24px rgba(255, 170, 0, 0.65);
+}
+
+/* 2. Bioluminescent Emerald */
+body[data-theme="emerald"] {
+  --bg-abyss-dark: #010a06;
+  --bg-cockpit-hull: #04160d;
+  --bg-card-glass: rgba(5, 24, 15, 0.82);
+  --bg-card-border: rgba(0, 255, 157, 0.25);
+  --bg-card-border-glow: rgba(0, 255, 157, 0.55);
+  --bg-control-active: rgba(0, 255, 157, 0.14);
+
+  --accent-cyan: #00ff9d;
+  --accent-cyan-dim: #00995e;
+  --accent-cyan-glow: rgba(0, 255, 157, 0.35);
+
+  --text-primary: #d6fff0;
+  --text-secondary: #6cc49d;
+  --text-dim: #317354;
+  --glow-subtle: 0 0 12px rgba(0, 255, 157, 0.3);
+  --glow-strong: 0 0 24px rgba(0, 255, 157, 0.65);
+}
+
+/* 3. Monolith Stark (High Contrast Slate) */
+body[data-theme="monolith"] {
+  --bg-abyss-dark: #0a0c0e;
+  --bg-cockpit-hull: #101418;
+  --bg-card-glass: rgba(18, 22, 26, 0.9);
+  --bg-card-border: rgba(200, 220, 240, 0.3);
+  --bg-card-border-glow: rgba(220, 235, 255, 0.6);
+  --bg-control-active: rgba(200, 220, 240, 0.15);
+
+  --accent-cyan: #d0e4f5;
+  --accent-cyan-dim: #7b95ad;
+  --accent-cyan-glow: rgba(208, 228, 245, 0.35);
+
+  --text-primary: #f0f5fa;
+  --text-secondary: #96aabf;
+  --text-dim: #546678;
+  --glow-subtle: 0 0 10px rgba(208, 228, 245, 0.25);
+  --glow-strong: 0 0 20px rgba(208, 228, 245, 0.5);
+}
+
+/* ==========================================================================
+   RESET & FOUNDATIONS
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-abyss-dark);
+  color: var(--text-primary);
+  font-family: var(--font-tech);
+  font-size: 14px;
+  line-height: 1.4;
+  user-select: none;
+}
+
+/* Full-bleed ocean depth ambient background (fills any non-16:9 window completely) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, var(--bg-cockpit-hull) 0%, var(--bg-abyss-dark) 80%, #000206 100%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 0),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+  background-size: 32px 32px, 100% 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   VIEWPORT SCALER WRAPPER
+   ========================================================================== */
+
+.viewport-scaler {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--base-width);
+  height: var(--base-height);
+  transform: translate(-50%, -50%) scale(var(--hud-scale));
+  transform-origin: center center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 24px;
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   HEADER NAVIGATION
+   ========================================================================== */
+
+.cockpit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  background: var(--bg-card-glass);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  padding: 0 16px;
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glow-subtle);
+  z-index: 50;
+}
+
+.header-left .vessel-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.consortium-tag {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, var(--accent-cyan), #0099ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-right: 8px;
+  border-right: 1px solid var(--bg-card-border);
+}
+
+.vessel-id {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-bright);
+}
+
+.system-status-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(0, 255, 157, 0.12);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(0, 255, 157, 0.35);
+}
+
+.cockpit-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-tech);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.nav-tab:hover {
+  color: var(--text-bright);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(0, 229, 255, 0.2);
+}
+
+.nav-tab.active {
+  color: var(--accent-cyan);
+  background: var(--bg-control-active);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
+}
+
+.nav-tab .tab-icon {
+  font-size: 11px;
+  color: var(--accent-cyan);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-preset-drawer, .btn-audio-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid var(--bg-card-border);
+  color: var(--text-primary);
+  font-family: var(--font-tech);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-preset-drawer:hover, .btn-audio-toggle:hover {
+  background: var(--bg-control-active);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 12px var(--accent-cyan-glow);
+}
+
+.btn-operator-help {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 0 8px var(--accent-cyan-glow);
+}
+
+.btn-operator-help:hover {
+  background: var(--accent-cyan);
+  color: #000;
+  box-shadow: 0 0 16px var(--accent-cyan);
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   FOOTER STATUS & BRANDING
+   ========================================================================== */
+
+.cockpit-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  background: var(--bg-card-glass);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  padding: 0 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glow-subtle);
+  z-index: 50;
+}
+
+.footer-left .brand-link {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.footer-left .brand-link:hover {
+  color: #ffffff;
+  text-shadow: 0 0 10px var(--accent-cyan);
+}
+
+.footer-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  letter-spacing: 0.8px;
+}
+
+.coord-divider {
+  color: var(--text-dim);
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.safety-indicator {
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(0, 255, 157, 0.12);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+}
+
+.safety-indicator.state-engaged {
+  background: rgba(255, 42, 75, 0.15);
+  color: var(--accent-red);
+  border-color: var(--accent-red);
+  box-shadow: 0 0 10px var(--accent-red-glow);
+}
+
+/* ==========================================================================
+   QUICK-DIAL DRAWER OVERLAY
+   ========================================================================== */
+
+.quickdial-drawer {
+  position: absolute;
+  top: 74px;
+  right: 24px;
+  width: 440px;
+  background: rgba(5, 14, 28, 0.95);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 8px;
+  padding: 18px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85), var(--glow-strong);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  animation: drawerSlide 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+.quickdial-drawer.active {
+  display: flex;
+}
+
+@keyframes drawerSlide {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--bg-card-border);
+  padding-bottom: 12px;
+}
+
+.drawer-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-cyan);
+  letter-spacing: 1.5px;
+}
+
+.drawer-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-bright);
+}
+
+.drawer-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: color var(--transition-fast);
+}
+
+.drawer-close:hover {
+  color: var(--accent-red);
+}
+
+.preset-tier-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tier-heading {
+  font-family: var(--font-tech);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tier-marker {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(0, 229, 255, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+.tier-marker.tier-exp {
+  background: rgba(255, 170, 0, 0.15);
+  color: var(--accent-amber);
+  border-color: rgba(255, 170, 0, 0.4);
+}
+
+.preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.preset-card-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: rgba(8, 22, 42, 0.7);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  border-radius: 5px;
+  padding: 8px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.preset-card-btn:hover {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
+  transform: translateX(3px);
+}
+
+.preset-name {
+  font-family: var(--font-tech);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-bright);
+}
+
+.preset-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.drawer-hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+.text-cyan { color: var(--accent-cyan) !important; }
+.text-emerald { color: var(--accent-emerald) !important; }
+.text-amber { color: var(--accent-amber) !important; }
+.text-red { color: var(--accent-red) !important; }
+.text-bright { color: var(--text-bright) !important; }
