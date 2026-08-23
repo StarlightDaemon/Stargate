@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DSV-7 Cerulean Lantern — Pilot Console · Hadal Threshold Institute</title>
+<meta name="description" content="Pilot console of the Hadal Threshold Institute's bathyscaphe DSV-7 Cerulean Lantern. A client-side piloting simulation: fly a descent profile to a Threshold ring and open the pressure-hull aperture.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%2335d6ff' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%2335d6ff'/%3E%3C/svg%3E">
+</head>
+<body data-phase="idle" data-mood="cerulean" data-density="standard" data-motion="normal">
+
+<div id="ocean-bg" aria-hidden="true">
+  <div class="bg-layer bg-gradient"></div>
+  <div class="bg-layer bg-caustic"></div>
+  <div class="bg-layer bg-grid"></div>
+</div>
+
+<div id="stage">
+
+  <!-- ============================ TOP BAR ============================ -->
+  <header id="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="24" cy="24" r="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4"/>
+        <path d="M24 4 L24 14 M24 34 L24 44 M4 24 L14 24 M34 24 L44 24" stroke="currentColor" stroke-width="2"/>
+        <circle cx="24" cy="24" r="4" fill="currentColor"/>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-inst">HADAL THRESHOLD INSTITUTE</span>
+        <span class="brand-vessel">DSV-7 <b>CERULEAN LANTERN</b> · PILOT CONSOLE</span>
+      </div>
+    </div>
+    <div class="mission">
+      <span class="mission-label">MISSION CLOCK</span>
+      <span class="mission-clock" id="mission-clock">00:00:00</span>
+      <span class="mission-sep">·</span>
+      <span class="mission-tender">TENDER <b>RV MERIDIAN HOLLOW</b> · DIVE TIME <b>×240</b></span>
+    </div>
+    <nav class="tabs" aria-label="Secondary panels">
+      <button class="tab" data-panel="archive">ARCHIVE</button>
+      <button class="tab" data-panel="vessel">VESSEL</button>
+      <button class="tab" data-panel="computer">DIVE COMPUTER</button>
+      <button class="tab" data-panel="log">SESSION LOG</button>
+      <button class="tab" data-panel="settings">SETTINGS</button>
+      <button class="tab tab-audio" id="btn-audio" title="Toggle audio engine">AUDIO <span id="audio-state">OFF</span></button>
+    </nav>
+  </header>
+
+  <!-- ===================== CLUSTER A — DESCENT PROFILE ===================== -->
+  <section id="cluster-profile" class="cluster cluster-primary" aria-label="Descent profile — waypoint selection">
+    <div class="cluster-head">
+      <h2>DESCENT PROFILE</h2>
+      <span class="cluster-sub">CLUSTER A · SELECT 7 STRATA, DEEPER EACH TIME</span>
+    </div>
+    <div class="seq-strip" id="seq-strip" aria-label="Locked waypoints"></div>
+    <div class="glyph-bank" id="glyph-bank" role="group" aria-label="Strata glyphs"></div>
+    <div class="profile-msg" id="profile-msg">SELECT THE FIRST STRATUM TO BEGIN THE DESCENT</div>
+  </section>
+
+  <!-- ===================== SPHERE + CRUSH-DEPTH GAUGE ===================== -->
+  <section id="sphere-assembly" aria-label="Observation sphere and crush-depth gauge">
+    <svg id="sphere-frame" viewBox="-450 -450 900 900" aria-hidden="true">
+      <defs>
+        <radialGradient id="sphere-halo" cx="50%" cy="50%" r="50%">
+          <stop offset="70%" stop-color="var(--accent)" stop-opacity="0"/>
+          <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.18"/>
+        </radialGradient>
+      </defs>
+      <circle cx="0" cy="0" r="372" fill="url(#sphere-halo)"/>
+      <g class="struts" stroke="var(--line)" stroke-width="3" fill="none">
+        <path d="M -310 -310 L -255 -255 M 310 -310 L 255 -255"/>
+        <path d="M -440 120 L -395 120 M 440 120 L 395 120"/>
+      </g>
+      <g class="seat-ring" fill="none" stroke="var(--line)" stroke-width="1.2">
+        <circle cx="0" cy="0" r="362"/>
+        <circle cx="0" cy="0" r="355" stroke-dasharray="3 9" opacity="0.6"/>
+      </g>
+    </svg>
+    <svg id="gauge" class="gauge" aria-label="Crush-depth gauge"></svg>
+    <div id="sphere-wrap">
+      <canvas id="viewport" width="660" height="660" aria-label="Observation sphere view"></canvas>
+    </div>
+    <div class="sphere-readout" id="sphere-readout">
+      <div class="ro ro-depth"><span class="ro-label">DEPTH</span><span class="ro-value" id="ro-depth">0</span><span class="ro-unit">m</span></div>
+      <div class="ro"><span class="ro-label">PRESSURE</span><span class="ro-value" id="ro-pressure">1.01</span><span class="ro-unit">bar</span></div>
+      <div class="ro"><span class="ro-label">HULL LOAD</span><span class="ro-value" id="ro-hull">0.0</span><span class="ro-unit">% rated</span></div>
+      <div class="ro"><span class="ro-label">TARGET</span><span class="ro-value" id="ro-target">—</span><span class="ro-unit">m</span></div>
+    </div>
+  </section>
+
+  <!-- ========================= CLUSTER B — HELM ========================= -->
+  <section id="cluster-helm" class="cluster cluster-primary" aria-label="Helm — activation and emergency ascent">
+    <div class="helm-status">
+      <div class="cluster-head">
+        <h2>HELM</h2>
+        <span class="cluster-sub">CLUSTER B · ACTIVATION</span>
+      </div>
+      <div class="helm-progress" id="helm-progress"><span class="hp-count" id="hp-count">0</span><span class="hp-of">/ 7 WAYPOINTS</span></div>
+      <div class="helm-state" id="helm-state">SURFACE · NO PROFILE</div>
+      <div class="helm-ticker" id="helm-ticker">console ready</div>
+    </div>
+    <button id="btn-commence" class="helm-btn helm-commence" disabled>
+      <span class="hb-title">COMMENCE FINAL DESCENT</span>
+      <span class="hb-sub">OPEN PRESSURE-HULL APERTURE</span>
+      <span class="hb-state" id="commence-state">AWAITING PROFILE</span>
+    </button>
+    <button id="btn-ascend" class="helm-btn helm-ascend">
+      <span class="hb-title">EMERGENCY ASCENT</span>
+      <span class="hb-sub">BLOW ALL BALLAST</span>
+      <span class="hb-state">ALWAYS ARMED</span>
+    </button>
+    <label class="lockout" id="lockout-ctl" title="Hull-integrity lockout — inhibits final descent">
+      <span class="lk-title">HULL-INTEGRITY LOCKOUT</span>
+      <input type="checkbox" id="lockout">
+      <span class="lk-switch" aria-hidden="true"></span>
+      <span class="lk-state" id="lockout-state">RELEASED</span>
+    </label>
+  </section>
+
+  <!-- =========================== TELEMETRY (passive) =========================== -->
+  <aside id="telemetry" aria-label="Live telemetry">
+    <div class="tel-group">
+      <h3>BALLAST · TRIM · THRUST <span class="tel-note">10 CH</span></h3>
+      <div class="channels" id="channels"></div>
+    </div>
+    <div class="tel-group">
+      <h3>ENVIRONMENT</h3>
+      <div class="tel-rows" id="tel-env"></div>
+    </div>
+    <div class="tel-group">
+      <h3>PRESSURE HULL</h3>
+      <div class="tel-rows" id="tel-hull"></div>
+    </div>
+    <div class="tel-group">
+      <h3>CABIN · POWER</h3>
+      <div class="tel-rows" id="tel-cabin"></div>
+    </div>
+    <div class="tel-group tel-dense-only">
+      <h3>ATTITUDE</h3>
+      <div class="tel-rows" id="tel-att"></div>
+    </div>
+  </aside>
+
+  <!-- ======================= LOCKOUT BANNER (hidden) ======================= -->
+  <div id="lockout-banner" hidden>
+    <div class="lb-inner">
+      <span class="lb-title">HULL-INTEGRITY LOCKOUT ENGAGED</span>
+      <span class="lb-sub">FINAL DESCENT INHIBITED — RELEASE THE LOCKOUT ON THE HELM TO PROCEED</span>
+    </div>
+  </div>
+
+  <!-- ============================ PANEL LAYER ============================ -->
+  <div id="panel-layer" hidden>
+    <div class="panel" id="panel-archive" hidden>
+      <div class="panel-head"><h2>DIVE ARCHIVE</h2><span class="panel-sub">CROSS-REFERENCED RECORDS · DSV-7 PROGRAMME 2041–2044</span><button class="panel-close" data-close>✕</button></div>
+      <div class="panel-body archive-body">
+        <div class="archive-list-col">
+          <div class="archive-filters" id="archive-filters"></div>
+          <input type="search" id="archive-search" placeholder="search records…" aria-label="Search archive">
+          <div class="archive-list" id="archive-list"></div>
+        </div>
+        <div class="archive-detail" id="archive-detail"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-vessel" hidden>
+      <div class="panel-head"><h2>VESSEL CROSS-SECTION</h2><span class="panel-sub">DSV-7 ENGINEERING · LIVE STATE</span><button class="panel-close" data-close>✕</button></div>
+      <div class="panel-body vessel-body">
+        <svg id="vessel-svg" viewBox="0 0 1400 640" aria-label="Vessel cross-section"></svg>
+        <div class="vessel-legend" id="vessel-legend"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-computer" hidden>
+      <div class="panel-head"><h2>DIVE COMPUTER</h2><span class="panel-sub">LOGGED PROFILES · REPLAY AT PROCESSOR SPEED · NEVER COMMENCES DESCENT</span><button class="panel-close" data-close>✕</button></div>
+      <div class="panel-body computer-body">
+        <div class="presets-col">
+          <h3 class="tier-head tier-verified">VERIFIED PROFILES <span>surface-audited · logged dives</span></h3>
+          <div class="presets" id="presets-verified"></div>
+          <h3 class="tier-head tier-experimental">EXPERIMENTAL ROUTES <span>plotted · unconfirmed · margin warnings</span></h3>
+          <div class="presets" id="presets-experimental"></div>
+        </div>
+        <div class="history-col">
+          <h3 class="tier-head">PILOT RECORD <span>this browser · persisted</span></h3>
+          <div class="history" id="history"></div>
+          <button class="small-btn" id="btn-clear-history">CLEAR PILOT RECORD</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-log" hidden>
+      <div class="panel-head"><h2>SESSION LOG</h2><span class="panel-sub">TIMESTAMPED RECORD OF THIS SESSION'S ACTIONS</span><button class="panel-close" data-close>✕</button></div>
+      <div class="panel-body log-body">
+        <div class="log-stats" id="log-stats"></div>
+        <div class="log-list" id="log-list"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-settings" hidden>
+      <div class="panel-head"><h2>SETTINGS</h2><span class="panel-sub">CONSOLE PREFERENCES · STORED LOCALLY</span><button class="panel-close" data-close>✕</button></div>
+      <div class="panel-body settings-body" id="settings-body"></div>
+    </div>
+  </div>
+
+  <!-- ============================ HELP OVERLAY ============================ -->
+  <div id="help-overlay" hidden>
+    <div class="help-box">
+      <div class="panel-head"><h2>OPERATOR REFERENCE</h2><span class="panel-sub">DSV-7 CERULEAN LANTERN · PILOT CONSOLE</span><button class="panel-close" id="help-close">✕</button></div>
+      <div class="help-body" id="help-body"></div>
+    </div>
+  </div>
+
+</div><!-- /stage -->
+
+<!-- corner display (viewport-fixed) -->
+<button id="help-btn" class="corner corner-help" aria-label="Operator reference" title="Operator reference">?</button>
+<a class="corner corner-author" href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+<div class="corner corner-version" id="version-label">v1.0.0</div>
+
+<script type="module" src="js/ui.js"></script>
+</body>
+</html>
