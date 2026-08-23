@@ -1,0 +1,374 @@
+/* ==========================================================================
+   WOODBLOCK STAMPING CANVAS, FUDA TAGS & APERTURE VORTEX
+   ========================================================================== */
+
+.stage-column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--border-sumi-mid);
+    padding-bottom: 6px;
+}
+
+.stage-title-kanji {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.stage-title-sub {
+    font-size: 12px;
+    font-family: 'Cinzel', serif;
+    color: var(--prussian-blue);
+    font-weight: 700;
+}
+
+/* 7 Passage Seal Tags (Tōri-fuda) */
+.fuda-slots-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 10px;
+    background-color: var(--washi-plate);
+    border: var(--border-sumi-mid);
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+}
+
+.fuda-slot {
+    flex: 1;
+    height: 70px;
+    background-color: var(--washi-card);
+    border: var(--border-sumi-fine);
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.fuda-slot.locked {
+    background-color: #fdf6e2;
+    border-color: var(--vermillion-shu);
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 0 var(--sumi-ink);
+}
+
+.fuda-tag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.fuda-hole {
+    width: 6px;
+    height: 6px;
+    background-color: var(--sumi-ink);
+    border-radius: 50%;
+    position: absolute;
+    top: 4px;
+}
+
+.fuda-num {
+    font-size: 10px;
+    font-weight: 900;
+    color: var(--vermillion-dark);
+    position: absolute;
+    top: 12px;
+}
+
+.fuda-kanji {
+    font-size: 18px;
+    font-weight: 900;
+    margin-top: 14px;
+    color: var(--sumi-ink);
+}
+
+.fuda-seal {
+    font-size: 9px;
+    font-weight: 900;
+    color: var(--vermillion-shu);
+    border: 1px solid var(--vermillion-shu);
+    border-radius: 2px;
+    padding: 0 2px;
+    position: absolute;
+    bottom: 4px;
+    opacity: 0;
+}
+
+.fuda-slot.locked .fuda-seal {
+    opacity: 1;
+}
+
+/* Woodblock Print Stage Frame */
+.woodblock-stage-active {
+    flex: 1;
+    background-color: var(--washi-plate);
+    border: var(--border-sumi-heavy);
+    padding: 16px;
+    box-shadow: 4px 4px 0 var(--sumi-ink);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.woodblock-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: var(--washi-card);
+    border: var(--border-sumi-heavy);
+    box-shadow: inset 0 0 20px rgba(200, 150, 62, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Woodblock Registration Kento Notches */
+.kento-notch {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 3px solid var(--vermillion-shu);
+    z-index: 10;
+}
+
+.kento-notch.top-left {
+    top: 8px;
+    left: 8px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.kento-notch.bottom-right {
+    bottom: 8px;
+    right: 8px;
+    border-left: none;
+    border-top: none;
+}
+
+.print-plate {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.print-svg {
+    width: 94%;
+    height: 94%;
+    border: var(--border-sumi-mid);
+    background-color: var(--washi-bg);
+}
+
+/* Stamping Drop Animations for Woodblock Layers */
+.woodblock-layer {
+    transition: opacity 0.2s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.woodblock-layer.stamping-drop {
+    animation: stampWoodblock 0.22s cubic-bezier(0.15, 0.9, 0.3, 1) forwards;
+}
+
+@keyframes stampWoodblock {
+    0% {
+        opacity: 0;
+        transform: scale(1.08) translateY(-6px);
+    }
+    70% {
+        opacity: 0.9;
+        transform: scale(0.98) translateY(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Official Hanko Inkan Seal Stamp */
+.official-seal {
+    position: absolute;
+    bottom: 24px;
+    right: 28px;
+    width: 44px;
+    height: 44px;
+    border: 3px solid var(--vermillion-shu);
+    color: var(--vermillion-shu);
+    font-size: 13px;
+    font-weight: 900;
+    line-height: 1.1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: rgba(255, 253, 245, 0.85);
+    opacity: 0;
+    transform: scale(1.6) rotate(-15deg);
+    transition: all 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.official-seal.stamped {
+    opacity: 1;
+    transform: scale(1) rotate(-5deg);
+}
+
+/* Tanzaku Poetry Cartouche in Print Stage */
+.print-cartouche {
+    position: absolute;
+    top: 24px;
+    left: 28px;
+    background-color: var(--washi-card);
+    border: var(--border-sumi-mid);
+    padding: 6px 14px;
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+    z-index: 5;
+    pointer-events: none;
+}
+
+.tanzaku-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--sumi-ink);
+    letter-spacing: 2px;
+}
+
+.tanzaku-sub {
+    font-size: 11px;
+    font-family: 'Cinzel', serif;
+    color: var(--prussian-blue);
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   APERTURE VORTEX & 3-STAGE ELEMENTAL ACTIVATION
+   ========================================================================== */
+
+.aperture-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+}
+
+.aperture-overlay.active {
+    opacity: 1;
+}
+
+/* Stage 1: Buildup */
+.aperture-overlay.stage-1 {
+    background: radial-gradient(circle at 50% 50%, rgba(29, 59, 83, 0.4) 0%, rgba(199, 61, 42, 0.2) 60%, transparent 85%);
+}
+
+.aperture-overlay.stage-1 .vortex-rings {
+    animation: vortexSpinBuildup 1.8s cubic-bezier(0.5, 0, 0.75, 0) infinite;
+}
+
+/* Stage 2: Breakthrough */
+.aperture-overlay.stage-2 {
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(29, 59, 83, 0.7) 40%, rgba(199, 61, 42, 0.6) 80%);
+}
+
+.aperture-overlay.stage-2 .wave-crest-burst {
+    opacity: 1;
+    transform: scale(1.4) rotate(180deg);
+    transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+/* Stage 3: Sustained Active */
+.aperture-overlay.stage-3 {
+    background: radial-gradient(circle at 50% 50%, rgba(246, 238, 216, 0.2) 0%, rgba(29, 59, 83, 0.35) 60%, transparent 95%);
+}
+
+.aperture-overlay.stage-3 .vortex-rings {
+    animation: vortexSpinSustained 6s linear infinite;
+}
+
+.vortex-rings {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wave-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 5px solid var(--prussian-blue);
+    border-top-color: var(--vermillion-shu);
+    border-right-color: var(--gold-leaf);
+    box-shadow: 0 0 0 2px var(--sumi-ink);
+}
+
+.ring-1 {
+    width: 280px;
+    height: 280px;
+    border-width: 6px;
+    animation: waveRotateClockwise 4s linear infinite;
+}
+
+.ring-2 {
+    width: 200px;
+    height: 200px;
+    border-width: 5px;
+    border-bottom-color: var(--pine-green);
+    animation: waveRotateCounter 3s linear infinite;
+}
+
+.ring-3 {
+    width: 120px;
+    height: 120px;
+    border-width: 4px;
+    border-left-color: var(--vermillion-shu);
+    animation: waveRotateClockwise 2s linear infinite;
+}
+
+.wave-crest-burst {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 8px dashed var(--vermillion-shu);
+    opacity: 0;
+    transform: scale(0.6) rotate(0deg);
+}
+
+@keyframes waveRotateClockwise {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes waveRotateCounter {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes vortexSpinBuildup {
+    0% { transform: scale(0.8) rotate(0deg); }
+    100% { transform: scale(1.1) rotate(540deg); }
+}
+
+@keyframes vortexSpinSustained {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

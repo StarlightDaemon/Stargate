@@ -1,0 +1,193 @@
+/* ==========================================================================
+   UKIYO-E CELESTIAL WOODBLOCK COMPASS DIAL
+   ========================================================================== */
+
+.dial-column-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--border-sumi-mid);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+.dial-title-kanji {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--sumi-ink);
+    letter-spacing: 2px;
+}
+
+.dial-title-sub {
+    font-size: 12px;
+    font-family: 'Cinzel', serif;
+    color: var(--prussian-blue);
+    font-weight: 700;
+}
+
+.dial-instrument-stack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.celestial-dial-wrapper {
+    position: relative;
+    width: 490px;
+    height: 490px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+/* Kento Alignment Marks around Dial */
+.kento-compass-ring {
+    position: absolute;
+    width: 486px;
+    height: 486px;
+    pointer-events: none;
+    border: 2px dashed rgba(26, 24, 24, 0.4);
+    border-radius: 50%;
+}
+
+.kento-mark {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 3px solid var(--vermillion-shu);
+}
+
+.kento-mark.north {
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom: none;
+    border-left: none;
+}
+
+.kento-mark.south {
+    bottom: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top: none;
+    border-right: none;
+}
+
+.kento-mark.east {
+    right: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: none;
+    border-top: none;
+}
+
+.kento-mark.west {
+    left: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right: none;
+    border-bottom: none;
+}
+
+/* Rotary Dial SVG */
+.dial-svg {
+    width: 470px;
+    height: 470px;
+    filter: drop-shadow(4px 4px 0 var(--sumi-ink));
+}
+
+.dial-sector {
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.dial-sector:hover .sector-badge {
+    fill: var(--gold-leaf);
+    stroke-width: 4px;
+}
+
+.dial-sector:active .sector-badge {
+    fill: var(--vermillion-shu);
+}
+
+.kento-needle {
+    pointer-events: none;
+    filter: drop-shadow(2px 2px 0 var(--sumi-ink));
+}
+
+.center-hub {
+    pointer-events: none;
+}
+
+.center-seal-group {
+    pointer-events: none;
+}
+
+/* 10 Station Woodblock Stamp Touchpads */
+.station-pad-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    width: 100%;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: var(--border-sumi-mid);
+}
+
+.station-pad-btn {
+    background-color: var(--washi-card);
+    border: var(--border-sumi-mid);
+    padding: 8px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+    transition: all 0.15s cubic-bezier(0.2, 0.9, 0.4, 1);
+}
+
+.station-pad-btn:hover {
+    background-color: #fdf2d0;
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--sumi-ink);
+    border-color: var(--vermillion-shu);
+}
+
+.station-pad-btn:active,
+.station-pad-btn.active {
+    background-color: var(--vermillion-shu);
+    color: #fffdf5;
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--sumi-ink);
+}
+
+.station-pad-btn.active .pad-num,
+.station-pad-btn.active .pad-kanji,
+.station-pad-btn.active .pad-romaji {
+    color: #fffdf5;
+}
+
+.pad-num {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--vermillion-dark);
+}
+
+.pad-kanji {
+    font-size: 14px;
+    font-weight: 900;
+    margin: 2px 0;
+}
+
+.pad-romaji {
+    font-size: 9px;
+    font-family: 'Cinzel', serif;
+    color: var(--sumi-light);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}

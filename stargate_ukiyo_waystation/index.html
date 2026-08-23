@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浮世雲織道 六十九次 · 雲路関所司 天象木版方位儀 (Ukiyo-e Waystation Portal)</title>
+    <meta name="description" content="A mystical waystation network dialing console rendered in authentic Japanese ukiyo-e woodblock print aesthetic and physical acoustic sound design.">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ukiyoe_dial.css">
+    <link rel="stylesheet" href="css/woodblock_canvas.css">
+    <link rel="stylesheet" href="css/modal.css">
+</head>
+<body>
+
+    <!-- Scaled 1920x1080 Master Container -->
+    <main id="app-root" role="main" aria-label="Ukiyo-e Waystation Portal Interface">
+
+        <!-- Top Header & Tanzaku Series Title -->
+        <header class="app-header">
+            <div class="series-banner-group">
+                <div class="series-cartouche">
+                    <span class="series-kanji">浮世雲織道 六十九次</span>
+                    <span class="series-sub">CELESTIAL MIST HIGHWAY</span>
+                </div>
+                <div class="bureau-title">
+                    <h1 class="bureau-kanji">雲路関所司 · 天象木版方位儀</h1>
+                    <span class="bureau-romaji">BUREAU OF CELESTIAL PASSES &amp; MIST REGISTRIES · WOODBLOCK COMPASS DIAL</span>
+                </div>
+            </div>
+
+            <div class="header-right-group">
+                <div class="status-callout-box" id="status-display-box">
+                    <span class="status-label" id="barrier-status-text">
+                        <span class="state-badge idle">待機中 (Idle)</span> · 雲路開放 · Select Seals (0/7)
+                    </span>
+                </div>
+                <!-- Operator Reference Button -->
+                <button class="btn-guide-seal" id="btn-help-guide" title="Operator Reference Guide" aria-label="Operator Reference Guide">
+                    <span>問</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Asymmetric Stage Layout -->
+        <section class="main-stage-layout">
+
+            <!-- Left Column: Celestial Woodblock Compass Dial -->
+            <article class="dial-column" aria-label="Celestial Woodblock Compass Dial">
+                <div class="dial-column-header">
+                    <span class="dial-title-kanji">天象木版方位儀</span>
+                    <span class="dial-title-sub">CELESTIAL WOODBLOCK DIAL</span>
+                </div>
+                
+                <div id="dial-container">
+                    <!-- Injected by CelestialDial.init() -->
+                </div>
+            </article>
+
+            <!-- Center Column: 7 Passage Seal Tags & Progressive Print Plate -->
+            <article class="stage-column" aria-label="Woodblock Stamping Stage & Portal Aperture">
+                <div class="stage-column-header">
+                    <span class="stage-title-kanji">通関手形七印 · 摺刻場</span>
+                    <span class="stage-title-sub">7 PASSAGE SEALS · WOODBLOCK STAGE</span>
+                </div>
+
+                <!-- 7 Hanging Address Tags (Tori-fuda) -->
+                <div class="fuda-slots-container" id="fuda-slots">
+                    <!-- Injected by WoodblockEngine.renderFudaSlots() -->
+                </div>
+
+                <!-- Progressive Woodblock Print Stage & Aperture Overlay -->
+                <div class="woodblock-stage-active state-idle" id="woodblock-stage">
+                    <!-- Injected by WoodblockEngine.renderEmptyStage() -->
+                </div>
+            </article>
+
+            <!-- Right Column: Travel Ledger Presets & Primary Operator Controls -->
+            <aside class="controls-column" aria-label="Travel Ledger & Barrier Controls">
+                
+                <!-- Travel Ledger Scroll (Quick-Dial Presets) -->
+                <div id="presets-ledger">
+                    <!-- Injected by PresetsManager.init() -->
+                </div>
+
+                <!-- Primary Operator Control Cluster -->
+                <div class="operator-controls-frame" id="operator-controls">
+                    <div class="controls-header">
+                        <span class="controls-title-kanji">関所統括盤</span>
+                        <span class="controls-title-en">OPERATOR CONTROLS</span>
+                    </div>
+
+                    <!-- Safety Interlock Latch -->
+                    <div class="interlock-control-box">
+                        <div class="interlock-header-row">
+                            <span class="interlock-title">関所手形結界 (Imperial Barrier Interlock)</span>
+                            <span class="interlock-label released" id="interlock-status-label">通行許可 (Pass Open / Released)</span>
+                        </div>
+                        <div class="latch-switch-wrapper">
+                            <label class="latch-toggle-label" for="toggle-interlock">
+                                <input type="checkbox" id="toggle-interlock" aria-label="Toggle Imperial Barrier Interlock">
+                                <span class="latch-slider"></span>
+                            </label>
+                            <span class="latch-subtext">Defaults to Released. Engage to close pass barrier.</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Seals: Activation & Disengage -->
+                    <div class="seal-actions-row">
+                        <button class="control-seal-btn btn-activate idle" id="btn-activate" aria-label="Activate Waystation Barrier">
+                            <span class="seal-kanji-huge">開関封印</span>
+                            <span class="seal-en-sub">ACTIVATE BARRIER</span>
+                        </button>
+
+                        <button class="control-seal-btn btn-disengage" id="btn-disengage" aria-label="Disengage and Reset Dial">
+                            <span class="seal-kanji-huge">盤上解散</span>
+                            <span class="seal-en-sub">DISENGAGE</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <!-- Footer Corner Displays -->
+        <footer class="app-footer">
+            <div class="footer-left">
+                <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+            </div>
+            <div class="footer-right">
+                <span>v1.0.0 · 雲路関所司 天象木版方位儀 · All Rights Reserved</span>
+            </div>
+        </footer>
+
+        <!-- Alert Notification Banner -->
+        <div class="interlock-alert-banner" id="interlock-alert-banner" role="alert"></div>
+
+    </main>
+
+    <!-- Operator Reference Guide Modal (Orihon Accordion Style) -->
+    <div class="modal-overlay" id="operator-guide-modal" role="dialog" aria-modal="true" aria-label="Operator Reference Guide">
+        <div class="orihon-modal-container">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center;">
+                    <span class="modal-title-kanji">雲路手引書 · 関所心得</span>
+                    <span class="modal-title-en">OPERATOR REFERENCE MANUAL</span>
+                </div>
+                <button class="btn-close-modal" id="btn-close-modal" aria-label="Close Guide">✕</button>
+            </div>
+            <div class="modal-body-scroll">
+                <div class="guide-section">
+                    <h3>一、雲路関所司の概要 (Overview of the Celestial Passes)</h3>
+                    <p>The <strong>Bureau of Celestial Passes &amp; Mist Registries</strong> (雲路関所司) oversees transit along the sixty-nine mystical waystations of the Celestial Mist Highway (浮世雲織道). The Celestial Woodblock Compass Dial (天象木版方位儀) locks the seven required passage seals (通関手形七印) by carving keyblocks and stamping mineral pigment layers in strict alignment.</p>
+                </div>
+
+                <div class="guide-section">
+                    <h3>二、五層摺刻技法 (5-Layer Woodblock Stamping Technique)</h3>
+                    <p>Every selected waystation is progressively brought into existence through traditional Japanese woodblock printing layers:</p>
+                    <ul>
+                        <li><strong>主版 (Omohan - Keyblock)</strong>: Bold black Sumi ink outlines and boundary ridges.</li>
+                        <li><strong>地摺り (Jizuri - Earth Ground)</strong>: Ochre, straw, and warm tea-wash mineral pigments.</li>
+                        <li><strong>藍摺り (Aizuri - Prussian Blue)</strong>: Deep indigo washes for distant mountains and ocean currents.</li>
+                        <li><strong>朱摺り (Shuzuri - Vermillion Accent)</strong>: Cinnabar stamps for gates, bridges, and lanterns.</li>
+                        <li><strong>ぼかし・印鑑 (Bokashi &amp; Inkan)</strong>: Gradient color feathering and the official red approval seal.</li>
+                    </ul>
+                </div>
+
+                <div class="guide-section">
+                    <h3>三、開関手続 (Three-Stage Activation Sequence)</h3>
+                    <p>When all seven seals are locked, the system enters the <strong>PENDING / READY</strong> state. It never auto-fires. An operator must deliberately press the vermillion <strong>開関封印 (Activate Barrier)</strong> seal to trigger transit:</p>
+                    <ol>
+                        <li><strong>墨気集約 (Stage 1: Buildup, 1.8s)</strong>: Mineral pigments concentrate and press tension accumulates.</li>
+                        <li><strong>怒涛開関 (Stage 2: Breakthrough)</strong>: A magnificent Great Cresting Wave aperture tears open with temple bell resonance.</li>
+                        <li><strong>通関中 (Stage 3: Sustained Active)</strong>: Continuous circulating woodblock vortex stream maintains transit stability.</li>
+                    </ol>
+                </div>
+
+                <div class="guide-section">
+                    <h3>四、関所手形結界 (Safety Interlock)</h3>
+                    <p>The Imperial Barrier Interlock (関所手形結界) defaults to <strong>RELEASED (Pass Open / 通行許可)</strong>. If an operator engages the barrier latch, all activation attempts are securely blocked with immediate acoustic and visual warning.</p>
+                </div>
+
+                <div class="guide-section">
+                    <h3>五、盤上解散 (Disengage Control)</h3>
+                    <p>The <strong>盤上解散 (Disengage)</strong> seal remains reachable and active at all times. Operating it clears the locked seals, stops the auto-dial sequence, and closes any open transit aperture.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/woodblock_engine.js"></script>
+    <script src="js/dial.js"></script>
+    <script src="js/presets.js"></script>
+    <script src="js/portal.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

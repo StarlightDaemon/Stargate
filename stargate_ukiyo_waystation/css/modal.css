@@ -1,0 +1,547 @@
+/* ==========================================================================
+   TRAVEL LEDGER PRESETS, CORE CONTROL CLUSTER & OPERATOR GUIDE MODAL
+   ========================================================================== */
+
+/* Travel Ledger Frame */
+.ledger-scroll-frame {
+    background-color: var(--washi-plate);
+    border: var(--border-sumi-heavy);
+    padding: 12px;
+    box-shadow: 4px 4px 0 var(--sumi-ink);
+    display: flex;
+    flex-direction: column;
+    height: 380px;
+}
+
+.ledger-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--border-sumi-mid);
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+}
+
+.ledger-title-kanji {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.ledger-title-en {
+    font-size: 11px;
+    font-family: 'Cinzel', serif;
+    color: var(--prussian-blue);
+    font-weight: 700;
+}
+
+/* Tier Tabs */
+.ledger-tier-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.tier-tab {
+    flex: 1;
+    background-color: var(--washi-card);
+    border: var(--border-sumi-fine);
+    padding: 6px 4px;
+    font-size: 12px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+    transition: all 0.15s;
+}
+
+.tier-tab:hover {
+    background-color: #fdf2d0;
+}
+
+.tier-tab.active {
+    background-color: var(--prussian-blue);
+    color: #fffdf5;
+    border-color: var(--sumi-ink);
+}
+
+/* Preset Cards Container */
+.ledger-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.ledger-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ledger-content::-webkit-scrollbar-track {
+    background: var(--washi-dark);
+}
+
+.ledger-content::-webkit-scrollbar-thumb {
+    background: var(--sumi-ink);
+    border-radius: 3px;
+}
+
+.preset-group {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.preset-group.active {
+    display: flex;
+}
+
+.preset-card {
+    background-color: var(--washi-card);
+    border: var(--border-sumi-mid);
+    padding: 8px 10px;
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: all 0.15s;
+}
+
+.preset-card:hover {
+    border-color: var(--vermillion-shu);
+}
+
+.preset-card.autodialing {
+    background-color: #fef5d8;
+    border-color: var(--gold-leaf);
+    box-shadow: 3px 3px 0 var(--sumi-ink);
+}
+
+.preset-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preset-kanji {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--vermillion-dark);
+}
+
+.preset-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--sumi-ink);
+}
+
+.preset-desc {
+    font-size: 11px;
+    color: var(--sumi-light);
+    line-height: 1.3;
+}
+
+.preset-route-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin: 3px 0;
+}
+
+.route-chip {
+    background-color: var(--washi-dark);
+    border: 1px solid var(--sumi-ink);
+    padding: 1px 5px;
+    font-size: 10px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.chip-idx {
+    color: var(--vermillion-shu);
+    font-size: 9px;
+}
+
+.chip-arrow {
+    font-size: 9px;
+    color: var(--sumi-light);
+}
+
+.preset-dial-btn {
+    background-color: var(--washi-bg);
+    border: var(--border-sumi-mid);
+    padding: 5px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+    transition: all 0.15s;
+}
+
+.preset-dial-btn:hover {
+    background-color: var(--ochre-odo);
+    color: #fffdf5;
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--sumi-ink);
+}
+
+.preset-dial-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--sumi-ink);
+}
+
+.btn-stamp {
+    font-size: 11px;
+    font-weight: 900;
+    background-color: var(--vermillion-shu);
+    color: #fffdf5;
+    padding: 1px 6px;
+    border-radius: 2px;
+}
+
+.btn-text {
+    font-size: 11px;
+    font-weight: 900;
+}
+
+/* ==========================================================================
+   PRIMARY OPERATOR CONTROL CLUSTER (Activation, Disengage, Interlock)
+   ========================================================================== */
+
+.operator-controls-frame {
+    background-color: var(--washi-plate);
+    border: var(--border-sumi-heavy);
+    padding: 14px;
+    box-shadow: 4px 4px 0 var(--sumi-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.controls-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--border-sumi-mid);
+    padding-bottom: 6px;
+}
+
+.controls-title-kanji {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.controls-title-en {
+    font-size: 11px;
+    font-family: 'Cinzel', serif;
+    color: var(--prussian-blue);
+    font-weight: 700;
+}
+
+/* Primary Seal Action Buttons */
+.seal-actions-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 12px;
+}
+
+/* Bold Primary Interactive Seals (Distinct from background without glow) */
+.control-seal-btn {
+    border: var(--border-sumi-heavy);
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--sumi-ink);
+    transition: all 0.15s cubic-bezier(0.1, 0.9, 0.3, 1);
+    position: relative;
+}
+
+.control-seal-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--sumi-ink);
+}
+
+.control-seal-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+}
+
+/* Activation Seal */
+.btn-activate {
+    background-color: var(--vermillion-shu);
+    color: #fffdf5;
+}
+
+.btn-activate.ready {
+    background-color: #d83b23;
+    animation: readyVibrate 0.8s infinite alternate;
+}
+
+.btn-activate.active {
+    background-color: var(--pine-green);
+}
+
+@keyframes readyVibrate {
+    0% { transform: scale(1); box-shadow: 4px 4px 0 var(--sumi-ink); }
+    100% { transform: scale(1.02); box-shadow: 6px 6px 0 var(--sumi-ink); }
+}
+
+/* Disengage Seal */
+.btn-disengage {
+    background-color: var(--prussian-blue);
+    color: #fffdf5;
+}
+
+.seal-kanji-huge {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin-bottom: 2px;
+}
+
+.seal-en-sub {
+    font-size: 11px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    font-weight: 700;
+    opacity: 0.9;
+}
+
+/* Safety Interlock Switch: Sekisho Tegata Barrier */
+.interlock-control-box {
+    background-color: var(--washi-card);
+    border: var(--border-sumi-mid);
+    padding: 10px 12px;
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.interlock-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.interlock-title {
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--sumi-ink);
+}
+
+.interlock-label {
+    font-size: 11px;
+    font-weight: 900;
+    padding: 2px 6px;
+    border: 1.5px solid var(--sumi-ink);
+}
+
+.interlock-label.released {
+    background-color: #d9ebd8;
+    color: var(--pine-green);
+}
+
+.interlock-label.engaged {
+    background-color: #f7d2cb;
+    color: var(--vermillion-dark);
+}
+
+/* Wooden Sliding Latch Toggle Switch */
+.latch-switch-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.latch-toggle-label {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 28px;
+    cursor: pointer;
+}
+
+.latch-toggle-label input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.latch-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #d9ebd8;
+    border: var(--border-sumi-mid);
+    transition: 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+    box-shadow: 2px 2px 0 var(--sumi-ink);
+}
+
+.latch-slider:before {
+    position: absolute;
+    content: "解";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    height: 20px;
+    width: 24px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--pine-green);
+    color: #fff;
+    border: 1.5px solid var(--sumi-ink);
+    transition: 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+input:checked + .latch-slider {
+    background-color: #f7d2cb;
+}
+
+input:checked + .latch-slider:before {
+    transform: translateX(28px);
+    content: "封";
+    background-color: var(--vermillion-shu);
+}
+
+.latch-subtext {
+    font-size: 11px;
+    color: var(--sumi-light);
+    line-height: 1.2;
+}
+
+/* ==========================================================================
+   OPERATOR REFERENCE GUIDE MODAL (Orihon Accordion Travel Manual)
+   ========================================================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(18, 16, 14, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 1000;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.orihon-modal-container {
+    width: 880px;
+    max-height: 85vh;
+    background-color: var(--washi-bg);
+    border: 8px solid var(--sumi-ink);
+    box-shadow: 12px 12px 0 var(--sumi-ink);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.modal-header {
+    background-color: var(--vermillion-shu);
+    color: #fffdf5;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--border-sumi-heavy);
+}
+
+.modal-title-kanji {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 3px;
+}
+
+.modal-title-en {
+    font-size: 13px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    border-left: 1.5px solid rgba(255, 255, 255, 0.6);
+    padding-left: 12px;
+    margin-left: 12px;
+}
+
+.btn-close-modal {
+    background: transparent;
+    border: 2px solid #fffdf5;
+    color: #fffdf5;
+    font-size: 22px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.btn-close-modal:hover {
+    background-color: #fffdf5;
+    color: var(--vermillion-shu);
+}
+
+.modal-body-scroll {
+    padding: 24px 32px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-body-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body-scroll::-webkit-scrollbar-thumb {
+    background: var(--sumi-ink);
+    border-radius: 4px;
+}
+
+.guide-section {
+    background-color: var(--washi-card);
+    border: var(--border-sumi-mid);
+    padding: 16px 20px;
+    box-shadow: 3px 3px 0 var(--sumi-ink);
+}
+
+.guide-section h3 {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--sumi-ink);
+    margin-bottom: 8px;
+    border-bottom: 2px solid var(--ochre-odo);
+    padding-bottom: 4px;
+}
+
+.guide-section p, .guide-section li {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--sumi-ink);
+}
+
+.guide-section ul, .guide-section ol {
+    margin-left: 20px;
+    margin-top: 6px;
+}
