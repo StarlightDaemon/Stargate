@@ -1,0 +1,1555 @@
+/**
+ * KONSTRUKT TRANSIT BUREAU
+ * Bauhaus & Constructivist Geometric Abstraction Stylesheet
+ * Strict flat colors, hard edges, asymmetric dynamic poster composition
+ */
+
+/* ==========================================================================
+   1. ROOT VARIABLES & PALETTE
+   ========================================================================== */
+:root {
+  --scale-factor: 1;
+
+  /* Disciplined Primary Palette */
+  --c-red: #D82B27;
+  --c-blue: #15448C;
+  --c-yellow: #F4B810;
+  --c-black: #181716;
+  --c-canvas: #F4F0E8;
+  --c-canvas-pure: #FFFFFF;
+  --c-grey: #8D9399;
+  --c-grey-light: #E2E0D8;
+  --c-grey-dark: #3A3D40;
+  --c-hazard-yellow: #FFE500;
+
+  /* Typography */
+  --font-display: 'Syne', 'Arial Black', sans-serif;
+  --font-mono: 'Space Grotesk', 'Courier New', monospace;
+  --font-body: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Structural Geometry */
+  --border-thick: 3px solid var(--c-black);
+  --border-medium: 2px solid var(--c-black);
+  --border-thin: 1px solid var(--c-black);
+}
+
+/* ==========================================================================
+   2. RESET & VIEWPORT SCALING
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--c-black);
+  font-family: var(--font-body);
+  color: var(--c-black);
+  user-select: none;
+}
+
+#viewport-scale-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform: translate(-50%, -50%) scale(var(--scale-factor, 1));
+  transform-origin: center center;
+  overflow: hidden;
+  background-color: var(--c-canvas);
+}
+
+#app-canvas {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   3. BACKGROUND POSTER GEOMETRY (Asymmetric Constructivist Dynamic Tension)
+   ========================================================================== */
+.poster-bg-geometry {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Bold diagonal primary color bands cutting across canvas */
+.diagonal-red-band {
+  position: absolute;
+  top: -120px;
+  left: -200px;
+  width: 2400px;
+  height: 110px;
+  background-color: var(--c-red);
+  transform: rotate(-14deg);
+  transform-origin: top left;
+  border-top: 4px solid var(--c-black);
+  border-bottom: 4px solid var(--c-black);
+  opacity: 0.95;
+}
+
+.diagonal-blue-wedge {
+  position: absolute;
+  bottom: -150px;
+  left: -100px;
+  width: 900px;
+  height: 400px;
+  background-color: var(--c-blue);
+  transform: rotate(18deg);
+  border-top: 5px solid var(--c-black);
+  opacity: 0.92;
+}
+
+.diagonal-yellow-bar {
+  position: absolute;
+  top: 360px;
+  right: -100px;
+  width: 1200px;
+  height: 24px;
+  background-color: var(--c-yellow);
+  transform: rotate(-14deg);
+  border: 2px solid var(--c-black);
+}
+
+.black-anchor-triangle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-bottom: 320px solid var(--c-black);
+  border-left: 450px solid transparent;
+}
+
+.grey-registration-axis {
+  position: absolute;
+  top: 0;
+  left: 700px;
+  width: 2px;
+  height: 100%;
+  background: repeating-linear-gradient(to bottom, var(--c-black) 0px, var(--c-black) 8px, transparent 8px, transparent 16px);
+  opacity: 0.35;
+}
+
+.large-bg-numeral-08 {
+  position: absolute;
+  top: 140px;
+  left: 600px;
+  font-family: var(--font-display);
+  font-size: 320px;
+  font-weight: 800;
+  color: var(--c-grey-light);
+  line-height: 0.8;
+  letter-spacing: -20px;
+  opacity: 0.45;
+  transform: rotate(-8deg);
+}
+
+.large-bg-text-vertical {
+  position: absolute;
+  bottom: 120px;
+  right: 30px;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 12px;
+  color: var(--c-canvas);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  z-index: 2;
+}
+
+/* ==========================================================================
+   4. TOP HEADER BAR
+   ========================================================================== */
+#top-bar {
+  position: relative;
+  z-index: 10;
+  height: 84px;
+  background-color: var(--c-canvas);
+  border-bottom: var(--border-thick);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.brand-emblem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background-color: var(--c-black);
+  border: 2px solid var(--c-black);
+}
+
+.emblem-square {
+  width: 18px;
+  height: 18px;
+  background-color: var(--c-red);
+}
+
+.emblem-circle {
+  width: 18px;
+  height: 18px;
+  background-color: var(--c-yellow);
+  border-radius: 50%;
+}
+
+.emblem-triangle {
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 18px solid var(--c-blue);
+}
+
+.brand-text .bureau-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  line-height: 1.1;
+  color: var(--c-black);
+}
+
+.brand-text .bureau-subtitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--c-grey-dark);
+}
+
+.header-right-tools {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.telemetry-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--c-canvas-pure);
+  border: var(--border-medium);
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pill-label {
+  color: var(--c-grey-dark);
+}
+
+.pill-val {
+  color: var(--c-black);
+}
+
+.header-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--c-canvas-pure);
+  border: var(--border-medium);
+  padding: 8px 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.1s, transform 0.05s;
+}
+
+.header-btn:hover {
+  background-color: var(--c-yellow);
+}
+
+.header-btn:active {
+  transform: translateY(2px);
+}
+
+.circular-help-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  background-color: var(--c-blue);
+  color: var(--c-canvas-pure);
+  border: var(--border-medium);
+}
+
+.circular-help-btn:hover {
+  background-color: var(--c-red);
+  color: var(--c-canvas-pure);
+}
+
+/* ==========================================================================
+   5. POSTER MAIN LAYOUT (Asymmetric Off-Axis Balance)
+   ========================================================================== */
+#poster-layout-grid {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 660px 1fr;
+  gap: 32px;
+  padding: 24px 32px;
+  max-height: calc(1080px - 84px - 44px);
+}
+
+/* ==========================================================================
+   6. LEFT WING: THE PRIMARY KINETIC ANNULUS (DIAL RING)
+   ========================================================================== */
+#annulus-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--c-canvas-pure);
+  border: var(--border-thick);
+  padding: 18px 20px;
+  position: relative;
+  z-index: 6;
+  box-shadow: 8px 8px 0px var(--c-black);
+}
+
+.annulus-title-tag {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: var(--border-medium);
+  padding-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.annulus-title-tag .tag-accent {
+  width: 12px;
+  height: 12px;
+  background-color: var(--c-red);
+}
+
+.annulus-assembly-container {
+  position: relative;
+  width: 520px;
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--c-canvas-pure);
+}
+
+.ring-calibration-ruler {
+  position: absolute;
+  width: 504px;
+  height: 504px;
+  border: 1px dashed var(--c-grey);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+#primary-ring-svg {
+  width: 520px;
+  height: 520px;
+  transform: rotate(0deg);
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+  overflow: visible;
+}
+
+/* Outer Rim & Tracks */
+.rim-outer-thick {
+  fill: var(--c-canvas-pure);
+  stroke: var(--c-black);
+  stroke-width: 5;
+}
+
+.rim-outer-guide {
+  fill: none;
+  stroke: var(--c-grey-dark);
+  stroke-width: 1.5;
+}
+
+.rim-inner-track {
+  fill: none;
+  stroke: var(--c-black);
+  stroke-width: 3;
+}
+
+/* Radial Spoke Lines */
+.spoke-line {
+  stroke: var(--c-black);
+  pointer-events: none;
+}
+
+.spoke-line.main-axis {
+  stroke-width: 3;
+}
+
+.spoke-line.diag-axis {
+  stroke-width: 2;
+}
+
+/* Sector Elements */
+.svg-sector-wedge {
+  cursor: pointer;
+  stroke: var(--c-black);
+  stroke-width: 2;
+  transition: fill 0.15s;
+}
+
+.svg-sector-wedge:hover {
+  filter: brightness(0.92);
+}
+
+.sector-bg-idle {
+  fill: var(--c-canvas);
+}
+
+.sector-locked-0 { fill: var(--c-red); }
+.sector-locked-1 { fill: var(--c-blue); }
+.sector-locked-2 { fill: var(--c-yellow); }
+.sector-locked-3 { fill: var(--c-black); }
+.sector-locked-4 { fill: var(--c-red); }
+.sector-locked-5 { fill: var(--c-blue); }
+.sector-locked-6 { fill: var(--c-yellow); }
+.sector-locked-7 { fill: var(--c-black); }
+
+/* Glyph Rendering inside Ring */
+.ring-glyph-icon {
+  pointer-events: none;
+}
+
+/* Sector Squeegee Wipe Animation inside Ring */
+.sector-squeegee-mask {
+  pointer-events: none;
+  transition: opacity 0.3s ease-out;
+}
+
+/* Center Aperture Iris Elements */
+.aperture-bezel {
+  fill: var(--c-black);
+  stroke: var(--c-black);
+  stroke-width: 4;
+}
+
+.iris-blade {
+  fill: var(--c-grey-dark);
+  stroke: var(--c-black);
+  stroke-width: 2;
+  transition: transform 0.5s cubic-bezier(0.3, 1, 0.4, 1), fill 0.3s;
+  transform-origin: 0 0;
+}
+
+.iris-blade.blade-0 { fill: #2B2D42; }
+.iris-blade.blade-1 { fill: #1D3557; }
+.iris-blade.blade-2 { fill: #2B2D42; }
+.iris-blade.blade-3 { fill: #1D3557; }
+.iris-blade.blade-4 { fill: #2B2D42; }
+.iris-blade.blade-5 { fill: #1D3557; }
+.iris-blade.blade-6 { fill: #2B2D42; }
+.iris-blade.blade-7 { fill: #1D3557; }
+
+.iris-hub {
+  fill: var(--c-black);
+  stroke: var(--c-canvas);
+  stroke-width: 3;
+  transition: transform 0.4s, opacity 0.3s;
+}
+
+.iris-hub-square {
+  fill: var(--c-red);
+  transition: transform 0.4s;
+}
+
+/* Portal Breakthrough Spearhead */
+.breakthrough-wedge {
+  opacity: 0;
+  transform: scale(0) rotate(-45deg);
+  transform-origin: 0 0;
+  transition: transform 0.45s cubic-bezier(0.1, 1, 0.1, 1), opacity 0.2s;
+  pointer-events: none;
+}
+
+/* Active Portal Vortex */
+.portal-vortex {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vortex-base-plate {
+  fill: var(--c-canvas-pure);
+  stroke: var(--c-black);
+  stroke-width: 4;
+}
+
+.vortex-counter-disc {
+  transform-origin: 0 0;
+}
+
+/* State-Driven Aperture Classes */
+.state-buildup .iris-blade {
+  animation: irisBladeJitter 0.12s infinite alternate;
+}
+
+@keyframes irisBladeJitter {
+  0% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(0.96) rotate(2deg); }
+}
+
+.state-buildup #primary-ring-svg {
+  animation: ringBuildupPulse 0.4s infinite alternate ease-in-out;
+}
+
+@keyframes ringBuildupPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.012); }
+}
+
+.state-breakthrough .breakthrough-wedge {
+  opacity: 1;
+  transform: scale(1.15) rotate(0deg);
+}
+
+.state-breakthrough .iris-blade {
+  transform: scale(0.2) rotate(45deg);
+  opacity: 0.3;
+}
+
+.state-breakthrough .iris-hub,
+.state-breakthrough .iris-hub-square {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.state-active .portal-vortex {
+  opacity: 1;
+}
+
+.state-active .iris-blade {
+  transform: scale(0) rotate(90deg);
+  opacity: 0;
+}
+
+.state-active .iris-hub,
+.state-active .iris-hub-square {
+  opacity: 0;
+}
+
+.state-active .disc-1 {
+  animation: rotateClockwise 6s linear infinite;
+}
+
+.state-active .disc-2 {
+  animation: rotateCounterClockwise 4s linear infinite;
+}
+
+.state-active .disc-3 {
+  animation: rotateClockwise 2s linear infinite;
+}
+
+@keyframes rotateClockwise {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotateCounterClockwise {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Ring Telemetry Strip */
+.annulus-telemetry-strip {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  border-top: var(--border-medium);
+  padding-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.strip-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.strip-k {
+  color: var(--c-grey-dark);
+}
+
+.strip-v {
+  color: var(--c-black);
+  font-size: 11px;
+}
+
+/* ==========================================================================
+   7. RIGHT WING: 2 NAMED CONTROL CLUSTERS
+   ========================================================================== */
+#control-clusters-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 6;
+}
+
+.control-cluster {
+  background-color: var(--c-canvas-pure);
+  border: var(--border-thick);
+  box-shadow: 8px 8px 0px var(--c-black);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cluster-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--border-medium);
+  padding-bottom: 8px;
+}
+
+.cluster-badge {
+  background-color: var(--c-black);
+  color: var(--c-canvas-pure);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 8px;
+  letter-spacing: 1px;
+}
+
+.cluster-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  flex: 1;
+  margin-left: 12px;
+}
+
+.cluster-status-indicator {
+  background-color: var(--c-grey-light);
+  border: var(--border-thin);
+  padding: 3px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   CLUSTER 1: Address Register & Manual Matrix
+   -------------------------------------------------------------------------- */
+.address-register-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: var(--c-canvas);
+  border: var(--border-medium);
+  padding: 10px 14px;
+}
+
+.register-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.reg-counter {
+  background-color: var(--c-black);
+  color: var(--c-canvas-pure);
+  padding: 2px 8px;
+}
+
+.stencil-slots-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.stencil-slot {
+  position: relative;
+  height: 84px;
+  background-color: var(--c-canvas-pure);
+  border: var(--border-medium);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px;
+  overflow: hidden;
+}
+
+.stencil-slot.empty {
+  border-style: dashed;
+  background-color: transparent;
+}
+
+.stencil-slot .slot-idx {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--c-grey-dark);
+}
+
+.stencil-slot .slot-glyph-target {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stencil-slot .slot-glyph-target svg {
+  width: 40px;
+  height: 40px;
+}
+
+.stencil-slot .slot-code {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.stencil-slot.filled {
+  border-style: solid;
+  background-color: var(--c-canvas-pure);
+}
+
+.stencil-slot.filled.slot-red {
+  background-color: #FDEDED;
+  border-color: var(--c-black);
+}
+
+.stencil-slot.filled.slot-blue {
+  background-color: #EBF2FA;
+  border-color: var(--c-black);
+}
+
+.stencil-slot.filled.slot-yellow {
+  background-color: #FEF9E7;
+  border-color: var(--c-black);
+}
+
+/* Squeegee wipe animation inside slot */
+.slot-squeegee-wipe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--c-red);
+  transform: translateY(-100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.stencil-slot.wiping .slot-squeegee-wipe {
+  animation: squeegeeSlotPass 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes squeegeeSlotPass {
+  0% { transform: translateY(-100%); }
+  50% { transform: translateY(0%); }
+  100% { transform: translateY(100%); }
+}
+
+.register-sub-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.sub-action-btn {
+  background-color: var(--c-canvas-pure);
+  border: var(--border-thin);
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sub-action-btn:hover {
+  background-color: var(--c-grey-light);
+}
+
+.pending-prompt-banner {
+  flex: 1;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--c-red);
+  color: var(--c-canvas-pure);
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.pending-prompt-banner.visible {
+  display: flex;
+}
+
+.pending-pulsar {
+  width: 8px;
+  height: 8px;
+  background-color: var(--c-yellow);
+  animation: pendingBlink 0.6s infinite alternate;
+}
+
+@keyframes pendingBlink {
+  0% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
+/* Manual 8-Sector Selector Grid */
+.manual-matrix-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.matrix-header-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-grey-dark);
+}
+
+.matrix-grid-8 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.glyph-tile-btn {
+  background-color: var(--c-canvas);
+  border: var(--border-medium);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.05s, background-color 0.1s;
+}
+
+.glyph-tile-btn:hover {
+  background-color: var(--c-canvas-pure);
+  border-color: var(--c-black);
+}
+
+.glyph-tile-btn:active {
+  transform: translateY(2px);
+}
+
+.glyph-tile-btn .tile-svg-box {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.glyph-tile-btn .tile-svg-box svg {
+  width: 32px;
+  height: 32px;
+}
+
+.glyph-tile-btn .tile-meta {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.1;
+}
+
+.glyph-tile-btn .tile-code {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--c-grey-dark);
+}
+
+.glyph-tile-btn .tile-name {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--c-black);
+}
+
+.glyph-tile-btn .tile-accent-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   CLUSTER 2: Master Vector Operations & Quick-Dial Roster
+   -------------------------------------------------------------------------- */
+.master-action-row {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 16px;
+}
+
+/* Giant Cadmium Red Primary Master Activation Button */
+.master-btn.btn-engage {
+  position: relative;
+  height: 84px;
+  background-color: var(--c-red);
+  color: var(--c-canvas-pure);
+  border: var(--border-thick);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 4px 4px 0px var(--c-black);
+  transition: transform 0.05s, filter 0.15s;
+}
+
+.master-btn.btn-engage:disabled {
+  background-color: var(--c-grey);
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.master-btn.btn-engage:not(:disabled):hover {
+  filter: brightness(1.1);
+}
+
+.master-btn.btn-engage:not(:disabled):active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px var(--c-black);
+}
+
+.master-btn.btn-engage:not(:disabled) {
+  animation: engageArmedPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes engageArmedPulse {
+  0% { border-color: var(--c-black); }
+  50% { border-color: var(--c-yellow); }
+  100% { border-color: var(--c-black); }
+}
+
+.btn-top-flag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.btn-headline {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.btn-subtext {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.btn-graphic-chevron {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-graphic-chevron span {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 14px solid var(--c-canvas-pure);
+}
+
+/* Master Disengage / Purge Button */
+.master-btn.btn-disengage {
+  height: 84px;
+  background-color: var(--c-black);
+  color: var(--c-canvas-pure);
+  border: var(--border-thick);
+  border-top: 5px solid var(--c-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px var(--c-grey-dark);
+  transition: transform 0.05s, background-color 0.1s;
+}
+
+.master-btn.btn-disengage:hover {
+  background-color: #262626;
+}
+
+.master-btn.btn-disengage:active {
+  transform: translateY(2px);
+}
+
+.master-btn.btn-disengage .btn-headline {
+  font-size: 18px;
+}
+
+.btn-graphic-cross {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--c-yellow);
+}
+
+/* Safety Interlock Detent Switch Box */
+.safety-interlock-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--c-canvas);
+  border: var(--border-medium);
+  padding: 10px 16px;
+}
+
+.interlock-text-block .interlock-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.interlock-text-block .interlock-desc {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--c-grey-dark);
+}
+
+.interlock-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--c-canvas-pure);
+  border: var(--border-medium);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.toggle-slider {
+  width: 36px;
+  height: 18px;
+  background-color: var(--c-grey-light);
+  border: var(--border-thin);
+  position: relative;
+  transition: background-color 0.15s;
+}
+
+.toggle-notch {
+  width: 14px;
+  height: 14px;
+  background-color: var(--c-black);
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+/* Released state: Unlocked / Green/Neutral */
+.interlock-toggle-btn.released .toggle-slider {
+  background-color: var(--c-canvas);
+}
+
+.interlock-toggle-btn.released .toggle-label {
+  color: var(--c-black);
+}
+
+/* Engaged state: Locked / Hazard Red */
+.interlock-toggle-btn.engaged {
+  background-color: #FDEDED;
+}
+
+.interlock-toggle-btn.engaged .toggle-slider {
+  background-color: var(--c-red);
+}
+
+.interlock-toggle-btn.engaged .toggle-notch {
+  transform: translateX(16px);
+  background-color: var(--c-canvas-pure);
+}
+
+.interlock-toggle-btn.engaged .toggle-label {
+  color: var(--c-red);
+}
+
+/* Quick-Dial Preset Roster */
+.quick-dial-roster-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roster-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.roster-title {
+  color: var(--c-black);
+}
+
+.roster-hint {
+  color: var(--c-grey-dark);
+  font-size: 9px;
+}
+
+.presets-tiers-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.tier-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: var(--c-canvas);
+  border: var(--border-medium);
+  padding: 8px 10px;
+}
+
+.tier-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--c-blue);
+  border-bottom: var(--border-thin);
+  padding-bottom: 4px;
+}
+
+#tier-2-group .tier-tag {
+  color: var(--c-red);
+}
+
+.presets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.preset-card-btn {
+  background-color: var(--c-canvas-pure);
+  border: var(--border-thin);
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.1s, border-color 0.1s;
+}
+
+.preset-card-btn:hover {
+  background-color: var(--c-yellow);
+  border-color: var(--c-black);
+}
+
+.preset-card-btn .p-meta-left {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.preset-card-btn .p-code {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--c-grey-dark);
+}
+
+.preset-card-btn .p-name {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--c-black);
+}
+
+.preset-card-btn .p-dest {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--c-grey-dark);
+}
+
+.preset-card-btn .p-glyph-sequence {
+  display: flex;
+  gap: 2px;
+}
+
+.preset-card-btn .p-mini-glyph {
+  width: 14px;
+  height: 14px;
+  background-color: var(--c-grey-light);
+  border: 1px solid var(--c-black);
+}
+
+/* ==========================================================================
+   8. BOTTOM FOOTER BAR
+   ========================================================================== */
+#bottom-bar {
+  position: relative;
+  z-index: 10;
+  height: 44px;
+  background-color: var(--c-black);
+  color: var(--c-canvas-pure);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.corner-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.starlight-link {
+  color: var(--c-yellow);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.starlight-link:hover {
+  text-decoration: underline;
+}
+
+.footer-divider {
+  color: var(--c-grey);
+}
+
+.footer-note {
+  color: var(--c-grey-light);
+  font-size: 10px;
+}
+
+.center-ticker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ticker-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--c-red);
+  border-radius: 50%;
+}
+
+.state-active .ticker-dot {
+  background-color: var(--c-yellow);
+  animation: pendingBlink 0.4s infinite alternate;
+}
+
+.corner-right .version-label {
+  color: var(--c-canvas);
+  letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   9. HAZARD WARNING MODAL OVERLAY (Safety Interlock Detent Block)
+   ========================================================================== */
+.hazard-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(24, 23, 22, 0.85);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.hazard-overlay.visible {
+  display: flex;
+}
+
+.hazard-stripes-top,
+.hazard-stripes-bottom {
+  width: 100%;
+  height: 32px;
+  background: repeating-linear-gradient(-45deg, var(--c-hazard-yellow) 0px, var(--c-hazard-yellow) 24px, var(--c-black) 24px, var(--c-black) 48px);
+  border-top: 3px solid var(--c-black);
+  border-bottom: 3px solid var(--c-black);
+}
+
+.hazard-dialog {
+  width: 580px;
+  background-color: var(--c-canvas-pure);
+  border: 6px solid var(--c-red);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 12px 12px 0px var(--c-black);
+}
+
+.hazard-icon {
+  font-size: 48px;
+  color: var(--c-red);
+  margin-bottom: 8px;
+}
+
+.hazard-h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--c-red);
+}
+
+.hazard-h2 {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--c-black);
+  margin-bottom: 14px;
+}
+
+.hazard-body {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--c-grey-dark);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.hazard-btn {
+  background-color: var(--c-red);
+  color: var(--c-canvas-pure);
+  border: var(--border-thick);
+  padding: 10px 24px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.hazard-btn:hover {
+  background-color: var(--c-black);
+}
+
+/* ==========================================================================
+   10. OPERATOR REFERENCE MODAL (Collapsed by default)
+   ========================================================================== */
+.operator-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(24, 23, 22, 0.7);
+  z-index: 90;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.operator-modal-backdrop.visible {
+  display: flex;
+}
+
+.operator-modal-card {
+  width: 780px;
+  max-height: 900px;
+  background-color: var(--c-canvas);
+  border: var(--border-thick);
+  box-shadow: 16px 16px 0px var(--c-black);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  background-color: var(--c-blue);
+  color: var(--c-canvas-pure);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--border-thick);
+}
+
+.modal-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  background-color: var(--c-black);
+  padding: 2px 8px;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.modal-close-btn {
+  background-color: var(--c-canvas-pure);
+  color: var(--c-black);
+  border: var(--border-medium);
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.modal-close-btn:hover {
+  background-color: var(--c-red);
+  color: var(--c-canvas-pure);
+}
+
+.modal-body-scroll {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.manual-sec h3 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--c-black);
+  border-bottom: var(--border-thin);
+  padding-bottom: 2px;
+}
+
+.manual-list {
+  padding-left: 20px;
+  margin-top: 6px;
+}
+
+.manual-list li {
+  margin-bottom: 4px;
+}
+
+.shortcuts-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background-color: var(--c-canvas-pure);
+  border: var(--border-thin);
+  padding: 10px;
+}
+
+.sc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+kbd {
+  background-color: var(--c-black);
+  color: var(--c-canvas-pure);
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 2px;
+}
+
+.modal-footer {
+  background-color: var(--c-canvas-pure);
+  border-top: var(--border-medium);
+  padding: 14px 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-action-btn {
+  background-color: var(--c-black);
+  color: var(--c-canvas-pure);
+  border: var(--border-medium);
+  padding: 8px 20px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.modal-action-btn:hover {
+  background-color: var(--c-yellow);
+  color: var(--c-black);
+}

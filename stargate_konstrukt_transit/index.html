@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KONSTRUKT TRANSIT BUREAU · Geometric Vector Gateway</title>
+  <meta name="description" content="Bauhaus and Constructivist geometric abstraction portal-dialing interface. High-contrast primary color geometry, screen-printing squeegee locking mechanism, and functionalist machine-age controls.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="viewport-scale-wrapper">
+    <main id="app-canvas" class="state-idle" role="main">
+      <!-- Background Structural Geometric Poster Elements -->
+      <div class="poster-bg-geometry" aria-hidden="true">
+        <div class="diagonal-red-band"></div>
+        <div class="diagonal-blue-wedge"></div>
+        <div class="diagonal-yellow-bar"></div>
+        <div class="black-anchor-triangle"></div>
+        <div class="grey-registration-axis"></div>
+        <div class="large-bg-numeral-08">08</div>
+        <div class="large-bg-text-vertical">FORM · WERK · VEKTOR</div>
+      </div>
+
+      <!-- Top Header Structural Typography Bar -->
+      <header id="top-bar">
+        <div class="brand-block">
+          <div class="brand-emblem">
+            <span class="emblem-square"></span>
+            <span class="emblem-circle"></span>
+            <span class="emblem-triangle"></span>
+          </div>
+          <div class="brand-text">
+            <h1 class="bureau-title">KONSTRUKT TRANSIT BUREAU</h1>
+            <p class="bureau-subtitle">BUREAU OF APPLIED GEOMETRIC KINETICS // FORM-WERK APPARATUS 08</p>
+          </div>
+        </div>
+
+        <div class="header-right-tools">
+          <div class="telemetry-pill" id="telemetry-clock">
+            <span class="pill-label">CYCLE:</span>
+            <span class="pill-val" id="clock-display">08:24:00</span>
+          </div>
+          <button id="btn-audio-toggle" class="header-btn" title="Toggle Mechanical Audio Engine" aria-label="Toggle Audio">
+            <span class="btn-icon">🔊</span>
+            <span class="btn-text">AUDIO ON</span>
+          </button>
+          <button id="btn-operator-help" class="header-btn circular-help-btn" title="Operator Reference Manual" aria-label="Operator Reference">
+            <span>?</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Layout: 2 Primary Asymmetric Wings -->
+      <div id="poster-layout-grid">
+        
+        <!-- Left Wing: The Kinetic Annulus (Dial Ring) -->
+        <section id="annulus-stage" aria-label="Primary Kinetic Annulus">
+          <div class="annulus-title-tag">
+            <span class="tag-accent"></span>
+            <span class="tag-text">ANNULUS APPARATUS // 8-SECTOR HARMONIC CIRCLE</span>
+          </div>
+
+          <div class="annulus-assembly-container">
+            <!-- Outer Geometric Calibration Markings -->
+            <div class="ring-calibration-ruler" aria-hidden="true"></div>
+
+            <!-- SVG Ring with 8 Radial Sectors -->
+            <svg id="primary-ring-svg" viewBox="-260 -260 520 520">
+              <!-- Outer Heavy Rim -->
+              <circle cx="0" cy="0" r="246" class="rim-outer-thick" />
+              <circle cx="0" cy="0" r="238" class="rim-outer-guide" />
+              <circle cx="0" cy="0" r="138" class="rim-inner-track" />
+
+              <!-- Sector Backgrounds, Glyphs, and Squeegee Overlays -->
+              <g id="svg-sectors-group">
+                <!-- Injected dynamically in JS -->
+              </g>
+
+              <!-- Radial Spoke Dividers (45 deg divisions) -->
+              <g class="radial-spokes" aria-hidden="true">
+                <line x1="0" y1="-238" x2="0" y2="238" class="spoke-line main-axis" />
+                <line x1="-238" y1="0" x2="238" y2="0" class="spoke-line main-axis" />
+                <line x1="-168.29" y1="-168.29" x2="168.29" y2="168.29" class="spoke-line diag-axis" />
+                <line x1="-168.29" y1="168.29" x2="168.29" y2="-168.29" class="spoke-line diag-axis" />
+              </g>
+
+              <!-- Center Aperture Portal Group -->
+              <g id="center-aperture-group">
+                <!-- Fixed Aperture Bezel -->
+                <circle cx="0" cy="0" r="136" class="aperture-bezel" />
+                
+                <!-- Active Portal Chamber (Revealed when open) -->
+                <g id="portal-vortex-active" class="portal-vortex" aria-hidden="true">
+                  <circle cx="0" cy="0" r="134" class="vortex-base-plate" />
+                  <g class="vortex-counter-disc disc-1">
+                    <polygon points="0,-128 110,-64 110,64 0,128 -110,64 -110,-64" fill="#D82B27" />
+                    <circle cx="0" cy="0" r="92" fill="#181716" />
+                  </g>
+                  <g class="vortex-counter-disc disc-2">
+                    <polygon points="-78,-78 78,-78 78,78 -78,78" fill="#F4B810" />
+                    <circle cx="0" cy="0" r="62" fill="#15448C" />
+                  </g>
+                  <g class="vortex-counter-disc disc-3">
+                    <polygon points="0,-58 50,29 -50,29" fill="#F4F0E8" />
+                    <circle cx="0" cy="0" r="28" fill="#D82B27" />
+                  </g>
+                  <!-- Rotating dynamic vector cross-hairs -->
+                  <line x1="-128" y1="0" x2="128" y2="0" stroke="#F4F0E8" stroke-width="4" />
+                  <line x1="0" y1="-128" x2="0" y2="128" stroke="#F4F0E8" stroke-width="4" />
+                  <circle cx="0" cy="0" r="12" fill="#181716" />
+                </g>
+
+                <!-- Dramatic Breakthrough Spearhead Wedge -->
+                <g id="portal-breakthrough-wedge" class="breakthrough-wedge" aria-hidden="true">
+                  <polygon points="-138,138 138,-138 60,-138 -138,60" fill="#D82B27" />
+                  <polygon points="-118,118 118,-118 88,-118 -118,88" fill="#F4B810" />
+                  <line x1="-138" y1="138" x2="138" y2="-138" stroke="#181716" stroke-width="6" />
+                </g>
+
+                <!-- Interlocking Geometric Iris Blades (8 solid triangular plates) -->
+                <g id="iris-blades-group" class="iris-blades">
+                  <polygon class="iris-blade blade-0" points="0,0 136,0 96.16,96.16" />
+                  <polygon class="iris-blade blade-1" points="0,0 96.16,96.16 0,136" />
+                  <polygon class="iris-blade blade-2" points="0,0 0,136 -96.16,96.16" />
+                  <polygon class="iris-blade blade-3" points="0,0 -96.16,96.16 -136,0" />
+                  <polygon class="iris-blade blade-4" points="0,0 -136,0 -96.16,-96.16" />
+                  <polygon class="iris-blade blade-5" points="0,0 -96.16,-96.16 0,-136" />
+                  <polygon class="iris-blade blade-6" points="0,0 0,-136 96.16,-96.16" />
+                  <polygon class="iris-blade blade-7" points="0,0 96.16,-96.16 136,0" />
+                </g>
+
+                <!-- Center Idle Core Hub -->
+                <circle id="iris-center-hub" cx="0" cy="0" r="32" class="iris-hub" />
+                <rect id="iris-center-square" x="-12" y="-12" width="24" height="24" class="iris-hub-square" />
+              </g>
+            </svg>
+          </div>
+
+          <!-- Ring Bottom Telemetry Bar -->
+          <div class="annulus-telemetry-strip">
+            <div class="strip-item">
+              <span class="strip-k">APERTURE STATUS:</span>
+              <span class="strip-v" id="aperture-status-text">LOCKED / READY</span>
+            </div>
+            <div class="strip-item">
+              <span class="strip-k">HARMONIC RATIO:</span>
+              <span class="strip-v" id="harmonic-ratio-text">1:1.414 (EUCLIDEAN)</span>
+            </div>
+            <div class="strip-item">
+              <span class="strip-k">STENCIL REGISTRATION:</span>
+              <span class="strip-v" id="registration-text">CALIBRATED</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Wing: 2 Named Control Clusters -->
+        <div id="control-clusters-stage">
+
+          <!-- ========================================================= -->
+          <!-- CLUSTER 1: VECTOR REGISTRY & MANUAL STENCIL MATRIX -->
+          <!-- ========================================================= -->
+          <section id="cluster-registry" class="control-cluster" aria-labelledby="heading-cluster-registry">
+            <div class="cluster-header">
+              <div class="cluster-badge">CLUSTER I</div>
+              <h2 id="heading-cluster-registry" class="cluster-title">COORDINATE REGISTRY &amp; STENCIL MATRIX</h2>
+              <div class="cluster-status-indicator" id="cluster1-status-pill">STANDBY</div>
+            </div>
+
+            <!-- Address Sequence Linear Stencil Register (6 Slots) -->
+            <div class="address-register-block">
+              <div class="register-header-row">
+                <span class="reg-label">6-VECTOR ADDRESS REGISTER:</span>
+                <div class="reg-counter" id="address-counter-badge">
+                  <span id="reg-count-current">0</span> / <span id="reg-count-max">6</span> LOCKED
+                </div>
+              </div>
+
+              <!-- 6 Linear Slots -->
+              <div class="stencil-slots-row" id="stencil-slots-container">
+                <!-- Slot 1 -->
+                <div class="stencil-slot empty" data-slot="0" id="slot-0">
+                  <div class="slot-idx">V-I</div>
+                  <div class="slot-squeegee-wipe"></div>
+                  <div class="slot-glyph-target"></div>
+                  <div class="slot-code">---</div>
+                </div>
+                <!-- Slot 2 -->
+                <div class="stencil-slot empty" data-slot="1" id="slot-1">
+                  <div class="slot-idx">V-II</div>
+                  <div class="slot-squeegee-wipe"></div>
+                  <div class="slot-glyph-target"></div>
+                  <div class="slot-code">---</div>
+                </div>
+                <!-- Slot 3 -->
+                <div class="stencil-slot empty" data-slot="2" id="slot-2">
+                  <div class="slot-idx">V-III</div>
+                  <div class="slot-squeegee-wipe"></div>
+                  <div class="slot-glyph-target"></div>
+                  <div class="slot-code">---</div>
+                </div>
+                <!-- Slot 4 -->
+                <div class="stencil-slot empty" data-slot="3" id="slot-3">
+                  <div class="slot-idx">V-IV</div>
+                  <div class="slot-squeegee-wipe"></div>
+                  <div class="slot-glyph-target"></div>
+                  <div class="slot-code">---</div>
+                </div>
+                <!-- Slot 5 -->
+                <div class="stencil-slot empty" data-slot="4" id="slot-4">
+                  <div class="slot-idx">V-V</div>
+                  <div class="slot-squeegee-wipe"></div>
+                  <div class="slot-glyph-target"></div>
+                  <div class="slot-code">---</div>
+                </div>
+                <!-- Slot 6 -->
+                <div class="stencil-slot empty" data-slot="5" id="slot-5">
+                  <div class="slot-idx">V-VI</div>
+                  <div class="slot-squeegee-wipe"></div>
+                  <div class="slot-glyph-target"></div>
+                  <div class="slot-code">---</div>
+                </div>
+              </div>
+
+              <!-- Register Sub-Bar: Undo / Clear buttons -->
+              <div class="register-sub-actions">
+                <button id="btn-pop-glyph" class="sub-action-btn" title="Undo last glyph">
+                  <span>⌫ UNDO LAST GLYPH</span>
+                </button>
+                <button id="btn-clear-register" class="sub-action-btn" title="Clear all glyphs">
+                  <span>⊗ CLEAR REGISTER</span>
+                </button>
+                <div class="pending-prompt-banner" id="pending-prompt-banner">
+                  <span class="pending-pulsar"></span>
+                  <span class="pending-text">ALL 6 VECTORS LOCKED // ENGAGE CONTROL ARMED</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Manual 8-Sector Geometric Matrix -->
+            <div class="manual-matrix-block">
+              <div class="matrix-header-tag">MANUAL STENCIL SECTOR SELECTOR:</div>
+              <div class="matrix-grid-8" id="manual-matrix-grid">
+                <!-- 8 buttons populated dynamically via JS -->
+              </div>
+            </div>
+          </section>
+
+          <!-- ========================================================= -->
+          <!-- CLUSTER 2: MASTER OPERATIONS & PRESET TRANSIT ROSTER -->
+          <!-- ========================================================= -->
+          <section id="cluster-operations" class="control-cluster" aria-labelledby="heading-cluster-ops">
+            <div class="cluster-header">
+              <div class="cluster-badge">CLUSTER II</div>
+              <h2 id="heading-cluster-ops" class="cluster-title">MASTER VECTOR OPERATIONS &amp; TRANSIT ROSTER</h2>
+              <div class="cluster-status-indicator" id="cluster2-status-pill">READY</div>
+            </div>
+
+            <!-- Primary Master Action Controls (Scale, Color, Contrast Dominance) -->
+            <div class="master-action-row">
+              <!-- Giant Cadmium Red Master Activation Button -->
+              <button id="btn-engage-vector" class="master-btn btn-engage" disabled>
+                <div class="btn-stencil-stripes"></div>
+                <div class="btn-main-content">
+                  <div class="btn-top-flag">PRIMARY DISPATCH DETENT</div>
+                  <div class="btn-headline">ENGAGE VECTOR</div>
+                  <div class="btn-subtext">INITIATE THREE-STAGE APERTURE TRANSIT</div>
+                </div>
+                <div class="btn-graphic-chevron" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+              </button>
+
+              <!-- Master Disengage / Purge Button -->
+              <button id="btn-disengage-vector" class="master-btn btn-disengage">
+                <div class="btn-main-content">
+                  <div class="btn-top-flag">DETENT PURGE</div>
+                  <div class="btn-headline">DISENGAGE</div>
+                  <div class="btn-subtext">PURGE APERTURE &amp; RESET</div>
+                </div>
+                <div class="btn-graphic-cross" aria-hidden="true">⊗</div>
+              </button>
+            </div>
+
+            <!-- Safety Interlock Detent Switch -->
+            <div class="safety-interlock-box" id="interlock-control-box">
+              <div class="interlock-text-block">
+                <div class="interlock-title">VECTOR INTERFERENCE INTERLOCK // DETENT 08</div>
+                <div class="interlock-desc" id="interlock-desc-text">
+                  STATUS: <strong>RELEASED (ARMED)</strong> — Gate dispatch permissible.
+                </div>
+              </div>
+              <button id="btn-toggle-interlock" class="interlock-toggle-btn released" role="switch" aria-checked="false">
+                <div class="toggle-slider">
+                  <div class="toggle-notch"></div>
+                </div>
+                <span class="toggle-label" id="interlock-toggle-label">RELEASED</span>
+              </button>
+            </div>
+
+            <!-- Quick-Dial Transit Roster (2 Tiers, 6 Presets) -->
+            <div class="quick-dial-roster-block">
+              <div class="roster-header-row">
+                <span class="roster-title">PRE-CALCULATED HARMONIC VECTORS:</span>
+                <span class="roster-hint">CLICK PRESET TO AUTO-SEQUENCE STENCIL PASSES</span>
+              </div>
+
+              <div class="presets-tiers-wrapper">
+                <!-- Tier 1 -->
+                <div class="tier-group" id="tier-1-group">
+                  <div class="tier-tag">TIER I · INTRA-METROPOLITAN ARTERIES</div>
+                  <div class="presets-list" id="tier-1-list">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+
+                <!-- Tier 2 -->
+                <div class="tier-group" id="tier-2-group">
+                  <div class="tier-tag">TIER II · DEEP KINETIC CORRIDORS</div>
+                  <div class="presets-list" id="tier-2-list">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+      <!-- Bottom Bar with Corner Metadata -->
+      <footer id="bottom-bar">
+        <div class="corner-left">
+          <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="starlight-link">
+            <span class="link-bullet">■</span> StarlightDaemon
+          </a>
+          <span class="footer-divider">/</span>
+          <span class="footer-note">BUREAU OF APPLIED KINETICS · STANDALONE VECTOR APPARATUS</span>
+        </div>
+
+        <div class="center-ticker" id="system-status-ticker">
+          <span class="ticker-dot"></span>
+          <span class="ticker-text" id="status-ticker-text">SYSTEM IDLE // SELECT 6 GLYPHS TO CONFIGURE VECTOR COORDINATES</span>
+        </div>
+
+        <div class="corner-right">
+          <span class="version-label">v1.0.0 · KONSTRUKT TRANSIT BUREAU</span>
+        </div>
+      </footer>
+
+      <!-- Safety Interlock Error Hazard Banner Overlay -->
+      <div id="hazard-warning-overlay" class="hazard-overlay" aria-hidden="true">
+        <div class="hazard-stripes-top"></div>
+        <div class="hazard-dialog">
+          <div class="hazard-icon">▲</div>
+          <div class="hazard-h1">VECTOR DIRECTIVE BLOCKED</div>
+          <div class="hazard-h2">SAFETY INTERLOCK DETENT IS ENGAGED</div>
+          <p class="hazard-body">
+            Aperture ignition prohibited by Safety Directive 08. Disengage the Vector Interference Interlock to proceed with gateway dispatch.
+          </p>
+          <button id="btn-dismiss-hazard" class="hazard-btn">ACKNOWLEDGE &amp; RETURN</button>
+        </div>
+        <div class="hazard-stripes-bottom"></div>
+      </div>
+
+      <!-- Operator Reference Modal (Collapsed by default) -->
+      <aside id="operator-modal" class="operator-modal-backdrop" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+        <div class="operator-modal-card">
+          <header class="modal-header">
+            <div class="modal-badge">BUREAU OPERATING DIRECTIVE // DOC-08</div>
+            <h2 id="modal-title" class="modal-title">OPERATOR'S APPARATUS MANUAL</h2>
+            <button id="btn-close-modal" class="modal-close-btn" aria-label="Close Manual">✕</button>
+          </header>
+
+          <div class="modal-body-scroll">
+            <section class="manual-sec">
+              <h3>I. THE BAUHAUS GEOMETRIC RING</h3>
+              <p>
+                The primary apparatus is an 8-sector Euclidean circle divided along strict 45° orthogonal and diagonal axes. Each sector maps to a primary geometric glyph representing fundamental physical vector transformations (orthogonal axes, equilateral prisms, kinetic arcs, and annular cores).
+              </p>
+            </section>
+
+            <section class="manual-sec">
+              <h3>II. SCREEN-PRINT SQUEEGEE LOCKING</h3>
+              <p>
+                Address registration simulates the physical craft of screen-printing: when a sector is selected, a registration stencil aligns with a sharp mechanical detent, followed by a squeegee sweep that pulls saturated primary pigment across the screen mesh, stamping the glyph into the linear coordinate register.
+              </p>
+            </section>
+
+            <section class="manual-sec">
+              <h3>III. THREE-STAGE STAGED ACTIVATION</h3>
+              <p>
+                Entering 6 glyphs arms the apparatus into a <code>PENDING</code> state. The portal <strong>never auto-fires</strong>. Activation requires manual dispatch of the primary <strong>ENGAGE VECTOR</strong> control, executing a 3-stage mechanical ignition:
+              </p>
+              <ul class="manual-list">
+                <li><strong>Stage 1 (Buildup - 1.8s):</strong> Radial spokes align under mounting metronomic tension.</li>
+                <li><strong>Stage 2 (Breakthrough - 0.6s):</strong> A high-velocity geometric vector spearhead pierces the central iris blades.</li>
+                <li><strong>Stage 3 (Sustained Active):</strong> Interlocking counter-rotating primary color discs maintain steady harmonic vortex transit.</li>
+              </ul>
+            </section>
+
+            <section class="manual-sec">
+              <h3>IV. QUICK-DIAL HARMONIC PRESETS</h3>
+              <p>
+                Preloaded transit routes are organized into two operational tiers: <em>Intra-Metropolitan Arteries</em> (local transit) and <em>Deep Kinetic Corridors</em> (high-velocity long-range vectors). Selecting a preset executes a staged auto-dial sequence (~320ms per symbol), halting in the pending state for operator confirmation.
+              </p>
+            </section>
+
+            <section class="manual-sec">
+              <h3>V. SAFETY INTERLOCK DETENT</h3>
+              <p>
+                The <em>Vector Interference Interlock</em> defaults to <strong>RELEASED</strong>. When toggled to <strong>ENGAGED</strong>, attempts to activate trigger an immediate hazard lockout and audible warning tone.
+              </p>
+            </section>
+
+            <section class="manual-sec">
+              <h3>VI. OPERATOR KEYBOARD SHORTCUTS</h3>
+              <div class="shortcuts-table">
+                <div class="sc-row"><kbd>1</kbd>–<kbd>8</kbd> <span>Input Geometric Glyphs 01–08</span></div>
+                <div class="sc-row"><kbd>Backspace</kbd> <span>Undo Last Locked Glyph</span></div>
+                <div class="sc-row"><kbd>Space</kbd> / <kbd>Enter</kbd> <span>Engage Vector (When Armed)</span></div>
+                <div class="sc-row"><kbd>Escape</kbd> <span>Disengage / Purge Aperture</span></div>
+                <div class="sc-row"><kbd>I</kbd> <span>Toggle Safety Interlock</span></div>
+                <div class="sc-row"><kbd>?</kbd> <span>Toggle This Reference Manual</span></div>
+              </div>
+            </section>
+          </div>
+
+          <footer class="modal-footer">
+            <button id="btn-modal-got-it" class="modal-action-btn">PROCEED TO OPERATE</button>
+          </footer>
+        </div>
+      </aside>
+
+    </main>
+  </div>
+
+  <script src="js/symbols.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/dialer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
