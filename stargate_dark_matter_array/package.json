@@ -1,0 +1,22 @@
+{
+  "name": "stargate-dark-matter-array",
+  "version": "1.0.0",
+  "description": "BOREAS-IX Subterranean Cryogenic Dark Matter Array - Interactive Novelty Portal Dialing System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/verify.js"
+  },
+  "keywords": [
+    "dark-matter",
+    "cryogenic",
+    "portal",
+    "pmt-array",
+    "rare-event-detection"
+  ],
+  "author": "StarlightDaemon",
+  "license": "MIT",
+  "devDependencies": {
+    "puppeteer": "^24.43.1"
+  }
+}

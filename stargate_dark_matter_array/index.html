@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="deep-xenon" data-density="standard" data-motion="full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOREAS-IX // Subterranean Cryogenic Dark Matter Array</title>
+  <meta name="description" content="BOREAS-IX Deep Crust Cryogenic Observatory - Interactive Novelty Dark Matter Aperture & Background Discrimination Instrument.">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
+</head>
+<body>
+
+  <div id="app-container">
+
+    <!-- ====================================================================
+         HEADER & OBSERVATORY IDENTITY
+         ==================================================================== -->
+    <header class="app-header">
+      <div class="header-identity">
+        <h1 class="obs-title">
+          <span class="obs-icon">❖</span>
+          BOREAS-IX DEEP CRUST CRYOGENIC OBSERVATORY
+        </h1>
+        <div class="obs-subtitle">
+          DUAL-PHASE LIQUID XENON TPC // RARE-EVENT DISCRIMINATION APERTURE [DM-TPC-7X]
+        </div>
+      </div>
+
+      <div class="header-telemetry">
+        <div class="overburden-badge">
+          🛡 1,450m ROCK OVERBURDEN (4,200 m.w.e.) // MT. CALDERA LAB-4
+        </div>
+
+        <nav class="nav-tabs" aria-label="Observatory Navigation">
+          <button class="nav-tab-btn active" data-view="detector" id="nav-btn-detector">
+            [1] DETECTOR CONSOLE
+          </button>
+          <button class="nav-tab-btn" data-view="engineering" id="nav-btn-engineering">
+            [2] CRYO-ENGINEERING
+          </button>
+          <button class="nav-tab-btn" data-view="archive" id="nav-btn-archive">
+            [3] ARCHIVE VAULT (36+ RUNS)
+          </button>
+          <button class="nav-tab-btn" data-view="logger" id="nav-btn-logger">
+            [4] SESSION LOG
+          </button>
+          <button class="nav-tab-btn" data-view="settings" id="nav-btn-settings">
+            [5] SETTINGS
+          </button>
+        </nav>
+
+        <button class="btn-help-circle" id="btn-open-manual" title="Operator Reference Manual" aria-label="Open Operator Reference Manual">
+          ?
+        </button>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         MAIN VIEW 1: DETECTOR CONSOLE (PRIMARY OPERABLE APERTURE INTERFACE)
+         ==================================================================== -->
+    <main class="view-panel active" id="view-detector">
+      <div class="detector-main-layout">
+
+        <!-- Center-Left Dominant High-Precision Instrument Display -->
+        <section class="instrument-focal-display" aria-label="PMT Array & Target Chamber Display">
+          <div class="canvas-status-overlay">
+            <div class="status-badge standby" id="aperture-status-badge">
+              STANDBY // SCANNING DETECTOR (0/7 SLOTS)
+            </div>
+            <div class="status-badge standby" id="target-mass-badge">
+              TARGET: 3.50 TONNES LXe // T = 165.20 K
+            </div>
+          </div>
+
+          <div class="canvas-wrapper">
+            <canvas id="detector-canvas" width="620" height="620"></canvas>
+          </div>
+
+          <!-- 7-Slot Target Coordinate Lock Strip -->
+          <div class="coordinate-lock-strip" id="coordinate-slots-container">
+            <div class="coord-slot empty" id="slot-0" data-slot-index="0">
+              <div class="slot-idx">SLOT 01</div>
+              <div class="slot-glyph empty-glyph">[ -- ]</div>
+              <div class="slot-details"><span class="slot-ch">WAITING</span><span class="slot-energy">0.0 keVnr</span></div>
+              <div class="slot-status">VACANT</div>
+            </div>
+            <div class="coord-slot empty" id="slot-1" data-slot-index="1">
+              <div class="slot-idx">SLOT 02</div>
+              <div class="slot-glyph empty-glyph">[ -- ]</div>
+              <div class="slot-details"><span class="slot-ch">WAITING</span><span class="slot-energy">0.0 keVnr</span></div>
+              <div class="slot-status">VACANT</div>
+            </div>
+            <div class="coord-slot empty" id="slot-2" data-slot-index="2">
+              <div class="slot-idx">SLOT 03</div>
+              <div class="slot-glyph empty-glyph">[ -- ]</div>
+              <div class="slot-details"><span class="slot-ch">WAITING</span><span class="slot-energy">0.0 keVnr</span></div>
+              <div class="slot-status">VACANT</div>
+            </div>
+            <div class="coord-slot empty" id="slot-3" data-slot-index="3">
+              <div class="slot-idx">SLOT 04</div>
+              <div class="slot-glyph empty-glyph">[ -- ]</div>
+              <div class="slot-details"><span class="slot-ch">WAITING</span><span class="slot-energy">0.0 keVnr</span></div>
+              <div class="slot-status">VACANT</div>
+            </div>
+            <div class="coord-slot empty" id="slot-4" data-slot-index="4">
+              <div class="slot-idx">SLOT 05</div>
+              <div class="slot-glyph empty-glyph">[ -- ]</div>
+              <div class="slot-details"><span class="slot-ch">WAITING</span><span class="slot-energy">0.0 keVnr</span></div>
+              <div class="slot-status">VACANT</div>
+            </div>
+            <div class="coord-slot empty" id="slot-5" data-slot-index="5">
+              <div class="slot-idx">SLOT 06</div>
+              <div class="slot-glyph empty-glyph">[ -- ]</div>
+              <div class="slot-details"><span class="slot-ch">WAITING</span><span class="slot-energy">0.0 keVnr</span></div>
+              <div class="slot-status">VACANT</div>
+            </div>
+            <div class="coord-slot empty" id="slot-6" data-slot-index="6">
+              <div class="slot-idx">SLOT 07</div>
+              <div class="slot-glyph empty-glyph">[ -- ]</div>
+              <div class="slot-details"><span class="slot-ch">WAITING</span><span class="slot-energy">0.0 keVnr</span></div>
+              <div class="slot-status">VACANT</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Asymmetric Telemetry & Discrimination Rack -->
+        <aside class="telemetry-discrimination-wing" aria-label="Discrimination & Physics Telemetry">
+          
+          <!-- Pulse-Shape Discrimination (PSD) Monitor -->
+          <div class="telem-panel" id="psd-discrimination-panel">
+            <div class="panel-header">
+              <span>PULSE-SHAPE DISCRIMINATION (PSD)</span>
+              <span style="color: var(--accent-cyan);">S1/S2 RATIO</span>
+            </div>
+            <div class="disc-grid">
+              <div class="disc-meter-box">
+                <span class="disc-lbl">S1 PROMPT PHOTONS</span>
+                <span class="disc-val" id="meter-s1-val">-- PE</span>
+              </div>
+              <div class="disc-meter-box">
+                <span class="disc-lbl">S2 DRIFT IONIZATION</span>
+                <span class="disc-val" id="meter-s2-val">-- PE</span>
+              </div>
+              <div class="disc-meter-box">
+                <span class="disc-lbl">log₁₀(S2/S1) RATIO [NR: 1.6-2.55]</span>
+                <span class="disc-val pass" id="meter-ratio-val">--</span>
+              </div>
+              <div class="disc-meter-box">
+                <span class="disc-lbl">RECOIL ENERGY ROI</span>
+                <span class="disc-val" id="meter-energy-val">-- keVnr</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Muon Veto Coincidence Guard Panel -->
+          <div class="telem-panel" id="muon-veto-panel">
+            <div class="panel-header">
+              <span>COSMIC MUON VETO GUARD (120t CHERENKOV)</span>
+              <span style="color: var(--accent-red);">±50ns GATE</span>
+            </div>
+            <div class="disc-grid">
+              <div class="disc-meter-box">
+                <span class="disc-lbl">COINCIDENCE TIMING (Δt)</span>
+                <span class="disc-val pass" id="meter-veto-dt">-- ns</span>
+              </div>
+              <div class="disc-meter-box">
+                <span class="disc-lbl">VETO STATUS</span>
+                <span class="disc-val pass" id="meter-veto-status">GUARD NOMINAL</span>
+              </div>
+            </div>
+            <div class="veto-reason-banner" id="veto-rejection-reason">
+              <!-- Dynamically populated on failure path -->
+            </div>
+          </div>
+
+          <!-- Coupled Physics Telemetry -->
+          <div class="telem-panel" id="coupled-physics-panel">
+            <div class="panel-header">
+              <span>PHYSICS TELEMETRY ENGINE</span>
+              <span style="color: var(--accent-violet);">COUPLED STATE</span>
+            </div>
+            <div class="physics-telemetry-grid">
+              <div class="telem-box">
+                <span class="telem-lbl">CRYOSTAT TEMP</span>
+                <span class="telem-val" id="telem-temp">165.20 K</span>
+              </div>
+              <div class="telem-box">
+                <span class="telem-lbl">INSULATION VACUUM</span>
+                <span class="telem-val" id="telem-pressure">1.24e-9 mbar</span>
+              </div>
+              <div class="telem-box">
+                <span class="telem-lbl">CATHODE DRIFT BIAS</span>
+                <span class="telem-val" id="telem-voltage">-10.50 kV</span>
+              </div>
+              <div class="telem-box">
+                <span class="telem-lbl">COSMIC MUON FLUX</span>
+                <span class="telem-val" id="telem-muon-rate">0.038 Hz</span>
+              </div>
+              <div class="telem-box">
+                <span class="telem-lbl">AMBIENT GAMMA BACKGROUND</span>
+                <span class="telem-val" id="telem-gamma-rate">14.22 Hz</span>
+              </div>
+              <div class="telem-box">
+                <span class="telem-lbl">SIGNIFICANCE / EXCLUSION</span>
+                <span class="telem-val" id="telem-sigma">0.00 σ</span>
+              </div>
+              <div class="telem-box" style="grid-column: span 2;">
+                <span class="telem-lbl">APERTURE WIMP FLUX RATE</span>
+                <span class="telem-val" id="telem-flux">0.0 ev/s</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blind Analysis Alert Box -->
+          <div class="blind-alert-box" id="blind-warning-banner">
+            ⚠️ BLIND-ANALYSIS SAFETY GATE ACTIVE: Aperture unblinding commits are locked to prevent observer bias. Release interlock below to authorize unblinded commit.
+          </div>
+
+        </aside>
+      </div>
+
+      <!-- ====================================================================
+           BOTTOM OPERABLE CONTROL STRIP (CORE LOOP - AT MOST 2 NAMED CLUSTERS)
+           ==================================================================== -->
+      <section class="operable-control-strip" aria-label="Core Operable Controls">
+
+        <!-- Cluster 1: PMT DETECTOR SECTOR ARRAY [10 Channels] -->
+        <div class="control-cluster-pmt" id="cluster-pmt-sectors">
+          <div class="cluster-title-bar">
+            <span class="cluster-title">CLUSTER 1: PMT DETECTOR SECTOR ARRAY [10 CHANNELS]</span>
+            <button class="btn-spike-test" id="btn-simulate-veto" title="Toggle background noise spike to test rejection failure path">
+              ⚡ SIMULATE VETO SPIKE / FAIL PATH
+            </button>
+          </div>
+          <div class="pmt-buttons-grid" id="pmt-channel-buttons">
+            <!-- Dynamically populated with 10 PMT channel buttons -->
+          </div>
+        </div>
+
+        <!-- Cluster 2: RUN COMMIT & APERTURE INTERLOCK CONSOLE -->
+        <div class="control-cluster-commit" id="cluster-aperture-console">
+          <div class="cluster-title-bar">
+            <span class="cluster-title">CLUSTER 2: RUN COMMIT & APERTURE INTERLOCK CONSOLE</span>
+          </div>
+
+          <div class="commit-actions-row">
+            <button class="btn-commit disabled" id="btn-commit-run" disabled>
+              AWAITING COORDINATES (0/7 LOCKED)
+            </button>
+            <button class="btn-disengage" id="btn-disengage" title="Disengage cryogenic aperture & abort run">
+              ✕ DISENGAGE / ABORT
+            </button>
+          </div>
+
+          <div class="interlock-safety-row">
+            <span class="interlock-label">BLIND-ANALYSIS PROTOCOL LOCK:</span>
+            <label class="switch-label">
+              <input type="checkbox" id="toggle-blind-lock">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="quick-preset-row">
+            <select class="quick-preset-select" id="quick-preset-select" aria-label="Select archival dataset preset to auto-dial">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- ====================================================================
+         VIEW 2: CRYO-ENGINEERING CROSS-SECTION
+         ==================================================================== -->
+    <section class="view-panel" id="view-engineering" aria-label="Engineering Cross-Section">
+      <div class="engineering-layout">
+        <div class="engineering-canvas-box">
+          <canvas id="engineering-canvas" width="900" height="540"></canvas>
+        </div>
+        <div class="engineering-info-box" id="engineering-info-panel">
+          <!-- Dynamically populated with component details on click -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 3: ARCHIVE VAULT (36+ CROSS-REFERENCED RUNS)
+         ==================================================================== -->
+    <section class="view-panel" id="view-archive" aria-label="Observatory Archive Vault">
+      <div class="archive-top-controls">
+        <input type="text" class="archive-search-input" id="archive-search-input" placeholder="Search archive runs by ID, keyword, author, or physical baseline...">
+        <select class="archive-filter-select" id="archive-filter-tier" aria-label="Filter archive by tier">
+          <option value="ALL">ALL ARCHIVE DATASETS (36+ RUNS)</option>
+          <option value="TIER_1_VETTED">TIER 1: VETTED HISTORICAL RUNS & BASELINES</option>
+          <option value="TIER_2_CANDIDATE">TIER 2: CANDIDATE EXCESSES UNDER REVIEW</option>
+        </select>
+      </div>
+      <div class="archive-entries-grid" id="archive-entries-container">
+        <!-- Dynamically populated with 36+ cross-referenced relational cards -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 4: SESSION EVENT LOG
+         ==================================================================== -->
+    <section class="view-panel" id="view-logger" aria-label="Session Event Log">
+      <div class="logger-toolbar">
+        <div class="logger-filter-group">
+          <select class="archive-filter-select" id="logger-filter-select" style="width: 220px;" aria-label="Filter session logs by category">
+            <option value="ALL">ALL LOGGED EVENTS</option>
+            <option value="CHANNEL">CHANNEL SCANS</option>
+            <option value="DISCRIMINATION">DISCRIMINATION CHECKS</option>
+            <option value="REJECTION">BACKGROUND REJECTIONS</option>
+            <option value="APERTURE">APERTURE TRANSITIONS</option>
+            <option value="SYSTEM">SYSTEM & PROTOCOL</option>
+          </select>
+        </div>
+        <div class="logger-actions">
+          <button class="btn-log-action" id="btn-export-logs">EXPORT LOG FILE</button>
+          <button class="btn-log-action" id="btn-clear-logs">CLEAR LOGS</button>
+        </div>
+      </div>
+      <div class="session-logs-list" id="session-logs-container">
+        <!-- Live stream of user actions -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 5: INSTRUMENT SETTINGS & PREFERENCES
+         ==================================================================== -->
+    <section class="view-panel" id="view-settings" aria-label="Instrument Settings">
+      <div class="settings-grid-layout">
+        
+        <!-- Color Scheme Moods -->
+        <div class="settings-card">
+          <h3 class="settings-card-title">INSTRUMENT COLOR SCHEME & MOOD</h3>
+          <div class="settings-options-list">
+            <label class="setting-radio-row">
+              <input type="radio" name="theme-select" value="deep-xenon" checked>
+              <span>Deep Xenon Violet (Luminous Obsidian & Violet-Cyan)</span>
+            </label>
+            <label class="setting-radio-row">
+              <input type="radio" name="theme-select" value="cryo-cyan">
+              <span>Cryogenic Neon Cyan (Electric Blue & Glacier Ice)</span>
+            </label>
+            <label class="setting-radio-row">
+              <input type="radio" name="theme-select" value="amber-phosphor">
+              <span>Amber Monochromatic Phosphor (Cathode-Ray Tube Amber)</span>
+            </label>
+            <label class="setting-radio-row">
+              <input type="radio" name="theme-select" value="cleanroom-emerald">
+              <span>Cleanroom Emerald (Precision Sensor Green & Obsidian)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- UI Density & Motion -->
+        <div class="settings-card">
+          <h3 class="settings-card-title">TELEMETRY DENSITY & MOTION</h3>
+          <div class="settings-options-list">
+            <label class="setting-radio-row">
+              <input type="radio" name="density-select" value="standard" checked>
+              <span>Standard Observational Density</span>
+            </label>
+            <label class="setting-radio-row">
+              <input type="radio" name="density-select" value="compact">
+              <span>Compact Laboratory Grid</span>
+            </label>
+            <label class="setting-radio-row">
+              <input type="radio" name="density-select" value="dense">
+              <span>Ultra-Dense Engineering Telemetry</span>
+            </label>
+            <hr style="border-color: var(--border-dim); margin: 6px 0;">
+            <label class="setting-radio-row">
+              <input type="radio" name="motion-select" value="full" checked>
+              <span>Full Particle Dynamics (60 FPS Vortex & Waves)</span>
+            </label>
+            <label class="setting-radio-row">
+              <input type="radio" name="motion-select" value="reduced">
+              <span>Reduced Motion & Static Schematics</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Synthesized Web Audio Mixers -->
+        <div class="settings-card">
+          <h3 class="settings-card-title">SYNTHESIZED WEB AUDIO BUS MIXERS</h3>
+          <div class="settings-options-list">
+            <div class="audio-slider-row">
+              <span>Master Output Gain:</span>
+              <input type="range" id="vol-master" min="0" max="1" step="0.05" value="0.7">
+            </div>
+            <div class="audio-slider-row">
+              <span>Cryostat 55Hz Hum:</span>
+              <input type="range" id="vol-cryo" min="0" max="1" step="0.05" value="0.35">
+            </div>
+            <div class="audio-slider-row">
+              <span>PMT Background Scintillation Clicks:</span>
+              <input type="range" id="vol-pmt" min="0" max="1" step="0.05" value="0.25">
+            </div>
+            <div class="audio-slider-row">
+              <span>S1/S2 Discrimination Chimes:</span>
+              <input type="range" id="vol-chime" min="0" max="1" step="0.05" value="0.6">
+            </div>
+            <div class="audio-slider-row">
+              <span>Muon Veto Alert Buzzer:</span>
+              <input type="range" id="vol-veto" min="0" max="1" step="0.05" value="0.5">
+            </div>
+            <div class="audio-slider-row">
+              <span>Aperture Vortex Resonance:</span>
+              <input type="range" id="vol-aperture" min="0" max="1" step="0.05" value="0.65">
+            </div>
+          </div>
+        </div>
+
+        <!-- Local Storage Session Persistence -->
+        <div class="settings-card">
+          <h3 class="settings-card-title">LOCAL SESSION PERSISTENCE & STORAGE</h3>
+          <p style="font-size: 10px; color: var(--text-muted); line-height: 1.4;">
+            All dial histories, viewed archive datasets, preferences, and session statistics are preserved in browser localStorage across page reloads.
+          </p>
+          <button class="btn-danger-reset" id="btn-reset-storage">
+            RESET ALL STORED SESSION DATA & LOGS
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         OPERATOR MANUAL MODAL OVERLAY
+         ==================================================================== -->
+    <div class="modal-overlay" id="modal-manual" role="dialog" aria-modal="true" aria-labelledby="manual-title">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title" id="manual-title">BOREAS-IX OPERATOR REFERENCE MANUAL // DM-TPC-7X</h3>
+          <button class="modal-close-btn" id="btn-close-manual" aria-label="Close Operator Manual">✕</button>
+        </div>
+        <div class="modal-body">
+          <h4>1. CORE SCIENTIFIC PRINCIPLE: BACKGROUND REJECTION</h4>
+          <p>
+            Dark matter particles (WIMPs, Axions) cannot be directly seen. They are inferred solely from extremely rare nuclear recoil (NR) elastic collisions inside the 3.5-tonne ultra-pure liquid xenon active volume, deep beneath 1,450 meters of mountain granite. Most detected events are ambient background noise (cosmic muons, radon daughters, gamma rays) and MUST BE EXCLUDED.
+          </p>
+
+          <h4>2. S1 / S2 PULSE-SHAPE DISCRIMINATION (PSD)</h4>
+          <p>
+            An interaction produces two signals: (1) <strong>S1</strong> prompt scintillation light (178nm) and (2) <strong>S2</strong> delayed secondary ionization charge drifting upward to the gas extraction grid. Nuclear recoils have a characteristic log₁₀(S2/S1) ratio between 1.60 and 2.55. Events with higher ionization ratios (> 2.55) are rejected as Electron Recoil (ER) gamma/beta background.
+          </p>
+
+          <h4>3. COSMIC-RAY MUON VETO GUARD & FIDUCIAL CUTS</h4>
+          <p>
+            The cryostat is submerged in a 120-tonne Water Cherenkov tank. Any event coinciding within ±50ns of a Cherenkov flash is immediately vetoed. Furthermore, the 3D fiducial volume algorithm excludes events occurring within 50mm of the PTFE chamber walls to reject radon contamination.
+          </p>
+
+          <h4>4. APERTURE STAGING & ACTIVATION</h4>
+          <p>
+            Locking all 7 coordinate slots does NOT auto-fire. The system enters a safe <strong>PENDING</strong> state. The operator must click <strong>COMMIT CANDIDATE RUN</strong> to initiate the 3-stage activation: (1) Buildup (2.5s ramp to 5.0σ) → (2) Breakthrough (shockwave & vortex burst) → (3) Sustained Active (continuous dark matter flux). Disengage is accessible at all times.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         FOOTER CORNER DISPLAY
+         ==================================================================== -->
+    <footer class="app-footer">
+      <div class="corner-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+      </div>
+      <div class="corner-right">
+        v1.0.0 // BOREAS-IX DEEP OBSERVATORY
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/logger.js"></script>
+  <script src="js/discrimination.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/archive.js"></script>
+  <script src="js/quickdial.js"></script>
+  <script src="js/detector.js"></script>
+  <script src="js/engineering.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
