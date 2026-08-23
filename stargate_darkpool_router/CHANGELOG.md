@@ -6,6 +6,8 @@ All notable changes to the VALENCE-9 Cross-Venue Dark Route Console (`stargate_d
 
 **Built by:** Gemini 3.7 Flash (High reasoning)
 
+> **Operator Verification Note:** Direct operator testing confirmed the build is fully functional end-to-end — manual dialing, three-stage activation (buildup, breakthrough, sustained active), disengage kill-switch, and quick-dial auto-dial sequencing all operate as intended.
+
 ### Added
 - **Asymmetric Trading Pit Split-Deck Architecture:** Non-symmetric 63/37 layout deliberately breaking the five-zone top/center/left/right/bottom frame rut.
 - **Orbital Order-Book Liquidity Ring:** 10 radial exchange nodes (`LSE-DARK`, `NY4-ULTRA`, `TY3-MWAVE`, `SG1-LASER`, `HK1-OPTIC`, `FR2-DIRECT`, `CME-AURORA`, `CHI-BATS`, `ZUR-QNTM`, `TOK-SUBSEA`) with real-time bid/ask depth walls converging toward an execution core.

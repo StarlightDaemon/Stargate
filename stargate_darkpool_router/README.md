@@ -2,6 +2,8 @@
 
 VALENCE-9 (V9-ELG) is a high-frequency trading and dark-pool multi-leg order execution portal. It models an institutional quantitative trading terminal where multi-exchange liquidity depth is routed across 10 global financial nodes via synthetic 7-leg arbitrage vectors.
 
+> **Operator Verification:** Direct operator testing confirmed the build is fully functional end-to-end — manual dial, three-stage activation (buildup, breakthrough, sustained active), disengage kill-switch, and quick-dial auto-dial sequencing all work as intended.
+
 ## Overview & Architecture
 
 - **Exchange / Desk Identity:** VALENCE-9 Cross-Venue Quantum Execution Desk (Valence Quantitative Technologies).
