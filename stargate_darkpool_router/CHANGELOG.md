@@ -1,0 +1,23 @@
+# Changelog
+
+All notable changes to the VALENCE-9 Cross-Venue Dark Route Console (`stargate_darkpool_router`) will be documented in this file.
+
+## [1.0.0] - 2026-08-22
+
+**Built by:** Gemini 3.7 Flash (High reasoning)
+
+### Added
+- **Asymmetric Trading Pit Split-Deck Architecture:** Non-symmetric 63/37 layout deliberately breaking the five-zone top/center/left/right/bottom frame rut.
+- **Orbital Order-Book Liquidity Ring:** 10 radial exchange nodes (`LSE-DARK`, `NY4-ULTRA`, `TY3-MWAVE`, `SG1-LASER`, `HK1-OPTIC`, `FR2-DIRECT`, `CME-AURORA`, `CHI-BATS`, `ZUR-QNTM`, `TOK-SUBSEA`) with real-time bid/ask depth walls converging toward an execution core.
+- **L-STOR Locking Mechanism:** Discrete Liquidity-Slicing & Sub-Tick Order Routing locking 7 synthetic multi-leg asset vectors with instant fill flashes and sub-tick spread compression.
+- **Three-Stage Staged Activation Sequence:**
+  - *Buildup Stage (1.8s)*: Volatility surge, 10x volume spike, high-frequency depth wall oscillation, rising acoustic sweep.
+  - *Breakthrough Stage (Instant Flash)*: Matched execution threshold crossing, spread snaps to 0.0000 Δ, central quantum aperture activation, polyphonic execution bell chime.
+  - *Sustained Active Stage*: High-throughput running P&L ticker, multi-node particle vortex circulation, live trade execution stream.
+- **Negative Auto-Fire Safeguard:** Explicit verification ensuring 7th lock leaves system in pending/ready state without auto-firing.
+- **Two-Tier Quick-Dial Engine:** 6 preloaded strategy presets across Backtested Alpha Baskets (Tier 1) and Experimental Dark Squeeze Vectors (Tier 2) with genuine sequenced auto-dialing (~280ms/step) and interruptible disengage.
+- **Hardware Risk Interlock / Pre-Trade Circuit Breaker:** Dedicated safety toggle defaulting to RELEASED (0 / Normal route permitted), with alarm strobe and negative buzz when engaged.
+- **Emergency Kill-Switch / Flatten Control:** High-visibility hazard disengage button enabling instantaneous order flattening and system reset from any state.
+- **Web Audio Sound Engine:** 100% procedural synthesized market audio (packet chirp, metallic fill chime, execution bell, warp hum, risk buzz, disengage dump).
+- **Responsive 16:9 Viewport Engine:** Unitless JS-driven `--app-scale` transform supporting 1920x1080 and 3840x2160 (4K) without overflow.
+- **Operator Reference Manual (`?`):** Collapsible modal guide with full terminal documentation.

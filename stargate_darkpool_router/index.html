@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VALENCE-9 // Cross-Venue Dark Route Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Fullscreen Responsive Application Viewport (1920x1080 Base) -->
+  <div id="app-wrapper">
+    <div id="app-container">
+
+      <!-- Breakthrough Flash Screen Overlay -->
+      <div id="breakthrough-flash-overlay"></div>
+
+      <!-- Top Ambient Telemetry Header -->
+      <header id="top-telemetry-bar">
+        <div class="header-branding">
+          <div class="brand-glyph">
+            <svg viewBox="0 0 24 24">
+              <polygon points="12,2 22,8 22,16 12,22 2,16 2,8" fill="none" stroke="#00f3ff" stroke-width="2"/>
+              <circle cx="12" cy="12" r="3" fill="#00ff9d"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <div class="brand-title">VALENCE-9 <span class="brand-subtitle">// CROSS-VENUE DARK ROUTE CONSOLE</span></div>
+            <div class="brand-regime">PROTOCOL: APEX-OMNI EXECUTION NETWORK // REGIME: VOLATILITY_DISPERSION</div>
+          </div>
+        </div>
+
+        <div class="header-center-metrics">
+          <div class="metric-box">
+            <span class="m-label">THROUGHPUT</span>
+            <span class="m-val" id="metric-throughput">1.48M pkts/s</span>
+          </div>
+          <div class="metric-box">
+            <span class="m-label">GLOBAL JITTER</span>
+            <span class="m-val" id="metric-jitter">0.038 μs</span>
+          </div>
+          <div class="metric-box">
+            <span class="m-label">VOLATILITY GAUGE</span>
+            <span class="m-val highlight-amber" id="volatility-gauge-val">14.2%</span>
+          </div>
+          <div class="metric-box">
+            <span class="m-label">VOLUME MULTIPLIER</span>
+            <span class="m-val highlight-cyan" id="volume-multiplier-val">1.0x</span>
+          </div>
+        </div>
+
+        <div class="header-right-deck">
+          <div id="system-status-pill" class="status-pill status-idle">STATUS: STANDBY_MONITORING</div>
+          <div class="clock-deck">
+            <span id="clock-utc" class="clock-item">--:--:-- UTC</span>
+            <span id="clock-est" class="clock-item">--:--:-- EST</span>
+            <span id="clock-sgt" class="clock-item">--:--:-- SGT</span>
+          </div>
+          <button id="btn-help-modal" class="help-circle-btn" title="Operator Reference Manual">?</button>
+        </div>
+      </header>
+
+      <!-- Alarm / Banner Strobe Notification -->
+      <div id="risk-alarm-banner" class="risk-alarm-banner"></div>
+
+      <!-- Main Asymmetric Workspace Layout (63% Left / 37% Right) -->
+      <main id="workspace-layout">
+
+        <!-- LEFT HERO DECK (63% Width): Radial Order-Book Depth Ring & Execution Cockpit -->
+        <section id="left-hero-sector">
+
+          <!-- Ring Canvas Visual Instrument Area -->
+          <div id="ring-view-container">
+            <canvas id="ring-canvas" width="760" height="660"></canvas>
+          </div>
+
+          <!-- Execution Cockpit & Controls -->
+          <div id="execution-cockpit">
+
+            <!-- Active 7-Leg Route Pipeline -->
+            <div class="pipeline-header">
+              <span class="section-tag">MULTI-LEG ROUTE PIPELINE (7 INSTRUMENTS REQUIRED)</span>
+              <span class="route-engine-tag">ALGO: L-STOR DIRECT MATCH</span>
+            </div>
+            <div id="route-pipeline" class="route-pipeline-strip">
+              <!-- Rendered dynamically by locking.js -->
+            </div>
+
+            <!-- Manual Synthetic Instrument Selection Matrix -->
+            <div class="instrument-deck-wrap">
+              <div class="inst-deck-header">
+                <span class="deck-title">SYNTHETIC ASSET VECTORS (SELECT TO ROUTE)</span>
+                <span class="deck-sub">SUB-TICK SPREAD LOCK // 10 AVAILABLE NODES</span>
+              </div>
+              <div id="instrument-grid" class="instrument-matrix">
+                <!-- Rendered dynamically by locking.js -->
+              </div>
+            </div>
+
+            <!-- Primary Execution Control Bar -->
+            <div class="command-action-bar">
+              <button id="btn-activate" class="action-btn btn-activate state-idle" disabled>
+                <span class="btn-main">EXECUTE BASKET</span>
+                <span class="btn-sub">0/7 LEGS SELECTED // STANDBY</span>
+              </button>
+              <button id="btn-disengage" class="action-btn btn-disengage">
+                <span class="btn-main">KILL SWITCH // FLATTEN</span>
+                <span class="btn-sub">IMMEDIATE ORDER PURGE</span>
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- RIGHT MICROSTRUCTURE DECK (37% Width): Order Book Tape, Presets, Risk Module -->
+        <section id="right-deck-sector">
+
+          <!-- Top Panel: Level-3 Order Book Tape & Microstructure Waterfall -->
+          <div class="deck-panel panel-microstructure">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon">☵</span>
+                <span class="panel-title">LEVEL-3 ORDER BOOK TAPE</span>
+              </div>
+              <span class="panel-badge live-badge">LIVE FEED</span>
+            </div>
+            <div id="order-tape-stream" class="order-tape-container">
+              <!-- Populated continuously by app.js -->
+            </div>
+          </div>
+
+          <!-- Middle Panel: Two-Tier Strategy Preset Deck -->
+          <div class="deck-panel panel-presets">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon">◈</span>
+                <span class="panel-title">STRATEGY EXECUTION MATRIX</span>
+              </div>
+              <span class="panel-badge">6 PRELOADED ROUTES</span>
+            </div>
+
+            <div class="presets-scroll-area">
+              <!-- Tier 1: Institutional Backtested Alpha Baskets -->
+              <div class="tier-section">
+                <div class="tier-heading">TIER 1: INSTITUTIONAL BACKTESTED ALPHA</div>
+                <div id="presets-tier1" class="preset-cards-grid">
+                  <!-- Rendered dynamically by presets.js -->
+                </div>
+              </div>
+
+              <!-- Tier 2: Experimental High-Risk Squeeze Vectors -->
+              <div class="tier-section">
+                <div class="tier-heading tier-heading-risk">TIER 2: HIGH-RISK DARK SQUEEZE VECTORS</div>
+                <div id="presets-tier2" class="preset-cards-grid">
+                  <!-- Rendered dynamically by presets.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Panel: Risk Limit Interlock & Running P&L Telemetry -->
+          <div class="deck-panel panel-risk" id="risk-panel">
+            <div class="panel-header">
+              <div class="panel-title-wrap">
+                <span class="panel-icon">⚑</span>
+                <span class="panel-title">HARDWARE PRE-TRADE RISK INTERLOCK</span>
+              </div>
+              <div id="risk-led" class="risk-led led-released"></div>
+            </div>
+
+            <div class="risk-controls-body">
+              <div class="risk-switch-wrap">
+                <label class="switch-container">
+                  <input type="checkbox" id="risk-toggle">
+                  <span class="switch-slider"></span>
+                </label>
+                <div class="risk-label-wrap">
+                  <div class="risk-title">CIRCUIT BREAKER HOLD</div>
+                  <div id="risk-status-label" class="risk-status-sub">RELEASED // DIRECT ROUTE ARMED</div>
+                </div>
+              </div>
+
+              <!-- Real-Time Running P&L Box -->
+              <div class="live-pnl-box">
+                <div class="pnl-header">
+                  <span class="pnl-tag">CUMULATIVE RUNNING P&L</span>
+                  <span class="pnl-currency">USD / ZERO SPREAD</span>
+                </div>
+                <div id="live-pnl-val" class="pnl-value">+$0.00</div>
+              </div>
+            </div>
+
+            <!-- Venue Latency Sub-Microsecond Ping Matrix -->
+            <div class="venue-latency-section">
+              <div class="latency-header">GLOBAL NODE LATENCY MATRIX (SUB-MICROSECOND)</div>
+              <div id="venue-latency-grid" class="latency-grid">
+                <!-- Rendered dynamically by app.js -->
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- Corner Footers (Standing Requirement) -->
+      <footer id="bottom-corner-footer">
+        <div class="corner-left">
+          <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="starlight-link">
+            <span class="daemon-icon">⬢</span> StarlightDaemon
+          </a>
+        </div>
+        <div class="corner-right">
+          <span class="version-label">v1.0.0</span>
+        </div>
+      </footer>
+
+      <!-- Operator Reference Manual Modal (Collapsible '?') -->
+      <div id="operator-modal-overlay" class="modal-backdrop">
+        <div class="operator-modal-card">
+          <div class="modal-header">
+            <div class="modal-title">
+              <span class="modal-icon">⚙</span>
+              VALENCE-9 OPERATOR REFERENCE MANUAL // PROTOCOL MK-IV
+            </div>
+            <button id="modal-close-btn" class="modal-close">✕</button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-section">
+              <h4>1. SYSTEM OVERVIEW & ARCHITECTURE</h4>
+              <p>VALENCE-9 is a high-frequency trading and dark pool execution gateway. It routes 7-leg synthetic arbitrage vectors across 10 global financial nodes (LSE-Dark, NY4-Ultra, TY3-Microwave, SG1-Laser, HK1-Optical, FR2-Direct, CME-Aurora, CHI-BATS, ZUR-Quantum, TOK-Subsea) to execute block orders through matched liquidity convergence.</p>
+            </div>
+
+            <div class="modal-section">
+              <h4>2. L-STOR LOCKING MECHANISM</h4>
+              <p>To construct a routing basket, select 7 synthetic instrument vectors (e.g. Ω-VIX, Δ-ETH, Σ-DARK). Each selection triggers a sub-tick order routing packet, tightening the node's bid/ask spread and locking the liquidity wall with a fill confirmation flash.</p>
+            </div>
+
+            <div class="modal-section">
+              <h4>3. THREE-STAGE STAGED ACTIVATION SEQUENCE</h4>
+              <p>Completing the 7th lock places the terminal in <b>BASKET_ROUTED_READY</b>. <u>The system will NEVER auto-fire.</u> You must manually click <b>[EXECUTE BASKET]</b>.</p>
+              <ul>
+                <li><b>Stage 1 (Buildup - 1.8s):</b> Volatility surges to 98%, volume multiplier climbs to 15x, and liquidity vectors converge toward the center.</li>
+                <li><b>Stage 2 (Breakthrough - Instant):</b> Spreads collapse to 0.0000 Δ, the central execution aperture bursts open, and the execution bell sounds.</li>
+                <li><b>Stage 3 (Sustained Active):</b> Continuous live execution feed with running P&L generation, particle vortex circulation, and sub-microsecond matching.</li>
+              </ul>
+            </div>
+
+            <div class="modal-section">
+              <h4>4. HARDWARE RISK INTERLOCK & KILL-SWITCH</h4>
+              <p>The <b>Hardware Pre-Trade Risk Interlock</b> defaults to <b>RELEASED</b>. If engaged, it blocks trade routing with an audible and visual alarm strobe. The <b>KILL SWITCH // FLATTEN</b> button is always accessible to purge open routes and flatten positions instantly.</p>
+            </div>
+
+            <div class="modal-section">
+              <h4>5. STRATEGY PRESET MATRIX</h4>
+              <p>Select any of the 6 preloaded strategies across Tier 1 (Institutional Backtested Alpha) and Tier 2 (High-Risk Dark Squeeze) to initiate genuine step-by-step auto-dialing.</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <span class="manual-foot-text">VALENCE QUANTITATIVE TECHNOLOGIES // TERMINAL SECURE</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/ring.js"></script>
+  <script src="js/locking.js"></script>
+  <script src="js/risk.js"></script>
+  <script src="js/presets.js"></script>
+  <script src="js/activation.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
