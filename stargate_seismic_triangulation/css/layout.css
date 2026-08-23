@@ -1,0 +1,425 @@
+/* layout.css - Asymmetric L-Framed Deep Seismology Depth Matrix */
+
+#screen-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, #081120 0%, #03060b 85%);
+  position: relative;
+}
+
+#app-container {
+  width: 1920px;
+  height: 1080px;
+  min-width: 1920px;
+  min-height: 1080px;
+  max-width: 1920px;
+  max-height: 1080px;
+  position: absolute;
+  transform-origin: center center;
+  transform: scale(var(--viewport-scale, 1));
+  display: flex;
+  flex-direction: column;
+  background: #060c18;
+  border: 1px solid var(--border-dim);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 100px rgba(0, 10, 25, 0.6);
+  overflow: hidden;
+}
+
+/* CRT Scanline & Subtle Ambient Grid Overlay */
+.crt-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+  background: linear-gradient(
+    rgba(18, 30, 48, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  ), radial-gradient(circle at 50% 50%, transparent 65%, rgba(0, 0, 0, 0.4) 100%);
+  background-size: 100% 4px, 100% 100%;
+  opacity: 0.75;
+}
+
+/* Header Strip */
+#header-strip {
+  height: var(--header-height);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: linear-gradient(90deg, #091322 0%, #0f1f38 40%, #091424 100%);
+  border-bottom: 1px solid var(--border-medium);
+  z-index: 20;
+  position: relative;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.institute-logo-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--cyan-primary);
+  background: rgba(0, 229, 255, 0.1);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--glow-cyan-sm);
+  color: var(--cyan-primary);
+}
+
+.institute-logo-badge svg {
+  width: 20px;
+  height: 20px;
+}
+
+.institute-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.institute-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-highlight);
+  text-transform: uppercase;
+}
+
+.institute-subtitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  color: var(--text-secondary);
+}
+
+.header-telemetry-cluster {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.telemetry-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.telemetry-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.telemetry-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cyan-primary);
+}
+
+.header-status-badge {
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--green-sync);
+  background: rgba(0, 230, 118, 0.12);
+  color: var(--green-sync);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green-sync);
+  box-shadow: 0 0 6px var(--green-sync);
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+#operator-help-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-bright);
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--cyan-primary);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+#operator-help-btn:hover {
+  background: rgba(0, 229, 255, 0.25);
+  box-shadow: var(--glow-cyan-sm);
+  transform: scale(1.08);
+}
+
+/* Main Workbench Layout (Asymmetric L-Frame) */
+#main-workbench {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1160px 720px;
+  gap: 16px;
+  padding: 16px 20px 36px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Left Area: Dominant Lithospheric Triangulation Map + Waterfall Seismograms */
+#left-viewport-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  height: 100%;
+}
+
+/* Ring & Triangulation Canvas Frame */
+.seismo-canvas-frame {
+  flex: 1;
+  background: radial-gradient(circle at 45% 48%, #0d1a2f 0%, #081120 70%, #050912 100%);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.6);
+}
+
+#seismic-triangulation-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Canvas HUD Overlays */
+.canvas-hud-top-left {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  pointer-events: none;
+}
+
+.hud-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--cyan-primary);
+  background: rgba(0, 229, 255, 0.1);
+  padding: 2px 8px;
+  border-left: 2px solid var(--cyan-primary);
+  letter-spacing: 1px;
+}
+
+.canvas-hud-bottom-right {
+  position: absolute;
+  bottom: 14px;
+  right: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* Waterfall Seismogram Frame (Overlapping Lower Quadrant) */
+.waterfall-frame {
+  height: 250px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px;
+  backdrop-filter: blur(8px);
+}
+
+.waterfall-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--border-dim);
+  padding-bottom: 4px;
+}
+
+.waterfall-title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--cyan-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.waterfall-metrics {
+  display: flex;
+  gap: 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+#waterfall-canvas {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Right Area: Tactical Operations, Rupture Control, and Preset Archive */
+#right-control-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+}
+
+/* Control Cluster 1: Seismo-Station Array Matrix */
+.station-matrix-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  backdrop-filter: blur(8px);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-dim);
+  padding-bottom: 6px;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--text-highlight);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-subtext {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.station-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+/* Control Cluster 2: Fault Link Engagement & Interlock */
+.rupture-control-card {
+  background: linear-gradient(180deg, rgba(14, 26, 46, 0.95) 0%, rgba(8, 16, 30, 0.95) 100%);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rupture-card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--cyan-primary), var(--orange-rupture), var(--cyan-primary));
+  opacity: 0.5;
+}
+
+/* Telemetry & Quick-Dial Accordion Card */
+.telemetry-presets-card {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+/* Corner Footer Elements */
+#corner-footer-left {
+  position: absolute;
+  bottom: 8px;
+  left: 24px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  z-index: 30;
+}
+
+#corner-footer-left a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+#corner-footer-left a:hover {
+  color: var(--cyan-primary);
+  text-decoration: underline;
+}
+
+#corner-footer-right {
+  position: absolute;
+  bottom: 8px;
+  right: 24px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  z-index: 30;
+}

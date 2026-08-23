@@ -1,0 +1,726 @@
+/* components.css - Tactical Controls, Visual Hierarchy & Geophysics Telemetry */
+
+/* ============================================================
+   1. CONTROL CLUSTER 1: Seismo-Station Matrix Node Tiles
+   ============================================================ */
+.station-tile {
+  background: rgba(14, 24, 40, 0.7);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.station-tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--text-dim);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.station-tile:hover {
+  background: rgba(22, 38, 62, 0.9);
+  border-color: var(--cyan-dim);
+  transform: translateY(-1px);
+}
+
+.station-tile:hover::before {
+  background: var(--cyan-primary);
+  box-shadow: 0 0 6px var(--cyan-primary);
+}
+
+.station-tile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.station-id {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.station-status-pill {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 2px;
+  background: rgba(40, 65, 95, 0.4);
+  color: var(--text-muted);
+  border: 1px solid rgba(50, 80, 120, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+}
+
+.station-tile-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.station-name {
+  color: var(--text-secondary);
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}
+
+.station-rms {
+  color: var(--text-muted);
+}
+
+/* Locked Station State */
+.station-tile.locked {
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.12) 0%, rgba(14, 28, 50, 0.85) 100%);
+  border-color: var(--cyan-primary);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.25), inset 0 0 8px rgba(0, 229, 255, 0.15);
+}
+
+.station-tile.locked::before {
+  background: var(--cyan-primary);
+  box-shadow: 0 0 8px var(--cyan-primary);
+}
+
+.station-tile.locked .station-id {
+  color: var(--cyan-primary);
+  text-shadow: 0 0 6px var(--cyan-glow);
+}
+
+.station-tile.locked .station-status-pill {
+  background: rgba(0, 229, 255, 0.2);
+  color: var(--cyan-primary);
+  border-color: var(--cyan-primary);
+  box-shadow: 0 0 5px rgba(0, 229, 255, 0.4);
+}
+
+.station-tile.locked .station-name {
+  color: var(--text-highlight);
+}
+
+.station-tile.locked .station-rms {
+  color: var(--teal-accent);
+}
+
+/* Auto-Dial Highlighting */
+.station-tile.syncing {
+  background: rgba(0, 255, 179, 0.18);
+  border-color: var(--teal-accent);
+  box-shadow: 0 0 12px rgba(0, 255, 179, 0.5);
+  animation: pulse-sync 0.3s infinite alternate;
+}
+
+@keyframes pulse-sync {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.02); }
+}
+
+
+/* ============================================================
+   2. CONTROL CLUSTER 2: Fault Link Engagement & Interlock Strip
+   ============================================================ */
+.interlock-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 18, 30, 0.75);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-dim);
+}
+
+.interlock-label-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.interlock-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.interlock-desc {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+/* Interlock Switch Toggle */
+.interlock-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.interlock-status-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 2px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.interlock-status-badge.released {
+  background: rgba(0, 230, 118, 0.15);
+  color: var(--green-sync);
+  border: 1px solid var(--green-sync);
+}
+
+.interlock-status-badge.engaged {
+  background: rgba(255, 23, 68, 0.2);
+  color: var(--red-critical);
+  border: 1px solid var(--red-critical);
+  box-shadow: 0 0 8px rgba(255, 23, 68, 0.4);
+}
+
+.toggle-switch-btn {
+  width: 48px;
+  height: 24px;
+  background: #111d2e;
+  border: 1px solid var(--border-medium);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-slider {
+  width: 18px;
+  height: 18px;
+  background: var(--green-sync);
+  box-shadow: 0 0 6px var(--green-sync);
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toggle-switch-btn.engaged {
+  background: #2a0f16;
+  border-color: var(--red-critical);
+}
+
+.toggle-switch-btn.engaged .toggle-slider {
+  left: 25px;
+  background: var(--red-critical);
+  box-shadow: 0 0 8px var(--red-critical);
+}
+
+/* Primary Actuator Controls Row */
+.actuator-row {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 12px;
+}
+
+/* Primary Activation Button */
+#establish-link-btn {
+  height: 52px;
+  background: linear-gradient(180deg, #102138 0%, #0a1525 100%);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+#establish-link-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: 0.5s;
+}
+
+/* Armed State (Ready for activation) */
+#establish-link-btn.armed {
+  background: linear-gradient(180deg, rgba(255, 109, 0, 0.35) 0%, rgba(200, 60, 0, 0.2) 100%);
+  border: 1px solid var(--orange-rupture);
+  color: var(--text-highlight);
+  cursor: pointer;
+  box-shadow: var(--glow-orange-lg);
+  animation: pulse-armed 1.5s infinite ease-in-out;
+}
+
+#establish-link-btn.armed:hover {
+  background: linear-gradient(180deg, rgba(255, 109, 0, 0.55) 0%, rgba(200, 60, 0, 0.35) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 0 35px rgba(255, 109, 0, 0.9);
+}
+
+@keyframes pulse-armed {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 109, 0, 0.4), inset 0 0 10px rgba(255, 109, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 109, 0, 0.8), inset 0 0 20px rgba(255, 109, 0, 0.4);
+  }
+}
+
+/* Buildup State */
+#establish-link-btn.buildup {
+  background: linear-gradient(180deg, rgba(255, 23, 68, 0.6) 0%, rgba(180, 10, 40, 0.5) 100%);
+  border-color: var(--red-critical);
+  color: #fff;
+  cursor: wait;
+  box-shadow: 0 0 40px rgba(255, 23, 68, 0.9);
+  animation: jitter-button 0.1s infinite;
+}
+
+@keyframes jitter-button {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-1px, 1px); }
+  50% { transform: translate(1px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+  100% { transform: translate(1px, 1px); }
+}
+
+/* Breakthrough State */
+#establish-link-btn.breakthrough {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #050912;
+  box-shadow: 0 0 60px #ffffff, 0 0 100px var(--cyan-primary);
+  cursor: wait;
+}
+
+/* Sustained Active State */
+#establish-link-btn.active {
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.35) 0%, rgba(0, 140, 180, 0.2) 100%);
+  border: 1px solid var(--cyan-primary);
+  color: var(--cyan-primary);
+  box-shadow: var(--glow-cyan-lg);
+  cursor: default;
+}
+
+/* Disengage Button */
+#disengage-network-btn {
+  height: 52px;
+  background: rgba(30, 20, 25, 0.6);
+  border: 1px solid rgba(255, 23, 68, 0.4);
+  border-radius: var(--radius-sm);
+  color: #ff8a9a;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+#disengage-network-btn:hover {
+  background: rgba(255, 23, 68, 0.25);
+  border-color: var(--red-critical);
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 23, 68, 0.5);
+}
+
+
+/* ============================================================
+   3. TELEMETRY & QUICK-DIAL ARCHIVE ACCORDION
+   ============================================================ */
+.telemetry-split-row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 12px;
+  height: 110px;
+}
+
+/* Moment-Tensor Beachball Box */
+.focal-mechanism-box {
+  background: rgba(8, 14, 24, 0.75);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.box-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.beachball-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#beachball-canvas {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid var(--border-bright);
+  background: #091220;
+}
+
+.focal-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.focal-val {
+  color: var(--cyan-primary);
+  font-weight: 600;
+}
+
+/* Epicenter Hypocenter Matrix Box */
+.hypocenter-metrics-box {
+  background: rgba(8, 14, 24, 0.75);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  align-content: center;
+}
+
+.telemetry-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.cell-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cell-val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cell-val.alert {
+  color: var(--orange-rupture);
+  text-shadow: 0 0 6px var(--orange-glow);
+}
+
+.cell-val.highlight {
+  color: var(--cyan-primary);
+  text-shadow: 0 0 6px var(--cyan-glow);
+}
+
+/* Quick-Dial Presets Container */
+.presets-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.preset-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border-dim);
+  padding-bottom: 4px;
+}
+
+.preset-tab-btn {
+  background: rgba(14, 24, 40, 0.5);
+  border: 1px solid var(--border-dim);
+  border-radius: 2px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 3px 8px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.preset-tab-btn.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--cyan-primary);
+  color: var(--cyan-primary);
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
+}
+
+.preset-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+}
+
+.preset-card {
+  background: rgba(12, 20, 34, 0.6);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.preset-card:hover {
+  background: rgba(20, 34, 56, 0.85);
+  border-color: var(--cyan-primary);
+  transform: translateX(2px);
+}
+
+.preset-card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.preset-name {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-highlight);
+}
+
+.preset-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  display: flex;
+  gap: 10px;
+}
+
+.preset-meta span {
+  color: var(--text-secondary);
+}
+
+.preset-card-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.preset-mag-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background: rgba(255, 109, 0, 0.15);
+  color: var(--orange-rupture);
+  border: 1px solid rgba(255, 109, 0, 0.4);
+}
+
+.autodial-arrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--cyan-primary);
+  font-weight: bold;
+}
+
+
+/* ============================================================
+   4. INTERLOCK WARNING BANNER & NOTIFICATION TOAST
+   ============================================================ */
+#interlock-toast {
+  position: absolute;
+  top: 68px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: rgba(255, 23, 68, 0.95);
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 25px rgba(255, 23, 68, 0.8);
+  border-radius: var(--radius-sm);
+  padding: 10px 24px;
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#interlock-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+/* ============================================================
+   5. OPERATOR REFERENCE GUIDE MODAL OVERLAY
+   ============================================================ */
+#operator-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(3, 7, 14, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#operator-modal-backdrop.open {
+  display: flex;
+}
+
+.operator-modal-box {
+  width: 820px;
+  max-height: 85vh;
+  background: #0a1322;
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: linear-gradient(90deg, #0e1e35 0%, #0a1322 100%);
+  border-bottom: 1px solid var(--border-medium);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--cyan-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+#modal-close-btn:hover {
+  color: var(--cyan-primary);
+  background: rgba(0, 229, 255, 0.1);
+}
+
+.modal-content {
+  padding: 20px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.guide-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(14, 24, 40, 0.5);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--cyan-primary);
+}
+
+.guide-heading {
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--cyan-primary);
+  letter-spacing: 1px;
+}
+
+.guide-section p {
+  color: var(--text-secondary);
+}
+
+.guide-section ul {
+  padding-left: 18px;
+  color: var(--text-secondary);
+}
+
+.guide-section li {
+  margin-bottom: 4px;
+}
+
+.guide-code {
+  font-family: var(--font-mono);
+  color: var(--teal-accent);
+  background: rgba(0, 255, 179, 0.1);
+  padding: 1px 4px;
+  border-radius: 2px;
+}

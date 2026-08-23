@@ -1,0 +1,22 @@
+{
+  "name": "stargate-seismic-triangulation",
+  "version": "1.0.0",
+  "description": "Cascadia Lithospheric Seismo-Acoustic Array (CLSA-9) - Novelty Seismic Triangulation Portal Console",
+  "main": "scripts/server.js",
+  "scripts": {
+    "start": "node scripts/server.js",
+    "test:verify": "node scripts/verify.js"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  },
+  "keywords": [
+    "seismology",
+    "portal",
+    "triangulation",
+    "geophysics",
+    "stargate"
+  ],
+  "author": "StarlightDaemon",
+  "license": "MIT"
+}

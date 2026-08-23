@@ -1,0 +1,98 @@
+/* theme.css - Cascadia Lithospheric Seismo-Acoustic Array (CLSA-9) Design Tokens */
+
+:root {
+  /* Color Palette - Lithospheric Digital Geophysics */
+  --bg-primary: #050911;
+  --bg-secondary: #0a111e;
+  --bg-tertiary: #101c30;
+  --bg-panel: rgba(10, 18, 32, 0.85);
+  --bg-panel-hover: rgba(16, 28, 48, 0.95);
+  --bg-glass: rgba(8, 15, 26, 0.72);
+
+  /* Borders & Grids */
+  --border-dim: rgba(30, 75, 120, 0.25);
+  --border-medium: rgba(45, 110, 170, 0.45);
+  --border-bright: rgba(0, 229, 255, 0.65);
+  --border-active: #00e5ff;
+
+  /* Data & Phosphor Accents */
+  --cyan-primary: #00e5ff;
+  --cyan-glow: rgba(0, 229, 255, 0.35);
+  --cyan-dim: #008ba3;
+  --teal-accent: #00ffb3;
+  --teal-glow: rgba(0, 255, 179, 0.3);
+
+  /* Alert & Rupture Accents */
+  --amber-warning: #ffb300;
+  --amber-glow: rgba(255, 179, 0, 0.4);
+  --orange-rupture: #ff6d00;
+  --orange-glow: rgba(255, 109, 0, 0.5);
+  --red-critical: #ff1744;
+  --red-glow: rgba(255, 23, 68, 0.6);
+
+  /* Status Colors */
+  --green-sync: #00e676;
+  --green-glow: rgba(0, 230, 118, 0.35);
+  --purple-shear: #b388ff;
+  --purple-glow: rgba(179, 136, 255, 0.4);
+
+  /* Typography */
+  --text-primary: #e0f2fe;
+  --text-secondary: #8ab4f8;
+  --text-muted: #476582;
+  --text-dim: #2a415a;
+  --text-highlight: #ffffff;
+
+  --font-mono: 'JetBrains Mono', 'Share Tech Mono', 'Consolas', 'Courier New', monospace;
+  --font-display: 'Orbitron', 'Inter', -apple-system, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Sizing & Geometry */
+  --header-height: 52px;
+  --viewport-scale: 1;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  /* Shadows & Scanlines */
+  --glow-cyan-sm: 0 0 8px rgba(0, 229, 255, 0.4);
+  --glow-cyan-lg: 0 0 24px rgba(0, 229, 255, 0.65), 0 0 48px rgba(0, 229, 255, 0.25);
+  --glow-orange-lg: 0 0 30px rgba(255, 109, 0, 0.75), 0 0 60px rgba(255, 61, 0, 0.4);
+  --glow-green-sm: 0 0 8px rgba(0, 230, 118, 0.5);
+}
+
+/* Global Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #03060b;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Base Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cyan-primary);
+}

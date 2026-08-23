@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLSA-9 // Cascadia Lithospheric Seismo-Acoustic Array</title>
+  <meta name="description" content="Cascadia Lithospheric Seismo-Acoustic Array (CLSA-9) - Teleseismic Station Triangulation & Crustal Rupture Aperture Console">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Orbitron:wght@600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <div id="screen-wrapper">
+    <div id="app-container">
+      <div class="crt-overlay"></div>
+
+      <!-- Header Strip -->
+      <header id="header-strip">
+        <div class="header-brand">
+          <div class="institute-logo-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 3v18M3 12h18M7 7l10 10M17 7L7 17"/>
+            </svg>
+          </div>
+          <div class="institute-title-group">
+            <h1 class="institute-title">CLSA-9 // Cascadia Lithospheric Array</h1>
+            <span class="institute-subtitle">Pacific Northwest Sub-Crustal Survey &amp; Teleseismic Triangulation Station</span>
+          </div>
+        </div>
+
+        <div class="header-telemetry-cluster">
+          <div class="telemetry-item">
+            <span class="telemetry-label">UTC Observation Time</span>
+            <span class="telemetry-value" id="telemetry-clock">2026-08-22 00:00:00 UTC</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">Array Coherence</span>
+            <span class="telemetry-value" id="val-coherence">0%</span>
+          </div>
+          <div class="header-status-badge" id="header-system-status-container">
+            <div class="status-dot"></div>
+            <span id="header-system-status">MONITORING ARRAY NOMINAL</span>
+          </div>
+        </div>
+
+        <div class="header-tools">
+          <button id="operator-help-btn" title="Operator Reference Guide" aria-label="Help">?</button>
+        </div>
+      </header>
+
+      <!-- Main Workbench (Asymmetric L-Framed Layout) -->
+      <main id="main-workbench">
+
+        <!-- Left Viewport Pane (62% Dominant Lithospheric Triangulation Map + Waterfall) -->
+        <section id="left-viewport-pane">
+          <div class="seismo-canvas-frame">
+            <div class="canvas-hud-top-left">
+              <div class="hud-tag">TELESEISMIC TRIANGULATION MATRIX // 10-NODE ARRAY</div>
+            </div>
+            <div class="canvas-hud-bottom-right">
+              <div>POLAR GRID: AZIMUTHAL EQUIDISTANT</div>
+              <div>RANGE: 0 - 750 KM CRUSTAL RADIUS</div>
+            </div>
+            <canvas id="seismic-triangulation-canvas"></canvas>
+          </div>
+
+          <!-- Multi-Channel Seismogram Waterfall (Lower Quadrant) -->
+          <div class="waterfall-frame">
+            <div class="waterfall-header">
+              <div class="waterfall-title">
+                <span>≋</span> MULTI-CHANNEL TELESEISMIC WAVEFORM WATERFALL
+              </div>
+              <div class="waterfall-metrics">
+                <span>TIME BASE: 250ms/DIV</span>
+                <span>CHANNELS: 10 ACTIVE</span>
+                <span>SAMPLING: 100 Hz</span>
+              </div>
+            </div>
+            <canvas id="waterfall-canvas"></canvas>
+          </div>
+        </section>
+
+        <!-- Right Control Pane (38% Tactical Operations, Rupture Actuator & Presets) -->
+        <section id="right-control-pane">
+
+          <!-- Control Cluster 1: Seismo-Station Array Matrix -->
+          <div class="station-matrix-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span>◉</span> SEISMIC STATION NETWORK (CLUSTER 1)
+              </div>
+              <div class="card-subtext">SELECT 7 NODES TO RESOLVE HYPOCENTER</div>
+            </div>
+            <div class="station-grid" id="station-matrix-grid">
+              <!-- Dynamically populated 10 station tiles -->
+            </div>
+          </div>
+
+          <!-- Control Cluster 2: Fault Link Engagement & Interlock Strip -->
+          <div class="rupture-control-card">
+            <div class="rupture-card-glow"></div>
+            
+            <div class="interlock-control-row">
+              <div class="interlock-label-group">
+                <span class="interlock-title">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  CRUSTAL SHEAR INTERLOCK
+                </span>
+                <span class="interlock-desc">Aftershock-risk lockout hold</span>
+              </div>
+              <div class="interlock-toggle-wrapper">
+                <span class="interlock-status-badge released" id="interlock-status-badge">RELEASED [ARMED]</span>
+                <div class="toggle-switch-btn" id="interlock-toggle-btn" role="switch" aria-checked="false">
+                  <div class="toggle-slider"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="actuator-row">
+              <button id="establish-link-btn">
+                <span>🔒</span> LOCK 7 STATIONS TO ARM
+              </button>
+              <button id="disengage-network-btn">
+                <span>✕</span> UNCOUPLE NETWORK
+              </button>
+            </div>
+          </div>
+
+          <!-- Telemetry & Quick-Dial Preset Accordion -->
+          <div class="telemetry-presets-card">
+            <!-- Telemetry Split Row -->
+            <div class="telemetry-split-row">
+              <div class="focal-mechanism-box">
+                <span class="box-label">FOCAL MECHANISM (MOMENT TENSOR)</span>
+                <div class="beachball-display">
+                  <canvas id="beachball-canvas" width="54" height="54"></canvas>
+                  <div class="focal-metrics">
+                    <div>STRIKE: <span class="focal-val" id="val-strike">350°</span></div>
+                    <div>DIP: <span class="focal-val" id="val-dip">45°</span></div>
+                    <div>RAKE: <span class="focal-val" id="val-rake">90°</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hypocenter-metrics-box">
+                <div class="telemetry-cell">
+                  <span class="cell-label">EPICENTER LAT</span>
+                  <span class="cell-val highlight" id="val-lat">44.500°N</span>
+                </div>
+                <div class="telemetry-cell">
+                  <span class="cell-label">EPICENTER LNG</span>
+                  <span class="cell-val highlight" id="val-lng">-124.800°W</span>
+                </div>
+                <div class="telemetry-cell">
+                  <span class="cell-label">HYPOCENTER DEPTH</span>
+                  <span class="cell-val" id="val-depth">0.0 km</span>
+                </div>
+                <div class="telemetry-cell">
+                  <span class="cell-label">MOMENT MAGNITUDE</span>
+                  <span class="cell-val" id="val-magnitude">Mw 0.0 (IDLE)</span>
+                </div>
+                <div class="telemetry-cell">
+                  <span class="cell-label">TIME RESIDUAL RMS</span>
+                  <span class="cell-val" id="val-rms">1.84 ms</span>
+                </div>
+                <div class="telemetry-cell">
+                  <span class="cell-label">ARRAY GEOMETRY</span>
+                  <span class="cell-val" id="val-geometry">10-AZIMUTH</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick-Dial Presets Container -->
+            <div class="presets-section">
+              <div class="preset-tabs">
+                <button class="preset-tab-btn active" id="preset-tab-1">TIER 1: MONITORED SUBDUCTION FAULTS</button>
+                <button class="preset-tab-btn" id="preset-tab-2">TIER 2: DEEP MANTLE ACTIVE ZONES</button>
+              </div>
+              <div class="preset-list" id="preset-list-tier1">
+                <!-- Tier 1 Presets injected via JS -->
+              </div>
+              <div class="preset-list" id="preset-list-tier2" style="display: none;">
+                <!-- Tier 2 Presets injected via JS -->
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </main>
+
+      <!-- Interlock Toast Alert -->
+      <div id="interlock-toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>[INTERLOCK ACTIVE: CRUSTAL SHEAR HOLD BLOCKS RUPTURE] — RELEASE INTERLOCK TO PROCEED</span>
+      </div>
+
+      <!-- Corner Displays -->
+      <footer id="corner-footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+      </footer>
+      <footer id="corner-footer-right">
+        <span>v1.0.0</span>
+      </footer>
+
+      <!-- Operator Reference Modal Overlay -->
+      <div id="operator-modal-backdrop" role="dialog" aria-modal="true">
+        <div class="operator-modal-box">
+          <div class="modal-header">
+            <div class="modal-title">
+              <span>🕮</span> OPERATOR REFERENCE MANUAL // CLSA-9 SEISMIC APERTURE SYSTEM
+            </div>
+            <button id="modal-close-btn" aria-label="Close modal">✕</button>
+          </div>
+          <div class="modal-content">
+            <div class="guide-section">
+              <div class="guide-heading">1. ARRAY OVERVIEW &amp; PHILOSOPHY</div>
+              <p>The Cascadia Lithospheric Seismo-Acoustic Array (CLSA-9) monitors sub-crustal stress gradients and drives aperture fault links using 10 radial borehole and ocean-bottom broadband stations. Real-time wave-propagation telemetry converges P-wave (fast, cyan) and S-wave (shear, amber) wavefront circles to resolve focal hypocenters.</p>
+            </div>
+
+            <div class="guide-section">
+              <div class="guide-heading">2. PHASE-COHERENCE LOCKING PROTOCOL</div>
+              <p>To triangulate a fault zone, select <span class="guide-code">7 seismic stations</span> manually from the network matrix or trigger a preloaded fault event from the archive. Each locked station initiates cross-correlation phase sync, drawing a geodetic ray vector to the calculated epicenter and shrinking the uncertainty ellipse.</p>
+            </div>
+
+            <div class="guide-section">
+              <div class="guide-heading">3. THREE-STAGE APERTURE ACTIVATION</div>
+              <ul>
+                <li><strong>Negative Auto-Fire Guarantee:</strong> Locking the 7th station arms the system into <span class="guide-code">PENDING</span> state. Activation must be triggered manually via <span class="guide-code">ESTABLISH FAULT LINK</span>.</li>
+                <li><strong>Stage 1 (Buildup - 1.8s):</strong> Tremor rumble escalates, waveforms heighten, magnitude climbs.</li>
+                <li><strong>Stage 2 (Breakthrough - 0.6s):</strong> Hypocenter ruptures open with an explosive shockwave ring.</li>
+                <li><strong>Stage 3 (Sustained Active):</strong> Continuous lithospheric plasma vortex and steady harmonic hum.</li>
+              </ul>
+            </div>
+
+            <div class="guide-section">
+              <div class="guide-heading">4. SAFETY INTERLOCK &amp; UNCOUPLING</div>
+              <p>The <strong>Crustal Shear Interlock</strong> blocks rupture activation during unstable aftershock conditions. It defaults to <span class="guide-code">RELEASED [ARMED]</span>. The <span class="guide-code">UNCOUPLE NETWORK</span> control immediately aborts all locks and discharges the aperture.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/seismic-engine.js"></script>
+  <script src="js/controls.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
