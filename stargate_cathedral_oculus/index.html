@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Grand Vitrarium of Lumisfer | Gothic Cathedral Oculus Portal</title>
+  <meta name="description" content="An interactive leaded stained-glass Gothic cathedral sanctuary console for aligning celestial meridians through the Great Rose Window Oculus.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cinzel+Decorative:wght@700&family=MedievalSharp&family=UnifrakturMaguntia&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="cathedral-scaler" class="cathedral-scaler">
+    <div id="cathedral-app" class="cathedral-app">
+      
+      <!-- Architectural Vault Background Layer & Candle Ambient -->
+      <div class="cathedral-vault-backdrop">
+        <div class="candle-cluster candle-left">
+          <div class="candle-flame flame-1"></div>
+          <div class="candle-flame flame-2"></div>
+          <div class="candle-flame flame-3"></div>
+        </div>
+        <div class="candle-cluster candle-right">
+          <div class="candle-flame flame-4"></div>
+          <div class="candle-flame flame-5"></div>
+          <div class="candle-flame flame-6"></div>
+        </div>
+        <div class="clerestory-sunbeams" id="clerestory-sunbeams"></div>
+      </div>
+
+      <!-- Top Clerestory Tympanum & Header -->
+      <header class="cathedral-tympanum">
+        <div class="header-flank header-left">
+          <button id="btn-audio-toggle" class="gothic-btn audio-btn" title="Toggle Cathedral Acoustic Synthesizer" aria-label="Toggle Cathedral Sound">
+            <span class="btn-lead-border"></span>
+            <span class="icon-sound" id="audio-icon">🔔</span>
+            <span class="btn-text" id="audio-status-text">Vox Sancta</span>
+          </button>
+        </div>
+
+        <div class="header-center">
+          <div class="sanctuary-crest">
+            <span class="fleur-de-lis">⚜</span>
+            <span class="order-motto">PER ARTEM VITRI AD ASTRA MERIDIANA</span>
+            <span class="fleur-de-lis">⚜</span>
+          </div>
+          <h1 class="cathedral-title">The Grand Vitrarium of Lumisfer</h1>
+          <p class="cathedral-subtitle">Chantry of the Solstitial Oculus &bull; Custodians of the Seven Cardinal Lumens</p>
+        </div>
+
+        <div class="header-flank header-right">
+          <button id="btn-operator-help" class="gothic-btn help-btn" title="Examine the Liturgical Codex & Symbol Concordance" aria-label="Open Operator Reference Manual">
+            <span class="btn-lead-border"></span>
+            <span class="icon-help">?</span>
+            <span class="btn-text">Codex</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Facade Elevation: Tripartite Gothic Structure -->
+      <main class="cathedral-facade">
+        
+        <!-- Left Wing: The Artificer's Palette (Cluster 1 - Radial Tracery Dial) -->
+        <section class="facade-wing wing-left" aria-label="Artificer's Stained Glass Palette">
+          <div class="lancet-frame">
+            <div class="lancet-arch-top">
+              <div class="trefoil-cusp"></div>
+              <h2 class="wing-title">Artificer's Palette</h2>
+              <span class="wing-subtitle">Tabula Vitrarii &bull; 12 Radial Lights</span>
+            </div>
+
+            <div class="palette-scroll-container">
+              <div class="palette-grid" id="palette-grid" role="group" aria-label="Stained Glass Glyph Selectors">
+                <!-- 12 Glyph buttons dynamically populated by app.js -->
+              </div>
+            </div>
+
+            <div class="lancet-plinth">
+              <div class="plinth-status">
+                <span class="plinth-label">Active Light Lock:</span>
+                <span class="plinth-value" id="active-glyph-preview">None Selected</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Center Nave: The Great Rose Window Oculus & Liturgical Lectern -->
+        <section class="facade-nave" aria-label="The Great Rose Window Oculus">
+          
+          <!-- Crown: The Great Rose Window Oculus Frame -->
+          <div class="oculus-monument" id="oculus-monument">
+            <div class="tracery-spandrels">
+              <div class="spandrel spandrel-tl"></div>
+              <div class="spandrel spandrel-tr"></div>
+              <div class="spandrel spandrel-bl"></div>
+              <div class="spandrel spandrel-br"></div>
+            </div>
+
+            <!-- The Rose Window SVG -->
+            <div class="rose-window-wrapper">
+              <svg id="rose-window-svg" class="rose-window-svg" viewBox="-250 -250 500 500" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <!-- Radial Gradients for Jewel Stained Glass Backlight -->
+                  <radialGradient id="backlight-ambient" cx="0" cy="0" r="240" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#fff8d4" stop-opacity="0.9" />
+                    <stop offset="35%" stop-color="#ffd56b" stop-opacity="0.6" />
+                    <stop offset="70%" stop-color="#e09218" stop-opacity="0.3" />
+                    <stop offset="100%" stop-color="#241408" stop-opacity="0.05" />
+                  </radialGradient>
+
+                  <!-- Active Portal Vortex Gradients -->
+                  <radialGradient id="portal-vortex-grad" cx="0" cy="0" r="85" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1" />
+                    <stop offset="20%" stop-color="#FFF2A8" stop-opacity="0.95" />
+                    <stop offset="45%" stop-color="#55D8EB" stop-opacity="0.9" />
+                    <stop offset="75%" stop-color="#883AE8" stop-opacity="0.85" />
+                    <stop offset="100%" stop-color="#180C38" stop-opacity="0.7" />
+                  </radialGradient>
+
+                  <!-- Filter for Lead Came Relief and Glass Texture -->
+                  <filter id="lead-relief" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#050508" flood-opacity="0.9" />
+                  </filter>
+                  <filter id="solder-spark-glow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="4" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                <!-- 1. Outer Stone Ashlar Wall -->
+                <circle class="masonry-wall-ring" cx="0" cy="0" r="245" />
+
+                <!-- 2. Carved Stone Tracery Outer Rim with Cusped Arches -->
+                <circle class="tracery-outer-rim" cx="0" cy="0" r="236" />
+                <circle class="tracery-inner-rim" cx="0" cy="0" r="222" />
+
+                <!-- Outer Cusped Trefoil Mouldings (12 sectors) -->
+                <g id="tracery-stone-cusps" class="tracery-stone-cusps"></g>
+
+                <!-- 3. Stained Glass Backlight Plane -->
+                <circle class="glass-backlight-plane" cx="0" cy="0" r="222" fill="url(#backlight-ambient)" />
+
+                <!-- 4. The 12 Radial Stained-Glass Lights (Filled and Sealed during Dialing) -->
+                <g id="radial-lights-group" class="radial-lights-group"></g>
+
+                <!-- 5. Dark Leaded Came Structural Web (Radial Mullions & Concentric Bands) -->
+                <g id="lead-came-web" class="lead-came-web" filter="url(#lead-relief)"></g>
+
+                <!-- 6. Central Oculus Portal Aperture -->
+                <g id="central-aperture-group" class="central-aperture-group">
+                  <!-- Aperture Backing -->
+                  <circle class="aperture-base-ring" cx="0" cy="0" r="72" />
+                  
+                  <!-- Idle Sealed Rosette Glass & Lead Web -->
+                  <g id="aperture-sealed-rosette" class="aperture-sealed-rosette">
+                    <circle cx="0" cy="0" r="68" class="aperture-sealed-glass" />
+                    <path class="aperture-sealed-lead" d="M 0 -68 L 0 68 M -68 0 L 68 0 M -48 -48 L 48 48 M -48 48 L 48 -48" />
+                    <circle cx="0" cy="0" r="32" class="aperture-inner-ring" />
+                    <circle cx="0" cy="0" r="14" class="aperture-keystone-boss" />
+                  </g>
+
+                  <!-- Active Trans-Meridian Kaleidoscope Vortex (Revealed in Breakthrough/Active) -->
+                  <g id="aperture-active-vortex" class="aperture-active-vortex" style="opacity: 0;">
+                    <circle cx="0" cy="0" r="70" fill="url(#portal-vortex-grad)" />
+                    <!-- Dynamic kaleidoscope shards populated by JS -->
+                    <g id="vortex-glass-shards" class="vortex-glass-shards"></g>
+                    <circle cx="0" cy="0" r="71" class="vortex-lead-containment-ring" />
+                  </g>
+
+                  <!-- Solder Spark & Alignment Flash Layer -->
+                  <g id="solder-spark-layer" class="solder-spark-layer"></g>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Middle: The Liturgical Triforium (7-Lumen Locked Address Sequence) -->
+          <div class="liturgical-triforium">
+            <div class="triforium-header">
+              <span class="triforium-title">Ordo Lumen &bull; Sevenfold Cardinal Address</span>
+              <span class="triforium-indicator" id="address-count-indicator">0 / 7 Lumens Sealed</span>
+            </div>
+            
+            <div class="triforium-lancets" id="triforium-lancets" role="region" aria-label="Seven Locked Address Lumens">
+              <!-- 7 Address slots dynamically rendered -->
+              <div class="triforium-slot" id="slot-0" data-index="0">
+                <span class="slot-number">I</span>
+                <div class="slot-glass"></div>
+                <span class="slot-lead-joint"></span>
+                <span class="slot-name">Vacant</span>
+              </div>
+              <div class="triforium-slot" id="slot-1" data-index="1">
+                <span class="slot-number">II</span>
+                <div class="slot-glass"></div>
+                <span class="slot-lead-joint"></span>
+                <span class="slot-name">Vacant</span>
+              </div>
+              <div class="triforium-slot" id="slot-2" data-index="2">
+                <span class="slot-number">III</span>
+                <div class="slot-glass"></div>
+                <span class="slot-lead-joint"></span>
+                <span class="slot-name">Vacant</span>
+              </div>
+              <div class="triforium-slot" id="slot-3" data-index="3">
+                <span class="slot-number">IV</span>
+                <div class="slot-glass"></div>
+                <span class="slot-lead-joint"></span>
+                <span class="slot-name">Vacant</span>
+              </div>
+              <div class="triforium-slot" id="slot-4" data-index="4">
+                <span class="slot-number">V</span>
+                <div class="slot-glass"></div>
+                <span class="slot-lead-joint"></span>
+                <span class="slot-name">Vacant</span>
+              </div>
+              <div class="triforium-slot" id="slot-5" data-index="5">
+                <span class="slot-number">VI</span>
+                <div class="slot-glass"></div>
+                <span class="slot-lead-joint"></span>
+                <span class="slot-name">Vacant</span>
+              </div>
+              <div class="triforium-slot" id="slot-6" data-index="6">
+                <span class="slot-number">VII</span>
+                <div class="slot-glass"></div>
+                <span class="slot-lead-joint"></span>
+                <span class="slot-name">Vacant</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: The Liturgical Lectern (Cluster 2 - Action & Safety Controls) -->
+          <div class="liturgical-lectern" role="group" aria-label="Liturgical Lectern Controls">
+            
+            <!-- Safety Interlock: Chantry Anathema Latch -->
+            <div class="lectern-interlock-box">
+              <div class="interlock-header">
+                <span class="interlock-title">Anathema Latch</span>
+                <span class="interlock-status-badge released" id="latch-status-badge">Released (Sanctified)</span>
+              </div>
+              <button id="btn-toggle-latch" class="gothic-btn latch-toggle-btn" aria-pressed="false" title="Engage or Release the Chantry Anathema Latch">
+                <span class="latch-lead-bar" id="latch-lead-bar"></span>
+                <span class="latch-btn-label" id="latch-btn-label">Engage Anathema Latch</span>
+              </button>
+              <div class="latch-warning-text" id="latch-warning-text">
+                Oculus is sanctified for transit alignment.
+              </div>
+            </div>
+
+            <!-- Primary Action: Keystone Censer / Ignite Sanctified Rose -->
+            <div class="lectern-primary-action">
+              <button id="btn-activate-portal" class="gothic-btn ignition-btn disabled" disabled aria-label="Ignite Sanctified Rose Portal">
+                <span class="ignition-glow-underlay"></span>
+                <span class="ignition-lead-came"></span>
+                <div class="ignition-content">
+                  <span class="ignition-icon">☀️</span>
+                  <span class="ignition-title">Ignite Sanctified Rose</span>
+                  <span class="ignition-subtitle" id="ignition-subtitle">Requires 7 Sealed Lumens</span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Secondary Action: Quench Oculus / Disengage -->
+            <div class="lectern-disengage-box">
+              <button id="btn-disengage" class="gothic-btn disengage-btn" aria-label="Quench Oculus and Reset Address">
+                <span class="btn-lead-border"></span>
+                <div class="disengage-content">
+                  <span class="disengage-icon">🕯️</span>
+                  <span class="disengage-title">Quench Oculus</span>
+                  <span class="disengage-subtitle">Extinguish Alignment</span>
+                </div>
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Right Wing: Sanctuary Psalter (Quick-Dial Presets & Telemetry) -->
+        <section class="facade-wing wing-right" aria-label="Sanctuary Presets and Telemetry">
+          <div class="lancet-frame">
+            <div class="lancet-arch-top">
+              <div class="trefoil-cusp"></div>
+              <h2 class="wing-title">Sanctuary Psalter</h2>
+              <span class="wing-subtitle">Concordia Meridianorum &bull; Quick-Dial Rites</span>
+            </div>
+
+            <div class="presets-scroll-container">
+              <!-- Tier I Section -->
+              <div class="preset-tier-section">
+                <div class="tier-divider">
+                  <span class="tier-divider-line"></span>
+                  <span class="tier-title">Tier I: Inner Sanctum Sanctorum</span>
+                  <span class="tier-divider-line"></span>
+                </div>
+                <div class="preset-list" id="preset-list-tier1">
+                  <!-- Tier 1 presets populated by app.js -->
+                </div>
+              </div>
+
+              <!-- Tier II Section -->
+              <div class="preset-tier-section">
+                <div class="tier-divider">
+                  <span class="tier-divider-line"></span>
+                  <span class="tier-title">Tier II: Outer Pilgrim Voids</span>
+                  <span class="tier-divider-line"></span>
+                </div>
+                <div class="preset-list" id="preset-list-tier2">
+                  <!-- Tier 2 presets populated by app.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Telemetry Plinth -->
+            <div class="lancet-plinth telemetry-plinth">
+              <div class="telemetry-row">
+                <span class="telem-label">Meridian Flux:</span>
+                <span class="telem-val" id="telem-flux">0.00 Lumen-Harmonics</span>
+              </div>
+              <div class="telemetry-row">
+                <span class="telem-label">Sanctuary State:</span>
+                <span class="telem-val state-idle" id="telem-state">Idle (Vigil of Dawn)</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Bottom Plinth & Chronicler Inscription Bar -->
+      <footer class="cathedral-plinth">
+        <div class="plinth-left">
+          <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="starlight-link">
+            <span class="seal-icon">✦</span> StarlightDaemon
+          </a>
+        </div>
+
+        <div class="plinth-center">
+          <div class="inscription-banner">
+            <span class="inscription-lead-joint"></span>
+            <span class="inscription-text" id="inscription-text">Sanctuary console awaiting liturgical alignment. Select seven radial lights or recite a psalter preset.</span>
+            <span class="inscription-lead-joint"></span>
+          </div>
+        </div>
+
+        <div class="plinth-right">
+          <span class="version-tag" id="version-display">v1.0.0</span>
+        </div>
+      </footer>
+
+      <!-- Operator Reference Codex Overlay (Illuminated Manuscript Modal) -->
+      <div id="reference-modal" class="reference-modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-codex-title">
+        <div class="modal-backdrop" id="modal-backdrop"></div>
+        <div class="parchment-sheet">
+          <div class="parchment-border-tracery"></div>
+          <button id="btn-close-modal" class="modal-close-btn" aria-label="Close Codex">&times;</button>
+          
+          <div class="parchment-content">
+            <div class="parchment-header">
+              <div class="illuminated-initial">C</div>
+              <div class="parchment-title-block">
+                <h2 id="modal-codex-title" class="parchment-title">Codex Vitrarii: The Liturgy of the Oculus</h2>
+                <p class="parchment-subtitle">Canonical Guide to Harmonizing the Sevenfold Meridian Pathways</p>
+              </div>
+            </div>
+
+            <div class="parchment-body">
+              <section class="codex-section">
+                <h3 class="codex-heading">I. The Tradition of Leaded Glass Alignment</h3>
+                <p>
+                  Within the soaring chantry of Lumisfer, the Great Rose Window functions as an astronomical and metaphysical aperture.
+                  When an Artificer selects a celestial light, two distinct physical rites occur in sequence:
+                </p>
+                <ol class="codex-list">
+                  <li><strong>Glass Inset (Seating):</strong> The raw jewel-toned glass tile cuts and nests within its tracery division, resonating with a pure crystalline chime.</li>
+                  <li><strong>Lead Came Solder (Sealing):</strong> Structural lead came strips are drawn around the perimeter and soldered with intense heat, permanently binding the light to the meridian matrix.</li>
+                </ol>
+              </section>
+
+              <section class="codex-section">
+                <h3 class="codex-heading">II. The Sevenfold Cardinal Address &amp; Activation</h3>
+                <p>
+                  To establish transit, exactly <strong>seven</strong> radial lights must be sealed. Upon soldering the seventh light, the Oculus enters the <em>Pending Sanctification</em> state. The gateway <strong>never auto-fires</strong>; the presiding master must explicitly ignite the central <strong>Keystone Censer</strong>.
+                </p>
+                <div class="activation-stages-guide">
+                  <div class="stage-guide-card">
+                    <span class="stage-number">1</span>
+                    <strong>Buildup (1.8s)</strong>
+                    <span>Clerestory sunbeams blaze, organ drone swells, stone tracery resonates.</span>
+                  </div>
+                  <div class="stage-guide-card">
+                    <span class="stage-number">2</span>
+                    <strong>Breakthrough (1.2s)</strong>
+                    <span>The central aperture vortex snaps open with a great bronze cathedral bell toll.</span>
+                  </div>
+                  <div class="stage-guide-card">
+                    <span class="stage-number">3</span>
+                    <strong>Sustained Active</strong>
+                    <span>Prismatic stained-glass kaleidoscope vortex maintains stable trans-meridian passage.</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="codex-section">
+                <h3 class="codex-heading">III. The 12 Celestial Glyphs of Lumisfer</h3>
+                <div class="codex-glyphs-table-wrapper">
+                  <table class="codex-glyphs-table">
+                    <thead>
+                      <tr>
+                        <th>N°</th>
+                        <th>Sacred Name</th>
+                        <th>Liturgical Title</th>
+                        <th>Color Register</th>
+                        <th>Cosmic Resonance</th>
+                      </tr>
+                    </thead>
+                    <tbody id="codex-glyphs-tbody">
+                      <!-- Populated by app.js -->
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="codex-section">
+                <h3 class="codex-heading">IV. Safety &amp; Quenching</h3>
+                <p>
+                  <strong>The Anathema Latch</strong> defaults to <em>Released</em>. When locked, it bars ignition to prevent unconsecrated passage.
+                  The <strong>Quench Oculus</strong> control is perpetually accessible to extinguish any active alignment or clear incomplete sequences safely.
+                </p>
+              </section>
+            </div>
+
+            <div class="parchment-footer">
+              <span class="parchment-seal">✦ Sanctum Sigillum Vitrarii ✦</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="js/glyphs.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

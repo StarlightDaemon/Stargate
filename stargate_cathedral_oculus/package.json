@@ -1,0 +1,16 @@
+{
+  "name": "stargate_cathedral_oculus",
+  "version": "1.0.0",
+  "description": "Gothic Stained Glass Cathedral Oculus Portal Interface",
+  "main": "js/app.js",
+  "scripts": {
+    "start": "http-server . -p 8080 -c-1",
+    "test": "node tests/verify.js"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "puppeteer-core": "^23.0.0"
+  },
+  "author": "Antigravity",
+  "license": "MIT"
+}
