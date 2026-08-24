@@ -43,6 +43,18 @@
       "note": "Operator evaluation: functional but rough — closed as a one-off attempt, no further iteration planned."
     },
     {
+      "id": "stargate-astro-pavilion",
+      "folder": "stargate_astro_pavilion",
+      "title": "Astro-Transit Pavilion",
+      "blurb": "An interactive novelty portal-dialing website built as the Astro-Transit Pavilion '64 terminal, a bright, optimistic mid-century retrofuturist \"World of Tomorrow\" aesthetic. Dialing runs a 9-chevron mechanical ring —…",
+      "link": "../stargate_astro_pavilion/index.html",
+      "preview": null,
+      "status": "live",
+      "version": "1.4.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-atompunk",
       "folder": "stargate_atompunk",
       "title": "VANTAGE — Type 9 Aperture Surveillance & Induction Console",
