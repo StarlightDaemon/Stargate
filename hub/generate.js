@@ -419,6 +419,11 @@ function scanFeatured() {
     }
   }
 
+  // Hero preview: Stargate_OG/preview.png is an untracked file in OG's
+  // own repo (OG's git history is off-limits; the screenshot lives on
+  // disk only, like the untracked blueprint folders' previews).
+  const preview = findPreview(OG_DIR);
+
   // Not fabricating a pass count here: package.json's `test` script
   // (`vitest run`) is directly verifiable, but no run count for it is
   // recorded anywhere in this session's history or in the repo's own
@@ -427,6 +432,7 @@ function scanFeatured() {
     title: extracted.title,
     blurb: extracted.blurb,
     link: "../Stargate_OG/index.html",
+    preview: preview ? `../Stargate_OG/${preview}` : null,
     testStatus: hasTestScript
       ? "Test script present (npm test -> vitest run); no independently verifiable pass count found in this session or repo docs"
       : "No test script found in package.json",

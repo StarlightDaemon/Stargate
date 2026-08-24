@@ -63,6 +63,18 @@ export class Gallery {
     card.className = "featured-card";
     if (tag === "a") card.href = this.featured.link;
 
+    if (this.featured.preview) {
+      card.classList.add("has-preview");
+      const preview = document.createElement("div");
+      preview.className = "featured-preview";
+      const img = document.createElement("img");
+      img.src = this.featured.preview;
+      img.alt = `${this.featured.title} preview`;
+      img.addEventListener("error", () => preview.remove());
+      preview.appendChild(img);
+      card.appendChild(preview);
+    }
+
     const eyebrow = document.createElement("span");
     eyebrow.className = "featured-eyebrow";
     eyebrow.textContent = "FEATURED SYSTEM";

@@ -3,6 +3,7 @@
     "title": "STARGATE — Gate Interface",
     "blurb": "A client-side interactive Stargate gate interface: dial fictional in-universe addresses on a 39-glyph ring, watch the per-chevron encoding sequence, the Kawoosh Burst, and a stable event horizon — with a fully wired…",
     "link": "../Stargate_OG/index.html",
+    "preview": "../Stargate_OG/preview.png",
     "testStatus": "Test script present (npm test -> vitest run); no independently verifiable pass count found in this session or repo docs"
   },
   "entries": [
@@ -48,7 +49,7 @@
       "title": "Astro-Transit Pavilion",
       "blurb": "An interactive novelty portal-dialing website built as the Astro-Transit Pavilion '64 terminal, a bright, optimistic mid-century retrofuturist \"World of Tomorrow\" aesthetic. Dialing runs a 9-chevron mechanical ring —…",
       "link": "../stargate_astro_pavilion/index.html",
-      "preview": null,
+      "preview": "../stargate_astro_pavilion/preview.png",
       "status": "live",
       "version": "1.4.0",
       "series": null,

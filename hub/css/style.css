@@ -162,6 +162,30 @@ a.featured-card:hover, a.featured-card:focus-visible {
   transform: translateY(-2px);
 }
 
+/* Hero preview: two-column grid — the image is explicitly placed in
+   column 2 spanning every text row (it is first in DOM order), and the
+   eyebrow/title/blurb/test line auto-place down column 1. */
+.featured-card.has-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 38%);
+  column-gap: 28px;
+  align-items: center;
+}
+
+.featured-preview {
+  grid-column: 2;
+  grid-row: 1 / 5;
+  border: 1px solid var(--panel-edge);
+  background: var(--bg-1);
+  overflow: hidden;
+}
+
+.featured-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .featured-eyebrow {
   display: inline-block;
   font-family: var(--mono);
@@ -466,4 +490,7 @@ a.card:hover, a.card:focus-visible {
   #hub-head { flex-direction: column; align-items: flex-start; gap: 4px; }
   .featured-card { padding: 20px 18px; }
   .featured-title { font-size: 19px; }
+  /* stack the hero preview above the text on narrow screens */
+  .featured-card.has-preview { display: block; }
+  .featured-preview { margin-bottom: 14px; }
 }
