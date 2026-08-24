@@ -1,0 +1,5 @@
+# Astro-Transit Pavilion
+
+An interactive novelty portal-dialing website built as the Astro-Transit Pavilion '64 terminal, a bright, optimistic mid-century retrofuturist "World of Tomorrow" aesthetic. Dialing runs a 9-chevron mechanical ring — eight address chevrons plus the origin chevron — driven from the Sequence Input Console, with an Advanced Routing toggle switching between 4-symbol local addressing and full 8-symbol deep-space addressing across 24 unique transit symbols. Express Transit Tokens across five clearance classes (public, standard, VIP, emergency, diplomatic) provide a lore-friendly fast-dial mechanism, a Directory & Logging Terminal tracks destinations and activity alongside a Star Chart tab rendering the network as linked nodes, and synthesized Web Audio tones accompany every symbol and chevron lock. An Operator Reference guide documents the terminal end to end.
+
+Everything here is fictional and fully client-side: no backend, no server process, no network calls, no real destinations.
