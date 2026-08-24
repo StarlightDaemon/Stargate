@@ -1,0 +1,26 @@
+{
+  "name": "stargate_blueprint_alpha",
+  "version": "1.0.0",
+  "description": "Vossen-Klein Topological Drafting Station Alpha - Interactive Blueprint Portal Terminal",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve . -l 8088 --no-clipboard",
+    "test": "node verify.js"
+  },
+  "keywords": [
+    "blueprint",
+    "cad",
+    "stargate",
+    "topological",
+    "drafting",
+    "cyanotype"
+  ],
+  "author": "StarlightDaemon",
+  "license": "MIT",
+  "dependencies": {
+    "serve": "^14.2.4"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.4.0"
+  }
+}

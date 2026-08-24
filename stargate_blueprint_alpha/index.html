@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vossen-Klein Topological Drafting Station | Alpha CAD Manifold</title>
+  <meta name="description" content="Digital architectural blueprint and CAD drafting terminal for the Vossen-Klein Non-Euclidean Radial Manifold Gateway.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Viewport Scaling Root -->
+  <div id="viewport-root">
+    <div id="drafting-station-frame">
+      
+      <!-- Architectural Grid Overlay -->
+      <div class="blueprint-grid-background"></div>
+      
+      <!-- Outer Drawing Sheet Border with Zone Coordinates -->
+      <div class="sheet-border-outer">
+        <div class="sheet-zone zone-top">
+          <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span>
+        </div>
+        <div class="sheet-zone zone-bottom">
+          <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span>
+        </div>
+        <div class="sheet-zone zone-left">
+          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+        </div>
+        <div class="sheet-zone zone-right">
+          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+        </div>
+
+        <!-- Main Header / Terminal Ribbon -->
+        <header class="cad-header">
+          <div class="header-left">
+            <div class="firm-emblem">
+              <svg viewBox="0 0 32 32" class="firm-logo-svg">
+                <polygon points="16,2 30,26 2,26" fill="none" stroke="#40e0d0" stroke-width="2"/>
+                <circle cx="16" cy="18" r="7" fill="none" stroke="#f0f6fc" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <line x1="16" y1="2" x2="16" y2="26" stroke="#40e0d0" stroke-width="1"/>
+                <line x1="2" y1="18" x2="30" y2="18" stroke="#40e0d0" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="firm-titles">
+              <h1 class="firm-main-title">VOSSEN-KLEIN TOPOLOGICAL ARCHITECTS &amp; SURVEYORS</h1>
+              <div class="firm-sub-title">BUREAU OF NON-EUCLIDEAN METRIC EXPANSION // SECTOR 08 DRAFTING TERMINAL</div>
+            </div>
+          </div>
+
+          <div class="header-center">
+            <div class="telemetry-readout">
+              <span class="telemetry-item"><span class="lbl">DWG:</span> <span class="val">VK-TMB-8088</span></span>
+              <span class="telemetry-item"><span class="lbl">SCALE:</span> <span class="val">1:50 METRIC</span></span>
+              <span class="telemetry-item"><span class="lbl">DATUM:</span> <span class="val">WGS-NON-EUCLID</span></span>
+              <span class="telemetry-item"><span class="lbl">SYS:</span> <span class="val status-indicator" id="system-status-indicator">STANDBY / READY</span></span>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <div class="cursor-coordinates" id="cursor-coord-display">
+              <span class="lbl">COORD:</span> <span class="val" id="cursor-coords">X: +000.00 Y: +000.00 θ: 000.0°</span>
+            </div>
+            <button id="sound-toggle-btn" class="cad-mini-btn" title="Toggle Synthesized Audio" aria-label="Toggle Synthesized Audio">
+              <span id="sound-icon">🔊</span> AUDIO: ON
+            </button>
+            <button id="operator-help-btn" class="operator-ref-btn" title="Operator Technical Reference" aria-label="Operator Technical Reference">?</button>
+          </div>
+        </header>
+
+        <!-- Main Drafting Layout Grid -->
+        <main class="cad-main-layout">
+          
+          <!-- LEFT SIDEBAR: Filed Drawings / Preloaded Quick-Dial Site Plans -->
+          <aside class="cad-sidebar-left">
+            <div class="sidebar-panel-header">
+              <span class="panel-icon">📁</span>
+              <span class="panel-title">FILED SITE PLANS // ARCHIVE</span>
+            </div>
+
+            <!-- Tier 1: Approved Civil & Sector Transit Plans -->
+            <div class="quick-dial-tier tier-civil">
+              <div class="tier-badge">
+                <span class="tier-code">TIER-I</span>
+                <span class="tier-name">APPROVED CIVIL INFRASTRUCTURE</span>
+              </div>
+              <div class="site-plan-list">
+                <button class="site-plan-card" data-plan-id="civil-helios" data-symbols="0,1,2,5,6,12" title="Load Site Plan 101-A">
+                  <div class="card-header">
+                    <span class="plan-num">PLAN 101-A</span>
+                    <span class="plan-status approved">CERTIFIED</span>
+                  </div>
+                  <div class="plan-title">Helios Orbital Solar Station</div>
+                  <div class="plan-details">Truss Ring 4 // Outer Equatorial Chord</div>
+                  <div class="plan-glyphs-preview">⌖ ⌬ ⟐ ⎔ ⊞ ⍟</div>
+                </button>
+
+                <button class="site-plan-card" data-plan-id="civil-olympus" data-symbols="4,10,11,7,9,14" title="Load Site Plan 204-C">
+                  <div class="card-header">
+                    <span class="plan-num">PLAN 204-C</span>
+                    <span class="plan-status approved">CERTIFIED</span>
+                  </div>
+                  <div class="plan-title">Olympus Caldera Geothermal Vault</div>
+                  <div class="plan-details">Sub-Basaltic Metric Anchor #8</div>
+                  <div class="plan-glyphs-preview">◬ ⎊ ⏣ ⊛ ⋈ ⏛</div>
+                </button>
+
+                <button class="site-plan-card" data-plan-id="civil-cydonia" data-symbols="3,5,15,0,13,1" title="Load Site Plan 318-F">
+                  <div class="card-header">
+                    <span class="plan-num">PLAN 318-F</span>
+                    <span class="plan-status approved">CERTIFIED</span>
+                  </div>
+                  <div class="plan-title">Cydonia Primary Survey Archive</div>
+                  <div class="plan-details">Sedimentary Vector Bore B-12</div>
+                  <div class="plan-glyphs-preview">⨁ ⎔ ⧉ ⌖ ⏚ ⌬</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tier 2: Classified Extra-Topological Blueprints -->
+            <div class="quick-dial-tier tier-classified">
+              <div class="tier-badge classified-badge">
+                <span class="tier-code">TIER-II</span>
+                <span class="tier-name">CLASSIFIED EXTRA-TOPOLOGICAL PLANS</span>
+              </div>
+              <div class="site-plan-list">
+                <button class="site-plan-card classified-card" data-plan-id="class-oort" data-symbols="12,14,8,10,15,11" title="Load Blueprint EX-901">
+                  <div class="card-header">
+                    <span class="plan-num">EX-901-SEC</span>
+                    <span class="plan-status classified">PERMIT 9-B</span>
+                  </div>
+                  <div class="plan-title">Outer Oort Manifold Hub</div>
+                  <div class="plan-details">Vector Gateway Nine // Non-Euclid Array</div>
+                  <div class="plan-glyphs-preview">⍟ ⏛ ⨀ ⎊ ⧉ ⏣</div>
+                </button>
+
+                <button class="site-plan-card classified-card" data-plan-id="class-proxima" data-symbols="13,9,7,4,3,2" title="Load Blueprint EX-742">
+                  <div class="card-header">
+                    <span class="plan-num">EX-742-SEC</span>
+                    <span class="plan-status classified">PERMIT 9-B</span>
+                  </div>
+                  <div class="plan-title">Proxima Centauri B Drydock</div>
+                  <div class="plan-details">Hydro-Topological Slipway C</div>
+                  <div class="plan-glyphs-preview">⏚ ⋈ ⊛ ◬ ⨁ ⟐</div>
+                </button>
+
+                <button class="site-plan-card classified-card" data-plan-id="class-singularity" data-symbols="8,6,5,0,1,14" title="Load Blueprint EX-000">
+                  <div class="card-header">
+                    <span class="plan-num">EX-000-OMEGA</span>
+                    <span class="plan-status restricted">RESTRICTED</span>
+                  </div>
+                  <div class="plan-title">Trans-Singularity Vault Null-0</div>
+                  <div class="plan-details">Curvature Singularity Containment Floor</div>
+                  <div class="plan-glyphs-preview">⨀ ⊞ ⎔ ⌖ ⌬ ⏛</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Review Hold Status Card -->
+            <div class="sidebar-hold-status" id="sidebar-hold-box">
+              <div class="hold-status-label">STRUCTURAL PEER REVIEW STATUS:</div>
+              <div class="hold-status-value" id="sidebar-hold-val">PERMIT REVIEW: CLEAR (NOMINAL)</div>
+            </div>
+          </aside>
+
+          <!-- CENTER: The Technical Blueprint Drawing Canvas -->
+          <section class="cad-viewport-center">
+            
+            <div class="drawing-title-banner">
+              <span class="dwg-tag">FIG 1.0</span>
+              <span class="dwg-heading">NON-EUCLIDEAN RADIAL MANIFOLD GATEWAY — STRUCTURAL ELEVATION &amp; CHORD SECTIONS</span>
+              <span class="dwg-rev" id="drawing-rev-tag">REV 4.2-APPROVED</span>
+            </div>
+
+            <!-- Technical Drawing Container -->
+            <div class="drawing-canvas-wrapper" id="blueprint-drawing-container">
+              
+              <!-- Particle / Ray-Traced Topological Flux Canvas (Underlay) -->
+              <canvas id="aperture-flux-canvas" width="600" height="600"></canvas>
+
+              <!-- Central SVG Technical Vector Drawing -->
+              <svg id="blueprint-gate-svg" viewBox="0 0 1000 1000" class="blueprint-svg-gate">
+                <defs>
+                  <!-- Hatch Pattern for Steel / Structural Core -->
+                  <pattern id="hatch-steel" width="12" height="12" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                    <line x1="0" y1="0" x2="0" y2="12" stroke="#40e0d0" stroke-width="0.75" stroke-opacity="0.35" />
+                  </pattern>
+
+                  <!-- Secondary Hatch Pattern for Annular Stiffener -->
+                  <pattern id="hatch-dense" width="8" height="8" patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+                    <line x1="0" y1="0" x2="0" y2="8" stroke="#388bfd" stroke-width="0.6" stroke-opacity="0.4" />
+                  </pattern>
+
+                  <!-- Dimension Arrowhead Marker (Start) -->
+                  <marker id="dim-arrow-start" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <polygon points="10,2 0,5 10,8" fill="#58a6ff" />
+                  </marker>
+
+                  <!-- Dimension Arrowhead Marker (End) -->
+                  <marker id="dim-arrow-end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <polygon points="0,2 10,5 0,8" fill="#58a6ff" />
+                  </marker>
+
+                  <!-- Inked Dimension Arrow Marker -->
+                  <marker id="dim-arrow-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <polygon points="0,2 10,5 0,8" fill="#40e0d0" />
+                  </marker>
+
+                  <!-- Caliper Marker -->
+                  <marker id="caliper-tick" viewBox="0 0 4 10" refX="2" refY="5" markerWidth="4" markerHeight="8" orient="auto">
+                    <line x1="2" y1="0" x2="2" y2="10" stroke="#40e0d0" stroke-width="1.5"/>
+                  </marker>
+                </defs>
+
+                <!-- Grid Construction Axis Lines & Datums -->
+                <g class="datum-construction-lines">
+                  <!-- Horizontal Datum A-A -->
+                  <line x1="20" y1="500" x2="980" y2="500" class="datum-line" />
+                  <text x="30" y="492" class="datum-label">DATUM A-A (EQUATORIAL CHORD)</text>
+                  <text x="830" y="492" class="datum-label">DATUM A-A</text>
+
+                  <!-- Vertical Datum B-B -->
+                  <line x1="500" y1="20" x2="500" y2="980" class="datum-line" />
+                  <text x="508" y="45" class="datum-label">DATUM B-B (ZENITH AXIS)</text>
+                  <text x="508" y="970" class="datum-label">DATUM B-B (NADIR)</text>
+
+                  <!-- Diagonal Construction Rays (45 deg) -->
+                  <line x1="160" y1="160" x2="840" y2="840" class="construction-ray" />
+                  <line x1="160" y1="840" x2="840" y2="160" class="construction-ray" />
+                  
+                  <!-- Calibration Reticles -->
+                  <circle cx="500" cy="500" r="480" class="guide-circle" />
+                  <circle cx="500" cy="500" r="440" class="guide-circle dashed" />
+                </g>
+
+                <!-- Outer Cast Flange Ring (Solid / Inked Geometry) -->
+                <g class="outer-flange-group">
+                  <circle cx="500" cy="500" r="400" class="flange-outer" />
+                  <circle cx="500" cy="500" r="375" class="flange-inner" />
+                  <!-- Flange Cross-Hatch Fill -->
+                  <circle cx="500" cy="500" r="400" fill="url(#hatch-steel)" mask="url(#flange-mask)" class="flange-hatch" />
+                  
+                  <!-- Radial Fastener Bolt Positions (48 precision studs) -->
+                  <g id="fastener-bolts" class="fastener-bolts-layer"></g>
+                </g>
+
+                <!-- Rotating Dial Track / Vector Caliper Annulus -->
+                <g id="rotating-compass-ring" class="rotating-compass-ring">
+                  <circle cx="500" cy="500" r="370" class="track-outer" />
+                  <circle cx="500" cy="500" r="300" class="track-inner" />
+                  <circle cx="500" cy="500" r="335" class="track-midline dashed" />
+                  
+                  <!-- Graduation Ticks (every 5 deg) and Compass Labels -->
+                  <g id="compass-graduations" class="compass-graduations-layer"></g>
+
+                  <!-- Dialed Vector Pointer / Caliper Arm -->
+                  <g id="plotter-caliper-arm" class="plotter-caliper-arm" transform="rotate(0 500 500)">
+                    <line x1="500" y1="500" x2="500" y2="135" class="caliper-pointer-line" />
+                    <polygon points="500,120 493,138 507,138" class="caliper-pointer-head" />
+                    <circle cx="500" cy="500" r="14" class="caliper-hub" />
+                    <circle cx="500" cy="500" r="5" class="caliper-pin" />
+                    <text x="512" y="240" class="caliper-arm-label">VECTOR COMPASS TRACER</text>
+                  </g>
+                </g>
+
+                <!-- Inner Stator Ring & Annular Waveguides -->
+                <g class="inner-stator-group">
+                  <circle cx="500" cy="500" r="295" class="stator-outer" />
+                  <circle cx="500" cy="500" r="230" class="stator-inner-bore" />
+                  <circle cx="500" cy="500" r="295" fill="url(#hatch-dense)" class="stator-hatch" />
+                </g>
+
+                <!-- Central Topological Aperture Vector Grid (Idle / Drafting State) -->
+                <g id="aperture-grid-group" class="aperture-grid-group">
+                  <circle cx="500" cy="500" r="225" class="aperture-boundary" />
+                  <circle cx="500" cy="500" r="180" class="aperture-grid-circle" />
+                  <circle cx="500" cy="500" r="135" class="aperture-grid-circle" />
+                  <circle cx="500" cy="500" r="90" class="aperture-grid-circle" />
+                  <circle cx="500" cy="500" r="45" class="aperture-grid-circle" />
+                  <!-- Hyperbolic Mesh Lines -->
+                  <g id="hyperbolic-mesh-lines" class="hyperbolic-mesh-lines"></g>
+                  <text x="500" y="504" class="aperture-center-text" text-anchor="middle" id="aperture-status-text">TOPOLOGY DORMANT // READY</text>
+                </g>
+
+                <!-- 8 RADIAL STRUCTURAL CALIPER DATUM LOCK NODES -->
+                <g id="structural-lock-nodes-group" class="structural-lock-nodes-group">
+                  
+                  <!-- Node 1: Zenith (0° / 360°) -->
+                  <g class="datum-lock-node" id="lock-node-0" transform="translate(500, 100)" data-node-index="0" data-angle="0">
+                    <circle cx="0" cy="0" r="28" class="node-caliper-housing" />
+                    <circle cx="0" cy="0" r="22" class="node-inner-pad" />
+                    <polygon points="0,-18 16,10 -16,10" class="node-weld-symbol" />
+                    <text x="0" y="4" class="node-num" text-anchor="middle">01</text>
+                    <text x="35" y="-12" class="node-tag">SEC-01 [ZENITH]</text>
+                    <line x1="0" y1="28" x2="0" y2="55" class="node-anchor-pin" />
+                    <text x="35" y="6" class="node-status-text" id="node-stat-0">UNLOCKED</text>
+                  </g>
+
+                  <!-- Node 2: North-East (45°) -->
+                  <g class="datum-lock-node" id="lock-node-1" transform="translate(782.8, 217.2)" data-node-index="1" data-angle="45">
+                    <circle cx="0" cy="0" r="28" class="node-caliper-housing" />
+                    <circle cx="0" cy="0" r="22" class="node-inner-pad" />
+                    <polygon points="0,-18 16,10 -16,10" class="node-weld-symbol" />
+                    <text x="0" y="4" class="node-num" text-anchor="middle">02</text>
+                    <text x="35" y="-12" class="node-tag">SEC-02 [45° CHORD]</text>
+                    <line x1="-20" y1="20" x2="-39" y2="39" class="node-anchor-pin" />
+                    <text x="35" y="6" class="node-status-text" id="node-stat-1">UNLOCKED</text>
+                  </g>
+
+                  <!-- Node 3: East (90°) -->
+                  <g class="datum-lock-node" id="lock-node-2" transform="translate(900, 500)" data-node-index="2" data-angle="90">
+                    <circle cx="0" cy="0" r="28" class="node-caliper-housing" />
+                    <circle cx="0" cy="0" r="22" class="node-inner-pad" />
+                    <polygon points="0,-18 16,10 -16,10" class="node-weld-symbol" />
+                    <text x="0" y="4" class="node-num" text-anchor="middle">03</text>
+                    <text x="-35" y="44" class="node-tag" text-anchor="end">SEC-03 [EQUATOR]</text>
+                    <line x1="-28" y1="0" x2="-55" y2="0" class="node-anchor-pin" />
+                    <text x="-35" y="62" class="node-status-text" id="node-stat-2" text-anchor="end">UNLOCKED</text>
+                  </g>
+
+                  <!-- Node 4: South-East (135°) -->
+                  <g class="datum-lock-node" id="lock-node-3" transform="translate(782.8, 782.8)" data-node-index="3" data-angle="135">
+                    <circle cx="0" cy="0" r="28" class="node-caliper-housing" />
+                    <circle cx="0" cy="0" r="22" class="node-inner-pad" />
+                    <polygon points="0,-18 16,10 -16,10" class="node-weld-symbol" />
+                    <text x="0" y="4" class="node-num" text-anchor="middle">04</text>
+                    <text x="35" y="-12" class="node-tag">SEC-04 [135° CHORD]</text>
+                    <line x1="-20" y1="-20" x2="-39" y2="-39" class="node-anchor-pin" />
+                    <text x="35" y="6" class="node-status-text" id="node-stat-3">UNLOCKED</text>
+                  </g>
+
+                  <!-- Node 5: Nadir (180°) -->
+                  <g class="datum-lock-node" id="lock-node-4" transform="translate(500, 900)" data-node-index="4" data-angle="180">
+                    <circle cx="0" cy="0" r="28" class="node-caliper-housing" />
+                    <circle cx="0" cy="0" r="22" class="node-inner-pad" />
+                    <polygon points="0,-18 16,10 -16,10" class="node-weld-symbol" />
+                    <text x="0" y="4" class="node-num" text-anchor="middle">05</text>
+                    <text x="35" y="16" class="node-tag">SEC-05 [NADIR]</text>
+                    <line x1="0" y1="-28" x2="0" y2="-55" class="node-anchor-pin" />
+                    <text x="35" y="34" class="node-status-text" id="node-stat-4">UNLOCKED</text>
+                  </g>
+
+                  <!-- Node 6: South-West (225°) -->
+                  <g class="datum-lock-node" id="lock-node-5" transform="translate(217.2, 782.8)" data-node-index="5" data-angle="225">
+                    <circle cx="0" cy="0" r="28" class="node-caliper-housing" />
+                    <circle cx="0" cy="0" r="22" class="node-inner-pad" />
+                    <polygon points="0,-18 16,10 -16,10" class="node-weld-symbol" />
+                    <text x="0" y="4" class="node-num" text-anchor="middle">06</text>
+                    <text x="-35" y="16" class="node-tag" text-anchor="end">SEC-06 [225° CHORD]</text>
+                    <line x1="20" y1="-20" x2="39" y2="-39" class="node-anchor-pin" />
+                    <text x="-35" y="34" class="node-status-text" id="node-stat-5" text-anchor="end">UNLOCKED</text>
+                  </g>
+
+                  <!-- Node 7: West (270°) -->
+                  <g class="datum-lock-node" id="lock-node-6" transform="translate(100, 500)" data-node-index="6" data-angle="270">
+                    <circle cx="0" cy="0" r="28" class="node-caliper-housing" />
+                    <circle cx="0" cy="0" r="22" class="node-inner-pad" />
+                    <polygon points="0,-18 16,10 -16,10" class="node-weld-symbol" />
+                    <text x="0" y="4" class="node-num" text-anchor="middle">07</text>
+                    <text x="35" y="44" class="node-tag">SEC-07 [WEST FLANGE]</text>
+                    <line x1="28" y1="0" x2="55" y2="0" class="node-anchor-pin" />
+                    <text x="35" y="62" class="node-status-text" id="node-stat-6">UNLOCKED</text>
+                  </g>
+
+                  <!-- Node 8: North-West (315°) -->
+                  <g class="datum-lock-node" id="lock-node-7" transform="translate(217.2, 217.2)" data-node-index="7" data-angle="315">
+                    <circle cx="0" cy="0" r="28" class="node-caliper-housing" />
+                    <circle cx="0" cy="0" r="22" class="node-inner-pad" />
+                    <polygon points="0,-18 16,10 -16,10" class="node-weld-symbol" />
+                    <text x="0" y="4" class="node-num" text-anchor="middle">08</text>
+                    <text x="-35" y="-12" class="node-tag" text-anchor="end">SEC-08 [315° CHORD]</text>
+                    <line x1="20" y1="20" x2="39" y2="39" class="node-anchor-pin" />
+                    <text x="-35" y="6" class="node-status-text" id="node-stat-7" text-anchor="end">UNLOCKED</text>
+                  </g>
+                </g>
+
+                <!-- Architectural Dimension Lines & Leaders -->
+                <g class="dimension-lines-layer">
+                  <!-- Outer Diameter Dimension Line: Ø 7,200 mm -->
+                  <line x1="100" y1="940" x2="900" y2="940" class="dim-line" marker-start="url(#dim-arrow-start)" marker-end="url(#dim-arrow-end)" />
+                  <line x1="100" y1="500" x2="100" y2="955" class="dim-ext-line" />
+                  <line x1="900" y1="500" x2="900" y2="955" class="dim-ext-line" />
+                  <text x="500" y="932" class="dim-text" text-anchor="middle">Ø 7,200 mm (OUTER CAST CHORD)</text>
+
+                  <!-- Aperture Bore Radius: R 2,400 mm -->
+                  <line x1="500" y1="500" x2="662" y2="338" class="dim-line" marker-end="url(#dim-arrow-end)" />
+                  <polyline points="662,338 710,338" class="dim-line" />
+                  <text x="718" y="335" class="dim-text">R 2,400 mm (APERTURE BORE)</text>
+
+                  <!-- Flange Wall Thickness Leader: T = 240 mm -->
+                  <polyline points="200,350 140,320 60,320" class="dim-line" marker-start="url(#dim-arrow-ink)" />
+                  <text x="60" y="312" class="dim-text">T = 240 mm ASTM-4140/AETH</text>
+
+                  <!-- Detail View Callout Bubble: DET 01 -->
+                  <g transform="translate(850, 120)" class="detail-callout-bubble">
+                    <circle cx="0" cy="0" r="22" class="callout-circle" />
+                    <line x1="-22" y1="0" x2="22" y2="0" class="callout-divider" />
+                    <text x="0" y="-5" class="callout-top" text-anchor="middle">DET 01</text>
+                    <text x="0" y="14" class="callout-bot" text-anchor="middle">A-108</text>
+                    <line x1="-16" y1="16" x2="-65" y2="65" class="callout-leader" marker-end="url(#dim-arrow-end)" />
+                  </g>
+
+                  <!-- Detail View Callout Bubble: DET 02 -->
+                  <g transform="translate(130, 880)" class="detail-callout-bubble">
+                    <circle cx="0" cy="0" r="22" class="callout-circle" />
+                    <line x1="-22" y1="0" x2="22" y2="0" class="callout-divider" />
+                    <text x="0" y="-5" class="callout-top" text-anchor="middle">DET 02</text>
+                    <text x="0" y="14" class="callout-bot" text-anchor="middle">A-108</text>
+                    <line x1="16" y1="-16" x2="60" y2="-60" class="callout-leader" marker-end="url(#dim-arrow-end)" />
+                  </g>
+                </g>
+
+                <!-- Dynamic Approval Stamp (Appears upon full manifold authorization) -->
+                <g id="approval-stamp-group" class="approval-stamp-group hidden" transform="translate(500, 500) rotate(-12)">
+                  <rect x="-180" y="-70" width="360" height="140" rx="8" class="stamp-box-outer" />
+                  <rect x="-172" y="-62" width="344" height="124" rx="4" class="stamp-box-inner" />
+                  <text x="0" y="-32" class="stamp-title" text-anchor="middle">APPROVED &amp; CERTIFIED</text>
+                  <text x="0" y="-8" class="stamp-sub" text-anchor="middle">VOSSEN-KLEIN TOPOLOGICAL ARCHITECTS</text>
+                  <line x1="-150" y1="2" x2="150" y2="2" class="stamp-divider" />
+                  <text x="0" y="22" class="stamp-meta" text-anchor="middle" id="stamp-permit-id">PERMIT: VK-AUTH-9042-ALPHA // SPEC A-108</text>
+                  <text x="0" y="44" class="stamp-sig" text-anchor="middle">METRIC EXPANSION MANIFOLD: ACTIVE</text>
+                </g>
+
+                <!-- Review Hold Inspection Warning Overlay -->
+                <g id="review-hold-stamp-group" class="review-hold-stamp-group hidden" transform="translate(500, 500) rotate(8)">
+                  <rect x="-190" y="-60" width="380" height="120" rx="6" class="hold-box-outer" />
+                  <rect x="-182" y="-52" width="364" height="104" rx="3" class="hold-box-inner" />
+                  <text x="0" y="-22" class="hold-title" text-anchor="middle">⚠ STRUCTURAL REVIEW HOLD</text>
+                  <text x="0" y="2" class="hold-sub" text-anchor="middle">BUREAU OF TOPOLOGICAL PERMITS // SAFETY LOCKOUT</text>
+                  <line x1="-160" y1="12" x2="160" y2="12" class="hold-divider" />
+                  <text x="0" y="32" class="hold-meta" text-anchor="middle">FINAL TRANSMISSION REFUSED — SIGN-OFF REQUIRED</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- Telemetry & Status Readout Strip Under Drawing -->
+            <div class="drawing-footer-strip">
+              <div class="strip-item">
+                <span class="lbl">MANIFOLD FLUX:</span>
+                <span class="val" id="telemetry-flux">0.0000 Å-RAD</span>
+              </div>
+              <div class="strip-item">
+                <span class="lbl">TENSION BALANCE:</span>
+                <span class="val" id="telemetry-tension">100.0% EQUILIBRIUM</span>
+              </div>
+              <div class="strip-item">
+                <span class="lbl">CALIPER DRIFT:</span>
+                <span class="val" id="telemetry-drift">±0.000 mm</span>
+              </div>
+              <div class="strip-item">
+                <span class="lbl">ACTIVE VECTOR:</span>
+                <span class="val highlight" id="telemetry-active-vector">NONE</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- RIGHT SIDEBAR: Control Clusters and Title Block -->
+          <aside class="cad-sidebar-right">
+            
+            <!-- CONTROL CLUSTER 1: Coordinate Drafting Matrix (Symbol Keypad) -->
+            <section class="control-cluster matrix-cluster">
+              <div class="cluster-header">
+                <span class="cluster-num">CLUSTER 01</span>
+                <h2 class="cluster-title">COORDINATE DRAFTING MATRIX</h2>
+              </div>
+              
+              <div class="glyph-grid" id="glyph-keypad-grid" role="group" aria-label="Coordinate Drafting Glyphs">
+                <!-- 16 Original Vector Glyphs -->
+                <button class="glyph-btn" data-glyph-index="0" data-glyph-char="⌖" data-code="ALPHA-AXIS" data-pitch="0°">
+                  <span class="glyph-symbol">⌖</span>
+                  <span class="glyph-code">01:ALPHA</span>
+                  <span class="glyph-pitch">0°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="1" data-glyph-char="⌬" data-code="HEXA-CELL" data-pitch="22.5°">
+                  <span class="glyph-symbol">⌬</span>
+                  <span class="glyph-code">02:HEXA</span>
+                  <span class="glyph-pitch">22.5°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="2" data-glyph-char="⟐" data-code="DIAMOND-CHORD" data-pitch="45°">
+                  <span class="glyph-symbol">⟐</span>
+                  <span class="glyph-code">03:DIAM</span>
+                  <span class="glyph-pitch">45°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="3" data-glyph-char="⨁" data-code="FLUX-SUM" data-pitch="67.5°">
+                  <span class="glyph-symbol">⨁</span>
+                  <span class="glyph-code">04:FLUX</span>
+                  <span class="glyph-pitch">67.5°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="4" data-glyph-char="◬" data-code="PRISM-VECTOR" data-pitch="90°">
+                  <span class="glyph-symbol">◬</span>
+                  <span class="glyph-code">05:PRISM</span>
+                  <span class="glyph-pitch">90°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="5" data-glyph-char="⎔" data-code="CURV-REFLECT" data-pitch="112.5°">
+                  <span class="glyph-symbol">⎔</span>
+                  <span class="glyph-code">06:CURV</span>
+                  <span class="glyph-pitch">112.5°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="6" data-glyph-char="⊞" data-code="QUAD-TENSOR" data-pitch="135°">
+                  <span class="glyph-symbol">⊞</span>
+                  <span class="glyph-code">07:QUAD</span>
+                  <span class="glyph-pitch">135°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="7" data-glyph-char="⊛" data-code="ASTRA-DATUM" data-pitch="157.5°">
+                  <span class="glyph-symbol">⊛</span>
+                  <span class="glyph-code">08:ASTRA</span>
+                  <span class="glyph-pitch">157.5°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="8" data-glyph-char="⨀" data-code="SINGULARITY-N" data-pitch="180°">
+                  <span class="glyph-symbol">⨀</span>
+                  <span class="glyph-code">09:SING</span>
+                  <span class="glyph-pitch">180°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="9" data-glyph-char="⋈" data-code="SHEAR-LINK" data-pitch="202.5°">
+                  <span class="glyph-symbol">⋈</span>
+                  <span class="glyph-code">10:SHEAR</span>
+                  <span class="glyph-pitch">202.5°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="10" data-glyph-char="⎊" data-code="PHASE-DELTA" data-pitch="225°">
+                  <span class="glyph-symbol">⎊</span>
+                  <span class="glyph-code">11:PHASE</span>
+                  <span class="glyph-pitch">225°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="11" data-glyph-char="⏣" data-code="METRIC-RING" data-pitch="247.5°">
+                  <span class="glyph-symbol">⏣</span>
+                  <span class="glyph-code">12:METRIC</span>
+                  <span class="glyph-pitch">247.5°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="12" data-glyph-char="⍟" data-code="POLAR-VEX" data-pitch="270°">
+                  <span class="glyph-symbol">⍟</span>
+                  <span class="glyph-code">13:POLAR</span>
+                  <span class="glyph-pitch">270°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="13" data-glyph-char="⏚" data-code="NULL-DATUM" data-pitch="292.5°">
+                  <span class="glyph-symbol">⏚</span>
+                  <span class="glyph-code">14:NULL</span>
+                  <span class="glyph-pitch">292.5°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="14" data-glyph-char="⏛" data-code="EXP-CHAMBER" data-pitch="315°">
+                  <span class="glyph-symbol">⏛</span>
+                  <span class="glyph-code">15:EXP</span>
+                  <span class="glyph-pitch">315°</span>
+                </button>
+
+                <button class="glyph-btn" data-glyph-index="15" data-glyph-char="⧉" data-code="TENSOR-TWIN" data-pitch="337.5°">
+                  <span class="glyph-symbol">⧉</span>
+                  <span class="glyph-code">16:TWIN</span>
+                  <span class="glyph-pitch">337.5°</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- CONTROL CLUSTER 2: Drafting Manifold Sequence & Action Bar -->
+            <section class="control-cluster manifold-cluster">
+              <div class="cluster-header">
+                <span class="cluster-num">CLUSTER 02</span>
+                <h2 class="cluster-title">DRAFTING MANIFOLD CONTROLS</h2>
+              </div>
+
+              <!-- Staged Vector Sequence Display (6 Address Slots) -->
+              <div class="staged-sequence-box">
+                <div class="sequence-label">STAGED COORDINATE VECTORS (6-DOF MANIFOLD):</div>
+                <div class="sequence-slots" id="address-slots-container">
+                  <div class="seq-slot" data-slot="0"><span class="slot-num">V1</span><span class="slot-char">_</span></div>
+                  <div class="seq-slot" data-slot="1"><span class="slot-num">V2</span><span class="slot-char">_</span></div>
+                  <div class="seq-slot" data-slot="2"><span class="slot-num">V3</span><span class="slot-char">_</span></div>
+                  <div class="seq-slot" data-slot="3"><span class="slot-num">V4</span><span class="slot-char">_</span></div>
+                  <div class="seq-slot" data-slot="4"><span class="slot-num">V5</span><span class="slot-char">_</span></div>
+                  <div class="seq-slot" data-slot="5"><span class="slot-num">V6</span><span class="slot-char">_</span></div>
+                </div>
+              </div>
+
+              <!-- Action Buttons Row -->
+              <div class="manifold-actions-grid">
+                <!-- Primary Action: Engage / Plot & Approve -->
+                <button id="btn-engage-draft" class="action-btn btn-engage" title="Commit Staged Drawing and Execute Topological Connection">
+                  <span class="btn-icon">🖋</span>
+                  <span class="btn-text">ENGAGE / APPROVE DRAWING</span>
+                </button>
+
+                <!-- DISENGAGE CONTROL: Hard Requirement - Clearly visible, always reachable, never disabled during active connection -->
+                <button id="btn-disengage-draft" class="action-btn btn-disengage" title="Disengage Active Connection and Revert Drawing">
+                  <span class="btn-icon">⮌</span>
+                  <span class="btn-text">VOID DRAFT / DISENGAGE</span>
+                </button>
+              </div>
+
+              <!-- Secondary Row: Review Hold Toggle & Clear Buffer -->
+              <div class="manifold-sub-actions">
+                <button id="btn-review-hold-toggle" class="sub-btn btn-hold" title="Toggle Structural Engineering Permit Hold Subsystem">
+                  <span class="hold-indicator-led" id="hold-led"></span>
+                  <span class="btn-text" id="hold-btn-text">REVIEW HOLD: [DISENGAGED]</span>
+                </button>
+
+                <button id="btn-clear-buffer" class="sub-btn btn-clear" title="Clear Staged Coordinate Vector Buffer">
+                  <span class="btn-icon">✕</span>
+                  <span class="btn-text">CLEAR BUFFER</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- ARCHITECTURAL CAD TITLE BLOCK (Standard Drawing Corner Box) -->
+            <div class="cad-title-block">
+              <div class="title-block-grid">
+                <div class="tb-cell tb-firm">
+                  <div class="tb-label">FIRM / ENGINEERING BUREAU:</div>
+                  <div class="tb-val bold">VOSSEN-KLEIN TOPOLOGICAL ARCHITECTS</div>
+                  <div class="tb-sub">SECTOR 08 HIGH-TENSILE DRAFTING LABS</div>
+                </div>
+                <div class="tb-cell tb-proj">
+                  <div class="tb-label">PROJECT:</div>
+                  <div class="tb-val">NON-EUCLIDEAN METRIC EXPANSION MANIFOLD</div>
+                </div>
+                <div class="tb-cell tb-scale">
+                  <div class="tb-label">SCALE:</div>
+                  <div class="tb-val">1:50 METRIC</div>
+                </div>
+                <div class="tb-cell tb-sheet">
+                  <div class="tb-label">SHEET NO:</div>
+                  <div class="tb-val bold">A-108</div>
+                </div>
+                <div class="tb-cell tb-rev">
+                  <div class="tb-label">REV:</div>
+                  <div class="tb-val" id="tb-rev-number">4.2</div>
+                </div>
+                <div class="tb-cell tb-date">
+                  <div class="tb-label">DATE / TIME:</div>
+                  <div class="tb-val" id="tb-clock-date">2026-08-12 // 05:30Z</div>
+                </div>
+                <div class="tb-cell tb-status">
+                  <div class="tb-label">PERMIT STATUS:</div>
+                  <div class="tb-val status-ok" id="tb-permit-status">CLEAR / UNRESTRICTED</div>
+                </div>
+              </div>
+            </div>
+
+          </aside>
+
+        </main>
+
+        <!-- Sheet Footer Bar -->
+        <footer class="cad-footer">
+          <div class="footer-left">
+            <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="attribution-link" id="starlight-attribution">StarlightDaemon</a>
+            <span class="footer-note">// VOSSEN-KLEIN SPECIFICATION ISO-TOPOLOGY-9001</span>
+          </div>
+          <div class="footer-center">
+            <span class="footer-prompt" id="system-prompt-log">DRAFTING STATION ONLINE — SELECT 6 COORDINATE GLYPHS OR LOAD ARCHIVED SITE PLAN.</span>
+          </div>
+          <div class="footer-right">
+            <span class="version-label">v1.0.0</span>
+          </div>
+        </footer>
+
+      </div>
+
+      <!-- OPERATOR REFERENCE MODAL OVERLAY -->
+      <div id="operator-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-card">
+          <div class="modal-header">
+            <div class="modal-title-group">
+              <span class="modal-icon">📐</span>
+              <h3 class="modal-title" id="modal-title">OPERATOR TECHNICAL REFERENCE SPECIFICATION // MANUAL A-108</h3>
+            </div>
+            <button id="modal-close-btn" class="modal-close-x" aria-label="Close Specification">&times;</button>
+          </div>
+          <div class="modal-body">
+            
+            <div class="spec-section">
+              <h4 class="spec-heading">1.0 TOPOLOGICAL DIALING &amp; VECTOR STAGING</h4>
+              <p>The Non-Euclidean Radial Manifold requires a <strong>6-symbol coordinate address</strong> to calibrate the 6 Degrees of Freedom (X-Trans, Y-Trans, Z-Trans, Yaw, Pitch, Metric Scale). Each selection engages a structural lock node on the 8-point radial chord and renders real-time inking passes with mechanical weld callouts.</p>
+              <ul class="spec-list">
+                <li><strong>Manual Dial:</strong> Select 6 distinct glyphs from the <em>Coordinate Drafting Matrix</em>, then click <code>ENGAGE / APPROVE DRAWING</code>.</li>
+                <li><strong>Plotter Tracer:</strong> Watch the central compass arm and caliper pins ink the schematic in real time.</li>
+              </ul>
+            </div>
+
+            <div class="spec-section">
+              <h4 class="spec-heading">2.0 APPROVED SITE PLANS (QUICK-DIAL ARCHIVE)</h4>
+              <p>The sidebar contains 6 pre-engineered site plans sorted into two classification tiers. Selecting any plan executes single-action coordinate loading and immediate drafting approval:</p>
+              <ul class="spec-list">
+                <li><strong>Tier-I (Approved Civil):</strong> Standard intra-atmospheric and orbital civil transport plans.</li>
+                <li><strong>Tier-II (Classified Extra-Topological):</strong> Deep-space non-Euclidean manifold blueprints with metric stress safeguards.</li>
+              </ul>
+            </div>
+
+            <div class="spec-section">
+              <h4 class="spec-heading">3.0 STRUCTURAL REVIEW HOLD SUBSYSTEM</h4>
+              <p>The <code>REVIEW HOLD</code> control simulates a municipal engineering / architectural code compliance hold. When engaged:</p>
+              <ul class="spec-list">
+                <li>Dialing may proceed normally, but final drawing authorization and wormhole transmission will be strictly refused.</li>
+                <li>An inspection hold stamp and safety caution hatch pattern will render across the schematic until the hold is disengaged.</li>
+              </ul>
+            </div>
+
+            <div class="spec-section">
+              <h4 class="spec-heading">4.0 DISENGAGE &amp; DRAWING REVERSION</h4>
+              <p>The <code>VOID DRAFT / DISENGAGE</code> button remains permanently active and clickable at all times. Clicking disengage smoothly dissolves the active topological manifold, voiding inked lines and restoring the schematic to clean dashed construction lines for a fresh dialing cycle.</p>
+            </div>
+
+            <div class="spec-footer-block">
+              <span>BUREAU OF TOPOLOGICAL PERMITS // CERTIFICATION NO. VK-CAD-ALPHA-8088</span>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button id="modal-dismiss-btn" class="modal-btn-dismiss">DISMISS SPECIFICATION [ESC]</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
