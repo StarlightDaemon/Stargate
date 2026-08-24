@@ -1,0 +1,15 @@
+{
+  "name": "stargate_blueprint_drafting",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "vite": "^5.0.0"
+  },
+  "devDependencies": {
+    "puppeteer": "^22.0.0"
+  }
+}
