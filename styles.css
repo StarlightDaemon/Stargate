@@ -256,24 +256,36 @@ body {
 .execution-row:last-child {
     margin-bottom: 0;
 }
-.danger-btn {
-    width: 100%;
-    background: rgba(255, 68, 68, 0.1);
-    border: 2px solid var(--alert-color);
-    color: var(--alert-color);
+.danger-btn, .action-btn {
+    width: 48%;
+    border: 2px solid;
     padding: 10px;
     font-family: var(--font-main);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
     transition: all 0.2s;
 }
+.danger-btn {
+    background: rgba(255, 68, 68, 0.1);
+    border-color: var(--alert-color);
+    color: var(--alert-color);
+}
+.action-btn {
+    background: rgba(173, 216, 230, 0.1);
+    border-color: var(--line-color);
+    color: var(--line-color);
+}
 .danger-btn:hover:not(:disabled) {
     background: rgba(255, 68, 68, 0.3);
     box-shadow: 0 0 10px var(--alert-color);
 }
-.danger-btn:disabled {
+.action-btn:hover:not(:disabled) {
+    background: rgba(173, 216, 230, 0.3);
+    box-shadow: 0 0 10px var(--line-color);
+}
+.danger-btn:disabled, .action-btn:disabled {
     border-color: var(--line-color);
     color: var(--line-color);
     opacity: 0.5;

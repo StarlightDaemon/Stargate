@@ -23,6 +23,7 @@ const symbolGrid = document.getElementById('symbol-grid');
 const addressBuffer = document.getElementById('address-buffer');
 const lockPointsContainer = document.getElementById('lock-points-container');
 const btnDisengage = document.getElementById('btn-disengage');
+const btnEngage = document.getElementById('btn-engage');
 const toggleReviewHold = document.getElementById('toggle-review-hold');
 const drawingStatus = document.getElementById('drawing-status');
 const approvalStamp = document.getElementById('approval-stamp');
@@ -118,7 +119,7 @@ function init() {
         container.appendChild(btn);
     });
 
-    // Controls
+    btnEngage.onclick = checkFinalization;
     btnDisengage.onclick = disengage;
 
     // Operator Reference
@@ -153,15 +154,32 @@ function handleSymbolSelect(symbol, btnElement) {
     btnDisengage.disabled = false;
 
     if (currentAddress.length === MAX_ADDRESS_LENGTH) {
-        checkFinalization();
+        btnEngage.disabled = false;
     }
 }
 
 async function handleQuickDial(sequence) {
     if (isConnected || isDialing) return;
+    
+    // Reset safely without triggering disengage audio or clearing isDialing
+    isConnected = false;
+    currentAddress = [];
+    updateBufferDisplay();
+    lockPointsContainer.innerHTML = '';
+    drawingStatus.textContent = "DRAFT";
+    drawingStatus.style.color = "var(--line-color)";
+    svgGate.classList.remove('is-active');
+    approvalStamp.classList.remove('stamp-anim');
+    portalEventHorizon.style.opacity = "0";
+    portalEventHorizon.style.fill = "none";
+    Array.from(symbolGrid.children).forEach(btn => {
+        btn.classList.remove('selected');
+        btn.disabled = false;
+    });
+    
     isDialing = true;
-    disengage(false); // Silent reset
     btnDisengage.disabled = false;
+    btnEngage.disabled = true;
     
     for (let i = 0; i < sequence.length; i++) {
         if (!isDialing) break; // Interrupted by disengage
@@ -184,6 +202,7 @@ async function handleQuickDial(sequence) {
     }
     
     if (isDialing && currentAddress.length === MAX_ADDRESS_LENGTH) {
+        btnEngage.disabled = false;
         checkFinalization();
     }
     isDialing = false;
@@ -300,6 +319,7 @@ function disengage(playSound = true) {
     Array.from(qdTier2.children).forEach(btn => btn.disabled = false);
     
     btnDisengage.disabled = true;
+    btnEngage.disabled = true;
     
     if (playSound && audioCtx) {
         playDraftingSound(); // Using drafting sound for erase/reset
@@ -308,11 +328,14 @@ function disengage(playSound = true) {
 
 // Watch Review Hold toggle to allow finalization if disabled after dialing
 toggleReviewHold.addEventListener('change', () => {
-    if (!toggleReviewHold.checked && currentAddress.length === MAX_ADDRESS_LENGTH && !isConnected) {
-        finalizeConnection();
+    if (!toggleReviewHold.checked && currentAddress.length === MAX_ADDRESS_LENGTH && isConnected) {
+        // Just remove the alert text if it was held, though actually it doesn't finalize automatically unless click engage
     } else if (toggleReviewHold.checked && currentAddress.length === MAX_ADDRESS_LENGTH && !isConnected) {
         drawingStatus.textContent = "REVIEW HOLD";
         drawingStatus.style.color = "var(--alert-color)";
+    } else if (!toggleReviewHold.checked && currentAddress.length === MAX_ADDRESS_LENGTH && !isConnected) {
+        drawingStatus.textContent = "DRAFT";
+        drawingStatus.style.color = "var(--line-color)";
     }
 });
 
