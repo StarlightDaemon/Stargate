@@ -324,6 +324,9 @@ a.card:hover, a.card:focus-visible {
   justify-content: space-between;
   gap: 10px;
   margin-top: 4px;
+  /* series badge + folder + version can exceed the card width —
+     wrap instead of letting the version overlap the tags row */
+  flex-wrap: wrap;
 }
 
 .card-tags {
@@ -331,6 +334,7 @@ a.card:hover, a.card:focus-visible {
   align-items: center;
   gap: 8px;
   min-width: 0;
+  flex-wrap: wrap;
 }
 
 /* ---------------- status badges ----------------
@@ -404,6 +408,31 @@ a.card:hover, a.card:focus-visible {
   border-color: #322b29;
   filter: grayscale(0.5);
   opacity: 0.85;
+}
+
+/* Honest caveat line: distinct from the blurb (mono, hairline-topped)
+   in the fault amber-red family but dimmer than the known-issue badge
+   — it qualifies the entry, it doesn't re-alarm it. */
+.card-note {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: #c58a76;
+  border-top: 1px solid var(--panel-edge);
+  padding-top: 8px;
+}
+
+/* Thematic-series tag: teal to read as a grouping, not a status */
+.series-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  border: 1px solid var(--teal-dim);
+  border-radius: 2px;
+  padding: 1px 6px;
+  white-space: nowrap;
 }
 
 .card-folder {

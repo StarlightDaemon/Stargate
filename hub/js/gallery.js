@@ -121,6 +121,16 @@ export class Gallery {
     blurb.className = "card-blurb";
     blurb.textContent = entry.blurb || "";
 
+    // Honest per-build caveat (weak thematic fit, closed-as-one-off,
+    // session-verified-only, documented defects) — rendered on the
+    // card so flagged entries don't present as uniformly polished.
+    let note = null;
+    if (entry.note) {
+      note = document.createElement("p");
+      note.className = "card-note";
+      note.textContent = entry.note;
+    }
+
     const footer = document.createElement("div");
     footer.className = "card-footer";
 
@@ -131,6 +141,13 @@ export class Gallery {
     badge.className = `status-badge ${entry.status}`;
     badge.textContent = STATUS_LABELS[entry.status] || entry.status;
     tags.appendChild(badge);
+
+    if (entry.series) {
+      const series = document.createElement("span");
+      series.className = "series-badge";
+      series.textContent = `${entry.series} series`;
+      tags.appendChild(series);
+    }
 
     const folder = document.createElement("span");
     folder.className = "card-folder";
@@ -148,6 +165,7 @@ export class Gallery {
 
     body.appendChild(title);
     body.appendChild(blurb);
+    if (note) body.appendChild(note);
     body.appendChild(footer);
 
     card.appendChild(preview);

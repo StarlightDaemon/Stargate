@@ -12,9 +12,11 @@
       "title": "AETHERGATE — Transit Ring Console",
       "blurb": "An original, fully client-side interactive tribute to ring-portal science fiction. Compose a seven-sigil destination address, watch the sigil track spin each glyph under the crown marker while mechanical seals clamp…",
       "link": "../stargate_aethergate/index.html",
-      "preview": null,
+      "preview": "../stargate_aethergate/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-aetheric-telegraph",
@@ -22,9 +24,23 @@
       "title": "HM Imperial Aetheric Telegraph & Pneumatic Dispatch Registry",
       "blurb": "An interactive Victorian technical drafting instrument panel and glowing vector schematic portal ring dispatch terminal.",
       "link": "../stargate_aetheric_telegraph/index.html",
-      "preview": null,
+      "preview": "../stargate_aetheric_telegraph/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-apiculture-telemetry",
+      "folder": "stargate_apiculture_telemetry",
+      "title": "IPATC Precision Apiculture Telemetry Network (`stargate_apiculture_telemetry`)",
+      "blurb": "> Build Status Note: > Operator testing confirmed the core loop is technically functional (dial, activation, disengage all work), but found the overall build rough and not clear or polished enough to warrant further…",
+      "link": "../stargate_apiculture_telemetry/index.html",
+      "preview": "../stargate_apiculture_telemetry/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": "Operator evaluation: functional but rough — closed as a one-off attempt, no further iteration planned."
     },
     {
       "id": "stargate-atompunk",
@@ -32,9 +48,47 @@
       "title": "VANTAGE — Type 9 Aperture Surveillance & Induction Console",
       "blurb": "stargate_atompunk — an interactive novelty portal-dialing website. Atompunk: Cold War civil-defense radar room, alt-1959. Station 3 \"Bluff Creek\" on the Continental Threshold Warning Line, Bureau of Civil Aperture…",
       "link": "../_sequestered/stargate_atompunk/index.html",
-      "preview": null,
+      "preview": "../_sequestered/stargate_atompunk/preview.png",
       "status": "retired",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-bathyscaphe-pilot",
+      "folder": "stargate_bathyscaphe_pilot",
+      "title": "DSV-9 ARCHELON - Bathyscaphe Pilot Console & Abyssal Gateway Interface",
+      "blurb": "Themed, single-page \"portal dialing\" console: a deep-ocean submersible HUD for the fictional Hadal Exploration & Abyssal Research Consortium (HEARC). Version 1.0.0, originally built by Gemini 3.7 Flash (see…",
+      "link": "../stargate_bathyscaphe_pilot/index.html",
+      "preview": "../stargate_bathyscaphe_pilot/preview.png",
+      "status": "known-issue",
+      "version": "1.0.0",
+      "series": null,
+      "note": "Session-verified only. Three documented unfixed content defects: depth readout contradicts stage text after activation, hardcoded archive counts, saved-dives counter never updates."
+    },
+    {
+      "id": "stargate-bathyscaphe-pilot-fable",
+      "folder": "stargate_bathyscaphe_pilot_fable",
+      "title": "DSV-7 *Cerulean Lantern* — Pilot Console",
+      "blurb": "Hadal Threshold Institute · fictional deep-sea submersible piloting console. An interactive, entirely client-side novelty site: fly a seven-waypoint descent profile by balancing ballast and trim into neutral-buoyancy…",
+      "link": "../stargate_bathyscaphe_pilot_fable/index.html",
+      "preview": "../stargate_bathyscaphe_pilot_fable/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": "Zero defects found across all automated verification checks — operator confirmation still pending."
+    },
+    {
+      "id": "stargate-bibliographic-depository",
+      "folder": "stargate_bibliographic_depository",
+      "title": "Pan-Harmonic Bibliographic Depository (`stargate_bibliographic_depository`)",
+      "blurb": "> Operator Review & Thematic Finding: Direct operator testing confirmed that the core interactive loop (manual dialing, two-step authority cross-reference locking, three-stage stasis vault activation, disengage, and…",
+      "link": "../stargate_bibliographic_depository/index.html",
+      "preview": "../stargate_bibliographic_depository/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": "Operator finding: fully functional, but the archival theme fits this project's digital-forward visual identity less naturally than other builds."
     },
     {
       "id": "stargate-blueprint-alpha",
@@ -42,9 +96,11 @@
       "title": "Vossen-Klein Topological Drafting Station Alpha (stargate_blueprint_alpha)",
       "blurb": "> [!WARNING] > Known Issues / Current State Note: > Operator testing found that manual dialing is non-functional. This contradicts this session's automated verification report (which reported two passing…",
       "link": "../stargate_blueprint_alpha/index.html",
-      "preview": null,
+      "preview": "../stargate_blueprint_alpha/preview.png",
       "status": "known-issue",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-blueprint-drafting",
@@ -52,9 +108,11 @@
       "title": "Aeon Structural Dynamics CAD Drafting Terminal",
       "blurb": "> [!WARNING] > UNRESOLVED ISSUE - BUILD CLOSED AS-IS > The original build shipped with non-functional manual dialing. A dedicated fix pass diagnosed and addressed two specific issues (a missing manual ENGAGE control,…",
       "link": "../stargate_blueprint_drafting/index.html",
-      "preview": null,
+      "preview": "../stargate_blueprint_drafting/preview.png",
       "status": "known-issue",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-bureaucratic-mainframe",
@@ -62,9 +120,11 @@
       "title": "D.S.T.C.L. Terminal OS/88-V — Municipal Conduit & Transit Authority",
       "blurb": "An interactive novelty portal-dialing website in a bureaucratic-terminal register: the public dialing terminal of the Department of Sub-Aetheric Transit & Conduit Licensure (D.S.T.C.L.), running Terminal OS/88-V (Rev…",
       "link": "../stargate_bureaucratic_mainframe/index.html",
-      "preview": null,
+      "preview": "../stargate_bureaucratic_mainframe/preview.png",
       "status": "live",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-caissa-workstation",
@@ -72,9 +132,83 @@
       "title": "CAÏSSA-9 — Neural Recursion Strategy Analysis Workstation",
       "blurb": "An interactive novelty portal-dialing website built around CAÏSSA-9, a neural-recursion strategy workstation of the Institute for Deep Combinatorial Analysis (Minimax Core v9.42-AVX512). A destination is dialed as a…",
       "link": "../stargate_caissa_workstation/index.html",
-      "preview": null,
+      "preview": "../stargate_caissa_workstation/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-cathedral-oculus",
+      "folder": "stargate_cathedral_oculus",
+      "title": "The Grand Vitrarium of Lumisfer (`stargate_cathedral_oculus`)",
+      "blurb": "> Direct Operator Testing Confirmation: Direct operator testing confirmed this build is fully functional end-to-end—manual dial, three-stage activation, disengage, and quick-dial auto-dial all working as intended. This…",
+      "link": "../stargate_cathedral_oculus/index.html",
+      "preview": "../stargate_cathedral_oculus/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": "Artistic Register",
+      "note": null
+    },
+    {
+      "id": "stargate-futurist-dynamism",
+      "folder": "stargate_futurist_dynamism",
+      "title": "Istituto Dinamico di Propulsione e Traslazione (IDPT)",
+      "blurb": "> Operator Review Note: The build is complete and functional (all automated verification passed), but operator review found the overall result underwhelming — not a strong execution of the Futurist register, though no…",
+      "link": "../stargate_futurist_dynamism/index.html",
+      "preview": "../stargate_futurist_dynamism/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": "Artistic Register",
+      "note": "Operator review: complete and functional but underwhelming as an execution of the Futurist register — closed without further iteration."
+    },
+    {
+      "id": "stargate-konstrukt-transit",
+      "folder": "stargate_konstrukt_transit",
+      "title": "Stargate Konstrukt Transit",
+      "blurb": "> Operator Verification Note: Direct operator testing confirmed this build is fully functional end-to-end — manual dialing, three-stage activation (buildup, breakthrough, sustained active), disengage/reset, and…",
+      "link": "../stargate_konstrukt_transit/index.html",
+      "preview": "../stargate_konstrukt_transit/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": "Artistic Register",
+      "note": null
+    },
+    {
+      "id": "stargate-nouveau-nimbus",
+      "folder": "stargate_nouveau_nimbus",
+      "title": "Stargate : Le Nimbus Florié (Art Nouveau Botanical Portal)",
+      "blurb": "> Operator Verification Note: Direct operator testing confirmed this build is fully functional end-to-end — manual dial, three-stage activation (Buildup → Breakthrough → Sustained Active), disengage, and quick-dial…",
+      "link": "../stargate_nouveau_nimbus/index.html",
+      "preview": "../stargate_nouveau_nimbus/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": "Artistic Register",
+      "note": null
+    },
+    {
+      "id": "stargate-ukiyo-waystation",
+      "folder": "stargate_ukiyo_waystation",
+      "title": "Stargate Ukiyo-e Waystation (`stargate_ukiyo_waystation`)",
+      "blurb": "> Operator Verification Note: Direct operator testing confirmed this build is fully functional end-to-end — manual dialing, three-stage activation, disengage, and quick-dial auto-dialing all perform as intended. This…",
+      "link": "../stargate_ukiyo_waystation/index.html",
+      "preview": "../stargate_ukiyo_waystation/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": "Artistic Register",
+      "note": null
+    },
+    {
+      "id": "stargate-celestial-astrolabe",
+      "folder": "stargate_celestial_astrolabe",
+      "title": "Stargate Celestial Astrolabe (Series IX)",
+      "blurb": "> Operator Verification Note: Direct operator testing confirmed the build fully functional end-to-end — manual star-fix dialing, three-stage activation (Buildup, Breakthrough, Sustained Active), disengage field…",
+      "link": "../stargate_celestial_astrolabe/index.html",
+      "preview": "../stargate_celestial_astrolabe/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-cyanotype-geodetic",
@@ -82,9 +216,11 @@
       "title": "Vance & Sterling Geodetic Survey Bureau (Plate No. IV-B)",
       "blurb": "> CURRENT STATUS NOTE (POST-1.1.0 OPERATOR AUDIT): > - Confirmed Working: Direct operator testing confirms the v1.1.0 auto-activation fix is genuinely resolved — dialing requires a deliberate click on VALIDATE & COMMIT…",
       "link": "../_sequestered/stargate_cyanotype_geodetic/index.html",
-      "preview": null,
+      "preview": "../_sequestered/stargate_cyanotype_geodetic/preview.png",
       "status": "retired",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-cyberpunk",
@@ -92,9 +228,35 @@
       "title": "DEADRINGER — salvaged transit aperture A7-113",
       "blurb": "An interactive, fully fictional portal-dialing console. Cyberpunk build of the Stargate-inspired series: a decommissioned Kessler-Voss Orbital \"SPINDLE\" transit aperture, cut out of a bankrupt megacorp's tower and…",
       "link": "../_sequestered/stargate_cyberpunk/index.html",
-      "preview": null,
+      "preview": "../_sequestered/stargate_cyberpunk/preview.png",
       "status": "retired",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-dark-matter-array",
+      "folder": "stargate_dark_matter_array",
+      "title": "BOREAS-IX Subterranean Cryogenic Dark Matter Array",
+      "blurb": "> Verification Status (v1.1.2): Automated testing in this session confirmed that the 16:9 interface scales and centers across standard 16:9 (1920x1080), ultrawide (2560x1080), and square (1280x1280) viewports with…",
+      "link": "../stargate_dark_matter_array/index.html",
+      "preview": "../stargate_dark_matter_array/preview.png",
+      "status": "live",
+      "version": "1.1.2",
+      "series": null,
+      "note": "Solid build; the final 16:9 viewport-fill fix (v1.1.2) is session-verified only, not yet confirmed by direct operator testing."
+    },
+    {
+      "id": "stargate-darkpool-router",
+      "folder": "stargate_darkpool_router",
+      "title": "VALENCE-9: Cross-Venue Dark Route Console (`stargate_darkpool_router`)",
+      "blurb": "VALENCE-9 (V9-ELG) is a high-frequency trading and dark-pool multi-leg order execution portal. It models an institutional quantitative trading terminal where multi-exchange liquidity depth is routed across 10 global…",
+      "link": "../stargate_darkpool_router/index.html",
+      "preview": "../stargate_darkpool_router/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-dieselpunk",
@@ -102,9 +264,11 @@
       "title": "STENTOR — Resonance Alternator No. 3",
       "blurb": "An original dieselpunk portal-dialing console: the Halvorsen & Krag Type 88 resonance alternator, worked by the fictional Overland Wireless Traction Board, alternate 1931. The paradigm is the great mechanical longwave…",
       "link": "../_sequestered/stargate_dieselpunk/index.html",
-      "preview": null,
+      "preview": "../_sequestered/stargate_dieselpunk/preview.png",
       "status": "retired",
-      "version": null
+      "version": null,
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-dieselpunkv2",
@@ -112,9 +276,11 @@
       "title": "CARAVELLE — Pan-Continental Travelways Portal Salon",
       "blurb": "An interactive novelty portal-dialing website: the Caravelle, a Pan-Continental Travelways portal salon built into a 1937 cabinet (Belmont Instrument Works, Cabinet No. 9). The salon's directory carries a short board of…",
       "link": "../_sequestered/stargate_dieselpunkv2/index.html",
-      "preview": null,
+      "preview": "../_sequestered/stargate_dieselpunkv2/preview.png",
       "status": "retired",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-epigraphic-spectrometry",
@@ -122,9 +288,11 @@
       "title": "Ancient Mythic Epigraphic Spectrometry Console (`stargate_epigraphic_spectrometry`)",
       "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
       "link": "../stargate_epigraphic_spectrometry/index.html",
-      "preview": null,
+      "preview": "../stargate_epigraphic_spectrometry/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-erebus-signal",
@@ -132,9 +300,23 @@
       "title": "Erebus Signal Intercept",
       "blurb": "An interactive novelty portal-dialing website built as the Erebus Signal Intercept terminal, a signal-degradation aesthetic worked in CRT scanlines, tracking artifacts, and chromatic aberration. Dialing runs a 9-chevron…",
       "link": "../stargate_erebus_signal/index.html",
-      "preview": null,
+      "preview": "../stargate_erebus_signal/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-fulldome-planetarium",
+      "folder": "stargate_fulldome_planetarium",
+      "title": "VXD-9000 Chrono-Celestial Projector Console",
+      "blurb": "Mount Tycho Zenith Fulldome Observatory & Public Sky Theatre (stargatefulldomeplanetarium)",
+      "link": "../stargate_fulldome_planetarium/index.html",
+      "preview": "../stargate_fulldome_planetarium/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-genomic-sequencer",
@@ -142,9 +324,11 @@
       "title": "Genomic Biotech Sequencing Lab Console (`stargate_genomic_sequencer`)",
       "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
       "link": "../stargate_genomic_sequencer/index.html",
-      "preview": null,
+      "preview": "../stargate_genomic_sequencer/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-heliacal-ring",
@@ -152,9 +336,11 @@
       "title": "Heliacal Ring — Gate Command · Terminal VII",
       "blurb": "An original, fully client-side interactive novelty site: a ring-shaped dialing device that opens a shimmering travel conduit. Compose a seven-glyph address, watch the inner ring spin each glyph to the primary lock, see…",
       "link": "../stargate_heliacal_ring/index.html",
-      "preview": null,
+      "preview": "../stargate_heliacal_ring/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-heliora-annulus",
@@ -162,9 +348,11 @@
       "title": "HELIORA · Threshold Annulus",
       "blurb": "An interactive novelty website: a ring-shaped dialing instrument that attunes seven-sigil addresses (\"cants\"), locks seven Annular Seals one by one, strikes open a molten travel-well (the Wellglass) with a dramatic…",
       "link": "../stargate_heliora_annulus/index.html",
-      "preview": null,
+      "preview": "../stargate_heliora_annulus/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-high-magic",
@@ -172,9 +360,11 @@
       "title": "SIDEREUM — the Ring of Seven Wards",
       "blurb": "An interactive novelty website: a ring-shaped portal-activation artifact of the Astrolith Order, a fictional tradition of sidereal high magic — magic written in the grammar of constellations, inlaid in silver and gold…",
       "link": "../stargate_high_magic/index.html",
-      "preview": null,
+      "preview": "../stargate_high_magic/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-high-scifi",
@@ -182,9 +372,11 @@
       "title": "MERIDIAN — Transit Artifact Console",
       "blurb": "An interactive novelty portal-dialing website. High Sci-Fi theme, ancient-megastructure register: Transit Artifact M-1 “Meridian” is a 2.1-million-year-old torus of scale-invariant grey glass recovered at Sol–Earth L4,…",
       "link": "../stargate_high_scifi/index.html",
-      "preview": null,
+      "preview": "../stargate_high_scifi/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-low-magic",
@@ -192,9 +384,11 @@
       "title": "The Wayband of Wren Alderwick",
       "blurb": "An interactive novelty website: a ring-shaped, portal-opening device built in a low-magic register — hedge-craft, not high sorcery. The Wayband is a threshold wheel kept by Wren Alderwick, a hedge-dialer of the…",
       "link": "../_sequestered/Stargate_low_magic/index.html",
-      "preview": null,
+      "preview": "../_sequestered/Stargate_low_magic/preview.png",
       "status": "retired",
-      "version": "1.3.0"
+      "version": "1.3.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-low-magicv2",
@@ -202,9 +396,11 @@
       "title": "The Hollowbeck Six — a lych-ring",
       "blurb": "An interactive novelty website in a low-magic register: not sorcery, just an old practice that works if you do it properly. Hollowbeck's church tower keeps a ring of six bells — Lark, Tansy, Dole, Mattock, Hobb, and…",
       "link": "../_sequestered/stargate_low_magicv2/index.html",
-      "preview": null,
+      "preview": "../_sequestered/stargate_low_magicv2/preview.png",
       "status": "retired",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-low-scifi-maintenance",
@@ -212,9 +408,11 @@
       "title": "Panel K — Conduit Routing & Service",
       "blurb": "A fictional, fully client-side, interactive portal-dialing site in the register of grounded, workaday low-tech science fiction. Portals here are not relics or ritual instruments — they are municipal infrastructure,…",
       "link": "../_sequestered/stargate_low_scifi_maintenance/index.html",
-      "preview": null,
+      "preview": "../_sequestered/stargate_low_scifi_maintenance/preview.png",
       "status": "retired",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-lumina-grove",
@@ -222,9 +420,11 @@
       "title": "Lumina Grove — Bioluminescent Conduit Lattice",
       "blurb": "An interactive novelty portal-dialing website built as the Lumina Grove portal interface: a bioluminescent conduit lattice dialed through a 9-chevron system that wakes a living-surface portal effect on activation. Six…",
       "link": "../stargate_lumina_grove/index.html",
-      "preview": null,
+      "preview": "../stargate_lumina_grove/preview.png",
       "status": "live",
-      "version": "1.2.0"
+      "version": "1.2.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-mastering-suite",
@@ -232,9 +432,11 @@
       "title": "Axiom Sound Labs — Quantum Mastering Array MK-IX",
       "blurb": "An interactive novelty portal-dialing website staged as an audio mastering console: the Quantum Mastering Array MK-IX at Axiom Sound Labs, a 10-channel Harmonic Patchbay running custom sonic glyphs from 32 Hz to 16 kHz.…",
       "link": "../stargate_mastering_suite/index.html",
-      "preview": null,
+      "preview": "../stargate_mastering_suite/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-meridian-ring",
@@ -242,9 +444,11 @@
       "title": "MERIDIAN RING — Gateway Operations Console",
       "blurb": "An original, fully client-side interactive novelty site: a ring-shaped dialing apparatus that acquires a seven-sigil address, seats eight mechanical hold-clamps one by one, ignites a violent energy surge, and settles…",
       "link": "../stargate_meridian_ring/index.html",
-      "preview": null,
+      "preview": "../stargate_meridian_ring/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-meteorological-nexrad",
@@ -252,9 +456,11 @@
       "title": "Meteorological Doppler NEXRAD Radar Stargate Console (`stargate_meteorological_nexrad`)",
       "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
       "link": "../stargate_meteorological_nexrad/index.html",
-      "preview": null,
+      "preview": "../stargate_meteorological_nexrad/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-modern",
@@ -262,9 +468,11 @@
       "title": "AERIS // Astraea Subspace Gateway Control Console",
       "blurb": "AERIS (Aperture Executive Resonance Interface System) v4.8.2 is a high-fidelity, ultra-modern dark-mode mission-control interface for operating the Series-IX Harmonic Vector Annulus (HVA-900 / \"The Vector Ring\") under…",
       "link": "../stargate_modern/index.html",
-      "preview": null,
+      "preview": "../stargate_modern/preview.png",
       "status": "live",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-municipal-registry",
@@ -272,9 +480,11 @@
       "title": "DITMCO — Municipal Conduit Registry Terminal (Form 1099-TX)",
       "blurb": "An interactive novelty portal-dialing website for the Department of Interzonal Transit & Municipal Conduit Oversight (DITMCO), Registry Division Annex 4-B. Dialing means filing a Form 1099-TX Clearance Application: an…",
       "link": "../stargate_municipal_registry/index.html",
-      "preview": null,
+      "preview": "../stargate_municipal_registry/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-orbital-atc",
@@ -282,9 +492,47 @@
       "title": "Orbital Air Traffic Control Radar Stargate Console (`stargate_orbital_atc`)",
       "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
       "link": "../stargate_orbital_atc/index.html",
-      "preview": null,
+      "preview": "../stargate_orbital_atc/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-orthographic-cad",
+      "folder": "stargate_orthographic_cad",
+      "title": "Stargate Orthographic CAD Terminal (`stargate_orthographic_cad`)",
+      "blurb": "> Status: Operator Verified & Certified Functional (v1.0.0) > Direct operator testing has confirmed this build is fully operational across the entire functional loop: manual dialing, three-stage activation sequence…",
+      "link": "../stargate_orthographic_cad/index.html",
+      "preview": "../stargate_orthographic_cad/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-radio-interferometry",
+      "folder": "stargate_radio_interferometry",
+      "title": "Hesperus Deep-Space Synthesis Array (HDSSA) — Stargate Radio Interferometry",
+      "blurb": "> Verification Status: Confirmed fully functional end-to-end in direct operator testing as part of a three-variant page composition experiment. Manual symbol dialing, activation sequence, disengage/reset, and quick-dial…",
+      "link": "../stargate_radio_interferometry/index.html",
+      "preview": "../stargate_radio_interferometry/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-reactor-criticality",
+      "folder": "stargate_reactor_criticality",
+      "title": "TX-77 'AURA' Fast-Neutron Annular Resonator // Criticality HMI",
+      "blurb": "> Build Status: Complete and functional. Confirmed by operator — manual dial, 3-stage activation sequence, emergency SCRAM disengage, and quick-dial auto-sequencer are all verified and working as intended.",
+      "link": "../stargate_reactor_criticality/index.html",
+      "preview": "../stargate_reactor_criticality/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-retro",
@@ -292,9 +540,47 @@
       "title": "AUGUR — Type 61 Aperture Trace Console",
       "blurb": "A single-session novelty portal-dialing toy in the Retro register: an early-1960s storage-oscilloscope installation at the (fictional) Physical Establishment, Nine Elms. Fully client-side; all destinations are…",
       "link": "../stargate_retro/index.html",
-      "preview": null,
+      "preview": "../stargate_retro/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-seismic-triangulation",
+      "folder": "stargate_seismic_triangulation",
+      "title": "Cascadia Lithospheric Seismo-Acoustic Array (CLSA-9)",
+      "blurb": "> Operator Verification Note: Direct operator testing confirmed the build is fully functional end-to-end — manual dial, three-stage activation (Buildup, Breakthrough, Sustained Active), network disengage/abort, and…",
+      "link": "../stargate_seismic_triangulation/index.html",
+      "preview": "../stargate_seismic_triangulation/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-seti-deepscope",
+      "folder": "stargate_seti_deepscope",
+      "title": "Argos DeepScope: Technosignature Interferometry Console",
+      "blurb": "> Status: Confirmed Fully Functional > Direct operator testing has confirmed this build fully functional end-to-end as part of a three-variant page composition experiment. Manual 7-carrier dialing, 10-dish coincidence…",
+      "link": "../stargate_seti_deepscope/index.html",
+      "preview": "../stargate_seti_deepscope/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-seti-freeform",
+      "folder": "stargate_seti_freeform",
+      "title": "ASBA-VESPER // Deep-Space Interferometric Technosignature Console",
+      "blurb": "Observatory: Vesper Deep-Aperture Technosignature Observatory (VDATO) Array: Aetheris 10-Dish Synthetic Baseline Array (ADIA) Version: 1.0.0 Built by: Gemini 3.7 Flash (High reasoning)",
+      "link": "../stargate_seti_freeform/index.html",
+      "preview": "../stargate_seti_freeform/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-sigint-cryptanalysis",
@@ -302,9 +588,11 @@
       "title": "Station VORTEX-9 — Cryptanalysis & Key Recovery Workstation",
       "blurb": "An interactive novelty portal-dialing website run from Station VORTEX-9, the signals-intelligence workstation of the Directorate of Signal Cryptanalysis & Key Recovery (DSCR). Dialing is a key-recovery hunt: eight…",
       "link": "../stargate_sigint_cryptanalysis/index.html",
-      "preview": null,
+      "preview": "../stargate_sigint_cryptanalysis/preview.png",
       "status": "live",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-solarpunk-ecogrid",
@@ -312,9 +600,11 @@
       "title": "Solarpunk Smart Eco-Grid Dispatch Terminal (`stargate_solarpunk_ecogrid`)",
       "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
       "link": "../stargate_solarpunk_ecogrid/index.html",
-      "preview": null,
+      "preview": "../stargate_solarpunk_ecogrid/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-sonar-abyssal",
@@ -322,9 +612,11 @@
       "title": "Deep-Sea Nautical Sonar Command Console (`stargate_sonar_abyssal`)",
       "blurb": "> Build Status: Confirmed functionally solid via direct operator testing (dialing, activation, and disengage fully functional). Part of the 2026-08-12 six-build batch; operator review noted a creative-diversity finding…",
       "link": "../stargate_sonar_abyssal/index.html",
-      "preview": null,
+      "preview": "../stargate_sonar_abyssal/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-steampunk",
@@ -332,9 +624,11 @@
       "title": "Old Punctual — Vane & Harrow Transit Engine №7",
       "blurb": "An interactive, entirely fictional portal-dialing exhibit in a Victorian steampunk idiom: a punched-card æther correspondence engine built in 1894 by the (equally fictional) firm of Vane & Harrow, Blackfriars, for the…",
       "link": "../_sequestered/stargate_steampunk/index.html",
-      "preview": null,
+      "preview": "../_sequestered/stargate_steampunk/preview.png",
       "status": "retired",
-      "version": null
+      "version": null,
+      "series": null,
+      "note": null
     },
     {
       "id": "stargate-synchrotron-collider",
@@ -342,9 +636,11 @@
       "title": "Aethel-Ring Collider (ARC) — Synchrotron Inversion Control",
       "blurb": "An interactive novelty portal-dialing website built around the Aethel-Ring Collider (ARC), the synchrotron control room of the Aethelgard High-Energy Inversion Laboratory (AHEIL). Dialing means steering six…",
       "link": "../stargate_synchrotron_collider/index.html",
-      "preview": null,
+      "preview": "../stargate_synchrotron_collider/preview.png",
       "status": "live",
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "series": null,
+      "note": null
     }
   ]
 }

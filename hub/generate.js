@@ -67,6 +67,63 @@ const STATUS_OVERRIDES = {
   // [!WARNING] block reports manual dialing is STILL non-functional
   // after a dedicated fix attempt; root cause unresolved, build closed.
   stargate_blueprint_drafting: "known-issue",
+  // Verified against stargate_bathyscaphe_pilot/CHANGELOG.md's
+  // "Issues found (documented, NOT fixed in this session)" section:
+  // three real content defects remain open (depth telemetry lags the
+  // stage narrative, hard-coded archive sidebar counts, saved-dives
+  // counter never updates). Interaction mechanics themselves work.
+  stargate_bathyscaphe_pilot: "known-issue",
+};
+
+// Short caveat lines surfaced on the card itself, so entries with an
+// honest asterisk don't present as uniformly polished. Each is
+// hand-verified against that folder's OWN CHANGELOG.md/README.md
+// (quoting its documented operator evaluation or verification state),
+// never inferred. Folders absent from this map get no note.
+const NOTES = {
+  // CHANGELOG [1.0.0] operator evaluation: core loop functional but
+  // "rough and not clear or polished enough to warrant further
+  // development"; closed as a single one-off attempt.
+  stargate_apiculture_telemetry:
+    "Operator evaluation: functional but rough — closed as a one-off attempt, no further iteration planned.",
+  // CHANGELOG [1.0.0] operator review: complete and fully functional,
+  // but "operator review found the overall result underwhelming";
+  // session closed with no further iteration planned.
+  stargate_futurist_dynamism:
+    "Operator review: complete and functional but underwhelming as an execution of the Futurist register — closed without further iteration.",
+  // CHANGELOG [1.0.0] "Operator Review & Thematic Finding": the
+  // card-catalog archival theme "does not translate as naturally into
+  // the project's digital-forward, glowing-schematic visual mandate".
+  stargate_bibliographic_depository:
+    "Operator finding: fully functional, but the archival theme fits this project's digital-forward visual identity less naturally than other builds.",
+  // CHANGELOG [1.1.2] note: the final 16:9 viewport-fill fix "has not
+  // yet been independently confirmed by the operator's own direct
+  // testing" — self-verified by the building session only.
+  stargate_dark_matter_array:
+    "Solid build; the final 16:9 viewport-fill fix (v1.1.2) is session-verified only, not yet confirmed by direct operator testing.",
+  // CHANGELOG [1.0.0]: "Status of operator testing: NONE" plus three
+  // documented, unfixed content defects (see STATUS_OVERRIDES comment).
+  stargate_bathyscaphe_pilot:
+    "Session-verified only. Three documented unfixed content defects: depth readout contradicts stage text after activation, hardcoded archive counts, saved-dives counter never updates.",
+  // CHANGELOG close-out: zero defects across 185/185 + 24/24 checks,
+  // but "the operator has NOT yet personally clicked through this
+  // build" — automated verification only.
+  stargate_bathyscaphe_pilot_fable:
+    "Zero defects found across all automated verification checks — operator confirmation still pending.",
+};
+
+// Thematic series groupings. Members render a series tag and are
+// clustered together in the grid (see the sort in scan()). The five
+// artistic-register builds were built as one connected sub-series
+// exploring aesthetics beyond the default digital-glow HUD register;
+// each build's own CHANGELOG self-numbers its departure consistently
+// (ukiyo=first, cathedral=second, konstrukt=third, ...).
+const SERIES = {
+  stargate_ukiyo_waystation: "Artistic Register",
+  stargate_cathedral_oculus: "Artistic Register",
+  stargate_konstrukt_transit: "Artistic Register",
+  stargate_nouveau_nimbus: "Artistic Register",
+  stargate_futurist_dynamism: "Artistic Register",
 };
 
 // _sequestered/<folder> dispositions, decided from each folder's OWN
@@ -140,6 +197,14 @@ function cleanMarkdownInline(text) {
     .replace(/\*([^*]+)\*/g, "$1")
     .replace(/_([^_]+)_/g, "$1")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    // common named/numeric HTML entities some READMEs carry (blurbs are
+    // rendered via textContent, so entities would otherwise show raw)
+    .replace(/&rarr;/g, "→")
+    .replace(/&larr;/g, "←")
+    .replace(/&mdash;/g, "—")
+    .replace(/&ndash;/g, "–")
+    .replace(/&amp;/g, "&")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
     .trim();
 }
 
@@ -263,6 +328,8 @@ function scanOne(dir, name, { linkPrefix, status }) {
       preview: preview ? `${linkPrefix}${name}/${preview}` : null,
       status,
       version,
+      series: SERIES[name] || null,
+      note: NOTES[name] || null,
     },
   };
 }
@@ -311,7 +378,24 @@ function scan() {
     }
   }
 
-  included.sort((a, b) => a.folder.localeCompare(b.folder, "en", { sensitivity: "base" }));
+  // Alphabetical by folder, except that members of a series cluster
+  // together at the position of their alphabetically-first member
+  // (internally still alphabetical) — grouping without a separate
+  // grid section.
+  const seriesAnchor = {};
+  for (const e of included) {
+    if (!e.series) continue;
+    const f = e.folder.toLowerCase();
+    if (!(e.series in seriesAnchor) || f < seriesAnchor[e.series]) seriesAnchor[e.series] = f;
+  }
+  const sortKey = (e) =>
+    e.series ? `${seriesAnchor[e.series]}~${e.folder.toLowerCase()}` : e.folder.toLowerCase();
+  // Plain ordinal compare — locale collation can treat the "~" cluster
+  // separator as ignorable punctuation and break the grouping.
+  included.sort((a, b) => {
+    const ka = sortKey(a), kb = sortKey(b);
+    return ka < kb ? -1 : ka > kb ? 1 : 0;
+  });
 
   return { included, skipped };
 }
