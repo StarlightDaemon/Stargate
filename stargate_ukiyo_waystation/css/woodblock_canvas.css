@@ -25,17 +25,16 @@
 
 /* 7 Passage Seal Tags (Tōri-fuda) */
 .fuda-slots-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 6px 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 8px 10px;
     background-color: var(--washi-plate);
     border: var(--border-sumi-mid);
     box-shadow: 2px 2px 0 var(--sumi-ink);
 }
 
 .fuda-slot {
-    flex: 1;
     height: 70px;
     background-color: var(--washi-card);
     border: var(--border-sumi-fine);
@@ -104,9 +103,12 @@
     opacity: 1;
 }
 
-/* Woodblock Print Stage Frame */
+/* Woodblock Print Stage Frame.
+   Fixed plate height so the imagery block sits as a discrete panel anchored to
+   the TOP LEFT of the stage area rather than stretching the whole column. */
 .woodblock-stage-active {
-    flex: 1;
+    flex: 0 0 auto;
+    height: 530px;
     background-color: var(--washi-plate);
     border: var(--border-sumi-heavy);
     padding: 16px;

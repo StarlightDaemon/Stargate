@@ -2,6 +2,82 @@
 
 All notable changes to the Stargate Ukiyo-e Waystation interface will be documented in this file.
 
+## [1.0.2] - 2026-08-25
+
+**Built by:** Claude Opus 5
+
+> **Fix scope:** Pure layout/positioning pass. No interactive behaviour, audio, palette,
+> station content, or woodblock-stamping logic was altered — in particular the ring's own
+> locking feedback and the click-queue serialisation added in 1.0.1 are untouched and
+> re-verified below.
+
+### Before (measured on the cold-start page, 1920×1080)
+- `.main-stage-layout` was a single-row 3-column grid, `550px 1fr 490px`.
+- **Interactive dial / ring** sat in **grid column 1 (left flank)**: `.dial-column` at
+  x=36, y=108, 550×912; the ring itself (`.celestial-dial-wrapper`, 490×490) centred at
+  **(311, 417)**.
+- **Illustrated print panel (Woodblock Stage)** sat in **grid column 2 (centre)**:
+  `#woodblock-stage` at x=604, y=248, 772×772, centred at **(990, 634)** — i.e. the imagery
+  occupied the page's central focal position and the instrument was pushed to the margin.
+- `.controls-column` in grid column 3 at x=1394.
+
+### Changed — imagery to top-left, dial to centre
+- `.main-stage-layout` now uses **named grid areas** (`"stage dial controls"`) with
+  **equal-width flanking columns** (`490px 1fr 490px`). Equal flanks are deliberate: they put
+  the centre column's axis exactly on the 1920px stage centre line, so the dial is
+  geometrically centred rather than approximately so.
+- **`.stage-column` (illustrated print panel) → `grid-area: stage`, the top-left flank.**
+  Its children were reordered so the print plate leads and the seal tags follow, and the
+  column is `justify-content: flex-start` so the block hugs the top edge.
+  `#woodblock-stage` changed from `flex: 1` (stretch the whole column) to a fixed
+  `530px` plate, making it a discrete panel anchored top-left at **x=36, y=152, 490×530**
+  rather than a full-height stretch. The washi below it is intentional *Ma*.
+- **`.dial-column` (interactive dial/ring) → `grid-area: dial`, the centre.** New
+  `#dial-container` rule (`flex: 1` + column flex + `justify-content: center`) lets the
+  instrument stack occupy the full remaining height of the centre column.
+- **Ring enlarged to read as the dominant focal element**: `.celestial-dial-wrapper`
+  490→**620px**, `.kento-compass-ring` 486→616px, `.dial-svg` 470→596px (+27% diameter).
+  The SVG is `viewBox`-driven, so every sector, trigram, kento blade and seal mark scales
+  with it and no coordinate maths changed.
+- **7 passage seal tags (`.fuda-slots-container`) reflowed** from a 1×7 flex row to a
+  `repeat(4, 1fr)` grid so the tags stay legible in the narrower 490px left flank; they now
+  sit directly beneath the print panel they annotate. `.fuda-slot` dropped its `flex: 1`
+  accordingly. Ids (`#fuda-slots`, `#fuda-slot-N`) are unchanged, so
+  `WoodblockEngine.renderFudaSlots` / `updateFudaTag` / `clearFudaSlots` are unaffected.
+- `.station-pad-strip` keeps its 5×2 arrangement but now spans the wider centre column, so
+  each pad's romaji label fits on one line (strip height 190→166px).
+- Footer version label `v1.0.0` → `v1.0.2` (it had drifted behind `version.json`).
+
+### After (measured on the cold-start page, 1920×1080)
+- Computed grid: `490px 832px 490px`.
+- **Illustrated print panel top-left**: `#woodblock-stage` at **x=36, y=152, 490×530**,
+  its top edge flush with the top of the stage area; seal tags directly below at y=692.
+- **Dial centred and dominant**: `.dial-column` at x=544, 832×912, **centre x = 960 — exactly
+  the page centre line**; the ring (`.celestial-dial-wrapper`, now 620×620) centred at
+  **(960, 482)**, the largest single element on the page.
+- Quick-dial ledger, operator controls, header and footer corner displays all retain their
+  prior roles and positions (`.controls-column` unchanged at x=1394, 490×912).
+
+### Verified
+- Full existing **14-test Puppeteer E2E suite passes 14/14** with no regressions: viewport
+  scaling, safety-interlock default (RELEASED), 7-station manual dial, negative auto-fire
+  (lands in PENDING, never self-activates), three-stage activation
+  (buildup → breakthrough → sustained), both disengage/redial cycles, quick-dial auto-dial
+  sequencing, interlock block, operator reference modal, and 4K scaling. The suite drives
+  every control by hit-tested bounding box, so it exercised the relocated elements at their
+  new coordinates.
+- **Prior fixes explicitly re-verified against the restructured DOM** rather than assumed
+  intact. A targeted Puppeteer run confirmed: all 10 sectors present in the recentred dial;
+  a locked sector still passes through the transient `.sector-locking` layer-colour
+  animation, ends in persistent `.sector-locked`, repaints its rim notch through the
+  woodblock layer colours, and reveals the vermillion Inkan seal mark. Rapid dispatched
+  pointer clicks at both **60ms and 20ms** spacing still fully serialise — exactly 5
+  registrations, zero duplicates, zero blank destination tags, all 5 ring sectors sealed,
+  queue drained with no stuck in-flight flag, and mid-flight clicks still acknowledged by
+  the dashed `.pad-queued` outline. Both behaviours are keyed off `this.container`-relative
+  selectors and the SVG's own coordinate space, which is why page position does not affect
+  them — but this was confirmed by measurement, not by inspection alone.
+
 ## [1.0.1] - 2026-08-25
 
 **Built by:** Claude Sonnet 5

@@ -2,6 +2,16 @@
    UKIYO-E CELESTIAL WOODBLOCK COMPASS DIAL
    ========================================================================== */
 
+/* The dial now owns the centre column: its container fills the remaining
+   height so the instrument stack sits optically centred in the page. */
+#dial-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+}
+
 .dial-column-header {
     width: 100%;
     display: flex;
@@ -37,8 +47,8 @@
 
 .celestial-dial-wrapper {
     position: relative;
-    width: 490px;
-    height: 490px;
+    width: 620px;
+    height: 620px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,8 +58,8 @@
 /* Kento Alignment Marks around Dial */
 .kento-compass-ring {
     position: absolute;
-    width: 486px;
-    height: 486px;
+    width: 616px;
+    height: 616px;
     pointer-events: none;
     border: 2px dashed rgba(26, 24, 24, 0.4);
     border-radius: 50%;
@@ -96,8 +106,8 @@
 
 /* Rotary Dial SVG */
 .dial-svg {
-    width: 470px;
-    height: 470px;
+    width: 596px;
+    height: 596px;
     filter: drop-shadow(4px 4px 0 var(--sumi-ink));
 }
 

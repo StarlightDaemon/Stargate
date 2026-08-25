@@ -227,18 +227,24 @@ body::before {
     box-shadow: 1px 1px 0 var(--sumi-ink);
 }
 
-/* Main Body Layout (Asymmetric Ukiyo-e Composition) */
+/* Main Body Layout (Asymmetric Ukiyo-e Composition)
+   Named areas: the woodblock print plate anchors the TOP LEFT, the compass dial
+   holds the CENTRE as the dominant focal instrument, ledger/controls stay right.
+   The two flanking columns are deliberately equal-width so the dial column's
+   centre line lands exactly on the 1920px stage centre (x = 960). */
 .main-stage-layout {
     flex: 1;
     display: grid;
-    grid-template-columns: 550px 1fr 490px;
+    grid-template-columns: 490px 1fr 490px;
+    grid-template-areas: "stage dial controls";
     gap: 18px;
     padding: 14px 28px 10px 28px;
     overflow: hidden;
 }
 
-/* Left Flank: Celestial Compass Dial */
+/* Centre Focal Instrument: Celestial Compass Dial */
 .dial-column {
+    grid-area: dial;
     display: flex;
     flex-direction: column;
     background-color: var(--washi-plate);
@@ -248,15 +254,19 @@ body::before {
     position: relative;
 }
 
-/* Center Flank: Multi-Layer Woodblock Stamping Canvas & Fuda Slots */
+/* Top-Left Flank: Multi-Layer Woodblock Stamping Canvas & Fuda Slots.
+   Contents hug the top of the column; the washi below is intentional Ma. */
 .stage-column {
+    grid-area: stage;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     gap: 10px;
 }
 
 /* Right Flank: Travel Ledger Presets & Interactive Seal Controls */
 .controls-column {
+    grid-area: controls;
     display: flex;
     flex-direction: column;
     gap: 12px;

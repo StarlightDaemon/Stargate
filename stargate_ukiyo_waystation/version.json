@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "model": "Gemini 3.7 Flash (High Reasoning)",
-  "patchModel": "Claude Sonnet 5"
+  "patchModel": "Claude Opus 5"
 }
