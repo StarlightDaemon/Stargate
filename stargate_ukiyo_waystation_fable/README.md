@@ -1,5 +1,13 @@
 # Kagerō Road Waystation Registry
 
+> **Status note:** this build is closed as a single, one-off attempt; no further
+> iteration is planned. Operator review found it did not meet expectations
+> compared to a sibling build on the same brief — in particular, the
+> quick-dial (traveler's token) auto-dial behavior did not read as present or
+> working during real use, even though the build's own automated Puppeteer
+> verification reported specific staged auto-dial timing. That discrepancy
+> between automated verification and operator experience is unresolved.
+
 An interactive novelty portal-dialing console rendered as a Japanese woodblock print.
 The **Kagerō-kaidō** — the Shimmer Road — is a legendary route whose ten waystations
 are joined not by footpath but by printed passage: the Lantern Wardens who keep the

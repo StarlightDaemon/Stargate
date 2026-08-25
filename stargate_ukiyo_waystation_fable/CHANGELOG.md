@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Built by:** Claude Fable 5, high reasoning
 
+### Known Issues
+
+- Operator review found the overall build did not meet expectations
+  compared to a sibling build on the same creative brief. Specifically,
+  the auto-dial/quick-dial preset behavior (the traveler's tokens) did
+  not read as working or present during real operator use.
+- This build's own automated Puppeteer verification reported specific
+  staged auto-dial timing (per-lock timestamps of roughly 850ms to
+  5100ms across the seven impressions, documented in the original build
+  report). The discrepancy between that automated verification and the
+  operator's real-use experience has not been resolved or explained.
+- This build is closed as a single, one-off attempt. No further
+  iteration or fix pass is planned.
+
 ### Added
 
 - Initial release of the Kagerō Road Waystation Registry, a portal-dialing
