@@ -8,9 +8,14 @@ import { spawn } from 'child_process';
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-const ARTIFACT_DIR = './test_screenshots';
+const ARTIFACT_DIR = path.join(__dirname, 'test_screenshots');
+if (!fs.existsSync(ARTIFACT_DIR)) {
+  fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
+}
 const PORT = 9222;
 
 function sleep(ms) {

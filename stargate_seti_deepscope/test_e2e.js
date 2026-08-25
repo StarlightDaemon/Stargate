@@ -1,8 +1,10 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const SCREENSHOT_DIR = './test_screenshots';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SCREENSHOT_DIR = path.join(__dirname, 'test_screenshots');
 if (!fs.existsSync(SCREENSHOT_DIR)) {
   fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
 }
