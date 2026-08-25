@@ -115,6 +115,33 @@
     fill: var(--vermillion-shu);
 }
 
+/* Ring is the primary locus of dialing feedback: sectors carry their own
+   progressive woodblock-layer stamping and a persistent lock seal. */
+.sector-notch,
+.sector-badge {
+    transition: fill 0.12s linear, stroke 0.12s linear;
+}
+
+.dial-sector.sector-locking .sector-badge {
+    animation: sectorLockPulse 0.28s ease-in-out infinite alternate;
+}
+
+@keyframes sectorLockPulse {
+    from { stroke-width: 3px; }
+    to { stroke-width: 6px; }
+}
+
+.dial-sector.sector-locked .sector-badge {
+    stroke: var(--vermillion-shu, #c73d2a);
+    stroke-width: 4px;
+}
+
+.sector-seal-mark,
+.sector-seal-text {
+    transition: opacity 0.25s ease-in;
+    pointer-events: none;
+}
+
 .kento-needle {
     pointer-events: none;
     filter: drop-shadow(2px 2px 0 var(--sumi-ink));
@@ -156,6 +183,11 @@
     transform: translate(-1px, -1px);
     box-shadow: 3px 3px 0 var(--sumi-ink);
     border-color: var(--vermillion-shu);
+}
+
+.station-pad-btn.pad-queued {
+    outline: 2px dashed var(--vermillion-shu, #c73d2a);
+    outline-offset: 2px;
 }
 
 .station-pad-btn:active,

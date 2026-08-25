@@ -84,26 +84,38 @@ class PortalController {
 
         // Connect Celestial Dial manual station lock callback
         if (window.CelestialDial) {
-            window.CelestialDial.onStationLockedCallback = (station) => {
-                this.handleManualStationLock(station);
+            window.CelestialDial.onStationLockedCallback = (station, doneCallback) => {
+                this.handleManualStationLock(station, doneCallback);
             };
         }
     }
 
-    handleManualStationLock(station) {
+    /**
+     * doneCallback is always invoked exactly once, and only once the full
+     * lock attempt (accepted or rejected) has resolved - it drains the
+     * dial's click queue, so a rejected/no-op click still lets the next
+     * queued click proceed instead of stalling it.
+     */
+    handleManualStationLock(station, doneCallback) {
+        const finish = () => { if (doneCallback) doneCallback(); };
+
         if (this.state === PORTAL_STATES.STAGE_1_BUILDUP ||
             this.state === PORTAL_STATES.STAGE_2_BREAKTHROUGH ||
             this.state === PORTAL_STATES.STAGE_3_SUSTAINED) {
+            finish();
             return;
         }
 
         if (this.lockedStations.length >= this.maxStations) {
+            finish();
             return;
         }
 
         const lockIdx = this.lockedStations.length;
+        window.CelestialDial.animateSectorLock(station.index, station, false);
         window.WoodblockEngine.stampStation(station, lockIdx, () => {
             this.registerLockedStation(station);
+            finish();
         });
     }
 

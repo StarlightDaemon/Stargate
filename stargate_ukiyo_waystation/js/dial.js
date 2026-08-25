@@ -16,6 +16,9 @@ class CelestialDial {
         this.selectedIndex = -1;
         this.isSpinning = false;
         this.onStationLockedCallback = null;
+        this.lockedIndices = new Set();
+        this.clickQueue = [];
+        this.isLockInFlight = false;
     }
 
     init(containerId = 'dial-container', onStationLocked = null) {
@@ -38,14 +41,18 @@ class CelestialDial {
 
             sectorsSvg += `
                 <g class="dial-sector" data-index="${i}" data-id="${st.id}" transform="rotate(${angle} 260 260)">
-                    <!-- Outer Woodblock Rim Notch -->
-                    <rect x="254" y="16" width="12" height="24" fill="#9e7b51" stroke="#1a1818" stroke-width="2"/>
+                    <!-- Outer Woodblock Rim Notch (progressively stamped through print layers on lock) -->
+                    <rect x="254" y="16" width="12" height="24" fill="#9e7b51" stroke="#1a1818" stroke-width="2" class="sector-notch"/>
                     <text x="260" y="32" font-family="'Noto Serif JP', serif" font-size="11" font-weight="900" fill="#1a1818" text-anchor="middle">${i + 1}</text>
-                    
+
                     <!-- Station Seal Badge -->
                     <circle cx="260" cy="72" r="26" fill="#f4ecd4" stroke="#1a1818" stroke-width="3" class="sector-badge"/>
                     <text x="260" y="78" font-family="'Noto Serif JP', serif" font-size="16" font-weight="900" fill="#1a1818" text-anchor="middle">${st.kanji.charAt(0)}</text>
                     <text x="260" y="112" font-family="'Noto Serif JP', serif" font-size="10" font-weight="700" fill="#842618" text-anchor="middle">${st.kanji}</text>
+
+                    <!-- Locked Seal Stamp (revealed once this station fully resolves) -->
+                    <circle cx="280" cy="54" r="10" fill="#c73d2a" stroke="#1a1818" stroke-width="1.5" class="sector-seal-mark" opacity="0"/>
+                    <text x="280" y="58" font-family="'Noto Serif JP', serif" font-size="9" font-weight="900" fill="#fdfaf0" text-anchor="middle" class="sector-seal-text" opacity="0">印</text>
                 </g>
             `;
         }
@@ -146,7 +153,7 @@ class CelestialDial {
         sectors.forEach(sec => {
             sec.addEventListener('click', (e) => {
                 const idx = parseInt(sec.getAttribute('data-index'), 10);
-                this.rotateToStation(idx, true);
+                this.queueStationClick(idx);
             });
         });
 
@@ -155,9 +162,44 @@ class CelestialDial {
         padBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const idx = parseInt(btn.getAttribute('data-index'), 10);
-                this.rotateToStation(idx, true);
+                this.queueStationClick(idx);
             });
         });
+    }
+
+    /**
+     * Entry point for every manual click. Clicks landing while a prior
+     * rotate+lock pipeline is still in flight are queued (with audible/visual
+     * acknowledgement) and processed strictly in order, rather than racing
+     * the in-progress animation and corrupting shared stage/ring state.
+     */
+    queueStationClick(idx) {
+        if (this.isLockInFlight) {
+            this.clickQueue.push(idx);
+            this.flashQueuedFeedback(idx);
+            window.UkiyoeAudio.playPaperFriction(0.06, 0.12);
+            return;
+        }
+        this.isLockInFlight = true;
+        this.processStationClick(idx);
+    }
+
+    processStationClick(idx) {
+        this.rotateToStation(idx, true, () => {
+            if (this.clickQueue.length > 0) {
+                const next = this.clickQueue.shift();
+                this.processStationClick(next);
+            } else {
+                this.isLockInFlight = false;
+            }
+        });
+    }
+
+    flashQueuedFeedback(idx) {
+        const btn = this.container.querySelector(`.station-pad-btn[data-index="${idx}"]`);
+        if (!btn) return;
+        btn.classList.add('pad-queued');
+        setTimeout(() => btn.classList.remove('pad-queued'), 320);
     }
 
     /**
@@ -199,21 +241,90 @@ class CelestialDial {
 
         setTimeout(() => {
             if (isManual && this.onStationLockedCallback) {
-                this.onStationLockedCallback(STATIONS_DATA[targetIdx]);
+                // onDone is deferred until the full external lock pipeline
+                // (woodblock stamping + registration) actually completes,
+                // so queued clicks never overlap an in-progress lock.
+                this.onStationLockedCallback(STATIONS_DATA[targetIdx], () => {
+                    if (onDone) onDone(STATIONS_DATA[targetIdx]);
+                });
+            } else {
+                if (onDone) onDone(STATIONS_DATA[targetIdx]);
             }
-            if (onDone) onDone(STATIONS_DATA[targetIdx]);
         }, 240);
+    }
+
+    /**
+     * Progressively stamps the corresponding dial sector's rim notch and seal
+     * badge through the same woodblock layer colors used on the print stage,
+     * so the ring itself is the primary, persistent record of which stations
+     * have locked - not just the separate stage panel.
+     */
+    animateSectorLock(index, station, isFast = false) {
+        const sectorElem = this.container && this.container.querySelector(`.dial-sector[data-index="${index}"]`);
+        if (!sectorElem) return;
+        const notch = sectorElem.querySelector('.sector-notch');
+        const badge = sectorElem.querySelector('.sector-badge');
+        const sealMark = sectorElem.querySelector('.sector-seal-mark');
+        const sealText = sectorElem.querySelector('.sector-seal-text');
+        if (!notch || !badge) return;
+
+        const layers = station.layers || {};
+        const stepTime = isFast ? 40 : 80;
+
+        sectorElem.classList.add('sector-locking');
+        notch.style.fill = '#1a1818';
+        notch.style.stroke = '#1a1818';
+
+        setTimeout(() => {
+            if (layers.jizuri) notch.style.fill = layers.jizuri;
+        }, stepTime);
+
+        setTimeout(() => {
+            if (layers.aizuri) {
+                notch.style.fill = layers.aizuri;
+                badge.style.stroke = layers.aizuri;
+            }
+        }, stepTime * 2);
+
+        setTimeout(() => {
+            if (layers.shuzuri) badge.style.fill = layers.shuzuri;
+        }, stepTime * 3);
+
+        setTimeout(() => {
+            if (layers.gold) notch.style.fill = layers.gold;
+            sectorElem.classList.remove('sector-locking');
+            sectorElem.classList.add('sector-locked');
+            this.lockedIndices.add(index);
+            if (sealMark) sealMark.style.opacity = '1';
+            if (sealText) sealText.style.opacity = '1';
+        }, stepTime * 4);
     }
 
     resetDial() {
         this.currentAngle = 0;
         this.selectedIndex = -1;
+        this.clickQueue = [];
+        this.isLockInFlight = false;
+        this.lockedIndices.clear();
         if (this.rotaryGroup) {
             this.rotaryGroup.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
             this.rotaryGroup.style.transform = 'rotate(0deg)';
         }
         const padBtns = this.container.querySelectorAll('.station-pad-btn');
-        padBtns.forEach(btn => btn.classList.remove('active'));
+        padBtns.forEach(btn => btn.classList.remove('active', 'pad-queued'));
+
+        const sectors = this.container.querySelectorAll('.dial-sector');
+        sectors.forEach(sec => {
+            sec.classList.remove('sector-locking', 'sector-locked');
+            const notch = sec.querySelector('.sector-notch');
+            const badge = sec.querySelector('.sector-badge');
+            const sealMark = sec.querySelector('.sector-seal-mark');
+            const sealText = sec.querySelector('.sector-seal-text');
+            if (notch) { notch.style.fill = ''; notch.style.stroke = ''; }
+            if (badge) { badge.style.fill = ''; badge.style.stroke = ''; }
+            if (sealMark) sealMark.style.opacity = '0';
+            if (sealText) sealText.style.opacity = '0';
+        });
     }
 }
 

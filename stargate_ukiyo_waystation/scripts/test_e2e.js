@@ -86,15 +86,17 @@ async function runE2ETests() {
             const box = await btn.boundingBox();
             await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
 
-            await sleep(400); // Allow stamping animation
-
             if (i === 3) {
+                // Clicks now queue and fully serialize (rotate + 5-layer stamp) rather
+                // than racing, so wait for this click to actually resolve before the mid-sequence shot.
+                await page.waitForFunction((n) => window.PortalController.lockedStations.length >= n, {}, i + 1);
                 await page.screenshot({ path: path.join(SCREENSHOT_DIR, '02_manual_dial_progress.png') });
                 console.log('✓ Captured 02_manual_dial_progress.png (4 seals locked)');
             }
         }
 
-        await sleep(500);
+        // Wait for the full serialized queue (all 7 clicks) to resolve.
+        await page.waitForFunction(() => window.PortalController.lockedStations.length >= 7, { timeout: 10000 });
 
         // [Test 3] Negative Test: Verify state is PENDING and did NOT auto-fire!
         const pendingCheck = await page.evaluate(() => {
@@ -212,14 +214,13 @@ async function runE2ETests() {
 
         // [Test 8] Safety Interlock Blocked Test
         console.log('\n[Test 8] Testing Safety Interlock (関所手形結界)...');
-        // Dial 7 stations again
+        // Dial 7 stations again (clicks queue and fully serialize; wait for all to resolve)
         for (let i = 0; i < 7; i++) {
             const pad = await page.$(`.station-pad-btn[data-index="${i}"]`);
             const pbox = await pad.boundingBox();
             await page.mouse.click(pbox.x + pbox.width / 2, pbox.y + pbox.height / 2);
-            await sleep(150);
         }
-        await sleep(400);
+        await page.waitForFunction(() => window.PortalController.lockedStations.length >= 7, { timeout: 10000 });
 
         // Toggle interlock to CLOSED
         const toggleLabel = await page.$('.latch-toggle-label');

@@ -219,7 +219,8 @@ class PresetsManager {
             window.CelestialDial.rotateToStation(stationIdx, false, () => {
                 if (!this.isAutoDialing) return;
 
-                // Stamp woodblock print (isFast = true for crisp auto-dial pacing)
+                // Stamp the ring sector and woodblock print in sync (isFast = true for crisp auto-dial pacing)
+                window.CelestialDial.animateSectorLock(stationIdx, station, true);
                 window.WoodblockEngine.stampStation(station, currentLockIdx, () => {
                     if (!this.isAutoDialing) return;
 
