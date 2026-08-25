@@ -1,0 +1,631 @@
+/* ==========================================================================
+   DSV-9 ARCHELON PILOT CONSOLE - CONTROL CLUSTERS (WAYPOINTS & ACTUATION)
+   ========================================================================== */
+
+.control-cluster {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cluster-card {
+  height: 100%;
+  background: var(--bg-card-glass);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glow-subtle);
+  position: relative;
+  overflow: hidden;
+}
+
+.cluster-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid var(--bg-card-border);
+  padding-bottom: 10px;
+}
+
+.cluster-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+}
+
+.cluster-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--text-bright);
+}
+
+.cluster-status-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.trim-state-pill, .status-pill-sub {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(0, 255, 157, 0.12);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+}
+
+.trim-state-pill.state-balancing {
+  background: rgba(255, 170, 0, 0.15);
+  color: var(--accent-amber);
+  border-color: rgba(255, 170, 0, 0.4);
+  animation: pulseBalancing 0.6s infinite alternate;
+}
+
+@keyframes pulseBalancing {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+/* ==========================================================================
+   CLUSTER 1: 8 WAYPOINT STRATA BUTTONS
+   ========================================================================== */
+
+.waypoint-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.waypoint-btn {
+  background: rgba(8, 20, 38, 0.75);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 5px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.waypoint-btn:hover {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px var(--accent-cyan-glow);
+  transform: translateY(-1px);
+}
+
+.waypoint-btn.active-target {
+  background: rgba(0, 229, 255, 0.2);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 14px var(--accent-cyan-glow);
+}
+
+.waypoint-btn.locked {
+  background: rgba(0, 255, 157, 0.15);
+  border-color: var(--accent-emerald);
+  box-shadow: 0 0 12px var(--accent-emerald-glow);
+}
+
+.waypoint-btn.locked .wp-id {
+  color: var(--accent-emerald);
+}
+
+.wp-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wp-id {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  letter-spacing: 1px;
+}
+
+.wp-depth {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.wp-name {
+  font-family: var(--font-tech);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wp-lock-badge {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  align-self: flex-start;
+}
+
+.waypoint-btn.locked .wp-lock-badge {
+  color: var(--accent-emerald);
+}
+
+/* ==========================================================================
+   10-CHANNEL BALLAST & TRIM PROGRESS BARS
+   ========================================================================== */
+
+.trim-channel-matrix {
+  background: rgba(3, 10, 20, 0.85);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.matrix-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.matrix-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--text-secondary);
+}
+
+.matrix-mode {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.channels-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px 8px;
+}
+
+.channel-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ch-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-secondary);
+}
+
+.ch-meter-track {
+  height: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ch-meter-fill {
+  height: 100%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 4px var(--accent-cyan);
+  transition: width 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+.cluster-footnote {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  line-height: 1.3;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   CLUSTER 2: SAFETY INTERLOCK & DESCENT ACTUATION
+   ========================================================================== */
+
+.interlock-module {
+  background: rgba(4, 14, 28, 0.85);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.interlock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.interlock-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+.interlock-default-tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--accent-emerald);
+}
+
+.btn-interlock {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 255, 157, 0.1);
+  border: 1px solid var(--accent-emerald);
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-interlock.state-engaged {
+  background: rgba(255, 42, 75, 0.15);
+  border-color: var(--accent-red);
+  box-shadow: 0 0 12px var(--accent-red-glow);
+}
+
+.toggle-track {
+  width: 38px;
+  height: 18px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  border: 1px solid var(--accent-emerald);
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.btn-interlock.state-engaged .toggle-track {
+  border-color: var(--accent-red);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  box-shadow: 0 0 6px var(--accent-emerald);
+  transition: transform var(--transition-fast);
+}
+
+.btn-interlock.state-engaged .toggle-thumb {
+  transform: translateX(20px);
+  background: var(--accent-red);
+  box-shadow: 0 0 6px var(--accent-red);
+}
+
+.toggle-label {
+  font-family: var(--font-tech);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--accent-emerald);
+}
+
+.btn-interlock.state-engaged .toggle-label {
+  color: var(--accent-red);
+}
+
+.interlock-warning-box {
+  background: rgba(255, 42, 75, 0.12);
+  border: 1px solid var(--accent-red);
+  border-radius: 4px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #ff99aa;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   PRIMARY ACTUATION BUTTON
+   ========================================================================== */
+
+.actuation-control-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.actuation-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.act-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+}
+
+.act-stage-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+}
+
+.btn-commence-descent {
+  width: 100%;
+  background: rgba(12, 28, 52, 0.6);
+  border: 2px solid rgba(0, 229, 255, 0.3);
+  border-radius: 8px;
+  padding: 16px 14px;
+  cursor: not-allowed;
+  opacity: 0.5;
+  transition: all var(--transition-norm);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-commence-descent.ready {
+  cursor: pointer;
+  opacity: 1;
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 24px var(--accent-cyan-glow);
+  animation: pulseActuator 1.5s infinite alternate;
+}
+
+@keyframes pulseActuator {
+  from { box-shadow: 0 0 16px var(--accent-cyan-glow); }
+  to { box-shadow: 0 0 32px var(--accent-cyan); }
+}
+
+.btn-commence-descent.ready:hover {
+  background: rgba(0, 229, 255, 0.25);
+  border-color: #ffffff;
+  transform: scale(1.02);
+}
+
+.btn-commence-descent.active-buildup {
+  background: rgba(255, 170, 0, 0.25);
+  border-color: var(--accent-amber);
+  box-shadow: var(--glow-amber);
+  cursor: default;
+}
+
+.btn-commence-descent.active-sustained {
+  background: rgba(0, 255, 157, 0.25);
+  border-color: var(--accent-emerald);
+  box-shadow: var(--glow-emerald);
+  cursor: default;
+}
+
+.btn-core-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.act-icon {
+  font-size: 24px;
+  color: var(--accent-cyan);
+}
+
+.btn-commence-descent.ready .act-icon {
+  color: #ffffff;
+  text-shadow: 0 0 12px var(--accent-cyan);
+}
+
+.act-primary-text {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--text-bright);
+}
+
+.act-subtext {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-secondary);
+  letter-spacing: 0.8px;
+}
+
+/* ==========================================================================
+   STAGED PROGRESS MATRIX
+   ========================================================================== */
+
+.staged-progress-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: rgba(3, 10, 20, 0.85);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.stage-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+}
+
+.stage-step.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan-glow);
+}
+
+.stage-step.completed {
+  background: rgba(0, 255, 157, 0.12);
+  border-color: var(--accent-emerald);
+}
+
+.stage-num {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-dim);
+}
+
+.stage-name {
+  font-family: var(--font-tech);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stage-state {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.stage-step.active .stage-state {
+  color: var(--accent-cyan);
+}
+
+.stage-step.completed .stage-state {
+  color: var(--accent-emerald);
+}
+
+/* ==========================================================================
+   EMERGENCY BLOW ALL BALLAST (DISENGAGE)
+   ========================================================================== */
+
+.emergency-disengage-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.emergency-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 8px;
+}
+
+.emerg-tag {
+  color: var(--accent-red);
+  font-weight: 700;
+}
+
+.emerg-state {
+  color: var(--text-dim);
+}
+
+.btn-emergency-blow {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(70, 10, 20, 0.9) 0%, rgba(35, 5, 10, 0.95) 100%);
+  border: 2px solid var(--accent-red);
+  border-radius: 6px;
+  padding: 12px 14px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(255, 42, 75, 0.3);
+  transition: all var(--transition-fast);
+}
+
+.btn-emergency-blow:hover {
+  background: linear-gradient(135deg, rgba(120, 15, 30, 0.95) 0%, rgba(60, 8, 18, 1) 100%);
+  box-shadow: 0 0 25px var(--accent-red-glow);
+  transform: translateY(-1px);
+}
+
+.btn-emergency-blow:active {
+  transform: translateY(1px);
+}
+
+.emerg-stripes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--accent-red),
+    var(--accent-red) 10px,
+    #000000 10px,
+    #000000 20px
+  );
+}
+
+.emerg-text-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.emerg-icon {
+  font-size: 14px;
+  color: var(--accent-red);
+}
+
+.emerg-title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ffffff;
+  text-shadow: 0 0 8px var(--accent-red);
+}
+
+.emerg-sub {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: #ff99aa;
+  letter-spacing: 0.5px;
+}

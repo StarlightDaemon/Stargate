@@ -1,0 +1,9 @@
+{
+  "name": "stargate-bathyscaphe-pilot",
+  "version": "1.0.0",
+  "model": "Gemini 3.7 Flash (High Reasoning)",
+  "buildDate": "2026-08-23",
+  "vessel": "DSV-9 ARCHELON",
+  "consortium": "Hadal Exploration & Abyssal Research Consortium (HEARC)",
+  "interface": "ARCHELON PILOT HUD Mk VII"
+}

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSV-9 ARCHELON // Bathyscaphe Pilot Console & Abyssal Gateway Interface</title>
+  <meta name="description" content="High-fidelity deep-sea submersible HUD and Abyssal Gateway rift navigation console for the DSV-9 ARCHELON, operated by the Hadal Exploration & Abyssal Research Consortium (HEARC).">
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400;1,700&family=JetBrains+Mono:wght@300;400;500;700;800&family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/cockpit.css">
+  <link rel="stylesheet" href="src/css/clusters.css">
+  <link rel="stylesheet" href="src/css/engineering.css">
+  <link rel="stylesheet" href="src/css/archive.css">
+  <link rel="stylesheet" href="src/css/telemetry.css">
+</head>
+<body class="theme-abyssal density-standard motion-full" data-theme="abyssal">
+  <!-- Root Scaling Canvas Wrapper -->
+  <div id="cockpit-viewport-scaler" class="viewport-scaler">
+    
+    <!-- Top Cockpit Header Navigation -->
+    <header class="cockpit-header" role="banner">
+      <div class="header-left">
+        <div class="vessel-badge">
+          <span class="consortium-tag">HEARC</span>
+          <span class="vessel-id">DSV-9 ARCHELON</span>
+          <span class="system-status-pill status-nominal" id="header-status-pill">SYSTEMS NOMINAL</span>
+        </div>
+      </div>
+      
+      <!-- Primary Cockpit Navigation Tabs -->
+      <nav class="cockpit-tabs" role="navigation" aria-label="Cockpit Subsystems">
+        <button class="nav-tab active" id="tab-hud" data-target="panel-hud">
+          <span class="tab-icon">◈</span>
+          <span class="tab-label">PILOTING HUD</span>
+        </button>
+        <button class="nav-tab" id="tab-engineering" data-target="panel-engineering">
+          <span class="tab-icon">⬢</span>
+          <span class="tab-label">VESSEL ENGINEERING</span>
+        </button>
+        <button class="nav-tab" id="tab-archive" data-target="panel-archive">
+          <span class="tab-icon">▤</span>
+          <span class="tab-label">DIVE ARCHIVES</span>
+        </button>
+        <button class="nav-tab" id="tab-telemetry" data-target="panel-telemetry">
+          <span class="tab-icon">∿</span>
+          <span class="tab-label">TELEMETRY MATRIX</span>
+        </button>
+        <button class="nav-tab" id="tab-events" data-target="panel-events">
+          <span class="tab-icon">≡</span>
+          <span class="tab-label">SESSION LOG</span>
+        </button>
+        <button class="nav-tab" id="tab-settings" data-target="panel-settings">
+          <span class="tab-icon">⚙</span>
+          <span class="tab-label">SETTINGS</span>
+        </button>
+      </nav>
+      
+      <!-- Utility Controls: Quick-Dial Drawer, Audio Toggle, Operator Help -->
+      <div class="header-right">
+        <button class="btn-preset-drawer" id="btn-quickdial-toggle" title="Open Stored Descent Profiles" aria-expanded="false">
+          <span class="btn-glyph">⚡</span>
+          <span class="btn-text">DIVE PRESETS</span>
+        </button>
+        <button class="btn-audio-toggle" id="btn-audio-toggle" title="Toggle Web Audio Synthesizer" aria-label="Audio Mute Toggle">
+          <span class="audio-icon" id="audio-icon-indicator">🔊</span>
+          <span class="audio-label" id="audio-state-label">AUDIO: ON</span>
+        </button>
+        <button class="btn-operator-help" id="btn-operator-help" title="Operator Reference Manual" aria-label="Operator Reference">
+          <span class="help-glyph">?</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Quick-Dial Drawer (Collapsible Overlay) -->
+    <aside class="quickdial-drawer" id="quickdial-drawer" aria-hidden="true">
+      <div class="drawer-header">
+        <div class="drawer-title-wrap">
+          <span class="drawer-tag">DIVE COMPUTER STORAGE</span>
+          <h2 class="drawer-title">STORED DESCENT PROFILES</h2>
+        </div>
+        <button class="drawer-close" id="btn-quickdial-close" aria-label="Close presets">✕</button>
+      </div>
+      <div class="drawer-body">
+        <div class="preset-tier-section">
+          <h3 class="tier-heading"><span class="tier-marker">TIER I</span> VERIFIED CONSORTIUM PROFILES</h3>
+          <div class="preset-list" id="tier1-presets-list">
+            <!-- Dynamically populated from JS -->
+          </div>
+        </div>
+        <div class="preset-tier-section">
+          <h3 class="tier-heading"><span class="tier-marker tier-exp">TIER II</span> EXPERIMENTAL HADAL RIFT ROUTES</h3>
+          <div class="preset-list" id="tier2-presets-list">
+            <!-- Dynamically populated from JS -->
+          </div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <p class="drawer-hint">Playback replays verified ballast-trim sequencing at dive-computer speeds. Does NOT auto-fire.</p>
+      </div>
+    </aside>
+
+    <!-- MAIN COCKPIT PILOTING INTERFACE (Active HUD View) -->
+    <main class="cockpit-stage" id="panel-hud" role="main">
+      
+      <!-- LEFT PILOTING CLUSTER (CORE CONTROL CLUSTER 1: WAYPOINTS & BALLAST/TRIM) -->
+      <section class="control-cluster cluster-left" id="cluster-waypoint-selector" aria-labelledby="heading-waypoint-cluster">
+        <div class="cluster-card">
+          <div class="cluster-header">
+            <div class="cluster-badge">CLUSTER 01 // BALLAST & TRIM</div>
+            <h2 id="heading-waypoint-cluster" class="cluster-title">WAYPOINT STRATA SELECTOR</h2>
+            <div class="cluster-status-line">
+              <span class="subsys-label">BUOYANCY DIFF:</span>
+              <span class="metric-val text-cyan" id="live-buoyancy-diff">ΔF 0.00 kN</span>
+              <span class="trim-state-pill" id="live-trim-pill">TRIM STABLE</span>
+            </div>
+          </div>
+
+          <!-- 8 Abyssal Waypoint Buttons -->
+          <div class="waypoint-grid" id="waypoint-grid" role="group" aria-label="Descent Profile Depth Waypoints">
+            <!-- Populated dynamically and statically accessible -->
+          </div>
+
+          <!-- 10-Channel Ballast and Vectored Thruster Trim Monitor -->
+          <div class="trim-channel-matrix">
+            <div class="matrix-header">
+              <span class="matrix-title">10-CHANNEL HYDROSTATIC TRIM & VECTORING</span>
+              <span class="matrix-mode" id="trim-sim-mode">HOLDING</span>
+            </div>
+            <div class="channels-grid" id="trim-channels-grid">
+              <!-- 10 Ballast/Thruster Channels -->
+            </div>
+          </div>
+          
+          <div class="cluster-footnote">
+            <span class="footnote-glyph">ℹ</span>
+            <span class="footnote-text">Selecting waypoints triggers dynamic ballast flood/vent and thruster vectoring to achieve a Neutral Buoyancy Hold.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- CENTER OBSERVATION VIEWPORT & CONCENTRIC CRUSH-DEPTH GAUGE RING -->
+      <section class="cockpit-center-viewport" id="center-viewport-section" aria-label="Primary Acrylic Observation Viewport">
+        <div class="viewport-assembly" id="viewport-assembly">
+          
+          <!-- Outer Structural Viewport Reticle & Bezel -->
+          <div class="viewport-acrylic-sphere" id="viewport-acrylic-sphere">
+            
+            <!-- Dynamic WebGL/Canvas Ocean Particle Simulator (Marine Snow & Gateway Vortex) -->
+            <canvas id="viewport-canvas" width="640" height="640" class="viewport-canvas" aria-label="Real-time ocean depth visualizer"></canvas>
+            
+            <!-- SVG Crush-Depth Gauge Ring & Waypoint Locks -->
+            <svg id="crush-depth-ring-svg" class="crush-depth-svg" viewBox="0 0 600 600" aria-hidden="true">
+              <defs>
+                <linearGradient id="depthGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="var(--accent-cyan)" />
+                  <stop offset="60%" stop-color="var(--accent-emerald)" />
+                  <stop offset="90%" stop-color="var(--accent-amber)" />
+                  <stop offset="100%" stop-color="var(--accent-red)" />
+                </linearGradient>
+                <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+                <filter id="vortex-glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="6" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <!-- Base Instrument Track Rings -->
+              <circle cx="300" cy="300" r="280" class="gauge-ring-base" />
+              <circle cx="300" cy="300" r="260" class="gauge-ring-sub" />
+              <circle cx="300" cy="300" r="240" class="gauge-ring-inner" />
+              <circle cx="300" cy="300" r="180" class="gauge-aperture-gate" id="svg-aperture-gate" />
+
+              <!-- Active Gauge Arc (Tracks Descent) -->
+              <path id="svg-depth-arc" class="gauge-arc-active" d="M 300 40 A 260 260 0 0 1 300 40" />
+
+              <!-- Crush Depth Limit Sector (11,850m Warning Zone) -->
+              <path class="gauge-crush-sector" d="M 300 560 A 260 260 0 0 1 116 484" />
+              
+              <!-- Dynamic Ticks & Markers (rendered via JS) -->
+              <g id="svg-gauge-ticks"></g>
+              <g id="svg-waypoint-markers"></g>
+              
+              <!-- Center Reticle Crosshairs & Pitch Horizon -->
+              <line x1="140" y1="300" x2="260" y2="300" class="hud-reticle-line" />
+              <line x1="340" y1="300" x2="460" y2="300" class="hud-reticle-line" />
+              <line x1="300" y1="140" x2="300" y2="260" class="hud-reticle-line" />
+              <line x1="300" y1="340" x2="300" y2="460" class="hud-reticle-line" />
+              <circle cx="300" cy="300" r="12" class="hud-reticle-center" />
+            </svg>
+
+            <!-- Center Digital Pilot HUD Overlay (Floating in acrylic sightline) -->
+            <div class="viewport-hud-overlay" id="viewport-hud-overlay">
+              <div class="hud-strata-tag" id="hud-strata-tag">EPIPELAGIC ZONE</div>
+              
+              <div class="hud-main-depth-readout">
+                <span class="depth-number" id="hud-depth-display">00,000</span>
+                <span class="depth-unit">METERS</span>
+              </div>
+              
+              <div class="hud-metrics-row">
+                <div class="hud-stat">
+                  <span class="stat-lbl">PRESSURE:</span>
+                  <span class="stat-val" id="hud-pressure-display">1.01 BAR</span>
+                </div>
+                <div class="hud-stat">
+                  <span class="stat-lbl">DESCENT RATE:</span>
+                  <span class="stat-val" id="hud-velocity-display">0.0 M/S</span>
+                </div>
+                <div class="hud-stat">
+                  <span class="stat-lbl">HULL INTEGRITY:</span>
+                  <span class="stat-val text-emerald" id="hud-hull-stress-display">100.0%</span>
+                </div>
+              </div>
+
+              <div class="hud-aperture-state-pill" id="hud-aperture-state">
+                SURFACE HOLD // PROFILE PENDING
+              </div>
+            </div>
+
+            <!-- Staged Aperture Overlay Flash FX -->
+            <div class="aperture-fx-layer" id="aperture-fx-layer"></div>
+          </div>
+
+          <!-- Bottom Viewport Pitch / Roll Micro-Gauges -->
+          <div class="viewport-sub-meters">
+            <div class="sub-meter">
+              <span class="sub-meter-label">PITCH TRIM:</span>
+              <div class="meter-bar-track"><div class="meter-bar-fill" id="meter-pitch-bar" style="width: 50%;"></div></div>
+              <span class="sub-meter-val" id="meter-pitch-val">+0.0°</span>
+            </div>
+            <div class="sub-meter">
+              <span class="sub-meter-label">ROLL TRIM:</span>
+              <div class="meter-bar-track"><div class="meter-bar-fill" id="meter-roll-bar" style="width: 50%;"></div></div>
+              <span class="sub-meter-val" id="meter-roll-val">+0.0°</span>
+            </div>
+            <div class="sub-meter">
+              <span class="sub-meter-label">SEAWATER TEMP:</span>
+              <div class="meter-bar-track"><div class="meter-bar-fill temp-fill" id="meter-temp-bar" style="width: 90%;"></div></div>
+              <span class="sub-meter-val" id="meter-temp-val">24.5°C</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT PILOTING CLUSTER (CORE CONTROL CLUSTER 2: ACTUATION & SAFETY INTERLOCK) -->
+      <section class="control-cluster cluster-right" id="cluster-actuation" aria-labelledby="heading-actuation-cluster">
+        <div class="cluster-card">
+          <div class="cluster-header">
+            <div class="cluster-badge">CLUSTER 02 // VECTOR COMMAND</div>
+            <h2 id="heading-actuation-cluster" class="cluster-title">APERTURE ACTUATION & SAFETY</h2>
+            <div class="cluster-status-line">
+              <span class="subsys-label">WAYPOINT LOCKS:</span>
+              <span class="metric-val text-cyan" id="locked-count-display">0 / 8 LOCKED</span>
+              <span class="status-pill-sub" id="sequence-state-pill">INCOMPLETE</span>
+            </div>
+          </div>
+
+          <!-- Safety Interlock Module (MUST DEFAULT TO RELEASED) -->
+          <div class="interlock-module" id="interlock-module">
+            <div class="interlock-header">
+              <span class="interlock-title">HULL INTEGRITY & DESCENT INTERLOCK</span>
+              <span class="interlock-default-tag">[SAFETY BYPASS]</span>
+            </div>
+            <div class="interlock-toggle-wrap">
+              <button class="btn-interlock state-released" id="safety-interlock-toggle" role="switch" aria-checked="false">
+                <span class="toggle-track">
+                  <span class="toggle-thumb"></span>
+                </span>
+                <span class="toggle-label" id="interlock-status-text">INTERLOCK RELEASED // DESCENT PERMITTED</span>
+              </button>
+            </div>
+            <div class="interlock-warning-box" id="interlock-warning-box" style="display: none;">
+              <span class="warning-icon">⚠</span>
+              <span class="warning-text">SAFETY INTERLOCK ACTIVE: Primary descent thrusters and aperture hydraulics locked. Disengage interlock to permit descent.</span>
+            </div>
+          </div>
+
+          <!-- Staged Descent Aperture Actuation Button -->
+          <div class="actuation-control-box">
+            <div class="actuation-label-row">
+              <span class="act-tag">PRIMARY ACTUATOR</span>
+              <span class="act-stage-label" id="act-stage-label">STANDBY</span>
+            </div>
+            <button class="btn-commence-descent" id="btn-commence-descent" disabled aria-live="polite">
+              <span class="btn-inner-glow"></span>
+              <span class="btn-core-content">
+                <span class="act-icon" id="act-icon">⬡</span>
+                <span class="act-primary-text" id="act-primary-text">COMMENCE DESCENT APERTURE</span>
+                <span class="act-subtext" id="act-subtext">LOCK ALL 8 WAYPOINTS TO ARM APERTURE</span>
+              </span>
+            </button>
+          </div>
+
+          <!-- Staged Descent Progress Indicators -->
+          <div class="staged-progress-matrix" id="staged-progress-matrix">
+            <div class="stage-step" id="stage-step-1">
+              <span class="stage-num">01</span>
+              <span class="stage-name">BUILDUP</span>
+              <span class="stage-state" id="stage-state-1">READY</span>
+            </div>
+            <div class="stage-step" id="stage-step-2">
+              <span class="stage-num">02</span>
+              <span class="stage-name">BREAKTHROUGH</span>
+              <span class="stage-state" id="stage-state-2">PENDING</span>
+            </div>
+            <div class="stage-step" id="stage-step-3">
+              <span class="stage-num">03</span>
+              <span class="stage-name">SUSTAINED ACTIVE</span>
+              <span class="stage-state" id="stage-state-3">PENDING</span>
+            </div>
+          </div>
+
+          <!-- Emergency Ascent / Disengage Actuator (Always Enabled) -->
+          <div class="emergency-disengage-box">
+            <div class="emergency-label-row">
+              <span class="emerg-tag">EMERGENCY SAFETY OVERRIDE</span>
+              <span class="emerg-state">ALWAYS ARMED</span>
+            </div>
+            <button class="btn-emergency-blow" id="btn-emergency-blow" title="Emergency Ascent: Blow All Ballast Tanks and Vent Hydraulic Trim">
+              <span class="emerg-stripes"></span>
+              <span class="emerg-text-wrap">
+                <span class="emerg-icon">▲</span>
+                <span class="emerg-title">EMERGENCY ASCENT // BLOW ALL BALLAST</span>
+                <span class="emerg-sub">ABORT PROFILE • VENT ALL TANKS • RAPID SURFACE</span>
+              </span>
+            </button>
+          </div>
+
+          <div class="cluster-footnote">
+            <span class="footnote-glyph">▲</span>
+            <span class="footnote-text">Emergency ballast blow immediately vents all 10 trim channels, arresting descent and returning to surface hold.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- SECONDARY SUBSYSTEM VIEWS (TAB-ACCESSIBLE) -->
+    <!-- ========================================================================= -->
+
+    <!-- PANEL 2: VESSEL ENGINEERING CROSS-SECTION -->
+    <section class="cockpit-secondary-panel" id="panel-engineering" style="display: none;" aria-label="Vessel Engineering Cross Section">
+      <div class="panel-content-card">
+        <div class="panel-header">
+          <div class="panel-tag">SCHEMATIC DIAGRAM // CLASS-IV DEEP BATHYSCAPHE</div>
+          <h2 class="panel-title">DSV-9 ARCHELON ENGINEERING & BALLAST CROSS-SECTION</h2>
+          <p class="panel-desc">Interactive structural layout of the titanium pressure hull, syntactic foam pack, high-pressure variable buoyancy spheres, and vectored magnetic thrusters.</p>
+        </div>
+        
+        <div class="engineering-layout">
+          <!-- Interactive SVG Cross-Section Schematic -->
+          <div class="schematic-canvas-box">
+            <svg id="vessel-schematic-svg" class="vessel-schematic-svg" viewBox="0 0 900 480" aria-label="Vessel Structural Diagram">
+              <!-- Vessel Hull Outline, Spheres, Tanks, Thrusters rendered via JS & SVG -->
+            </svg>
+          </div>
+
+          <!-- Engineering Subsystems Telemetry Inspector -->
+          <div class="engineering-inspector" id="engineering-inspector">
+            <div class="inspector-header">
+              <span class="inspector-badge" id="insp-badge">COMPARTMENT: TI-SPHERE</span>
+              <h3 class="inspector-title" id="insp-title">Grade-5 Titanium Spherical Pressure Hull</h3>
+            </div>
+            <div class="inspector-body" id="insp-body">
+              <p class="insp-text" id="insp-desc">2.1m inner diameter forged titanium-alloy pressure sphere housing 2 pilot stations, environmental scrubbers, and primary HUD vectoring compute clusters. Rated for continuous cyclic dives to 12,000m.</p>
+              <div class="insp-specs-grid" id="insp-specs">
+                <div class="spec-row"><span class="spec-k">Wall Thickness:</span><span class="spec-v">94.0 mm</span></div>
+                <div class="spec-row"><span class="spec-k">Yield Strength:</span><span class="spec-v">880 MPa</span></div>
+                <div class="spec-row"><span class="spec-k">Current Internal Pressure:</span><span class="spec-v">1.00 ATM (Normoxic)</span></div>
+                <div class="spec-row"><span class="spec-k">Oxygen Partial Pressure:</span><span class="spec-v">0.210 BAR</span></div>
+              </div>
+            </div>
+            <div class="inspector-controls">
+              <span class="insp-note">Click any component on the schematic above to inspect active hydrostatic telemetry and fluid load.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 3: RELATIONAL IN-UNIVERSE DIVE ARCHIVES -->
+    <section class="cockpit-secondary-panel" id="panel-archive" style="display: none;" aria-label="Relational Dive Archives">
+      <div class="panel-content-card">
+        <div class="panel-header">
+          <div class="panel-tag">CONSORTIUM DATABASE // CLASSIFIED & RESEARCH LOGS</div>
+          <h2 class="panel-title">RELATIONAL DIVE LOGS & INCIDENT ARCHIVES</h2>
+          <p class="panel-desc">Fully interconnected repository of historical bathyscaphe descents, anomaly detections, and field engineering reports. Click any highlighted reference code to navigate relational links.</p>
+        </div>
+
+        <div class="archive-workbench">
+          <!-- Filter & Search Sidebar -->
+          <aside class="archive-sidebar">
+            <div class="search-box">
+              <input type="text" id="archive-search-input" class="archive-search-input" placeholder="Search logs, anomalies, crew..." aria-label="Search dive archives">
+            </div>
+            <div class="filter-categories">
+              <span class="cat-label">RECORD CLASSIFICATION:</span>
+              <button class="btn-cat-filter active" data-cat="all">ALL ENTRIES (32)</button>
+              <button class="btn-cat-filter" data-cat="dive">MISSION LOGS (12)</button>
+              <button class="btn-cat-filter" data-cat="incident">INCIDENT REPORTS (8)</button>
+              <button class="btn-cat-filter" data-cat="anomaly">ANOMALY DETECTIONS (7)</button>
+              <button class="btn-cat-filter" data-cat="crew">CREW JOURNALS (5)</button>
+            </div>
+            <div class="archive-stats">
+              <div class="arch-stat-item"><span class="arch-k">Total Archived Dives:</span><span class="arch-v">1,489 hrs</span></div>
+              <div class="arch-stat-item"><span class="arch-k">Deepest Reached:</span><span class="arch-v">11,842 m</span></div>
+              <div class="arch-stat-item"><span class="arch-k">Saved Local Dives:</span><span class="arch-v text-cyan" id="local-dives-count">0 recorded</span></div>
+            </div>
+          </aside>
+
+          <!-- Records List -->
+          <div class="archive-list-pane">
+            <div class="record-list" id="archive-record-list" role="list">
+              <!-- Dynamically populated from archive.js -->
+            </div>
+          </div>
+
+          <!-- Active Record Detail Reader -->
+          <div class="archive-detail-pane" id="archive-detail-pane">
+            <div class="detail-header">
+              <div class="detail-badge" id="rec-type-badge">MISSION LOG</div>
+              <h3 class="detail-title" id="rec-detail-title">DIVE-882: Kermadec Trench Sub-Basin Acoustic Survey</h3>
+              <div class="detail-meta" id="rec-detail-meta">
+                <span>DATE: 2026-04-12</span> • <span>DEPTH: 10,047 m</span> • <span>PILOT: Dr. H. Vance</span>
+              </div>
+            </div>
+            <div class="detail-body" id="rec-detail-body">
+              <!-- Relational article body with clickable [REF-XXXX] links -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 4: PHYSICAL TELEMETRY MATRIX -->
+    <section class="cockpit-secondary-panel" id="panel-telemetry" style="display: none;" aria-label="Physical Telemetry Matrix">
+      <div class="panel-content-card">
+        <div class="panel-header">
+          <div class="panel-tag">COMPUTED HYDROSTATIC PHYSICS // SENSOR DATA STREAM</div>
+          <h2 class="panel-title">HADOPELAGIC PHYSICAL DYNAMICS MATRIX</h2>
+          <p class="panel-desc">Real-time computed physical relationships: hydrostatic pressure gradient, seawater density equation of state, titanium hull compression strain, and thermal thermocline response.</p>
+        </div>
+
+        <div class="telemetry-grid">
+          <!-- Physics Formula Cards -->
+          <div class="telemetry-card">
+            <div class="t-card-header">
+              <span class="t-badge">HYDROSTATICS</span>
+              <h4>Ambient Hydrostatic Pressure</h4>
+            </div>
+            <div class="t-formula">P(z) = P₀ + ∫ ρ(z) · g · dz ≈ 1.013 + 0.1008 · z [bar]</div>
+            <div class="t-live-val" id="telemetry-pressure-live">1.01 BAR (14.7 PSI)</div>
+            <p class="t-desc">Computes actual hydrostatic force acting uniformly on the titanium hull sphere at depth <span class="text-cyan" id="tele-depth-ref">0 m</span>.</p>
+          </div>
+
+          <div class="telemetry-card">
+            <div class="t-card-header">
+              <span class="t-badge">THERMODYNAMICS</span>
+              <h4>Abyssal Thermocline Gradient</h4>
+            </div>
+            <div class="t-formula">T(z) = T_abyss + (T_surface - T_abyss) · e^(-z / z_scale)</div>
+            <div class="t-live-val" id="telemetry-temp-live">24.50 °C (76.1 °F)</div>
+            <p class="t-desc">Exponential drop from warm epipelagic sunlit waters to the dense 1.20°C hadal trench floor.</p>
+          </div>
+
+          <div class="telemetry-card">
+            <div class="t-card-header">
+              <span class="t-badge">MATERIAL STRAIN</span>
+              <h4>Titanium Sphere Microstrain</h4>
+            </div>
+            <div class="t-formula">ε_hull = (P(z) · r_inner) / (2 · E_titanium · t_wall)</div>
+            <div class="t-live-val" id="telemetry-strain-live">12.4 με (Elastic Margin 98.8%)</div>
+            <p class="t-desc">Calculated structural compression of the Ti-6Al-4V ELI sphere against rated yield threshold of 880 MPa.</p>
+          </div>
+
+          <div class="telemetry-card">
+            <div class="t-card-header">
+              <span class="t-badge">OCEANOGRAPHY</span>
+              <h4>Seawater Density Equation of State</h4>
+            </div>
+            <div class="t-formula">ρ(z, T, S) = ρ₀ · [1 + β_P · P(z) - α_T · (T - T₀)]</div>
+            <div class="t-live-val" id="telemetry-density-live">1025.2 kg/m³</div>
+            <p class="t-desc">Compressibility of water at extreme hadal depths increases local fluid density, altering required ballast trim.</p>
+          </div>
+        </div>
+
+        <div class="telemetry-sub-tables">
+          <div class="tele-table-wrap">
+            <table class="telemetry-data-table" aria-label="Active Subsystem Telemetry">
+              <thead>
+                <tr>
+                  <th>SUBSYSTEM</th>
+                  <th>SENSOR CHANNEL</th>
+                  <th>VALUE</th>
+                  <th>NOMINAL RANGE</th>
+                  <th>INTEGRITY STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="telemetry-table-body">
+                <!-- Dynamically updated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 5: LIVE SESSION EVENT LOG -->
+    <section class="cockpit-secondary-panel" id="panel-events" style="display: none;" aria-label="Session Event Log">
+      <div class="panel-content-card">
+        <div class="panel-header">
+          <div class="panel-tag">REAL-TIME AUDIT TRAIL // LOCAL SESSION ACTIONS</div>
+          <h2 class="panel-title">PILOT ACTION & SYSTEM EVENT LOG</h2>
+          <p class="panel-desc">Running, timestamped chronicle of all operator gestures, trim adjustments, waypoints locked, and emergency overrides executed during this session.</p>
+        </div>
+
+        <div class="event-log-container">
+          <div class="event-log-toolbar">
+            <span class="log-count-tag" id="log-count-tag">12 EVENTS RECORDED</span>
+            <div class="log-actions">
+              <button class="btn-log-action" id="btn-export-log">EXPORT JSON</button>
+              <button class="btn-log-action" id="btn-clear-log">PURGE LOG</button>
+            </div>
+          </div>
+          <div class="event-log-feed" id="event-log-feed" role="log" aria-live="polite">
+            <!-- Dynamically populated from storage.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 6: CONSOLE SETTINGS & AUDIO MIXER -->
+    <section class="cockpit-secondary-panel" id="panel-settings" style="display: none;" aria-label="Console Settings">
+      <div class="panel-content-card">
+        <div class="panel-header">
+          <div class="panel-tag">COCKPIT CONFIGURATION // PREFERENCES & AUDIO LAYERING</div>
+          <h2 class="panel-title">CONSOLE SETTINGS & AUDIO MIXER</h2>
+          <p class="panel-desc">Customize HUD instrument themes, visual density, motion intensity, and balance individual Web Audio synthesized acoustic channels.</p>
+        </div>
+
+        <div class="settings-grid">
+          <!-- Theme Palettes -->
+          <div class="settings-group">
+            <h3 class="setting-heading">INSTRUMENT COLOR MOOD</h3>
+            <div class="theme-picker-grid">
+              <button class="theme-opt-btn active" data-set-theme="abyssal">
+                <span class="theme-swatch swatch-abyssal"></span>
+                <span class="theme-name">Abyssal Cyan</span>
+                <span class="theme-sub">Default Hadal HUD</span>
+              </button>
+              <button class="theme-opt-btn" data-set-theme="amber">
+                <span class="theme-swatch swatch-amber"></span>
+                <span class="theme-name">Deep Amber</span>
+                <span class="theme-sub">Night Dive Spec</span>
+              </button>
+              <button class="theme-opt-btn" data-set-theme="emerald">
+                <span class="theme-swatch swatch-emerald"></span>
+                <span class="theme-name">Bioluminescent</span>
+                <span class="theme-sub">Emerald Trench</span>
+              </button>
+              <button class="theme-opt-btn" data-set-theme="monolith">
+                <span class="theme-swatch swatch-monolith"></span>
+                <span class="theme-name">Monolith Stark</span>
+                <span class="theme-sub">High Contrast Slate</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Display Density & Motion Controls -->
+          <div class="settings-group">
+            <h3 class="setting-heading">DISPLAY DENSITY & MOTION</h3>
+            <div class="settings-control-row">
+              <label for="setting-density-select" class="setting-lbl">HUD Layout Density:</label>
+              <select id="setting-density-select" class="settings-select">
+                <option value="standard" selected>Standard Pilot Deck (1920x1080 Optimal)</option>
+                <option value="compact">Compact Tactical (High Information Density)</option>
+                <option value="minimal">Minimal HUD (Focus on Observation Viewport)</option>
+              </select>
+            </div>
+            <div class="settings-control-row">
+              <label for="setting-motion-select" class="setting-lbl">Motion & Particle FX:</label>
+              <select id="setting-motion-select" class="settings-select">
+                <option value="full" selected>Full (Marine snow, particle vortex, trim animations)</option>
+                <option value="reduced">Reduced (Smooth transitions, static particles)</option>
+                <option value="static">Static (Zero canvas animation for low power)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Web Audio Layering Mixer -->
+          <div class="settings-group full-width">
+            <h3 class="setting-heading">WEB AUDIO SYNTHESIS CHANNEL MIXER</h3>
+            <div class="audio-mixer-grid">
+              <div class="mixer-slider-wrap">
+                <label for="vol-master" class="mixer-lbl">Master Gain:</label>
+                <input type="range" id="vol-master" min="0" max="100" value="80" class="mixer-range">
+                <span class="mixer-val" id="val-vol-master">80%</span>
+              </div>
+              <div class="mixer-slider-wrap">
+                <label for="vol-ballast" class="mixer-lbl">Ballast Flood / Vent Hiss:</label>
+                <input type="range" id="vol-ballast" min="0" max="100" value="85" class="mixer-range">
+                <span class="mixer-val" id="val-vol-ballast">85%</span>
+              </div>
+              <div class="mixer-slider-wrap">
+                <label for="vol-thruster" class="mixer-lbl">Vectored Thruster Whine:</label>
+                <input type="range" id="vol-thruster" min="0" max="100" value="75" class="mixer-range">
+                <span class="mixer-val" id="val-vol-thruster">75%</span>
+              </div>
+              <div class="mixer-slider-wrap">
+                <label for="vol-hull" class="mixer-lbl">Hull Pressure Creak / Groan:</label>
+                <input type="range" id="vol-hull" min="0" max="100" value="90" class="mixer-range">
+                <span class="mixer-val" id="val-vol-hull">90%</span>
+              </div>
+              <div class="mixer-slider-wrap">
+                <label for="vol-drone" class="mixer-lbl">Deep Hadal Ambient Drone:</label>
+                <input type="range" id="vol-drone" min="0" max="100" value="65" class="mixer-range">
+                <span class="mixer-val" id="val-vol-drone">65%</span>
+              </div>
+            </div>
+            <p class="mixer-note">All soundscapes are generated in real-time via the browser's Web Audio API using white/pink noise sweeps, resonant bandpass filters, and frequency-modulated saw oscillators. Zero external audio files are loaded.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OPERATOR REFERENCE MODAL OVERLAY (Circular '?' top-right) -->
+    <div class="modal-overlay" id="modal-operator-help" style="display: none;" aria-hidden="true" role="dialog" aria-labelledby="help-modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-badge">OPERATOR REFERENCE MANUAL</div>
+          <h2 id="help-modal-title" class="modal-title">DSV-9 ARCHELON PILOTING PROCEDURES</h2>
+          <button class="modal-close" id="btn-close-help" aria-label="Close operator manual">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="manual-section">
+            <h3>1. Identity & Operating Consortium</h3>
+            <p>You are in command of the <strong>DSV-9 ARCHELON</strong>, a Class-IV Titanium Bathyscaphe commissioned by the <strong>Hadal Exploration & Abyssal Research Consortium (HEARC)</strong>. Your mission is navigating planned descent profiles down to the 11,800m Abyssal Gateway Rift.</p>
+          </div>
+          <div class="manual-section">
+            <h3>2. Ballast & Trim Neutral Buoyancy Locking Mechanism</h3>
+            <p>Unlike surface vessels or stationary dialing panels, deep bathyscaphes require balancing 10 independent ballast and trim channels (Main Forward/Aft tanks, Variable Buoyancy Cylinders, and Vectored Thrusters) to reach a stable <strong>Neutral Buoyancy Hold (ΔF = 0.00 kN)</strong> at each depth waypoint before that waypoint is locked into the descent computer.</p>
+          </div>
+          <div class="manual-section">
+            <h3>3. Staged Descent & Aperture Breach</h3>
+            <p>Once all 8 waypoints are stabilized, the system enters the <strong>PENDING / ARMED</strong> state (it will NEVER auto-fire). The operator must manually engage the <strong>COMMENCE DESCENT APERTURE</strong> actuator. The descent executes across three deliberate stages:</p>
+            <ul>
+              <li><strong>Stage 1 (Buildup):</strong> 2.0s descent acceleration, hydraulic pressure surge, hull creak audio.</li>
+              <li><strong>Stage 2 (Breakthrough):</strong> Target depth reached at 11,800m, dimensional aperture breach, optical flash.</li>
+              <li><strong>Stage 3 (Sustained Active):</strong> Stable hold at depth, live particle vortex, continuous active telemetry.</li>
+            </ul>
+          </div>
+          <div class="manual-section">
+            <h3>4. Emergency Disengage & Ascent</h3>
+            <p>The <strong>EMERGENCY ASCENT // BLOW ALL BALLAST</strong> control remains accessible at all times. Actuating it instantly vents all 10 trim channels, purges the descent profile, and rapidly surfaces the bathyscaphe.</p>
+          </div>
+          <div class="manual-section">
+            <h3>5. Keyboard Shortcuts</h3>
+            <p><kbd>1</kbd>-<kbd>8</kbd>: Select Waypoint • <kbd>Space</kbd> / <kbd>Enter</kbd>: Commence Descent • <kbd>Escape</kbd>: Emergency Blow Ballast • <kbd>P</kbd>: Presets Drawer • <kbd>M</kbd>: Audio Mute • <kbd>?</kbd>: Help Manual</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-dismiss-help" id="btn-dismiss-help">ACKNOWLEDGE & RETURN TO CONSOLE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COCKPIT FOOTER STATUS & BRANDING -->
+    <footer class="cockpit-footer" role="contentinfo">
+      <div class="footer-left">
+        <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer" class="brand-link" id="brand-link">
+          <span class="brand-glyph">✦</span> StarlightDaemon
+        </a>
+      </div>
+      
+      <div class="footer-center">
+        <span class="geo-coord" id="live-geo-coord">LAT 11°22'04"N // LON 142°35'30"E (CHALLENGER ABYSSAL DEEP)</span>
+        <span class="coord-divider">•</span>
+        <span class="live-clock" id="live-utc-clock">UTC 00:00:00</span>
+      </div>
+
+      <div class="footer-right">
+        <span class="version-label" id="version-label">v1.0.0 // ARCHELON-HUD</span>
+        <span class="safety-indicator" id="footer-safety-indicator">INTERLOCK: RELEASED</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Application JavaScript Modules -->
+  <script src="src/js/storage.js"></script>
+  <script src="src/js/audio.js"></script>
+  <script src="src/js/physics.js"></script>
+  <script src="src/js/dialer.js"></script>
+  <script src="src/js/quickdial.js"></script>
+  <script src="src/js/viewport.js"></script>
+  <script src="src/js/engineering.js"></script>
+  <script src="src/js/archive.js"></script>
+  <script src="src/js/settings.js"></script>
+  <script src="src/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+/* ==========================================================================
+   DSV-9 ARCHELON PILOT CONSOLE - VESSEL ENGINEERING CROSS-SECTION
+   ========================================================================== */
+
+.cockpit-secondary-panel {
+  height: calc(var(--base-height) - 130px);
+  display: flex;
+  flex-direction: column;
+  animation: fadeInPanel 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+@keyframes fadeInPanel {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.panel-content-card {
+  height: 100%;
+  background: var(--bg-card-glass);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glow-subtle);
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid var(--bg-card-border);
+  padding-bottom: 12px;
+}
+
+.panel-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--text-bright);
+}
+
+.panel-desc {
+  font-family: var(--font-tech);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   ENGINEERING LAYOUT
+   ========================================================================== */
+
+.engineering-layout {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 20px;
+  height: calc(100% - 90px);
+}
+
+.schematic-canvas-box {
+  background: rgba(3, 8, 18, 0.9);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.vessel-schematic-svg {
+  width: 100%;
+  height: 100%;
+  max-height: 480px;
+}
+
+.svg-comp-interactive {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.svg-comp-interactive:hover {
+  filter: drop-shadow(0 0 8px var(--accent-cyan));
+}
+
+.svg-comp-interactive.active-selected {
+  filter: drop-shadow(0 0 14px var(--accent-cyan));
+}
+
+.svg-fluid-fill {
+  transition: height 0.4s ease, y 0.4s ease;
+}
+
+/* ==========================================================================
+   ENGINEERING SUBSYSTEM INSPECTOR
+   ========================================================================== */
+
+.engineering-inspector {
+  background: rgba(5, 14, 28, 0.85);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.inspector-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid var(--bg-card-border);
+  padding-bottom: 10px;
+}
+
+.inspector-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--accent-cyan);
+}
+
+.inspector-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-bright);
+}
+
+.inspector-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 12px 0;
+}
+
+.insp-text {
+  font-family: var(--font-tech);
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.insp-specs-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(2, 6, 14, 0.7);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  border-radius: 4px;
+  padding: 10px 12px;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.spec-k {
+  color: var(--text-secondary);
+}
+
+.spec-v {
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.inspector-controls {
+  border-top: 1px solid var(--bg-card-border);
+  padding-top: 10px;
+}
+
+.insp-note {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
