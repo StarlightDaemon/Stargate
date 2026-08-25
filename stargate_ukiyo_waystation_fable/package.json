@@ -1,6 +1,6 @@
 {
   "name": "kagero-road-waystation-registry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interactive ukiyo-e woodblock portal-dialing console for the fictional Kagero Road",
   "private": true,
   "type": "module",

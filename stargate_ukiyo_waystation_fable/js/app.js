@@ -15,6 +15,7 @@ const S = {
   station: null,
   ringAngle: 0,
   rotating: false,
+  queue: [],          // manual clicks landed while the wheel was turning
   auto: false,
   autoTimer: null,
   actTimers: [],
@@ -85,13 +86,36 @@ function buildDial() {
   });
   dial.appendChild(ring);
 
-  // the still aperture over the wheel's mouth
+  // the still aperture over the wheel's mouth — also the press bed:
+  // once dialing begins, the destination print builds impression by
+  // impression right here, in the mouth of the way
+  const clip = svgEl('clipPath', { id: 'ap-clip' });
+  clip.appendChild(svgEl('circle', { cx: DIAL_C, cy: DIAL_C, r: 244 }));
+  defs.appendChild(clip);
+
   const ap = svgEl('g', { id: 'aperture' });
   ap.appendChild(svgEl('circle', {
     cx: DIAL_C, cy: DIAL_C, r: 250,
     fill: '#f0e6d2', stroke: '#221c16', 'stroke-width': 7
   }));
   ap.appendChild(buildApIdle());
+
+  const press = svgEl('g', { id: 'ap-press', 'clip-path': 'url(#ap-clip)' });
+  // the sheet (380x520) laid centered on the round bed, corners to the rim
+  const bedScale = (2 * 244) / Math.hypot(380, 520);
+  press.appendChild(svgEl('g', {
+    id: 'ap-press-print',
+    transform: `translate(${DIAL_C - 190 * bedScale} ${DIAL_C - 260 * bedScale}) scale(${bedScale.toFixed(4)})`
+  }));
+  ap.appendChild(press);
+
+  // vermillion rim that beckons while a full address awaits the Seal
+  ap.appendChild(svgEl('circle', {
+    id: 'press-rim', cx: DIAL_C, cy: DIAL_C, r: 246,
+    fill: 'none', stroke: '#c03a29', 'stroke-width': 9
+  }));
+
+  ap.appendChild(buildSeals());
   ap.appendChild(buildApBuildup());
   ap.appendChild(buildApBreak());
   ap.appendChild(buildApActive());
@@ -201,6 +225,37 @@ function buildApActive() {
   return g;
 }
 
+/* seven kentō stations around the mouth of the way: the registration
+   marks a printer cuts to keep impressions true. Each registered block
+   stamps its vermillion seal over its mark — the ring itself carries
+   the address as it builds. Angles skip the pointer notch at the top. */
+const SEAL_ANGLES = [45, 90, 135, 180, 225, 270, 315];
+const SEAL_JITTER = [-6, 4, -3, 7, -5, 3, -7]; // hand-stamped, never square
+
+function buildSeals() {
+  const g = svgEl('g', { id: 'ap-seals' });
+  SEAL_ANGLES.forEach((a, i) => {
+    const rad = a * Math.PI / 180;
+    const x = DIAL_C + 212 * Math.sin(rad);
+    const y = DIAL_C - 212 * Math.cos(rad);
+    const s = svgEl('g', {
+      id: 'kento-' + (i + 1), class: 'ap-seal',
+      transform: `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${SEAL_JITTER[i]})`
+    });
+    s.innerHTML =
+      `<g class="kento">` +
+      `<path d="M-16 12 H12 V-16" fill="none" stroke="#8d8677" stroke-width="5"/>` +
+      `<text y="34" text-anchor="middle" font-size="12" fill="#8d8677">${i + 1}</text>` +
+      `</g>` +
+      `<g class="seal-face" color="#f0e6d2">` +
+      `<rect x="-23" y="-23" width="46" height="46" rx="4" fill="#c03a29" stroke="#221c16" stroke-width="4"/>` +
+      `<use x="-15" y="-15" width="30" height="30"/>` +
+      `</g>`;
+    g.appendChild(s);
+  });
+  return g;
+}
+
 /* ====================== the destination print ====================== */
 
 const MOUNTAINS = [
@@ -211,31 +266,29 @@ const MOUNTAINS = [
 const DOT_SPOTS = [[70, 60], [130, 42], [206, 72], [262, 48], [330, 118],
                    [96, 132], [168, 108], [300, 66], [236, 130]];
 
-function buildPrint(st) {
+/* the seven impressions as [class, markup] pairs, in append order
+   (impressions 2–7, then the sumi key-block drawn on top). Shared by
+   the destination-print panel and the press bed in the dial's mouth,
+   so the two can never drift apart. */
+function printLayers(st) {
   const p = st.print;
-  const print = el('print');
-  print.innerHTML = '';
-  const mk = (cls, inner) => {
-    const g = svgEl('g', { class: 'layer ' + cls });
-    g.innerHTML = inner;
-    return g;
-  };
+  const layers = [];
 
   // impression 2 — sky block
-  print.appendChild(mk('layer-2',
-    `<rect x="18" y="18" width="344" height="314" fill="${p.sky}"/>`));
+  layers.push(['layer-2',
+    `<rect x="18" y="18" width="344" height="314" fill="${p.sky}"/>`]);
 
   // impression 3 — water block
-  print.appendChild(mk('layer-3',
+  layers.push(['layer-3',
     `<rect x="18" y="330" width="344" height="172" fill="${p.water}"/>` +
     [368, 410, 452].map((y, i) =>
       `<path d="M${30 + i * 12} ${y} q20 -14 40 0 t40 0 t40 0 t40 0 t40 0 t40 0" ` +
       `fill="none" stroke="#f0e6d2" stroke-width="5" stroke-linecap="round"/>`).join('') +
-    `<path d="M64 384 Q92 366 116 384 Q132 396 118 408" fill="none" stroke="#f0e6d2" stroke-width="6" stroke-linecap="round"/>`));
+    `<path d="M64 384 Q92 366 116 384 Q132 396 118 408" fill="none" stroke="#f0e6d2" stroke-width="6" stroke-linecap="round"/>`]);
 
   // impression 4 — earth block
-  print.appendChild(mk('layer-4',
-    `<path d="${MOUNTAINS[p.mountain]}" fill="${p.land}"/>`));
+  layers.push(['layer-4',
+    `<path d="${MOUNTAINS[p.mountain]}" fill="${p.land}"/>`]);
 
   // impression 5 — light block: mist, the disk, stars or snow
   let l5 = `<rect x="26" y="196" width="150" height="15" fill="#f0e6d2"/>` +
@@ -245,15 +298,15 @@ function buildPrint(st) {
     const spots = p.dots === 'snow' ? DOT_SPOTS.concat([[80, 300], [210, 350], [300, 300], [150, 390]]) : DOT_SPOTS;
     l5 += spots.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="${p.dots === 'snow' ? 5 : 3.5}" fill="#f0e6d2"/>`).join('');
   }
-  print.appendChild(mk('layer-5', l5));
+  layers.push(['layer-5', l5]);
 
   // impression 6 — accent block (vermillion), deliberately a hair off-register
-  print.appendChild(mk('layer-6',
+  layers.push(['layer-6',
     `<g transform="translate(2.5 2.5)">` +
     `<rect x="24" y="24" width="332" height="472" fill="none" stroke="#c03a29" stroke-width="3"/>` +
     `<g color="#c03a29"><use href="#g-${st.emblem}" x="186" y="176" width="150" height="150" style="stroke:#c03a29"/></g>` +
     `<path d="M40 328 l8 -14 M58 330 l7 -12 M78 329 l8 -14" stroke="#c03a29" stroke-width="4" fill="none" stroke-linecap="round"/>` +
-    `</g>`));
+    `</g>`]);
 
   // impression 7 — title cartouche and the printer's seal
   // (stacked per-character: SVG text has no dependable vertical writing-mode)
@@ -261,32 +314,41 @@ function buildPrint(st) {
   const nameCol = chars.map((ch, i) =>
     `<text x="54" y="${52 + i * 18}" text-anchor="middle" font-size="15" ` +
     `text-rendering="geometricPrecision" font-weight="bold" fill="#221c16">${ch}</text>`).join('');
-  print.appendChild(mk('layer-7',
+  layers.push(['layer-7',
     `<rect x="28" y="26" width="52" height="${chars.length * 18 + 24}" fill="#f0e6d2" stroke="#221c16" stroke-width="5"/>` +
     nameCol +
     `<rect x="314" y="450" width="40" height="40" fill="#c03a29" stroke="#221c16" stroke-width="4"/>` +
-    `<path d="M322 462 H346 M334 462 V482 M324 482 H344" stroke="#f0e6d2" stroke-width="4" fill="none"/>`));
+    `<path d="M322 462 H346 M334 462 V482 M324 482 H344" stroke="#f0e6d2" stroke-width="4" fill="none"/>`]);
 
   // impression 1 — the sumi key-block, printed first, drawn on top
-  const emblemGlyph = GLYPH_BY_ID[st.emblem];
-  const key = svgEl('g', { class: 'layer layer-1' });
-  key.innerHTML =
+  layers.push(['layer-1',
     `<rect x="12" y="12" width="356" height="496" fill="none" stroke="#221c16" stroke-width="7"/>` +
     `<path d="M18 332 H362" stroke="#221c16" stroke-width="4" fill="none"/>` +
     `<path d="${MOUNTAINS[p.mountain]}" fill="none" stroke="#221c16" stroke-width="4"/>` +
     (p.disk ? `<circle cx="${p.disk.x}" cy="${p.disk.y}" r="${p.disk.r}" fill="none" stroke="#221c16" stroke-width="4"/>` : '') +
-    `<g color="#221c16"><use href="#g-${st.emblem}" x="184" y="174" width="150" height="150"/></g>` +
-    `<path d="M64 384 Q92 366 116 384 Q132 396 118 408" fill="none" stroke="#221c16" stroke-width="4" stroke-linecap="round"/>`;
-  // key-block glyph strokes
-  key.querySelectorAll('use').forEach(u => u.setAttribute('style', 'stroke:#221c16'));
-  print.appendChild(key);
+    `<g color="#221c16"><use href="#g-${st.emblem}" x="184" y="174" width="150" height="150" style="stroke:#221c16"/></g>` +
+    `<path d="M64 384 Q92 366 116 384 Q132 396 118 408" fill="none" stroke="#221c16" stroke-width="4" stroke-linecap="round"/>`]);
+
+  return layers;
 }
+
+function fillWithLayers(node, st) {
+  node.innerHTML = '';
+  printLayers(st).forEach(([cls, inner]) => {
+    const g = svgEl('g', { class: 'layer ' + cls });
+    g.innerHTML = inner;
+    node.appendChild(g);
+  });
+}
+
+function buildPrint(st)    { fillWithLayers(el('print'), st); }
+function buildPressBed(st) { fillWithLayers(el('ap-press-print'), st); }
 
 /* glyph symbols carry no fill/stroke of their own; inside the print, the
    <use> elements supply them by inheritance into the shadow tree */
 const printStyle = document.createElement('style');
 printStyle.textContent =
-  '#print use { fill: none; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }';
+  '#print use, #ap-press-print use { fill: none; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }';
 document.head.appendChild(printStyle);
 
 /* ========================= address track ========================= */
@@ -357,7 +419,12 @@ function markNext() {
 }
 
 function selectGlyph(gid, { auto }) {
-  if (S.rotating) return;
+  if (S.rotating) {
+    // a hand quicker than the wheel: hold the block until the turn ends
+    // rather than letting the click vanish without a trace
+    if (!auto && !S.auto && S.queue.length < ADDR_LEN) S.queue.push(gid);
+    return;
+  }
   if (['pending', 'buildup', 'break', 'active'].includes(S.state)) return;
   if (S.auto && !auto) return;
   if (S.locks.includes(gid)) { Sound.tok(0.06); return; }
@@ -365,6 +432,7 @@ function selectGlyph(gid, { auto }) {
   if (S.locks.length > 0) {
     const expected = S.station.address[S.locks.length];
     if (gid !== expected) {
+      S.queue.length = 0; // a refused block voids anything held behind it
       const c = el('glyph-' + gid);
       c.classList.add('refuse');
       setTimeout(() => c.classList.remove('refuse'), 450);
@@ -388,7 +456,16 @@ function selectGlyph(gid, { auto }) {
   S.tickTimers.forEach(clearTimeout);
   S.tickTimers = [0.15, 0.5, 0.85].map(f => setTimeout(() => Sound.tok(0.07), dur * f));
 
-  setTimeout(() => { S.rotating = false; stampGlyph(gid, auto); }, dur + 60);
+  setTimeout(() => {
+    S.rotating = false;
+    stampGlyph(gid, auto);
+    // work through any blocks the hand queued while the wheel turned;
+    // each goes through the same registration path (refusals still refuse)
+    while (!auto && !S.auto && S.queue.length) {
+      selectGlyph(S.queue.shift(), { auto: false });
+      if (S.rotating) break; // a turn began; the rest wait for its end
+    }
+  }, dur + 60);
 }
 
 function stampGlyph(gid, auto) {
@@ -402,9 +479,23 @@ function stampGlyph(gid, auto) {
   setTimeout(() => c.classList.remove('stamping'), 320);
   document.body.classList.add('has-locks');
 
-  if (n === 1) buildPrint(S.station);
+  if (n === 1) { buildPrint(S.station); buildPressBed(S.station); }
   const layer = document.querySelector('#print .layer-' + n);
   if (layer) layer.classList.add('stamped');
+  const bedLayer = document.querySelector('#ap-press-print .layer-' + n);
+  if (bedLayer) bedLayer.classList.add('stamped');
+
+  // the ring itself takes the impression: the pointer strikes, the whole
+  // dial presses, and the block's seal stamps onto its kentō station
+  const kento = el('kento-' + n);
+  kento.querySelector('use').setAttribute('href', '#g-' + gid);
+  kento.classList.add('sealed');
+  el('pointer').classList.add('strike');
+  el('dial').classList.add('pressing');
+  setTimeout(() => {
+    el('pointer').classList.remove('strike');
+    el('dial').classList.remove('pressing');
+  }, 320);
 
   const slot = el('slot-' + n);
   slot.querySelector('use').setAttribute('href', '#g-' + gid);
@@ -439,6 +530,7 @@ function quickDial(stationId) {
   if (S.locks.length > 0) resetDial({ silent: true });
 
   const st = STATION_BY_ID[stationId];
+  S.queue.length = 0;
   S.auto = true;
   S.station = st;
   Sound.rustle(0.4, 0.12);
@@ -497,10 +589,13 @@ function resetDial({ silent }) {
   S.actTimers.forEach(clearTimeout);
   S.actTimers = [];
   S.locks = [];
+  S.queue.length = 0;
   S.station = null;
   clearMarks();
   document.querySelectorAll('.cartouche.locked').forEach(c => c.classList.remove('locked'));
   document.querySelectorAll('.slot.filled').forEach(s => s.classList.remove('filled'));
+  document.querySelectorAll('.ap-seal.sealed').forEach(s => s.classList.remove('sealed'));
+  el('ap-press-print').innerHTML = '';
   document.body.classList.remove('has-locks');
   const print = el('print');
   if (silent) {

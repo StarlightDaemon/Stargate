@@ -138,6 +138,54 @@ body[data-state="pending"] #ap-idle .dry-ring {
   animation: mark-blink 1.2s steps(2, jump-none) infinite;
 }
 
+/* ---------- the press bed: the print builds in the ring's mouth ---------- */
+#ap-press, #ap-seals { display: none; }
+body.has-locks #ap-press,
+body.has-locks #ap-seals { display: block; }
+body.has-locks #ap-idle { display: none; } /* the bed replaces the dry ring */
+
+#ap-press-print g.layer { opacity: 0; }
+#ap-press-print g.layer.stamped {
+  opacity: 1;
+  transform-box: view-box; transform-origin: 50% 50%;
+  animation: layer-stamp 0.3s steps(4, jump-none);
+}
+
+/* kentō stations & their seals around the mouth */
+.ap-seal .seal-face { display: none; }
+.ap-seal.sealed .kento { display: none; }
+.ap-seal.sealed .seal-face {
+  display: block;
+  transform-box: fill-box; transform-origin: center;
+  animation: stamp-pop 0.26s steps(4, jump-none);
+}
+.ap-seal .seal-face use {
+  fill: none; stroke: currentColor; stroke-width: 10;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* the pointer strikes and the whole dial takes the press on each lock */
+#pointer.strike { animation: ptr-strike 0.3s steps(3, jump-none); }
+@keyframes ptr-strike {
+  0% { transform: translateY(0); } 45% { transform: translateY(16px); }
+  100% { transform: translateY(0); }
+}
+#dial.pressing {
+  transform-origin: 50% 50%;
+  animation: dial-press 0.3s steps(4, jump-none);
+}
+@keyframes dial-press {
+  0% { transform: scale(1); } 40% { transform: scale(0.988); }
+  100% { transform: scale(1); }
+}
+
+/* a full address: the vermillion rim beckons for the Warden's Seal */
+#press-rim { display: none; }
+body[data-state="pending"] #press-rim {
+  display: block;
+  animation: mark-blink 1.2s steps(2, jump-none) infinite;
+}
+
 #ap-buildup .ink-curls {
   transform-box: view-box; transform-origin: 440px 440px;
   animation: curl-spin 2.6s steps(28) infinite;

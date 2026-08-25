@@ -145,16 +145,27 @@ const run = async () => {
   check('manual dial: state pending, NOT active', (await reg(page, 'state')) === 'pending');
   const stampedLayers = await page.evaluate(() => document.querySelectorAll('#print .layer.stamped').length);
   check('print carries all 7 stamped layers', stampedLayers === 7, `${stampedLayers} layers`);
+  const ringState = await page.evaluate(() => ({
+    seals: document.querySelectorAll('.ap-seal.sealed').length,
+    bedLayers: document.querySelectorAll('#ap-press-print .layer.stamped').length,
+    press: getComputedStyle(document.getElementById('ap-press')).display,
+    rim: getComputedStyle(document.getElementById('press-rim')).display
+  }));
+  check('ring itself carries the address: 7 seals + 7 press-bed layers',
+        ringState.seals === 7 && ringState.bedLayers === 7 && ringState.press === 'block',
+        JSON.stringify(ringState));
+  check('pending: vermillion rim beckons on the ring', ringState.rim === 'block', `rim=${ringState.rim}`);
   await shot(page, '03_manual_dial_pending_1080.png');
 
   /* ---- NEGATIVE: a full address must never auto-fire ---- */
   await sleep(2600);
   const apShown = await page.evaluate(() => ({
     active: getComputedStyle(document.getElementById('ap-active')).display,
-    idle: getComputedStyle(document.getElementById('ap-idle')).display
+    press: getComputedStyle(document.getElementById('ap-press')).display
   }));
   check('NEGATIVE: still pending 2.6s after 7th lock', (await reg(page, 'state')) === 'pending');
-  check('NEGATIVE: aperture not open (ap-active hidden)', apShown.active === 'none' && apShown.idle === 'block',
+  check('NEGATIVE: aperture not open (ap-active hidden, press bed showing)',
+        apShown.active === 'none' && apShown.press === 'block',
         JSON.stringify(apShown));
   await shot(page, '04_negative_still_pending_1080.png');
 
@@ -183,6 +194,12 @@ const run = async () => {
   await sleep(700);
   check('disengage 1: back to idle', (await reg(page, 'state')) === 'idle');
   check('disengage 1: locks cleared', (await reg(page, 'locks.length')) === 0);
+  const ringCleared = await page.evaluate(() => ({
+    seals: document.querySelectorAll('.ap-seal.sealed').length,
+    bedNodes: document.getElementById('ap-press-print').children.length
+  }));
+  check('disengage 1: ring seals & press bed cleared',
+        ringCleared.seals === 0 && ringCleared.bedNodes === 0, JSON.stringify(ringCleared));
   await shot(page, '09_disengaged_idle_1080.png');
 
   /* ---- CYCLE 2: quick-dial token (Tsukinoto) must auto-dial visibly ---- */
@@ -239,6 +256,18 @@ const run = async () => {
   await sleep(1200);
   check('release mid-auto-dial aborts the sequence',
         afterAbort === 0 && (await reg(page, 'locks.length')) === 0 && (await reg(page, 'state')) === 'idle');
+
+  /* ---- rapid manual dial: clicks faster than the wheel turns must queue, not vanish ---- */
+  const rapidAddr = await page.evaluate(() =>
+    window.__REGISTRY__.stations.find(s => s.id === 'kumogaeshi').address);
+  for (const g of rapidAddr) { await hitClick(page, '#glyph-' + g); await sleep(250); }
+  let rapidOk = true;
+  try { await waitLocks(page, 7, 12000); } catch { rapidOk = false; }
+  check('rapid clicking (every 250ms) queues and registers all 7 locks',
+        rapidOk && (await reg(page, 'state')) === 'pending',
+        `locks=${await reg(page, 'locks.length')}`);
+  await hitClick(page, '#release-btn');
+  await sleep(700);
 
   /* ---- help overlay ---- */
   await hitClick(page, '#help-btn');
