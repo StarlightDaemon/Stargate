@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kagerō Road Waystation Registry</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='%23c03a29'/></svg>">
+</head>
+<body data-state="idle">
+
+<div id="stage">
+
+  <!-- ===== distant scenery: low horizon, drifting clouds, open sky ===== -->
+  <div id="scenery" aria-hidden="true">
+    <svg id="far-hills" viewBox="0 0 1920 260" preserveAspectRatio="none">
+      <path d="M0 200 L180 130 L310 185 L520 105 L700 190 L960 150 L1200 205 L1450 120 L1650 190 L1920 140 L1920 260 L0 260 Z"
+            fill="#b9c0b4" stroke="#221c16" stroke-width="4"/>
+      <path d="M0 235 L260 185 L560 235 L900 195 L1300 245 L1620 200 L1920 235 L1920 260 L0 260 Z"
+            fill="#d5cdb4" stroke="#221c16" stroke-width="3"/>
+    </svg>
+    <svg class="cloud cloud-a" viewBox="0 0 300 90">
+      <path d="M20 70 Q8 70 10 55 Q2 40 22 36 Q28 18 55 24 Q70 10 92 22 Q118 14 124 36 Q146 38 140 58 Q146 72 128 70 Z"
+            fill="#e6dcc4" stroke="#221c16" stroke-width="4"/>
+      <path d="M150 70 H286" stroke="#221c16" stroke-width="4" fill="none"/>
+    </svg>
+    <svg class="cloud cloud-b" viewBox="0 0 300 90">
+      <path d="M40 66 Q26 66 30 52 Q20 38 42 36 Q50 20 76 26 Q96 14 112 28 Q136 24 138 44 Q154 50 146 64 Z"
+            fill="#e6dcc4" stroke="#221c16" stroke-width="4"/>
+      <path d="M12 66 H36" stroke="#221c16" stroke-width="4" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- ===== the Registry Dial (built by app.js) ===== -->
+  <div id="dial-wrap">
+    <svg id="dial" viewBox="0 0 880 880"></svg>
+  </div>
+
+  <!-- ===== right column: title, destination print, address, wardens' post ===== -->
+  <div id="title-cartouche" aria-label="Kagerō Road Waystation Registry">
+    <span class="title-jp">KAGERŌ ROAD</span>
+    <span class="title-sub">WAYSTATION REGISTRY</span>
+  </div>
+
+  <div id="print-frame">
+    <svg id="print" viewBox="0 0 380 520"></svg>
+    <div id="print-empty">
+      <span>no impression<br>on the press</span>
+    </div>
+  </div>
+
+  <div id="address-track" aria-label="address impressions"></div>
+
+  <div id="status-cartouche"><span id="status-text">The road sleeps beneath the mist.</span></div>
+
+  <div id="warden-post">
+    <button id="seal-btn" type="button" aria-label="Warden's Seal — open the way">
+      <svg viewBox="0 0 100 100">
+        <rect x="6" y="6" width="88" height="88" rx="8" fill="#c03a29" stroke="#221c16" stroke-width="6"/>
+        <path d="M28 30 H72 M28 30 V52 M72 30 V52 M28 52 H72 M50 52 V74 M34 74 H66"
+              stroke="#f0e6d2" stroke-width="7" fill="none" stroke-linecap="square"/>
+      </svg>
+      <span class="ctl-label">WARDEN'S SEAL<em>open the way</em></span>
+    </button>
+
+    <button id="release-btn" type="button" aria-label="Release Cord — furl the passage">
+      <svg viewBox="0 0 60 150">
+        <path d="M30 4 V52" stroke="#221c16" stroke-width="7" fill="none"/>
+        <circle cx="30" cy="62" r="11" fill="#c9962e" stroke="#221c16" stroke-width="5"/>
+        <path d="M30 73 V96" stroke="#221c16" stroke-width="7" fill="none"/>
+        <path d="M14 100 H46 L42 142 Q30 150 18 142 Z" fill="#a97e42" stroke="#221c16" stroke-width="5"/>
+        <path d="M22 112 H38 M22 124 H38" stroke="#221c16" stroke-width="4" fill="none"/>
+      </svg>
+      <span class="ctl-label">RELEASE CORD<em>furl the passage</em></span>
+    </button>
+
+    <button id="writ-btn" type="button" aria-pressed="false" aria-label="Barrier Writ interlock">
+      <svg viewBox="0 0 110 70">
+        <rect x="5" y="5" width="100" height="60" rx="6" fill="#e6dcc4" stroke="#221c16" stroke-width="5"/>
+        <path class="writ-brush" d="M20 35 H90" stroke="#5b7d54" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <path class="writ-x" d="M26 15 L84 55 M84 15 L26 55" stroke="#c03a29" stroke-width="10" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span class="ctl-label">BARRIER WRIT<em id="writ-state">pass open</em></span>
+    </button>
+
+    <div id="writ-banner" aria-hidden="true"><span>THE PASS IS CLOSED — BARRIER WRIT POSTED</span></div>
+  </div>
+
+  <!-- ===== traveler's tokens (quick dial) ===== -->
+  <div id="token-shelf">
+    <span id="token-shelf-label">TRAVELER'S TOKENS — pre-cut block sets</span>
+    <div id="token-row"></div>
+  </div>
+
+  <!-- ===== operator's reference ===== -->
+  <button id="help-btn" type="button" aria-label="Operator's reference">?</button>
+  <div id="help-overlay" hidden>
+    <div id="help-scroll">
+      <h2>Operator's Reference</h2>
+      <p class="help-lede">You keep the press of the Kagerō Road. A passage is a print:
+      seven blocks stamped in registration open the way to one of ten stations.</p>
+      <ol>
+        <li><strong>Name the province.</strong> Click any emblem glyph on the Registry
+        Dial. The dial turns it under the pointer and the sumi key-block stamps —
+        the destination is named.</li>
+        <li><strong>Follow the warden's mark.</strong> A vermillion brush-mark shows the
+        next block of that station's address. Stamp all seven impressions; wrong
+        blocks refuse to register.</li>
+        <li><strong>Break the passage open.</strong> A full address only readies the
+        road. Press the square <strong>Warden's Seal</strong> to gather the ink and
+        break the wave. Draw the knotted <strong>Release Cord</strong> at any moment
+        to furl everything.</li>
+        <li><strong>Traveler's tokens</strong> hold pre-cut block sets for seven
+        stations: the wardens stamp the address for you, block by block, faster than
+        any hand — but the Seal is still yours to press.</li>
+        <li><strong>The Barrier Writ</strong> closes the pass under an unfavorable
+        omen. While posted, the Seal refuses. The pass stands open by default.</li>
+      </ol>
+      <div id="help-stations"></div>
+      <button id="help-close" type="button">CLOSE THE SCROLL</button>
+    </div>
+  </div>
+
+  <!-- ===== corners ===== -->
+  <a id="author-corner" href="https://github.com/StarlightDaemon" target="_blank"
+     rel="noopener noreferrer">StarlightDaemon</a>
+  <span id="version-corner">v1.0.0 — first impression</span>
+
+  <!-- ===== paper grain ===== -->
+  <svg id="grain" aria-hidden="true">
+    <filter id="grain-f">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain-f)"/>
+  </svg>
+
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
