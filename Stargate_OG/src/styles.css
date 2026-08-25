@@ -1,5 +1,5 @@
-/* STARGATE console — dark SGC-style theme. System fonts only: the build has
-   no runtime network dependency. */
+/* STARGATE console — dark metal-toned console theme. System fonts only: the
+   build has no runtime network dependency. */
 
 :root {
   --bg: #05080f;
@@ -10,8 +10,8 @@
   --accent: #38bdf8;
   --amber: #fbbf24;
   --red: #f87171;
-  --naquadah: #2a3648;
-  --naquadah-deep: #171f2c;
+  --slate: #2a3648;
+  --slate-deep: #171f2c;
   --glyph: #9fc3e0;
   --iris: #6b7687;
   /* keep in sync with IRIS_TRANSIT_MS in src/state/constants.ts */
@@ -96,7 +96,7 @@ body {
   border: 1px solid var(--panel-edge);
   border-radius: 3px;
   color: var(--text-dim);
-  background: var(--naquadah-deep);
+  background: var(--slate-deep);
   transition: all 0.25s;
 }
 
@@ -135,7 +135,7 @@ body {
   font: inherit;
   font-size: 0.72rem;
   padding: 0.45rem 0.8rem;
-  background: var(--naquadah-deep);
+  background: var(--slate-deep);
   color: var(--text);
   border: 1px solid var(--panel-edge);
   border-radius: 4px;
@@ -212,18 +212,18 @@ body {
 
 .ring-outer {
   fill: none;
-  stroke: var(--naquadah);
+  stroke: var(--slate);
   stroke-width: 14;
 }
 
 .ring-outer--inner-edge {
   stroke-width: 6;
-  stroke: var(--naquadah-deep);
+  stroke: var(--slate-deep);
 }
 
 .symbol-ring__band {
   fill: none;
-  stroke: var(--naquadah-deep);
+  stroke: var(--slate-deep);
   stroke-width: 74;
 }
 
@@ -248,7 +248,7 @@ body {
 /* chevrons */
 
 .chevron__housing {
-  fill: var(--naquadah);
+  fill: var(--slate);
   stroke: #0a0f18;
   stroke-width: 2;
 }
@@ -342,7 +342,7 @@ body {
 .dhd__key {
   aspect-ratio: 1;
   padding: 0.25rem;
-  background: var(--naquadah-deep);
+  background: var(--slate-deep);
   border: 1px solid var(--panel-edge);
   border-radius: 4px;
   cursor: pointer;
@@ -411,7 +411,7 @@ body {
   font: inherit;
   font-size: 0.75rem;
   padding: 0 0.9rem;
-  background: var(--naquadah-deep);
+  background: var(--slate-deep);
   border: 1px solid var(--panel-edge);
   border-radius: 4px;
   color: var(--text);
