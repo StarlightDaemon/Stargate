@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "http-server": "^14.1.1",
-    "puppeteer-core": "^23.0.0"
+    "puppeteer-core": "^25.9.0"
   },
   "author": "Antigravity",
   "license": "MIT"
