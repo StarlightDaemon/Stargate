@@ -73,6 +73,13 @@ const STATUS_OVERRIDES = {
   // stage narrative, hard-coded archive sidebar counts, saved-dives
   // counter never updates). Interaction mechanics themselves work.
   stargate_bathyscaphe_pilot: "known-issue",
+  // Verified against stargate_ukiyo_waystation_fable/README.md's own
+  // opening status-note blockquote: closed as a single, one-off attempt,
+  // no further iteration planned; operator review found it underperformed
+  // its sibling build (stargate_ukiyo_waystation) on a specific documented
+  // behavior (quick-dial auto-dial did not read as present/working during
+  // real use, despite the build's own automated verification reporting it).
+  stargate_ukiyo_waystation_fable: "known-issue",
 };
 
 // Short caveat lines surfaced on the card itself, so entries with an
@@ -110,6 +117,13 @@ const NOTES = {
   // build" — automated verification only.
   stargate_bathyscaphe_pilot_fable:
     "Zero defects found across all automated verification checks — operator confirmation still pending.",
+  // README.md status-note blockquote: closed as a single, one-off
+  // attempt, no further iteration planned; underperformed its sibling
+  // build on the quick-dial auto-dial behavior, which didn't read as
+  // present or working during real use despite the build's own automated
+  // verification reporting it — a discrepancy left unresolved.
+  stargate_ukiyo_waystation_fable:
+    "Closed as a single, one-off attempt: underperformed its sibling build on the quick-dial auto-dial behavior, which didn't read as present or working during real use despite the build's own automated verification reporting it — unresolved.",
 };
 
 // Thematic series groupings. Members render a series tag and are
@@ -261,7 +275,10 @@ function extractTitleAndBlurb(readmePath) {
       !/^#{1,6}\s/.test(lines[i]) &&
       !lines[i].trim().startsWith("```")
     ) {
-      paraLines.push(lines[i].trim());
+      // Strip leading blockquote markers (">", "> >", etc.) so a README
+      // paragraph formatted as a `>` blockquote doesn't leak literal ">"
+      // (HTML-escaped as &gt;) into the rendered blurb.
+      paraLines.push(lines[i].trim().replace(/^(?:>\s?)+/, ""));
       i++;
     }
     if (paraLines.length === 0) continue;
