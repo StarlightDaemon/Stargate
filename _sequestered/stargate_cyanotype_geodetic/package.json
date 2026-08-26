@@ -7,6 +7,6 @@
     "test": "node verify.js"
   },
   "devDependencies": {
-    "puppeteer": "^22.15.0"
+    "puppeteer": "^25.9.0"
   }
 }
