@@ -2,6 +2,39 @@
 
 All notable changes to the Stargate Ukiyo-e Waystation interface will be documented in this file.
 
+## Session Close-Out Summary
+
+**Status: believed solid pending final operator review.**
+
+This build went through **four iterative fix passes in a single session**. Each pass fixed a
+real issue, each was verified as passing at the time — and each time, the next pass uncovered
+a further issue that the previous verification had not caught:
+
+| Pass | Version | Issue fixed |
+|---|---|---|
+| 1 | 1.0.1 | The dial ring carried no locking feedback of its own — every station lock rendered only in the separate print panel, leaving the ring a bare selector with no record of what had locked |
+| 2 | 1.0.1 | Rapid manual clicks raced and corrupted shared state (double-registered stations, blank destination tags); clicks now queue and serialize strictly in order |
+| 3 | 1.0.2 | The illustrated print panel and the compass dial sat in reversed positions; the grid was restructured so the print panel anchors top-left and the dial holds the centre |
+| 4 | 1.0.3 | Three stale-position issues left over from that restructuring: the activation aperture still anchored to the print panel, vortex diameters still sized for the old centre plate, and an implicitly-positioned kento ring |
+
+(Passes 1 and 2 were diagnosed and fixed together and shipped as a single version, 1.0.1 —
+four passes across three version entries.)
+
+The 1.0.3 pass was deliberately broadened from "fix the one reported symptom" to a full audit
+of every animated and absolutely-positioned layer, precisely because the three prior passes had
+each verified clean and still missed what came next. That audit was verified with **live-playback
+screenshot evidence** — each effect captured while it was actually animating, with its geometry
+measured at that instant and framed to show both candidate containers in the same image — rather
+than by DOM-state and computed-style checks alone, which is what let the 1.0.2 positioning
+problem slip through.
+
+On that basis the build is **believed solid**: the full E2E suite passes 14/14 across consecutive
+clean runs, and every animated effect has been confirmed rendering at its correct current
+position. This is not the same as fully confirmed. **Final operator review is still pending as of
+this close-out.** No further iteration is planned unless a new issue is found later.
+
+---
+
 ## [1.0.3] - 2026-08-25
 
 **Built by:** Claude Opus 5
