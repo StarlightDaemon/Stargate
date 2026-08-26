@@ -29,6 +29,17 @@ jobs:
         with:
           node-version: 20
 
+      # Stargate_OG is the one folder that is a real app rather than a
+      # static build folder: it needs tsc + vite build to produce servable
+      # files. Its dist/ is never committed, so it is rebuilt here, in the
+      # runner's ephemeral workspace, on every push. build-pages-site.js
+      # copies the result into _site/Stargate_OG/ in the next step.
+      - name: Build featured app (Stargate_OG)
+        working-directory: Stargate_OG
+        run: |
+          npm ci
+          npm run build
+
       - name: Assemble static site (hub + qualifying build folders)
         run: node scripts/build-pages-site.js "$GITHUB_WORKSPACE/_site"
 

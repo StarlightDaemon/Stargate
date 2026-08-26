@@ -10,10 +10,14 @@
 // says exists. If generate.js's discovery rules change, this script
 // picks that up automatically.
 //
-// Stargate_OG is never copied: generate.js keeps it out of `entries`
-// (it's surfaced separately as `featured`, which this script ignores),
-// because it's the one folder in this repo that needs an actual build
-// step (tsc + vite build) rather than being served as-is.
+// Stargate_OG is the one exception to that: generate.js keeps it out of
+// `entries` (it's surfaced separately as `featured`) because it's the one
+// folder in this repo that needs an actual build step (tsc + vite build)
+// rather than being served as-is. So it isn't copied from source like the
+// entries are — its already-built dist/ contents are copied instead, to
+// the path the featured link expects. The build itself is the caller's
+// job (CI runs it immediately before this script); dist/ is never
+// committed to the repo.
 //
 // Usage: node scripts/build-pages-site.js [outputDir]
 // Default outputDir: <repo root>/_site
@@ -25,6 +29,9 @@ const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
 const HUB_DIR = path.join(ROOT, "hub");
+const OG_DIR = path.join(ROOT, "Stargate_OG");
+const OG_DIST_DIR = path.join(OG_DIR, "dist");
+const OG_PREVIEW_CANDIDATES = ["preview.png", "preview.jpg", "preview.jpeg"];
 const OUTPUT_DIR = path.resolve(process.argv[2] || path.join(ROOT, "_site"));
 
 const SKIP_ENTRIES = new Set(["node_modules", ".git", ".DS_Store"]);
@@ -70,6 +77,34 @@ function main() {
     copied.push(relDir);
   }
 
+  // Featured app: the CONTENTS of Stargate_OG/dist/ (index.html + assets/)
+  // land directly in _site/Stargate_OG/, not nested under another dist/,
+  // so the featured link hub/generate.js already emits
+  // (../Stargate_OG/index.html, resolved from _site/hub/) hits a real file.
+  // Vite is configured with base: './', so index.html's asset references
+  // are relative and survive this move unchanged.
+  if (!fs.existsSync(path.join(OG_DIST_DIR, "index.html"))) {
+    throw new Error(
+      `Missing ${path.relative(ROOT, OG_DIST_DIR)}/index.html — build the ` +
+        `featured app first (cd Stargate_OG && npm ci && npm run build). ` +
+        `Without it the hub's featured link would deploy broken.`
+    );
+  }
+  copyDir(OG_DIST_DIR, path.join(OUTPUT_DIR, "Stargate_OG"));
+
+  // The featured card's hero image (../Stargate_OG/preview.png) lives in
+  // OG's source root, not in dist/ — vite has no public/ dir to sweep it
+  // in — so it's copied alongside the build output.
+  const ogPreview = OG_PREVIEW_CANDIDATES.find((c) =>
+    fs.existsSync(path.join(OG_DIR, c))
+  );
+  if (ogPreview) {
+    fs.copyFileSync(
+      path.join(OG_DIR, ogPreview),
+      path.join(OUTPUT_DIR, "Stargate_OG", ogPreview)
+    );
+  }
+
   // Root landing page: the Pages URL root has nothing else to serve
   // (hub lives at /hub/, mirroring the repo layout above), so drop in
   // a redirect. Generated into the build output only — not a repo file.
@@ -82,6 +117,10 @@ function main() {
   console.log(`  hub/ -> hub/`);
   for (const relDir of copied) {
     console.log(`  ${relDir} -> ${relDir}/`);
+  }
+  console.log(`  Stargate_OG/dist/ -> Stargate_OG/ [built output]`);
+  if (ogPreview) {
+    console.log(`  Stargate_OG/${ogPreview} -> Stargate_OG/${ogPreview}`);
   }
   console.log(`  (root) -> index.html [redirect to hub/]`);
 }
