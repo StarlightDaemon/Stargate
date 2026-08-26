@@ -10,7 +10,7 @@
   "keywords": ["futurism", "portal", "dynamism", "chronophotography", "teleportation"],
   "author": "StarlightDaemon",
   "license": "MIT",
-  "dependencies": {
-    "puppeteer": "^24.4.0"
+  "devDependencies": {
+    "puppeteer": "^25.9.0"
   }
 }
