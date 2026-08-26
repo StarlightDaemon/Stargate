@@ -8,7 +8,7 @@
     "test:verify": "node scripts/verify.js"
   },
   "devDependencies": {
-    "puppeteer-core": "^23.11.1"
+    "puppeteer-core": "^25.9.0"
   },
   "keywords": [
     "seismology",
