@@ -7,7 +7,8 @@
  * 4. Shuzuri (朱摺り) - Vermillion / cinnabar accents for torii, bridges, lanterns
  * 5. Bokashi & Inkan (ぼかし・印鑑) - Gradient feathering and red official approval seal
  *
- * In addition, powers the 3-stage elemental portal breakthrough & sustained active vortex.
+ * The 3-stage portal aperture vortex is NOT owned here - it belongs to the dial
+ * instrument (js/dial.js + css/ukiyoe_dial.css) so it tracks the dial's position.
  */
 
 const STATIONS_DATA = [
@@ -525,15 +526,11 @@ class WoodblockEngine {
                         <g id="layer-keyblock" class="woodblock-layer"></g>
                     </svg>
 
-                    <!-- Aperture Vortex Container (for activation stages) -->
-                    <div class="aperture-overlay" id="aperture-overlay">
-                        <div class="vortex-rings" id="vortex-rings">
-                            <div class="wave-ring ring-1"></div>
-                            <div class="wave-ring ring-2"></div>
-                            <div class="wave-ring ring-3"></div>
-                            <div class="wave-crest-burst" id="wave-burst"></div>
-                        </div>
-                    </div>
+                    <!-- NOTE: the Aperture Vortex used to live here. It is now rendered
+                         inside .celestial-dial-wrapper by CelestialDial.renderDialStructure()
+                         so it opens over the dial, not over this print panel. Do not move it
+                         back: this container is a flanking panel, not the focal instrument,
+                         and it is rebuilt wholesale by resetStage() on every disengage. -->
 
                     <!-- Seal Stamp overlay (Inkan) -->
                     <div class="official-seal" id="official-seal">

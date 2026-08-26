@@ -128,6 +128,20 @@ class CelestialDial {
                             <text x="260" y="276" font-family="'Noto Serif JP', serif" font-size="16" font-weight="900" fill="#fdfaf0" text-anchor="middle">関所</text>
                         </g>
                     </svg>
+
+                    <!-- Portal Aperture Vortex (activation stages 1-3).
+                         Anchored INSIDE .celestial-dial-wrapper on purpose: the aperture
+                         opens at the instrument, so it must inherit the dial's containing
+                         block and follow it wherever the grid places the dial. It carries
+                         no page-level or hardcoded coordinates - it is 100% of its parent. -->
+                    <div class="aperture-overlay" id="aperture-overlay">
+                        <div class="vortex-rings" id="vortex-rings">
+                            <div class="wave-ring ring-1"></div>
+                            <div class="wave-ring ring-2"></div>
+                            <div class="wave-ring ring-3"></div>
+                            <div class="wave-crest-burst" id="wave-burst"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 10 Station Woodblock Stamp Touchpads (Placed Below Dial) -->

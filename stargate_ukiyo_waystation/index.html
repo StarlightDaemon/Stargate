@@ -47,13 +47,13 @@
         <section class="main-stage-layout">
 
             <!-- Top-Left Column: Progressive Woodblock Print Plate & 7 Passage Seal Tags -->
-            <article class="stage-column" aria-label="Woodblock Stamping Stage & Portal Aperture">
+            <article class="stage-column" aria-label="Woodblock Stamping Stage">
                 <div class="stage-column-header">
                     <span class="stage-title-kanji">通関手形七印 · 摺刻場</span>
                     <span class="stage-title-sub">7 PASSAGE SEALS · WOODBLOCK STAGE</span>
                 </div>
 
-                <!-- Progressive Woodblock Print Stage & Aperture Overlay -->
+                <!-- Progressive Woodblock Print Stage (the portal aperture lives on the dial, not here) -->
                 <div class="woodblock-stage-active state-idle" id="woodblock-stage">
                     <!-- Injected by WoodblockEngine.renderEmptyStage() -->
                 </div>
@@ -65,12 +65,13 @@
             </article>
 
             <!-- Center Column: Celestial Woodblock Compass Dial (dominant focal instrument) -->
-            <article class="dial-column" aria-label="Celestial Woodblock Compass Dial">
+            <article class="dial-column" aria-label="Celestial Woodblock Compass Dial &amp; Portal Aperture">
                 <div class="dial-column-header">
                     <span class="dial-title-kanji">天象木版方位儀</span>
                     <span class="dial-title-sub">CELESTIAL WOODBLOCK DIAL</span>
                 </div>
 
+                <!-- Dial instrument + its portal aperture overlay -->
                 <div id="dial-container">
                     <!-- Injected by CelestialDial.init() -->
                 </div>
@@ -128,7 +129,7 @@
                 <a href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
             </div>
             <div class="footer-right">
-                <span>v1.0.2 · 雲路関所司 天象木版方位儀 · All Rights Reserved</span>
+                <span>v1.0.3 · 雲路関所司 天象木版方位儀 · All Rights Reserved</span>
             </div>
         </footer>
 

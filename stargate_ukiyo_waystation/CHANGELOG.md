@@ -2,6 +2,114 @@
 
 All notable changes to the Stargate Ukiyo-e Waystation interface will be documented in this file.
 
+## [1.0.3] - 2026-08-25
+
+**Built by:** Claude Opus 5
+
+> **Fix scope:** Stale-position audit and repair of every animated visual layer left
+> mis-anchored by the 1.0.2 grid restructuring. No state machine, audio, palette, station
+> content, woodblock-stamping logic, ring locking feedback or click-queue serialisation was
+> altered. All coordinates below were measured live in headless Chrome at 1920x1080.
+
+### The audit
+
+Every `position: absolute` / `position: fixed` rule in all four stylesheets, every
+`@keyframes` block and its host element, and every JS site that writes `style.top` /
+`style.left` / `style.transform` was read and then measured **during live playback** with
+`getBoundingClientRect()` while `getAnimations()` reported the animation `running`. Fourteen
+animated / absolutely-positioned layers were checked. Three were stale; the rest are recorded
+below as verified-correct so a future pass does not re-audit them.
+
+### Stale issue 1 - the portal aperture was anchored to the print panel, not the dial
+
+- **What was wrong:** `#aperture-overlay` (the entire 3-stage activation effect: the stage
+  gradients, `.vortex-rings`, the three `.wave-ring`s and `.wave-crest-burst`) was emitted by
+  `WoodblockEngine.renderEmptyStage()` as a child of `#print-plate`, inside `#woodblock-stage`.
+  Its `top/left/width/height` were correctly scoped to that parent - the defect is *which*
+  parent it had. Before 1.0.2 the print stage occupied the page centre (`#woodblock-stage` at
+  x=604, 772x772, centre **(990, 634)**), so the aperture read as a centred portal opening over
+  the page's dominant element. 1.0.2 moved the print panel to the top-left flank and moved the
+  dial to the centre; the aperture followed the panel to the corner and the dial - now the
+  dominant centred instrument - received no activation visual at all.
+- **Measured before:** aperture centre **(281, 417)** in all three stages, versus dial centre
+  **(960, 482)** - a **679px** horizontal miss. Coincidentally close to where the dial used to
+  sit (old `.dial-column` x=36, 550 wide), which is why it read as "anchored to the dial's old
+  position".
+- **Fix:** the aperture markup now renders inside `.celestial-dial-wrapper` in
+  `CelestialDial.renderDialStructure()` (js/dial.js), and was removed from
+  `renderEmptyStage()` (js/woodblock_engine.js), with a comment in its place so it is not
+  moved back. It is `top/left/width/height: 0/0/100%/100%` of the dial wrapper, so it carries
+  no page-level or hardcoded coordinates and tracks the dial wherever the grid puts it.
+  A `border-radius: 50%` was added so the stage gradients clip to the dial's circular form
+  instead of flashing as a square over a round instrument, and stage 2's gradient gained a
+  terminal `transparent` stop so it feathers rather than ending hard.
+- **Measured after:** aperture centre **(960, 482)** === dial wrapper centre **(960, 482)** in
+  stage 1, stage 2 and stage 3, each sampled while `vortexSpinBuildup` /
+  `waveRotateClockwise` / `waveRotateCounter` / `vortexSpinSustained` were reported `running`.
+- **Side benefit:** `resetStage()` rebuilds `#print-plate`'s `innerHTML` on every disengage,
+  which used to destroy and recreate the aperture node each cycle. It now lives outside that
+  subtree and survives disengage/re-activate intact.
+
+### Stale issue 2 - vortex diameters were still sized for the old centre print plate
+
+- **What was wrong:** `.vortex-rings` (320px) and its children `.ring-1` (280px),
+  `.ring-2` (200px), `.ring-3` (120px) and `.wave-crest-burst` (260px) are hardcoded pixel
+  diameters chosen against the pre-1.0.2 centre print plate (~724px inner). After the
+  restructuring that plate is only **442x482**, so the vortex filled ~72% of the panel's
+  width and the stage-2 burst ~82% - cramped against a frame with `overflow: hidden`. Left
+  unchanged they would have been the opposite problem once re-anchored: a 320px vortex
+  floating inside the 620px dial wrapper.
+- **Fix:** re-derived against the dial wrapper - `.vortex-rings` 320 -> **460px**, `.ring-1`
+  280 -> **420px**, `.ring-2` 200 -> **300px**, `.ring-3` 120 -> **180px**,
+  `.wave-crest-burst` 260 -> **380px**, with border weights raised 6/5/4/8 -> 8/7/6/10 so the
+  linework holds its ukiyo-e weight at the larger diameter.
+
+### Stale issue 3 - the kento compass ring was positioned only implicitly
+
+- **What was wrong:** `.kento-compass-ring` is `position: absolute` with **no** `top`/`left`.
+  It landed concentric with the dial purely via the flex static-position fallback of
+  `.celestial-dial-wrapper`'s `align-items/justify-content: center`. Correct today, but it is
+  not anchored to anything explicit - a future change to the wrapper's flex alignment would
+  silently decentre the ring, which is exactly the failure mode this pass exists to remove.
+- **Fix:** explicit `top: 50%; left: 50%; transform: translate(-50%, -50%)`. Measured
+  identical before and after: **(960, 482)**, 616x616.
+
+### Also changed - the print panel's activation states were dead code
+
+`portal.js` has always written `state-buildup` / `state-breakthrough` / `state-sustained`
+onto `#woodblock-stage`, but **no CSS rule for any of them existed** - the panel's only
+activation visual was the aperture that has now moved to the dial. Rather than leave the
+panel inert during transit, those three existing class hooks were given a purely tonal frame
+response (border + box-shadow: indigo -> vermillion -> pine green). Colour only: no position,
+size or transform, so the panel cannot drift from its grid area.
+
+### Verified correct, not changed
+
+`animateSectorLock` / `sectorLockPulse` (SVG `viewBox`-driven, measured mid-animation at
+**(962, 259)**, inside the dial); `stampWoodblock` on `.woodblock-layer`; `.official-seal`;
+`.print-cartouche`; `.kento-notch`; `.print-svg`; `pendingPulse`; `readyVibrate`;
+`.latch-slider`; `.modal-overlay`; `.interlock-alert-banner` (page-centred against `#app-root`
+by design, unrelated to the grid areas); `#app-root`'s JS scale transform in `app.js`.
+
+### File moves
+
+The aperture stylesheet block moved from `css/woodblock_canvas.css` to `css/ukiyoe_dial.css`
+so ownership matches the DOM. Both file headers were corrected, as were the now-inaccurate
+`aria-label` and comments in `index.html` that described the print panel as hosting the
+aperture.
+
+### Verification
+
+- Every animated state captured as a **screenshot while it was actively playing**, framed to
+  include both the top-left print panel and the centred dial in the same image so a
+  mis-anchored effect would be unmissable: station lock, stage 1 buildup, stage 2
+  breakthrough, stage 3 sustained active. All four confirmed over the centred dial.
+- Full E2E suite re-run: **14/14 passing**, including the second activate cycle after a
+  disengage (which exercises the aperture surviving `resetStage()`).
+- `preview.png` regenerated at the current composition via `scripts/capture-previews.js`
+  (it had been left stale by a prior pass).
+- Footer version label and `version.json` both moved to `1.0.3`.
+
 ## [1.0.2] - 2026-08-25
 
 **Built by:** Claude Opus 5

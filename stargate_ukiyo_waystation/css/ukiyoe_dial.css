@@ -55,9 +55,15 @@
     margin: 0 auto;
 }
 
-/* Kento Alignment Marks around Dial */
+/* Kento Alignment Marks around Dial.
+   Explicitly centred on the wrapper rather than relying on the flex
+   static-position fallback, so the ring stays concentric with the dial even if
+   the wrapper's flex alignment or size is changed by a future layout pass. */
 .kento-compass-ring {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 616px;
     height: 616px;
     pointer-events: none;
@@ -232,4 +238,138 @@
     color: var(--sumi-light);
     letter-spacing: 0.5px;
     text-transform: uppercase;
+}
+
+/* ==========================================================================
+   PORTAL APERTURE VORTEX & 3-STAGE ELEMENTAL ACTIVATION
+
+   Anchored to .celestial-dial-wrapper (the dial's own 620px box), NOT to the
+   print panel and NOT to the page. Every dimension below is either a percentage
+   of that wrapper or a diameter derived from it, so the whole effect tracks the
+   dial automatically wherever .main-stage-layout places the dial column.
+   ========================================================================== */
+
+.aperture-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Circular clip so the stage gradients read as the dial's own aperture
+       rather than as a square flash sitting on top of a round instrument. */
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+}
+
+.aperture-overlay.active {
+    opacity: 1;
+}
+
+/* Stage 1: Buildup */
+.aperture-overlay.stage-1 {
+    background: radial-gradient(circle at 50% 50%, rgba(29, 59, 83, 0.4) 0%, rgba(199, 61, 42, 0.2) 60%, transparent 85%);
+}
+
+.aperture-overlay.stage-1 .vortex-rings {
+    animation: vortexSpinBuildup 1.8s cubic-bezier(0.5, 0, 0.75, 0) infinite;
+}
+
+/* Stage 2: Breakthrough */
+.aperture-overlay.stage-2 {
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(29, 59, 83, 0.7) 40%, rgba(199, 61, 42, 0.6) 80%, transparent 100%);
+}
+
+.aperture-overlay.stage-2 .wave-crest-burst {
+    opacity: 1;
+    transform: scale(1.4) rotate(180deg);
+    transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+/* Stage 3: Sustained Active */
+.aperture-overlay.stage-3 {
+    background: radial-gradient(circle at 50% 50%, rgba(246, 238, 216, 0.2) 0%, rgba(29, 59, 83, 0.35) 60%, transparent 95%);
+}
+
+.aperture-overlay.stage-3 .vortex-rings {
+    animation: vortexSpinSustained 6s linear infinite;
+}
+
+/* Vortex diameters are scaled to the 620px dial wrapper (they were previously
+   sized for the old centre print plate and read undersized on the dial). */
+.vortex-rings {
+    position: relative;
+    width: 460px;
+    height: 460px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wave-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 5px solid var(--prussian-blue);
+    border-top-color: var(--vermillion-shu);
+    border-right-color: var(--gold-leaf);
+    box-shadow: 0 0 0 2px var(--sumi-ink);
+}
+
+.ring-1 {
+    width: 420px;
+    height: 420px;
+    border-width: 8px;
+    animation: waveRotateClockwise 4s linear infinite;
+}
+
+.ring-2 {
+    width: 300px;
+    height: 300px;
+    border-width: 7px;
+    border-bottom-color: var(--pine-green);
+    animation: waveRotateCounter 3s linear infinite;
+}
+
+.ring-3 {
+    width: 180px;
+    height: 180px;
+    border-width: 6px;
+    border-left-color: var(--vermillion-shu);
+    animation: waveRotateClockwise 2s linear infinite;
+}
+
+.wave-crest-burst {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    border: 10px dashed var(--vermillion-shu);
+    opacity: 0;
+    transform: scale(0.6) rotate(0deg);
+}
+
+@keyframes waveRotateClockwise {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes waveRotateCounter {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes vortexSpinBuildup {
+    0% { transform: scale(0.8) rotate(0deg); }
+    100% { transform: scale(1.1) rotate(540deg); }
+}
+
+@keyframes vortexSpinSustained {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
