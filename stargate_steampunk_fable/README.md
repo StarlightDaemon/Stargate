@@ -2,6 +2,13 @@
 
 > A fictional steam-and-clockwork calculating engine, rendered entirely as glowing schematic line-work. Purely decorative novelty site — no backend, no networking, nothing real.
 
+> **Status:** v1.0.0, operator-verified 2026-09-01 — direct testing confirmed the
+> full loop (manual dial, three-stage activation, disengage, quick-dial
+> auto-dial) working as intended. A successful second attempt at this genre:
+> it avoids the simulated-material rendering that ended a prior Steampunk try,
+> and takes a calculating-engine identity distinct from the genre's other
+> success (a telegraph/dispatch console).
+
 The Aldercroft Computation Bureau (est. 1859, Professor Imogen Aldercroft) maintains
 Engine No. 3, "PERPETUA" — a room-sized analytical engine whose Mill and Store,
 driven by steam through a forty-to-one main shaft, compute *traversal concordances*:

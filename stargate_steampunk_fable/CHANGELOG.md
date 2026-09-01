@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Built by:** Claude Fable 5
 
+### Verified
+
+- Direct operator testing (2026-09-01) confirmed the build fully functional and
+  matching the intended direction end-to-end: manual dial, three-stage
+  activation (buildup / breakthrough / sustained active), disengage, and
+  folio-rack quick-dial auto-dial all working as intended.
+- This is a successful second attempt at the Steampunk genre for this project.
+  It deliberately avoids the physical-material rendering approach (simulated
+  brass/iron surfaces) that ended a prior attempt at this theme, rendering
+  everything as glowing schematic line-work instead — and takes a distinct
+  identity angle (a calculating engine) from the genre's one other existing
+  success, a telegraph/dispatch-style console.
+
 ### Added
 
 - PERPETUA v1.0.0 — the Aldercroft Computation Bureau's Great Concordance Engine.
