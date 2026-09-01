@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Built by:** Claude Fable 5 (model id `claude-fable-5`)
 
+> **Operator verification (2026-09-01):** direct hands-on testing by the operator confirmed the build fully functional end-to-end — manual dial, three-stage activation, disengage, and quick-dial auto-dial all working as intended — and judged it a successful one-shot build. This release is a Fable-executed revisit of the Cyberpunk theme under the project's current digital-first, maximalist template.
+
 ### Added
 
 - Initial release of NIGHTGLASS, the private access spire of Vesper Ryn on the Lume Lattice.

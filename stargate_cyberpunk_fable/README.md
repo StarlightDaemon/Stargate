@@ -3,6 +3,8 @@
 NIGHTGLASS is a purely decorative, fully client-side novelty website: the private access spire of **Vesper Ryn**, a fictional "lightwright" who weaves glowing threads of connection across the **Lume Lattice** — an abstract, geometric information-space rendered as layered panes of light. Visitors compose a seven-glyph route on the Weave Deck, watch the barrier ring's veil shards dissolve as each glyph resolves from static into clarity, and open the link through a staged crescendo of light and synthesized sound. Everything on the page is fiction and stagecraft: there is no backend, no networking, and no real-world technical function of any kind — only an interactive piece of cyberspace theater.
 
 > **Status:** live · v1.0.0 · single static page, vanilla HTML/CSS/JS, no build step.
+>
+> **Operator-verified:** direct hands-on testing confirmed the build fully functional end-to-end (manual dial, three-stage activation, disengage, quick-dial auto-dial) — a successful one-shot build by Claude Fable 5, revisiting the Cyberpunk theme under this project's digital-first, maximalist template.
 
 ## Running
 
