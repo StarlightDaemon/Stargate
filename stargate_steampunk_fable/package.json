@@ -1,0 +1,14 @@
+{
+  "name": "stargate-steampunk-fable",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PERPETUA - Aldercroft Concordance Engine (decorative novelty site)",
+  "scripts": {
+    "serve": "node serve.js",
+    "test": "node test/run-tests.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^24.0.0"
+  }
+}

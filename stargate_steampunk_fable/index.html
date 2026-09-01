@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PERPETUA — Aldercroft Concordance Engine</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%23f0b45c' stroke-width='1.6'/%3E%3Ccircle cx='12' cy='12' r='3' fill='none' stroke='%23f0b45c' stroke-width='1.4'/%3E%3Cpath d='M12 3v3M12 18v3M3 12h3M18 12h3' stroke='%23f0b45c' stroke-width='1.4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="draught" data-density="comfortable" data-motion="full">
+
+<div id="stage">
+  <!-- ======================= SHEET HEADER / NAMEPLATE ======================= -->
+  <header id="nameplate">
+    <div class="np-rule"></div>
+    <h1>THE ALDERCROFT COMPUTATION BUREAU</h1>
+    <p class="np-sub">ENGINE No. 3 — <span class="np-name">“PERPETUA”</span> — GREAT CONCORDANCE ENGINE</p>
+    <p class="np-fine">SHEET 1 OF 1 · TRAVERSAL CONCORDANCE WORKING · PROF. I. ALDERCROFT, DEL. 1859</p>
+    <nav id="folio-tabs" aria-label="Bureau folios">
+      <button class="tab-btn" data-modal="archive">ARCHIVE</button>
+      <button class="tab-btn" data-modal="section">SECTION</button>
+      <button class="tab-btn" data-modal="log">DAY-BOOK</button>
+      <button class="tab-btn" data-modal="settings">ADJUSTMENTS</button>
+    </nav>
+  </header>
+
+  <!-- ======================= FIG. 1 — THE STORE WHEEL ======================= -->
+  <section id="figure-one">
+    <div id="wheel-mount"><!-- SVG injected by app.js --></div>
+    <p class="fig-caption">FIG. 1. — THE STORE IN PLAN. TEN VALUE-WHEEL RINGS ABOUT THE APERTURE FRAME.<br>
+    LOCKED WHEELS PRESENT THEIR INDEX TO THE READING LINE.</p>
+  </section>
+
+  <!-- ======================= MARGINALIA TELEMETRY ======================= -->
+  <aside id="marginalia" aria-label="Engine telemetry marginalia">
+    <div class="gauge-block" id="gauge-boiler">
+      <svg viewBox="0 0 120 78" class="gauge-svg" aria-hidden="true"></svg>
+      <p class="gauge-note">BOILER<br><span class="gauge-val" id="val-boiler">— lb</span></p>
+    </div>
+    <div class="gauge-block" id="gauge-torque">
+      <svg viewBox="0 0 120 78" class="gauge-svg" aria-hidden="true"></svg>
+      <p class="gauge-note">SHAFT TORQUE<br><span class="gauge-val" id="val-torque">—</span></p>
+    </div>
+    <div class="gauge-block" id="gauge-conf">
+      <svg viewBox="0 0 120 78" class="gauge-svg" aria-hidden="true"></svg>
+      <p class="gauge-note">CONCORDANCE<br><span class="gauge-val" id="val-conf">—</span></p>
+    </div>
+    <p id="marg-note" class="marg-annotation">N.B. — TORQUE FOLLOWS STEAM; CONFIDENCE FOLLOWS THE PROOF.</p>
+  </aside>
+
+  <!-- ======================= APPARATUS RAIL ======================= -->
+  <section id="apparatus-rail">
+
+    <!-- Cluster 1: CARD TRAIN -->
+    <div class="cluster" id="cluster-cardtrain">
+      <h2 class="cluster-title">CARD TRAIN</h2>
+      <div class="tray-tabs" role="tablist">
+        <button id="traytab-index" class="tray-tab active" role="tab" aria-selected="true">INDEX TRAY</button>
+        <button id="traytab-rack" class="tray-tab" role="tab" aria-selected="false">FOLIO RACK</button>
+      </div>
+      <div id="index-tray" class="tray-pane"><!-- 12 index cards injected --></div>
+      <div id="folio-rack" class="tray-pane" hidden><!-- quick-dial folios injected --></div>
+      <div id="reader">
+        <div id="reader-slot">
+          <div id="reader-card"><!-- animated feeding card, injected SVG --></div>
+          <div class="slot-line"></div>
+        </div>
+        <p class="reader-note" id="reader-note">READER AT REST — PRESENT A CARD</p>
+      </div>
+    </div>
+
+    <!-- Cluster 2: MILL GOVERNOR -->
+    <div class="cluster" id="cluster-governor">
+      <h2 class="cluster-title">MILL GOVERNOR</h2>
+      <div id="store-register" aria-label="Store register">
+        <!-- 10 register cells injected -->
+      </div>
+      <p id="annunciator" data-state="idle">ENGINE AT REST</p>
+      <div class="lever-row">
+        <button id="btn-engage" class="lever" disabled>
+          <span class="lever-glyph" aria-hidden="true"></span>
+          <span class="lever-label">ENGAGE MILL</span>
+          <span class="lever-sub">EXECUTE THE CONCORDANCE</span>
+        </button>
+        <button id="btn-disengage" class="lever lever-minor">
+          <span class="lever-label">DISENGAGE</span>
+          <span class="lever-sub">SPILL STEAM · CLEAR STORE</span>
+        </button>
+      </div>
+      <div id="hold-row">
+        <button id="btn-hold" role="switch" aria-checked="false">
+          <span class="hold-lamp" aria-hidden="true"></span>
+          <span class="hold-text">PROVING HOLD — <b id="hold-state">RELEASED</b></span>
+        </button>
+        <p class="hold-note">HOLD BARS THE MILL UNTIL THE SEQUENCE IS PROVED BY HAND.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ======================= INTERLOCK REFUSAL BANNER ======================= -->
+  <div id="refusal" hidden>
+    <p class="refusal-big">MILL REFUSED — PROVING HOLD IS ENGAGED</p>
+    <p class="refusal-sub">RELEASE THE HOLD AT THE GOVERNOR TO ENGAGE THE MILL.</p>
+  </div>
+</div><!-- /stage -->
+
+<!-- ======================= MODALS (outside core loop) ======================= -->
+<div id="modal-root" hidden>
+  <div id="modal-scrim"></div>
+  <div id="modal-frame" role="dialog" aria-modal="true">
+    <header id="modal-head">
+      <h2 id="modal-title">—</h2>
+      <button id="modal-close" aria-label="Close">✕ CLOSE</button>
+    </header>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ======================= OPERATOR REFERENCE ======================= -->
+<button id="ref-toggle" aria-label="Operator reference" title="Operator reference">?</button>
+<div id="ref-overlay" hidden>
+  <div id="ref-card">
+    <h2>OPERATOR'S REFERENCE — ENGINE No. 3</h2>
+    <ol>
+      <li><b>Set the train.</b> In the CARD TRAIN, present eight index cards from the tray, one after another. Each card feeds the reader and locks one value-wheel ring of the Store to the reading line.</li>
+      <li><b>Prove &amp; engage.</b> With eight wheels locked the concordance stands PROVED AT REST — the engine never fires of itself. Pull <b>ENGAGE MILL</b> to execute: the mill runs up, the residual wheel is driven to nought, the bell strikes, and the Aperture opens.</li>
+      <li><b>Disengage.</b> The <b>DISENGAGE</b> lever is answerable at every moment — dialing, run-up, or open Aperture — and spills steam, clears the Store, and closes the frame.</li>
+      <li><b>Folio rack.</b> Previously punched and attested card trains may be run at governor speed from the FOLIO RACK. The reader still feeds every card in order; the engine still waits for your hand at the lever.</li>
+      <li><b>Proving Hold.</b> When engaged, the hold bars the mill from executing any train until released. It ships RELEASED.</li>
+      <li><b>Bureau folios.</b> ARCHIVE holds the Bureau's prior concordance workings, cross-referenced folio to folio. SECTION shows the engine in elevation. The DAY-BOOK records your session. ADJUSTMENTS trims display, motion, and the sound of the room.</li>
+    </ol>
+    <button id="ref-dismiss">RETURN TO THE ENGINE</button>
+  </div>
+</div>
+
+<!-- ======================= CORNER CHROME (outside scaled stage) ======================= -->
+<a id="credit" href="https://github.com/StarlightDaemon" rel="noopener noreferrer" target="_blank">StarlightDaemon</a>
+<div id="version-tag">PERPETUA v1.0.0</div>
+
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
