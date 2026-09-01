@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="neon-dusk" data-density="standard" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NIGHTGLASS — a private spire on the Lume Lattice</title>
+<meta name="description" content="A decorative, fictional portal-dialing page: weave a seven-glyph thread of light and open the link. Pure stagecraft — no real function.">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<canvas id="lattice-bg" aria-hidden="true"></canvas>
+
+<div id="stage" data-state="idle">
+
+  <!-- ambient depth layers (decorative, never interactive) -->
+  <div class="depth-pane dp-a" aria-hidden="true"></div>
+  <div class="depth-pane dp-b" aria-hidden="true"></div>
+  <div class="depth-pane dp-c" aria-hidden="true"></div>
+  <div class="lightstream ls-1" aria-hidden="true"></div>
+  <div class="lightstream ls-2" aria-hidden="true"></div>
+  <div class="lightstream ls-3" aria-hidden="true"></div>
+
+  <header id="crest">
+    <div class="crest-mark" aria-hidden="true"></div>
+    <div class="crest-text">
+      <h1>NIGHTGLASS</h1>
+      <p class="crest-sub">private spire of <strong>VESPER RYN</strong> · lume lattice · seventh-order lightwright</p>
+    </div>
+    <div id="audio-chip" class="audio-chip" title="sound wakes on your first touch">loom asleep — touch to wake</div>
+  </header>
+
+  <!-- the veil ring -->
+  <section id="ringwrap" aria-label="The veil ring">
+    <svg id="ring" viewBox="0 0 680 680" aria-hidden="true"></svg>
+    <div id="ward-chip" hidden>DRIFT WARD · HOLDING</div>
+    <div id="ward-banner" hidden><span>DRIFT WARD ENGAGED</span><em>the link is held — release the ward to open</em></div>
+    <div id="state-caption">the veil turns, unhurried</div>
+  </section>
+
+  <!-- left ambient column: layered, mostly display-only -->
+  <aside id="ambient-left" aria-label="Ambient panes">
+    <div class="pane pane-signal">
+      <h3>NEAR SKY</h3>
+      <div id="mini-tele"></div>
+    </div>
+    <div class="pane pane-journalmini">
+      <h3>JOURNAL</h3>
+      <ul id="log-ticker"></ul>
+    </div>
+    <div class="pane pane-crest">
+      <p id="crest-quote">"a mark you did not watch become itself will not hold."<span>— lightscript primer, twelfth read</span></p>
+    </div>
+    <div class="pane pane-tide">
+      <h3>DRIFT &amp; WEATHER</h3>
+      <div id="tide-status">tide: slack water — good weaving</div>
+      <canvas id="turb-spark" width="330" height="44"></canvas>
+      <p id="tide-note">turbulence, last minute · channel markers set · the amber line is holding</p>
+    </div>
+  </aside>
+
+  <!-- CONTROL CLUSTER 1: the weave deck -->
+  <section id="weave-deck" class="cluster" aria-label="Weave Deck">
+    <h2>WEAVE DECK</h2>
+    <div id="addr-track" aria-label="Route track"></div>
+    <div id="glyph-keys" aria-label="Resonance glyphs"></div>
+  </section>
+
+  <!-- CONTROL CLUSTER 2: link control -->
+  <section id="link-control" class="cluster" aria-label="Link Control">
+    <h2>LINK CONTROL</h2>
+    <div class="lc-buttons">
+      <button id="btn-open" type="button">OPEN LINK</button>
+      <button id="btn-close" type="button">CLOSE LINK</button>
+      <button id="btn-ward" type="button" aria-pressed="false">DRIFT WARD <span id="ward-state">RELEASED</span></button>
+    </div>
+    <div id="threads-panel">
+      <h4>THREADS <span>remembered routes, re-woven at loom speed</span></h4>
+      <div class="thread-tiers">
+        <div class="tier" id="tier-anchored"><h5>ANCHORED</h5></div>
+        <div class="tier" id="tier-frayed"><h5>FRAYED</h5></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- secondary dock -->
+  <nav id="dock" aria-label="Panels">
+    <button data-ov="archive" type="button">ARCHIVE</button>
+    <button data-ov="chart" type="button">CHART</button>
+    <button data-ov="telemetry" type="button">TELEMETRY</button>
+    <button data-ov="journal" type="button">JOURNAL</button>
+    <button data-ov="settings" type="button">SETTINGS</button>
+  </nav>
+
+  <!-- light-thread overlay for the locking gesture -->
+  <svg id="thread-overlay" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
+
+  <!-- overlays -->
+  <div id="overlay-root">
+    <section class="overlay" id="ov-archive" hidden>
+      <div class="ov-frame ov-wide">
+        <header><h2>ARCHIVE — loom records</h2><button class="ov-close" type="button">✕</button></header>
+        <div class="archive-body">
+          <div id="archive-filters"></div>
+          <ul id="archive-list"></ul>
+          <article id="archive-detail"><p class="arch-hint">choose a record. threads of reference run between them.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="overlay" id="ov-chart" hidden>
+      <div class="ov-frame ov-wide">
+        <header><h2>LATTICE CHART — the near sky, as the Cartographer draws it</h2><button class="ov-close" type="button">✕</button></header>
+        <div class="chart-body">
+          <svg id="chart-svg" viewBox="0 0 1400 700"></svg>
+          <p id="chart-note">nodes of the near lattice and the threads known between them. amber line approximate. margins are the Cartographer's own.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="overlay" id="ov-telemetry" hidden>
+      <div class="ov-frame">
+        <header><h2>TELEMETRY — the near sky, measured</h2><button class="ov-close" type="button">✕</button></header>
+        <div id="tele-grid"></div>
+        <p class="tele-note">coherence leans on the carrier and is eroded by turbulence · throughput is brightness × steadiness, within what the loom's state allows · drift is coherence's shadow</p>
+      </div>
+    </section>
+
+    <section class="overlay" id="ov-journal" hidden>
+      <div class="ov-frame">
+        <header><h2>SESSION JOURNAL</h2><button class="ov-close" type="button">✕</button></header>
+        <div class="journal-body">
+          <div class="journal-col"><h4>THIS SESSION</h4><ul id="journal-list"></ul></div>
+          <div class="journal-col"><h4>WEAVE HISTORY</h4><ul id="history-list"></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="overlay" id="ov-settings" hidden>
+      <div class="ov-frame">
+        <header><h2>SETTINGS — tuning the spire</h2><button class="ov-close" type="button">✕</button></header>
+        <div id="settings-body"></div>
+      </div>
+    </section>
+
+    <section class="overlay" id="ov-help" hidden>
+      <div class="ov-frame">
+        <header><h2>OPERATOR REFERENCE</h2><button class="ov-close" type="button">✕</button></header>
+        <div id="help-body">
+          <p class="help-lede">NIGHTGLASS is a decorative fiction — a spire of woven light. Nothing here does anything real.</p>
+          <dl>
+            <dt>WEAVE DECK</dt><dd>Ten resonance glyphs. Choose any seven, in order, to name a destination. Each chosen glyph resolves from static into clarity, a light-thread arcs to the ring, and one shard of the veil dissolves.</dd>
+            <dt>OPEN LINK</dt><dd>A complete thread always waits, pending. The link opens only when you choose it: a buildup of gathering light, the breakthrough, then the open link held steady.</dd>
+            <dt>CLOSE LINK</dt><dd>Always within reach, in every state — it unwinds a part-woven thread, halts a re-weaving, or closes an open link.</dd>
+            <dt>DRIFT WARD</dt><dd>A hand laid on the loom during drift tides. Released by default. While engaged, the link is held closed and the ring says so, unmissably.</dd>
+            <dt>THREADS</dt><dd>Remembered routes in two tiers — anchored (kept and trusted) and frayed (kept, with reservations). A thread re-weaves its route glyph by glyph at loom speed and then waits, pending, like any other weave.</dd>
+            <dt>ARCHIVE</dt><dd>Vesper's loom records: nodes, routes, personas, phenomena, fragments — cross-referenced. Records you have read are marked.</dd>
+            <dt>CHART</dt><dd>The near Lattice as a constellation: nodes and the threads known between them.</dd>
+            <dt>TELEMETRY</dt><dd>The near sky, measured: carrier, coherence, throughput, drift — each leaning on the others.</dd>
+            <dt>JOURNAL</dt><dd>A timestamped record of what you actually did this session, plus your weave history (kept across visits).</dd>
+            <dt>SETTINGS</dt><dd>Themes, display density, motion intensity, and the loom's audio layers. Kept across visits.</dd>
+          </dl>
+          <p class="help-foot">sound wakes on your first touch of the page · the spire idles quietly and never weaves on its own</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</div><!-- /stage -->
+
+<!-- pinned corners, outside the scaled stage -->
+<button id="btn-help" type="button" aria-label="Operator reference">?</button>
+<a id="credit" href="https://github.com/StarlightDaemon" target="_blank" rel="noopener noreferrer">StarlightDaemon</a>
+<div id="version-label">NIGHTGLASS v1.0.0</div>
+
+<script src="js/glyphs.js" defer></script>
+<script src="js/archive.js" defer></script>
+<script src="js/audio.js" defer></script>
+<script src="js/telemetry.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

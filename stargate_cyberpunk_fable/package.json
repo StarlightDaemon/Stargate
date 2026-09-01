@@ -1,0 +1,14 @@
+{
+  "name": "nightglass",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NIGHTGLASS - a decorative, fictional portal-dialing page: the private access spire of Vesper Ryn on the Lume Lattice.",
+  "scripts": {
+    "serve": "node serve.js",
+    "test": "node test/run-tests.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^25.9.0"
+  }
+}
