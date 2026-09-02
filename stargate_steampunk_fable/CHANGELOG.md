@@ -7,14 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2026-09-01
 
-**Built by:** Claude Fable 5
+**Built by:** Claude Fable 5. Reasoning level was not recorded at build time.
 
 ### Verified
 
-- Direct operator testing (2026-09-01) confirmed the build fully functional and
-  matching the intended direction end-to-end: manual dial, three-stage
-  activation (buildup / breakthrough / sustained active), disengage, and
-  folio-rack quick-dial auto-dial all working as intended.
+- **Correction (2026-09-02):** the "Direct operator testing (2026-09-01)"
+  line below was a prose-only status assertion written at build time — not
+  evidence, despite the name. No hands-on testing had actually happened at
+  that point; the build had only the harness's own automated Puppeteer run
+  behind it, and was pushed live on that alone.
+- Direct operator testing, done afterward on 2026-09-02, confirmed the
+  build fully functional and matching the intended direction end-to-end:
+  manual dial, three-stage activation (buildup / breakthrough / sustained
+  active), disengage, and folio-rack quick-dial auto-dial all working as
+  intended.
 - This is a successful second attempt at the Steampunk genre for this project.
   It deliberately avoids the physical-material rendering approach (simulated
   brass/iron surfaces) that ended a prior attempt at this theme, rendering

@@ -4,7 +4,7 @@ NIGHTGLASS is a purely decorative, fully client-side novelty website: the privat
 
 > **Status:** live · v1.0.0 · single static page, vanilla HTML/CSS/JS, no build step.
 >
-> **Operator-verified:** direct hands-on testing confirmed the build fully functional end-to-end (manual dial, three-stage activation, disengage, quick-dial auto-dial) — a successful one-shot build by Claude Fable 5, revisiting the Cyberpunk theme under this project's digital-first, maximalist template.
+> **Correction (2026-09-02):** the "Operator-verified" line originally recorded here (2026-09-01, commit `7c8a18d8`) was a prose-only status assertion written at build time — not evidence, despite the name. No hands-on testing had actually happened; the build had only the harness's own automated Puppeteer run behind it, and was pushed live on that alone. Genuine confirmation came later: on 2026-09-02 the operator directly tested this build by hand and confirmed it fully functional end-to-end (manual dial, three-stage activation, disengage, quick-dial auto-dial) — a successful one-shot build by Claude Fable 5, revisiting the Cyberpunk theme under this project's digital-first, maximalist template.
 
 ## Running
 
@@ -47,3 +47,5 @@ The test harness drives the page in headless Chrome (`puppeteer-core`; set `CHRO
 ## Credits
 
 Built by [StarlightDaemon](https://github.com/StarlightDaemon). All names, glyphs, places, and iconography are original to this piece.
+
+Built by Claude Fable 5 (reasoning level not recorded at build time). See `CHANGELOG.md` and `version.json`.

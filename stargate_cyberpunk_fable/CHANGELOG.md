@@ -7,9 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] — 2026-09-01
 
-**Built by:** Claude Fable 5 (model id `claude-fable-5`)
+**Built by:** Claude Fable 5 (model id `claude-fable-5`). Reasoning level was not recorded at build time.
 
-> **Operator verification (2026-09-01):** direct hands-on testing by the operator confirmed the build fully functional end-to-end — manual dial, three-stage activation, disengage, and quick-dial auto-dial all working as intended — and judged it a successful one-shot build. This release is a Fable-executed revisit of the Cyberpunk theme under the project's current digital-first, maximalist template.
+> **Correction (2026-09-02):** the "Operator verification (2026-09-01)" line
+> originally recorded here (commit `7c8a18d8`) was a prose-only status
+> assertion written at build time — not evidence, despite the name. No
+> hands-on testing had actually happened at that point; the build had only
+> the harness's own automated Puppeteer run behind it, and was pushed live
+> on that alone.
+>
+> **Operator verification (2026-09-02):** direct hands-on testing by the
+> operator, done afterward, confirmed the build fully functional
+> end-to-end — manual dial, three-stage activation, disengage, and
+> quick-dial auto-dial all working as intended — and judged it a successful
+> one-shot build. This release is a Fable-executed revisit of the Cyberpunk
+> theme under the project's current digital-first, maximalist template.
 
 ### Added
 
