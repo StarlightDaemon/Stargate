@@ -1,0 +1,214 @@
+{
+  "passed": 42,
+  "failed": 0,
+  "total": 42,
+  "luminance": {
+    "pending": 238.8450127218298,
+    "buildup": 229.17630140769987,
+    "breakthrough": 240.63434770869688,
+    "active": 221.3295140787496
+  },
+  "warmth": {
+    "pending": 24.585263366392667,
+    "buildup": 71.83997113792957,
+    "breakthrough": 59.250038907202786,
+    "active": 104.77708295015634
+  },
+  "pressingMs": 4686,
+  "results": [
+    {
+      "name": "boot: idle, 13 cultivars in tray and on the ring, 5 lights, 5 pressings",
+      "ok": true,
+      "detail": "{\"phase\":\"idle\",\"seeds\":13,\"lights\":5,\"pressings\":5,\"cvs\":13,\"fit\":\"matrix(1, 0, 0, 1, 0, 0)\",\"fitVar\":\"1\",\"veilHidden\":\"none\",\"flashHidden\":\"none\",\"frostPressed\":\"false\",\"closeDisabled\":false}"
+    },
+    {
+      "name": "boot: frost shutter defaults to released",
+      "ok": true
+    },
+    {
+      "name": "boot: [hidden] reset works (frost veil + flash display:none)",
+      "ok": true
+    },
+    {
+      "name": "boot: stage transform is a real matrix at 1920×1080",
+      "ok": true,
+      "detail": "matrix(1, 0, 0, 1, 0, 0), --fit=1"
+    },
+    {
+      "name": "boot: disengage (CLOSE THE LIGHTS) enabled at idle",
+      "ok": true
+    },
+    {
+      "name": "geometry: all 23 controls hit-test to themselves at 1080p",
+      "ok": true,
+      "detail": "23/23"
+    },
+    {
+      "name": "geometry: stage scales at simulated 4K (3840×2160) and controls still hit-test",
+      "ok": true,
+      "detail": "transform=matrix(2, 0, 0, 2, 0, 0), fitK=2"
+    },
+    {
+      "name": "guard: TAKE with nothing chosen does not graft",
+      "ok": true,
+      "detail": "choose a cultivar from the seed tray first"
+    },
+    {
+      "name": "guard: OPEN with no grafts does nothing",
+      "ok": true
+    },
+    {
+      "name": "audio: first gesture unlocked the synth (context created, sound on)",
+      "ok": true,
+      "detail": "{\"ctx\":true,\"drone\":false,\"active\":false,\"ambient\":true}"
+    },
+    {
+      "name": "manual: choosing a seed slews the seed-ring (angle changed mid-slew) and settles aligned under light 1",
+      "ok": true,
+      "detail": "mid=-7.6° settled=-55.4° target=-55.4° err=0.000°"
+    },
+    {
+      "name": "manual: aligned notch + TAKE button read as armed",
+      "ok": true,
+      "detail": "{\"notch\":true,\"graft\":true}"
+    },
+    {
+      "name": "manual: TAKE grows a tendril (dashoffset strictly between full and zero mid-growth)",
+      "ok": true,
+      "detail": "L=91 off=21"
+    },
+    {
+      "name": "manual: the graft takes — light 1 taken, seal shows Oakleaf, bloom fully open, ledger node + seed marked",
+      "ok": true,
+      "detail": "{\"light\":true,\"seal\":\"#cv-oakleaf\",\"bloom\":\"scale(1.009)\",\"node\":true,\"nodeText\":\"Oakleaf\",\"seedUsed\":true,\"seedDisabled\":true}"
+    },
+    {
+      "name": "fast clicks: re-choosing mid-slew retargets (sel=dawn) and TAKE mid-slew queues the graft",
+      "ok": true,
+      "detail": "{\"sel\":\"dawn\",\"slewing\":true,\"queued\":true}"
+    },
+    {
+      "name": "fast clicks: queued graft takes on its own once the ring settles (light 2 = Dawn)",
+      "ok": true
+    },
+    {
+      "name": "fast clicks: choosing a seed during a graft queues it for after the take",
+      "ok": true,
+      "detail": "{\"grafting\":true,\"queued\":\"root\"}"
+    },
+    {
+      "name": "manual: grafts 3 and 4 hold (Bee, Root)",
+      "ok": true
+    },
+    {
+      "name": "guard: a grafted cultivar cannot be chosen again (seed disabled)",
+      "ok": true
+    },
+    {
+      "name": "manual: five grafts → pending; OPEN reads ready; ledger stem fully grown, 5 nodes taken; tray closed",
+      "ok": true,
+      "detail": "address=oakleaf,dawn,bee,root,helianth manual dial took 14124 ms"
+    },
+    {
+      "name": "NEGATIVE: completing the fifth graft never auto-opens (still pending after 1.6 s, opens=0)",
+      "ok": true
+    },
+    {
+      "name": "guard: tray ignores clicks while pending",
+      "ok": true
+    },
+    {
+      "name": "frost: engaging draws the shutter (state, veil, crackle, button state)",
+      "ok": true,
+      "detail": "{\"body\":true,\"veil\":\"block\",\"ink\":\"inline\",\"pressed\":\"true\",\"state\":\"DRAWN\"}"
+    },
+    {
+      "name": "frost: OPEN under frost is blocked with cold feedback (phase still pending, blocked=1)",
+      "ok": true,
+      "detail": "the Frost Shutter is drawn — the lights cannot open"
+    },
+    {
+      "name": "frost: releasing the shutter restores the ready lantern",
+      "ok": true
+    },
+    {
+      "name": "activation: OPEN starts BUILDUP (phase buildup, drone audio running, sashes mid-swing)",
+      "ok": true,
+      "detail": "t≈1369ms sash=matrix(0.282255, 0, 0, 1, 0, 0) drone=true"
+    },
+    {
+      "name": "activation: BREAKTHROUGH fires at the end of buildup (flash visible, counter 1)",
+      "ok": true,
+      "detail": "buildup lasted ≈2600 ms nominal"
+    },
+    {
+      "name": "activation: SUSTAINED ACTIVE (body.active, lights open, active drone, OPEN disabled, CLOSE enabled)",
+      "ok": true,
+      "detail": "{\"sash\":\"matrix(0.28, 0, 0, 1, 0, 0)\",\"audio\":{\"ctx\":true,\"drone\":false,\"active\":true,\"ambient\":true}}"
+    },
+    {
+      "name": "activation: the four oculus states are pairwise distinct (≥12 apart in luminance/warmth space) and warmth climbs pending → buildup → active",
+      "ok": true,
+      "detail": "lum/warmth pending=239/25 buildup=229/72 breakthrough=241/59 active=221/105 · closest pair buildup/breakthrough=17.0"
+    },
+    {
+      "name": "telemetry: the open way lifts canopy light and pollinators aloft",
+      "ok": true,
+      "detail": "light=82 klx aloft=662"
+    },
+    {
+      "name": "disengage: CLOSE while active → closing → idle with everything cut back",
+      "ok": true,
+      "detail": "{\"taken\":0,\"blooms\":0,\"tendrils\":0,\"nodes\":0,\"body\":false}"
+    },
+    {
+      "name": "pressing: quick-dial strikes the five cuttings one at a time (counts 0→5 seen, real gaps, slew+graft observed)",
+      "ok": true,
+      "detail": "graft times ms: {\"0\":13,\"1\":858,\"2\":1840,\"3\":2669,\"4\":3511,\"5\":4686} gaps=845/982/829/842/1175 mid-shot=true"
+    },
+    {
+      "name": "pressing: nursery pace is faster than hand grafting but never instant",
+      "ok": true,
+      "detail": "pressing 4686 ms for 5 grafts"
+    },
+    {
+      "name": "NEGATIVE: a struck pressing lands pending and never auto-opens",
+      "ok": true
+    },
+    {
+      "name": "cycle: second dial → open → active → close completes (breakthroughs=2, closes=2)",
+      "ok": true
+    },
+    {
+      "name": "disengage: CLOSE mid-buildup aborts before breakthrough",
+      "ok": true
+    },
+    {
+      "name": "disengage: CLOSE mid-pressing cancels the strike and cuts back",
+      "ok": true
+    },
+    {
+      "name": "frost: drawing the shutter mid-strike halts the pressing with one alert (no further grafts)",
+      "ok": true,
+      "detail": "grafts held at 1"
+    },
+    {
+      "name": "frost: TAKE under frost is blocked",
+      "ok": true
+    },
+    {
+      "name": "fallow: Hollins Cold Frame builds up but no light answers — closes without breakthrough",
+      "ok": true
+    },
+    {
+      "name": "sound: toggle mutes and unmutes",
+      "ok": true,
+      "detail": "sfx calls so far: 130"
+    },
+    {
+      "name": "hygiene: no console errors or page errors during the run",
+      "ok": true,
+      "detail": "clean"
+    }
+  ]
+}

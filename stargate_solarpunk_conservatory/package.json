@@ -1,0 +1,17 @@
+{
+  "name": "stargate-solarpunk-conservatory",
+  "version": "1.0.0",
+  "description": "HELIANTH - Wrenfield Commons Conservatory, Lantern Gate. A solarpunk portal-dialing console rendered as luminous Art Nouveau greenhouse linework.",
+  "private": true,
+  "scripts": {
+    "serve": "node server.js",
+    "start": "node server.js",
+    "test": "node test/run-tests.mjs",
+    "capture": "node test/capture.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^24.0.0",
+    "pngjs": "^7.0.0"
+  },
+  "license": "MIT"
+}

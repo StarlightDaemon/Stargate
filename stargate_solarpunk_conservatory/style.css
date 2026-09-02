@@ -1,0 +1,346 @@
+/* HELIANTH — Wrenfield Commons Conservatory · Lantern Gate
+   Daylight register. Every "material" here is luminous ink on sunlit paper:
+   no glass, wood or leaf textures — botanical form as glowing schematic linework. */
+
+:root {
+  --fit: 1;                    /* bare number, computed in JS: min(vw/1920, vh/1080) */
+  --paper: #f5f0e1;
+  --paper-2: #ede8d3;
+  --sky: #d9e9ec;
+  --sky-2: #eef3e6;
+  --ink: #2c5a44;              /* deep verdigris — the core line colour */
+  --ink-soft: #57806a;
+  --leaf: #8fcf7e;             /* halo green */
+  --leaf-2: #bfe3a3;
+  --moss: #4f7a4a;
+  --sun: #e2a739;
+  --sun-2: #ffd97a;
+  --sun-deep: #b8741a;
+  --terracotta: #c76f45;
+  --frost: #7fb6d6;
+  --frost-2: #dcf0fb;
+  --text: #2f4a3c;
+  --text-soft: #6b8172;
+  --serif: "Palatino Linotype", "Book Antiqua", Palatino, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --sans: "Segoe UI", "Trebuchet MS", "Gill Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0; padding: 0; width: 100%; height: 100%;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow: hidden;
+}
+
+/* daylight sky, behind everything (outside the scaled subtree) */
+.sky {
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 55% at 28% 38%, rgba(255, 240, 190, 0.75), rgba(255, 240, 190, 0) 70%),
+    radial-gradient(ellipse 40% 40% at 82% 18%, rgba(217, 233, 236, 0.9), rgba(217, 233, 236, 0) 70%),
+    linear-gradient(180deg, #e9f0e6 0%, var(--paper) 55%, #efe6cf 100%);
+}
+
+/* ===== the 1920×1080 stage, scaled proportionally ===== */
+.stage {
+  position: fixed; left: 50%; top: 50%;
+  width: 1920px; height: 1080px;
+  margin-left: -960px; margin-top: -540px;
+  transform: scale(var(--fit));
+  transform-origin: center center;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.glazing { position: absolute; inset: 0; width: 1920px; height: 1080px; pointer-events: none; }
+.glazing .rib { fill: none; stroke: var(--ink-soft); stroke-width: 1.4; opacity: 0.32; }
+.glazing .rib-fine { fill: none; stroke: var(--ink-soft); stroke-width: 0.8; opacity: 0.22; }
+.glazing .tendril { fill: none; stroke: var(--moss); stroke-width: 2; opacity: 0.55; stroke-linecap: round; }
+.glazing .tendril-halo { fill: none; stroke: var(--leaf); stroke-width: 9; opacity: 0.28; stroke-linecap: round; }
+.glazing .tendril-leaf { fill: none; stroke: var(--moss); stroke-width: 1.6; opacity: 0.5; }
+.glazing .sunpath { fill: none; stroke: var(--sun); stroke-width: 1.2; opacity: 0.45; stroke-dasharray: 3 7; }
+.glazing .taglines { fill: none; stroke: var(--ink-soft); stroke-width: 1; opacity: 0.45; }
+
+/* ===== the Lantern ===== */
+.lantern {
+  position: absolute; left: 60px; top: 30px; width: 860px; height: 860px;
+}
+#lanternSvg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+#oculus {
+  position: absolute; left: 50%; top: 50%; width: 516px; height: 516px;
+  margin-left: -258px; margin-top: -258px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+#lanternSvg { z-index: 1; }
+.lanternWord {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  font-family: var(--serif); font-style: italic; font-size: 22px; letter-spacing: 0.04em;
+  color: var(--ink); text-align: center; width: 380px; pointer-events: none;
+  text-shadow: 0 0 10px rgba(255, 246, 210, 0.9), 0 0 24px rgba(255, 246, 210, 0.9);
+  z-index: 2; opacity: 0.85;
+  transition: opacity 0.6s;
+}
+.lanternWord.dim { opacity: 0; }
+
+/* cultivar symbols: stroke inherits from the <use>, fill must be explicitly none */
+#lanternSvg symbol path, #lanternSvg symbol circle, #lanternSvg symbol ellipse, #lanternSvg symbol g { fill: none; }
+
+/* luminous ink inside the lantern */
+#lanternSvg .ink path, #lanternSvg .ink circle, #lanternSvg .ink line, #lanternSvg .ink polyline {
+  fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+#lanternSvg .rim { stroke-width: 3; filter: url(#inkGlow); }
+#lanternSvg .rim-fine { stroke-width: 1.2; opacity: 0.7; }
+#lanternSvg .rib { stroke-width: 3.2; filter: url(#inkGlow); }
+#lanternSvg .orn { stroke-width: 1.4; opacity: 0.7; }
+
+/* a light (sash): pane outline + inner Art Nouveau curve; hinged at the outer rim */
+#lanternSvg .light .pane {
+  fill: rgba(255, 252, 235, 0.55); stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round;
+  transition: fill 0.6s;
+}
+#lanternSvg .light .pane-orn { fill: none; stroke: var(--ink-soft); stroke-width: 1.3; opacity: 0.75; stroke-linecap: round; }
+#lanternSvg .light .sash { transform-box: fill-box; transform-origin: center; transition: transform 1.4s cubic-bezier(.55,.05,.35,1); }
+#lanternSvg .light.taken .pane { fill: rgba(255, 236, 170, 0.55); }
+#lanternSvg .seal circle { fill: rgba(255, 252, 240, 0.6); stroke: var(--ink-soft); stroke-width: 1.2; opacity: 0.45; transition: opacity 0.5s; }
+#lanternSvg .light.taken .seal circle { stroke: var(--sun-deep); opacity: 1; filter: url(#sunGlow); }
+#lanternSvg .light .glyph { stroke: var(--sun-deep); stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity 0.5s; filter: url(#sunGlow); }
+#lanternSvg .light.taken .glyph { opacity: 1; }
+#lanternSvg .light .openGlow { fill: url(#oculusWarm); opacity: 0; transition: opacity 1.2s; }
+#lanternSvg.opening .light .sash, #lanternSvg.open .light .sash { transform: scaleX(0.28); }
+#lanternSvg.opening .light .openGlow { opacity: 0.55; }
+#lanternSvg.open .light .openGlow { opacity: 0.85; }
+#lanternSvg.closing .light .sash { transition-duration: 1.1s; }
+
+/* seed-ring */
+#seedRing { transition: none; }
+#seedRing .sr-rim { stroke-width: 1.6; opacity: 0.8; }
+#seedRing .cv { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+#seedRing .cv.sel { stroke: var(--sun-deep); filter: url(#sunGlow); stroke-width: 2.8; }
+#seedRing .cv.used { opacity: 0.35; }
+#seedRing .tick { stroke-width: 1; opacity: 0.55; }
+
+/* notches */
+#notches path { stroke-width: 2.4; }
+#notches path.armed { stroke: var(--sun-deep); filter: url(#sunGlow); }
+
+/* tendrils */
+#tendrils path { fill: none; stroke: var(--moss); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; filter: url(#inkGlow); }
+#tendrils path.leaf { stroke-width: 1.8; }
+
+/* blooms */
+#blooms .bloom { transform-box: fill-box; transform-origin: center; }
+#blooms .bloom path, #blooms .bloom circle { fill: rgba(255, 214, 120, 0.35); stroke: var(--sun-deep); stroke-width: 1.8; stroke-linejoin: round; filter: url(#sunGlow); }
+#blooms .bloom circle { fill: var(--sun-2); }
+
+/* oculus ink */
+#oculusInk path, #oculusInk circle { stroke-width: 1; opacity: 0.5; }
+#oculusInk .sun-arc { stroke: var(--sun); stroke-width: 1.4; stroke-dasharray: 2 6; opacity: 0.7; }
+
+/* frost ink */
+#frostInk path { fill: none; stroke: var(--frost); stroke-width: 1.6; stroke-linecap: round; filter: url(#frostGlow); }
+
+/* index mark at top */
+#indexMark path { fill: var(--sun-2); stroke: var(--sun-deep); stroke-width: 1.6; filter: url(#sunGlow); }
+
+/* ===== hung tags ===== */
+.tags { position: absolute; inset: 0; pointer-events: none; }
+.tag {
+  position: absolute; width: 190px; padding: 8px 12px 9px;
+  background: rgba(255, 252, 240, 0.72);
+  border: 1.2px solid var(--ink-soft); border-radius: 3px 14px 3px 14px;
+  box-shadow: 0 0 0 3px rgba(255, 252, 240, 0.35), 0 0 18px rgba(143, 207, 126, 0.35);
+  font-size: 12px; line-height: 1.3; color: var(--text);
+}
+.tag .t-k { font-family: var(--serif); font-style: italic; color: var(--text-soft); font-size: 11.5px; }
+.tag .t-v { font-family: var(--serif); font-size: 17px; color: var(--ink); letter-spacing: 0.02em; }
+.tag .t-bar { height: 4px; margin-top: 5px; background: rgba(44, 90, 68, 0.12); border-radius: 2px; overflow: hidden; }
+.tag .t-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--leaf), var(--sun-2)); width: 50%; transition: width 1.8s ease; }
+
+/* ===== nameplate ===== */
+.nameplate {
+  position: absolute; left: 1040px; top: 34px; width: 820px;
+  font-family: var(--serif);
+}
+.np-eyebrow { font-style: italic; font-size: 16px; color: var(--text-soft); letter-spacing: 0.05em; }
+.np-title {
+  margin: 2px 0 0; font-size: 58px; font-weight: 400; letter-spacing: 0.22em; color: var(--ink);
+  text-shadow: 0 0 14px rgba(143, 207, 126, 0.55), 0 0 34px rgba(255, 217, 122, 0.55);
+  line-height: 1;
+}
+.np-sub { margin-top: 8px; font-size: 15px; font-style: italic; color: var(--text-soft); letter-spacing: 0.03em; }
+
+.sec-title {
+  font-family: var(--serif); font-size: 15px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink); margin-bottom: 8px;
+  border-bottom: 1px solid rgba(44, 90, 68, 0.35); padding-bottom: 4px;
+}
+.sec-note { text-transform: none; letter-spacing: 0.02em; font-style: italic; font-size: 12.5px; color: var(--text-soft); margin-left: 10px; }
+
+/* ===== climbing ledger ===== */
+.ledger { position: absolute; left: 1040px; top: 176px; width: 380px; height: 700px; }
+#ledgerSvg { position: absolute; left: 0; top: 34px; width: 360px; height: 620px; overflow: visible; }
+#ledgerSvg .stem { fill: none; stroke: var(--moss); stroke-width: 2.4; stroke-linecap: round; }
+#ledgerSvg .stem-halo { fill: none; stroke: var(--leaf); stroke-width: 10; opacity: 0.35; stroke-linecap: round; }
+#ledgerSvg .node-halo { fill: rgba(255, 217, 122, 0); stroke: none; transition: fill 0.6s; }
+#ledgerSvg .node-halo.taken { fill: rgba(255, 217, 122, 0.45); }
+#ledgerSvg .stem-ghost { fill: none; stroke: var(--ink-soft); stroke-width: 1; stroke-dasharray: 2 6; opacity: 0.6; }
+#ledgerSvg .node { fill: rgba(255, 252, 240, 0.85); stroke: var(--ink-soft); stroke-width: 1.4; }
+#ledgerSvg .node.taken { stroke: var(--sun-deep); fill: rgba(255, 222, 140, 0.7); }
+#ledgerSvg .node-glyph { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+#ledgerSvg .leaf { fill: none; stroke: var(--moss); stroke-width: 1.6; opacity: 0; transition: opacity 0.6s; }
+#ledgerSvg .leaf.on { opacity: 0.85; }
+.ledgerList { position: absolute; left: 0; top: 0; width: 360px; height: 660px; margin: 0; padding: 0; list-style: none; pointer-events: none; }
+.ledgerLabel { position: absolute; left: 100px; display: flex; flex-direction: column; line-height: 1.15; }
+.ledgerLabel .ntext { font-family: var(--serif); font-size: 16px; color: var(--ink); }
+.ledgerLabel .ntext-soft { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--text-soft); }
+
+/* ===== herbarium ===== */
+.herbarium { position: absolute; left: 1450px; top: 176px; width: 410px; height: 470px; }
+.pressings { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.pressing {
+  display: grid; grid-template-columns: 54px 1fr auto; align-items: center; gap: 10px;
+  width: 100%; padding: 7px 12px 7px 8px; text-align: left; cursor: pointer;
+  background: rgba(255, 252, 240, 0.72); color: var(--text);
+  border: 1.2px solid var(--ink-soft); border-radius: 3px 12px 3px 12px;
+  font-family: var(--sans); font-size: 13px;
+  box-shadow: 0 0 0 3px rgba(255, 252, 240, 0.3);
+  transition: box-shadow 0.25s, transform 0.15s, border-color 0.25s;
+}
+.pressing:hover:not(:disabled) { box-shadow: 0 0 0 3px rgba(255, 252, 240, 0.3), 0 0 18px rgba(255, 217, 122, 0.7); border-color: var(--sun-deep); }
+.pressing:active:not(:disabled) { transform: translateY(1px); }
+.pressing:disabled { opacity: 0.55; cursor: default; }
+.pressing.fallow { border-style: dashed; }
+.pressing .p-art { width: 54px; height: 44px; }
+.pressing .p-art path, .pressing .p-art circle { fill: none; stroke: var(--moss); stroke-width: 1.6; stroke-linecap: round; }
+.pressing.fallow .p-art path, .pressing.fallow .p-art circle { stroke: var(--terracotta); }
+.pressing .p-name { font-family: var(--serif); font-size: 15px; color: var(--ink); }
+.pressing .p-sub { font-size: 11.5px; color: var(--text-soft); font-style: italic; }
+.pressing .p-addr { display: flex; gap: 3px; }
+.pressing .p-addr svg { width: 18px; height: 18px; }
+.pressing .p-addr svg use, .pressing .p-addr svg path, .pressing .p-addr svg circle, .pressing .p-addr svg ellipse, .pressing .p-addr svg g { fill: none; stroke: var(--ink-soft); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.pressing.striking { border-color: var(--sun-deep); box-shadow: 0 0 0 3px rgba(255, 252, 240, 0.3), 0 0 22px rgba(255, 217, 122, 0.85); }
+
+/* ===== day-book ===== */
+.daybook { position: absolute; left: 1450px; top: 660px; width: 410px; height: 216px; }
+.daybookList {
+  margin: 0; padding: 0; list-style: none; font-family: var(--serif); font-size: 13.5px; line-height: 1.45;
+  color: var(--text); height: 178px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;
+}
+.daybookList li { display: flex; gap: 8px; opacity: 0.9; }
+.daybookList li .d-t { color: var(--text-soft); font-variant-numeric: tabular-nums; font-family: var(--sans); font-size: 11.5px; padding-top: 3px; min-width: 42px; }
+.daybookList li.warn { color: var(--terracotta); }
+.daybookList li.cold { color: #3b7ba3; }
+.daybookList li.sun { color: var(--sun-deep); }
+
+/* ===== potting bench ===== */
+.bench {
+  position: absolute; left: 60px; top: 900px; width: 1800px; height: 170px;
+  display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; column-gap: 26px; row-gap: 2px;
+  padding: 8px 18px 8px;
+  background: rgba(255, 252, 240, 0.55);
+  border-top: 2px solid var(--ink-soft); border-bottom: 1px solid rgba(87, 128, 106, 0.4);
+  box-shadow: 0 -10px 30px rgba(143, 207, 126, 0.12);
+}
+.tray { grid-column: 1; grid-row: 2; }
+.tray-label, .cluster-label {
+  font-family: var(--serif); font-size: 12.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-soft);
+}
+.tray-row { display: flex; gap: 6px; margin-top: 4px; }
+.seed {
+  width: 66px; height: 72px; padding: 4px 2px 3px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  background: rgba(255, 252, 240, 0.85); color: var(--text);
+  border: 1.4px solid var(--ink-soft); border-radius: 4px 12px 4px 12px;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.12s, opacity 0.3s;
+}
+.seed svg { width: 40px; height: 40px; }
+.seed svg use, .seed svg path, .seed svg circle, .seed svg ellipse, .seed svg g { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.seed .s-name { font-family: var(--serif); font-size: 11.5px; color: var(--text-soft); letter-spacing: 0.02em; }
+.seed:hover:not(:disabled) { border-color: var(--sun-deep); box-shadow: 0 0 14px rgba(255, 217, 122, 0.8); }
+.seed:active:not(:disabled) { transform: translateY(1px); }
+.seed.sel { border-color: var(--sun-deep); box-shadow: 0 0 0 2px rgba(226, 167, 57, 0.4), 0 0 16px rgba(255, 217, 122, 0.9); background: rgba(255, 244, 205, 0.95); }
+.seed.used { opacity: 0.42; }
+.seed:disabled { cursor: default; opacity: 0.35; }
+
+.graftCluster { grid-column: 2; grid-row: 2; display: flex; gap: 10px; align-items: stretch; align-self: end; margin: 0 0 2px; }
+.tool {
+  min-width: 128px; padding: 8px 14px 9px; cursor: pointer; text-align: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  background: rgba(255, 252, 240, 0.9); color: var(--ink);
+  border: 1.6px solid var(--ink); border-radius: 4px 16px 4px 16px;
+  font-family: var(--serif);
+  transition: box-shadow 0.2s, transform 0.12s, background 0.3s, border-color 0.3s, opacity 0.3s;
+}
+.tool .tool-kicker { font-style: italic; font-size: 11.5px; color: var(--text-soft); letter-spacing: 0.06em; }
+.tool .tool-word { font-size: 16px; letter-spacing: 0.14em; }
+.tool .tool-state { font-size: 11px; font-style: italic; color: var(--text-soft); }
+.tool:hover:not(:disabled) { box-shadow: 0 0 18px rgba(143, 207, 126, 0.8); }
+.tool:active:not(:disabled) { transform: translateY(1px); }
+.tool:disabled { opacity: 0.38; cursor: default; }
+.tool-graft { border-color: var(--moss); }
+.tool-graft.armed { background: rgba(230, 246, 214, 0.95); box-shadow: 0 0 22px rgba(143, 207, 126, 0.9); }
+.tool-open { border-color: var(--sun-deep); color: var(--sun-deep); min-width: 190px; }
+.tool-open.ready { background: rgba(255, 240, 190, 0.95); box-shadow: 0 0 26px rgba(255, 217, 122, 1); animation: readyPulse 1.6s ease-in-out infinite; }
+@keyframes readyPulse { 0%, 100% { box-shadow: 0 0 14px rgba(255, 217, 122, 0.7); } 50% { box-shadow: 0 0 30px rgba(255, 200, 90, 1); } }
+.tool-close { border-color: var(--terracotta); color: var(--terracotta); min-width: 190px; }
+.tool-frost { border-color: var(--frost); color: #3b7ba3; }
+.tool-frost.engaged { background: var(--frost-2); box-shadow: 0 0 22px rgba(127, 182, 214, 0.95); animation: frostPulse 1.1s ease-in-out infinite; }
+@keyframes frostPulse { 0%, 100% { box-shadow: 0 0 12px rgba(127, 182, 214, 0.7); } 50% { box-shadow: 0 0 30px rgba(127, 182, 214, 1); } }
+.tool-sound { border-color: var(--ink-soft); color: var(--text-soft); min-width: 96px; }
+.tool-sound.on { color: var(--ink); border-color: var(--ink); }
+
+.benchCard {
+  grid-column: 1 / -1; grid-row: 1; margin: 0 0 2px;
+  font-family: var(--serif); font-style: italic; font-size: 15.5px; color: var(--ink);
+  letter-spacing: 0.02em; min-height: 22px;
+}
+.benchCard::before { content: "❧  "; font-style: normal; color: var(--sun-deep); }
+.benchCard.warn { color: var(--terracotta); }
+.benchCard.cold { color: #3b7ba3; }
+.benchCard.sun { color: var(--sun-deep); }
+
+/* ===== overlays (inside the scaled stage) ===== */
+.frostVeil {
+  position: absolute; left: 60px; top: 30px; width: 860px; height: 860px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(220, 240, 251, 0) 40%, rgba(127, 182, 214, 0.22) 75%, rgba(127, 182, 214, 0.42) 100%);
+  pointer-events: none; z-index: 3;
+  animation: frostBreath 2.2s ease-in-out infinite;
+}
+@keyframes frostBreath { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+.flash {
+  position: absolute; left: 60px; top: 30px; width: 860px; height: 860px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 250, 220, 1) 0%, rgba(255, 224, 140, 0.85) 35%, rgba(255, 224, 140, 0) 70%);
+  pointer-events: none; z-index: 4;
+  animation: flashOut 0.75s ease-out forwards;
+}
+@keyframes flashOut { 0% { opacity: 1; transform: scale(0.6); } 100% { opacity: 0; transform: scale(1.35); } }
+
+/* body-state tints */
+body.active .sky { background:
+    radial-gradient(ellipse 62% 58% at 28% 40%, rgba(255, 226, 150, 0.95), rgba(255, 226, 150, 0) 70%),
+    radial-gradient(ellipse 40% 40% at 82% 18%, rgba(217, 233, 236, 0.9), rgba(217, 233, 236, 0) 70%),
+    linear-gradient(180deg, #eef3e0 0%, #f7efd6 55%, #f2e2bd 100%); }
+.sky { transition: background 1.5s; }
+body.frost .sky { background:
+    radial-gradient(ellipse 60% 55% at 28% 38%, rgba(220, 240, 251, 0.9), rgba(220, 240, 251, 0) 70%),
+    linear-gradient(180deg, #e3edf0 0%, #eef0ea 55%, #e9e6dc 100%); }
+
+/* ===== corner chrome, outside the scaled subtree ===== */
+.chrome {
+  position: fixed; z-index: 5; font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--text-soft);
+  padding: 4px 10px; background: rgba(255, 252, 240, 0.6); border-radius: 3px 10px 3px 10px;
+}
+.chrome-br { right: 10px; top: 8px; }
+.chrome-bl { left: 10px; bottom: 8px; }
+
+/* reduced motion: keep the state distinctions, drop the pulses */
+@media (prefers-reduced-motion: reduce) {
+  .tool-open.ready, .tool-frost.engaged, .frostVeil { animation: none; }
+}

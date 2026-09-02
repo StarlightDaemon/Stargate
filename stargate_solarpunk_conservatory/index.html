@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELIANTH — Wrenfield Commons Conservatory · Lantern Gate</title>
+<meta name="description" content="A solarpunk portal-dialing console: the five-light lantern of a commons conservatory, drawn as luminous Art Nouveau greenhouse linework. Fictional destinations, original iconography.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%27-20 -20 40 40%27%3E%3Ccircle r=%276%27 fill=%27none%27 stroke=%27%23b8741a%27 stroke-width=%273%27/%3E%3Cpath d=%27M0-9v-7M0 9v7M9 0h7M-9 0h-7M6.4-6.4l5-5M-6.4 6.4l-5 5M6.4 6.4l5 5M-6.4-6.4l-5-5%27 stroke=%27%232c5a44%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+
+<div class="stage" id="stage">
+
+  <!-- ===== Conservatory glazing backdrop (linework only) ===== -->
+  <svg class="glazing" id="glazing" viewBox="0 0 1920 1080" aria-hidden="true" focusable="false"></svg>
+
+  <!-- ===== The Lantern: five-light cupola, seed-ring, oculus ===== -->
+  <section class="lantern" id="lantern" aria-label="The Lantern — five-light cupola">
+    <svg id="lanternSvg" viewBox="-500 -500 1000 1000" role="img" aria-label="Lantern ring">
+      <defs>
+        <!-- luminous-ink filters: a saturated halo under a lighter core reads as glow on daylight paper -->
+        <filter id="inkGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3.2" result="b"/>
+          <feColorMatrix in="b" type="matrix" values="0.6 0 0 0 0  0 1 0 0 0.05  0 0 0.6 0 0  0 0 0 1.2 0" result="c"/>
+          <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="sunGlow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="b"/>
+          <feColorMatrix in="b" type="matrix" values="1.1 0 0 0 0.05  0 0.9 0 0 0.02  0 0 0.4 0 0  0 0 0 1.4 0" result="c"/>
+          <feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="frostGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <radialGradient id="oculusIdle" cx="50%" cy="46%" r="55%">
+          <stop offset="0" stop-color="#fbf5e3" stop-opacity="1"/>
+          <stop offset="0.7" stop-color="#eef1dc" stop-opacity="1"/>
+          <stop offset="1" stop-color="#dfe8d2" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="oculusWarm" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#fff3c4" stop-opacity="1"/>
+          <stop offset="0.55" stop-color="#ffd978" stop-opacity="0.9"/>
+          <stop offset="1" stop-color="#f2b246" stop-opacity="0.35"/>
+        </radialGradient>
+
+        <!-- ===== The thirteen cultivars: seed-tray glyphs, stroke-only ===== -->
+        <symbol id="cv-helianth" viewBox="-20 -20 40 40"><circle r="6"/><g id="hrays"><path d="M0-9v-7M0 9v7M9 0h7M-9 0h-7M6.4-6.4l5-5M-6.4 6.4l-5 5M6.4 6.4l5 5M-6.4-6.4l-5-5"/></g></symbol>
+        <symbol id="cv-crozier" viewBox="-20 -20 40 40"><path d="M-4 16C-4 4 -2-6 4-10c6-4 12 0 11 5s-6 6-9 3 0-8 4-7"/><path d="M-4 16l-4-5M-4 10l-4-4M-4 4l-4-3"/></symbol>
+        <symbol id="cv-oakleaf" viewBox="-20 -20 40 40"><path d="M0 17V-15"/><path d="M0-15c-5 2-9 6-7 10-4 1-5 6-2 8-3 3-1 8 3 8 2 0 4-1 6-4 2 3 4 4 6 4 4 0 6-5 3-8 3-2 2-7-2-8 2-4-2-8-7-10z"/></symbol>
+        <symbol id="cv-dew" viewBox="-20 -20 40 40"><path d="M0-16c6 8 11 14 11 20a11 11 0 0 1-22 0c0-6 5-12 11-20z"/><path d="M-6 6a6 6 0 0 0 4 5"/></symbol>
+        <symbol id="cv-bee" viewBox="-20 -20 40 40"><ellipse rx="7" ry="10" transform="rotate(-25)"/><path d="M-3-3l6 3M-4 2l7 3"/><path d="M3-9c6-6 14-4 12 2-1 3-6 4-9 1M-4-8c-7-4-14 0-11 5 2 3 6 3 9 0"/></symbol>
+        <symbol id="cv-root" viewBox="-20 -20 40 40"><path d="M0-16v10"/><path d="M0-6c-4 4-9 6-11 13M0-6c4 4 9 6 11 13M0-6c0 8-1 14 0 22M-5 4c-1 5-5 7-4 11M5 4c1 5 5 7 4 11"/></symbol>
+        <symbol id="cv-bud" viewBox="-20 -20 40 40"><path d="M0 16V6"/><path d="M0 6C-8 6-11-2-8-9c2-5 6-7 8-8 2 1 6 3 8 8 3 7 0 15-8 15z"/><path d="M0-17v23M-5-6c1 6 3 9 5 12 2-3 4-6 5-12"/></symbol>
+        <symbol id="cv-trefoil" viewBox="-20 -20 40 40"><circle cx="0" cy="-8" r="6"/><circle cx="-7" cy="4" r="6"/><circle cx="7" cy="4" r="6"/><path d="M0 4v13"/></symbol>
+        <symbol id="cv-wheat" viewBox="-20 -20 40 40"><path d="M0 17V-14"/><path d="M0-14l-6 5M0-14l6 5M0-8l-6 5M0-8l6 5M0-2l-6 5M0-2l6 5M0 4l-6 5M0 4l6 5"/></symbol>
+        <symbol id="cv-dawn" viewBox="-20 -20 40 40"><path d="M-17 6h34"/><path d="M-10 6a10 10 0 0 1 20 0"/><path d="M0-12v-5M-9-8l-3-3M9-8l3-3M-14 2h-4M14 2h4"/><path d="M-12 12h8M4 12h8"/></symbol>
+        <symbol id="cv-vine" viewBox="-20 -20 40 40"><path d="M-12 16C-6 8 6 10 4-2S-8-10 -2-16"/><path d="M4-2c6-2 10 2 9 6-4 1-8-1-9-6zM-4 6c-6-1-9 3-7 7 4 1 7-2 7-7z"/></symbol>
+        <symbol id="cv-lily" viewBox="-20 -20 40 40"><path d="M0 16V0"/><path d="M0 0C-9-2-13-9-12-16c5 2 9 6 12 12 3-6 7-10 12-12 1 7-3 14-12 16z"/><path d="M0 0c-2-6-1-11 0-14 1 3 2 8 0 14z"/></symbol>
+        <symbol id="cv-mycel" viewBox="-20 -20 40 40"><circle cx="0" cy="0" r="2.2"/><circle cx="-11" cy="-7" r="2.2"/><circle cx="10" cy="-9" r="2.2"/><circle cx="12" cy="7" r="2.2"/><circle cx="-9" cy="10" r="2.2"/><circle cx="1" cy="14" r="2.2"/><path d="M-2-1l-7-5M2-1l6-6M2 1l8 5M-2 1l-6 8M0 2l1 10M-9-7l-6 6M10-9l4-6"/></symbol>
+      </defs>
+
+      <!-- drum, sill and oculus rims -->
+      <g id="lanternFrame" class="ink"></g>
+      <!-- the five lights (sashes) — generated -->
+      <g id="lights"></g>
+      <!-- the heliotropic seed-ring — rotates to bring a cultivar under a light -->
+      <g id="seedRing" class="ink"></g>
+      <!-- graft notches at the sill under each light -->
+      <g id="notches" class="ink"></g>
+      <!-- tendrils that grow from the notch into the light on GRAFT -->
+      <g id="tendrils"></g>
+      <!-- blooms that open when a graft takes -->
+      <g id="blooms"></g>
+      <!-- oculus linework (hour lines, sun-path) -->
+      <g id="oculusInk" class="ink"></g>
+      <!-- frost crackle: only when the Frost Shutter is drawn -->
+      <g id="frostInk" hidden></g>
+      <!-- the reading index: a small sun-marker at the top rib -->
+      <g id="indexMark"></g>
+    </svg>
+    <canvas id="oculus" width="600" height="600" aria-hidden="true"></canvas>
+    <div class="lanternWord" id="lanternWord" aria-live="polite"></div>
+  </section>
+
+  <!-- ===== Hung tags: gentle stewardship telemetry, not industrial control ===== -->
+  <div class="tags" id="tags" aria-label="Conservatory notices"></div>
+
+  <!-- ===== Nameplate ===== -->
+  <header class="nameplate">
+    <div class="np-eyebrow">Wrenfield Commons Conservatory · Lantern Gate</div>
+    <h1 class="np-title">HELIANTH</h1>
+    <div class="np-sub">the five-light lantern &nbsp;·&nbsp; graft five cultivars, then open the lights</div>
+  </header>
+
+  <!-- ===== Climbing ledger: the address as a vine, one bloom per graft ===== -->
+  <section class="ledger" id="ledger" aria-label="Climbing ledger — grafts taken">
+    <div class="sec-title">Climbing ledger</div>
+    <svg id="ledgerSvg" viewBox="0 0 360 620" aria-hidden="true"></svg>
+    <ol id="ledgerList" class="ledgerList"></ol>
+  </section>
+
+  <!-- ===== Herbarium: pressed routes = quick-dial ===== -->
+  <section class="herbarium" id="herbarium" aria-label="Herbarium — pressed routes">
+    <div class="sec-title">Herbarium <span class="sec-note">rooted cuttings strike at nursery pace</span></div>
+    <div id="pressings" class="pressings"></div>
+  </section>
+
+  <!-- ===== Day-book ===== -->
+  <section class="daybook" id="daybook" aria-label="Day-book">
+    <div class="sec-title">Day-book</div>
+    <ul id="daybookList" class="daybookList" aria-live="polite"></ul>
+  </section>
+
+  <!-- ===== The potting bench: the only two control clusters for the core loop ===== -->
+  <section class="bench" id="bench" aria-label="Potting bench">
+    <div class="tray" id="tray" role="group" aria-label="Seed tray — thirteen cultivars">
+      <div class="tray-label">Seed tray</div>
+      <div class="tray-row" id="trayRow"></div>
+    </div>
+    <div class="graftCluster" role="group" aria-label="Grafting tools">
+      <button id="btnGraft" class="tool tool-graft" type="button">
+        <span class="tool-kicker">graft</span><span class="tool-word">TAKE</span>
+      </button>
+      <button id="btnOpen" class="tool tool-open" type="button">
+        <span class="tool-kicker">activation</span><span class="tool-word">OPEN THE LIGHTS</span>
+      </button>
+      <button id="btnClose" class="tool tool-close" type="button">
+        <span class="tool-kicker">disengage</span><span class="tool-word">CLOSE THE LIGHTS</span>
+      </button>
+      <button id="btnFrost" class="tool tool-frost" type="button" aria-pressed="false">
+        <span class="tool-kicker">interlock</span><span class="tool-word">FROST SHUTTER</span><span class="tool-state" id="frostState">drawn back</span>
+      </button>
+      <button id="btnSound" class="tool tool-sound" type="button" aria-pressed="false">
+        <span class="tool-kicker">sound</span><span class="tool-word" id="soundWord">quiet</span>
+      </button>
+    </div>
+    <div class="benchCard" id="benchCard" aria-live="polite">choose a cultivar from the tray</div>
+  </section>
+
+  <!-- frost veil over the lantern when the shutter is drawn -->
+  <div class="frostVeil" id="frostVeil" hidden></div>
+  <!-- breakthrough flash -->
+  <div class="flash" id="flash" hidden></div>
+</div>
+
+<div class="chrome chrome-br" id="credit">Built by Claude Fable 5.1 &nbsp;·&nbsp; v1.0.0</div>
+<div class="chrome chrome-bl">fictional destinations · original iconography · client-side only</div>
+
+<script src="app.js"></script>
+</body>
+</html>

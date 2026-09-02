@@ -1,0 +1,9 @@
+{
+  "name": "HELIANTH — Wrenfield Commons Conservatory · Lantern Gate",
+  "folder": "stargate_solarpunk_conservatory",
+  "version": "1.0.0",
+  "model": "Claude Fable 5.1",
+  "built": "2026-09-02",
+  "status": "implemented and self-tested; pending direct operator hands-on testing",
+  "port": 8685
+}
