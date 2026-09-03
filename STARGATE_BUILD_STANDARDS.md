@@ -50,6 +50,13 @@ Every build needs all four of these from the very first commit:
   CHANGELOG.
 - `.gitignore` — excluding `node_modules/`, created **before** the first
   commit, not fixed after the fact.
+- **Verification screenshots and run logs are never committed.** Test
+  output belongs in a directory named `test`, which the root `.gitignore`
+  excludes. The only image a build commits is `preview.png`. Screenshot
+  evidence satisfies the verification requirement by being observed during
+  the session and summarised in the CHANGELOG, not by being checked into
+  the repository. Editor and agent session files, including `.claude/`,
+  are not committed either.
 
 **Model attribution must be verified, not assumed.** A safety classifier
 can silently reroute execution to a different model mid-session. Before

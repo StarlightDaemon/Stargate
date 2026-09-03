@@ -1,3 +1,17 @@
 node_modules/
 *.presubtree-backup
 scripts/snapshots/
+
+# Test output: verification screenshots and run logs never ship or commit
+# (STARGATE_BUILD_STANDARDS.md section 3). Test output belongs in test/.
+test/
+tests/
+verify/
+screenshots/
+test_screenshots/
+test_artifacts/
+test-artifacts/
+*.log
+
+# Editor / agent session files
+.claude/

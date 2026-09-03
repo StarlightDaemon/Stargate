@@ -34,7 +34,26 @@ const OG_DIST_DIR = path.join(OG_DIR, "dist");
 const OG_PREVIEW_CANDIDATES = ["preview.png", "preview.jpg", "preview.jpeg"];
 const OUTPUT_DIR = path.resolve(process.argv[2] || path.join(ROOT, "_site"));
 
-const SKIP_ENTRIES = new Set(["node_modules", ".git", ".DS_Store"]);
+// Test-output and editor/agent session directories are never part of the
+// served site. Verification screenshots and run logs live under these
+// names inside build folders (see STARGATE_BUILD_STANDARDS.md section 3), and
+// `scripts` covers per-build harness / dev-server code. This set is only
+// ever applied inside a copied folder (hub/, each gallery entry, OG dist/),
+// never at the repo root, so the repo's own scripts/ is unaffected.
+const SKIP_ENTRIES = new Set([
+  "node_modules",
+  ".git",
+  ".DS_Store",
+  "test",
+  "tests",
+  "verify",
+  "screenshots",
+  "test_screenshots",
+  "test_artifacts",
+  "test-artifacts",
+  ".claude",
+  "scripts",
+]);
 
 function copyDir(src, dest) {
   fs.mkdirSync(dest, { recursive: true });
