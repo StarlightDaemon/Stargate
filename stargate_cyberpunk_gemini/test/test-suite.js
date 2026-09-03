@@ -9,7 +9,7 @@ const path = require('path');
 
 const CHROME_PATH = process.env.CHROME_PATH || 
   (process.platform === 'win32' 
-    ? (process.env.LOCALAPPDATA ? path.join(process.env.LOCALAPPDATA, 'Google/Chrome/Application/chrome.exe') : 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe')
+    ? (process.env.PROGRAMFILES ? path.join(process.env.PROGRAMFILES, 'Google/Chrome/Application/chrome.exe') : (process.env.LOCALAPPDATA ? path.join(process.env.LOCALAPPDATA, 'Google/Chrome/Application/chrome.exe') : 'chrome'))
     : '/usr/bin/google-chrome');
 const TARGET_URL = 'http://127.0.0.1:8080/';
 const SCREENSHOT_DIR = path.join(__dirname, '..', 'screenshots');

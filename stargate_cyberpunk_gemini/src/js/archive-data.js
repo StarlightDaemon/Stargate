@@ -209,7 +209,7 @@ const CIPHER_ARCHIVE_DATA = [
     address: [7, 0, 3, 6, 9, 2, 5],
     tags: ["FINANCIAL", "ESPIONAGE", "VERIFIED"],
     description: "Names, retinal scans, and off-ledger wire transactions for corporate black-ops infiltration teams and assassin syndicates operating on five continents.",
-    transcript: "[GHOST OPERATIVE PROFILE #402]\n> CODENAME: SILENT-HERON\n> ASSIGNMENT: COUNTER-NETRUNNER INTRUSION TARGETING [REF: KHEPRI-CONSOLE]\n> CONTRACT FUNDING ORIGIN: [REF: OBSIDIAN-12].",
+    transcript: "[GHOST OPERATIVE PROFILE #402]\n> CODENAME: SILENT-HERON\n> ASSIGNMENT: COUNTER-NETRUNNER INTRUSION TARGETING [REF: AEGIS-08]\n> CONTRACT FUNDING ORIGIN: [REF: OBSIDIAN-12].",
     relatedRefs: ["OBSIDIAN-12", "AEGIS-08"],
     iceRating: "56% (HONEYPOT FILTER ICE)",
     payloadType: "OPERATIVE DOSSIERS & BOUNTY CODES"

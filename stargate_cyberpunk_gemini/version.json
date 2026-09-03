@@ -1,6 +1,6 @@
 {
   "name": "stargate_cyberpunk_gemini",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "model": "Gemini 3.8 Flash, high",
   "title": "Khepri Cipher Terminal",
   "genre": "Cyberpunk Cyberspace Intrusion Gateway"
