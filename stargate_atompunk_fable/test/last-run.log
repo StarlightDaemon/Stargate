@@ -1,0 +1,149 @@
+
+== A. Cold start ==
+  PASS  simulated 4K (3840×2160): --fit is a bare number 2  — fit=2
+  PASS  4K: stage transform applied  — matrix(2, 0, 0, 2, -960, -540)
+        shot -> test\screenshots\01_cold_start_4k.png
+  PASS  1080p (1920×1080): --fit is 1  — fit=1
+  PASS  1080p: stage transform applied  — matrix(1, 0, 0, 1, -960, -540)
+  PASS  cold start is idle with no shells seated  — {"stage":"idle","locked":[]}
+  PASS  lead shutter defaults to RELEASED  — shutter=false
+  PASS  no warning shown on cold start
+  PASS  guide overlay hidden on cold start ([hidden] reset effective)
+  PASS  idle aperture is dark  — lum=36.6
+  PASS  idle ring is ambient (electron K moved)  — 497.12 → 443.13
+  PASS  idle never dials itself  — after 1s: locked=0
+        shot -> test\screenshots\02_cold_start_1080p.png
+
+== B. Control geometry ==
+  PASS  all 20 core controls reachable at their rendered centres (elementFromPoint)  — 3 cluster controls + 12 isotopes + 5 cams
+  PASS  every control and readout lies inside the 1080p viewport  — ok
+
+== C. Manual dial (hand tuning) ==
+  PASS  hit-test isotope Vx at (1420,140)  — topmost is the control
+  PASS  shell K hunts then seats Vx  — hunting observed at 350 ms, seated at 1307 ms
+  PASS  hit-test isotope Kw at (1550,365)  — topmost is the control
+  PASS  shell L hunts then seats Kw  — hunting observed at 350 ms, seated at 1262 ms
+  PASS  hit-test isotope Gv at (1290,365)  — topmost is the control
+  PASS  shell M hunts then seats Gv  — hunting observed at 350 ms, seated at 1294 ms
+  PASS  hit-test isotope Qo at (1495,160)  — topmost is the control
+        shot -> test\screenshots\03_manual_dial_in_progress.png
+  PASS  shell N hunts then seats Qo  — hunting observed at 350 ms, seated at 1263 ms
+  PASS  hit-test isotope Py at (1290,215)  — topmost is the control
+  PASS  shell O hunts then seats Py  — hunting observed at 350 ms, seated at 1268 ms
+  PASS  hit-test isotope Xa at (1495,420)  — topmost is the control
+  PASS  shell P hunts then seats Xa  — hunting observed at 350 ms, seated at 1263 ms
+  PASS  hit-test isotope Jr at (1550,215)  — topmost is the control
+  PASS  shell Q hunts then seats Jr  — hunting observed at 350 ms, seated at 1290 ms
+  PASS  each hand-tuned shell takes a hunt plus a capture (1.1–2.2 s)  — 1307, 1262, 1293, 1262, 1268, 1263, 1290 ms
+  PASS  seven isotopes seated in click order  — Vx Kw Gv Qo Py Xa Jr
+  PASS  ring did real work: 7 shells lit, 7 seats filled, 7 nucleus dots  — {"lockedShells":7,"lockedSeats":7,"nucleus":7}
+  PASS  manifest lamps and spectrograph lines follow the shells  — lamps=7 lines=7
+
+== D. No auto-fire ==
+  PASS  seventh shell leaves the console PENDING, not open (2.5 s later)  — stage=pending elapsed=2548
+  PASS  pending aperture still dark  — lum=44.2
+        shot -> test\screenshots\04_pending_ready_no_autofire.png
+  PASS  hit-test used isotope Vx while pending at (1420,140)  — topmost is the control
+  PASS  reseating while pending is refused with a visible warning  — ADDRESS FULL · EXCITE OR DISCHARGE
+
+== E. Excitation: buildup → breakthrough → active ==
+  PASS  hit-test EXCITE at (1360,682)  — topmost is the control
+  PASS  EXCITE starts BUILDUP  — 1 ms
+        shot -> test\screenshots\05_stage1_buildup.png
+  PASS  buildup contracts the shells (outer shell Q radius)  — 390 → 289.54
+  PASS  BUILDUP lasts ~2.3 s then BREAKTHROUGH  — reached after 522 ms of polling
+        shot -> test\screenshots\06_stage2_breakthrough.png
+  PASS  breakthrough shoots the starburst spikes  — 16/16 visible
+  PASS  BREAKTHROUGH resolves into SUSTAINED ACTIVE  — 187 ms
+        shot -> test\screenshots\07_stage3_sustained_active.png
+  PASS  hand-tuned address resolved to its destination  — THRESHOLD OPEN · PALOMAR SPRINGS
+  PASS  aperture luminance distinct at every stage pair (≥25)  — pending 44.2 · buildup 72.3 · breakthrough 221 · active 176.1
+  PASS  sustained state keeps a starburst halo but is visibly calmer than breakthrough  — halo 16/16, lum 221 → 176.1
+  PASS  hit-test EXCITE while open at (1360,682)  — topmost is the control
+  PASS  EXCITE while open is refused, threshold stays open  — THRESHOLD ALREADY OPEN
+
+== F. Discharge from open ==
+  PASS  DISCHARGE reachable while threshold is open
+  PASS  hit-test DISCHARGE at (1650,682)  — topmost is the control
+  PASS  discharge drops every shell and returns to idle  — {"stage":"idle","locked":0,"lamps":0}
+        shot -> test\screenshots\08_disengaged_cycle1.png
+  PASS  aperture dark again after discharge  — lum=39.4
+
+== G. Preset cam: staged auto-dial ==
+  PASS  hit-test CAM 2 SKYLINE MESA at (455,999)  — topmost is the control
+        shot -> test\screenshots\09_autodial_sequence_in_progress.png
+  PASS  cam seats all seven shells one at a time  — 1@506 2@1098 3@1692 4@2283 5@2878 6@3471 7@4065
+  PASS  every cam stop is a visible step (≥300 ms apart)  — 506, 592, 594, 591, 595, 593, 594 ms
+  PASS  cam is faster than hand tuning but never instantaneous  — 4065 ms for 7 vs hand 8945 ms
+  PASS  mid-sequence screenshot captured with 3 seated and shell N hunting
+  PASS  cam landing state is PENDING with no auto-fire (2.5 s later)  — stage=pending
+  PASS  cam seated the stored address  — Yx Ux Fz Wq Vx Zq Kw
+        shot -> test\screenshots\10_autodial_pending_ready.png
+
+== H. Lead shutter interlock ==
+  PASS  hit-test DISCHARGE (clear for interlock test) at (1650,682)  — topmost is the control
+  PASS  hit-test LEAD SHUTTER toggle (engage) at (1360,768)  — topmost is the control
+  PASS  shutter engages with a visible state change  — ENGAGED/true
+  PASS  hit-test isotope Jr with shutter engaged at (1550,215)  — topmost is the control
+  PASS  engaged shutter refuses capture with a blinking warning  — LEAD SHUTTER ENGAGED · CAPTURE BLOCKED
+        shot -> test\screenshots\11_shutter_refuses_capture.png
+  PASS  hit-test CAM 1 with shutter engaged at (273,999)  — topmost is the control
+  PASS  engaged shutter refuses a cam  — LEAD SHUTTER ENGAGED · CAM HALTED
+  PASS  hit-test EXCITE with shutter engaged at (1360,682)  — topmost is the control
+  PASS  engaged shutter refuses excitation  — LEAD SHUTTER ENGAGED · EXCITATION BLOCKED
+  PASS  shutter warning stays visible while engaged  — on
+  PASS  hit-test LEAD SHUTTER toggle (release) at (1360,768)  — topmost is the control
+  PASS  shutter releases and the warning clears  — shutter=false
+
+== I. Full second cycle ==
+  PASS  hit-test CAM 4 CORAL TERRACE at (819,999)  — topmost is the control
+  PASS  cycle 2: cam reaches pending  — 4084 ms
+  PASS  hit-test EXCITE (cycle 2) at (1360,682)  — topmost is the control
+  PASS  cycle 2: threshold opens  — 3026 ms
+  PASS  cycle 2 resolved its destination  — THRESHOLD OPEN · CORAL TERRACE
+        shot -> test\screenshots\12_active_cycle2.png
+  PASS  hit-test DISCHARGE (cycle 2) at (1650,682)  — topmost is the control
+  PASS  cycle 2 discharged to idle  — stage=idle
+        shot -> test\screenshots\13_disengaged_cycle2.png
+
+== J. Discharge mid-sequence ==
+  PASS  hit-test CAM 5 TWILITE JUNCTION at (1001,999)  — topmost is the control
+  PASS  hit-test DISCHARGE mid-cam at (1650,682)  — topmost is the control
+  PASS  discharge mid-cam cancels the remaining stops  — locked after 1.5 s = 0
+  PASS  hit-test CAM 1 PALOMAR SPRINGS at (273,999)  — topmost is the control
+  PASS  hit-test EXCITE at (1360,682)  — topmost is the control
+  PASS  hit-test DISCHARGE mid-buildup at (1650,682)  — topmost is the control
+  PASS  discharge mid-buildup aborts: never reaches breakthrough or open  — stage now idle
+
+== K. Dark route (no answering resonance) ==
+  PASS  hit-test CAM 3 MOONGLOW COURT at (637,999)  — topmost is the control
+  PASS  dark cam still seats fully and lands pending  — 4070 ms
+  PASS  hit-test EXCITE (dark route) at (1360,682)  — topmost is the control
+  PASS  dark route goes through buildup and breakthrough, then collapses  — 3033 ms
+        shot -> test\screenshots\14_dark_route_collapse.png
+  PASS  collapse clears the console to idle  — stage=idle locked=0
+
+== L. Rapid input and refusals ==
+  PASS  hit-test EXCITE from idle at (1360,682)  — topmost is the control
+  PASS  EXCITE with nothing seated is refused  — NO SEATED ADDRESS · SEAT SEVEN ISOTOPES FIRST
+  PASS  three clicks faster than the hunt are queued and all seat in order  — in flight right after clicks: 3, seated: Fz Zq Ux
+  PASS  hit-test duplicate isotope Zq at (1270,290)  — topmost is the control
+  PASS  a duplicate isotope is refused  — ZERQUINE ALREADY SEATED
+  PASS  hit-test CAM 2 with a partial address at (455,999)  — topmost is the control
+  PASS  a cam is refused while shells are partly seated  — DISCHARGE BEFORE RUNNING A CAM
+  PASS  hit-test DISCHARGE (clean up) at (1650,682)  — topmost is the control
+
+== M. Guide and chrome ==
+  PASS  hit-test guide button at (1890,1055)  — topmost is the control
+  PASS  guide opens
+        shot -> test\screenshots\15_guide_open.png
+  PASS  hit-test guide close at (681,714)  — topmost is the control
+  PASS  guide closes
+  PASS  hit-test sound toggle at (1822,1055)  — topmost is the control
+  PASS  sound toggle flips  — SOUND OFF
+  PASS  hit-test sound toggle back at (1819,1055)  — topmost is the control
+
+== N. Console ==
+  PASS  no page errors or console errors during the run  — clean
+
+104/104 checks passed

@@ -1,0 +1,14 @@
+{
+  "name": "stargate-atompunk-fable",
+  "version": "1.0.0",
+  "description": "AUREOLE — Meadowlark Atomic Exposition · Threshold Pavilion. An atompunk portal-dialing console rendered as glowing atomic-age schematic.",
+  "private": true,
+  "scripts": {
+    "serve": "node server.js",
+    "test": "node test/run-tests.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^25.9.0"
+  }
+}

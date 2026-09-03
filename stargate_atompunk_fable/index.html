@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AUREOLE — Meadowlark Atomic Exposition · Threshold Pavilion</title>
+<meta name="description" content="A purely decorative atompunk portal-dialing novelty. Seat seven isotopes in the Bohr shells, then excite the threshold. All destinations are fictional.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="stage" data-stage="idle">
+
+  <!-- Googie backdrop: cantilever wedge, boomerang, accent asterisks -->
+  <svg id="backdrop" viewBox="0 0 1920 1080" aria-hidden="true">
+    <path class="wedge" d="M1120 1080 C1170 790 1420 590 1920 500 L1920 1080 Z"/>
+    <path class="wedge-edge" d="M1120 1080 C1170 790 1420 590 1920 500"/>
+    <path class="boomerang" d="M1216 486 Q1290 130 1636 92 Q1522 150 1476 300 Q1416 418 1216 486 Z"/>
+    <path class="cant" d="M1092 1046 L1256 730"/>
+    <path class="cant cant-2" d="M1122 1058 L1286 742"/>
+    <g class="asterisks">
+      <path d="M1780 250 v-22 M1780 250 v22 M1780 250 h-22 M1780 250 h22 M1780 250 l-15 -15 M1780 250 l15 15 M1780 250 l-15 15 M1780 250 l15 -15"/>
+      <path d="M1140 60 v-14 M1140 60 v14 M1140 60 h-14 M1140 60 h14 M1140 60 l-10 -10 M1140 60 l10 10 M1140 60 l-10 10 M1140 60 l10 -10"/>
+      <path d="M1860 430 v-10 M1860 430 v10 M1860 430 h-10 M1860 430 h10"/>
+      <path d="M120 940 v-16 M120 940 v16 M120 940 h-16 M120 940 h16 M120 940 l-11 -11 M120 940 l11 11 M120 940 l-11 11 M120 940 l11 -11"/>
+      <path d="M1180 190 v-8 M1180 190 v8 M1180 190 h-8 M1180 190 h8"/>
+    </g>
+  </svg>
+
+  <!-- The ring: a seven-shell Bohr model, the instrument itself -->
+  <svg id="ringSvg" viewBox="0 0 900 900" aria-label="Threshold ring: seven Bohr shells">
+    <defs>
+      <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="4" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="glowBig" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="10" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <circle class="ring-outer" cx="450" cy="450" r="424"/>
+    <g class="ring-ticks"></g>
+    <g id="spikes"></g>
+    <g id="shells"></g>
+    <g id="trails"></g>
+    <path id="huntArc" d="" hidden/>
+    <g id="electrons"></g>
+    <g id="nucleus"></g>
+    <g id="pops"></g>
+    <g id="scatter"></g>
+  </svg>
+  <canvas id="aperture" width="340" height="340" aria-hidden="true"></canvas>
+  <div id="seats" aria-hidden="true"></div>
+
+  <!-- Spectrograph strip: an emission line appears for every seated isotope.
+       Sits after the ring in the DOM so the starburst passes behind it. -->
+  <section id="spectrum" aria-label="Emission spectrograph">
+    <div class="strip-label">EMISSION SPECTROGRAPH · 400–700 nm</div>
+    <div id="specLines"></div>
+    <div class="spec-scale"><span>400</span><span>450</span><span>500</span><span>550</span><span>600</span><span>650</span><span>700</span></div>
+  </section>
+
+  <!-- Shell manifest: one lamp per shell, shows the seated isotope -->
+  <section id="manifest" aria-label="Shell manifest">
+    <div class="col-label">SHELL</div>
+    <div id="lamps"></div>
+  </section>
+  <div id="countdown" aria-live="polite">— —</div>
+
+  <!-- Isotope selector: twelve isotopes on a starburst -->
+  <section id="isoBoard" aria-label="Isotope selector">
+    <svg id="isoSpokes" viewBox="0 0 400 400" aria-hidden="true"></svg>
+    <div class="hub"><span>ISOTOPE</span><span>SELECTOR</span></div>
+  </section>
+
+  <!-- Masthead -->
+  <header id="title">
+    <div class="mast-name">AUREOLE</div>
+    <div class="mast-sub">Meadowlark Atomic Exposition</div>
+    <div class="mast-sub">Threshold Pavilion · Console No. 2</div>
+  </header>
+
+  <!-- Excitation cluster -->
+  <div id="status" aria-live="polite">STANDING BY · SEAT SEVEN ISOTOPES</div>
+  <div id="warn" aria-live="assertive"></div>
+  <button id="excite" type="button"><span class="burst" aria-hidden="true">✳</span><span>EXCITE</span><small>open the threshold</small></button>
+  <button id="discharge" type="button"><span>DISCHARGE</span><small>drop all shells</small></button>
+  <button id="shutter" type="button" role="switch" aria-checked="false" aria-label="Lead shutter"><span class="knob"></span><span class="sw-label">LEAD SHUTTER</span></button>
+  <div id="shutterState">RELEASED</div>
+
+  <!-- Resonance meter -->
+  <div id="meterBox">
+    <svg id="meter" viewBox="0 0 160 100" aria-hidden="true">
+      <path class="arc" d="M16 84 A64 64 0 0 1 144 84"/>
+      <path class="arc-hot" d="M118 40 A64 64 0 0 1 144 84"/>
+      <g class="meter-ticks"></g>
+      <line id="needle" x1="80" y1="84" x2="80" y2="26"/>
+      <circle cx="80" cy="84" r="5"/>
+    </svg>
+    <div class="meter-label">RESONANCE</div>
+  </div>
+
+  <!-- Preset cams: pushbutton row -->
+  <section id="presetBox" aria-label="Preset cams">
+    <div class="row-label">PRESET CAMS · pre-cut tuning profiles — the servo runs straight to each cam stop</div>
+    <div id="presets"></div>
+  </section>
+
+  <!-- Telemetry and teletype -->
+  <section id="telemetry" aria-label="Telemetry">
+    <div class="tele"><div class="tele-k">EXPOSITION STANDARD TIME</div><div class="tele-v" id="clock">09:14:00</div></div>
+    <div class="tele"><div class="tele-k">HYPERFINE CYCLES</div><div class="tele-v" id="cycles">000 000 000</div></div>
+    <div class="tele"><div class="tele-k">SHELL ENERGY</div><div class="tele-v" id="energy">0 eV</div></div>
+    <div class="tele"><div class="tele-k">THRESHOLD FLUX</div><div class="tele-v" id="flux">0.00 Mc</div></div>
+  </section>
+  <section id="log" aria-label="Teletype log"></section>
+
+  <!-- Guide overlay -->
+  <div id="guide" hidden>
+    <div class="guide-card">
+      <h2>How to dial the threshold</h2>
+      <ol>
+        <li><b>Seat seven isotopes.</b> Press any isotope on the starburst selector. The next Bohr shell hunts for that isotope's resonance, then captures it with a flash. Shells fill from K outward to Q.</li>
+        <li><b>Excite.</b> Seven seated shells leave the console <i>ready</i> — nothing opens by itself. Press EXCITE: the shells contract, break through, and the threshold stays open.</li>
+        <li><b>Discharge</b> at any time to drop every shell and start over. It is never locked out.</li>
+        <li><b>Preset cams</b> seat a stored address at servo pace, shell by shell. One of them has not answered since the ’57 season.</li>
+        <li><b>Lead shutter</b> is a safety interlock. It is released by default; engage it and the console refuses to capture or excite until it is released again.</li>
+      </ol>
+      <p class="fine">A purely decorative novelty. All isotopes, destinations, and institutions are fictional.</p>
+      <button id="guideClose" type="button">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- Corner chrome lives outside the scaled stage -->
+<div id="corner">
+  <button id="soundBtn" type="button" aria-pressed="true" title="Sound on/off">SOUND ON</button>
+  <button id="guideBtn" type="button" title="Guide (?)">?</button>
+</div>
+<div id="credit">AUREOLE v1.0.0 · Built by Claude Fable 5.1 · fictional novelty</div>
+
+<script src="isotopes.js"></script>
+<script src="audio.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
