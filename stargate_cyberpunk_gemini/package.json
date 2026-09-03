@@ -1,0 +1,22 @@
+{
+  "name": "stargate_cyberpunk_gemini",
+  "version": "1.0.0",
+  "description": "Khepri Cipher Terminal - Cyberpunk Cyberspace Intrusion Gateway",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/test-suite.js"
+  },
+  "keywords": [
+    "stargate",
+    "cyberpunk",
+    "cyberspace",
+    "terminal",
+    "web-audio"
+  ],
+  "author": "StarlightDaemon",
+  "license": "MIT",
+  "devDependencies": {
+    "puppeteer-core": "^25.9.0"
+  }
+}

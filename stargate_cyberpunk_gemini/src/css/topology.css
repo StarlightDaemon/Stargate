@@ -1,0 +1,103 @@
+/* Khepri Cipher Terminal - Cyberspace Network Topology Map */
+
+#topology-modal {
+  position: absolute;
+  top: 52px;
+  left: 0;
+  width: 1920px;
+  height: 1028px;
+  background: rgba(3, 8, 14, 0.95);
+  backdrop-filter: blur(20px);
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#topology-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.topology-body {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+#topology-canvas {
+  width: 1440px;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(5, 18, 28, 0.8) 0%, rgba(2, 6, 10, 0.98) 85%);
+  cursor: crosshair;
+}
+
+.topology-sidebar {
+  width: 480px;
+  border-left: 1px solid var(--border-subtle);
+  background: rgba(4, 13, 20, 0.8);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.topology-controls {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+
+.sector-filter-btn {
+  padding: 6px 12px;
+  font-size: 11px;
+  background: rgba(4, 15, 23, 0.85);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sector-filter-btn.active {
+  background: var(--primary-dark);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.topology-inspector {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inspector-node-title {
+  font-size: 20px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.inspector-field {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 255, 157, 0.1);
+  font-size: 12px;
+}
+
+.inspector-field-label {
+  color: var(--text-muted);
+}
+
+.inspector-field-val {
+  color: var(--text-primary);
+  font-weight: 700;
+}

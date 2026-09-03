@@ -1,0 +1,273 @@
+/* Khepri Cipher Terminal - Main Design System & Base Layout */
+:root {
+  /* Default Theme: Neon Emerald (Cyber Matrix) */
+  --bg-void: #02060a;
+  --bg-deep: #050e17;
+  --bg-panel: rgba(6, 19, 29, 0.78);
+  --bg-panel-hover: rgba(9, 28, 42, 0.88);
+  --bg-panel-solid: #091a27;
+  --border-subtle: rgba(0, 255, 157, 0.2);
+  --border-glow: rgba(0, 255, 157, 0.6);
+  --primary-color: #00ff9d;
+  --primary-glow: rgba(0, 255, 157, 0.35);
+  --primary-dim: #00a86b;
+  --primary-dark: #032b1d;
+  --secondary-color: #00e1ff;
+  --secondary-glow: rgba(0, 225, 255, 0.35);
+  --secondary-dark: #032338;
+  --accent-amber: #ffb700;
+  --accent-amber-glow: rgba(255, 183, 0, 0.4);
+  --accent-crimson: #ff2a5f;
+  --accent-crimson-glow: rgba(255, 42, 95, 0.45);
+  --text-primary: #e6fff4;
+  --text-secondary: #7fbfa2;
+  --text-muted: #3e6d58;
+  --text-cyan: #b3f7ff;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+  --font-heading: 'Rajdhani', 'Orbitron', 'Segoe UI', system-ui, sans-serif;
+  --app-scale: 1;
+  --scanline-opacity: 0.15;
+  --crt-bloom: 1;
+}
+
+/* Theme: Cyber Violet */
+[data-theme="violet"] {
+  --bg-void: #070311;
+  --bg-deep: #110722;
+  --bg-panel: rgba(22, 10, 42, 0.8);
+  --bg-panel-hover: rgba(35, 16, 68, 0.9);
+  --bg-panel-solid: #1d0e37;
+  --border-subtle: rgba(230, 0, 255, 0.25);
+  --border-glow: rgba(230, 0, 255, 0.7);
+  --primary-color: #f026ff;
+  --primary-glow: rgba(240, 38, 255, 0.4);
+  --primary-dim: #a612b3;
+  --primary-dark: #2d0536;
+  --secondary-color: #00f0ff;
+  --secondary-glow: rgba(0, 240, 255, 0.4);
+  --secondary-dark: #002e3b;
+  --text-primary: #fbe6ff;
+  --text-secondary: #c288d6;
+  --text-muted: #6e477e;
+}
+
+/* Theme: Solar Amber */
+[data-theme="amber"] {
+  --bg-void: #090501;
+  --bg-deep: #150c04;
+  --bg-panel: rgba(28, 17, 7, 0.82);
+  --bg-panel-hover: rgba(43, 26, 12, 0.92);
+  --bg-panel-solid: #27170a;
+  --border-subtle: rgba(255, 170, 0, 0.25);
+  --border-glow: rgba(255, 170, 0, 0.7);
+  --primary-color: #ffaa00;
+  --primary-glow: rgba(255, 170, 0, 0.4);
+  --primary-dim: #b87b00;
+  --primary-dark: #3b2700;
+  --secondary-color: #ff5500;
+  --secondary-glow: rgba(255, 85, 0, 0.4);
+  --secondary-dark: #3b1400;
+  --text-primary: #fff2e0;
+  --text-secondary: #d4a974;
+  --text-muted: #7d5b33;
+}
+
+/* Theme: Glitch Monochrome (Ghost Protocol) */
+[data-theme="monochrome"] {
+  --bg-void: #030304;
+  --bg-deep: #090a0d;
+  --bg-panel: rgba(16, 18, 24, 0.85);
+  --bg-panel-hover: rgba(26, 30, 40, 0.95);
+  --bg-panel-solid: #151820;
+  --border-subtle: rgba(255, 255, 255, 0.2);
+  --border-glow: rgba(255, 255, 255, 0.75);
+  --primary-color: #ffffff;
+  --primary-glow: rgba(255, 255, 255, 0.4);
+  --primary-dim: #999999;
+  --primary-dark: #222226;
+  --secondary-color: #8faec9;
+  --secondary-glow: rgba(143, 174, 201, 0.4);
+  --secondary-dark: #1b2633;
+  --text-primary: #ffffff;
+  --text-secondary: #a3aab8;
+  --text-muted: #555b68;
+}
+
+/* CSS Reset & Viewport Lock */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-void);
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Application Viewport Scaling Container */
+#viewport-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  background: radial-gradient(circle at 50% 50%, var(--bg-deep) 0%, var(--bg-void) 85%);
+}
+
+#app-root {
+  width: 1920px;
+  height: 1080px;
+  position: absolute;
+  transform-origin: center center;
+  transform: scale(var(--app-scale, 1));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cyberspace Background Canvas */
+#cyberspace-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Subtle CRT Scanline & Vignette Overlay */
+#crt-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  opacity: var(--scanline-opacity);
+}
+
+#crt-vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 98;
+  pointer-events: none;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.8), inset 0 0 40px var(--primary-dark);
+}
+
+/* Screen Flash for Breakthrough */
+#flash-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 90;
+  pointer-events: none;
+  background-color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+}
+
+#flash-overlay.active {
+  opacity: 0.85;
+  transition: none;
+}
+
+/* Button & Interactive Element Base */
+button {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover {
+  background: var(--bg-panel-hover);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Typography Utilities */
+.cyber-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mono-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+.glow-text {
+  text-shadow: 0 0 10px var(--primary-glow);
+}
+
+.cyan-glow {
+  color: var(--secondary-color);
+  text-shadow: 0 0 10px var(--secondary-glow);
+}
+
+.amber-glow {
+  color: var(--accent-amber);
+  text-shadow: 0 0 10px var(--accent-amber-glow);
+}
+
+.crimson-glow {
+  color: var(--accent-crimson);
+  text-shadow: 0 0 10px var(--accent-crimson-glow);
+}
+
+/* Custom Scrollbar for Inner Windows */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}

@@ -1,0 +1,345 @@
+/* Khepri Cipher Terminal - Cross-Referenced Breach Database & Archive */
+
+#archive-modal {
+  position: absolute;
+  top: 52px;
+  left: 0;
+  width: 1920px;
+  height: 1028px;
+  background: rgba(3, 8, 14, 0.94);
+  backdrop-filter: blur(20px);
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#archive-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-header {
+  height: 60px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(6, 16, 25, 0.8);
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--primary-color);
+}
+
+.modal-close-btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 42, 95, 0.1);
+  color: #ff99aa;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-close-btn:hover {
+  background: var(--accent-crimson);
+  color: #fff;
+  border-color: #fff;
+}
+
+/* Archive Body: Split Screen Master-Detail */
+.archive-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Left: Filter & Entry List */
+.archive-sidebar {
+  width: 480px;
+  border-right: 1px solid var(--border-subtle);
+  background: rgba(4, 12, 19, 0.65);
+  display: flex;
+  flex-direction: column;
+}
+
+.archive-search-bar {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-input {
+  width: 100%;
+  background: rgba(2, 6, 10, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.tag-filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag-pill {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(5, 20, 30, 0.6);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag-pill:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.tag-pill.active {
+  background: var(--primary-dark);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.archive-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.archive-item {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(0, 255, 157, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.archive-item:hover {
+  background: rgba(9, 28, 42, 0.7);
+  border-left: 3px solid var(--primary-color);
+}
+
+.archive-item.selected {
+  background: rgba(0, 255, 157, 0.12);
+  border-left: 4px solid var(--primary-color);
+}
+
+.archive-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.archive-item-id {
+  font-size: 10px;
+  color: var(--secondary-color);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.archive-tier-badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tier-verified {
+  background: rgba(0, 255, 157, 0.15);
+  color: var(--primary-color);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+}
+
+.tier-deepice {
+  background: rgba(255, 170, 0, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(255, 170, 0, 0.3);
+}
+
+.archive-item-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.archive-item-sector {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Right: Decrypted Dossier Inspection View */
+.archive-dossier {
+  flex: 1;
+  padding: 36px 48px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dossier-hero {
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.dossier-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dossier-id {
+  font-size: 12px;
+  color: var(--secondary-color);
+  letter-spacing: 0.1em;
+}
+
+.dossier-title {
+  font-size: 24px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+}
+
+.dossier-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.dossier-load-btn {
+  height: 44px;
+  padding: 0 22px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--primary-dark);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  box-shadow: 0 0 15px var(--primary-glow);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.dossier-load-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+  box-shadow: 0 0 25px var(--primary-color);
+}
+
+.dossier-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.dossier-stat-box {
+  background: rgba(5, 17, 26, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.dossier-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-color);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dossier-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* Cross Reference Badges */
+.cross-ref-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  margin: 0 4px;
+  background: rgba(0, 225, 255, 0.15);
+  color: var(--secondary-color);
+  border: 1px solid rgba(0, 225, 255, 0.35);
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cross-ref-badge:hover {
+  background: var(--secondary-color);
+  color: #000;
+  box-shadow: 0 0 10px var(--secondary-glow);
+}
+
+/* Decrypted Memory Transcript Box */
+.transcript-box {
+  background: rgba(2, 6, 10, 0.95);
+  border-left: 3px solid var(--primary-color);
+  border-radius: 4px;
+  padding: 16px 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #a4f7d4;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}

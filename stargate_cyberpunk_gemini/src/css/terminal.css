@@ -1,0 +1,693 @@
+/* Khepri Cipher Terminal - Core Interactive Decks & Terminal UI */
+
+/* Top Command Bar */
+#top-command-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 52px;
+  background: rgba(3, 9, 15, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  z-index: 20;
+}
+
+.top-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.terminal-node-tag {
+  font-size: 11px;
+  background: var(--primary-dark);
+  color: var(--primary-color);
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+  letter-spacing: 0.08em;
+}
+
+.terminal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.1em;
+}
+
+.terminal-title span {
+  color: var(--primary-color);
+}
+
+.top-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  padding: 6px 14px;
+  font-size: 11px;
+  background: rgba(8, 22, 33, 0.6);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background: rgba(8, 28, 42, 0.85);
+}
+
+.nav-btn.active {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background: var(--primary-dark);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* Operator Reference Button: Standing convention circular '?' top-right */
+#btn-operator-reference {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--primary-color);
+  background: var(--primary-dark);
+  color: var(--primary-color);
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 0 12px var(--primary-glow);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+#btn-operator-reference:hover {
+  background: var(--primary-color);
+  color: #000;
+  box-shadow: 0 0 20px var(--primary-color);
+  transform: scale(1.08);
+}
+
+/* ------------------------------------------------------------- */
+/* FLOATING DECK LEFT: EXPLOIT VECTOR PALETTE (Control Cluster 1) */
+/* ------------------------------------------------------------- */
+#vector-selector {
+  position: absolute;
+  top: 72px;
+  left: 28px;
+  width: 410px;
+  height: 740px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.deck-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.deck-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deck-badge {
+  font-size: 10px;
+  background: rgba(0, 255, 157, 0.1);
+  color: var(--primary-color);
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 255, 157, 0.3);
+}
+
+.vector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+}
+
+.vector-btn {
+  background: rgba(5, 16, 24, 0.85);
+  border: 1px solid rgba(0, 255, 157, 0.25);
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vector-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.vector-btn:hover {
+  background: rgba(9, 31, 46, 0.95);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--primary-glow);
+}
+
+.vector-btn:hover::before {
+  background: var(--primary-color);
+}
+
+.vector-btn.selected {
+  background: rgba(0, 255, 157, 0.15);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 16px var(--primary-glow);
+}
+
+.vector-btn.selected::before {
+  background: var(--primary-color);
+}
+
+.vector-btn.cycling {
+  border-color: var(--secondary-color);
+  animation: vectorCyclePulse 0.15s infinite alternate;
+}
+
+@keyframes vectorCyclePulse {
+  0% { background: rgba(0, 225, 255, 0.1); }
+  100% { background: rgba(0, 225, 255, 0.3); }
+}
+
+.vector-top-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.vector-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.vector-glyph-icon {
+  width: 22px;
+  height: 22px;
+  stroke: var(--primary-color);
+  fill: none;
+  stroke-width: 1.5;
+  transition: transform 0.2s ease;
+}
+
+.vector-btn:hover .vector-glyph-icon {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.vector-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.vector-desc {
+  font-size: 9px;
+  color: var(--text-secondary);
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.vector-parity {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.vector-btn.selected .vector-parity {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+/* Vector Selector Footer info */
+.vector-deck-footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ------------------------------------------------------------- */
+/* FLOATING DECK RIGHT: TELEMETRY & TRACE RISK MATRIX            */
+/* ------------------------------------------------------------- */
+#telemetry-deck {
+  position: absolute;
+  top: 72px;
+  right: 28px;
+  width: 410px;
+  height: 740px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 10;
+}
+
+.telemetry-card {
+  background: rgba(4, 13, 20, 0.85);
+  border: 1px solid rgba(0, 255, 157, 0.15);
+  border-radius: 4px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.telemetry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.telemetry-label {
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+}
+
+.telemetry-value {
+  font-weight: 700;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--primary-color);
+}
+
+.meter-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.meter-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--primary-color);
+  box-shadow: 0 0 8px var(--primary-glow);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+}
+
+.meter-fill.warning {
+  background: var(--accent-amber);
+  box-shadow: 0 0 8px var(--accent-amber-glow);
+}
+
+.meter-fill.danger {
+  background: var(--accent-crimson);
+  box-shadow: 0 0 10px var(--accent-crimson-glow);
+}
+
+/* Target Data Payload Stream Preview */
+#active-cache-preview {
+  flex: 1;
+  background: rgba(2, 8, 13, 0.9);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 4px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.cache-preview-header {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cache-hex-stream {
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  word-break: break-all;
+  height: 100%;
+}
+
+/* ------------------------------------------------------------- */
+/* FLOATING BOTTOM: ADDRESS TRACK & BREACH CORE (Cluster 2)      */
+/* ------------------------------------------------------------- */
+#bottom-control-cluster {
+  position: absolute;
+  bottom: 24px;
+  left: 360px;
+  width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 15;
+}
+
+/* Address Track (7-Slot Cryptographic Sequence) */
+#address-track {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 24px;
+  background: rgba(3, 10, 16, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+}
+
+.track-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.address-slot {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(6, 18, 27, 0.9);
+  border: 1.5px dashed var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.address-slot.locked {
+  background: var(--primary-dark);
+  border: 1.5px solid var(--primary-color);
+  color: var(--primary-color);
+  box-shadow: 0 0 14px var(--primary-glow);
+  transform: scale(1.05);
+}
+
+.address-slot.active-target {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 10px var(--secondary-glow);
+  animation: slotPulse 1s infinite alternate;
+}
+
+@keyframes slotPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+/* Breach Core Console (Control Cluster 2) */
+#breach-core {
+  width: 920px;
+  background: var(--bg-panel-solid);
+  backdrop-filter: blur(16px);
+  border: 2px solid var(--border-glow);
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 25px var(--primary-glow);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.breach-status-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 340px;
+}
+
+.breach-state-badge {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+#breach-status-display {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.breach-controls-col {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Primary Execution Button */
+#btn-execute {
+  height: 52px;
+  padding: 0 28px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(3, 30, 20, 0.6);
+  border: 1.5px solid var(--border-subtle);
+  color: var(--text-muted);
+  border-radius: 4px;
+  cursor: not-allowed;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#btn-execute.ready {
+  background: var(--primary-color);
+  color: #020b06;
+  border-color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 25px var(--primary-color);
+  animation: readyPulse 1.2s infinite alternate;
+}
+
+@keyframes readyPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 20px var(--primary-color);
+  }
+  100% {
+    transform: scale(1.04);
+    box-shadow: 0 0 35px var(--primary-color), 0 0 10px #ffffff;
+  }
+}
+
+#btn-execute.active {
+  background: var(--secondary-color);
+  color: #02070e;
+  border-color: #ffffff;
+  box-shadow: 0 0 30px var(--secondary-color);
+}
+
+/* Disengage / Purge Button (Always reachable) */
+#btn-purge {
+  height: 52px;
+  padding: 0 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(30, 5, 12, 0.7);
+  border: 1.5px solid rgba(255, 42, 95, 0.4);
+  color: #ff8ca3;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#btn-purge:hover {
+  background: var(--accent-crimson);
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 0 20px var(--accent-crimson-glow);
+}
+
+/* Counter-Trace Isolator (Safety Interlock) */
+#toggle-isolator {
+  height: 52px;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(5, 18, 26, 0.85);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 140px;
+}
+
+.isolator-label {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.isolator-status {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* Default state: RELEASED (green) */
+#toggle-isolator.released .isolator-status {
+  color: var(--primary-color);
+}
+
+#toggle-isolator.released {
+  border-color: rgba(0, 255, 157, 0.3);
+}
+
+#toggle-isolator.released:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+/* Engaged state: ENGAGED (amber/red) */
+#toggle-isolator.engaged {
+  background: rgba(30, 15, 0, 0.85);
+  border-color: var(--accent-amber);
+  box-shadow: 0 0 15px var(--accent-amber-glow);
+}
+
+#toggle-isolator.engaged .isolator-status {
+  color: var(--accent-amber);
+}
+
+/* Interlock Warning Alert Modal */
+#interlock-alert-banner {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: rgba(45, 6, 16, 0.95);
+  backdrop-filter: blur(12px);
+  border: 2px solid var(--accent-crimson);
+  border-radius: 6px;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 85;
+  box-shadow: 0 0 35px var(--accent-crimson-glow);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#interlock-alert-banner.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.interlock-alert-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+}
+
+/* Corner Displays */
+#corner-left {
+  position: absolute;
+  bottom: 8px;
+  left: 28px;
+  font-size: 11px;
+  color: var(--text-muted);
+  z-index: 10;
+}
+
+#corner-left a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+#corner-left a:hover {
+  color: var(--primary-color);
+  text-shadow: 0 0 8px var(--primary-glow);
+}
+
+#corner-right {
+  position: absolute;
+  bottom: 8px;
+  right: 28px;
+  font-size: 11px;
+  color: var(--text-muted);
+  z-index: 10;
+  letter-spacing: 0.05em;
+}

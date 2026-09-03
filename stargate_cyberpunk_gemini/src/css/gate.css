@@ -1,0 +1,207 @@
+/* Khepri Cipher Terminal - The Rotating Firewall / ICE Barrier Ring */
+
+#gate-container {
+  position: absolute;
+  top: 60px;
+  left: 480px;
+  width: 960px;
+  height: 720px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Canvas for High-Performance Volumetric ICE Renders & Particle Effects */
+#gate-canvas {
+  position: absolute;
+  width: 720px;
+  height: 720px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* SVG Overlay for Vector Glyphs, Rings, and Precise Reticles */
+#gate-svg {
+  position: absolute;
+  width: 720px;
+  height: 720px;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Central Aperture Holographic Tunnel */
+.aperture-core {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 157, 0.05) 0%, rgba(2, 6, 10, 0.95) 75%);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+/* Stage: IDLE */
+.gate-idle .aperture-core {
+  box-shadow: inset 0 0 50px rgba(0, 255, 157, 0.1), 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Stage: PENDING (7/7 Locked) */
+.gate-pending .aperture-core {
+  box-shadow: inset 0 0 60px var(--primary-glow), 0 0 35px var(--primary-glow);
+  animation: pendingPulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes pendingPulse {
+  0% {
+    transform: scale(0.98);
+    box-shadow: inset 0 0 40px var(--primary-glow), 0 0 25px var(--primary-glow);
+  }
+  100% {
+    transform: scale(1.02);
+    box-shadow: inset 0 0 80px var(--primary-glow), 0 0 50px var(--primary-glow);
+  }
+}
+
+/* Stage 1: BUILDUP */
+.gate-buildup .aperture-core {
+  animation: buildupJitter 0.08s infinite alternate, buildupGlow 1.8s ease-in forwards;
+}
+
+@keyframes buildupJitter {
+  0% { transform: translate(-1px, 1px) scale(0.99); }
+  100% { transform: translate(1px, -1px) scale(1.01); }
+}
+
+@keyframes buildupGlow {
+  0% {
+    background: radial-gradient(circle, rgba(0, 255, 157, 0.15) 0%, rgba(2, 6, 10, 0.95) 70%);
+  }
+  50% {
+    background: radial-gradient(circle, rgba(0, 225, 255, 0.35) 10%, rgba(2, 6, 10, 0.85) 60%);
+  }
+  100% {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 20%, rgba(0, 255, 157, 0.9) 70%);
+    box-shadow: 0 0 90px var(--primary-color), inset 0 0 100px #ffffff;
+  }
+}
+
+/* Stage 2: BREAKTHROUGH */
+.gate-breakthrough .aperture-core {
+  transform: scale(1.12);
+  background: radial-gradient(circle, #ffffff 30%, var(--secondary-color) 70%, var(--bg-void) 100%);
+  box-shadow: 0 0 140px #ffffff, 0 0 180px var(--secondary-color);
+  transition: transform 0.1s ease-out;
+}
+
+/* Stage 3: SUSTAINED ACTIVE */
+.gate-active .aperture-core {
+  background: radial-gradient(circle at 50% 50%, 
+    rgba(0, 255, 157, 0.25) 0%, 
+    rgba(0, 225, 255, 0.4) 35%, 
+    rgba(2, 10, 18, 0.9) 80%);
+  box-shadow: 0 0 70px var(--primary-glow), inset 0 0 60px var(--secondary-glow);
+  animation: activeVortex 6s linear infinite;
+}
+
+@keyframes activeVortex {
+  0% {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  50% {
+    filter: hue-rotate(25deg) brightness(1.15);
+  }
+  100% {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+}
+
+/* Streaming Volumetric Data Tunnel inside Aperture */
+.aperture-stream {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease-in;
+}
+
+.gate-active .aperture-stream {
+  opacity: 1;
+}
+
+.stream-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed var(--secondary-color);
+  opacity: 0.7;
+  animation: streamTunnel 2.5s cubic-bezier(0.2, 0, 0.8, 1) infinite;
+}
+
+.stream-ring:nth-child(1) { animation-delay: 0s; }
+.stream-ring:nth-child(2) { animation-delay: 0.5s; }
+.stream-ring:nth-child(3) { animation-delay: 1.0s; }
+.stream-ring:nth-child(4) { animation-delay: 1.5s; }
+.stream-ring:nth-child(5) { animation-delay: 2.0s; }
+
+@keyframes streamTunnel {
+  0% {
+    width: 20px;
+    height: 20px;
+    opacity: 0.9;
+    border-color: #ffffff;
+    transform: rotate(0deg);
+  }
+  100% {
+    width: 250px;
+    height: 250px;
+    opacity: 0;
+    border-color: var(--primary-color);
+    transform: rotate(180deg);
+  }
+}
+
+/* Firewall Layer Destabilization HUD Indicators */
+#firewall-status-hud {
+  position: absolute;
+  bottom: 25px;
+  display: flex;
+  gap: 8px;
+  z-index: 12;
+  pointer-events: auto;
+}
+
+.firewall-pip {
+  width: 28px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--primary-dark);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.firewall-pip.locked {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.firewall-pip.destabilizing {
+  background: var(--secondary-color);
+  box-shadow: 0 0 14px var(--secondary-color);
+  animation: pipGlitch 0.2s infinite alternate;
+}
+
+@keyframes pipGlitch {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
