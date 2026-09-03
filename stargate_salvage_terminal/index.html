@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BONEYARD — Aperture Bench 3, Halvard Reach Breakers' Yard</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="stage" id="stage">
+<div class="console" id="console">
+
+  <!-- nameplate -->
+  <div class="title" id="title">BONEYARD</div>
+  <div class="subtitle hand">halvard reach breakers' yard &mdash; aperture bench 3 &mdash; collar rebuilt from three hulls</div>
+
+  <!-- ======= RING: the collar ======= -->
+  <section class="mod ring-panel" id="ringPanel">
+    <div class="plate">Aperture collar &middot; bench 3</div>
+    <div class="tape-label hand ring-note">rebuilt &times;3 &mdash; last: 2nd shift. seg 13 is dead, leave it.</div>
+    <svg id="ring" viewBox="0 0 600 600" aria-label="aperture collar"></svg>
+    <canvas id="aperture" width="96" height="96" hidden></canvas>
+    <div class="sticker dead-sticker">Dead seg<br>do not seat</div>
+    <div class="hand bay-note">dog bay &mdash; six dogs park here &#8599;</div>
+  </section>
+
+  <!-- ======= TAPE DECK ======= -->
+  <section class="mod deck" id="deck">
+    <div class="plate">Reel deck &middot; address log</div>
+    <div class="reel reel-l" id="reelL">
+      <svg viewBox="0 0 130 130"><circle cx="65" cy="65" r="60" class="reel-rim"/><path class="reel-spoke" d="M65,65 L65,10 M65,65 L112.6,92.5 M65,65 L17.4,92.5"/><circle cx="65" cy="65" r="14" class="reel-hub"/></svg>
+    </div>
+    <div class="reel reel-r" id="reelR">
+      <svg viewBox="0 0 130 130"><circle cx="65" cy="65" r="60" class="reel-rim"/><path class="reel-spoke" d="M65,65 L65,10 M65,65 L112.6,92.5 M65,65 L17.4,92.5"/><circle cx="65" cy="65" r="14" class="reel-hub"/></svg>
+    </div>
+    <div class="tape-path"></div>
+    <div class="counter" id="counter">0000</div>
+    <div class="deck-lamps">
+      <div class="lampset"><div class="lamp red" id="lampRec"></div><span>REC</span></div>
+      <div class="lampset"><div class="lamp green" id="lampPlay"></div><span>PLAY</span></div>
+      <div class="lampset"><div class="lamp amber" id="lampRun"></div><span>RUN</span></div>
+    </div>
+    <div class="slot"><span class="slot-k">CASSETTE:</span> <span class="slot-v" id="slotLabel">— none —</span></div>
+    <div class="tape-label hand deck-note">left reel squeals. ignore it.</div>
+  </section>
+
+  <!-- ======= PRINTOUT ======= -->
+  <section class="mod printout" id="printout">
+    <div class="plate">Log &middot; dot matrix</div>
+    <div class="paper" id="paper"></div>
+    <div class="hand print-note">ribbon's going &mdash; hit it if it fades</div>
+  </section>
+
+  <!-- ======= SCOPE ======= -->
+  <section class="mod scope" id="scopeMod">
+    <div class="plate">Read scope</div>
+    <div class="crt"><canvas id="scope" width="200" height="140"></canvas><div class="ghost">NO SIG</div><div class="px" style="left:44px;top:31px"></div><div class="px" style="left:151px;top:88px;background:#000;opacity:.9"></div></div>
+  </section>
+
+  <!-- ======= VU ======= -->
+  <section class="mod vu" id="vuMod">
+    <div class="plate">Line</div>
+    <svg viewBox="0 0 220 110" class="vu-svg">
+      <path d="M30,95 A80,80 0 0 1 190,95" class="vu-arc"/>
+      <path d="M150,45 A80,80 0 0 1 190,95" class="vu-arc-hot"/>
+      <g id="vuTicks"></g>
+      <line id="vuNeedle" x1="110" y1="95" x2="110" y2="22" class="vu-needle"/>
+      <circle cx="110" cy="95" r="6" class="vu-pivot"/>
+    </svg>
+  </section>
+
+  <!-- ======= CLUSTER A: SELECT & SEAT ======= -->
+  <section class="mod cluster cluster-a" id="clusterA">
+    <div class="plate">Select &amp; seat</div>
+    <div class="rotary" id="rotary" role="button" aria-label="mark selector, click left or right half to step">
+      <div class="ptr" id="rotaryPtr"></div>
+    </div>
+    <div class="hand rotary-note">turn it. one notch a click.</div>
+    <div class="readout">
+      <svg viewBox="-24 -24 48 48" class="readout-glyph"><path id="readoutGlyph" d=""/></svg>
+      <div class="readout-txt"><div class="readout-name" id="readoutName">HOOK</div><div class="readout-sub" id="readoutSub">mark 1 of 15</div></div>
+    </div>
+    <button class="btn" id="stepL" aria-label="previous mark">&#9664;</button>
+    <button class="btn" id="stepR" aria-label="next mark">&#9654;</button>
+    <div class="seated-row" id="seatedRow"></div>
+    <div class="toggle seat-toggle" id="seat" role="button" aria-label="SEAT: seat the selected mark">
+      <div class="tg-lab top">SEAT</div>
+      <div class="tg-body"></div>
+      <div class="tg-lever" id="seatLever"></div>
+      <div class="tg-lab bot">&mdash;</div>
+    </div>
+    <div class="sticker sticker-seat">One mark per flick</div>
+  </section>
+
+  <!-- ======= CLUSTER B: BREACH / DROP ======= -->
+  <section class="mod cluster cluster-b" id="clusterB">
+    <div class="plate">Breach / drop</div>
+    <div class="biglamp green" id="readyLamp"></div>
+    <div class="lamp-cap">READY</div>
+    <div class="toggle breach-toggle" id="breachWrap">
+      <div class="tg-lab top">BREACH</div>
+      <div class="tg-body"></div>
+      <div class="tg-lever" id="breachLever"></div>
+      <div class="tg-lab bot">OFF</div>
+      <div class="breach-hit" id="breach" role="button" aria-label="BREACH: open the route"></div>
+      <div class="cover" id="cover"></div>
+      <div class="hinge" id="hinge" role="button" aria-label="lift or shut the breach cover"></div>
+    </div>
+    <div class="hand cover-note">lift cover &#8593; then throw</div>
+    <button class="drop" id="drop" aria-label="DROP: disengage everything">DROP</button>
+  </section>
+
+  <!-- ======= CASSETTE RACK ======= -->
+  <section class="mod rack" id="rack">
+    <div class="plate">Tapes &middot; known routes</div>
+    <div class="hand rack-note">rewind them when you're done, I mean it</div>
+    <div id="cassettes"></div>
+  </section>
+
+  <!-- ======= LOCKOUT ======= -->
+  <section class="mod lockbox" id="lockbox">
+    <div class="plate">Yard lockout</div>
+    <div class="toggle lock-toggle" id="lockout" role="button" aria-label="YARD LOCKOUT: blocks seating and breach">
+      <div class="tg-lab top">ON</div>
+      <div class="tg-body"></div>
+      <div class="tg-lever" id="lockLever"></div>
+      <div class="tg-lab bot">OFF</div>
+    </div>
+    <div class="biglamp red" id="lockLamp"></div>
+    <div class="lamp-cap lock-cap">LOCKED</div>
+    <div class="sticker sticker-lock">Engage before anyone crawls in the collar</div>
+  </section>
+
+  <!-- ======= SPEAKER ======= -->
+  <section class="mod audiobox" id="audiobox">
+    <div class="plate">Spkr</div>
+    <div class="toggle spk-toggle" id="spk" role="button" aria-label="speaker on or off">
+      <div class="tg-lab top">ON</div>
+      <div class="tg-body"></div>
+      <div class="tg-lever on" id="spkLever"></div>
+      <div class="tg-lab bot">OFF</div>
+    </div>
+  </section>
+
+  <div class="hand scrawl">do NOT stack tapes on the deck!!</div>
+
+  <!-- overlays -->
+  <div class="grain"></div>
+  <div class="alarm-veil"></div>
+  <div class="tear"></div>
+  <div class="flash"></div>
+</div>
+</div>
+<div id="corner">BONEYARD v1.0.0 &middot; Built by Claude Fable 5.1</div>
+<script src="app.js"></script>
+</body>
+</html>

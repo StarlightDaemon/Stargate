@@ -1,0 +1,14 @@
+{
+  "name": "stargate-salvage-terminal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BONEYARD - Halvard Reach Breakers' Yard, Aperture Bench 3. A salvaged, low sci-fi portal-dialing console. Static site, no build step.",
+  "scripts": {
+    "serve": "node server.js",
+    "test": "node test/run-tests.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^24.0.0"
+  }
+}
