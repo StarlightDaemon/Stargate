@@ -2,7 +2,7 @@
 
 Aperture Bench 3 at the Halvard Reach breakers' yard: a portal-dialing console the yard crew rebuilt three times out of parts from three different hulls. This is the catalog's first Low Sci-Fi entry. Nothing here is sleek. The collar is a used instrument with a dead segment taped over, a dot-matrix log with a failing ribbon, a reel deck that logs every address to tape, a small read scope, a line meter, and a rack of hand-labelled cassettes holding the routes the crew trusts.
 
-Status: v1.0.0, built 2026-09-02, closed out 2026-09-03. Automated Puppeteer bench 77/77 on the final code (three runs; the last one includes every change). **Not operator-verified.** No human has dialed this build by hand. Automated passes in this project have repeatedly failed to hold up under real operator testing, so treat it as unconfirmed until someone actually dials it.
+Status: v1.0.0, built 2026-09-02, closed out 2026-09-03. Automated Puppeteer bench 77/77 on the committed code, four runs in total; the fourth ran during the close-out session on 2026-09-03 at 10:14 UTC and covers the alarm keyframe change. **Not operator-verified.** No human has dialed this build by hand, and no human has watched it render live in a browser. Automated passes in this project have repeatedly failed to hold up under real operator testing, so treat it as unconfirmed until someone actually dials it.
 
 Built by Claude Fable 5.1 (reasoning level: low, effort setting 25 as observed in-session).
 
@@ -34,7 +34,7 @@ The collar sits big and off-centre on the left. The bench modules cluster to the
 npm run serve
 ```
 
-Serves at http://127.0.0.1:8733/ (set `PORT` to override). Static files, no build step, no network.
+Serves at http://127.0.0.1:8733/ (set `PORT` to override). Static files, no build step, no network. This build has no entry in the repository's `.claude/launch.json`, so the in-app preview cannot start it by name; start it from a terminal with the command above (or `node server.js` in this folder) and open the URL in a browser.
 
 ```bash
 npm install
@@ -47,7 +47,8 @@ The bench spawns its own server on port 8734, drives system Chrome headless with
 
 - Sound starts on the first pointer press anywhere on the page, as browsers require. Until then the console is silent.
 - The stage is a fixed 1920x1080 layout scaled to fit. Below roughly 900px wide the hand labels get small; there is no separate mobile layout.
-- Visual evidence so far comes from headless Chrome screenshots only. The in-app Browser pane used during the build reported a hidden 0x0 viewport, so the page was never watched live during this build.
+- Visual evidence so far comes from headless Chrome screenshots only. The in-app Browser pane used during the build reported a hidden 0x0 viewport, so the page was never watched live during the build or its close-out session.
+- `preview.png` is a cold-start idle frame from headless Chrome (about 2 MB at 1920x1080). The builder checked it by opening the file, not by comparing it against a live render.
 - The tape counter and log timestamps are in-universe tape units, not real time.
 
 All destinations, names and iconography are fictional and original.
