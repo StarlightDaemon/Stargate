@@ -1,0 +1,406 @@
+/* WIDDERSHINS — The Gatehouse at Corvane Hollow.
+ * Everything is flat fill, stroke, and glow: spectral line-work standing in
+ * for iron, wax, stone and fog. No material is simulated. */
+
+:root {
+  --fit: 1;
+  --ink: #04060b;
+  --ink-2: #080c15;
+  --moon: #8fb8ff;
+  --moon-mid: #5a7fb8;
+  --moon-dim: #2c4468;
+  --witch: #7dffb0;
+  --witch-mid: #3fd48a;
+  --witch-deep: #1a6b47;
+  --amber: #ffb347;
+  --amber-deep: #ff7a1f;
+  --bone: #cfd6e4;
+  --bone-dim: #7d879a;
+  --salt: #f4f7ff;
+  --serif: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--serif);
+  overflow: hidden;
+  width: 100vw; height: 100vh; height: 100dvh;
+  display: flex; align-items: center; justify-content: center;
+}
+[hidden] { display: none !important; }
+button { font-family: inherit; cursor: pointer; }
+button:focus-visible { outline: 2px solid var(--witch); outline-offset: 3px; }
+
+#stage {
+  position: relative; width: 1920px; height: 1080px; flex: none;
+  transform: scale(var(--fit)); transform-origin: center center;
+  background:
+    radial-gradient(ellipse 900px 700px at 700px 560px, #0a1220 0%, rgba(10,18,32,0) 70%),
+    radial-gradient(ellipse 1200px 500px at 1500px 1100px, #071018 0%, rgba(7,16,24,0) 70%),
+    var(--ink);
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------- moon and vignette */
+#moon {
+  position: absolute; left: 104px; top: 214px; width: 140px; height: 140px; border-radius: 50%;
+  background: #b9cdf5;
+  box-shadow: 0 0 50px 16px rgba(143,184,255,0.2), 0 0 150px 60px rgba(143,184,255,0.08);
+  opacity: 0.8; transition: opacity 2s;
+}
+#moon::after { /* the crescent's shadow: a flat offset disc, no shading */
+  content: ""; position: absolute; left: 34px; top: -14px; width: 126px; height: 126px; border-radius: 50%;
+  background: var(--ink);
+}
+body[data-stage="buildup"] #moon { opacity: 0.25; }
+body[data-stage="active"] #moon { opacity: 0.55; }
+#vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 1300px 900px at 800px 520px, rgba(0,0,0,0) 55%, rgba(0,0,0,0.75) 100%);
+}
+
+/* ---------------------------------------------------------------- title and chrome */
+#title { position: absolute; left: 60px; top: 30px; z-index: 5; }
+#title h1 {
+  margin: 0; font-size: 44px; letter-spacing: 0.34em; font-weight: 400; color: var(--moon);
+  text-shadow: 0 0 12px rgba(143,184,255,0.7), 0 0 40px rgba(143,184,255,0.3);
+}
+#title .sub { margin: 4px 0 0 2px; font-size: 17px; letter-spacing: 0.22em; color: var(--bone); font-style: italic; }
+#title .sub2 { margin: 2px 0 0 2px; font-size: 12px; letter-spacing: 0.2em; color: var(--bone-dim); text-transform: uppercase; }
+#chrome { position: absolute; right: 200px; top: 34px; z-index: 30; display: flex; gap: 10px; }
+#chrome button {
+  background: transparent; color: var(--moon); border: 1px solid var(--moon-dim); border-radius: 3px;
+  font-size: 12px; letter-spacing: 0.2em; padding: 8px 12px; min-width: 40px;
+  box-shadow: 0 0 10px rgba(143,184,255,0.15) inset;
+}
+#chrome button:hover { border-color: var(--moon); box-shadow: 0 0 12px rgba(143,184,255,0.35); }
+
+/* ---------------------------------------------------------------- the lantern (the one warm light) */
+#lantern { position: absolute; left: 662px; top: 22px; width: 76px; height: 112px; z-index: 12; pointer-events: none; }
+#lantern .hook { position: absolute; left: 37px; top: 0; width: 2px; height: 14px; background: var(--moon-dim); box-shadow: 0 0 6px var(--moon-dim); }
+#lantern .frame {
+  position: absolute; left: 16px; top: 14px; width: 44px; height: 62px;
+  border: 2px solid var(--moon-mid); border-radius: 14px 14px 5px 5px;
+  box-shadow: 0 0 10px rgba(143,184,255,0.35), inset 0 0 12px rgba(255,179,71,0.25);
+}
+#lantern .frame::before, #lantern .frame::after {
+  content: ""; position: absolute; top: 4px; bottom: 4px; width: 1px; background: var(--moon-dim);
+}
+#lantern .frame::before { left: 12px; } #lantern .frame::after { right: 12px; }
+#lantern .flame {
+  position: absolute; left: 31px; top: 34px; width: 14px; height: 30px; transform-origin: 50% 100%;
+  animation: flick1 0.53s infinite alternate ease-in-out, flick2 0.83s infinite alternate ease-in-out;
+}
+#lantern .flame i {
+  position: absolute; left: 0; bottom: 0; width: 14px; height: 30px; display: block;
+  border-radius: 50% 50% 45% 45% / 62% 62% 38% 38%;
+  background: radial-gradient(ellipse at 50% 78%, #fff3c4 0%, var(--amber) 32%, var(--amber-deep) 68%, rgba(255,122,31,0) 100%);
+  box-shadow: 0 0 14px 4px rgba(255,179,71,0.75), 0 0 44px 16px rgba(255,140,40,0.35);
+}
+#lantern .cast {
+  position: absolute; left: -262px; top: 40px; width: 600px; height: 260px; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 12%, rgba(255,170,60,0.28) 0%, rgba(255,150,40,0.08) 40%, rgba(255,150,40,0) 70%);
+  animation: castFlick 1.7s infinite alternate ease-in-out;
+}
+@keyframes flick1 { from { transform: scaleY(0.92) skewX(-3deg); } to { transform: scaleY(1.08) skewX(4deg); } }
+@keyframes flick2 { from { opacity: 0.85; } 40% { opacity: 1; } to { opacity: 0.78; } }
+@keyframes castFlick { from { opacity: 0.8; } to { opacity: 1; } }
+#lantern.flare .flame { animation: flare 0.55s ease-out 1, flick1 0.53s infinite alternate ease-in-out; }
+@keyframes flare { 0% { transform: scale(1); } 30% { transform: scale(1.9, 2.3); } 100% { transform: scale(1); } }
+body[data-stage="buildup"] #lantern .flame { animation: buildFlame 0.19s infinite alternate ease-in-out; }
+@keyframes buildFlame { from { transform: scaleY(1.6) scaleX(0.9) skewX(-9deg); } to { transform: scaleY(2.2) scaleX(1.1) skewX(9deg); } }
+body[data-stage="breakthrough"] #lantern .flame { animation: none; transform: scaleY(0.55) skewX(38deg) translateX(8px); transition: transform 0.25s; }
+body[data-stage="active"] #lantern .flame { animation: flick1 0.31s infinite alternate ease-in-out, flick2 0.47s infinite alternate ease-in-out; transform-origin: 50% 100%; }
+body[data-stage="active"] #lantern .flame i { height: 22px; }
+#lantern.out .flame { opacity: 0; transition: opacity 0.12s; }
+#lantern.out .cast { opacity: 0; }
+
+/* ---------------------------------------------------------------- the beyond (under the fence svg) */
+#aperture {
+  --spin: 0deg;
+  position: absolute; left: 410px; top: 270px; width: 580px; height: 580px; border-radius: 50%;
+  background: transparent; z-index: 1; overflow: hidden; opacity: 0; transition: opacity 0.6s;
+}
+#aperture::before { /* slow witch-light wheel, turning widdershins */
+  content: ""; position: absolute; inset: -60px; border-radius: 50%;
+  background: conic-gradient(from calc(0deg - var(--spin)), #0b2219 0deg, #1f7a52 50deg, #7dffb0 95deg, #2f8f66 130deg, #0a1a2a 180deg, #3a5f95 220deg, #a9c4ff 255deg, #2c4468 300deg, #0b2219 360deg);
+  filter: blur(26px) saturate(1.1);
+}
+#aperture i { /* counter-turning inner wheel: the two wheels shear past each other */
+  position: absolute; inset: 60px; border-radius: 50%; display: block;
+  background: conic-gradient(from calc(var(--spin) * 2), rgba(125,255,176,0) 0deg, rgba(125,255,176,0.55) 40deg, rgba(234,255,242,0.8) 70deg, rgba(125,255,176,0) 120deg, rgba(143,184,255,0) 200deg, rgba(143,184,255,0.5) 250deg, rgba(143,184,255,0) 300deg);
+  filter: blur(18px); opacity: 0.85;
+}
+#aperture::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(234,255,242,0.75) 0%, rgba(125,255,176,0.25) 14%, rgba(8,17,31,0) 34%, rgba(4,6,11,0.35) 72%, rgba(4,6,11,0.95) 100%);
+}
+body[data-stage="active"] #aperture { opacity: 1; }
+body[data-stage="breakthrough"] #aperture { opacity: 0.8; }
+body[data-stage="refused"] #aperture { opacity: 0.6; }
+body[data-stage="refused"] #aperture::before { background: radial-gradient(circle, #1c1f26 0%, #0a0b10 60%, #04060b 100%); filter: blur(10px); }
+
+/* ---------------------------------------------------------------- the fence-ring */
+#fenceSvg { position: absolute; left: 200px; top: 60px; width: 1000px; height: 1000px; z-index: 4; overflow: visible; }
+#fence { filter: url(#glow); }
+.rail { fill: none; stroke: var(--moon-dim); stroke-width: 3; transition: stroke 0.8s; }
+.rail-in { stroke-width: 2; stroke-dasharray: 2 6; }
+.rivet { stroke: var(--moon-dim); stroke-width: 2; }
+.picket .shaft { stroke: var(--moon-mid); stroke-width: 3; stroke-linecap: round; transition: stroke 0.4s; }
+.picket .finial { fill: var(--moon-dim); stroke: var(--moon-mid); stroke-width: 1.5; stroke-linejoin: round; transition: fill 0.4s, stroke 0.4s; }
+.picket .collar { stroke: var(--moon-dim); stroke-width: 3; }
+.picket .plate { fill: var(--ink-2); stroke: var(--moon-dim); stroke-width: 2; transition: stroke 0.4s, fill 0.4s; }
+.picket .sigil { fill: none; stroke: var(--moon); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; opacity: 0.75; transition: stroke 0.4s, opacity 0.4s; }
+.picket .ember { fill: var(--witch); opacity: 0; }
+.picket.turning .sigil { stroke: var(--bone); opacity: 1; }
+.picket.turning .plate { stroke: var(--moon); }
+.picket.taking .finial { fill: var(--amber); stroke: #fff2c4; }
+.picket.taking .ember { opacity: 1; fill: var(--amber); animation: emberPop 0.5s ease-out; }
+.picket.taking .sigil { stroke: #fff2c4; opacity: 1; }
+@keyframes emberPop { 0% { r: 3; } 50% { r: 22; opacity: 0.9; } 100% { r: 6; } }
+.picket.caught .shaft { stroke: var(--witch-mid); }
+.picket.caught .finial { fill: var(--witch); stroke: var(--witch); }
+.picket.caught .plate { stroke: var(--witch-mid); fill: #0a1f16; }
+.picket.caught .sigil { stroke: var(--witch); opacity: 1; }
+.picket.caught .ember { opacity: 1; animation: emberBreathe 1.6s infinite alternate ease-in-out; }
+@keyframes emberBreathe { from { opacity: 0.5; r: 3; } to { opacity: 1; r: 5.5; } }
+.chain {
+  fill: none; stroke: var(--witch); stroke-width: 4; stroke-linecap: round;
+  stroke-dasharray: 9 7; opacity: 0.9;
+  animation: chainDraw 0.7s ease-out;
+}
+@keyframes chainDraw { from { opacity: 0; stroke-width: 1; } to { opacity: 0.9; stroke-width: 4; } }
+#lanternMark path { fill: none; stroke: var(--amber); stroke-width: 2.5; stroke-linecap: round; opacity: 0.8; }
+#ghost { fill: var(--moon); filter: url(#glow); }
+body[data-stage="buildup"] .rail, body[data-stage="breakthrough"] .rail, body[data-stage="active"] .rail { stroke: var(--witch-mid); }
+body[data-stage="active"] .rivet { stroke: var(--witch-deep); }
+
+/* the leaves of the gate */
+#leaves { filter: url(#glow); }
+.leaf-face { fill: #050912; stroke: var(--moon-mid); stroke-width: 3; }
+.scroll { fill: none; stroke: var(--moon-dim); stroke-width: 2.5; stroke-linecap: round; transition: stroke 1s; }
+.scroll.thin { stroke-width: 1.5; }
+.stud { fill: var(--moon-dim); }
+.finial-leaf { fill: var(--moon-dim); }
+.leaf { transform-box: view-box; transition: transform 0.55s cubic-bezier(0.7, 0, 0.3, 1); }
+#leafL { transform-origin: 212px 500px; }
+#leafR { transform-origin: 788px 500px; }
+body[data-stage="breakthrough"] .leaf, body[data-stage="active"] .leaf { transform: scaleX(0.04); }
+body[data-stage="refused"] .leaf { transform: scaleX(1); transition-duration: 0.18s; transition-timing-function: cubic-bezier(0.6, 0, 1, 1); }
+body[data-stage="buildup"] .leaf { animation: rattle 0.12s infinite alternate; }
+@keyframes rattle { from { transform: translateX(-1.5px); } to { transform: translateX(1.5px); } }
+body[data-stage="pending"] .scroll, body[data-stage="buildup"] .scroll { stroke: var(--witch-deep); }
+#gatebar rect { fill: var(--moon-dim); stroke: var(--moon-mid); stroke-width: 1.5; }
+#gatebar circle { fill: var(--moon-mid); }
+#gatebar { transform-box: view-box; transition: transform 0.6s ease, opacity 0.6s; }
+body:not([data-stage="idle"]) #gatebar { transform: translateY(-70px); opacity: 0; }
+
+/* haze, flash, rays, wisps */
+#haze { fill: url(#hazeGrad); opacity: 0; }
+body[data-stage="buildup"] #haze { animation: hazeRise 2.4s linear forwards, hazeBreathe 0.5s infinite alternate ease-in-out; }
+@keyframes hazeRise { from { opacity: 0.1; } to { opacity: 1; } }
+@keyframes hazeBreathe { from { transform: scale(0.96); } to { transform: scale(1.04); } }
+#haze { transform-box: view-box; transform-origin: 500px 500px; }
+body[data-stage="breakthrough"] #haze { opacity: 0.6; }
+#flash { fill: #dfffe9; opacity: 0; }
+body[data-stage="breakthrough"] #flash { animation: flash 0.8s ease-out forwards; }
+@keyframes flash { 0% { opacity: 1; } 55% { opacity: 0.92; } 100% { opacity: 0; } }
+#rays line { stroke: var(--witch); stroke-width: 3; stroke-linecap: round; opacity: 0; filter: url(#glowBig); }
+body[data-stage="breakthrough"] #rays line { animation: rayOut 0.8s ease-out forwards; }
+body[data-stage="active"] #rays line { animation: rayBreathe 2.2s infinite alternate ease-in-out; }
+@keyframes rayOut { 0% { opacity: 0; stroke-dasharray: 0 400; } 25% { opacity: 1; stroke-dasharray: 200 400; } 100% { opacity: 0.55; stroke-dasharray: 190 400; } }
+@keyframes rayBreathe { from { opacity: 0.35; } to { opacity: 0.7; } }
+#wisps circle { fill: var(--witch); opacity: 0; filter: url(#glow); }
+body[data-stage="breakthrough"] #wisps circle, body[data-stage="active"] #wisps circle { opacity: 0.8; }
+
+/* ---------------------------------------------------------------- salt, status, warn */
+#saltLine {
+  position: absolute; left: 330px; top: 984px; width: 740px; height: 0; z-index: 6;
+  border-top: 3px dashed rgba(244,247,255,0.16);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+body.salt #saltLine {
+  border-top-color: var(--salt);
+  box-shadow: 0 0 14px 3px rgba(244,247,255,0.6), 0 0 40px 8px rgba(244,247,255,0.25);
+  animation: saltPulse 1.1s infinite alternate ease-in-out;
+}
+@keyframes saltPulse { from { opacity: 0.75; } to { opacity: 1; } }
+#status {
+  position: absolute; left: 200px; top: 1004px; width: 1000px; text-align: center; z-index: 7;
+  font-size: 22px; letter-spacing: 0.32em; color: var(--moon);
+  text-shadow: 0 0 10px rgba(143,184,255,0.7), 0 0 30px rgba(143,184,255,0.35);
+}
+body[data-stage="pending"] #status { color: var(--witch); text-shadow: 0 0 10px rgba(125,255,176,0.8), 0 0 30px rgba(125,255,176,0.4); }
+body[data-stage="buildup"] #status, body[data-stage="breakthrough"] #status { color: #eafff2; animation: statusBlink 0.4s infinite alternate; }
+body[data-stage="active"] #status { color: var(--witch); text-shadow: 0 0 14px var(--witch), 0 0 40px rgba(125,255,176,0.5); }
+body[data-stage="refused"] #status { color: var(--bone-dim); }
+@keyframes statusBlink { from { opacity: 0.6; } to { opacity: 1; } }
+#warn {
+  position: absolute; left: 200px; top: 1040px; width: 1000px; text-align: center; z-index: 8;
+  font-size: 14px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--salt);
+  opacity: 0; transition: opacity 0.2s;
+  text-shadow: 0 0 10px rgba(244,247,255,0.8);
+}
+#warn.on { opacity: 1; }
+#warn.blink { animation: warnBlink 0.35s infinite alternate; }
+@keyframes warnBlink { from { opacity: 0.35; } to { opacity: 1; } }
+
+/* ---------------------------------------------------------------- the ward fence (control cluster 1) */
+#wardsWrap { position: absolute; left: 1206px; top: 96px; width: 110px; z-index: 10; }
+#wardsWrap h2, #ledger h2, #keysWrap h2 {
+  margin: 0 0 8px; font-size: 12px; letter-spacing: 0.3em; font-weight: 400; color: var(--bone-dim); text-transform: uppercase;
+}
+#wardsWrap h2 { text-align: center; }
+#wardsWrap .hint { margin: 8px 0 0; font-size: 10px; letter-spacing: 0.12em; color: var(--bone-dim); text-align: center; font-style: italic; line-height: 1.3; }
+#wards { display: flex; flex-direction: column; gap: 6px; }
+.ward {
+  position: relative; width: 110px; height: 56px; padding: 0 0 0 6px; display: flex; align-items: center; gap: 6px;
+  background: rgba(8,12,21,0.85); border: 1px solid var(--moon-dim); border-left: 3px solid var(--moon-mid); border-radius: 2px;
+  color: var(--bone); transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.ward::before { /* the picket's spear, seen face-on */
+  content: ""; position: absolute; left: -3px; top: -7px; width: 0; height: 0;
+  border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 8px solid var(--moon-mid); margin-left: -2.5px;
+}
+.ward svg { width: 36px; height: 36px; flex: none; }
+.ward svg path { fill: none; stroke: var(--moon); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.ward .wname { font-size: 12px; letter-spacing: 0.1em; }
+.ward:hover { border-color: var(--moon); box-shadow: 0 0 12px rgba(143,184,255,0.35); background: rgba(12,20,36,0.95); }
+.ward.turning { border-left-color: var(--bone); box-shadow: 0 0 14px rgba(207,214,228,0.4); }
+.ward.turning svg path { stroke: #fff; }
+.ward.caught { border-color: var(--witch-mid); border-left-color: var(--witch); box-shadow: 0 0 14px rgba(125,255,176,0.45); background: rgba(10,31,22,0.95); }
+.ward.caught::before { border-bottom-color: var(--witch); }
+.ward.caught svg path { stroke: var(--witch); }
+.ward.caught .wname { color: var(--witch); }
+
+/* ---------------------------------------------------------------- the gate-book */
+#ledger {
+  position: absolute; left: 1340px; top: 96px; width: 300px; height: 590px; z-index: 10;
+  display: flex; flex-direction: column; overflow: hidden;
+  padding: 12px 14px; border: 1px solid var(--moon-dim); border-radius: 2px;
+  background: rgba(6,9,16,0.7); box-shadow: inset 0 0 30px rgba(44,68,104,0.18);
+}
+#ledger .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dotted rgba(44,68,104,0.7); }
+#ledger .row.note { border-bottom: none; padding-top: 0; }
+#ledger .k { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-dim); flex: none; }
+#ledger .v { font-size: 14px; color: var(--bone); text-align: right; letter-spacing: 0.04em; }
+#ledger .row.note .v { font-size: 12px; font-style: italic; color: var(--bone-dim); text-align: right; width: 100%; min-height: 16px; }
+#ledRoad { color: var(--witch); letter-spacing: 0.1em; }
+.stones { display: inline-flex; gap: 6px; }
+.wardstone {
+  width: 14px; height: 14px; display: inline-block; transform: rotate(45deg);
+  border: 1px solid var(--moon-dim); background: var(--ink-2); transition: background 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.wardstone.lit { background: var(--witch); border-color: var(--witch); box-shadow: 0 0 10px var(--witch); }
+#log { margin-top: 10px; flex: 1; min-height: 0; overflow: hidden; font-size: 12.5px; line-height: 1.45; color: var(--bone-dim); }
+#log p { margin: 0 0 6px; padding-left: 12px; text-indent: -12px; }
+#log p::before { content: "— "; color: var(--moon-dim); }
+#log p:first-child { color: var(--bone); }
+#log p.caught { color: var(--witch-mid); }
+#log p.mark { color: var(--moon); }
+#log p.refused { color: #d9b9a0; font-style: italic; }
+
+/* ---------------------------------------------------------------- the threshold cluster (control cluster 2) */
+#threshold { position: absolute; left: 1660px; top: 0; width: 200px; height: 700px; z-index: 10; }
+#rope {
+  position: absolute; left: 96px; top: 0; width: 8px; height: 396px;
+  background: repeating-linear-gradient(-55deg, var(--moon-dim) 0 5px, var(--moon-mid) 5px 8px, var(--moon-dim) 8px 11px);
+  box-shadow: 0 0 8px rgba(143,184,255,0.3); border-radius: 4px;
+  transition: transform 0.15s;
+}
+#threshold button {
+  position: absolute; left: 0; width: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  background: rgba(6,9,16,0.85); color: var(--bone); border: 1px solid var(--moon-dim); border-radius: 3px;
+  transition: box-shadow 0.25s, border-color 0.25s, transform 0.15s, background 0.25s;
+}
+#threshold button .big { font-size: 15px; letter-spacing: 0.24em; }
+#threshold button .small { font-size: 10px; letter-spacing: 0.08em; color: var(--bone-dim); font-style: italic; }
+#bell {
+  top: 396px; height: 96px; border-color: var(--amber); color: var(--amber);
+  border-radius: 8px 8px 30px 30px; box-shadow: 0 0 18px rgba(255,179,71,0.35), inset 0 0 20px rgba(255,179,71,0.12);
+}
+#bell::after { /* tassel */
+  content: ""; position: absolute; left: 92px; bottom: -22px; width: 16px; height: 22px;
+  background: linear-gradient(to bottom, var(--amber), rgba(255,179,71,0)); border-radius: 0 0 8px 8px;
+}
+#bell:hover { box-shadow: 0 0 28px rgba(255,179,71,0.6), inset 0 0 24px rgba(255,179,71,0.2); }
+#bell.tug { animation: tug 0.35s ease-out; }
+@keyframes tug { 0% { transform: translateY(0); } 35% { transform: translateY(14px); } 100% { transform: translateY(0); } }
+body[data-stage="pending"] #bell { animation: bellReady 1.4s infinite alternate ease-in-out; }
+@keyframes bellReady { from { box-shadow: 0 0 18px rgba(255,179,71,0.35), inset 0 0 20px rgba(255,179,71,0.12); } to { box-shadow: 0 0 36px rgba(255,179,71,0.85), inset 0 0 28px rgba(255,179,71,0.3); } }
+#bar { top: 540px; height: 64px; border-color: var(--moon-mid); }
+#bar:hover { border-color: var(--moon); box-shadow: 0 0 16px rgba(143,184,255,0.4); }
+#salt { top: 622px; height: 64px; border-color: var(--bone-dim); }
+#salt:hover { border-color: var(--salt); box-shadow: 0 0 14px rgba(244,247,255,0.3); }
+body.salt #salt { border-color: var(--salt); color: var(--salt); box-shadow: 0 0 22px rgba(244,247,255,0.55); background: rgba(24,28,40,0.95); }
+body.salt #salt .small { color: var(--salt); }
+
+/* ---------------------------------------------------------------- the remembered hands (quick-dial keys) */
+#keysWrap { position: absolute; left: 1340px; top: 706px; width: 520px; z-index: 10; }
+#keysWrap h2 span { display: block; font-size: 10px; letter-spacing: 0.12em; text-transform: none; font-style: italic; margin-top: 2px; }
+#keys { display: flex; gap: 8px; }
+.key {
+  position: relative; width: 97.6px; height: 176px; padding: 6px 4px 8px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px;
+  background: rgba(6,9,16,0.7); border: 1px solid rgba(44,68,104,0.7); border-radius: 2px; color: var(--bone);
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.key::before { /* the hook */
+  content: ""; position: absolute; left: 50%; top: -1px; width: 12px; height: 8px; margin-left: -6px;
+  border: 2px solid var(--moon-dim); border-top: none; border-radius: 0 0 8px 8px;
+}
+.key svg { width: 40px; height: 96px; }
+.key svg path, .key svg circle { fill: none; stroke: var(--moon-mid); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.25s; }
+.key svg .hook { stroke: var(--moon-dim); }
+.key .kroad { font-size: 10.5px; letter-spacing: 0.08em; text-align: center; line-height: 1.25; color: var(--bone); }
+.key .khand { font-size: 9.5px; font-style: italic; color: var(--bone-dim); text-align: center; line-height: 1.2; }
+.key:hover { border-color: var(--moon); box-shadow: 0 0 12px rgba(143,184,255,0.3); }
+.key:hover svg path, .key:hover svg circle { stroke: var(--moon); }
+.key.active { border-color: var(--witch); box-shadow: 0 0 16px rgba(125,255,176,0.45); }
+.key.active svg path, .key.active svg circle { stroke: var(--witch); animation: keyTurn 0.9s infinite alternate ease-in-out; }
+@keyframes keyTurn { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
+.key.active svg { transform-origin: 50% 22%; }
+
+/* ---------------------------------------------------------------- fog: rolls and thins across the base */
+#fog { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 5; pointer-events: none; overflow: hidden; }
+#fog .bank {
+  position: absolute; border-radius: 50%; filter: blur(22px);
+  background: radial-gradient(ellipse at 50% 55%, rgba(150,180,215,0.34) 0%, rgba(120,160,200,0.14) 45%, rgba(120,160,200,0) 70%);
+  transition: opacity 2s;
+}
+#fog .b1 { left: -300px; top: 760px; width: 1100px; height: 300px; animation: roll1 34s linear infinite, thin1 11s ease-in-out infinite alternate; }
+#fog .b2 { left: 500px; top: 820px; width: 900px; height: 260px; animation: roll2 27s linear infinite, thin2 9s ease-in-out infinite alternate; }
+#fog .b3 { left: 100px; top: 880px; width: 1400px; height: 320px; animation: roll3 41s linear infinite, thin1 13s ease-in-out infinite alternate; opacity: 0.8; }
+#fog .b4 { left: 900px; top: 900px; width: 1200px; height: 300px; animation: roll1 23s linear infinite reverse, thin2 7s ease-in-out infinite alternate; }
+#fog .b5 { left: -100px; top: 640px; width: 700px; height: 220px; animation: roll2 38s linear infinite reverse, thin1 15s ease-in-out infinite alternate; opacity: 0.5; }
+@keyframes roll1 { from { transform: translateX(-140px); } to { transform: translateX(700px); } }
+@keyframes roll2 { from { transform: translateX(0); } to { transform: translateX(-900px); } }
+@keyframes roll3 { from { transform: translateX(300px); } to { transform: translateX(-600px); } }
+@keyframes thin1 { from { opacity: 0.35; } to { opacity: 1; } }
+@keyframes thin2 { from { opacity: 1; } to { opacity: 0.3; } }
+body[data-stage="buildup"] #fog { animation: fogRise 2.4s ease-in forwards; }
+@keyframes fogRise { from { transform: translateY(0); } to { transform: translateY(-160px); } }
+body[data-stage="buildup"] #fog .bank { background: radial-gradient(ellipse at 50% 55%, rgba(125,255,176,0.30) 0%, rgba(80,200,140,0.14) 45%, rgba(80,200,140,0) 70%); }
+body[data-stage="active"] #fog { opacity: 0.4; transition: opacity 3s; }
+body[data-stage="active"] #fog .bank { background: radial-gradient(ellipse at 50% 55%, rgba(125,255,176,0.22) 0%, rgba(80,200,140,0.08) 45%, rgba(80,200,140,0) 70%); }
+body[data-stage="breakthrough"] #fog { transform: translateY(-160px); opacity: 0.7; }
+
+/* ---------------------------------------------------------------- the gate-book overlay */
+#guide { position: absolute; inset: 0; z-index: 40; background: rgba(2,4,8,0.82); display: flex; align-items: center; justify-content: center; }
+#guide .page {
+  position: relative; width: 780px; max-height: 940px; overflow: auto; padding: 36px 44px;
+  background: #080c15; border: 1px solid var(--moon-dim); box-shadow: 0 0 60px rgba(143,184,255,0.15);
+  color: var(--bone); font-size: 15px; line-height: 1.55;
+}
+#guide h2 { margin: 0 0 10px; font-size: 26px; letter-spacing: 0.2em; font-weight: 400; color: var(--moon); }
+#guide h3 { margin: 18px 0 6px; font-size: 13px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--witch-mid); font-weight: 400; }
+#guide p, #guide li { margin: 0 0 8px; }
+#guide ol { padding-left: 22px; }
+#guide strong { color: var(--witch); font-weight: 400; }
+#guide em { color: var(--bone-dim); }
+#guideClose {
+  position: absolute; right: 12px; top: 10px; width: 36px; height: 36px; font-size: 22px; line-height: 1;
+  background: transparent; color: var(--moon); border: 1px solid var(--moon-dim); border-radius: 3px;
+}

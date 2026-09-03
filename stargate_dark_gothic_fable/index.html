@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WIDDERSHINS — The Gatehouse at Corvane Hollow</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-stage="idle" data-turning="">
+<div id="stage">
+
+  <div id="moon"></div>
+  <div id="vignette"></div>
+
+  <header id="title">
+    <h1>WIDDERSHINS</h1>
+    <p class="sub">The Gatehouse at Corvane Hollow</p>
+    <p class="sub2">fence-ring mechanism · the iron turns counter-sunwise only</p>
+  </header>
+
+  <nav id="chrome">
+    <button id="soundBtn" type="button">SOUND ON</button>
+    <button id="guideBtn" type="button" aria-label="open the gate-book">?</button>
+  </nav>
+
+  <!-- the keeper's lantern: the one warm light, where a ward takes flame -->
+  <div id="lantern" aria-hidden="true">
+    <div class="hook"></div>
+    <div class="frame"></div>
+    <div class="flame"><i></i></div>
+    <div class="cast"></div>
+  </div>
+
+  <!-- the beyond: what the open gate opens on (sits under the fence svg) -->
+  <div id="aperture" aria-hidden="true"><i></i></div>
+
+  <!-- the fence-ring -->
+  <svg id="fenceSvg" viewBox="0 0 1000 1000" aria-hidden="true">
+    <defs>
+      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="3" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="glowBig" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="9" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <radialGradient id="hazeGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#eafff2" stop-opacity="0.9"/>
+        <stop offset="28%" stop-color="#7dffb0" stop-opacity="0.55"/>
+        <stop offset="70%" stop-color="#1f7a52" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="#0b2219" stop-opacity="0"/>
+      </radialGradient>
+      <g id="leafShape">
+        <path class="leaf-face" d="M500 212 A288 288 0 0 0 500 788 Z"/>
+        <path class="scroll" d="M470 300 C380 300 318 400 318 500 C318 600 380 700 470 700"/>
+        <path class="scroll" d="M456 380 C400 380 372 440 372 500 C372 560 400 620 456 620"/>
+        <path class="scroll" d="M430 440 C404 440 396 470 396 500 C396 530 404 560 430 560"/>
+        <path class="scroll" d="M300 500 c0 -46 34 -70 66 -58 c30 12 34 52 6 62 c-22 8 -40 -10 -30 -28"/>
+        <path class="scroll" d="M262 330 c40 -20 84 -6 96 30 c10 32 -18 60 -46 46"/>
+        <path class="scroll" d="M262 670 c40 20 84 6 96 -30 c10 -32 -18 -60 -46 -46"/>
+        <path class="scroll thin" d="M490 240 v520"/>
+        <circle class="stud" cx="490" cy="300" r="4"/><circle class="stud" cx="490" cy="500" r="4"/><circle class="stud" cx="490" cy="700" r="4"/>
+        <path class="finial-leaf" d="M470 300 l-14 -26 l14 -8 l14 8 z"/>
+        <path class="finial-leaf" d="M470 700 l-14 26 l14 8 l14 -8 z"/>
+      </g>
+    </defs>
+
+    <!-- salt is an HTML line across the threshold; see #saltLine -->
+    <g id="leaves">
+      <g id="leafL" class="leaf"><use href="#leafShape"/></g>
+      <g id="leafR" class="leaf"><use href="#leafShape" transform="matrix(-1 0 0 1 1000 0)"/></g>
+      <g id="gatebar"><rect x="410" y="492" width="180" height="14" rx="4"/><circle cx="430" cy="499" r="4"/><circle cx="570" cy="499" r="4"/></g>
+    </g>
+    <circle id="haze" cx="500" cy="500" r="286"/>
+    <g id="wisps"></g>
+    <circle id="flash" cx="500" cy="500" r="300"/>
+    <g id="rays"></g>
+    <g id="fence" transform="rotate(0 500 500)"><g id="chain"></g></g>
+    <g id="lanternMark">
+      <path d="M470 42 l8 20 M530 42 l-8 20"/>
+      <path d="M500 12 v14"/>
+    </g>
+    <circle id="ghost" cx="500" cy="120" r="5"/>
+  </svg>
+
+  <div id="saltLine" aria-hidden="true"></div>
+  <div id="status" aria-live="polite">THE GATE STANDS BARRED</div>
+  <div id="warn" aria-live="assertive"></div>
+
+  <!-- the ward fence: thirteen pickets seen face-on (control cluster 1) -->
+  <section id="wardsWrap" aria-label="the wards">
+    <h2>THE WARDS</h2>
+    <div id="wards"></div>
+    <p class="hint">press a ward · the fence turns to it</p>
+  </section>
+
+  <!-- the gate-book: ledger of what the mechanism knows -->
+  <section id="ledger" aria-label="the gate-book">
+    <h2>THE GATE-BOOK</h2>
+    <div class="row"><span class="k">wards caught</span><span class="v stones"><i class="wardstone"></i><i class="wardstone"></i><i class="wardstone"></i><i class="wardstone"></i><i class="wardstone"></i><i class="wardstone"></i></span></div>
+    <div class="row"><span class="k">turning</span><span class="v" id="ledTurning">still</span></div>
+    <div class="row"><span class="k">the fence</span><span class="v" id="ledFence">0° · still</span></div>
+    <div class="row"><span class="k">the road beyond</span><span class="v" id="ledRoad">—</span></div>
+    <div class="row note"><span class="v" id="ledNote"></span></div>
+    <div class="row"><span class="k">remembered hand</span><span class="v" id="ledHand">none</span></div>
+    <div class="row"><span class="k">the salt</span><span class="v" id="saltState">UNLAID</span></div>
+    <div id="log" aria-label="the ledger"></div>
+  </section>
+
+  <!-- the threshold cluster: bell-pull, bar, salt (control cluster 2) -->
+  <section id="threshold" aria-label="the threshold">
+    <div id="rope"></div>
+    <button id="bell" type="button"><span class="big">RING THE BELL</span><span class="small">the only thing that opens it</span></button>
+    <button id="bar" type="button"><span class="big">BAR THE GATE</span><span class="small">drop the bar · every ward goes dark</span></button>
+    <button id="salt" type="button" role="switch" aria-checked="false"><span class="big">SALT LINE</span><span class="small">lay a line across the threshold</span></button>
+  </section>
+
+  <!-- the remembered hands: keys on hooks (quick-dial) -->
+  <section id="keysWrap" aria-label="the remembered hands">
+    <h2>THE REMEMBERED HANDS <span>keys the iron has turned for before</span></h2>
+    <div id="keys"></div>
+  </section>
+
+  <!-- fog rolls across the base of the console -->
+  <div id="fog" aria-hidden="true">
+    <div class="bank b1"></div><div class="bank b2"></div><div class="bank b3"></div><div class="bank b4"></div><div class="bank b5"></div>
+  </div>
+
+  <!-- the gate-book overlay -->
+  <div id="guide" hidden>
+    <div class="page">
+      <button id="guideClose" type="button" aria-label="close">×</button>
+      <h2>The Gate-Book</h2>
+      <p><em>Corvane Hollow, the gatehouse. The estate is long empty; the mechanism is not.</em></p>
+      <h3>To open the gate</h3>
+      <ol>
+        <li><strong>Choose six wards</strong> from the fence at the right. Each press turns the whole fence-ring <strong>widdershins</strong> — counter-sunwise, the only way it will go — until that ward's finial reaches the keeper's lantern at the top. There it <strong>takes flame</strong> from the one candle, and a ghost-chain binds it to the last ward caught. The fence will not catch a ward without turning; if the finial already stands at the lantern it goes the full round.</li>
+        <li>With six wards bound, <strong>the bar lifts</strong> and the gate stands unbarred — and nothing more happens on its own.</li>
+        <li><strong>Ring the bell.</strong> The bell tolls three times while the fence spins faster and the gate fills with witch-light (the buildup). Then the leaves fling open (the breakthrough), and the gate stands open on the road beyond.</li>
+        <li><strong>Bar the gate</strong> at any moment — mid-turn, unbarred, ringing, or open. The bar drops, every ward goes dark, and the fence rests where it stopped.</li>
+      </ol>
+      <h3>The remembered hands</h3>
+      <p>Five keys hang on hooks. Each is a turning the iron has done before; lift one and the fence turns itself along the remembered groove — faster than a living hand, because it does not hesitate, but still one ward at a time, because it still has to bring each finial to the lantern. It lands unbarred, not open. It only remembers from rest.</p>
+      <h3>The salt</h3>
+      <p>A line of salt across the threshold stops everything: the iron will not turn, no remembered hand crosses, the bell does not answer. It is unlaid by default. Lay it and the line burns white until you sweep it away.</p>
+      <h3>One road</h3>
+      <p>One key opens on a parish nobody has come back from. The gate opens. Something knocks back.</p>
+    </div>
+  </div>
+
+</div>
+
+<script src="wards.js"></script>
+<script src="audio.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

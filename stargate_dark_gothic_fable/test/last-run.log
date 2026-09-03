@@ -1,0 +1,154 @@
+
+== A. Cold start ==
+  PASS  simulated 4K (3840×2160): --fit is a bare number 2  — fit=2
+  PASS  4K: stage transform applied  — matrix(2, 0, 0, 2, 0, 0)
+        shot -> test\screenshots\01_cold_start_4k.png
+  PASS  1080p (1920×1080): --fit is 1  — fit=1
+  PASS  1080p: stage transform applied  — matrix(1, 0, 0, 1, 0, 0)
+  PASS  cold start is idle: no ward caught, fence still  — {"stage":"idle","locked":[]}
+  PASS  salt line defaults to UNLAID (interlock released)  — salt=false
+  PASS  no warning shown on cold start
+  PASS  gate-book overlay hidden on cold start ([hidden] effective)
+  PASS  idle gate is dark (leaves shut)  — lum=16.4
+  PASS  idle is ambient: ghost-light moves along the rail  — 649.2 → 729.4
+  PASS  idle never turns or dials itself  — after 1.1 s: rot=0 locked=0
+        shot -> test\screenshots\02_cold_start_1080p.png
+
+== B. Control geometry ==
+  PASS  all 21 core controls reachable at their rendered centres (elementFromPoint)  — 3 threshold controls + 13 wards + 5 keys
+  PASS  every control and readout lies inside the 1080p viewport  — ok
+
+== C. Manual dial (a living hand) ==
+  PASS  hit-test ward Th at (1261,149)  — topmost is the control
+  PASS  fence turns to Th, finial reaches the lantern, takes flame  — turning observed at 350 ms, caught at 2392 ms, finial at 0.0° from lantern
+  PASS  hit-test ward As at (1261,211)  — topmost is the control
+  PASS  fence turns to As, finial reaches the lantern, takes flame  — turning observed at 350 ms, caught at 1366 ms, finial at 0.0° from lantern
+  PASS  hit-test ward Wk at (1261,273)  — topmost is the control
+        shot -> test\screenshots\03_manual_dial_in_progress.png
+  PASS  fence turns to Wk, finial reaches the lantern, takes flame  — turning observed at 350 ms, caught at 1341 ms, finial at 0.0° from lantern
+  PASS  hit-test ward Ho at (1261,335)  — topmost is the control
+  PASS  fence turns to Ho, finial reaches the lantern, takes flame  — turning observed at 350 ms, caught at 1327 ms, finial at 0.0° from lantern
+  PASS  hit-test ward Ow at (1261,397)  — topmost is the control
+  PASS  fence turns to Ow, finial reaches the lantern, takes flame  — turning observed at 350 ms, caught at 1372 ms, finial at 0.0° from lantern
+  PASS  hit-test ward Ne at (1261,459)  — topmost is the control
+  PASS  fence turns to Ne, finial reaches the lantern, takes flame  — turning observed at 350 ms, caught at 1373 ms, finial at 0.0° from lantern
+  PASS  every turn went widdershins (rotation decreased by the announced delta)  — Th: 0° −360° → 0° · As: 0° −28° → 332° · Wk: 332° −28° → 305° · Ho: 305° −28° → 277° · Ow: 277° −28° → 249° · Ne: 249° −28° → 222°
+  PASS  each hand turn takes a turn plus a take (1.0–3.6 s)  — 2390, 1365, 1340, 1326, 1371, 1371 ms
+  PASS  six wards caught in press order  — Th As Wk Ho Ow Ne
+  PASS  ring did real work: 6 finials lit, 5 chain links bound, 6 wardstones, 6 fence buttons lit  — {"pickets":6,"chain":5,"stones":6,"buttons":6}
+
+== D. No auto-fire ==
+  PASS  sixth ward leaves the gate UNBARRED (pending), not open (2.5 s later)  — stage=pending elapsed=2532
+  PASS  the bar visibly lifts when unbarred  — gatebar opacity < 0.1
+  PASS  unbarred gate still dark  — lum=15.4
+        shot -> test\screenshots\04_pending_unbarred_no_autofire.png
+  PASS  hit-test ward Th while unbarred at (1261,149)  — topmost is the control
+  PASS  turning while unbarred is refused with a visible warning  — the gate stands unbarred — ring the bell, or bar it
+
+== E. Bell: buildup → breakthrough → open ==
+  PASS  hit-test RING THE BELL at (1760,444)  — topmost is the control
+  PASS  the bell starts BUILDUP  — 0 ms
+        shot -> test\screenshots\05_stage1_buildup.png
+  PASS  buildup spins the fence widdershins, accelerating  — vel=117°/s, rot 221.5 → 144.2
+  PASS  BUILDUP lasts ~2.4 s then BREAKTHROUGH  — reached after 476 ms of polling
+        shot -> test\screenshots\06_stage2_breakthrough.png
+  PASS  breakthrough throws witch-light rays  — 16/16 visible
+  PASS  the leaves fling open (left leaf scaleX)  — scaleX=0.040
+  PASS  BREAKTHROUGH resolves into SUSTAINED OPEN  — 1 ms
+        shot -> test\screenshots\07_stage3_sustained_open.png
+  PASS  the hand-turned address resolved to its road  — THE WAKE AT CORVANE
+  PASS  open gate keeps the fence turning slowly widdershins  — vel=20
+  PASS  gate luminance distinct at every stage pair (≥25)  — pending 15.4 · buildup 51.8 · breakthrough 236.7 · open 123
+  PASS  sustained open is calmer than breakthrough and more saturated than buildup  — lum 236.7 → 123, sat 36.6 → 74.6
+  PASS  hit-test RING THE BELL while open at (1760,444)  — topmost is the control
+  PASS  bell while open is refused, gate stays open  — the gate already stands open
+
+== F. Bar the gate from open ==
+  PASS  BAR THE GATE reachable while the gate is open
+  PASS  hit-test BAR THE GATE at (1760,572)  — topmost is the control
+  PASS  barring drops every ward, chain and stone, returns to idle  — {"stage":"idle","locked":0,"chain":0}
+        shot -> test\screenshots\08_barred_cycle1.png
+  PASS  gate dark again after barring  — lum=16.4
+
+== G. Remembered hand: staged auto-dial ==
+  PASS  hit-test KEY 2 THE DROWNED ORCHARD at (1494,834)  — topmost is the control
+        shot -> test\screenshots\09_autodial_sequence_in_progress.png
+  PASS  the remembered hand catches all six wards one at a time  — 1@841 2@1616 3@2395 4@3176 5@4021 6@5116
+  PASS  every remembered turn is a visible step (≥300 ms apart)  — 841, 775, 779, 781, 845, 1095 ms
+  PASS  remembered hand is faster than a living hand but never instantaneous  — 5116 ms for 6 vs hand 9163 ms
+  PASS  mid-sequence screenshot captured with 3 caught and the fence turning
+  PASS  remembered hand lands UNBARRED with no auto-fire (2.5 s later)  — stage=pending
+  PASS  the remembered address was caught in order  — As Ne Ic Du Ky Ho
+        shot -> test\screenshots\10_autodial_pending_unbarred.png
+
+== H. Salt line interlock ==
+  PASS  hit-test BAR THE GATE (clear for interlock test) at (1760,572)  — topmost is the control
+  PASS  hit-test SALT LINE toggle (lay) at (1760,654)  — topmost is the control
+  PASS  salt is laid with a visible state change  — LAID/true
+  PASS  hit-test ward Ne with salt laid at (1261,459)  — topmost is the control
+  PASS  salt refuses a turn with a blinking warning  — THE SALT HOLDS — the iron will not turn while the line is laid
+        shot -> test\screenshots\11_salt_refuses_turn.png
+  PASS  hit-test KEY 1 with salt laid at (1389,834)  — topmost is the control
+  PASS  salt refuses a remembered hand  — THE SALT HOLDS — no remembered hand can cross it
+  PASS  hit-test RING THE BELL with salt laid at (1760,444)  — topmost is the control
+  PASS  salt refuses the bell  — THE SALT HOLDS — the bell will not answer across the line
+  PASS  salt warning stays visible while the line is laid  — on blink
+  PASS  hit-test SALT LINE toggle (sweep away) at (1760,654)  — topmost is the control
+  PASS  salt is swept away and the warning clears  — salt=false
+
+== I. Full second cycle ==
+  PASS  hit-test KEY 4 HOLLOWMAS LANE at (1706,834)  — topmost is the control
+  PASS  cycle 2: remembered hand reaches unbarred  — 4894 ms
+  PASS  hit-test RING THE BELL (cycle 2) at (1760,444)  — topmost is the control
+  PASS  cycle 2: the gate opens  — 3245 ms
+  PASS  cycle 2 resolved its road  — HOLLOWMAS LANE
+        shot -> test\screenshots\12_open_cycle2.png
+  PASS  hit-test BAR THE GATE (cycle 2) at (1760,572)  — topmost is the control
+  PASS  cycle 2 barred to idle  — stage=idle
+        shot -> test\screenshots\13_barred_cycle2.png
+
+== J. Bar the gate mid-sequence ==
+  PASS  hit-test KEY 5 THE WIDOW'S STAIR at (1811,834)  — topmost is the control
+  PASS  hit-test BAR THE GATE mid-remembered-hand at (1760,572)  — topmost is the control
+  PASS  barring mid-hand cancels the remaining turns  — locked after 1.5 s = 0
+  PASS  hit-test KEY 1 CANDLEMERE at (1389,834)  — topmost is the control
+  PASS  hit-test RING THE BELL at (1760,444)  — topmost is the control
+  PASS  hit-test BAR THE GATE mid-buildup at (1760,572)  — topmost is the control
+  PASS  barring mid-buildup aborts: never reaches breakthrough or open  — stage now idle
+
+== K. Nobody's Parish (something knocks back) ==
+  PASS  hit-test KEY 3 NOBODY'S PARISH at (1600,834)  — topmost is the control
+  PASS  the dark key still catches fully and lands unbarred  — 5267 ms
+  PASS  hit-test RING THE BELL (dark road) at (1760,444)  — topmost is the control
+  PASS  the dark road goes through buildup and breakthrough, then the gate shuts itself  — 3664 ms
+        shot -> test\screenshots\14_dark_road_gate_shuts_itself.png
+  PASS  the candle goes out when the gate shuts itself
+  PASS  the refusal clears the gatehouse to idle  — stage=idle locked=0
+  PASS  the candle relights
+
+== L. Rapid input and refusals ==
+  PASS  hit-test RING THE BELL from idle at (1760,444)  — topmost is the control
+  PASS  bell with nothing caught is refused  — no ward is caught — the bell answers only a bound fence
+  PASS  three presses faster than the turn are queued and all catch in order  — in flight right after presses: 3, caught: Ic Ow Th
+  PASS  hit-test duplicate ward Ow at (1261,397)  — topmost is the control
+  PASS  a duplicate ward is refused  — the ward Owl is already caught
+  PASS  hit-test KEY 2 with a partial address at (1494,834)  — topmost is the control
+  PASS  a remembered hand is refused while wards are partly caught  — the iron only remembers from rest — bar the gate first
+  PASS  hit-test RING THE BELL with 3 of 6 at (1760,444)  — topmost is the control
+  PASS  bell with a partial address is refused  — only 3 of six wards caught — the bar still holds
+  PASS  hit-test BAR THE GATE (clean up) at (1760,572)  — topmost is the control
+
+== M. Gate-book and chrome ==
+  PASS  hit-test gate-book button at (1700,52)  — topmost is the control
+  PASS  gate-book opens
+        shot -> test\screenshots\15_gatebook_open.png
+  PASS  hit-test gate-book close at (1319,166)  — topmost is the control
+  PASS  gate-book closes
+  PASS  hit-test sound toggle at (1614,52)  — topmost is the control
+  PASS  sound toggle flips  — SOUND OFF
+  PASS  hit-test sound toggle back at (1611,52)  — topmost is the control
+
+== N. Console ==
+  PASS  no page errors or console errors during the run  — clean
+
+109/109 checks passed, 0 failed. 15 screenshots in test/screenshots/.

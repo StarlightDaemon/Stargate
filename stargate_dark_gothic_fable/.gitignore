@@ -1,0 +1,2 @@
+# Dependencies (installed via npm for the Puppeteer test harness; not source)
+node_modules/

@@ -1,0 +1,14 @@
+{
+  "name": "stargate-dark-gothic-fable",
+  "version": "1.0.0",
+  "description": "WIDDERSHINS — The Gatehouse at Corvane Hollow. A haunted-manor gatehouse portal-dialing console rendered as glowing spectral schematic.",
+  "private": true,
+  "scripts": {
+    "serve": "node server.js",
+    "test": "node test/run-tests.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^25.9.0"
+  }
+}
