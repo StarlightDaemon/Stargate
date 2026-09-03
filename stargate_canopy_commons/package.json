@@ -1,0 +1,14 @@
+{
+  "name": "stargate-canopy-commons",
+  "version": "1.0.0",
+  "description": "TRELLIS — Hollin Reach Canopy Commons · Sunspan Ring. A solarpunk community-tended portal-dialing console.",
+  "private": true,
+  "scripts": {
+    "serve": "node server.js",
+    "test": "node test/run-tests.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^25.9.0"
+  }
+}

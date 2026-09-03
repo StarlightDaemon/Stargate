@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TRELLIS — Hollin Reach Canopy Commons · Sunspan Ring</title>
+  <meta name="description" content="A community-tended, solar-pooled portal ring. Pledge seven waymarks, let the shares flow, and open the span together.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Waymark glyph symbols are injected here by app.js from waymarks.js -->
+  <svg id="glyph-defs" width="0" height="0" aria-hidden="true" focusable="false"></svg>
+
+  <div id="fitwrap">
+    <main id="stage" data-phase="idle">
+
+      <!-- The arbor: one whiplash stem that ties the ring to the board and the hearth -->
+      <svg class="arbor" viewBox="0 0 1920 1080" aria-hidden="true" focusable="false">
+        <path class="stem stem-main" d="M-20 1100 C 180 960, 260 1040, 420 980 C 640 900, 720 1040, 990 930 C 1070 890, 1050 640, 1052 470 C 1054 400, 1120 372, 1400 370 C 1650 368, 1780 300, 1960 40"/>
+        <path class="stem stem-thin" d="M-20 1040 C 160 920, 300 1000, 470 930 C 660 850, 760 990, 1010 900 C 1085 860, 1066 640, 1068 480 C 1070 416, 1130 388, 1400 386 C 1660 384, 1800 320, 1960 90"/>
+        <path class="stem stem-tendril" d="M1052 600 C 1030 580, 1020 550, 1036 528 C 1048 512, 1070 516, 1070 536"/>
+        <path class="stem stem-tendril" d="M1400 370 C 1396 340, 1416 318, 1446 320 C 1470 322, 1478 346, 1462 358"/>
+        <path class="stem stem-tendril" d="M420 980 C 440 950, 470 950, 480 975 C 486 992, 468 1004, 452 994"/>
+        <path class="stem stem-thin" d="M1960 720 C 1840 780, 1720 720, 1650 640"/>
+        <g class="stem-leaves">
+          <path d="M1036 528 c -30 -2 -48 -22 -48 -50 c 28 0 48 20 48 50 z"/>
+          <path d="M1446 320 c -2 -28 16 -48 44 -50 c 2 28 -16 48 -44 50 z"/>
+          <path d="M470 930 c -24 -12 -30 -38 -18 -60 c 22 12 30 38 18 60 z"/>
+          <path d="M1650 640 c 12 -26 36 -36 62 -28 c -10 26 -36 38 -62 28 z"/>
+        </g>
+      </svg>
+
+      <!-- Masthead: who keeps this ring, and what the sky is doing -->
+      <header class="masthead">
+        <svg class="crest" viewBox="0 0 80 80" aria-hidden="true" focusable="false">
+          <circle cx="40" cy="40" r="34" class="crest-ring"/>
+          <circle cx="40" cy="40" r="11" class="crest-sun"/>
+          <path class="crest-vine" d="M12 66 C 22 50, 30 50, 40 40 C 50 30, 58 30, 68 14"/>
+          <path class="crest-leaf" d="M30 50 c -12 -2 -18 -12 -14 -24 c 12 2 18 12 14 24 z"/>
+          <path class="crest-leaf" d="M52 32 c 2 -12 12 -18 24 -14 c -2 12 -12 18 -24 14 z"/>
+        </svg>
+        <div class="masthead-text">
+          <div class="overline">Hollin Reach</div>
+          <h1>Canopy Commons</h1>
+          <div class="subline">Sunspan Ring · Trellis Board · tended in common</div>
+        </div>
+        <div class="dayline" aria-live="polite">
+          <svg class="sun-arc" viewBox="0 0 160 70" aria-hidden="true" focusable="false">
+            <path class="sun-track" d="M10 62 A 70 70 0 0 1 150 62"/>
+            <line x1="6" y1="62" x2="154" y2="62" class="horizon"/>
+            <circle id="sun-dot" cx="80" cy="-8" r="6"/>
+          </svg>
+          <div class="day-text">
+            <span id="hour">09:40</span>
+            <span id="skyword">bright and open</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Ledger gauges: what the commons has to share right now -->
+      <section class="gauges" aria-label="Commons ledger">
+        <div class="gauge" id="gauge-sun">
+          <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+            <circle class="gauge-track" cx="60" cy="60" r="48"/>
+            <circle class="gauge-fill" cx="60" cy="60" r="48"/>
+          </svg>
+          <div class="gauge-num"><span class="val">62</span><span class="unit">sunhours</span></div>
+          <div class="gauge-label">sun stored</div>
+        </div>
+        <div class="gauge" id="gauge-pool">
+          <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+            <circle class="gauge-track" cx="60" cy="60" r="48"/>
+            <circle class="gauge-fill" cx="60" cy="60" r="48"/>
+          </svg>
+          <div class="gauge-num"><span class="val">0</span><span class="unit">of 7 shares</span></div>
+          <div class="gauge-label">pooled</div>
+        </div>
+        <div class="gauge" id="gauge-draw">
+          <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+            <circle class="gauge-track" cx="60" cy="60" r="48"/>
+            <circle class="gauge-fill" cx="60" cy="60" r="48"/>
+          </svg>
+          <div class="gauge-num"><span class="val">0.0</span><span class="unit">sun / min</span></div>
+          <div class="gauge-label">draw</div>
+        </div>
+        <div class="gauge-note" id="gauge-note">the canopy is charging on its own</div>
+      </section>
+
+      <!-- The Sunspan Ring itself -->
+      <section class="ring-stage" aria-label="Sunspan Ring">
+        <svg id="ring" viewBox="0 0 900 900" aria-hidden="true" focusable="false"></svg>
+        <canvas id="aperture" width="400" height="400" aria-hidden="true"></canvas>
+        <div id="ring-word" class="ring-word" aria-live="polite">the ring is resting</div>
+        <div id="banner" class="banner" hidden role="status"></div>
+      </section>
+
+      <!-- Bottom-left toolshelf -->
+      <div class="toolshelf">
+        <button id="btn-guide" class="shelf-btn" type="button" aria-label="How to tend the ring" title="How to tend the ring">?</button>
+        <button id="btn-sound" class="shelf-btn" type="button" aria-pressed="true" title="Sound">♪</button>
+        <div class="shelf-text">tending today: <strong id="tenders">4 neighbours</strong></div>
+      </div>
+
+      <!-- Cluster 1: the Waymark Board -->
+      <section class="board" aria-label="Waymark board">
+        <h2 class="panel-title"><span>Waymark board</span><small>choose seven · each one pledges a share</small></h2>
+        <div id="board-grid" class="board-grid"></div>
+      </section>
+
+      <!-- The route being held on the trellis -->
+      <section class="held" aria-label="Route held on the trellis">
+        <h2 class="panel-title"><span>Route held</span><small id="held-word">nothing chosen yet</small></h2>
+        <div id="slots" class="slots"></div>
+      </section>
+
+      <!-- Secondary: routes the commons has walked (ledger-pace re-pledging) -->
+      <section class="ledger" aria-label="Routes the commons has walked">
+        <h2 class="panel-title"><span>Routes the commons has walked</span><small>already pledged · ledger pace</small></h2>
+        <div id="route-list" class="route-list"></div>
+      </section>
+
+      <!-- Tending log -->
+      <section class="tending" aria-label="Tending log">
+        <h2 class="panel-title"><span>Tending log</span><small id="log-count"></small></h2>
+        <ol id="log" class="log"></ol>
+      </section>
+
+      <!-- Cluster 2: the Hearth -->
+      <section class="hearth" aria-label="Hearth controls">
+        <div class="hearth-title">the hearth</div>
+        <button id="btn-open" class="open-btn" type="button">
+          <span class="open-ring"></span>
+          <span class="open-text">Open<br>the Span</span>
+        </button>
+        <button id="btn-fold" class="fold-btn" type="button">Fold the Span</button>
+        <button id="btn-latch" class="latch-btn" type="button" aria-pressed="false">
+          <span class="latch-name">Quiet-hours latch</span>
+          <span class="latch-state" id="latch-state">released</span>
+        </button>
+        <div class="hearth-note" id="hearth-note">open hours · the span may be opened</div>
+      </section>
+
+      <!-- Guide overlay -->
+      <div id="guide" class="guide" hidden>
+        <div class="guide-card" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+          <button id="btn-guide-close" class="guide-close" type="button" aria-label="Close">×</button>
+          <h2 id="guide-title">How to tend the ring</h2>
+          <ol>
+            <li><strong>Choose seven waymarks</strong> from the board. Each one pledges a share of stored sun: the hoop slews the waymark under an open bay, the share flows down its conduit, and the bay's collector opens to hold it.</li>
+            <li><strong>The route waits.</strong> When seven are held the ring pools its shares and rests. Nothing opens on its own.</li>
+            <li><strong>Open the Span</strong> from the hearth when the commons is ready. The pool gathers, breaks into sunlight, and the span stands open until someone folds it.</li>
+            <li><strong>Fold the Span</strong> at any time, in any state. Shares flow back, collectors close, the hoop settles.</li>
+            <li><strong>Quiet-hours latch.</strong> Released by default. While engaged the span will not open, and the ring says so plainly. Release it to carry on.</li>
+            <li><strong>Routes the commons has walked</strong> are re-pledged from the ledger at ledger pace, quicker than by hand because every share is already promised, but each still has to be routed and held.</li>
+          </ol>
+          <p class="guide-foot">Seven bays, fourteen waymarks, one hearth. The ring belongs to everyone who tends it.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="corner">
+    <span>TRELLIS <span id="corner-version">v1.0.0</span> · Hollin Reach Canopy Commons</span>
+    <a href="https://github.com/StarlightDaemon/Stargate" target="_blank" rel="noopener">source</a>
+  </div>
+
+  <script src="waymarks.js"></script>
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

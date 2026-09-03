@@ -1,0 +1,140 @@
+[TRELLIS] tending at http://localhost:8729/
+
+== TRELLIS end-to-end ==
+http://localhost:8729/
+
+[1] load and identity
+  PASS  title  — TRELLIS — Hollin Reach Canopy Commons · Sunspan Ring
+  PASS  version.json version and model  — {"name":"TRELLIS — Hollin Reach Canopy Commons · Sunspan Ring","folder":"stargate_canopy_commons","version":"1.0.0","model":"Claude Fable 5.1","built":"2026-09-02","status":"implemented and self-tested; pending direct operator hands-on testing","port":8709}
+  PASS  corner version readout
+  PASS  cold start phase is idle  — idle
+  PASS  quiet-hours latch defaults to released  — false
+  PASS  cold start: no shares, bays closed, pool empty
+  PASS  guide and banner hidden on cold start
+[2] viewport fit
+  PASS  stage transform applied at 1920x1080  — matrix(1, 0, 0, 1, -960, -540)
+  PASS  --fit is 1 at 1920x1080  — 1
+  PASS  stage scales to 4K (3840x2160)  — transform=matrix(2, 0, 0, 2, -960, -540) --fit=2
+  PASS  stage fills the 4K viewport  — {"x":1920,"y":1080,"w":3840,"h":2160}
+        shot -> test\screenshots\01_cold_start_4k.png
+        shot -> test\screenshots\02_cold_start_1080p.png
+[3] every core control is reachable at its rendered position
+  PASS  all 14 waymark tiles hit-test clean  — 14/14
+  PASS  reachable #btn-open  — 
+  PASS  reachable #btn-fold  — 
+  PASS  reachable #btn-latch  — 
+  PASS  reachable #btn-guide  — 
+  PASS  reachable #btn-sound  — 
+  PASS  all 6 ledger routes hit-test clean  — 6/6
+[4] manual dial — seven rapid clicks must all register and lock in order
+  PASS  hit-test waymark rainbreak at (1356,176)  — topmost is the control
+  PASS  hit-test waymark stargap at (1620,284)  — topmost is the control
+  PASS  hit-test waymark meridian at (1244,166)  — topmost is the control
+  PASS  hit-test waymark wellspring at (1732,294)  — topmost is the control
+  PASS  hit-test waymark beeway at (1804,153)  — topmost is the control
+  PASS  hit-test waymark duskfold at (1844,307)  — topmost is the control
+  PASS  hit-test waymark mossline at (1284,294)  — topmost is the control
+  PASS  all seven rapid clicks registered (held + in flight + queued)  — held 0, in flight rainbreak, queued 6
+  PASS  third share locks within 12s  — 3883ms
+        shot -> test\screenshots\03_manual_dial_in_progress.png
+  PASS  mid-dial: bay 3 open, bay 4 still closed  — bay3 open=0.28 bay4 open=0
+  PASS  all seven shares held → pending  — 11874ms total
+  PASS  route holds the seven waymarks in click order  — rainbreak,stargap,meridian,wellspring,beeway,duskfold,mossline
+  PASS  all seven bays open with conduits full  — rainbreak,stargap,meridian,wellspring,beeway,duskfold,mossline
+  PASS  pool rim full  — 1.000
+  PASS  manual pace is genuinely staged (over 7.7s for seven)  — 11874ms
+  PASS  the hoop slewed between the third and the seventh share  — -372.9 → -707.1
+  PASS  seventh waymark is geometrically aligned under bay 7  — error 0.000° at hoop -707.1°
+  PASS  conduits were filling progressively mid-dial  — 1,1,1,0,0,0,0
+[5] no auto-fire: the held route must wait for the hearth
+  PASS  still pending 2.5s after the seventh share  — pending
+        shot -> test\screenshots\04_pending_ready_no_autofire.png
+  PASS  fold control is offered while pending  — Fold the Span
+[6] open the span — buildup, sunburst, open
+  PASS  hit-test Open the Span at (1773,545)  — topmost is the control
+  PASS  hearth starts the buildup  — buildup
+  PASS  still building 1.5s in (real rising tension, not a state flip)  — buildup
+        shot -> test\screenshots\05_stage1_buildup.png
+  PASS  breakthrough follows buildup  — 237ms after sample
+        shot -> test\screenshots\06_stage2_breakthrough.png
+  PASS  sustained active follows breakthrough  — 1ms
+        shot -> test\screenshots\07_stage3_sustained_active.png
+  PASS  span stays open (sustained)  — active
+  PASS  draw gauge shows neighbours drawing on the pool while open  — 5.50 sun/min
+        aperture metrics (lum, warm, sat): pending {"lum":232.3,"warm":46.3,"sat":46.3} buildup {"lum":130.8,"warm":73.5,"sat":73.5} breakthrough {"lum":224.3,"warm":106.7,"sat":106.7} active {"lum":179.2,"warm":86,"sat":87.1}
+  PASS  aperture pending vs buildup visibly distinct  — distance 105.1
+  PASS  aperture pending vs breakthrough visibly distinct  — distance 60.9
+  PASS  aperture pending vs active visibly distinct  — distance 66.3
+  PASS  aperture buildup vs breakthrough visibly distinct  — distance 99.2
+  PASS  aperture buildup vs active visibly distinct  — distance 50.0
+  PASS  aperture breakthrough vs active visibly distinct  — distance 49.6
+  PASS  stored sun is drawn down while the span is open  — 62.63 → 62.57
+[7] fold the span (cycle 1)
+  PASS  hit-test Fold the Span at (1773,676)  — topmost is the control
+  PASS  folding begins  — folding
+  PASS  ring returns to rest  — 892ms
+  PASS  shares flowed home: bays closed, conduits drained, pool empty
+        shot -> test\screenshots\08_disengaged_cycle1.png
+[8] ledger route — re-pledged at ledger pace, still staged
+  PASS  hit-test route Kestrel Terrace Growers at (1504,603)  — topmost is the control
+  PASS  second share re-pledged  — 1314ms
+        shot -> test\screenshots\09_autodial_sequence_in_progress.png
+  PASS  real staged motion mid-sequence (hoop/conduit/petals changed over 120ms)  — hoop 244.3→244.3
+  PASS  ledger is walking, route partially held  — 2 held
+  PASS  ledger route ends held (pending)  — 5218ms total
+  PASS  ledger route holds exactly its seven marks in order  — leafturn,seedfall,mossline,dawnline,wellspring,stargap,emberkeep
+  PASS  ledger pace is faster than by hand but never instantaneous  — ledger 5218ms vs hand 11874ms
+  PASS  no auto-fire after a ledger route either  — pending
+        shot -> test\screenshots\10_autodial_pending_ready.png
+[9] quiet-hours latch
+  PASS  hit-test Quiet-hours latch at (1773,757)  — topmost is the control
+  PASS  latch engaged  — engaged · quiet hours
+  PASS  hit-test Open the Span (should be refused) at (1773,545)  — topmost is the control
+  PASS  latch refuses the opening: still pending  — pending
+  PASS  refusal banner is shown  — Quiet hours are kept. Release the latch at the hearth to open the span.
+  PASS  tending log records the refusal in warm colour
+        shot -> test\screenshots\11_latch_refuses_opening.png
+  PASS  hit-test Quiet-hours latch (release) at (1773,767)  — topmost is the control
+  PASS  latch released again
+  PASS  hit-test Open the Span (cycle 2) at (1773,545)  — topmost is the control
+  PASS  cycle 2 opens after release  — 3136ms
+        shot -> test\screenshots\12_active_cycle2.png
+  PASS  hit-test Fold the Span (cycle 2) at (1773,676)  — topmost is the control
+  PASS  cycle 2 folds back to rest  — 979ms
+        shot -> test\screenshots\13_disengaged_cycle2.png
+[10] fold is reachable during buildup
+  PASS  hit-test route Alder Ferry Landing at (1217,603)  — topmost is the control
+  PASS  third route held  — 4867ms
+  PASS  hit-test Open the Span (cycle 3) at (1773,545)  — topmost is the control
+  PASS  hit-test Fold during buildup at (1773,676)  — topmost is the control
+  PASS  folding mid-buildup returns to rest without ever opening  — idle
+  PASS  no late timer reopens the span after the fold  — idle
+[11] fold mid-walk cancels the ledger
+  PASS  hit-test route The Long Orchard at (1217,677)  — topmost is the control
+  PASS  hit-test Fold mid-walk at (1773,676)  — topmost is the control
+  PASS  walk cancelled: nothing held, nothing queued  — held 0 queued 0
+[12] gentle guards
+  PASS  hit-test waymark leafturn at (1692,166)  — topmost is the control
+  PASS  hit-test waymark leafturn again at (1692,166)  — topmost is the control
+  PASS  a waymark cannot be pledged twice  — leafturn
+  PASS  hit-test route while a hand route is held at (1504,603)  — topmost is the control
+  PASS  ledger declines while a hand-pledged route is being held
+  PASS  hit-test Fold (guards cleanup) at (1773,676)  — topmost is the control
+  PASS  hit-test Let the ring rest (already idle) at (1773,676)  — topmost is the control
+  PASS  folding an idle ring is harmless  — idle
+[13] guide overlay and sound toggle
+  PASS  hit-test guide button at (72,924)  — topmost is the control
+  PASS  guide opens
+        shot -> test\screenshots\14_guide_open.png
+  PASS  hit-test guide close at (1301,303)  — topmost is the control
+  PASS  guide closes
+  PASS  hit-test sound toggle at (132,924)  — topmost is the control
+  PASS  sound toggles off
+  PASS  hit-test sound toggle back at (132,924)  — topmost is the control
+  PASS  audio context exists after gestures  — running
+  PASS  no console or page errors across the run  — clean
+        preview.png captured (1920x1080 cold start)
+
+== 102/102 checks passed ==
+
+Automated passes are evidence, not proof: direct operator hands-on testing is the real final check.
