@@ -1,0 +1,13 @@
+{
+  "name": "stargate_windtunnel_aerodynamics",
+  "version": "1.0.0",
+  "description": "Aeolos Stagnation Plenum (ASP-9) — Transonic Aerodynamic Test Console",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node verify.js"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^22.15.0"
+  }
+}

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aeolos Stagnation Plenum (ASP-9) — Transonic Aerodynamic Test Console</title>
+  <meta name="description" content="A digital-native wind tunnel aerodynamics dialing console featuring variable-pitch guide vanes, real-time vector Schlieren flow visualization, and supersonic shock wave dynamics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="viewport-frame">
+    <div id="app-scaler">
+      <!-- MAIN CONSOLE CONTAINER -->
+      <main class="console-root" id="console-root">
+
+        <!-- TOP BAR: FACILITY TELEMETRY & SYSTEM UTILITIES -->
+        <header class="facility-header" id="facility-header">
+          <div class="facility-brand">
+            <div class="brand-insignia">ASP-9</div>
+            <div class="brand-titles">
+              <h1 class="main-title">AEOLOS STAGNATION PLENUM (ASP-9)</h1>
+              <div class="sub-title">TRANSONIC AERODYNAMIC INVERSION CONSOLE // HIGH-SPEED FLOW LABORATORY</div>
+            </div>
+          </div>
+
+          <div class="header-telemetry">
+            <div class="telem-item">
+              <span class="telem-lbl">STAGNATION P₀</span>
+              <span class="telem-val text-cyan" id="disp-p0">101.3 kPa</span>
+            </div>
+            <div class="telem-item">
+              <span class="telem-lbl">VELOCITY // MACH</span>
+              <span class="telem-val text-amber" id="disp-mach">M 0.05</span>
+            </div>
+            <div class="telem-item">
+              <span class="telem-lbl">DYNAMIC HEAD (q)</span>
+              <span class="telem-val text-cyan" id="disp-q">1.2 kPa</span>
+            </div>
+            <div class="telem-item">
+              <span class="telem-lbl">REYNOLDS (Re)</span>
+              <span class="telem-val text-emerald" id="disp-re">1.4 × 10⁶</span>
+            </div>
+          </div>
+
+          <div class="header-controls">
+            <button class="util-btn" id="btn-audio-toggle" title="Toggle Synthesizer Sound Engine" aria-label="Toggle Sound">
+              <span class="btn-icon" id="audio-icon">🔊</span> AUDIO: ON
+            </button>
+            <button class="util-btn" id="btn-manual-toggle" title="Open Aerodynamic Test Operating Manual" aria-label="Operating Reference">
+              <span class="btn-icon">ℹ</span> MANUAL [?]
+            </button>
+            <div class="system-version-tag">VER 1.0.0</div>
+          </div>
+        </header>
+
+        <!-- SAFETY INTERLOCK WARNING TRIP BANNER (Visible when engaged) -->
+        <div class="interlock-trip-banner" id="interlock-trip-banner" style="display: none;">
+          <div class="hazard-stripe left"></div>
+          <div class="interlock-warning-text">
+            <span class="warning-symbol">⚠</span>
+            <strong>SAFETY INTERLOCK ACTIVE:</strong> CHOKE GATE SEALED // TRANSONIC BLOWDOWN INHIBITED
+          </div>
+          <button class="interlock-quick-release-btn" id="btn-banner-release-interlock">
+            RELEASE CHOKE GATE NOW
+          </button>
+          <div class="hazard-stripe right"></div>
+        </div>
+
+        <!-- MAIN DECK: ASYMMETRIC HORIZONTAL WIND TUNNEL FLOW AXIS -->
+        <div class="main-deck">
+
+          <!-- LEFT COLUMN (58%): MANOMETER BANK + TEST SECTION SCHLIEREN CHAMBER -->
+          <section class="test-chamber-section" aria-label="Wind Tunnel Aerodynamic Test Chamber">
+            
+            <!-- LEFT VERTICAL MANOMETER COLUMN BANK -->
+            <div class="manometer-bank-container" id="manometer-bank">
+              <div class="manometer-header">P/P₀ RAKE</div>
+              <div class="manometer-tubes" id="manometer-tubes">
+                <!-- Populated dynamically via JS -->
+              </div>
+              <div class="manometer-footer">STA 00-07</div>
+            </div>
+
+            <!-- CENTRAL FLOW VISUALIZATION CANVAS & VANE RING -->
+            <div class="flow-canvas-container" id="flow-canvas-container">
+              <canvas id="windtunnel-canvas"></canvas>
+
+              <!-- OVERLAY ANNOTATIONS -->
+              <div class="canvas-overlay-top">
+                <div class="badge-station"><span class="pulse-dot"></span> NOZZLE CONTRACTION CONE</div>
+                <div class="badge-throat">VARIABLE THROAT // MACH TEST SECTION</div>
+                <div class="badge-diffuser">SUPERSONIC DIFFUSER // EXPANSION</div>
+              </div>
+
+              <!-- LIVE FLOW STATE BADGE -->
+              <div class="canvas-overlay-bottom">
+                <div class="flow-regime-indicator" id="flow-regime-badge">
+                  <span class="regime-lbl">REGIME:</span>
+                  <span class="regime-val" id="disp-flow-regime">SUBSONIC QUIESCENT</span>
+                </div>
+                <div class="boundary-layer-indicator" id="boundary-layer-badge">
+                  <span class="boundary-lbl">BOUNDARY LAYER:</span>
+                  <span class="boundary-val text-amber" id="disp-boundary-state">TURB // UNCONDITIONED</span>
+                </div>
+                <div class="sector-lock-counter" id="disp-lock-counter">
+                  LOCKED VANES: <span class="text-cyan font-bold" id="locked-vane-count">0</span> / 6
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- RIGHT COLUMN (42%): TWO NAMED CORE INTERACTIVE CONTROL CLUSTERS + AMBIENT TELEMETRY -->
+          <section class="control-telemetry-column" aria-label="Flight Test Control Benches">
+
+            <!-- CORE CONTROL CLUSTER 1: FLOW-VECTOR VANE STEERING & LOCK DETENT -->
+            <div class="control-cluster" id="cluster-vane-dial" data-cluster-name="Vane Steering & Coordinate Cluster">
+              <div class="cluster-header">
+                <div class="cluster-title-group">
+                  <span class="cluster-num">CLUSTER 01</span>
+                  <h2 class="cluster-title">FLOW-VECTOR VANE STEERING & DETENT</h2>
+                </div>
+                <div class="cluster-status-pill" id="steer-status-pill">STANDBY</div>
+              </div>
+
+              <div class="cluster-body">
+                <!-- AZIMUTH STEERING WHEEL / SLIDER -->
+                <div class="steer-azimuth-row">
+                  <div class="azimuth-readout-box">
+                    <span class="azimuth-lbl">AZIMUTH ANGLE (α)</span>
+                    <span class="azimuth-val text-cyan" id="disp-azimuth-angle">000.0°</span>
+                  </div>
+                  <div class="azimuth-slider-wrapper">
+                    <input type="range" id="azimuth-slider" min="0" max="330" step="30" value="0" aria-label="Guide Vane Azimuth Steer Angle">
+                  </div>
+                  <button class="step-btn" id="btn-step-prev" title="Step Azimuth Counter-Clockwise" aria-label="Previous Sector">◀</button>
+                  <button class="step-btn" id="btn-step-next" title="Step Azimuth Clockwise" aria-label="Next Sector">▶</button>
+                </div>
+
+                <!-- 12 SECTOR QUICK-SELECT SELECTOR MATRIX -->
+                <div class="sector-matrix-grid" id="sector-matrix-grid" role="group" aria-label="12 Flow Guide Vane Sectors">
+                  <!-- Generated via JS -->
+                </div>
+
+                <!-- CURRENT TARGET SECTOR TELEMETRY & PHYSICAL LOCK TRIGGER -->
+                <div class="selected-sector-panel" id="selected-sector-panel">
+                  <div class="sector-panel-left">
+                    <div class="panel-glyph-box" id="disp-sector-glyph">
+                      <!-- SVG inserted via JS -->
+                    </div>
+                    <div class="panel-sector-id">
+                      <div class="sector-code-large" id="disp-sector-code">LAM-01</div>
+                      <div class="sector-name-small" id="disp-sector-name">Laminar Core Baseline</div>
+                    </div>
+                  </div>
+
+                  <div class="sector-panel-right">
+                    <div class="mini-spec-row">
+                      <span class="spec-lbl">VANE PITCH:</span>
+                      <span class="spec-val text-cyan" id="disp-vane-pitch">+0.0°</span>
+                    </div>
+                    <div class="mini-spec-row">
+                      <span class="spec-lbl">PITOT REF:</span>
+                      <span class="spec-val text-amber" id="disp-pitot-ref">101.3 kPa</span>
+                    </div>
+                    <div class="mini-spec-row">
+                      <span class="spec-lbl">PROFILE:</span>
+                      <span class="spec-val" id="disp-profile-type">Falkner-Skan</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PHYSICAL LOCK TRIGGER & UNLOCK BUTTONS -->
+                <div class="vane-lock-actions">
+                  <button class="btn-primary-lock" id="btn-lock-sector">
+                    <span class="lock-icon">🔒</span>
+                    <span class="lock-label-main">ENGAGE VANE LOCK</span>
+                    <span class="lock-label-sub">SEAL BOUNDARY & STAGNATION REFERENCE</span>
+                  </button>
+                  <button class="btn-secondary-unlock" id="btn-clear-sectors" title="Release all aligned guide vanes back to neutral">
+                    RESET VANES
+                  </button>
+                </div>
+
+                <!-- CURRENTLY LOCKED SEQUENCE STRIP -->
+                <div class="locked-sequence-strip" id="locked-sequence-strip">
+                  <span class="strip-label">LOCKED VECTOR MATRIX [6 MAX]:</span>
+                  <div class="strip-slots" id="strip-slots">
+                    <div class="slot empty" data-slot="0">--</div>
+                    <div class="slot empty" data-slot="1">--</div>
+                    <div class="slot empty" data-slot="2">--</div>
+                    <div class="slot empty" data-slot="3">--</div>
+                    <div class="slot empty" data-slot="4">--</div>
+                    <div class="slot empty" data-slot="5">--</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CORE CONTROL CLUSTER 2: TUNNEL RUN MASTER CONSOLE -->
+            <div class="control-cluster" id="cluster-run-master" data-cluster-name="Tunnel Run Master Console">
+              <div class="cluster-header">
+                <div class="cluster-title-group">
+                  <span class="cluster-num">CLUSTER 02</span>
+                  <h2 class="cluster-title">TUNNEL RUN MASTER CONSOLE</h2>
+                </div>
+                <div class="run-state-badge" id="run-master-state-badge">READY TO CONFIGURE</div>
+              </div>
+
+              <div class="cluster-body">
+                <!-- ACTIVATION ACTION & ABORT CONTROLS -->
+                <div class="master-action-row">
+                  <!-- MAIN ACTIVATION TRIGGER (Disabled until all 6 locked; never auto-fires!) -->
+                  <button class="btn-initiate-run" id="btn-initiate-run" disabled>
+                    <div class="run-btn-glare"></div>
+                    <span class="run-btn-status" id="run-btn-status-sub">LATTICE UNLOCKED</span>
+                    <span class="run-btn-text" id="run-btn-text-main">INITIATE TRANSONIC RUN</span>
+                  </button>
+
+                  <!-- ALWAYS-REACHABLE EMERGENCY BLOWDOWN DUMP -->
+                  <button class="btn-emergency-dump" id="btn-emergency-dump" title="Vent stagnation pressure and abort flow initiation">
+                    <div class="dump-hazard-stripes"></div>
+                    <span class="dump-text-main">EMERGENCY BLOWDOWN DUMP</span>
+                    <span class="dump-text-sub">INSTANT PRESSURE VENT // ABORT</span>
+                  </button>
+                </div>
+
+                <!-- SAFETY INTERLOCK & QUICK-DIAL PRESET ROW -->
+                <div class="master-secondary-controls">
+                  <!-- CHOKE GATE INTERLOCK TOGGLE -->
+                  <div class="interlock-control-box">
+                    <div class="interlock-label-col">
+                      <span class="interlock-title">CHOKE GATE INTERLOCK</span>
+                      <span class="interlock-desc" id="interlock-status-desc">Status: RELEASED (Permit Blowdown)</span>
+                    </div>
+                    <button class="btn-interlock-toggle released" id="btn-toggle-interlock" aria-label="Toggle Choke Gate Interlock">
+                      <span class="interlock-toggle-knob"></span>
+                      <span class="interlock-toggle-text" id="interlock-toggle-btn-text">RELEASED</span>
+                    </button>
+                  </div>
+
+                  <!-- QUICK-DIAL PRESET SELECTOR (Auto-dial test matrix) -->
+                  <div class="preset-control-box">
+                    <label for="select-preset-profile" class="preset-label">TEST MATRIX PRESET (AUTO-DIAL):</label>
+                    <div class="preset-row">
+                      <select id="select-preset-profile" class="preset-dropdown" aria-label="Select Test Run Profile">
+                        <!-- Populated via JS -->
+                      </select>
+                      <button class="btn-run-preset" id="btn-execute-preset">
+                        AUTO-DIAL
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AMBIENT MONITORING: 6-AXIS STRAIN-GAUGE BALANCE TELEMETRY & TURBULENCE FFT -->
+            <div class="telemetry-bench-container" id="telemetry-bench">
+              <div class="bench-header">
+                <span class="bench-title">6-COMPONENT STRAIN-GAUGE BALANCE // AERO POLAR</span>
+                <span class="bench-badge">SAMPLING: 250 Hz</span>
+              </div>
+
+              <div class="balance-grid">
+                <div class="balance-item">
+                  <span class="b-axis">LIFT (C_L)</span>
+                  <div class="b-bar-track"><div class="b-bar-fill" id="bar-cl" style="width: 15%;"></div></div>
+                  <span class="b-val" id="val-cl">0.124</span>
+                </div>
+                <div class="balance-item">
+                  <span class="b-axis">DRAG (C_D)</span>
+                  <div class="b-bar-track"><div class="b-bar-fill text-amber" id="bar-cd" style="width: 8%;"></div></div>
+                  <span class="b-val" id="val-cd">0.018</span>
+                </div>
+                <div class="balance-item">
+                  <span class="b-axis">PITCH (C_m)</span>
+                  <div class="b-bar-track"><div class="b-bar-fill text-cyan" id="bar-cm" style="width: 5%;"></div></div>
+                  <span class="b-val" id="val-cm">-0.004</span>
+                </div>
+                <div class="balance-item">
+                  <span class="b-axis">SIDE (C_Y)</span>
+                  <div class="b-bar-track"><div class="b-bar-fill text-emerald" id="bar-cy" style="width: 2%;"></div></div>
+                  <span class="b-val" id="val-cy">+0.001</span>
+                </div>
+                <div class="balance-item">
+                  <span class="b-axis">YAW (C_n)</span>
+                  <div class="b-bar-track"><div class="b-bar-fill text-cyan" id="bar-cn" style="width: 3%;"></div></div>
+                  <span class="b-val" id="val-cn">+0.002</span>
+                </div>
+                <div class="balance-item">
+                  <span class="b-axis">ROLL (C_l)</span>
+                  <div class="b-bar-track"><div class="b-bar-fill text-amber" id="bar-cll" style="width: 1%;"></div></div>
+                  <span class="b-val" id="val-cll">+0.000</span>
+                </div>
+              </div>
+
+              <!-- BOUNDARY LAYER RAKE PROFILE GRAPHIC -->
+              <div class="boundary-rake-row">
+                <span class="rake-title">WALL BOUNDARY VELOCITY RATIO (u / U_inf):</span>
+                <div class="rake-profile-bars" id="rake-bars">
+                  <!-- 8 probe bars -->
+                </div>
+              </div>
+            </div>
+
+          </section>
+        </div>
+
+        <!-- OPERATOR REFERENCE MANUAL MODAL [?] -->
+        <div class="modal-backdrop" id="manual-modal" style="display: none;">
+          <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <div class="modal-header">
+              <h3 class="modal-title" id="modal-title">ASP-9 AERODYNAMIC OPERATING PROTOCOL</h3>
+              <button class="modal-close-btn" id="btn-close-modal" aria-label="Close Reference Manual">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="modal-section">
+                <h4>1. VARIABLE-PITCH GUIDE VANE DIALING</h4>
+                <p>To establish a gateway inversion through the test section nozzle, steer the azimuth angle around the 12-sector guide vane ring. Aligning a sector commands pneumatic micro-actuators to pivot the straightener vane to its calibrated flow angle and balances pitot-static reference pressure to 0.00 kPa, converting turbulent separation eddies into coherent laminar streamlines.</p>
+              </div>
+              <div class="modal-section">
+                <h4>2. NEVER AUTO-FIRE SAFETY GUARANTEE</h4>
+                <p>Locking all 6 sectors arms the stagnation plenum into <strong>PLENUM ARMED / READY TO FIRE</strong>. The blowdown sequence will <em>never</em> automatically fire upon the 6th lock. Flow initiation is strictly triggered by manual operator command on the <strong>INITIATE TRANSONIC RUN</strong> control.</p>
+              </div>
+              <div class="modal-section">
+                <h4>3. THREE-STAGE TRANSONIC ACTIVATION</h4>
+                <p>Upon initiation, the console executes a genuine 3-stage aerodynamic sequence:</p>
+                <ul>
+                  <li><strong>Stage 1: Buildup Phase (2.2s):</strong> Compressor turbine spool-up, Mach ramps 0.20 to 0.95, rising pneumatic whine, and pressure condensation.</li>
+                  <li><strong>Stage 2: Breakthrough Instant (0.5s):</strong> Transonic Mach 1.0 crossing, optical Prandtl-Glauert Schlieren inversion flash, and sonic boom acoustic impulse.</li>
+                  <li><strong>Stage 3: Sustained Active State:</strong> Steady-state supersonic flow at Mach 1.45, diamond shock wave lattice in the diffuser, deep resonant roar, and stable aerodynamic balance trim.</li>
+                </ul>
+              </div>
+              <div class="modal-section">
+                <h4>4. EMERGENCY BLOWDOWN & DISENGAGE</h4>
+                <p>The hazard-striped <strong>EMERGENCY BLOWDOWN DUMP</strong> switch is permanently active and reachable in all states. It vents plenum stagnation pressure and returns all guide vanes to neutral.</p>
+              </div>
+              <div class="modal-section">
+                <h4>5. CHOKE GATE SAFETY INTERLOCK</h4>
+                <p>Defaults to <strong>RELEASED</strong>. When engaged, the physical choke gate blocks nozzle expansion, immediately locking out activation with high-visibility hazard banners and acoustic sirens.</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="modal-dismiss-btn" id="btn-dismiss-modal">ACKNOWLEDGE PROTOCOL</button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
