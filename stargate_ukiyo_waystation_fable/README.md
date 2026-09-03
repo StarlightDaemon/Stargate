@@ -7,6 +7,17 @@
 > working during real use, even though the build's own automated Puppeteer
 > verification reported specific staged auto-dial timing. That discrepancy
 > between automated verification and operator experience is unresolved.
+>
+> **v1.0.1 fix pass, 2026-08-25.** After the close-out above, a targeted fix
+> pass shipped as v1.0.1 (see CHANGELOG.md). It made the ring itself the
+> primary locus of dialing feedback — the aperture now builds the destination
+> print layer by layer as each impression lands — and it stopped manual clicks
+> that arrive while the wheel is still turning from being silently discarded;
+> those are now queued and replayed through the normal registration path.
+> This note records that the fix pass happened. It does **not** claim the
+> quick-dial discrepancy described above was resolved by it: v1.0.1 was
+> verified by the automated suite only, and no operator has redialed this
+> build by hand since. The status note above stands as written.
 
 An interactive novelty portal-dialing console rendered as a Japanese woodblock print.
 The **Kagerō-kaidō** — the Shimmer Road — is a legendary route whose ten waystations
