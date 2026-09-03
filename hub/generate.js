@@ -80,6 +80,14 @@ const STATUS_OVERRIDES = {
   // behavior (quick-dial auto-dial did not read as present/working during
   // real use, despite the build's own automated verification reporting it).
   stargate_ukiyo_waystation_fable: "known-issue",
+  // Verified against stargate_atompunk_fable/CHANGELOG.md's [1.0.0]
+  // "Verified" section and README "Status" blockquote: direct operator
+  // hands-on testing (2026-09-02) confirmed the build works as intended,
+  // end to end, and "Known issues" records none found by either the
+  // harness or the operator. "live" is also this folder's default; the
+  // explicit entry records that the status is hand-verified, not merely
+  // defaulted.
+  stargate_atompunk_fable: "live",
 };
 
 // Short caveat lines surfaced on the card itself, so entries with an

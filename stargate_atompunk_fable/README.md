@@ -1,21 +1,22 @@
 # AUREOLE — Meadowlark Atomic Exposition · Threshold Pavilion
 
-A purely decorative novelty website in the **Atompunk** register: a 1950s
-atomic-age exhibition console, Console No. 2 of the (fictional) Meadowlark
-Atomic Exposition's Threshold Pavilion. The ring is a seven-shell Bohr model
-drawn as glowing schematic line-work on a midnight-teal ground with
-turquoise, coral, and butter-cream light — Googie starbursts, a cantilevered
-boomerang console, dial-and-lamp instrumentation, and a Geiger-tick ambient.
-Fully client-side, no networking; all isotopes, destinations, and
-institutions are invented. Nothing here reproduces any franchise's assets.
+A purely decorative novelty in the Atompunk register: a 1950s atomic-age exhibition console whose dialing ring is a seven-shell Bohr model, drawn as glowing turquoise, coral, and cream schematic line-work.
+
+> **Status:** confirmed — the operator has personally tested this build by
+> hand, end to end, and confirmed it works as intended (2026-09-02). That
+> confirmation is the operator's own hands-on testing, not this session's
+> automated checks; the Puppeteer harness (104/104 checks, 15 named
+> screenshots) supported it but does not stand in for it.
+
+Console No. 2 of the (fictional) Meadowlark Atomic Exposition's Threshold
+Pavilion. The ring sits on a midnight-teal ground with turquoise, coral, and
+butter-cream light — Googie starbursts, a cantilevered boomerang console,
+dial-and-lamp instrumentation, and a Geiger-tick ambient. Fully
+client-side, no networking; all isotopes, destinations, and institutions are
+invented. Nothing here reproduces any franchise's assets.
 
 **Built by:** Claude Fable 5.1 (`claude-fable-5-1`). The reasoning level is
 not observable from inside the build session and is therefore not recorded.
-
-**Status:** implemented and self-tested with a Puppeteer harness (104/104
-checks, 15 named screenshots); **direct operator hands-on testing has not yet
-been performed** — automated passes are necessary but not sufficient, and
-this line should be updated once a person has actually dialed it.
 
 ## The conceit
 

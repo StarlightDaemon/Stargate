@@ -4,6 +4,6 @@
   "version": "1.0.0",
   "model": "Claude Fable 5.1",
   "built": "2026-09-02",
-  "status": "implemented and self-tested; pending direct operator hands-on testing",
+  "status": "confirmed by direct operator hands-on testing (2026-09-02)",
   "port": 8733
 }

@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Built by:** Claude Fable 5.1 (`claude-fable-5-1`). Reasoning level: not observable from inside the build session, so not recorded rather than guessed.
 
-**Status:** implemented and self-tested; pending direct operator hands-on testing.
+**Status:** confirmed by direct operator hands-on testing (2026-09-02) — see "Verified" below.
+
+### Verified
+- Direct operator testing (2026-09-02) confirmed the build works as intended, end to end. This confirmation is the operator's own hands-on testing, not the build's automated self-test; the harness results listed under "Added" supported it but do not stand in for it.
 
 ### Added
 - **Atompunk register, digital-native.** Midnight-teal ground with turquoise, coral, and butter-cream glow; Googie starburst selector, boomerang outline, cantilevered console wedge, asterisk ornaments. Flat fill, stroke, and glow only — no simulated chrome, Bakelite, or metal anywhere. Deliberately distinct from the retro build's charcoal-and-green-phosphor storage-oscilloscope console in both palette and concept.
@@ -27,4 +30,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Puppeteer verification harness** (`npm test`): 104 checks with hit-tested real pointer events, externally timed captures, screenshot-based aperture metrics, and 15 named screenshots.
 
 ### Known issues
-- None found by the automated harness. Operator hands-on testing has not yet been performed; this section should be updated after it.
+- None found by the automated harness or by the operator's hands-on testing (2026-09-02).

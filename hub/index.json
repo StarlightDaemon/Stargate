@@ -68,6 +68,18 @@
       "note": null
     },
     {
+      "id": "stargate-atompunk-fable",
+      "folder": "stargate_atompunk_fable",
+      "title": "AUREOLE — Meadowlark Atomic Exposition · Threshold Pavilion",
+      "blurb": "A purely decorative novelty in the Atompunk register: a 1950s atomic-age exhibition console whose dialing ring is a seven-shell Bohr model, drawn as glowing turquoise, coral, and cream schematic line-work.",
+      "link": "../stargate_atompunk_fable/index.html",
+      "preview": "../stargate_atompunk_fable/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-bathyscaphe-pilot",
       "folder": "stargate_bathyscaphe_pilot",
       "title": "DSV-9 ARCHELON - Bathyscaphe Pilot Console & Abyssal Gateway Interface",
