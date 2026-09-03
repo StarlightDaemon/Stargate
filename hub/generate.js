@@ -444,9 +444,17 @@ function scanFeatured() {
     }
   }
 
-  // Hero preview: Stargate_OG/preview.png is an untracked file in OG's
-  // own repo (OG's git history is off-limits; the screenshot lives on
-  // disk only, like the untracked blueprint folders' previews).
+  // Hero preview: Stargate_OG/preview.png is tracked in this monorepo,
+  // and so are stargate_blueprint_alpha/preview.png and
+  // stargate_blueprint_drafting/preview.png. All three arrive in a clean
+  // clone; none of them is an on-disk-only screenshot, and Stargate_OG
+  // has no nested .git of its own — it is an ordinary folder here.
+  // That became true with the 2026-08-24 subtree merges (9bb1e05 for
+  // Stargate_OG, 73110cd and a7f1863 for the two blueprint folders),
+  // which folded each of those histories in with their previews. This
+  // comment previously described all three as untracked files living in
+  // separate repos; that was true when it was written on 2026-08-23 and
+  // stopped being true the following day.
   const preview = findPreview(OG_DIR);
 
   // Not fabricating a pass count here: package.json's `test` script
