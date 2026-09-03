@@ -9,7 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Built by:** Claude Fable 5.1 (`claude-fable-5-1`), the runtime identity reported to the build session. Reasoning level: not observable from inside the build session, so not recorded rather than guessed.
 
-**Status:** self-verified by the building session's automated suite only. **Not yet confirmed by direct operator hands-on testing.**
+**Status:** closed, complete, no further iteration planned (2026-09-03). Not a defect close-out — see "Verified" and "Closed" below.
+
+### Verified
+- Automated Puppeteer suite: 109/109 checks passed, every control hit-tested at its rendered position with real dispatched events, catches timed from outside the page, widdershins direction checked per turn, stages measured from screenshots.
+- Direct hands-on testing in an interactive browser confirmed the core interactions work: ward selection turns the fence and catches the ward at the lantern; a remembered-hand quick-dial catches all six wards one at a time and lands unbarred; RING THE BELL runs the three-stage sequence (buildup → breakthrough → sustained open) and BAR THE GATE returns the console to idle. The operator judged the build functionally solid, with good aesthetics and working tooling.
+- One documented caveat: a screenshot taken from a throttled interactive browser pane about four seconds after the bell still showed the gate bar mid-fade, while headless Chrome and the pane's own computed styles a few seconds later showed the transition completing (bar opacity 0, translated fully). Resolved as a headless-vs-interactive-pane timing artifact — environment noise, not a build bug. No change was made for it.
+
+### Closed
+- Closed without further iteration on a creative and genre-fit judgment by the operator: digitizing an inherently supernatural subject through the project's standard glowing-schematic register undercuts the theme itself for this gallery's purposes. This is a conceptual call, not a defect; nothing here needs fixing.
+- The local dev server left running at the end of the build session (port 8797) was stopped and the port confirmed free before this entry was committed.
 
 ### Added
 - **Dark Gothic horror register, digital-native.** Haunted-manor gatehouse: witch-fire green and moonlight blue over near-black, one guttering amber candle in the keeper's lantern as the sole warm point, fog banks that roll and thin across the base. Everything is flat fill, stroke, and glow — spectral line-work standing in for wrought iron, ghost-light scrollwork for the gate leaves, drifting soft light for fog. No material is simulated. Deliberately distinct from the reverent, jewel-toned stained-glass cathedral register elsewhere in the catalogue: dread and shadow rather than reverence and warmth.
@@ -32,4 +41,4 @@ Gatehouse stack rather than hero-and-wings: large ring left of centre under the 
 Atmospheric horror only — no gore, viscera, or depictions of death. Draws on generic European folklore (widdershins, salt lines) and the Gothic horror literary tradition; no living sacred or ceremonial tradition, no real political content.
 
 ### Known issues
-- None found by the automated harness. Operator hands-on testing has not yet happened; anything it finds belongs here.
+- None. Neither the automated harness nor the operator's hands-on testing found a defect. The one caveat above (interactive-pane transition timing) was resolved as environment noise.
