@@ -1,0 +1,10 @@
+{
+  "name": "SPLITTERLICHT",
+  "version": "1.0.0",
+  "model": "Claude Fable 5.1",
+  "reasoning": "effort 25 (as exposed by the session harness)",
+  "built": "2026-09-03",
+  "status": "operator-confirmed",
+  "verification": "automated suite 116/116 at build time; operator hands-on testing confirmed functional 2026-09-03",
+  "creative_status": "closed; leans into Expressionist horror/dread beyond a general Expressionism brief; accepted as a legitimate result, no further iteration"
+}

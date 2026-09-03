@@ -1,0 +1,14 @@
+{
+  "name": "stargate-expressionism-fable",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SPLITTERLICHT - Torkammer Neun. A German-Expressionist portal-dialing console: shards cracked out of a leaning wall.",
+  "scripts": {
+    "serve": "node server.js",
+    "test": "node test/run-tests.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^24.0.0"
+  }
+}
