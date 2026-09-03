@@ -1,5 +1,5 @@
 // ============================================================================
-// Aeolos Stagnation Plenum (ASP-9) — Central Control Room Orchestrator
+// Aeolos Stagnation Plenum (ASP-9) — Central Control Room Controller
 // Coordinates Vane Steering, Locking Mechanics, 3-Stage Activation & Telemetry
 // ============================================================================
 

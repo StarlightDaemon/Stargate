@@ -164,6 +164,18 @@
       "note": null
     },
     {
+      "id": "stargate-canopy-commons",
+      "folder": "stargate_canopy_commons",
+      "title": "TRELLIS — Hollin Reach Canopy Commons · Sunspan Ring",
+      "blurb": "A solarpunk portal-dialing console kept by a neighbourhood rather than a bunker: a solar-pooled ring on an Art Nouveau trellis, where every waymark you choose pledges a share of stored sun, the shares flow along visible…",
+      "link": "../stargate_canopy_commons/index.html",
+      "preview": "../stargate_canopy_commons/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-cathedral-oculus",
       "folder": "stargate_cathedral_oculus",
       "title": "The Grand Vitrarium of Lumisfer (`stargate_cathedral_oculus`)",
@@ -260,6 +272,42 @@
       "note": null
     },
     {
+      "id": "stargate-cyberpunk-fable",
+      "folder": "stargate_cyberpunk_fable",
+      "title": "NIGHTGLASS",
+      "blurb": "NIGHTGLASS is a purely decorative, fully client-side novelty website: the private access spire of Vesper Ryn, a fictional \"lightwright\" who weaves glowing threads of connection across the Lume Lattice — an abstract,…",
+      "link": "../stargate_cyberpunk_fable/index.html",
+      "preview": "../stargate_cyberpunk_fable/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-cyberpunk-gemini",
+      "folder": "stargate_cyberpunk_gemini",
+      "title": "Khepri Cipher Terminal",
+      "blurb": "Khepri Cipher Terminal is a high-fidelity cyberpunk data-access console and network intrusion deck operated by the notorious shadow-lattice broker KHEPRI. Set in a pure information-space aesthetic of glowing vector…",
+      "link": "../stargate_cyberpunk_gemini/index.html",
+      "preview": "../stargate_cyberpunk_gemini/preview.png",
+      "status": "live",
+      "version": "1.0.1",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-dark-gothic-fable",
+      "folder": "stargate_dark_gothic_fable",
+      "title": "WIDDERSHINS — The Gatehouse at Corvane Hollow",
+      "blurb": "A haunted-manor portal-dialing console: the gatehouse mechanism of an abandoned Victorian estate, its wrought-iron fence-ring rendered as glowing spectral schematic, which only turns widdershins and remembers the hands…",
+      "link": "../stargate_dark_gothic_fable/index.html",
+      "preview": "../stargate_dark_gothic_fable/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-dark-matter-array",
       "folder": "stargate_dark_matter_array",
       "title": "BOREAS-IX Subterranean Cryogenic Dark Matter Array",
@@ -328,6 +376,18 @@
       "preview": "../stargate_erebus_signal/preview.png",
       "status": "live",
       "version": "1.1.0",
+      "series": null,
+      "note": null
+    },
+    {
+      "id": "stargate-expressionism-fable",
+      "folder": "stargate_expressionism_fable",
+      "title": "SPLITTERLICHT",
+      "blurb": "Torkammer Neun at the Nachtwerk Kesselgrund, 1921. A gate console in the register of German Expressionism: the address is not dialed, it is cracked out of a leaning black wall. Twelve angular marks sit on a crooked…",
+      "link": "../stargate_expressionism_fable/index.html",
+      "preview": "../stargate_expressionism_fable/preview.png",
+      "status": "live",
+      "version": "1.0.0",
       "series": null,
       "note": null
     },
@@ -572,6 +632,18 @@
       "note": null
     },
     {
+      "id": "stargate-salvage-terminal",
+      "folder": "stargate_salvage_terminal",
+      "title": "BONEYARD",
+      "blurb": "Aperture Bench 3 at the Halvard Reach breakers' yard: a portal-dialing console the yard crew rebuilt three times out of parts from three different hulls. This is the catalog's first Low Sci-Fi entry. Nothing here is…",
+      "link": "../stargate_salvage_terminal/index.html",
+      "preview": "../stargate_salvage_terminal/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-seismic-triangulation",
       "folder": "stargate_seismic_triangulation",
       "title": "Cascadia Lithospheric Seismo-Acoustic Array (CLSA-9)",
@@ -620,6 +692,18 @@
       "note": null
     },
     {
+      "id": "stargate-solarpunk-conservatory",
+      "folder": "stargate_solarpunk_conservatory",
+      "title": "HELIANTH — Wrenfield Commons Conservatory · Lantern Gate",
+      "blurb": "Status: confirmed — the operator has directly tested this build by hand and confirmed it is functional and solid. That confirmation is the operator's own hands-on testing, not this session's automated checks; the \"What…",
+      "link": "../stargate_solarpunk_conservatory/index.html",
+      "preview": "../stargate_solarpunk_conservatory/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-solarpunk-ecogrid",
       "folder": "stargate_solarpunk_ecogrid",
       "title": "Solarpunk Smart Eco-Grid Dispatch Terminal (`stargate_solarpunk_ecogrid`)",
@@ -656,6 +740,18 @@
       "note": null
     },
     {
+      "id": "stargate-steampunk-fable",
+      "folder": "stargate_steampunk_fable",
+      "title": "PERPETUA — The Aldercroft Concordance Engine",
+      "blurb": "A fictional steam-and-clockwork calculating engine, rendered entirely as glowing schematic line-work. Purely decorative novelty site — no backend, no networking, nothing real.",
+      "link": "../stargate_steampunk_fable/index.html",
+      "preview": "../stargate_steampunk_fable/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-synchrotron-collider",
       "folder": "stargate_synchrotron_collider",
       "title": "Aethel-Ring Collider (ARC) — Synchrotron Inversion Control",
@@ -678,6 +774,18 @@
       "version": "1.0.1",
       "series": null,
       "note": "Closed as a single, one-off attempt: underperformed its sibling build on the quick-dial auto-dial behavior, which didn't read as present or working during real use despite the build's own automated verification reporting it — unresolved."
+    },
+    {
+      "id": "stargate-windtunnel-aerodynamics",
+      "folder": "stargate_windtunnel_aerodynamics",
+      "title": "Aeolos Stagnation Plenum (ASP-9) — Transonic Aerodynamic Test Console",
+      "blurb": "An interactive novelty portal-dialing website built around the Aeolos Stagnation Plenum (ASP-9), the central transonic and supersonic aerodynamic flight test facility of the Aeolos High-Speed Aerodynamics Laboratory.…",
+      "link": "../stargate_windtunnel_aerodynamics/index.html",
+      "preview": "../stargate_windtunnel_aerodynamics/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
     }
   ]
 }
