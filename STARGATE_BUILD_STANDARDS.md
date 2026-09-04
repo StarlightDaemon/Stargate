@@ -136,6 +136,22 @@ the physical object instead.
   count.** At most 2 named control clusters for the core loop. A visitor
   must always be able to complete a basic dial without being overwhelmed,
   regardless of how much secondary depth exists elsewhere on the page.
+- **Every interactive control is keyboard-operable.** Native `<button>` and
+  `<a>` elements get this for free; anything else needs an explicit `role`,
+  a `tabindex`, and its own handler firing on Enter and Space (the shape
+  used throughout `stargate_retro/js/controls.js`). Every focusable control
+  also needs a visible focus-visible style — never rely on default browser
+  outline behavior alone.
+- **Ambient decorative motion must respect `prefers-reduced-motion`.**
+  Anything that moves on its own without user action — background drift,
+  idle shimmer, looping glow — should back off when the media query
+  matches. Motion that *communicates state* (a dial rotating, a stage
+  transition, an activation sequence) is different: it must remain visible
+  in some form even with reduced motion enabled, typically by pairing it
+  with a live text caption a reduced-motion user can still follow (the
+  shape used by `prefers-reduced-motion` detection in
+  `stargate_heliacal_ring/js/portal.js` paired with the `caption()` calls
+  driving the live region in `stargate_heliacal_ring/js/sequencer.js`).
 
 ## 7. Composition
 
