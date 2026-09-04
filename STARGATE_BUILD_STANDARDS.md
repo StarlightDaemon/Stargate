@@ -57,6 +57,10 @@ Every build needs all four of these from the very first commit:
   the session and summarised in the CHANGELOG, not by being checked into
   the repository. Editor and agent session files, including `.claude/`,
   are not committed either.
+- **`preview.png` is committed at 800px wide by 450px tall, not at the
+  build's native 1920x1080 render resolution.** This keeps the gallery
+  thumbnail lightweight; it has no bearing on the resolution a build
+  renders itself at for an operator.
 
 **Model attribution must be verified, not assumed.** A safety classifier
 can silently reroute execution to a different model mid-session. Before
