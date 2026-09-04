@@ -12,6 +12,7 @@ All notable changes to the **Stargate: Le Nimbus Florié (Art Nouveau Botanical 
 
 ### Fixed
 - The botanical safety latch (`#safety-latch-toggle`) was a plain `div` and could not be reached or activated from the keyboard. `index.html` now gives it `role="button"` and `tabindex="0"`, and `js/app.js` adds an Enter/Space keydown handler that toggles the latch exactly as a click does, stopping propagation so the window-level Enter/Space activate shortcut does not fire on top of it.
+- The quick-dial preset cards (`.preset-card`) and the archive codex nav items (`.archive-nav-item`) were plain `div`s, created in `js/app.js`, and could not be reached or activated from the keyboard. `js/app.js` now sets `role="button"` and `tabindex="0"` on each as it is created, and adds an Enter/Space keydown handler that performs the same action as the existing click handler (trigger the preset's auto-dial; open the archive entry), stopping propagation so the window-level Enter/Space activate shortcut does not fire on top of it. Completes the keyboard-accessibility pass started with the safety latch above. Built by Claude Sonnet 5, 2026-09-04. Version number left unchanged; whether this warrants a bump is for operator review.
 
 ## [1.0.0] - 2026-08-22
 

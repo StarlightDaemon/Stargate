@@ -150,6 +150,8 @@ class NimbusApp {
         const card = document.createElement("div");
         card.className = "preset-card";
         card.id = `preset-card-${preset.id}`;
+        card.setAttribute("role", "button");
+        card.tabIndex = 0;
         card.innerHTML = `
           <div class="preset-name">${preset.name}</div>
           <div class="preset-sub">${preset.subtitle}</div>
@@ -162,6 +164,14 @@ class NimbusApp {
         `;
 
         card.addEventListener("click", () => {
+          this.triggerAutoDial(preset);
+        });
+        // Keyboard: Enter/Space on the focused card does exactly what a click does.
+        // Propagation stops so the window-level Enter/Space (activate) shortcut doesn't fire on top of it.
+        card.addEventListener("keydown", (e) => {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          e.preventDefault();
+          e.stopPropagation();
           this.triggerAutoDial(preset);
         });
 
@@ -577,8 +587,18 @@ class NimbusApp {
         const item = document.createElement("div");
         item.className = "archive-nav-item";
         item.id = `archive-item-${entry.id}`;
+        item.setAttribute("role", "button");
+        item.tabIndex = 0;
         item.innerHTML = `<strong>${entry.title}</strong><div style="font-size:12px; color:#6a574d;">${entry.subtitle}</div>`;
         item.addEventListener("click", () => {
+          showArticle(entry.id);
+        });
+        // Keyboard: Enter/Space on the focused item does exactly what a click does.
+        // Propagation stops so the window-level Enter/Space (activate) shortcut doesn't fire on top of it.
+        item.addEventListener("keydown", (e) => {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          e.preventDefault();
+          e.stopPropagation();
           showArticle(entry.id);
         });
         listEl.appendChild(item);
