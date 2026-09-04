@@ -190,6 +190,44 @@ const SEQUESTERED_STATUS = {
 
 const BLURB_MAX_CHARS = 220;
 
+// Standards-mandated gallery thumbnail size (STARGATE_BUILD_STANDARDS.md
+// section on preview.png). Enforced only for the top-level scan() entries —
+// _sequestered/ carries a standing no-touch policy (section 10) so its
+// preview.png files, captured before this rule existed, are left alone.
+const REQUIRED_PREVIEW_WIDTH = 800;
+const REQUIRED_PREVIEW_HEIGHT = 450;
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+// Reads width/height straight out of the PNG IHDR chunk (always the first
+// chunk, immediately after the 8-byte signature) — no image library needed.
+// Returns null if the file isn't a well-formed PNG.
+function readPngDimensions(filePath) {
+  const fd = fs.openSync(filePath, "r");
+  try {
+    const header = Buffer.alloc(24);
+    const bytesRead = fs.readSync(fd, header, 0, 24, 0);
+    if (bytesRead < 24) return null;
+    if (!header.subarray(0, 8).equals(PNG_SIGNATURE)) return null;
+    if (header.toString("ascii", 12, 16) !== "IHDR") return null;
+    return { width: header.readUInt32BE(16), height: header.readUInt32BE(20) };
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
+function enforcePreviewDimensions(name, previewPath) {
+  if (!previewPath.toLowerCase().endsWith(".png")) return;
+  const dims = readPngDimensions(previewPath);
+  if (!dims) return;
+  if (dims.width === REQUIRED_PREVIEW_WIDTH && dims.height === REQUIRED_PREVIEW_HEIGHT) return;
+
+  console.error(
+    `FATAL: ${name}/preview.png is ${dims.width}x${dims.height}, ` +
+      `but STARGATE_BUILD_STANDARDS.md requires ${REQUIRED_PREVIEW_WIDTH}x${REQUIRED_PREVIEW_HEIGHT}.`
+  );
+  process.exit(1);
+}
+
 function isExcluded(name) {
   if (EXCLUDE_NAMES.has(name)) return true;
   if (name.startsWith(".")) return true;
@@ -313,7 +351,7 @@ function readVersion(dir) {
   }
 }
 
-function scanOne(dir, name, { linkPrefix, status }) {
+function scanOne(dir, name, { linkPrefix, status, checkPreviewDimensions }) {
   const hasReadme = fs.existsSync(path.join(dir, "README.md"));
   const entryFile = findEntryPoint(dir);
 
@@ -341,6 +379,9 @@ function scanOne(dir, name, { linkPrefix, status }) {
   }
   const { title, blurb } = extracted;
   const preview = findPreview(dir);
+  if (preview && checkPreviewDimensions) {
+    enforcePreviewDimensions(name, path.join(dir, preview));
+  }
   const version = readVersion(dir);
 
   return {
@@ -377,6 +418,7 @@ function scan() {
     const result = scanOne(dir, name, {
       linkPrefix: "../",
       status: STATUS_OVERRIDES[name] || "live",
+      checkPreviewDimensions: true,
     });
     if (result.entry) included.push(result.entry);
     else skipped.push(result.skip);
@@ -393,6 +435,9 @@ function scan() {
       const result = scanOne(dir, name, {
         linkPrefix: "../_sequestered/",
         status: hasDetermination ? SEQUESTERED_STATUS[name] : "live",
+        // checkPreviewDimensions omitted: _sequestered/ carries a standing
+        // no-touch policy (STARGATE_BUILD_STANDARDS.md section 10), so its
+        // pre-existing preview.png files are not held to this rule.
       });
 
       if (result.entry) {
