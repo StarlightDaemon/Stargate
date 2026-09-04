@@ -1,9 +1,10 @@
 {
-  "name": "TRELLIS — Hollin Reach Canopy Commons · Sunspan Ring",
-  "folder": "stargate_canopy_commons",
   "version": "1.0.0",
   "model": "Claude Fable 5.1",
   "built": "2026-09-02",
-  "status": "closed, complete, no further iteration (2026-09-03): functional and a legitimate execution of the solarpunk theme; closed on creative-fit grounds — it does not fully match the intended vision — not a technical failure",
-  "port": 8709
+  "meta": {
+    "name": "TRELLIS — Hollin Reach Canopy Commons · Sunspan Ring",
+    "folder": "stargate_canopy_commons",
+    "status": "closed, complete, no further iteration (2026-09-03): functional and a legitimate execution of the solarpunk theme; closed on creative-fit grounds — it does not fully match the intended vision — not a technical failure"
+  }
 }

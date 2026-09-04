@@ -1,5 +1,7 @@
 {
-  "name": "NIGHTGLASS",
   "version": "1.0.0",
-  "model": "Claude Fable 5 (claude-fable-5)"
+  "model": "Claude Fable 5 (claude-fable-5)",
+  "meta": {
+    "name": "NIGHTGLASS"
+  }
 }

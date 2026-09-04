@@ -1,5 +1,7 @@
 {
   "version": "1.0.3",
   "model": "Gemini 3.7 Flash (High Reasoning)",
-  "patchModel": "Claude Opus 5"
+  "meta": {
+    "patchModel": "Claude Opus 5"
+  }
 }

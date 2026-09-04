@@ -1,11 +1,13 @@
 {
-  "name": "Argos DeepScope Interferometric Technosignature Console",
-  "short_name": "ADISO DeepScope",
   "version": "1.0.0",
-  "release_date": "2026-08-22",
-  "build_model": "Gemini 3.7 Flash (High reasoning)",
-  "array_elements": 10,
-  "address_length": 7,
-  "default_safety_hold": "RELEASED",
-  "observatory": "Argos DeepScope Interferometric Synthesis Observatory (ADISO)"
+  "model": "Gemini 3.7 Flash (High reasoning)",
+  "built": "2026-08-22",
+  "meta": {
+    "name": "Argos DeepScope Interferometric Technosignature Console",
+    "short_name": "ADISO DeepScope",
+    "array_elements": 10,
+    "address_length": 7,
+    "default_safety_hold": "RELEASED",
+    "observatory": "Argos DeepScope Interferometric Synthesis Observatory (ADISO)"
+  }
 }

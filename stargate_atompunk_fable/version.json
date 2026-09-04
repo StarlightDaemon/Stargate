@@ -1,9 +1,10 @@
 {
-  "name": "AUREOLE — Meadowlark Atomic Exposition · Threshold Pavilion",
-  "folder": "stargate_atompunk_fable",
   "version": "1.0.0",
   "model": "Claude Fable 5.1",
   "built": "2026-09-02",
-  "status": "confirmed by direct operator hands-on testing (2026-09-02)",
-  "port": 8733
+  "meta": {
+    "name": "AUREOLE — Meadowlark Atomic Exposition · Threshold Pavilion",
+    "folder": "stargate_atompunk_fable",
+    "status": "confirmed by direct operator hands-on testing (2026-09-02)"
+  }
 }

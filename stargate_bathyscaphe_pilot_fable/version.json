@@ -1,9 +1,11 @@
 {
-  "name": "stargate_bathyscaphe_pilot_fable",
-  "title": "DSV-7 Cerulean Lantern — Pilot Console",
-  "institute": "Hadal Threshold Institute",
   "version": "1.0.0",
   "model": "Claude Fable 5 (high reasoning)",
   "built": "2026-08-23",
-  "architecture": "client-side only; localStorage for single-device persistence; no backend"
+  "meta": {
+    "name": "stargate_bathyscaphe_pilot_fable",
+    "title": "DSV-7 Cerulean Lantern — Pilot Console",
+    "institute": "Hadal Threshold Institute",
+    "architecture": "client-side only; localStorage for single-device persistence; no backend"
+  }
 }

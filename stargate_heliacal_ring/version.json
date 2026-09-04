@@ -1,7 +1,9 @@
 {
-  "name": "stargate_heliacal_ring",
-  "device": "Heliacal Ring — Gate Command · Terminal VII",
   "version": "1.1.0",
-  "date": "2026-08-16",
-  "model": "Claude Sonnet 5"
+  "model": "Claude Sonnet 5",
+  "built": "2026-08-16",
+  "meta": {
+    "name": "stargate_heliacal_ring",
+    "device": "Heliacal Ring — Gate Command · Terminal VII"
+  }
 }

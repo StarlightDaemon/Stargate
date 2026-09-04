@@ -1,7 +1,9 @@
 {
-  "name": "stargate_astro_pavilion",
-  "device": "Astro-Transit Pavilion '64",
   "version": "1.4.0",
-  "date": "2026-08-11",
-  "model": "Gemini 3.1 Pro (high reasoning)"
+  "model": "Gemini 3.1 Pro (high reasoning)",
+  "built": "2026-08-11",
+  "meta": {
+    "name": "stargate_astro_pavilion",
+    "device": "Astro-Transit Pavilion '64"
+  }
 }

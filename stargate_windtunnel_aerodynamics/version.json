@@ -1,7 +1,9 @@
 {
-  "name": "stargate_windtunnel_aerodynamics",
   "version": "1.0.0",
   "model": "Gemini 3.8 Flash (High Reasoning)",
-  "title": "Aeolos Stagnation Plenum (ASP-9) — Transonic Aerodynamic Test Console",
-  "genre": "Wind Tunnel Aerodynamics Test Facility"
+  "meta": {
+    "name": "stargate_windtunnel_aerodynamics",
+    "title": "Aeolos Stagnation Plenum (ASP-9) — Transonic Aerodynamic Test Console",
+    "genre": "Wind Tunnel Aerodynamics Test Facility"
+  }
 }

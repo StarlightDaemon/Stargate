@@ -1,7 +1,9 @@
 {
   "version": "1.0.0",
-  "build": "stargate_celestial_astrolabe",
-  "institute": "Hyperion Astronavigation Institute",
-  "vessel": "R/V Tethys-V",
-  "model": "Gemini 3.7 Flash"
+  "model": "Gemini 3.7 Flash",
+  "meta": {
+    "build": "stargate_celestial_astrolabe",
+    "institute": "Hyperion Astronavigation Institute",
+    "vessel": "R/V Tethys-V"
+  }
 }

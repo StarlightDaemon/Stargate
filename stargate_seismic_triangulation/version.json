@@ -1,7 +1,9 @@
 {
   "version": "1.0.0",
   "model": "Gemini 3.7 Flash (High Reasoning)",
-  "build_name": "Cascadia Lithospheric Seismo-Acoustic Array",
-  "system_id": "CLSA-9",
-  "timestamp": "2026-08-22T22:05:00Z"
+  "built": "2026-08-22T22:05:00Z",
+  "meta": {
+    "build_name": "Cascadia Lithospheric Seismo-Acoustic Array",
+    "system_id": "CLSA-9"
+  }
 }

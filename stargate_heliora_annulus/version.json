@@ -1,7 +1,9 @@
 {
-  "name": "stargate_heliora_annulus",
-  "device": "HELIORA · Threshold Annulus, Meridian Vault Instrument No. 1",
   "version": "1.1.0",
-  "date": "2026-08-16",
-  "model": "Claude Fable 5"
+  "model": "Claude Fable 5",
+  "built": "2026-08-16",
+  "meta": {
+    "name": "stargate_heliora_annulus",
+    "device": "HELIORA · Threshold Annulus, Meridian Vault Instrument No. 1"
+  }
 }

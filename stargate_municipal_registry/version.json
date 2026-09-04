@@ -1,7 +1,9 @@
 {
-  "name": "stargate_municipal_registry",
-  "device": "DITMCO — Municipal Conduit Registry Terminal (Form 1099-TX)",
   "version": "1.1.0",
-  "date": "2026-08-11",
-  "model": "Gemini 3.6 Flash (high reasoning)"
+  "model": "Gemini 3.6 Flash (high reasoning)",
+  "built": "2026-08-11",
+  "meta": {
+    "name": "stargate_municipal_registry",
+    "device": "DITMCO — Municipal Conduit Registry Terminal (Form 1099-TX)"
+  }
 }
