@@ -1188,6 +1188,15 @@ body {
   cursor: pointer;
 }
 
+/* Accessibility: keyboard focus indicators (added, does not alter existing :focus/:hover) */
+button:focus-visible,
+input[type="range"]:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--cyan-bright);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px var(--cyan-glow);
+}
+
 /* Helper Utilities */
 .text-cyan { color: var(--cyan-bright); }
 .text-amber { color: var(--amber-bright); }

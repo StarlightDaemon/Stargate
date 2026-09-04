@@ -421,3 +421,25 @@ body.seeking .gate-container {
 .footer-right { right: 25px; }
 .footer-left a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.2s; }
 .footer-left a:hover { opacity: 1; border-color: var(--text); }
+
+/* ———— focus-visible (keyboard accessibility) ———— */
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 3px;
+}
+
+/* ———— reduced motion ————
+   Almost every animation here (.tracking-line scan, chevron/origin
+   seeking-target flicker, the transmission-surface active/degrading/
+   rejected states) is direct feedback tied to the seeking/active/reject
+   dial-sequence states and is left untouched so the user can still tell
+   the gate is dialing. The one exception is the gate's rapid position
+   jitter (gateShake) during "seeking" -- a vestibular-trigger shake that
+   is redundant with the tracking-line and chevron flicker already
+   conveying "seeking", so it alone is paused. */
+@media (prefers-reduced-motion: reduce) {
+    body.seeking .gate-container {
+        animation-play-state: paused;
+    }
+}

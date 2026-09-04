@@ -829,3 +829,44 @@ html, body {
 .version-tag {
   color: var(--text-dim);
 }
+
+/* ==========================================================================
+   Accessibility: Keyboard Focus Indicators
+   Added alongside existing :hover rules (none removed or modified). The
+   3px outline-offset keeps the ring on the console's dark chrome around
+   every control, so it stays legible even for buttons whose own fill
+   turns bright green in active states (e.g. btn-engage's pending-eco
+   state). Note: the "SUPERCONDUCTING BUS OVERLOAD HOLD" checkbox
+   (.switch-control input) is styled with display:none, which already
+   removes it from the keyboard tab order and from :focus-visible
+   matching entirely -- CSS cannot restore its focusability without
+   changing that display rule, which is out of scope here (would require
+   an HTML/JS-level accessible-toggle fix), so no rule is added for it.
+   The 10 substation chevrons (.substation-chevron) and 8 route slots
+   (.slot) are plain <div>s with no tabindex in app.js, so they are also
+   not part of the keyboard tab order and are skipped.
+   ========================================================================== */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--eco-cyan);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px rgba(0, 255, 200, 0.4);
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion
+   Damps only the always-on ambient loops (the central synchro-core rotor
+   spin, the footer "online" status heartbeat dot). Purposeful
+   state-feedback animation (pending-eco, the "ready to engage" glow on
+   btn-engage) is intentionally left untouched so activation-readiness
+   feedback stays fully visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .core-rotor {
+    animation-duration: 20s;
+  }
+
+  .status-dot {
+    animation-duration: 5s;
+  }
+}

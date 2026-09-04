@@ -830,3 +830,53 @@ html, body {
 .version-tag {
   color: var(--text-dim);
 }
+
+/* ---------------- focus-visible (accessibility) ---------------- */
+
+.help-btn:focus-visible,
+.glyph-btn:focus-visible,
+.preset-btn:focus-visible,
+.modal-close:focus-visible {
+  outline: 2px solid var(--nex-cyan);
+  outline-offset: 2px;
+  box-shadow: 0 0 14px rgba(0, 245, 212, 0.6);
+}
+
+.btn-engage:focus-visible {
+  outline: 2px solid var(--nex-orange);
+  outline-offset: 2px;
+}
+
+.btn-abort:focus-visible {
+  outline: 2px solid var(--nex-red);
+  outline-offset: 2px;
+}
+
+.banner-dismiss:focus-visible {
+  outline: 2px solid var(--nex-yellow);
+  outline-offset: 2px;
+}
+
+.switch-control input:focus-visible + .slider {
+  outline: 2px solid var(--nex-cyan);
+  outline-offset: 2px;
+}
+
+.daemon-link:focus-visible {
+  outline: 2px solid var(--nex-cyan);
+  outline-offset: 3px;
+}
+
+/* ---------------- reduced motion ---------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .core-reticle {
+    animation-duration: 6s;
+    animation-name: pulse-reticle-reduced;
+  }
+
+  @keyframes pulse-reticle-reduced {
+    0%, 100% { transform: scale(1); opacity: 0.75; }
+    50% { transform: scale(1.08); opacity: 0.9; }
+  }
+}

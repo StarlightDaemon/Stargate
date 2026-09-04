@@ -1394,3 +1394,39 @@ body::after {
   background: #ffffff;
   box-shadow: 0 0 16px var(--accent-cyan);
 }
+
+/* ==========================================================================
+   Accessibility: Keyboard Focus Indicators
+   Added alongside existing :hover rules (none removed or modified). The
+   3px outline-offset keeps the ring on the console's dark chrome around
+   every control, so it stays legible even for buttons whose own fill
+   turns bright cyan/white in active states (e.g. btn-action-primary's
+   ready-pulse state). Note: the 8 register slots (.reg-slot) are plain
+   <div>s with no tabindex in app.js, so they are not part of the
+   keyboard tab order and are skipped here.
+   ========================================================================== */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion
+   Damps only the always-on ambient loops (header SIGINT badge icon pulse,
+   the "live" stream indicator dot). Purposeful state-feedback animations
+   (testing-strobe for active sub-key hypothesis testing, pulse-alert for
+   the OPSEC interlock warning banner, and ready-pulse for the "ready to
+   execute" glow) are intentionally left untouched so dialing and
+   activation feedback stays fully visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .badge-icon {
+    animation-duration: 10s;
+  }
+
+  .ph-dot.live-dot {
+    animation-duration: 5s;
+  }
+}

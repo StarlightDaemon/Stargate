@@ -1324,3 +1324,43 @@ html, body {
   color: var(--text-dim);
   letter-spacing: 1px;
 }
+
+/* ==========================================================================
+   ACCESSIBILITY: KEYBOARD FOCUS INDICATORS
+   Added alongside existing :hover rules (none removed or modified). The
+   generous outline-offset keeps the ring on the console's dark chrome
+   around every button, so it stays high-contrast even for buttons whose
+   own fill turns bright cyan/amber/white in active states (e.g. the
+   activate-btn's ready-pulse / in-progress / sustained states).
+   Note: the "ENGAGE VERIFICATION HOLD" checkbox (.switch-label input) is
+   styled with display:none, which already removes it from the keyboard
+   tab order and from :focus-visible matching entirely -- CSS cannot
+   restore its focusability without changing that display rule, which is
+   out of scope here (would require an HTML/JS-level accessible-toggle
+   fix), so no rule is added for it.
+   ========================================================================== */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--cyan-primary);
+  outline-offset: 3px;
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: REDUCED MOTION
+   Damps only the always-on ambient loops (header logo glow pulse, the
+   spectrogram radar dot). Purposeful state-feedback animations
+   (badgeBlink for dialing/buildup, activeGlow for the active badge,
+   holdFlash for the interlock violation alert, and activatePulsate for
+   the "ready to activate" glow) are intentionally left untouched so
+   dialing and activation feedback stays fully visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .observatory-logo .logo-svg {
+    animation-duration: 16s;
+  }
+
+  .radar-dot {
+    animation-duration: 8s;
+  }
+}

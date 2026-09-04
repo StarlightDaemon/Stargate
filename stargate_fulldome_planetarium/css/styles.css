@@ -1633,3 +1633,39 @@ kbd {
   display: flex;
   justify-content: flex-end;
 }
+
+/* ==========================================================================
+   Accessibility: Keyboard Focus Indicators
+   ========================================================================== */
+
+button:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+.sector-node:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 4px;
+}
+
+.switch-container input:focus-visible + .slider {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-beacon,
+  .live-dot-pulse,
+  .master-power-led,
+  .banner-icon {
+    animation-duration: 6s;
+  }
+
+  .lens-reticle-spin {
+    animation-duration: 90s;
+  }
+}

@@ -1139,3 +1139,43 @@ input:checked + .slider:before {
   font-size: 10px;
   color: var(--accent-cyan);
 }
+
+/* ==========================================================================
+   ACCESSIBILITY: KEYBOARD FOCUS INDICATORS
+   Cyan glow pulled from --accent-cyan / --accent-cyan-glow, matching the
+   existing hover glow language (e.g. .help-btn:hover, .tab-btn.active).
+   Crimson-themed controls (disengage, chip removal) use --accent-crimson to
+   match their own hover language. Added alongside existing :hover rules;
+   no existing :hover rule is modified.
+   ========================================================================== */
+.help-btn:focus-visible,
+.star-select-btn:focus-visible,
+.quick-dial-item:focus-visible,
+.tab-btn:focus-visible,
+.footer-link:focus-visible,
+.modal-close-btn:focus-visible,
+.btn-primary-action:focus-visible,
+.almanac-input:focus-visible,
+.almanac-select:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
+}
+
+.btn-disengage-action:focus-visible,
+.chip-remove:focus-visible {
+  outline: 2px solid var(--accent-crimson);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--accent-crimson-glow);
+}
+
+.switch input:focus-visible + .slider {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+input[type="checkbox"]:focus-visible,
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}

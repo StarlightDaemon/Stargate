@@ -271,3 +271,20 @@ button:active {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-color);
 }
+
+/* ———— focus-visible (keyboard accessibility) ———— */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+/* ———— reduced motion: pause ambient/decorative loops, leave breach-sequence feedback untouched ———— */
+@media (prefers-reduced-motion: reduce) {
+  .gate-pending .aperture-core,
+  .address-slot.active-target,
+  #btn-execute.ready {
+    animation-play-state: paused;
+  }
+}

@@ -862,3 +862,16 @@
   border: 1px solid var(--crt-border);
   padding: 1px 6px;
 }
+
+/* Reduced motion: damp ambient decorative pulse/blink that run regardless of
+   dial/docket state. Purposeful state animations (pulse-status, flash-keypad)
+   are left untouched. */
+@media (prefers-reduced-motion: reduce) {
+  .banner-icon {
+    animation: none;
+  }
+  .cursor-blink {
+    animation: none;
+    opacity: 1;
+  }
+}

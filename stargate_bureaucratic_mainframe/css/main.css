@@ -203,6 +203,32 @@ body.theme-green .crt-flicker {
   opacity: 1;
 }
 
+/* ==========================================================================
+   ACCESSIBILITY: KEYBOARD FOCUS INDICATORS
+   Amber glow pulled from --crt-border-bright / --glow-md, matching the
+   existing hover glow language (e.g. .keypad-btn:hover, .action-btn:hover).
+   Automatically adapts to the green phosphor theme since these are
+   theme-scoped custom properties. Added alongside existing :hover/:focus
+   rules; no existing :hover/:focus rule is modified.
+   ========================================================================== */
+.operator-ref-btn:focus-visible,
+.theme-btn:focus-visible,
+.audio-btn:focus-visible,
+.text-action-btn:focus-visible,
+.action-btn:focus-visible,
+.keypad-btn:focus-visible,
+.modal-close-btn:focus-visible,
+.starlight-link:focus-visible {
+  outline: 2px solid var(--crt-border-bright);
+  outline-offset: 2px;
+  box-shadow: var(--glow-md);
+}
+
+.terminal-checkbox:focus-visible + .chk-custom {
+  outline: 2px solid var(--crt-border-bright);
+  outline-offset: 2px;
+}
+
 /* Custom Scrollbar for Terminal Panels */
 ::-webkit-scrollbar {
   width: 6px;
@@ -217,4 +243,15 @@ body.theme-green .crt-flicker {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--crt-primary);
+}
+
+/* ==========================================================================
+   REDUCED MOTION: damp ambient/decorative CRT effects only.
+   Purposeful feedback animations (chevron-pulse, flash-keypad, pulse-status,
+   receipt-feed) are left untouched so dial/lock/active state stays visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .crt-flicker {
+    animation: none;
+  }
 }

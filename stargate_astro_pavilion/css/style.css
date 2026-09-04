@@ -210,3 +210,46 @@ input:disabled + .slider { opacity: 0.5; cursor: not-allowed; }
 .corner-bottom-right { right: 2.5rem; }
 .corner-attribution a { color: var(--accent-blue-dark); text-decoration: none; transition: color 0.2s; }
 .corner-attribution a:hover { color: var(--accent-blue); text-decoration: underline; }
+
+/* ==========================================================================
+   ACCESSIBILITY: Keyboard Focus Indicators (added alongside existing hover)
+   ========================================================================== */
+.tab-btn:focus-visible,
+.symbol-btn:focus-visible,
+.btn-express:focus-visible,
+.btn-secondary:focus-visible,
+.btn-primary:focus-visible,
+.corner-attribution a:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+}
+
+.btn-engage:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 3px;
+}
+
+/* Custom checkbox toggle: input itself is visually hidden (opacity:0), so the
+   focus ring is drawn on its visible .slider sibling instead. */
+.switch input:focus-visible + .slider {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: Reduced Motion (damp ambient/decorative loops only)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    /* Idle ring-track background breathing glow: loops continuously
+       regardless of dial/activation state, purely decorative - slow it
+       down and narrow the opacity/scale/brightness swing. Dial feedback
+       (seeking-pulse, shockwave, portal-ripple, portal-collapse) is left
+       untouched so activation state stays fully legible. */
+    .ring-track-bg {
+        animation-duration: 16s;
+    }
+    @keyframes idle-pulse {
+        0% { opacity: 0.85; transform: scale(1); filter: brightness(0.95); }
+        100% { opacity: 0.95; transform: scale(1.005); filter: brightness(1.05); }
+    }
+}

@@ -2112,3 +2112,80 @@ kbd {
 body.no-scanlines .crt-overlay-layer {
   display: none;
 }
+
+/* ==========================================================================
+   ACCESSIBILITY: Keyboard Focus Indicators (added alongside existing hover/focus)
+   Outline tracks --phosphor-primary so it follows the active phosphor theme
+   (default emerald, theme-amber, theme-cobalt).
+   ========================================================================== */
+.nav-tab:focus-visible,
+.nav-help-btn:focus-visible,
+.taxon-btn:focus-visible,
+.preset-card-btn:focus-visible,
+.table-load-btn:focus-visible,
+.modal-close-btn:focus-visible,
+.footer-link:focus-visible,
+.category-select:focus-visible,
+.master-actuator-btn:focus-visible,
+.setting-row select:focus-visible,
+.setting-row input[type="range"]:focus-visible,
+.setting-row input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--phosphor-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--phosphor-primary-glow);
+}
+
+.disengage-vault-btn:focus-visible {
+  outline: 2px solid var(--crimson-alert);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--crimson-glow);
+}
+
+/* Custom checkbox toggle: input itself is visually hidden (opacity:0), so the
+   focus ring is drawn on its visible .switch-slider sibling instead. */
+.switch-container input:focus-visible + .switch-slider {
+  outline: 2px solid var(--phosphor-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: Reduced Motion (damp ambient/decorative loops only)
+   Untouched on purpose: vortexSpin, pulseRing (active-vault energy feedback),
+   pulseReady (armed-to-fire invitation) - these communicate live
+   dial/activation state and must stay fully visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  /* Header seal icon: rotates/scales continuously regardless of dial state -
+     purely decorative branding flourish. */
+  .depository-seal {
+    animation-duration: 30s;
+  }
+
+  /* Inner hub ring of the rotary wheel: slow continuous background rotation,
+     unrelated to dial progress. */
+  .hub-brass-rim {
+    animation-play-state: paused;
+  }
+
+  /* Footer status ticker dot: idle "system alive" blink, always on. */
+  .ticker-pulse {
+    animation-duration: 4s;
+  }
+
+  /* Deep Stacks map location ping: continuous locator blip, not tied to
+     dialing/activation. */
+  .pod-ping {
+    animation-duration: 4s;
+  }
+
+  /* Holographic folio bob: decorative breathing/float once the record card
+     has materialized - narrow the amplitude and slow it rather than removing
+     the hologram's presence (which itself signals successful retrieval). */
+  .stasis-vault-aperture.active .holographic-folio-projection {
+    animation-duration: 8s;
+  }
+  @keyframes floatHolo {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-2px) rotate(0deg); }
+  }
+}

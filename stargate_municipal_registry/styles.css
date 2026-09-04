@@ -1523,3 +1523,47 @@ html, body {
   background: #ffffff;
   box-shadow: 0 0 10px #ffffff;
 }
+
+/* ==========================================================================
+   FOCUS-VISIBLE (ACCESSIBILITY)
+   ========================================================================== */
+
+.audio-toggle-btn:focus-visible,
+.glyph-btn:focus-visible,
+.qd-btn:focus-visible,
+.btn-engage:focus-visible,
+.starlight-link:focus-visible {
+  outline: 2px solid var(--phosphor-green-bright);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--phosphor-green-glow);
+}
+
+.help-btn:focus-visible,
+.lockout-switch-btn:focus-visible {
+  outline: 2px solid var(--amber-warning);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--amber-warning-glow);
+}
+
+.btn-disengage:focus-visible,
+.modal-close-btn:focus-visible {
+  outline: 2px solid var(--red-reject);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--red-reject-glow);
+}
+
+.btn-modal-dismiss:focus-visible {
+  outline: 2px solid var(--phosphor-green-bright);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-flicker {
+    animation: none;
+    opacity: 0.98;
+  }
+}

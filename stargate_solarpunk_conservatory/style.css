@@ -344,3 +344,12 @@ body.frost .sky { background:
 @media (prefers-reduced-motion: reduce) {
   .tool-open.ready, .tool-frost.engaged, .frostVeil { animation: none; }
 }
+
+/* ===== keyboard focus (added alongside the existing hover/active rules above, none of which are altered) ===== */
+.seed:focus-visible,
+.pressing:focus-visible,
+.tool:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(255, 252, 240, 0.9), 0 0 14px rgba(44, 90, 68, 0.6);
+}

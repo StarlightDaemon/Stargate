@@ -1795,3 +1795,42 @@ html, body {
   font-weight: 700;
   cursor: pointer;
 }
+
+/* ==========================================================================
+   ACCESSIBILITY: KEYBOARD FOCUS INDICATORS
+   Added alongside existing :hover/:focus rules (none removed or modified).
+   Uses the theme's own --accent custom property so the indicator follows
+   whichever palette (cyan/amber/emerald/violet) is active.
+   ========================================================================== */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: REDUCED MOTION
+   Damps only the always-on ambient/decorative loops (header emblem spin+pulse,
+   aperture lens ring spin, idle status/alert heartbeat dots). Purposeful
+   state-feedback animations (pulse-amber dish verification, engage-pulse
+   "ready to activate" glow, and all buildup/breakthrough/active stage
+   transitions driven from JS) are intentionally left untouched so dialing
+   and activation feedback stays fully visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .emblem-ring,
+  .aperture-lens-rings {
+    animation-duration: 90s;
+  }
+
+  .emblem-core {
+    animation-duration: 8s;
+  }
+
+  .pulse-dot,
+  .toast-icon {
+    animation-duration: 4s;
+  }
+}

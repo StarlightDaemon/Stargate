@@ -1206,3 +1206,33 @@ html, body {
 .modal-section li strong {
   color: var(--text-bright);
 }
+
+/* ==========================================================================
+   ACCESSIBILITY: KEYBOARD FOCUS INDICATORS
+   Cyan glow pulled from --border-bright / --accent-cyan, matching the
+   existing hover glow language (e.g. .icon-btn:hover, .candidate-move-btn:hover).
+   Added alongside existing :hover rules; no existing :hover rule is modified.
+   ========================================================================== */
+/* ==========================================================================
+   REDUCED MOTION: damp ambient decorative pulse only. The status-pill
+   indicator dot pulses continuously regardless of engine/dial state, so it
+   is ambient. Purposeful stage-feedback animations (buildup-pulse,
+   breakthrough-flash, sustained-aurora, ready-strobe) are left untouched so
+   dial progress and connection state remain visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .status-pill .indicator-dot {
+    animation: none;
+  }
+}
+
+.icon-btn:focus-visible,
+.candidate-move-btn:focus-visible,
+.preset-btn:focus-visible,
+.action-btn:focus-visible,
+.close-modal-btn:focus-visible,
+.bottom-bar a:focus-visible {
+  outline: 2px solid var(--border-bright);
+  outline-offset: 2px;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}

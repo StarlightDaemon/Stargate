@@ -393,3 +393,16 @@ html, body {
   position: absolute; right: 22px; bottom: 14px;
   font-size: 13px; letter-spacing: 0.1em; color: #565b61; opacity: 0.55;
 }
+
+/* ============================================================
+   reduced motion: damp ambient/decorative looping effects only.
+   Purposeful state-change transitions (toggle throw, cover flip,
+   opacity fades) and canvas-driven trace/dial rendering are
+   untouched — they communicate console state, not idle ambience.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+    opacity: 1;
+  }
+}

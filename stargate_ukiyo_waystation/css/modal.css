@@ -409,6 +409,12 @@ input:checked + .latch-slider {
     background-color: #f7d2cb;
 }
 
+/* Accessibility: keyboard focus indicator for the (visually 0-size) checkbox driving the latch */
+input:focus-visible + .latch-slider {
+    outline: 3px solid var(--vermillion-shu);
+    outline-offset: 3px;
+}
+
 input:checked + .latch-slider:before {
     transform: translateX(28px);
     content: "封";

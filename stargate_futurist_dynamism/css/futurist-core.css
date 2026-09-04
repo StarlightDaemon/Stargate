@@ -526,3 +526,28 @@ body::before {
   background: var(--border-accent);
   border-radius: 3px;
 }
+
+/* ==========================================================================
+   Accessibility: Keyboard Focus Indicators
+   ========================================================================== */
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent-speed);
+  outline-offset: 2px;
+}
+
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--accent-speed);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-crest {
+    animation-duration: 12s;
+  }
+}

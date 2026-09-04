@@ -1420,3 +1420,33 @@ html, body {
   color: var(--parchment-rubric);
   font-weight: 700;
 }
+
+/* ==========================================================================
+   ACCESSIBILITY: KEYBOARD FOCUS INDICATORS
+   Gold-leaf glow pulled from --gold-leaf / --gold-glow, matching the
+   existing hover glow language (e.g. .gothic-btn:hover, .palette-btn:hover).
+   Added alongside existing :hover rules; no existing :hover rule is modified.
+   ========================================================================== */
+/* ==========================================================================
+   REDUCED MOTION: damp ambient decorative candle flicker only, which plays
+   continuously regardless of dial/activation state. Purposeful stage-feedback
+   animations (sunbeamShift/sunbeamActiveGlow on buildup/active, kaleidoscopeSpin
+   on the active portal vortex, pendingPulse/activeTransitPulse on the ignition
+   button, glassSeatSettle/sparkFlash lock feedback) are left untouched so dial
+   progress and activation state remain visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .candle-flame {
+    animation: none;
+  }
+}
+
+.gothic-btn:focus-visible,
+.palette-btn:focus-visible,
+.preset-card-btn:focus-visible,
+.modal-close-btn:focus-visible,
+.starlight-link:focus-visible {
+  outline: 2px solid var(--gold-leaf);
+  outline-offset: 2px;
+  box-shadow: 0 0 12px var(--gold-glow);
+}

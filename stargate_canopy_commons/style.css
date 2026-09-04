@@ -556,6 +556,28 @@ html, body {
 #corner a { color: var(--terracotta); text-decoration: none; }
 #corner a:hover { text-decoration: underline; }
 
+/* ---------- keyboard focus (a11y pass, additive only) ---------- */
+/* Terracotta is this build's existing "held / active / engaged" accent
+   (.wm.is-pledged, .r-slot.is-held, .latch-btn[aria-pressed="true"]),
+   and it reads clearly against every cream-family surface these controls
+   sit on. Outline is drawn outside each control via outline-offset, so it
+   shows against the surrounding page background rather than the button's
+   own (sometimes amber) fill. */
+.wm:focus-visible,
+.route:focus-visible,
+.shelf-btn:focus-visible,
+.open-btn:focus-visible,
+.fold-btn:focus-visible,
+.latch-btn:focus-visible,
+.guide-close:focus-visible,
+#corner a:focus-visible {
+  outline: 3px solid var(--terracotta);
+  outline-offset: 3px;
+}
+.route:focus-visible {
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .open-btn, .open-ring { animation: none !important; }
 }

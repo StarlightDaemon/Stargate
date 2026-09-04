@@ -829,3 +829,28 @@ html, body {
 .version-tag {
   color: var(--text-dim);
 }
+
+/* ==========================================================================
+   Accessibility: Keyboard Focus Indicators
+   ========================================================================== */
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--bio-violet);
+  outline-offset: 2px;
+}
+
+.switch-control input:focus-visible + .slider {
+  outline: 2px solid var(--bio-violet);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .core-reticle {
+    animation-duration: 8s;
+  }
+}

@@ -1474,3 +1474,41 @@ html, body {
   background: var(--cyan-bright);
   color: var(--bg-prussian-deep);
 }
+
+/* ===== Accessibility: keyboard focus indicators (added alongside existing :hover rules) ===== */
+.cad-icon-btn:focus-visible,
+.cad-help-btn:focus-visible,
+.glyph-key-btn:focus-visible,
+.cad-btn-primary-action:focus-visible,
+.cad-toggle-btn:focus-visible,
+.preset-card-btn:focus-visible,
+.starlight-link:focus-visible,
+.cad-btn-secondary:focus-visible {
+  outline: 2px solid var(--cyan-bright);
+  outline-offset: 3px;
+  box-shadow: var(--shadow-vector-glow);
+}
+
+.cad-btn-disengage:focus-visible,
+.modal-close-btn:focus-visible {
+  outline: 2px solid var(--accent-red);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px rgba(255, 51, 102, 0.5);
+}
+
+/* ===== Accessibility: reduced motion (damps ambient/decorative animation only) ===== */
+@media (prefers-reduced-motion: reduce) {
+  /* Bureau badge icon pulse is a purely decorative logo animation that loops
+     continuously regardless of dial/activation state. */
+  .badge-icon {
+    animation: none;
+  }
+
+  /* Decorative light-sweep shimmer layered on the ready-state execute button.
+     The READY state itself stays fully communicated via the button's
+     color/border change and its (purposeful, untouched) ready-pulse-glow
+     box-shadow animation, so the shimmer alone is safe to disable. */
+  .cad-btn-primary-action.ready .btn-glimmer {
+    animation: none;
+  }
+}

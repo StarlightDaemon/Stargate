@@ -302,6 +302,15 @@ button { font: inherit; }
 .drop:hover { background: #f05a3c; }
 .drop:active { transform: scale(.94); }
 
+/* ---------- accessibility: keyboard focus indicators (added alongside existing :hover rules) ---------- */
+.btn:focus-visible,
+.drop:focus-visible,
+.cass:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  box-shadow: 0 0 10px rgba(242,169,59,.6);
+}
+
 /* ---------- cassette rack ---------- */
 .rack { left: 1520px; top: 60px; width: 360px; height: 660px; transform: rotate(.3deg); }
 .rack-note { position: absolute; left: 24px; top: 28px; font-size: 13px; }
@@ -335,3 +344,12 @@ button { font: inherit; }
 
 /* ---------- corner (outside the scaled subtree) ---------- */
 #corner { position: fixed; right: 10px; bottom: 8px; font: 12px var(--f-mono); color: #7a7060; z-index: 100; pointer-events: none; }
+
+/* ---------- accessibility: reduced motion (damps ambient/decorative animation only) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  /* CRT grain jitter is a purely decorative idle texture that loops
+     continuously regardless of dial/activation state. */
+  .grain {
+    animation-play-state: paused;
+  }
+}

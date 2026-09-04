@@ -480,6 +480,23 @@ body {
 }
 .opref-close:hover { border-color: var(--cyan-dim); color: var(--cyan); }
 
+/* ---------------- focus-visible (accessibility) ---------------- */
+
+.key:focus-visible,
+.dest:focus-visible,
+.ctl:focus-visible,
+.opref-btn:focus-visible,
+.opref-close:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--cyan);
+}
+
+.credit:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+
 /* ---------------- narrow screens ---------------- */
 
 @media (max-width: 900px) {

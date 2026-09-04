@@ -356,6 +356,28 @@ button { font-family: inherit; color: inherit; background: none; border: none; c
 #credit:hover { color: var(--accent); }
 #version-label { position: fixed; right: calc(16px * var(--fit)); bottom: calc(12px * var(--fit)); font-family: var(--mono); font-size: calc(12px * var(--fit)); letter-spacing: .12em; color: var(--ink-dim); z-index: 40; }
 
+/* ———— focus-visible (keyboard accessibility) ———— */
+button:focus-visible,
+a:focus-visible,
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ———— reduced motion: pause ambient/decorative loops, leave dial feedback untouched ———— */
+@media (prefers-reduced-motion: reduce) {
+  .lightstream,
+  .ring-rot,
+  .ring-rot-rev,
+  #stage[data-state="pending"] #aperture-breath,
+  .addr-slot.next,
+  #btn-open[data-armed="1"],
+  #btn-ward.engaged,
+  .ch-edge.known {
+    animation-play-state: paused;
+  }
+}
+
 /* ———— motion intensity ———— */
 html[data-motion="still"] .lightstream,
 html[data-motion="still"] .ring-rot,

@@ -432,3 +432,18 @@ body {
     box-shadow: 0 0 10px rgba(157,78,221,0.2);
 }
 .btn-quick:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* Accessibility: Keyboard Focus Indicators */
+button:focus-visible {
+    outline: 2px solid var(--glow-primary);
+    outline-offset: 3px;
+}
+
+/* Accessibility: Reduced Motion (ambient ward-barrier rotation only;
+   living-surface pulse and chevron seek-pulse communicate active dial
+   state and are left intact) */
+@media (prefers-reduced-motion: reduce) {
+    .ward-barrier {
+        animation-play-state: paused;
+    }
+}

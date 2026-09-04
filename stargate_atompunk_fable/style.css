@@ -317,3 +317,23 @@ body {
 #corner button { border: 1.5px solid var(--turq-dim); background: rgba(13,27,38,.85); color: var(--turq); font-family: var(--font); font-size: 11px; letter-spacing: .14em; padding: 6px 12px; border-radius: 14px; cursor: pointer; }
 #corner button[aria-pressed="false"] { color: var(--ink); border-color: var(--ink-dim); }
 #credit { position: fixed; left: 14px; bottom: 12px; font-size: 11px; letter-spacing: .1em; color: var(--ink-dim); z-index: 60; }
+
+/* ---------- Accessibility: keyboard focus indicators (alongside existing hover) ---------- */
+.iso:focus-visible,
+#discharge:focus-visible,
+#shutter:focus-visible,
+#corner button:focus-visible {
+  outline: 2px solid var(--turq);
+  outline-offset: 3px;
+}
+
+.preset:focus-visible {
+  outline: 2px solid var(--cream);
+  outline-offset: 3px;
+}
+
+#excite:focus-visible,
+#guideClose:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 3px;
+}

@@ -668,3 +668,16 @@ body[data-state="closing"] #status-text { color: var(--danger); }
   .flash.go { animation-duration: 0.5s; }
   #ring.sheen .idle-sheen { animation: none; stroke: rgba(150, 220, 255, 0); }
 }
+
+/* ---------- keyboard focus ---------- */
+
+.chip:focus-visible,
+.btn:focus-visible,
+.pad-key:focus-visible,
+.dest:focus-visible,
+.op-ref-btn:focus-visible,
+.credit:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(89, 216, 255, 0.25);
+}

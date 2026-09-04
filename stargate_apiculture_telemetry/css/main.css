@@ -1402,3 +1402,50 @@ html, body {
   from { transform: scale(0.95); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
+/* ==========================================================================
+   ACCESSIBILITY: Keyboard Focus Indicators (added alongside existing hover/focus)
+   ========================================================================== */
+.nav-drawer-btn:focus-visible,
+.btn-help-circle:focus-visible,
+.btn-quick-dial-engage:focus-visible,
+.colony-key-btn:focus-visible,
+.filter-btn:focus-visible,
+.btn-modal-close:focus-visible,
+.footer-left a:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+  box-shadow: var(--glow-cyan-sm);
+}
+
+#quick-dial-select:focus-visible,
+.search-input-wrap input:focus-visible,
+.setting-row select:focus-visible,
+#setting-master-volume:focus-visible,
+#setting-mute-toggle:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+.btn-primary-activation:focus-visible {
+  outline: 2px solid var(--accent-emerald);
+  outline-offset: 3px;
+  box-shadow: var(--glow-emerald-lg);
+}
+
+.btn-disengage:focus-visible {
+  outline: 2px solid var(--accent-crimson);
+  outline-offset: 2px;
+  box-shadow: var(--glow-crimson-lg);
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: Reduced Motion (damp ambient/decorative loops only)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  /* Idle system-status heartbeat dot: pulses continuously regardless of
+     dial/activation state (just a "system online" LED) - ambient, so damp it. */
+  .status-dot {
+    animation-duration: 8s;
+  }
+}

@@ -865,3 +865,22 @@ html, body {
 .version-tag {
   color: var(--text-dim);
 }
+
+/* ———— focus-visible (keyboard accessibility) ———— */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 3px;
+}
+
+/* ———— reduced motion: damp ambient/decorative loops only ———— */
+/* (this console's buildup/breakthrough/active stage feedback is drawn on
+   #spectro-canvas by app.js, not via CSS classes/keyframes, so nothing
+   below is dial-sequence feedback -- these are all idle ambient loops) */
+@media (prefers-reduced-motion: reduce) {
+  .s-bar,
+  .cartouche-frame,
+  .btn-engage:not(:disabled) {
+    animation-play-state: paused;
+  }
+}

@@ -404,3 +404,29 @@ body[data-stage="breakthrough"] #fog { transform: translateY(-160px); opacity: 0
   position: absolute; right: 12px; top: 10px; width: 36px; height: 36px; font-size: 22px; line-height: 1;
   background: transparent; color: var(--moon); border: 1px solid var(--moon-dim); border-radius: 3px;
 }
+
+/* ---------------------------------------------------------------- reduced motion: damp ambient/decorative loops only.
+ * Purposeful feedback — buildup (buildFlame, rattle, hazeRise/hazeBreathe, statusBlink, fogRise), the breakthrough
+ * burst (flash, rayOut), the one-shot ward-catch cues (flare, emberPop, chainDraw, tug), the assertive warning
+ * (warnBlink), and the quick-dial key turn (keyTurn) are all left untouched. */
+@media (prefers-reduced-motion: reduce) {
+  /* the lantern's idle candle-flicker: at rest, and the flicker that continues once the gate is active */
+  #lantern .flame { animation: none; }
+  body[data-stage="active"] #lantern .flame { animation: none; }
+  #lantern .cast { animation: none; }
+
+  /* a caught ward's ember: stop the idle breathing glow, it stays lit */
+  .picket.caught .ember { animation: none; }
+
+  /* the rays' idle shimmer while the gate stands active; frozen at a static visible level, not hidden */
+  body[data-stage="active"] #rays line { animation: none; opacity: 0.5; }
+
+  /* the salt line's idle pulse once laid; its static border/box-shadow already marks it lit */
+  body.salt #saltLine { animation: none; }
+
+  /* the bell's idle "ready" pulse; its static glow already marks it */
+  body[data-stage="pending"] #bell { animation: none; }
+
+  /* the fog banks' continuous drift and thinning */
+  #fog .bank { animation-play-state: paused; }
+}

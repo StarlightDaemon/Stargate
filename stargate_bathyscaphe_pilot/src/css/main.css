@@ -564,3 +564,36 @@ body::after {
 .text-amber { color: var(--accent-amber) !important; }
 .text-red { color: var(--accent-red) !important; }
 .text-bright { color: var(--text-bright) !important; }
+
+/* ==========================================================================
+   ACCESSIBILITY: Keyboard Focus Indicators (added alongside existing hover/focus)
+   Selectors here cover controls defined across all src/css/*.css partials -
+   outline color tracks --accent-cyan so it follows the active color theme.
+   ========================================================================== */
+.nav-tab:focus-visible,
+.btn-preset-drawer:focus-visible,
+.btn-audio-toggle:focus-visible,
+.btn-operator-help:focus-visible,
+.drawer-close:focus-visible,
+.preset-card-btn:focus-visible,
+.waypoint-btn:focus-visible,
+.btn-interlock:focus-visible,
+.btn-commence-descent:focus-visible,
+.btn-cat-filter:focus-visible,
+.btn-log-action:focus-visible,
+.theme-opt-btn:focus-visible,
+.settings-select:focus-visible,
+.mixer-range:focus-visible,
+.modal-close:focus-visible,
+.btn-dismiss-help:focus-visible,
+.footer-left .brand-link:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+  box-shadow: var(--glow-subtle);
+}
+
+.btn-emergency-blow:focus-visible {
+  outline: 2px solid var(--accent-red);
+  outline-offset: 2px;
+  box-shadow: var(--glow-red);
+}

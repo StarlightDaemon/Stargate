@@ -1589,3 +1589,42 @@ body.crt-scanlines::after {
   from { transform: translateX(40px); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
 }
+
+/* ---------------- focus-visible (accessibility) ---------------- */
+
+.nav-tab-btn:focus-visible,
+.btn-help-ref:focus-visible,
+.preset-btn:focus-visible,
+.btn-tool:focus-visible,
+.glyph-key-btn:focus-visible,
+.btn-power:focus-visible,
+.btn-iris:focus-visible,
+.btn-info-load:focus-visible,
+.btn-info-fast:focus-visible,
+.btn-log-filter:focus-visible,
+.btn-db-load:focus-visible,
+.btn-db-fast:focus-visible,
+.modal-close-btn:focus-visible,
+.alert-close:focus-visible,
+.db-search-field:focus-visible,
+.db-filter-select:focus-visible,
+.setting-item input:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+.btn-lock:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.btn-engage:focus-visible {
+  outline: 2px solid var(--ruby);
+  outline-offset: 2px;
+}
+
+.corner-credit-link:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}

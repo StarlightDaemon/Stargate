@@ -1236,3 +1236,28 @@ input:checked + .switch-slider:before {
   color: var(--text-muted);
   text-align: right;
 }
+
+/* ———— focus-visible (keyboard accessibility) ———— */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+}
+
+/* The risk-toggle checkbox is visually hidden (0x0) in favor of its
+   .switch-slider sibling, so route its focus-visible ring onto the slider. */
+#risk-toggle:focus-visible + .switch-slider {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+/* ———— reduced motion: damp ambient alarm/ready pulses, leave buildup/breakthrough/active stage feedback untouched ———— */
+@media (prefers-reduced-motion: reduce) {
+  .status-pill.status-ready,
+  .risk-alarm-banner.active-alarm,
+  .btn-activate.state-ready,
+  .risk-led.led-engaged,
+  .panel-risk.alarm-shake {
+    animation: none;
+  }
+}

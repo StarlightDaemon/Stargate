@@ -407,3 +407,15 @@
   50% { transform: rotate(180deg) scale(1.05); filter: brightness(1.6) hue-rotate(45deg); }
   to { transform: rotate(360deg) scale(1); filter: brightness(1.2); }
 }
+
+/* ==========================================================================
+   Accessibility: Reduced Motion (ambient idle-state ring rotation only;
+   buildup/breakthrough/active dialing-feedback animations are left intact)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  #center-stage[data-gate-state="idle"] .ring-layer-outer-teeth,
+  #center-stage[data-gate-state="idle"] .ring-layer-flywheel-core {
+    animation-play-state: paused;
+  }
+}

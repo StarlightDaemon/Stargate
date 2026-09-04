@@ -161,6 +161,15 @@
   50% { opacity: 0.4; transform: scale(0.85); }
 }
 
+/* Accessibility: damp ambient idle heartbeat for users who prefer reduced motion.
+   Purposeful state animations (pulse-sync, pulse-armed, jitter-button in components.css)
+   are intentionally left untouched so dial/activation feedback stays visible. */
+@media (prefers-reduced-motion: reduce) {
+  .status-dot {
+    animation-duration: 6s;
+  }
+}
+
 .header-tools {
   display: flex;
   align-items: center;

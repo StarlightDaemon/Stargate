@@ -507,6 +507,23 @@ input:checked + .slider:before {
     color: var(--highlight-color);
 }
 
+/* Accessibility: keyboard focus indicators (added alongside existing :hover rules) */
+.symbol-btn:focus-visible,
+.danger-btn:focus-visible,
+.action-btn:focus-visible,
+.qd-btn:focus-visible,
+.operator-ref-btn:focus-visible,
+.close-btn:focus-visible,
+.bottom-left a:focus-visible {
+    outline: 2px solid var(--line-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 10px var(--line-color);
+}
+.toggle-switch input:focus-visible + .slider {
+    outline: 2px solid var(--line-color);
+    outline-offset: 2px;
+}
+
 /* Animations */
 @keyframes drawPath {
     from { stroke-dashoffset: 100; }

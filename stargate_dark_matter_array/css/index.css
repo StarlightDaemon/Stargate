@@ -1455,3 +1455,34 @@ input:checked + .switch-slider:before {
   0% { opacity: 0.3; }
   100% { opacity: 1.0; }
 }
+
+/* ==========================================================================
+   FOCUS-VISIBLE (KEYBOARD ACCESSIBILITY)
+   ========================================================================== */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
+}
+
+/* The blind-lock checkbox is visually hidden (0x0) in favor of its
+   .switch-slider sibling, so route its focus-visible ring onto the slider. */
+#toggle-blind-lock:focus-visible + .switch-slider {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   REDUCED MOTION: pause ambient/decorative loops only.
+   Buildup/active-flow/discriminating pulses and the veto strobe are
+   real-time process feedback and are intentionally left untouched.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-commit.ready-to-commit {
+    animation-play-state: paused;
+  }
+}

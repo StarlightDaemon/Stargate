@@ -1024,3 +1024,19 @@ html, body {
   color: var(--text-dim);
   z-index: 100;
 }
+
+/* Accessibility: keyboard focus indicators (added, does not alter existing :focus/:hover) */
+button:focus-visible,
+#corner-attribution a:focus-visible,
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+}
+
+/* Accessibility: damp ambient/decorative motion, leave dial/activation feedback untouched */
+@media (prefers-reduced-motion: reduce) {
+  .collider-badge {
+    animation-duration: 12s;
+  }
+}

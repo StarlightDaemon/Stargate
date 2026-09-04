@@ -1197,3 +1197,37 @@ body {
   color: #020306;
   box-shadow: 0 0 16px var(--color-cyan-glow);
 }
+
+/* ===== Accessibility: keyboard focus indicators (added alongside existing :hover rules) ===== */
+.glyph-btn:focus-visible,
+.preset-btn:focus-visible,
+.interlock-toggle-btn:focus-visible,
+.action-btn-engage:focus-visible,
+.corner-link:focus-visible,
+.operator-ref-circle-btn:focus-visible,
+.modal-btn-confirm:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+  box-shadow: 0 0 14px var(--color-cyan-glow);
+}
+
+.action-btn-disengage:focus-visible,
+.modal-close-btn:focus-visible {
+  outline: 2px solid var(--color-crimson);
+  outline-offset: 3px;
+  box-shadow: 0 0 14px var(--color-crimson-glow);
+}
+
+/* ===== Accessibility: reduced motion (damps ambient/decorative animation only) ===== */
+@media (prefers-reduced-motion: reduce) {
+  /* Header emblem is a purely decorative slow logo rotation, unrelated to dial state. */
+  .emblem-svg {
+    animation: none;
+  }
+
+  /* Correlator status dot pulses continuously in every state (idle/ready/active/
+     warning only change its color, not the animation), so it is ambient. */
+  .status-indicator-dot {
+    animation: none;
+  }
+}

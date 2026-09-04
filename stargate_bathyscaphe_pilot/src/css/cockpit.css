@@ -364,3 +364,17 @@
   min-width: 44px;
   text-align: right;
 }
+
+/* ==========================================================================
+   ACCESSIBILITY: Reduced Motion (damp ambient/decorative loops only)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  /* Slow dashed aperture-gate ring: rotates continuously (60s/turn) purely as
+     background decoration, regardless of dial/activation state - pause it.
+     Buildup/breakthrough/ready-state feedback (pulseReady, pulseBuildup,
+     buildupFlicker, breakthroughShock) is left untouched so staged activation
+     remains fully legible. */
+  .gauge-aperture-gate {
+    animation-play-state: paused;
+  }
+}

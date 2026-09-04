@@ -96,3 +96,10 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--cyan-primary);
 }
+
+/* Accessibility: Keyboard Focus Indicators (added alongside existing :hover rules, none modified) */
+button:focus-visible {
+  outline: 2px solid var(--cyan-primary);
+  outline-offset: 3px;
+  box-shadow: var(--glow-cyan-sm);
+}

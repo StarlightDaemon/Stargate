@@ -473,6 +473,28 @@ body {
 #opref-close:hover { border-color: var(--brass); color: var(--brass-hi); }
 #opref-card #opref-close-btn { margin-top: 1.1rem; flex: none; padding: 0.55rem 1.2rem; }
 
+/* ---------------- accessibility: focus-visible ---------------- */
+/* New rules only — existing :focus/:hover/prefers-reduced-motion rules
+   above are untouched. Outline color is var(--sunfire), the instrument's
+   own "energized/lit" accent (already used for filled sockets, the open
+   lamp, lit plaques, and gold log entries), chosen for high contrast
+   against every focusable control's dark background. */
+
+.icon-btn:focus-visible,
+.act-btn:focus-visible,
+.opref-btn:focus-visible,
+#opref-close:focus-visible {
+  outline: 2px solid var(--sunfire);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px #ffb85c88;
+}
+
+.credit:focus-visible {
+  outline: 2px solid var(--sunfire);
+  outline-offset: 3px;
+  color: var(--sunfire);
+}
+
 /* ---------------- narrow layout ---------------- */
 
 @media (max-width: 880px) {

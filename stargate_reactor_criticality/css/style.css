@@ -1601,3 +1601,46 @@ html, body {
   50% { transform: translateX(-50%) scale(1.02); box-shadow: 0 0 45px rgba(0, 191, 255, 0.9); }
   100% { transform: translateX(-50%) scale(1); }
 }
+
+/* ==========================================================================
+   Accessibility: keyboard focus indicators (added alongside existing :hover rules)
+   ========================================================================== */
+.header-btn:focus-visible,
+.channel-btn:focus-visible,
+.rps-toggle-btn:focus-visible,
+.activate-btn:focus-visible,
+.deck-tab:focus-visible,
+.archive-search:focus-visible,
+.archive-filter:focus-visible,
+.load-config-btn:focus-visible,
+.log-mini-btn:focus-visible,
+.set-slider:focus-visible,
+.theme-btn:focus-visible,
+.preset-dropdown:focus-visible,
+.run-preset-btn:focus-visible,
+.footer-author-link:focus-visible,
+.modal-close-btn:focus-visible,
+.modal-ack-btn:focus-visible,
+.check-wrap input:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
+  box-shadow: var(--glow-cyan);
+}
+
+.scram-btn:focus-visible {
+  outline: 2px solid var(--accent-red);
+  outline-offset: 3px;
+  box-shadow: var(--glow-scram);
+}
+
+/* ==========================================================================
+   Accessibility: reduced motion (damps ambient/decorative animation only)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  /* Header reactor-state beacon keeps the same continuous blink in every
+     state (SUBCRITICAL/PENDING/BUILDUP/ACTIVE only change its color via
+     inline style, not the "blink" class), so it is ambient, not feedback. */
+  .status-beacon.blink {
+    animation: none;
+  }
+}

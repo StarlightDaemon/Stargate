@@ -1553,3 +1553,19 @@ kbd {
   background-color: var(--c-yellow);
   color: var(--c-black);
 }
+
+/* ==========================================================================
+   11. ACCESSIBILITY: KEYBOARD FOCUS INDICATORS
+   ========================================================================== */
+button:focus-visible,
+a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--c-canvas-pure), 0 0 0 5px var(--c-blue);
+}
+
+/* Override so the focus ring wins over the hard-shadow resting state of the
+   two giant master action buttons (they already declare their own box-shadow). */
+.master-btn.btn-engage:focus-visible,
+.master-btn.btn-disengage:focus-visible {
+  box-shadow: 0 0 0 2px var(--c-canvas-pure), 0 0 0 5px var(--c-blue);
+}

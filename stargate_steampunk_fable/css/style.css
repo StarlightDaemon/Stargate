@@ -521,3 +521,15 @@ body[data-density="compact"] .gauge-svg { width: 124px; height: 82px; }
 /* ---------- motion ---------- */
 body[data-motion="reduced"] * { animation-duration: 0.001s !important; }
 body[data-motion="reduced"] #reader-card { transition-duration: 0.05s; }
+
+/* ---------- prefers-reduced-motion (OS-level): damp ambient/decorative loops only.
+   Purposeful/feedback motion (refusal-flash, buildup/breakthrough/active annunciator
+   states, reader-card feed transition) is left fully intact. ---------- */
+@media (prefers-reduced-motion: reduce) {
+  /* idle "armed and ready" breathing glow on the engage lever — state is already
+     conveyed statically via border-color and label color, so the pulse is pure decoration */
+  #btn-engage.armed { animation: none; }
+  /* continuous decorative flywheel rotation in the cross-section modal — slowed
+     substantially rather than stopped, since it is a "turning" illustration */
+  body[data-motion="full"] .xs-spin.turning { animation-duration: 32s; }
+}

@@ -1285,3 +1285,30 @@ input[type="range"] {
   background: var(--bg-parchment-dark);
   border: 1px solid var(--vermeil-gold-dark);
 }
+
+/* --- FOCUS-VISIBLE (ACCESSIBILITY) --- */
+
+.nav-ribbon-btn:focus-visible,
+.operator-ref-btn:focus-visible,
+.btn-activate:focus-visible,
+.btn-clear-seq:focus-visible,
+.modal-close-btn:focus-visible,
+.litho-plate-btn:focus-visible,
+.archive-search-input:focus-visible,
+.archive-cat-btn:focus-visible,
+.footer-credit-left a:focus-visible,
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--teal-deep);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px rgba(14, 42, 48, 0.5);
+}
+
+.btn-disengage:focus-visible {
+  outline: 2px solid var(--vermeil-gold-light);
+  outline-offset: 2px;
+}
+
+.codex-link:focus-visible {
+  outline: 2px solid var(--rose-deep);
+  outline-offset: 2px;
+}

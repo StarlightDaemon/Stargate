@@ -1616,6 +1616,26 @@ html, body {
 }
 
 /* ==========================================================================
+   ACCESSIBILITY: KEYBOARD FOCUS INDICATORS
+   Cyan glow pulled from --line-bright-cyan, matching the build's existing
+   glow/box-shadow language (e.g. .operator-ref-btn:hover, .glyph-btn.selected).
+   Added alongside existing :hover rules; no :hover/:focus rule is altered.
+   ========================================================================== */
+.cad-mini-btn:focus-visible,
+.operator-ref-btn:focus-visible,
+.site-plan-card:focus-visible,
+.glyph-btn:focus-visible,
+.action-btn:focus-visible,
+.sub-btn:focus-visible,
+.modal-close-x:focus-visible,
+.modal-btn-dismiss:focus-visible,
+.attribution-link:focus-visible {
+  outline: 2px solid var(--line-bright-cyan);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px rgba(0, 245, 212, 0.6);
+}
+
+/* ==========================================================================
    ANIMATIONS & KEYFRAMES
    ========================================================================== */
 @keyframes pulseStatus {

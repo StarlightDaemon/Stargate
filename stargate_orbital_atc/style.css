@@ -830,3 +830,31 @@ html, body {
 .version-tag {
   color: var(--text-dim);
 }
+
+/* ===== Accessibility: keyboard focus indicators (added alongside existing :hover/:focus rules) ===== */
+.help-btn:focus-visible,
+.glyph-btn:focus-visible,
+.btn-engage:focus-visible,
+.preset-btn:focus-visible,
+.modal-close:focus-visible,
+.daemon-link:focus-visible {
+  outline: 2px solid var(--radar-cyan);
+  outline-offset: 3px;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
+}
+
+.btn-abort:focus-visible,
+.banner-dismiss:focus-visible {
+  outline: 2px solid var(--alarm-red);
+  outline-offset: 3px;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.6);
+}
+
+/* ===== Accessibility: reduced motion (damps ambient/decorative animation only) ===== */
+@media (prefers-reduced-motion: reduce) {
+  /* Ambient center-reticle pulse in the radar corridor runs continuously
+     regardless of dial/activation state - safe to disable entirely. */
+  .core-reticle {
+    animation: none;
+  }
+}
