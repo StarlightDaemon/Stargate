@@ -4,6 +4,8 @@
 
 ---
 
+**Persistence:** `localStorage` only, under the single key `nouveau_nimbus_session_v1`: dial history, discovered and bookmarked archive entries, session logs, operator notes, colour mood, motion intensity, gaslight flicker and a last-saved timestamp. Gate state and the safety interlock are not persisted.
+
 ## Overview
 
 **Stargate: Le Nimbus Florié** is an interactive Belle Époque aetheric transit portal interface set in Paris (circa 1900), styled after the poster compositions of Alphonse Mucha, the curvilinear cast-iron architecture of Hector Guimard, and the botanical glasswork of Victor Horta and Émile Gallé.

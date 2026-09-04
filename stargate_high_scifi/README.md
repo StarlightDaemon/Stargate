@@ -9,6 +9,8 @@ Everything here is fictional and fully client-side: **no backend, no server proc
 network calls, no messaging, no real addresses.** State that persists (the geodesic cache,
 the sound preference) lives in `localStorage` only.
 
+**Persistence:** `localStorage` only, under `meridian.geodesic-cache.v1` (up to 8 cold-solved route ids with solve timestamps, the basis of fast dial) and `meridian.sound.v1` (`on`/`off` sound preference).
+
 ## Running it
 
 Static files, zero dependencies, no build step. Serve the directory with any static file

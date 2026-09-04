@@ -2,6 +2,7 @@
   "version": "1.1.0",
   "model": "Claude Fable 5",
   "built": "2026-08-11",
+  "persistence": "localStorage",
   "meta": {
     "name": "stargate_high_scifi",
     "device": "MERIDIAN — Transit Artifact M-1 Console"

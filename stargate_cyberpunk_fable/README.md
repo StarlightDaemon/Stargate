@@ -6,6 +6,8 @@ NIGHTGLASS is a purely decorative, fully client-side novelty website: the privat
 >
 > **Correction (2026-09-02):** the "Operator-verified" line originally recorded here (2026-09-01, commit `7c8a18d8`) was a prose-only status assertion written at build time — not evidence, despite the name. No hands-on testing had actually happened; the build had only the harness's own automated Puppeteer run behind it, and was pushed live on that alone. Genuine confirmation came later: on 2026-09-02 the operator directly tested this build by hand and confirmed it fully functional end-to-end (manual dial, three-stage activation, disengage, quick-dial auto-dial) — a successful one-shot build by Claude Fable 5, revisiting the Cyberpunk theme under this project's digital-first, maximalist template.
 
+**Persistence:** `localStorage` only, under `nightglass.prefs` (theme, density, motion, audio mix), `nightglass.history` (the last 40 weave entries: time, destination name, manual or preset) and `nightglass.seen` (archive entries already viewed).
+
 ## Running
 
 ```

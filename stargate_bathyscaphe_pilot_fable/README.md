@@ -2,6 +2,8 @@
 
 Hadal Threshold Institute · fictional deep-sea submersible piloting console. An interactive, entirely client-side novelty site: fly a seven-waypoint descent profile by balancing ballast and trim into neutral-buoyancy holds, then commence the final descent to a Threshold ring and open the pressure-hull aperture.
 
+**Persistence:** `localStorage` only, under the `lantern.v1.` prefix: `prefs` (mood, density, motion, master volume, audio layer toggles, auto-audio), `history` (the pilot dive record), `viewed` (archive entries already read) and `sessions` (a per-device session counter). Clearable from Settings.
+
 ## Run
 
 ```

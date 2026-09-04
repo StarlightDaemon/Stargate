@@ -1,6 +1,7 @@
 {
   "version": "1.0.1",
   "model": "Gemini 3.8 Flash, high",
+  "persistence": "localStorage",
   "meta": {
     "name": "stargate_cyberpunk_gemini",
     "title": "Khepri Cipher Terminal",

@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "model": "Gemini 3.7 Flash (High Reasoning)",
   "built": "2026-08-23",
+  "persistence": "localStorage",
   "meta": {
     "name": "stargate-bathyscaphe-pilot",
     "vessel": "DSV-9 ARCHELON",

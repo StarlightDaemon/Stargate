@@ -1,3 +1,5 @@
 # Khepri Cipher Terminal
 
 Khepri Cipher Terminal is a high-fidelity cyberpunk data-access console and network intrusion deck operated by the notorious shadow-lattice broker KHEPRI. Set in a pure information-space aesthetic of glowing vector lattices, floating geometric HUDs, and quantum-resistant ICE barriers, this interactive gateway enables operatives to penetrate encrypted countermeasure rings using a 7-stage polymorphic handshake protocol spoof. Featuring a multi-tier rotating firewall visualization with real physical layer decay, a non-auto-firing three-stage breach sequence (Buildup, Breakthrough, Sustained Extraction), an interactive network topology map, mathematically coupled real-time telemetry, a richly cross-referenced archive of decrypted data enclaves, and an algorithmic synthesized Web Audio soundscape, the terminal delivers a maximalist digital-native cyberspace experience.
+
+**Persistence:** `localStorage` only, under `khepri_terminal_settings` (theme, master/drone/sfx/noise volumes, scanline intensity, reduced-motion flag) and `khepri_viewed_archives` (archive entries already viewed).

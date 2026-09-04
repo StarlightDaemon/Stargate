@@ -4,6 +4,8 @@
 
 ---
 
+**Persistence:** `localStorage` only, under the single key `idpt_gateway_state`: theme, motion intensity, audio volumes, dial history, unlocked dossier records and the session log.
+
 ## Overview
 
 An interactive client-side gateway-dialing terminal inspired by the visual language of Italian Futurism — featuring machine-age dynamism, diagonal force lines, chronophotographic phase capture, and radial velocity mechanics.

@@ -61,6 +61,13 @@ Every build needs all four of these from the very first commit:
   build's native 1920x1080 render resolution.** This keeps the gallery
   thumbnail lightweight; it has no bearing on the resolution a build
   renders itself at for an operator.
+- **Client-side persistence is permitted but must be declared.** A build
+  defaults to in-memory state that resets on reload. If it deliberately
+  keeps anything across reloads (`localStorage` or any other browser
+  storage), `version.json` carries a `"persistence"` field naming the
+  mechanism, and the README carries a short line saying what is stored
+  and under which keys, derived from the code rather than assumed. An
+  undeclared persistence path is a defect, not a feature.
 
 **Model attribution must be verified, not assumed.** A safety classifier
 can silently reroute execution to a different model mid-session. Before

@@ -32,6 +32,8 @@ HTML/CSS/JS, no build step) with synthesized Web Audio, a cross-referenced folio
 archive, a schematic cross-section of the mechanism, coupled live telemetry, a
 session log, and a settings panel. Session state persists in `localStorage` only.
 
+**Persistence:** `localStorage` only, under the single key `perpetua.v1`: settings (theme, density, motion, master/ambient/mechanism/bell volumes), the last 40 dial history entries and archive entries already viewed.
+
 ## Running
 
 ```

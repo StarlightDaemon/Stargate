@@ -10,6 +10,8 @@ fire one by one, wake the Keystone, and open the Way — a shimmering veil of
 starlight. Seal it again when you are done. The Order counsels against leaving
 a gate open.
 
+**Persistence:** `localStorage` only, under the single key `sidereum.memory.v1`: the Ring's remembered Ways (id, name, seven-symbol address, uncharted flag) and the count of uncharted Ways taken. The Forget control effaces it.
+
 ## Running it
 
 This is a fully static, client-side site with **zero dependencies, no build

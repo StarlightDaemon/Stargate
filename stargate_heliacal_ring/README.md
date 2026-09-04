@@ -9,6 +9,8 @@ Everything here — the device, the 38 glyphs, the destinations, the signals —
 is invented for this piece. It is a fan tribute to the *idea* of a ring gate,
 not a reproduction of any existing work's artwork, symbols, or names.
 
+**Persistence:** `localStorage` only, under `hg.visited` (ids of destinations already reached) and `hg.muted` (`"1"` or `"0"`; audio stays muted unless this is explicitly `"0"`).
+
 ## Running it
 
 No build step, no dependencies, no network.

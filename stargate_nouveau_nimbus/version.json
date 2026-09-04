@@ -1,4 +1,5 @@
 {
   "version": "1.0.0",
-  "model": "Gemini 3.7 Flash"
+  "model": "Gemini 3.7 Flash",
+  "persistence": "localStorage"
 }

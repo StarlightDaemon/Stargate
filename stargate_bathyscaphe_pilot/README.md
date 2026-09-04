@@ -2,6 +2,8 @@
 
 Themed, single-page "portal dialing" console: a deep-ocean submersible HUD for the fictional Hadal Exploration & Abyssal Research Consortium (HEARC). Version 1.0.0, originally built by Gemini 3.7 Flash (see `CHANGELOG.md`).
 
+**Persistence:** `localStorage` only, under `archelon_pilot_preferences_v1` (theme, density, motion, audio mute and the master/ballast/thruster/hull/drone volumes), `archelon_pilot_dives_v1` (the last 50 completed dives) and `archelon_pilot_viewed_archives_v1` (archive entries already opened). The session event log is in-memory only and resets on reload.
+
 ## Run
 
 ```

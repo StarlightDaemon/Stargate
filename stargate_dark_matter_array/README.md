@@ -4,6 +4,8 @@
 
 ---
 
+**Persistence:** `localStorage` only, under the single key `boreas_ix_dark_matter_state_v1`: theme, density, motion, audio mix and mute, viewed archive ids, dial history, operator notes and session statistics. The blind-analysis lock is written with the rest of the state but is always restored as released on load.
+
 ## Overview
 The **BOREAS-IX Deep Crust Cryogenic Observatory** (`Model DM-TPC-7X`) is an interactive novelty dark-matter portal-dialing website grounded in rare-event particle physics and background-rejection science. Situated beneath 1,450 meters of mountain granite ($4,200 \text{ m.w.e.}$), the observatory operates a 3.5-tonne dual-phase liquid xenon time-projection chamber (TPC) to discern rare WIMP nuclear recoil events.
 
