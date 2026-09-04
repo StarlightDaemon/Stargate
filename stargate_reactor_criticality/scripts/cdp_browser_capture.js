@@ -77,9 +77,28 @@ class CDPClient {
   }
 }
 
+// Browser resolution. No absolute local filesystem path is committed here:
+// CHROME_PATH (or PUPPETEER_EXECUTABLE_PATH) wins, otherwise puppeteer's own
+// executable path is used. Anything else is an explicit error.
+async function resolveChrome() {
+  const fromEnv = process.env.CHROME_PATH || process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (fromEnv) return fromEnv;
+  let why;
+  try {
+    let puppeteer;
+    try { puppeteer = require('puppeteer'); } catch { puppeteer = require('puppeteer-core'); }
+    const p = await puppeteer.executablePath();
+    if (p && fs.existsSync(p)) return p;
+    why = p ? `puppeteer's executable path does not exist: ${p}` : 'puppeteer reported no executable path';
+  } catch (e) {
+    why = `puppeteer could not resolve an executable path (${e.message})`;
+  }
+  throw new Error(`No browser found: ${why}. Set CHROME_PATH to a Chrome/Chromium executable.`);
+}
+
 async function run() {
   console.log('Launching headless Chrome with CDP on port 9222...');
-  const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+  const chromePath = await resolveChrome();
   const chromeProc = spawn(chromePath, [
     '--headless=new',
     '--remote-debugging-port=9222',

@@ -17,12 +17,22 @@ const ROOT = path.join(here, '..');
 const SHOTS = path.join(here, 'screenshots');
 const PORT = Number(process.env.TEST_PORT) || 8734;
 const URL = `http://127.0.0.1:${PORT}/?test`;
-const CHROME = process.env.CHROME_PATH || [
-  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-  'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-  '/usr/bin/google-chrome', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-].find(p => existsSync(p));
-if (!CHROME) { console.error('No Chrome found; set CHROME_PATH'); process.exit(2); }
+// Browser resolution. No absolute local filesystem path is committed here:
+// CHROME_PATH (or PUPPETEER_EXECUTABLE_PATH) wins, otherwise puppeteer's own
+// executable path is used. Anything else is an explicit error.
+async function resolveChrome() {
+  const fromEnv = process.env.CHROME_PATH || process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (fromEnv) return fromEnv;
+  let why;
+  try {
+    const p = await puppeteer.executablePath();
+    if (p && existsSync(p)) return p;
+    why = p ? `puppeteer's executable path does not exist: ${p}` : 'puppeteer reported no executable path';
+  } catch (e) {
+    why = `puppeteer could not resolve an executable path (${e.message})`;
+  }
+  throw new Error(`No browser found: ${why}. Set CHROME_PATH to a Chrome/Chromium executable.`);
+}
 mkdirSync(SHOTS, { recursive: true });
 
 const results = [];
@@ -121,7 +131,7 @@ async function stepTo(mark) {
 // ---------- scenarios ----------
 async function main() {
   await waitServer();
-  const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--window-size=1920,1080', '--autoplay-policy=no-user-gesture-required'], defaultViewport: { width: 1920, height: 1080 } });
+  const browser = await puppeteer.launch({ executablePath: await resolveChrome(), headless: 'new', args: ['--window-size=1920,1080', '--autoplay-policy=no-user-gesture-required'], defaultViewport: { width: 1920, height: 1080 } });
   page = await browser.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));

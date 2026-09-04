@@ -7,7 +7,22 @@ const puppeteer = require('puppeteer-core');
 const fs = require('fs');
 const path = require('path');
 
-const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+// Browser resolution. No absolute local filesystem path is committed here:
+// CHROME_PATH (or PUPPETEER_EXECUTABLE_PATH) wins, otherwise puppeteer's own
+// executable path is used. Anything else is an explicit error.
+async function resolveChrome() {
+  const fromEnv = process.env.CHROME_PATH || process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (fromEnv) return fromEnv;
+  let why;
+  try {
+    const p = await puppeteer.executablePath();
+    if (p && fs.existsSync(p)) return p;
+    why = p ? `puppeteer's executable path does not exist: ${p}` : 'puppeteer reported no executable path';
+  } catch (e) {
+    why = `puppeteer could not resolve an executable path (${e.message})`;
+  }
+  throw new Error(`No browser found: ${why}. Set CHROME_PATH to a Chrome/Chromium executable.`);
+}
 const SCREENSHOTS_DIR = path.join(__dirname, '..', 'screenshots');
 const APP_URL = 'http://localhost:8092';
 
@@ -21,7 +36,7 @@ async function runTestSuite() {
   console.log('====================================================');
 
   const browser = await puppeteer.launch({
-    executablePath: CHROME_PATH,
+    executablePath: await resolveChrome(),
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1920,1080']
   });

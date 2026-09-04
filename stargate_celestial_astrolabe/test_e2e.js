@@ -8,10 +8,27 @@ import { spawn } from 'child_process';
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+// Browser resolution. No absolute local filesystem path is committed here:
+// CHROME_PATH (or PUPPETEER_EXECUTABLE_PATH) wins, otherwise puppeteer's own
+// executable path is used. Anything else is an explicit error.
+async function resolveChrome() {
+  const fromEnv = process.env.CHROME_PATH || process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (fromEnv) return fromEnv;
+  let why;
+  try {
+    const puppeteer = (await import('puppeteer').catch(() => import('puppeteer-core'))).default;
+    const p = await puppeteer.executablePath();
+    if (p && fs.existsSync(p)) return p;
+    why = p ? `puppeteer's executable path does not exist: ${p}` : 'puppeteer reported no executable path';
+  } catch (e) {
+    why = `puppeteer could not resolve an executable path (${e.message})`;
+  }
+  throw new Error(`No browser found: ${why}. Set CHROME_PATH to a Chrome/Chromium executable.`);
+}
 const ARTIFACT_DIR = path.join(__dirname, 'test_screenshots');
 if (!fs.existsSync(ARTIFACT_DIR)) {
   fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
@@ -126,6 +143,7 @@ class CDPClient {
 
 async function run() {
   console.log('Starting Headless Chrome for End-to-End Testing...');
+  const CHROME_PATH = await resolveChrome();
   const chromeProcess = spawn(CHROME_PATH, [
     `--remote-debugging-port=${PORT}`,
     '--headless=new',
@@ -133,7 +151,7 @@ async function run() {
     '--window-size=1920,1080',
     '--disable-gpu',
     '--no-sandbox',
-    '--user-data-dir=C:\\Temp\\chrome_test_profile_' + Date.now(),
+    '--user-data-dir=' + path.join(os.tmpdir(), 'chrome_test_profile_' + Date.now()),
     'http://localhost:8080'
   ]);
 
