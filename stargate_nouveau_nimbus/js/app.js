@@ -194,6 +194,14 @@ class NimbusApp {
     this.safetyLatch.addEventListener("click", () => {
       this.toggleSafetyLatch();
     });
+    // Keyboard: Enter/Space on the focused latch does exactly what a click does.
+    // Propagation stops so the window-level Enter/Space (activate) shortcut doesn't fire on top of it.
+    this.safetyLatch.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggleSafetyLatch();
+    });
 
     // Operator Reference
     this.operatorRefBtn.addEventListener("click", () => {

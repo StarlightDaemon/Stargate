@@ -535,6 +535,7 @@ html, body {
 }
 
 .switch-control {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -542,7 +543,18 @@ html, body {
 }
 
 .switch-control input {
-  display: none;
+  /* Visually hidden, not display:none — keeps the checkbox in the
+     accessibility tree and keyboard-focusable while the .slider draws it. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .slider {

@@ -73,7 +73,7 @@
   <!-- ======= CLUSTER A: SELECT & SEAT ======= -->
   <section class="mod cluster cluster-a" id="clusterA">
     <div class="plate">Select &amp; seat</div>
-    <div class="rotary" id="rotary" role="button" aria-label="mark selector, click left or right half to step">
+    <div class="rotary" id="rotary" role="button" tabindex="0" aria-label="mark selector, click left or right half to step">
       <div class="ptr" id="rotaryPtr"></div>
     </div>
     <div class="hand rotary-note">turn it. one notch a click.</div>
@@ -84,7 +84,7 @@
     <button class="btn" id="stepL" aria-label="previous mark">&#9664;</button>
     <button class="btn" id="stepR" aria-label="next mark">&#9654;</button>
     <div class="seated-row" id="seatedRow"></div>
-    <div class="toggle seat-toggle" id="seat" role="button" aria-label="SEAT: seat the selected mark">
+    <div class="toggle seat-toggle" id="seat" role="button" tabindex="0" aria-label="SEAT: seat the selected mark">
       <div class="tg-lab top">SEAT</div>
       <div class="tg-body"></div>
       <div class="tg-lever" id="seatLever"></div>
@@ -103,9 +103,9 @@
       <div class="tg-body"></div>
       <div class="tg-lever" id="breachLever"></div>
       <div class="tg-lab bot">OFF</div>
-      <div class="breach-hit" id="breach" role="button" aria-label="BREACH: open the route"></div>
+      <div class="breach-hit" id="breach" role="button" tabindex="0" aria-label="BREACH: open the route"></div>
       <div class="cover" id="cover"></div>
-      <div class="hinge" id="hinge" role="button" aria-label="lift or shut the breach cover"></div>
+      <div class="hinge" id="hinge" role="button" tabindex="0" aria-label="lift or shut the breach cover"></div>
     </div>
     <div class="hand cover-note">lift cover &#8593; then throw</div>
     <button class="drop" id="drop" aria-label="DROP: disengage everything">DROP</button>
@@ -121,7 +121,7 @@
   <!-- ======= LOCKOUT ======= -->
   <section class="mod lockbox" id="lockbox">
     <div class="plate">Yard lockout</div>
-    <div class="toggle lock-toggle" id="lockout" role="button" aria-label="YARD LOCKOUT: blocks seating and breach">
+    <div class="toggle lock-toggle" id="lockout" role="button" tabindex="0" aria-label="YARD LOCKOUT: blocks seating and breach">
       <div class="tg-lab top">ON</div>
       <div class="tg-body"></div>
       <div class="tg-lever" id="lockLever"></div>
@@ -135,7 +135,7 @@
   <!-- ======= SPEAKER ======= -->
   <section class="mod audiobox" id="audiobox">
     <div class="plate">Spkr</div>
-    <div class="toggle spk-toggle" id="spk" role="button" aria-label="speaker on or off">
+    <div class="toggle spk-toggle" id="spk" role="button" tabindex="0" aria-label="speaker on or off">
       <div class="tg-lab top">ON</div>
       <div class="tg-body"></div>
       <div class="tg-lever on" id="spkLever"></div>

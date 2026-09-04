@@ -558,6 +558,7 @@ html, body {
 }
 
 .switch-control {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -565,7 +566,18 @@ html, body {
 }
 
 .switch-control input {
-  display: none;
+  /* Visually hidden, not display:none — keeps the checkbox in the
+     accessibility tree and keyboard-focusable while the .slider draws it. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .slider {
@@ -866,6 +878,11 @@ button:focus-visible,
   outline: 2px solid var(--sonar-cyan);
   outline-offset: 3px;
   box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+}
+
+.switch-control input:focus-visible + .slider {
+  outline: 2px solid var(--sonar-cyan);
+  outline-offset: 2px;
 }
 
 /* Accessibility: damp ambient/decorative motion, leave dial/activation feedback untouched */

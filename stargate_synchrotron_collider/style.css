@@ -654,13 +654,25 @@ html, body {
 }
 
 .toggle-switch-container {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 .toggle-switch-input {
-  display: none;
+  /* Visually hidden, not display:none — keeps the checkbox in the
+     accessibility tree and keyboard-focusable while the .slider draws it. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .toggle-switch-label {
@@ -1032,6 +1044,11 @@ input[type="range"]:focus-visible {
   outline: 2px solid var(--neon-cyan);
   outline-offset: 3px;
   box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+}
+
+.toggle-switch-input:focus-visible + .toggle-switch-label {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 2px;
 }
 
 /* Accessibility: damp ambient/decorative motion, leave dial/activation feedback untouched */

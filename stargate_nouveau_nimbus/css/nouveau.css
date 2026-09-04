@@ -1297,6 +1297,7 @@ input[type="range"] {
 .archive-search-input:focus-visible,
 .archive-cat-btn:focus-visible,
 .footer-credit-left a:focus-visible,
+.safety-latch-container:focus-visible,
 input[type="range"]:focus-visible {
   outline: 2px solid var(--teal-deep);
   outline-offset: 2px;

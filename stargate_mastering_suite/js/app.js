@@ -71,6 +71,12 @@ class AxiomApp {
         const chIdx = parseInt(jack.getAttribute('data-channel'), 10);
         this.toggleChannelPatch(chIdx);
       });
+      // Keyboard: Enter/Space on a focused jack does exactly what a click does.
+      jack.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        jack.click();
+      });
     });
 
     // Ring perimeter channel buttons

@@ -977,7 +977,8 @@ input:checked + .slider:before {
 
 /* Accessibility: Keyboard Focus Indicators */
 button:focus-visible,
-select:focus-visible {
+select:focus-visible,
+.patch-jack:focus-visible {
   outline: 2px solid var(--color-cyan);
   outline-offset: 2px;
 }

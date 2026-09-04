@@ -663,6 +663,18 @@ function wire() {
   $('#drop').addEventListener('click', () => drop(false));
   $('#lockout').addEventListener('click', () => setLockout(!S.lockout));
   $('#spk').addEventListener('click', () => { S.muted = !S.muted; if (AU.ctx) AU.master.gain.value = S.muted ? 0 : 0.55; log(S.muted ? 'SPEAKER OFF' : 'SPEAKER ON'); });
+  // Keyboard: the role="button" divs above activate on Enter/Space exactly as a click would.
+  // Propagation stops so the window-level Enter (seat) shortcut doesn't fire on top of it.
+  ['#rotary', '#seat', '#breach', '#hinge', '#lockout', '#spk'].forEach(sel => {
+    const el = $(sel);
+    el.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault(); e.stopPropagation();
+      if (sel === '#rotary') { stepSel(1); return; }
+      if (sel === '#breach' && !S.coverOpen) { $('#cover').click(); return; }
+      el.click();
+    });
+  });
   window.addEventListener('keydown', e => {
     if (e.key === 'ArrowLeft') stepSel(-1);
     else if (e.key === 'ArrowRight') stepSel(1);

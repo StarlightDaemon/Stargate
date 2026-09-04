@@ -305,7 +305,11 @@ button { font: inherit; }
 /* ---------- accessibility: keyboard focus indicators (added alongside existing :hover rules) ---------- */
 .btn:focus-visible,
 .drop:focus-visible,
-.cass:focus-visible {
+.cass:focus-visible,
+.rotary:focus-visible,
+.toggle:focus-visible,
+.breach-hit:focus-visible,
+.hinge:focus-visible {
   outline: 2px solid var(--amber);
   outline-offset: 3px;
   box-shadow: 0 0 10px rgba(242,169,59,.6);

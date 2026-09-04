@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!listEl || !window.PRESET_TIERS) return;
     const presets = window.PRESET_TIERS[activePresetTier] || [];
     listEl.innerHTML = presets.map(p => `
-      <div class="preset-card" data-preset-id="${p.id}">
+      <div class="preset-card" data-preset-id="${p.id}" role="button" tabindex="0">
         <div class="preset-info">
           <span class="preset-name">${p.name}</span>
           <span class="preset-route">${p.route}</span>
@@ -129,6 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (preset) {
           window.idptGate.autoDialPreset(preset);
         }
+      });
+      // Keyboard: Enter/Space on a focused card does exactly what a click does.
+      card.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        card.click();
       });
     });
   }
@@ -214,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     listEl.innerHTML = items.map(it => `
-      <div class="archive-entry-item ${it.id === activeDossierId ? 'active' : ''}" data-entry-id="${it.id}">
+      <div class="archive-entry-item ${it.id === activeDossierId ? 'active' : ''}" data-entry-id="${it.id}" role="button" tabindex="0">
         <span class="entry-code">${it.id} &bull; ${it.categoryName}</span>
         <div class="entry-title">${it.title}</div>
       </div>
@@ -224,6 +230,12 @@ document.addEventListener('DOMContentLoaded', () => {
       el.addEventListener('click', () => {
         const id = el.getAttribute('data-entry-id');
         showDossier(id);
+      });
+      // Keyboard: Enter/Space on a focused entry does exactly what a click does.
+      el.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        el.click();
       });
     });
 
