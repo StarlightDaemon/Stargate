@@ -1,0 +1,9 @@
+{
+  "name": "stargate-repo-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Repository-level tooling dependencies for scripts/ (preview capture). Individual builds carry their own package.json.",
+  "dependencies": {
+    "sharp": "^0.35.4"
+  }
+}

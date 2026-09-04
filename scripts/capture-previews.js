@@ -1,7 +1,9 @@
 // ============================================================
 // capture-previews.js — captures a cold-start/idle 1920x1080
-// screenshot of each listed build into <build>/preview.png (the
-// filename hub/generate.js already picks up as a card preview).
+// screenshot of each listed build, resizes it to 800x450 (the
+// committed preview.png size required by STARGATE_BUILD_STANDARDS.md
+// section 3), and writes it to <build>/preview.png (the filename
+// hub/generate.js already picks up as a card preview).
 //
 // Per site: start `python -m http.server <port>` with cwd at the
 // build folder, navigate a headless-Chrome tab over CDP, wait for
@@ -13,17 +15,23 @@
 //   node scripts/capture-previews.js --sites <sites.json> --base-port 8501 --debug-port 9301
 //
 // sites.json: [ { "folder": "stargate_high_scifi", "dir": "E:/abs/path" }, ... ]
-// Node built-ins only (global WebSocket, Node >= 22).
+// Node >= 22 (global WebSocket) plus `sharp` from the repository-root
+// package.json (`npm install` at the repo root) for the resize step.
 // ============================================================
 
 const fs = require("fs");
 const path = require("path");
 const http = require("http");
 const { spawn } = require("child_process");
+const sharp = require("sharp");
 
 const CHROME = process.env.CHROME_PATH ||
   "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const SETTLE_MS = 6000; // ambient idle settle after load
+// Committed preview.png dimensions (standards section 3). The page is
+// still rendered and captured at 1920x1080; only the written file shrinks.
+const PREVIEW_W = 800;
+const PREVIEW_H = 450;
 const NAV_TIMEOUT_MS = 30000;
 
 function arg(name, dflt) {
@@ -137,7 +145,14 @@ async function captureOne(cdp, site, port) {
 
     const shot = await cdp.send("Page.captureScreenshot", { format: "png" }, sessionId);
     const outPath = site.out || path.join(site.dir, "preview.png");
-    fs.writeFileSync(outPath, Buffer.from(shot.data, "base64"));
+    // Shrink the full-resolution capture to the committed thumbnail size.
+    // sharp's default kernel is lanczos3, matching the manual resize the
+    // existing previews received; `fit: "fill"` forces exact dimensions.
+    const resized = await sharp(Buffer.from(shot.data, "base64"))
+      .resize(PREVIEW_W, PREVIEW_H, { fit: "fill" })
+      .png()
+      .toBuffer();
+    fs.writeFileSync(outPath, resized);
     return outPath;
   } finally {
     await cdp.send("Target.closeTarget", { targetId }).catch(() => {});
