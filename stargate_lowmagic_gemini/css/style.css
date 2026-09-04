@@ -1,0 +1,1250 @@
+/* ==========================================================================
+   RUSHLIGHT: Stargate Low Magic Portal Console
+   Style System & Folk-Craft Visual Design
+   ========================================================================== */
+
+:root {
+  /* Folk Pigments & Natural Dyes */
+  --bg-parchment: #F5EFEB;
+  --bg-parchment-warm: #EFE8DE;
+  --bg-panel: #FAF7F2;
+  --bg-card: #FFFFFF;
+  --bg-slate: #24201C;
+  --bg-slate-soft: #2F2A25;
+
+  /* Ink & Inscriptions */
+  --ink-irongall: #26211C;
+  --ink-muted: #5C5248;
+  --ink-faint: #8E8276;
+  --ink-hairline: rgba(38, 33, 28, 0.14);
+
+  /* Folk Dyes (Vegetable & Mineral) */
+  --dye-madder: #983A2E;
+  --dye-madder-soft: #C85A4E;
+  --dye-woad: #2D485E;
+  --dye-woad-soft: #4F6D85;
+  --dye-sage: #455C42;
+  --dye-sage-soft: #6A8567;
+  --dye-ochre: #C48A36;
+  --dye-ochre-soft: #E0AA58;
+  --dye-tallow: #EAD09E;
+  --dye-chalk: #FAF8F2;
+  --dye-iron-rust: #8A3D28;
+
+  /* Typography */
+  --font-serif: "Cormorant Garamond", "IM Fell English", "Georgia", "Baskerville", serif;
+  --font-display: "Cinzel Decorative", "Cinzel", "Cormorant Garamond", serif;
+  --font-body: "Newsreader", "Garamond", "Times New Roman", serif;
+  --font-mono: "Courier Prime", "Courier New", monospace;
+
+  /* App Dimensions */
+  --app-width: 1920px;
+  --app-height: 1080px;
+  --app-scale: 1;
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #1A1715;
+  color: var(--ink-irongall);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 1920x1080 Master Container */
+#app-root {
+  position: absolute;
+  width: var(--app-width);
+  height: var(--app-height);
+  transform-origin: top left;
+  background-color: var(--bg-parchment);
+  background-image: 
+    radial-gradient(ellipse at 50% 50%, rgba(250, 247, 242, 0.9) 0%, rgba(239, 232, 222, 0.85) 60%, rgba(225, 214, 198, 0.8) 100%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Visually Hidden Accessibility Live Region */
+.visually-hidden-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Top Header: Manuscript Title & Quick Status Bar */
+.hearth-header {
+  height: 84px;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--ink-hairline);
+  background-color: rgba(250, 247, 242, 0.8);
+  backdrop-filter: blur(4px);
+  position: relative;
+  z-index: 20;
+}
+
+/* Cross-stitch running hem decorative line */
+.cross-stitch-border {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background-image: repeating-linear-gradient(90deg, 
+    var(--dye-madder) 0px, var(--dye-madder) 4px, 
+    transparent 4px, transparent 8px,
+    var(--dye-woad) 8px, var(--dye-woad) 12px,
+    transparent 12px, transparent 16px
+  );
+  opacity: 0.7;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.header-sigil-badge {
+  width: 52px;
+  height: 52px;
+  border: 2px solid var(--ink-irongall);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-parchment-warm);
+  color: var(--dye-ochre);
+}
+
+.header-titles h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: var(--ink-irongall);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.header-subtitle {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-muted);
+  letter-spacing: 0.5px;
+}
+
+.header-telemetry-cluster {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Status Pill */
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1.5px solid var(--ink-irongall);
+  background-color: var(--bg-card);
+  box-shadow: 1px 2px 0 rgba(38, 33, 28, 0.08);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--ink-faint);
+  transition: background-color 0.3s ease;
+}
+
+.status-pill.state-idle .status-dot { background-color: var(--ink-faint); }
+.status-pill.state-dialing .status-dot { background-color: var(--dye-woad); }
+.status-pill.state-pending_kindle .status-dot { background-color: var(--dye-ochre); animation: pulseDot 1.6s infinite ease-in-out; }
+.status-pill.state-buildup .status-dot { background-color: var(--dye-madder); animation: fastPulse 0.4s infinite alternate; }
+.status-pill.state-breakthrough .status-dot { background-color: #FFF; box-shadow: 0 0 8px var(--dye-ochre); }
+.status-pill.state-active .status-dot { background-color: var(--dye-sage); }
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+@keyframes fastPulse {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.4); opacity: 1; }
+}
+
+#portal-status-text {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--ink-irongall);
+}
+
+.header-action-btn {
+  background: var(--bg-card);
+  border: 1.5px solid var(--ink-irongall);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-irongall);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 1px 2px 0 rgba(38, 33, 28, 0.1);
+}
+
+.header-action-btn:hover {
+  background-color: var(--bg-parchment-warm);
+  transform: translateY(-1px);
+}
+
+.header-action-btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.header-action-btn.muted {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+/* ==========================================================================
+   Main Three-Column Layout (Asymmetric Herbarium & Hearth Cloth)
+   ========================================================================== */
+.main-console-deck {
+  flex: 1;
+  display: flex;
+  padding: 24px 36px 28px 36px;
+  gap: 28px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* --- COLUMN 1: Hearth-Side Herbarium Desk (Left, 470px) --- */
+.left-herbarium-desk {
+  width: 470px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel-parchment {
+  background-color: var(--bg-panel);
+  border: 1.5px solid var(--ink-irongall);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 2px 3px 0 rgba(38, 33, 28, 0.08);
+  position: relative;
+}
+
+.panel-parchment::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid var(--ink-hairline);
+  pointer-events: none;
+  border-radius: 6px;
+}
+
+.panel-header-stitch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--ink-faint);
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--ink-irongall);
+  text-transform: uppercase;
+}
+
+.panel-badge {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+/* Address Cord Slots (7 Knots) */
+.address-slots-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.address-knot-slot {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 4px;
+  border: 1px solid var(--ink-hairline);
+  background-color: var(--bg-card);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.address-knot-slot.empty {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+.address-knot-slot.bound {
+  border-color: var(--ink-irongall);
+  background-color: #FFFDF9;
+  box-shadow: 1px 1px 0 rgba(38, 33, 28, 0.05);
+}
+
+.knot-pin-icon {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.knot-pin-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.knot-pin-empty-mark {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  color: var(--ink-faint);
+}
+
+.knot-pin-name {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-irongall);
+  flex: 1;
+}
+
+.knot-pin-order {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.5px;
+}
+
+/* Address Manipulation Bar */
+.address-action-bar {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.desk-btn-sm {
+  flex: 1;
+  height: 34px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--ink-irongall);
+  border-radius: 4px;
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-irongall);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.desk-btn-sm:hover:not([disabled]) {
+  background-color: var(--bg-parchment-warm);
+}
+
+.desk-btn-sm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Symbol Inspection Plate */
+.symbol-inspect-plate {
+  min-height: 105px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.inspect-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--dye-madder);
+  margin-bottom: 4px;
+}
+
+.inspect-lore {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+/* Destination Autocomplete Search Box */
+.autocomplete-search-container {
+  position: relative;
+  margin-top: 6px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon-marker {
+  position: absolute;
+  left: 12px;
+  color: var(--ink-muted);
+  pointer-events: none;
+}
+
+#destination-search-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px 0 38px;
+  border-radius: 6px;
+  border: 1.5px solid var(--ink-irongall);
+  background-color: var(--bg-card);
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--ink-irongall);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#destination-search-input:focus {
+  border-color: var(--dye-madder);
+  box-shadow: 0 0 0 2px rgba(152, 58, 46, 0.2);
+}
+
+#destination-search-input::placeholder {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--ink-irongall);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(38, 33, 28, 0.2);
+  z-index: 100;
+  display: none;
+}
+
+.autocomplete-dropdown.open {
+  display: block;
+}
+
+.autocomplete-item {
+  width: 100%;
+  padding: 9px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--ink-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.autocomplete-item:hover, .autocomplete-item.focused {
+  background-color: var(--bg-parchment-warm);
+}
+
+.dest-match-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.dest-match-name {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-irongall);
+}
+
+.dest-match-region {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+.dest-match-symbols {
+  display: flex;
+  gap: 4px;
+}
+
+.mini-sym svg {
+  width: 16px;
+  height: 16px;
+}
+
+.autocomplete-no-match {
+  padding: 14px;
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+
+/* --- COLUMN 2: Hearth-Stone Flag & Spindle Arena (Center, 880px) --- */
+.center-hearth-arena {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* North Hearth Pin (Fixed marker at Zenith) */
+.north-pin-anchor {
+  position: absolute;
+  top: 10px;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.north-pin-triangle {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 16px solid var(--dye-madder);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+}
+
+.north-pin-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--dye-madder);
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+/* The Spindle Dial Apparatus (560px x 560px) */
+.hearth-spindle-stage {
+  width: 560px;
+  height: 560px;
+  position: relative;
+  margin-top: 18px;
+}
+
+/* Stationary Ring Backdrop */
+.spindle-backdrop-plate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--ink-irongall);
+  background-color: var(--bg-panel);
+  box-shadow: 0 4px 20px rgba(38, 33, 28, 0.12);
+  pointer-events: none;
+}
+
+/* Rotating Wheel */
+.spindle-wheel-rotator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: 280px 280px;
+}
+
+/* 28 Folk Glyph Buttons on Spindle */
+.spindle-glyph-btn {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  margin-left: -22px;
+  margin-top: -22px;
+  border-radius: 50%;
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--ink-irongall);
+  color: var(--ink-irongall);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  box-shadow: 1px 2px 0 rgba(38, 33, 28, 0.15);
+  z-index: 10;
+}
+
+.spindle-glyph-btn:hover:not([disabled]) {
+  transform: scale(1.18);
+  border-color: var(--dye-madder);
+  background-color: var(--bg-parchment-warm);
+  z-index: 12;
+}
+
+.spindle-glyph-btn.active-pinned {
+  border-color: var(--dye-madder);
+  border-width: 2px;
+  background-color: #FFF2EE;
+  box-shadow: 0 0 10px rgba(152, 58, 46, 0.3);
+}
+
+.glyph-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.glyph-inner svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Dye classes for line-art colors */
+.dye-madder { color: var(--dye-madder); }
+.dye-woad { color: var(--dye-woad); }
+.dye-sage { color: var(--dye-sage); }
+.dye-ochre { color: var(--dye-ochre); }
+.dye-iron { color: var(--ink-irongall); }
+
+/* Inward Linen Cords SVG Overlay */
+.hearth-cord-overlay-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.hearth-bound-thread {
+  stroke: var(--dye-madder);
+  stroke-width: 2.2;
+  stroke-dasharray: 4 2;
+  animation: drawThread 0.3s ease-out forwards;
+}
+
+@keyframes drawThread {
+  from { stroke-dashoffset: 80; opacity: 0; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+
+.hearth-bound-knot {
+  fill: var(--dye-ochre);
+  stroke: var(--ink-irongall);
+  stroke-width: 1.5;
+}
+
+/* Salt Boundary Ring */
+.salt-boundary-ring {
+  position: absolute;
+  top: 150px;
+  left: 150px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  border: 3px dashed var(--dye-chalk);
+  box-shadow: 0 0 0 2px var(--ink-hairline), inset 0 0 0 2px var(--ink-hairline);
+  background-color: var(--bg-parchment-warm);
+  pointer-events: none;
+  z-index: 6;
+  transition: all 0.5s ease;
+}
+
+.salt-boundary-ring.kindling-glow {
+  border-color: var(--dye-ochre);
+  box-shadow: 0 0 25px rgba(196, 138, 54, 0.4), inset 0 0 15px rgba(196, 138, 54, 0.3);
+}
+
+/* Center Hearth Aperture (The Veil) */
+.hearth-aperture {
+  position: absolute;
+  top: 165px;
+  left: 165px;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-irongall);
+  background-color: var(--bg-slate);
+  overflow: hidden;
+  z-index: 7;
+  transition: background-color 0.8s ease, transform 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3-Stage Visual Progressions inside Aperture */
+.hearth-aperture.stage-idle {
+  background-color: #24201C;
+}
+
+.hearth-aperture.stage-buildup {
+  background-color: #381E15;
+  box-shadow: inset 0 0 35px #C48A36;
+  animation: buildupTremor 1.8s ease-in-out forwards;
+}
+
+@keyframes buildupTremor {
+  0% { transform: scale(1); filter: brightness(1); }
+  60% { transform: scale(1.02); filter: brightness(1.2); }
+  100% { transform: scale(1.04); filter: brightness(1.4); }
+}
+
+.hearth-aperture.stage-breakthrough {
+  background-color: #FAF8F2;
+  box-shadow: 0 0 50px #FAF8F2, inset 0 0 40px #C48A36;
+  transform: scale(1.08);
+}
+
+.hearth-aperture.stage-active {
+  background-color: #1F2E28;
+  box-shadow: inset 0 0 30px rgba(196, 138, 54, 0.35);
+}
+
+/* Idle Woodcut Vignette */
+.idle-hearth-art {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  opacity: 0.85;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.hearth-aperture.stage-buildup .idle-hearth-art,
+.hearth-aperture.stage-breakthrough .idle-hearth-art,
+.hearth-aperture.stage-active .idle-hearth-art {
+  opacity: 0;
+}
+
+/* Buildup Embers */
+.buildup-embers-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.hearth-aperture.stage-buildup .buildup-embers-container {
+  opacity: 1;
+}
+
+.peat-ember-spark {
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--dye-ochre);
+  box-shadow: 0 0 4px var(--dye-madder);
+  animation: emberRise 1.6s ease-out infinite;
+}
+
+@keyframes emberRise {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  30% { opacity: 0.9; }
+  100% { transform: translateY(-70px) scale(1.4); opacity: 0; }
+}
+
+/* Breakthrough Radial Burst Mandala */
+.breakthrough-mandala {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.2) rotate(0deg);
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.hearth-aperture.stage-breakthrough .breakthrough-mandala {
+  opacity: 1;
+  transform: scale(1.15) rotate(45deg);
+}
+
+.hearth-aperture.stage-active .breakthrough-mandala {
+  opacity: 0;
+  transform: scale(1.4) rotate(90deg);
+  transition: all 0.5s ease-out;
+}
+
+/* Drifting Moths & Botanical Seedheads */
+.active-moths-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.hearth-aperture.stage-active .active-moths-container {
+  opacity: 1;
+}
+
+.folk-moth-entity {
+  position: absolute;
+  color: var(--dye-tallow);
+  opacity: 0.85;
+  animation: mothFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes mothFloat {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(12px, -8px) rotate(15deg); }
+  100% { transform: translate(-10px, 10px) rotate(-10deg); }
+}
+
+/* Hearth-Kindler Direct Controls (Cluster 2) */
+.hearth-kindler-controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.kindler-button-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* Primary Kindle Button */
+.btn-kindle-bellows {
+  height: 52px;
+  padding: 0 32px;
+  border-radius: 8px;
+  border: 2px solid var(--ink-irongall);
+  background-color: var(--bg-card);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--ink-irongall);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+  box-shadow: 2px 3px 0 rgba(38, 33, 28, 0.15);
+}
+
+.btn-kindle-bellows:hover:not([disabled]) {
+  transform: translateY(-2px);
+  box-shadow: 2px 5px 0 rgba(38, 33, 28, 0.2);
+}
+
+.btn-kindle-bellows:active:not([disabled]) {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 rgba(38, 33, 28, 0.2);
+}
+
+.btn-kindle-bellows.ready-to-kindle {
+  border-color: var(--dye-madder);
+  background-color: #FFF3F0;
+  color: var(--dye-madder);
+  box-shadow: 0 0 14px rgba(152, 58, 46, 0.35);
+  animation: kindleReadyPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes kindleReadyPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.btn-kindle-bellows:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  animation: none;
+}
+
+/* Primary Snuff / Disengage Button */
+.btn-snuff-shears {
+  height: 52px;
+  padding: 0 24px;
+  border-radius: 8px;
+  border: 2px solid var(--ink-irongall);
+  background-color: var(--bg-card);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--ink-irongall);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 2px 3px 0 rgba(38, 33, 28, 0.15);
+}
+
+.btn-snuff-shears:hover {
+  background-color: #F8F4F0;
+  transform: translateY(-2px);
+  border-color: var(--dye-iron-rust);
+}
+
+/* Cold-Iron Threshold Nail Safety Interlock Toggle */
+.iron-nail-toggle-btn {
+  height: 38px;
+  padding: 0 18px;
+  border-radius: 6px;
+  border: 1.5px solid var(--ink-irongall);
+  background-color: var(--bg-card);
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-irongall);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.iron-nail-toggle-btn.engaged {
+  border-color: var(--dye-iron-rust);
+  background-color: #F0E8E6;
+  color: var(--dye-iron-rust);
+}
+
+.iron-nail-marker-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+}
+
+.iron-nail-toggle-btn.engaged .iron-nail-marker-dot {
+  background-color: currentColor;
+}
+
+/* Warning Banner */
+.hearth-warning-banner {
+  width: 90%;
+  max-width: 620px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1.5px solid var(--dye-madder);
+  background-color: #FFF5F4;
+  color: var(--dye-madder);
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-style: italic;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.hearth-warning-banner.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* --- COLUMN 3: Pantry Ledger & Destination Registry (Right, 470px) --- */
+.right-pantry-ledger {
+  width: 470px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Presets List */
+.hearth-presets-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hearth-preset-btn {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1.5px solid var(--ink-irongall);
+  background-color: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.hearth-preset-btn:hover {
+  background-color: var(--bg-parchment-warm);
+  transform: translateX(3px);
+  border-color: var(--dye-madder);
+}
+
+.preset-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.preset-name {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink-irongall);
+}
+
+.preset-tag {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+.preset-arrow {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--ink-faint);
+}
+
+/* Active Destination Card (When Kindled / Active) */
+.active-destination-display {
+  min-height: 110px;
+  border-radius: 6px;
+  border: 1.5px dashed var(--ink-faint);
+  padding: 14px;
+  background-color: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.active-destination-display.visible {
+  border-style: solid;
+  border-color: var(--dye-sage);
+  background-color: #F8FAF7;
+}
+
+.dest-card-region {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--dye-sage);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dest-card-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--ink-irongall);
+  margin: 4px 0;
+}
+
+.dest-card-lore {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+/* Cottage Rhymes & Hearth Lore Panel */
+.cottage-charm-quote {
+  font-family: var(--font-serif);
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--ink-muted);
+  line-height: 1.5;
+  border-left: 2px solid var(--dye-ochre);
+  padding-left: 12px;
+}
+
+/* ==========================================================================
+   Operator Guide Modal ("The Herbwife's Handbook")
+   ========================================================================== */
+.guide-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(26, 23, 21, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.guide-modal-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.guide-modal-sheet {
+  width: 780px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background-color: var(--bg-parchment);
+  border: 2px solid var(--ink-irongall);
+  border-radius: 8px;
+  padding: 32px 40px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.modal-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink-hairline);
+}
+
+.modal-header-row h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink-irongall);
+  letter-spacing: 1px;
+}
+
+.modal-close-btn {
+  background: none;
+  border: 1px solid var(--ink-irongall);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink-irongall);
+  font-size: 18px;
+}
+
+.guide-content-body {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-irongall);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.guide-content-body h3 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--dye-madder);
+  margin-bottom: 6px;
+  letter-spacing: 0.8px;
+}
+
+.guide-content-body ul {
+  padding-left: 24px;
+}
+
+/* ==========================================================================
+   Focus & Keyboard Accessibility (Standards Sec 6)
+   ========================================================================== */
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--dye-madder) !important;
+  outline-offset: 2px !important;
+}
+
+/* Reduced Motion Compliance (Standards Sec 6) */
+body.reduced-motion *, 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+}

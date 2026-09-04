@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stargate Rushlight Hearth — Low Magic Console</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Fixed 1920x1080 Viewport Shell -->
+  <div id="app-root">
+
+    <!-- ARIA Live Announcements Region for Reduced Motion & Screen Readers -->
+    <div id="live-portal-caption" class="visually-hidden-live" role="status" aria-live="polite">
+      Hearth Slumbering. Flagstones cold.
+    </div>
+
+    <!-- Top Header: Title, Live Status & Auxiliary Controls -->
+    <header class="hearth-header" role="banner">
+      <div class="header-brand">
+        <div class="header-sigil-badge" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="16" cy="16" r="12" stroke-dasharray="3 3"/>
+            <path d="M16 8v16M8 16h16"/>
+            <circle cx="16" cy="16" r="3" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="header-titles">
+          <h1>RUSHLIGHT HEARTH</h1>
+          <p class="header-subtitle">Low Magic Dialing Console · The Parishes of Nine-Knot & Hollowbeck</p>
+        </div>
+      </div>
+
+      <div class="header-telemetry-cluster">
+        <!-- Status Pill -->
+        <div class="status-pill state-idle" id="portal-status-pill">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="portal-status-text">HEARTH SLUMBERING</span>
+        </div>
+
+        <!-- Folk Sound Toggle -->
+        <button type="button" class="header-action-btn" id="btn-toggle-sound" aria-pressed="false" aria-label="Toggle Folk Acoustics">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          </svg>
+          <span id="sound-status-label">Sound: Folk Acoustics</span>
+        </button>
+
+        <!-- Herbwife's Guide Modal Trigger -->
+        <button type="button" class="header-action-btn" id="btn-help-guide" aria-label="Open Herbwife's Guide">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Herbwife's Guide [?]</span>
+        </button>
+      </div>
+
+      <!-- Decorative running stitch line -->
+      <div class="cross-stitch-border" aria-hidden="true"></div>
+    </header>
+
+    <!-- Main Console Deck (Asymmetric Layout) -->
+    <main class="main-console-deck" role="main">
+
+      <!-- COLUMN 1: Hearth-Side Herbarium Desk (Left) -->
+      <aside class="left-herbarium-desk" aria-label="Address & Dial Desk">
+        
+        <!-- Address Knot Ledger (Cluster 1: Core Loop Input) -->
+        <section class="panel-parchment" aria-labelledby="knot-ledger-heading">
+          <div class="panel-header-stitch">
+            <h2 id="knot-ledger-heading" class="panel-title">Tied Cord Ledger</h2>
+            <span class="panel-badge">7 Knots Required</span>
+          </div>
+
+          <div class="address-slots-grid" id="address-cord-slots" role="list">
+            <!-- Populated via dial.js -->
+          </div>
+
+          <div class="address-action-bar">
+            <button type="button" class="desk-btn-sm" id="btn-undo-cord" aria-label="Snip Last Cord">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 10h10a5 5 0 0 1 5 5v2"/>
+                <path d="M7 6L3 10l4 4"/>
+              </svg>
+              <span>Snip Cord</span>
+            </button>
+            <button type="button" class="desk-btn-sm" id="btn-clear-hearth" aria-label="Sweep Hearth Clean">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              </svg>
+              <span>Sweep Hearth</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Active Symbol Inspection Plate -->
+        <section class="panel-parchment" aria-labelledby="inspect-plate-heading">
+          <div class="panel-header-stitch">
+            <h2 id="inspect-plate-heading" class="panel-title">Herbarium Marginalia</h2>
+            <span class="panel-badge">Botanical & Hearth Lore</span>
+          </div>
+          <div class="symbol-inspect-plate">
+            <h3 class="inspect-title" id="inspect-symbol-name">The Salt Line</h3>
+            <p class="inspect-lore" id="inspect-symbol-lore">“Salt to bar the threshold, salt to keep the peace.”</p>
+          </div>
+        </section>
+
+        <!-- Destination Autocomplete Typeahead -->
+        <section class="panel-parchment" aria-labelledby="autocomplete-heading">
+          <div class="panel-header-stitch">
+            <h2 id="autocomplete-heading" class="panel-title">Cot-Hearth Typeahead</h2>
+            <span class="panel-badge" id="destination-total-count">50 Cot-Hearths</span>
+          </div>
+          <div class="autocomplete-search-container">
+            <div class="search-input-wrapper">
+              <svg class="search-icon-marker" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="destination-search-input" placeholder="Search hearth name or herb..." autocomplete="off" spellcheck="false">
+            </div>
+            <div class="autocomplete-dropdown" id="destination-autocomplete-dropdown" role="listbox">
+              <!-- Populated via app.js -->
+            </div>
+          </div>
+        </section>
+
+      </aside>
+
+      <!-- COLUMN 2: Hearth-Stone Flag & Spindle Arena (Center) -->
+      <section class="center-hearth-arena" aria-label="Hearth Spindle & Portal Threshold">
+        
+        <!-- North Hearth Pin (Zenith alignment marker) -->
+        <div class="north-pin-anchor" aria-hidden="true">
+          <div class="north-pin-triangle"></div>
+          <span class="north-pin-label">North Pin</span>
+        </div>
+
+        <!-- The Spindle Apparatus Stage (560px x 560px) -->
+        <div class="hearth-spindle-stage">
+          <!-- Outer illuminated volvelle backdrop plate -->
+          <div class="spindle-backdrop-plate" id="spindle-backdrop" aria-hidden="true">
+            <svg viewBox="0 0 560 560" width="100%" height="100%" fill="none" stroke="currentColor">
+              <!-- Concentric Manuscript Rings -->
+              <circle cx="280" cy="280" r="275" stroke="#26211C" stroke-width="2.5"/>
+              <circle cx="280" cy="280" r="271" stroke="#983A2E" stroke-width="1" stroke-dasharray="4 4"/>
+              <circle cx="280" cy="280" r="218" stroke="#26211C" stroke-width="1.5"/>
+              <circle cx="280" cy="280" r="214" stroke="#5C5248" stroke-width="1" stroke-dasharray="2 2"/>
+              <circle cx="280" cy="280" r="145" stroke="#26211C" stroke-width="1.5"/>
+              <circle cx="280" cy="280" r="135" stroke="#C48A36" stroke-width="1" stroke-dasharray="3 3"/>
+
+              <!-- Folk Quarter Inscriptions -->
+              <text x="280" y="32" font-family="'Cinzel Decorative', serif" font-size="10" font-weight="700" fill="#983A2E" text-anchor="middle" letter-spacing="2">MIDWINTER CANDLEMAS</text>
+              <text x="528" y="284" font-family="'Cinzel Decorative', serif" font-size="10" font-weight="700" fill="#455C42" text-anchor="middle" transform="rotate(90 528 280)" letter-spacing="2">SPRING EQUINOX</text>
+              <text x="280" y="542" font-family="'Cinzel Decorative', serif" font-size="10" font-weight="700" fill="#C48A36" text-anchor="middle" letter-spacing="2">MIDSUMMER LAMMAS</text>
+              <text x="32" y="284" font-family="'Cinzel Decorative', serif" font-size="10" font-weight="700" fill="#2D485E" text-anchor="middle" transform="rotate(-90 32 280)" letter-spacing="2">MICHAELMAS HARVEST</text>
+
+              <!-- Corner Botanical Sprigs -->
+              <path d="M60 60 C90 75 110 95 125 125 M85 72 C95 62 105 60 115 65 M95 95 C110 90 120 80 120 70" stroke="#455C42" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M500 60 C470 75 450 95 435 125 M475 72 C465 62 455 60 445 65 M465 95 C450 90 440 80 440 70" stroke="#455C42" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M60 500 C90 485 110 465 125 435 M85 488 C95 498 105 500 115 495 M95 465 C110 470 120 480 120 490" stroke="#455C42" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M500 500 C470 485 450 465 435 435 M475 488 C465 498 455 500 445 495 M465 465 C450 470 440 480 440 490" stroke="#455C42" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <!-- Rotating 28-Glyph Spindle Wheel -->
+          <div class="spindle-wheel-rotator" id="spindle-wheel" role="region" aria-label="Spindle Dial Wheel">
+            <!-- 28 Glyph Buttons injected via dial.js -->
+          </div>
+
+          <!-- Dynamic Inward Linen Cords SVG Overlay -->
+          <svg class="hearth-cord-overlay-svg" id="hearth-cord-overlay" viewBox="0 0 560 560" aria-hidden="true">
+            <!-- Line cords drawn via dial.js -->
+          </svg>
+
+          <!-- Salt Boundary Ring -->
+          <div class="salt-boundary-ring" id="salt-boundary-ring" aria-hidden="true"></div>
+
+          <!-- Center Hearth Aperture (The Veil) -->
+          <div class="hearth-aperture stage-idle" id="hearth-aperture" role="img" aria-label="Hearth Portal Threshold">
+            <!-- Idle Woodcut Hearth Vignette -->
+            <div class="idle-hearth-art" id="idle-hearth-art" aria-hidden="true">
+              <svg viewBox="0 0 200 200" width="180" height="180" fill="none" stroke="#EAE0D2" stroke-width="1.6" stroke-linecap="round">
+                <!-- Hearth Stones -->
+                <ellipse cx="100" cy="145" rx="65" ry="18" stroke="#8E8276" stroke-dasharray="3 3"/>
+                <path d="M60 140c10-8 30-10 40-10s30 2 40 10"/>
+                <!-- Rowan Sprig with Berries -->
+                <path d="M70 135 C80 120 105 115 130 110" stroke="#C48A36"/>
+                <circle cx="85" cy="122" r="3" fill="#983A2E" stroke="#983A2E"/>
+                <circle cx="95" cy="118" r="3" fill="#983A2E" stroke="#983A2E"/>
+                <circle cx="102" cy="124" r="3" fill="#983A2E" stroke="#983A2E"/>
+                <!-- Tallow Rushlight -->
+                <line x1="100" y1="138" x2="100" y2="78" stroke="#EAE0D2" stroke-width="2.2"/>
+                <ellipse cx="100" cy="138" rx="14" ry="4" fill="#5C5248"/>
+                <circle cx="100" cy="74" r="2.5" fill="#C48A36"/>
+                <!-- Hearth Inscription -->
+                <text x="100" y="54" font-family="'Cinzel Decorative', serif" font-size="9" fill="#8E8276" text-anchor="middle" letter-spacing="1.5">SLUMBERING HEARTH</text>
+              </svg>
+            </div>
+
+            <!-- Buildup Peat Embers Layer -->
+            <div class="buildup-embers-container" id="buildup-embers-container" aria-hidden="true"></div>
+
+            <!-- Breakthrough Botanical Radial Burst Mandala -->
+            <div class="breakthrough-mandala" id="breakthrough-mandala" aria-hidden="true">
+              <svg viewBox="0 0 220 220" width="100%" height="100%" fill="none" stroke="#FAF8F2" stroke-width="1.8">
+                <circle cx="110" cy="110" r="30" stroke="#C48A36" stroke-dasharray="4 2"/>
+                <circle cx="110" cy="110" r="65" stroke="#FAF8F2" stroke-width="2"/>
+                <path d="M110 20v180M20 110h180M46 46l128 128M174 46L46 174" stroke-dasharray="2 4"/>
+                <circle cx="110" cy="40" r="6" fill="#FAF8F2"/>
+                <circle cx="110" cy="180" r="6" fill="#FAF8F2"/>
+                <circle cx="40" cy="110" r="6" fill="#FAF8F2"/>
+                <circle cx="180" cy="110" r="6" fill="#FAF8F2"/>
+              </svg>
+            </div>
+
+            <!-- Drifting flat vector moths & botanical seedheads in Active stage -->
+            <div class="active-moths-container" id="active-moths-container" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <!-- Direct Hearth Controls (Cluster 2: Kindler, Snuffer & Interlock) -->
+        <div class="hearth-kindler-controls" role="group" aria-label="Kindling & Safety Controls">
+          <div class="kindler-button-row">
+            <!-- Kindle Button (Activate) -->
+            <button type="button" class="btn-kindle-bellows" id="btn-kindle-portal" disabled aria-label="Kindle Hearth Portal (Activate)">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v6m0 8v6M4.93 4.93l4.24 4.24m5.66 5.66l4.24 4.24M2 12h6m8 0h6M4.93 19.07l4.24-4.24m5.66-5.66l4.24-4.24"/>
+              </svg>
+              <span>Kindle Hearth [K]</span>
+            </button>
+
+            <!-- Snuff Button (Disengage) -->
+            <button type="button" class="btn-snuff-shears" id="btn-snuff-portal" aria-label="Snuff Hearth (Disengage)">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="6" cy="6" r="3"/>
+                <circle cx="6" cy="18" r="3"/>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+                <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+                <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+              </svg>
+              <span>Snuff Hearth [Esc]</span>
+            </button>
+
+            <!-- Cold-Iron Threshold Nail Safety Toggle -->
+            <button type="button" class="iron-nail-toggle-btn" id="btn-iron-nail" aria-pressed="false" aria-label="Cold-Iron Threshold Nail Interlock">
+              <span class="iron-nail-marker-dot" aria-hidden="true"></span>
+              <span>Cold Iron Nail [I]: <strong id="iron-nail-status">Drawn (Released)</strong></span>
+            </button>
+          </div>
+
+          <!-- Warning Banner (Appears if Kindling is Barred) -->
+          <div class="hearth-warning-banner" id="hearth-warning-banner" role="alert" aria-live="assertive">
+            Cold iron bars the threshold. Draw the nail before kindling.
+          </div>
+        </div>
+
+      </section>
+
+      <!-- COLUMN 3: Pantry Ledger & Destination Registry (Right) -->
+      <aside class="right-pantry-ledger" aria-label="Pantry Presets & Live Destination">
+
+        <!-- Quick-Dial Presets List -->
+        <section class="panel-parchment" aria-labelledby="presets-heading">
+          <div class="panel-header-stitch">
+            <h2 id="presets-heading" class="panel-title">Wayfarer's Presets</h2>
+            <span class="panel-badge">Rapid Auto-Dial</span>
+          </div>
+
+          <div class="hearth-presets-grid">
+            <button type="button" class="hearth-preset-btn" data-dest-id="salt-line-hearth">
+              <div class="preset-info">
+                <span class="preset-name">The Salt-Line Hearth</span>
+                <span class="preset-tag">The Warm Hearthside · Solstice</span>
+              </div>
+              <span class="preset-arrow">→</span>
+            </button>
+
+            <button type="button" class="hearth-preset-btn" data-dest-id="bramblehollow-well">
+              <div class="preset-info">
+                <span class="preset-name">Bramblehollow Well</span>
+                <span class="preset-tag">Herb Garden · Autumn Equinox</span>
+              </div>
+              <span class="preset-arrow">→</span>
+            </button>
+
+            <button type="button" class="hearth-preset-btn" data-dest-id="nine-knot-hedge">
+              <div class="preset-info">
+                <span class="preset-name">Nine-Knot Hedge</span>
+                <span class="preset-tag">Hedgerows · Midsummer Eve</span>
+              </div>
+              <span class="preset-arrow">→</span>
+            </button>
+
+            <button type="button" class="hearth-preset-btn" data-dest-id="mothlight-meadow">
+              <div class="preset-info">
+                <span class="preset-name">Mothlight Meadow</span>
+                <span class="preset-tag">Out-Pastures · Lammas Twilight</span>
+              </div>
+              <span class="preset-arrow">→</span>
+            </button>
+
+            <button type="button" class="hearth-preset-btn" data-dest-id="butter-churn-croft">
+              <div class="preset-info">
+                <span class="preset-name">The Butter Churn Croft</span>
+                <span class="preset-tag">Byres · May Morning</span>
+              </div>
+              <span class="preset-arrow">→</span>
+            </button>
+
+            <button type="button" class="hearth-preset-btn" data-dest-id="tallow-chandlery">
+              <div class="preset-info">
+                <span class="preset-name">The Tallow Chandlery</span>
+                <span class="preset-tag">Lofts · Late Candlemas</span>
+              </div>
+              <span class="preset-arrow">→</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Active Destination Card (Appears during Kindled State) -->
+        <section class="panel-parchment" aria-labelledby="active-dest-heading">
+          <div class="panel-header-stitch">
+            <h2 id="active-dest-heading" class="panel-title">Active Threshold</h2>
+            <span class="panel-badge">Hearth Connection</span>
+          </div>
+          <div class="active-destination-display" id="active-destination-display">
+            <p style="font-family: var(--font-serif); font-size: 14px; font-style: italic; color: var(--ink-faint); text-align: center;">
+              No threshold is currently kindled. Tie seven cords and apply the bellows.
+            </p>
+          </div>
+        </section>
+
+        <!-- Cottage Lore & Parish Rhyme -->
+        <section class="panel-parchment" aria-labelledby="charm-rhyme-heading">
+          <div class="panel-header-stitch">
+            <h2 id="charm-rhyme-heading" class="panel-title">Parish Hearth-Rhyme</h2>
+            <span class="panel-badge">Nine-Knot Folk Tradition</span>
+          </div>
+          <blockquote class="cottage-charm-quote">
+            “Seven knots upon the sill,<br>
+            Flaxen thread and iron quill.<br>
+            Blow the coals till rushes catch,<br>
+            Draw cold iron from the latch.<br>
+            Walk the larder, walk the fen,<br>
+            Snuff the flame to rest again.”
+          </blockquote>
+        </section>
+
+      </aside>
+
+    </main>
+
+    <!-- Modal: The Herbwife's Handbook -->
+    <div class="guide-modal-backdrop" id="operator-guide-modal" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+      <div class="guide-modal-sheet">
+        <div class="modal-header-row">
+          <div>
+            <h2 id="guide-title">THE HERBWIFE'S HANDBOOK</h2>
+            <p style="font-family: var(--font-serif); font-style: italic; color: var(--ink-muted); font-size: 13px;">A Simple Guide to Cottage Wards and Hearth-Dialing</p>
+          </div>
+          <button type="button" class="modal-close-btn" id="btn-close-modal" aria-label="Close Handbook">✕</button>
+        </div>
+
+        <div class="guide-content-body">
+          <section>
+            <h3>I. Low Magic vs. Grand Arcana</h3>
+            <p>
+              This hearth-stone is not a cathedral of high celestial constellations or glowing technomantic circuitry. It is humble kitchen craft: flagstone salt lines, spun linen cords, dried yarrow, and tallow-dipped rushes. Everything is made by hand from field and hedgerow.
+            </p>
+          </section>
+
+          <section>
+            <h3>II. How to Dial a Hearth</h3>
+            <ul>
+              <li><strong>The Spindle:</strong> Click any of the 28 folk symbols on the turning ring. The spindle will rotate to the North Hearth Pin and inscribe a cord inward.</li>
+              <li><strong>Tying Seven Knots:</strong> Every parish destination requires exactly seven symbols. When all seven are tied, the hearth enters the <em>Bound & Pending</em> state.</li>
+              <li><strong>The Kindler:</strong> Press <strong>Kindle Hearth [K]</strong> to blow the bellows and ignite the rushlight wick. The gate will <em>never</em> open on its own.</li>
+              <li><strong>Snuffing:</strong> Press <strong>Snuff Hearth [Esc]</strong> at any time to sever the cords with sheep shears and smother the coals.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>III. The Three Stages of Kindling</h3>
+            <ul>
+              <li><strong>1. Buildup (1.8s):</strong> The bellows breathe, the tallow wick catches, linen cords hum with rising tension.</li>
+              <li><strong>2. Breakthrough:</strong> The salt line fractures with a sharp chalk snap; the bronze hearth-bell chimes; botanical silhouettes blossom.</li>
+              <li><strong>3. Sustained Active:</strong> The threshold opens. Night moths and thistle seedheads drift lazily through the warm aperture.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>IV. The Cold-Iron Threshold Nail</h3>
+            <p>
+              Old folk tradition holds that cold iron bars the fae and prevents hearth-magic from catching. When the Iron Nail is <em>Driven</em>, the Kindler is barred and will clang shut. Click <strong>Cold Iron Nail [I]</strong> to draw the nail and permit kindling.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/symbols.js"></script>
+  <script src="js/destinations.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/dial.js"></script>
+  <script src="js/portal.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
