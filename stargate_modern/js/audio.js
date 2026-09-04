@@ -19,6 +19,7 @@ class AerisAudioEngine {
     // Active nodes
     this.vortexDroneNode = null;
     this.vortexGainNode = null;
+    this.vortexHumTimer = null;
     this.motorOsc = null;
     this.motorFilter = null;
     
@@ -308,7 +309,8 @@ class AerisAudioEngine {
     noise.start(t);
 
     // Start sustained vortex hum after ignition
-    setTimeout(() => {
+    this.vortexHumTimer = setTimeout(() => {
+      this.vortexHumTimer = null;
       this.startVortexHum();
     }, 900);
   }
@@ -355,6 +357,11 @@ class AerisAudioEngine {
   }
 
   stopVortexHum() {
+    // Cancel a hum that ignition scheduled but that has not started yet
+    if (this.vortexHumTimer) {
+      clearTimeout(this.vortexHumTimer);
+      this.vortexHumTimer = null;
+    }
     if (!this.vortexDroneNode || !this.ctx) return;
     const t = this.ctx.currentTime;
     if (this.vortexGainNode) {

@@ -15,6 +15,7 @@ class VectorRingEngine {
     // State
     this.powerOnline = false;
     this.gateState = 'IDLE'; // 'IDLE', 'ROTATING', 'ALIGNING', 'LOCKED', 'IGNITING', 'ACTIVE', 'DISENGAGING'
+    this.igniteTimer = null; // IGNITING -> ACTIVE transition handle, cleared by disengage()
     this.ringAngle = 0; // Current rotation in radians
     this.targetRingAngle = 0;
     this.angularVelocity = 0;
@@ -184,13 +185,21 @@ class VectorRingEngine {
     this.emitBurst(this.width / 2, this.height / 2, 90, '#00f0ff');
     this.emitBurst(this.width / 2, this.height / 2, 45, '#a855f7');
 
-    setTimeout(() => {
+    if (this.igniteTimer) clearTimeout(this.igniteTimer);
+    this.igniteTimer = setTimeout(() => {
+      this.igniteTimer = null;
+      // Disengaged (or otherwise taken over) mid-ignition - do not resurrect ACTIVE.
+      if (this.gateState !== 'IGNITING') return;
       this.gateState = 'ACTIVE';
     }, 1100);
   }
 
   // Disengage aperture
   disengage() {
+    if (this.igniteTimer) {
+      clearTimeout(this.igniteTimer);
+      this.igniteTimer = null;
+    }
     if (this.gateState === 'ACTIVE' || this.gateState === 'IGNITING') {
       if (window.aerisAudio) {
         window.aerisAudio.playDisengage();

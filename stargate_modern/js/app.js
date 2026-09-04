@@ -502,7 +502,7 @@ class AerisApplication {
   // Fast-Dial EAFP Protocol Execution
   executeFastDial(destination) {
     if (!destination) return;
-    if (this.gateState === 'LOCKING' || this.gateState === 'ACTIVE') {
+    if (this.gateState === 'LOCKING' || this.gateState === 'ACTIVE' || this.gateState === 'IGNITING') {
       this.disengageAperture();
     }
 

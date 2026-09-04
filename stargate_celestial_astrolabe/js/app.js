@@ -14,6 +14,8 @@ function initApp() {
   // App State
   let systemState = 'idle'; // 'idle' | 'pending' | 'buildup' | 'breakthrough' | 'active'
   let autoDialInterval = null;
+  let buildupTimer = null;
+  let breakthroughTimer = null;
   let activeTab = 'horizon-tab';
 
   // DOM Elements
@@ -231,13 +233,15 @@ function initApp() {
     const startTime = performance.now();
     const buildupDuration = 1800; // 1.8 seconds
 
-    const buildupTimer = setInterval(() => {
+    buildupTimer = setInterval(() => {
+      if (systemState !== 'buildup') { clearInterval(buildupTimer); buildupTimer = null; return; }
       const elapsed = performance.now() - startTime;
       const progress = Math.min(1.0, elapsed / buildupDuration);
       astrolabe.buildupProgress = progress;
 
       if (progress >= 1.0) {
         clearInterval(buildupTimer);
+        buildupTimer = null;
         triggerBreakthrough();
       }
     }, 30);
@@ -257,7 +261,9 @@ function initApp() {
     gateStatusBanner.className = 'status-banner breakthrough';
     gateStatusText.textContent = 'STAGE 2: BREAKTHROUGH — STELLAR IRIS DILATING...';
 
-    setTimeout(() => {
+    breakthroughTimer = setTimeout(() => {
+      breakthroughTimer = null;
+      if (systemState !== 'breakthrough') return;
       triggerSustainedActive();
     }, 850);
   }
@@ -289,6 +295,14 @@ function initApp() {
     if (autoDialInterval) {
       clearInterval(autoDialInterval);
       autoDialInterval = null;
+    }
+    if (buildupTimer) {
+      clearInterval(buildupTimer);
+      buildupTimer = null;
+    }
+    if (breakthroughTimer) {
+      clearTimeout(breakthroughTimer);
+      breakthroughTimer = null;
     }
 
     audio.playDisengage();

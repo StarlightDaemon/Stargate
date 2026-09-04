@@ -11,6 +11,8 @@ class DarkMatterApp {
     this.apertureState = 'STANDBY'; // 'STANDBY', 'PENDING', 'BUILDUP', 'BREAKTHROUGH', 'ACTIVE'
     this.activationTimeout = null;
     this.breakthroughTimeout = null;
+    this.buildupInterval = null;
+    this.btInterval = null;
 
     this.init();
   }
@@ -538,7 +540,8 @@ class DarkMatterApp {
     let buildupStart = Date.now();
     const buildupDuration = 2400;
 
-    const buildupInterval = setInterval(() => {
+    this.buildupInterval = setInterval(() => {
+      if (this.apertureState !== 'BUILDUP') { clearInterval(this.buildupInterval); this.buildupInterval = null; return; }
       const elapsed = Date.now() - buildupStart;
       const progress = Math.min(1, elapsed / buildupDuration);
       
@@ -553,7 +556,8 @@ class DarkMatterApp {
       }
 
       if (progress >= 1) {
-        clearInterval(buildupInterval);
+        clearInterval(this.buildupInterval);
+        this.buildupInterval = null;
         this.triggerBreakthroughStage();
       }
     }, 50);
@@ -575,7 +579,8 @@ class DarkMatterApp {
     let btStart = Date.now();
     const btDuration = 600;
 
-    const btInterval = setInterval(() => {
+    this.btInterval = setInterval(() => {
+      if (this.apertureState !== 'BREAKTHROUGH') { clearInterval(this.btInterval); this.btInterval = null; return; }
       const elapsed = Date.now() - btStart;
       const progress = Math.min(1, elapsed / btDuration);
       if (this.detectorRenderer) {
@@ -583,7 +588,8 @@ class DarkMatterApp {
       }
 
       if (progress >= 1) {
-        clearInterval(btInterval);
+        clearInterval(this.btInterval);
+        this.btInterval = null;
         this.enterSustainedActiveStage();
       }
     }, 40);
@@ -600,7 +606,7 @@ class DarkMatterApp {
     if (window.dmStorage) {
       window.dmStorage.updateStats('aperturesOpened');
       // Save dial history
-      const locked = window.dmDiscrimination.lockedSlots.map(s => s.glyph).join(' - ');
+      const locked = window.dmDiscrimination.lockedSlots.filter(s => s).map(s => s.glyph).join(' - ');
       window.dmStorage.addDialHistory({
         sequence: locked,
         significance: '5.18σ (Discovered)',
@@ -617,6 +623,16 @@ class DarkMatterApp {
     // Abort any ongoing auto-dialing
     if (window.dmQuickDial) {
       window.dmQuickDial.abortAutoDial();
+    }
+
+    // Abort any in-flight activation stage timers
+    if (this.buildupInterval) {
+      clearInterval(this.buildupInterval);
+      this.buildupInterval = null;
+    }
+    if (this.btInterval) {
+      clearInterval(this.btInterval);
+      this.btInterval = null;
     }
 
     if (window.dmAudio) {
