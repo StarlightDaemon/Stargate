@@ -19,5 +19,8 @@
     "portal"
   ],
   "author": "IPATC Consortium / Gemini 3.7 Flash (High reasoning)",
-  "license": "MIT"
+  "license": "MIT",
+  "overrides": {
+    "qs": "6.16.0"
+  }
 }
