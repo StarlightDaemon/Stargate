@@ -1,6 +1,12 @@
 import puppeteer from 'puppeteer';
 import { spawn } from 'child_process';
 import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+// Verification screenshots go to the gitignored test/ directory next to this
+// script, never the build root or the caller's cwd (STARGATE_BUILD_STANDARDS.md section 3).
+const OUT_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'test');
+fs.mkdirSync(OUT_DIR, { recursive: true });
 
 async function run() {
     console.log('Starting Vite server...');
@@ -117,7 +123,7 @@ async function run() {
         await page.click('#btn-disengage');
         await new Promise(r => setTimeout(r, 500));
         
-        await page.screenshot({ path: 'test_idle_screenshot.png' });
+        await page.screenshot({ path: path.join(OUT_DIR, 'test_idle_screenshot.png') });
         console.log('Saved idle screenshot to test_idle_screenshot.png');
         
         console.log('All tests passed successfully.');

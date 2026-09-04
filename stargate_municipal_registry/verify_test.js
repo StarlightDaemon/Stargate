@@ -4,6 +4,10 @@ const path = require('path');
 
 const PORT = 8899;
 const DIR = __dirname;
+// Verification screenshots go to the gitignored test/ directory, never the
+// build root (STARGATE_BUILD_STANDARDS.md section 3).
+const OUT_DIR = path.join(__dirname, 'test');
+fs.mkdirSync(OUT_DIR, { recursive: true });
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -98,7 +102,7 @@ async function runVerification() {
     console.log('[Puppeteer] Page loaded at 1920x1080.');
 
     // Screenshot 1: Idle
-    await page.screenshot({ path: path.join(DIR, 'screenshot_01_idle.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_01_idle.png') });
     console.log('[Screenshot] Saved screenshot_01_idle.png');
 
     // Test Cycle 1: Dial 8 Glyphs -> Engage -> Disengage
@@ -107,7 +111,7 @@ async function runVerification() {
       await page.click(`#glyphBtn-${i}`);
       await new Promise(r => setTimeout(r, 200));
     }
-    await page.screenshot({ path: path.join(DIR, 'screenshot_02_dialed.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_02_dialed.png') });
     console.log('[Screenshot] Saved screenshot_02_dialed.png');
 
     // Engage
@@ -118,7 +122,7 @@ async function runVerification() {
 
     await page.click('#engageBtn');
     await new Promise(r => setTimeout(r, 600));
-    await page.screenshot({ path: path.join(DIR, 'screenshot_03_engaged.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_03_engaged.png') });
     console.log('[Screenshot] Saved screenshot_03_engaged.png');
 
     const statusAfterEngage = await page.evaluate(() => document.getElementById('authStatusPill').textContent);
@@ -145,7 +149,7 @@ async function runVerification() {
     await new Promise(r => setTimeout(r, 600));
     const statusAfterDisengage2 = await page.evaluate(() => document.getElementById('authStatusPill').textContent);
     console.log(`Status after Second Disengage: "${statusAfterDisengage2}"`);
-    await page.screenshot({ path: path.join(DIR, 'screenshot_04_disengaged_redialed.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_04_disengaged_redialed.png') });
     console.log('[Screenshot] Saved screenshot_04_disengaged_redialed.png');
 
     // Test 5: Lockout Control (Compliance Freeze)
@@ -160,7 +164,7 @@ async function runVerification() {
     // Attempt Engage while frozen
     await page.click('#engageBtn');
     await new Promise(r => setTimeout(r, 500));
-    await page.screenshot({ path: path.join(DIR, 'screenshot_05_lockout_rejection.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_05_lockout_rejection.png') });
     console.log('[Screenshot] Saved screenshot_05_lockout_rejection.png (Lockout Rejection Stamp Verified)');
 
     // Unlock lockout
@@ -180,7 +184,7 @@ async function runVerification() {
 
     await page.click('#qdRoute4');
     await new Promise(r => setTimeout(r, 1600));
-    await page.screenshot({ path: path.join(DIR, 'screenshot_06_quickdial.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_06_quickdial.png') });
     console.log('[Screenshot] Saved screenshot_06_quickdial.png');
     await page.click('#disengageBtn');
     await new Promise(r => setTimeout(r, 600));
@@ -189,7 +193,7 @@ async function runVerification() {
     console.log('\n--- 7. Testing Operator Reference Modal ---');
     await page.click('#operatorHelpBtn');
     await new Promise(r => setTimeout(r, 400));
-    await page.screenshot({ path: path.join(DIR, 'screenshot_07_help_modal.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_07_help_modal.png') });
     console.log('[Screenshot] Saved screenshot_07_help_modal.png');
 
     await page.click('#modalDismissBtn');

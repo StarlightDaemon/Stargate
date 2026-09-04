@@ -9,6 +9,10 @@ const puppeteer = require('puppeteer');
 
 const PORT = 8420;
 const ROOT_DIR = __dirname;
+// Verification screenshots go to the gitignored test/ directory, never the
+// build root (STARGATE_BUILD_STANDARDS.md section 3).
+const OUT_DIR = path.join(__dirname, 'test');
+fs.mkdirSync(OUT_DIR, { recursive: true });
 
 // Simple HTTP Server
 function createServer() {
@@ -119,7 +123,7 @@ async function runTestSuite() {
     record('1080p Scale Transform Applied', scale1080.transform !== 'none', `Transform: ${scale1080.transform}`);
     record('1080p Zero Document Scroll', !scale1080.hasScroll, `Height: ${scale1080.rect.height}px`);
 
-    await page.screenshot({ path: path.join(ROOT_DIR, 'screenshot_idle_1080p.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_idle_1080p.png') });
     console.log('Saved screenshot_idle_1080p.png');
 
     // 2. Test 4K Resolution & Scale Factor
@@ -142,7 +146,7 @@ async function runTestSuite() {
     record('4K Scale Transform Applied', scale4k.transform !== 'none' && scale4k.transform.includes('matrix'), `Transform: ${scale4k.transform}`);
     record('4K Canvas Centered & Scaled', scale4k.rect.width > 3000, `Rendered Width: ${scale4k.rect.width.toFixed(1)}px`);
 
-    await page.screenshot({ path: path.join(ROOT_DIR, 'screenshot_4k.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_4k.png') });
     console.log('Saved screenshot_4k.png');
 
     // Reset back to 1080p and reload for pristine interactive tests
@@ -225,7 +229,7 @@ async function runTestSuite() {
 
     record('Conduit Active / Ignition Successful', stateAfterIgnition.state === 'ACTIVE', `State: ${stateAfterIgnition.state}, Pressure: ${stateAfterIgnition.pressure.toFixed(1)} inHg, Voltage: ${Math.round(stateAfterIgnition.voltage)}V`);
 
-    await page.screenshot({ path: path.join(ROOT_DIR, 'screenshot_active_conduit.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_active_conduit.png') });
     console.log('Saved screenshot_active_conduit.png');
 
     // Disengage via Emergency Vent button
@@ -316,7 +320,7 @@ async function runTestSuite() {
     });
     await new Promise(r => setTimeout(r, 200));
 
-    await page.screenshot({ path: path.join(ROOT_DIR, 'screenshot_manual_modal.png') });
+    await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_manual_modal.png') });
     console.log('Saved screenshot_manual_modal.png');
 
     // Close Modal

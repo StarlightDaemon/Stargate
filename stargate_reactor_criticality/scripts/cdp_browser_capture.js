@@ -131,7 +131,10 @@ async function run() {
 
     await client.send('Page.navigate', { url: 'http://127.0.0.1:8080/' });
     await sleep(1500);
-    const outDir = path.join(__dirname, '..');
+    // Verification screenshots go to the gitignored test/ directory, never the
+    // build root (STARGATE_BUILD_STANDARDS.md section 3).
+    const outDir = path.join(__dirname, '..', 'test');
+    fs.mkdirSync(outDir, { recursive: true });
 
     // 1. Cold Start
     console.log('\nStep 1: Cold Start State');

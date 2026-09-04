@@ -452,7 +452,10 @@ async function runVerification() {
     results.allPassed = false;
   } finally {
     await browser.close();
-    fs.writeFileSync(path.join(__dirname, 'test_results.json'), JSON.stringify(results, null, 2));
+    // Run logs go to the gitignored test/ directory, never the build root
+    // (STARGATE_BUILD_STANDARDS.md section 3).
+    fs.mkdirSync(path.join(__dirname, 'test'), { recursive: true });
+    fs.writeFileSync(path.join(__dirname, 'test', 'test_results.json'), JSON.stringify(results, null, 2));
     console.log('Saved test_results.json');
   }
 }

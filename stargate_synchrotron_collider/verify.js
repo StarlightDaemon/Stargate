@@ -476,6 +476,9 @@ async function runVerification() {
 }
 
 runVerification().then(res => {
-  fs.writeFileSync(path.join(__dirname, 'test_results.json'), JSON.stringify(res, null, 2));
+  // Run logs go to the gitignored test/ directory, never the build root
+    // (STARGATE_BUILD_STANDARDS.md section 3).
+    fs.mkdirSync(path.join(__dirname, 'test'), { recursive: true });
+    fs.writeFileSync(path.join(__dirname, 'test', 'test_results.json'), JSON.stringify(res, null, 2));
   console.log('Verification finished. Saved to test_results.json');
 });

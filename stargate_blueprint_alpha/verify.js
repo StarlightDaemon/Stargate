@@ -8,6 +8,10 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
+// Verification screenshots go to the gitignored test/ directory, never the
+// build root (STARGATE_BUILD_STANDARDS.md section 3).
+const OUT_DIR = path.join(__dirname, 'test');
+fs.mkdirSync(OUT_DIR, { recursive: true });
 
 const PORT = 8088;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
@@ -124,7 +128,7 @@ async function runTests() {
     }
 
     // Capture 1080p Screenshot
-    const screenshot1080Path = path.join(__dirname, 'screenshot_1080p_dormant.png');
+    const screenshot1080Path = path.join(OUT_DIR, 'screenshot_1080p_dormant.png');
     await page.screenshot({ path: screenshot1080Path });
     console.log(`  ✓ Saved 1080p dormant screenshot: ${screenshot1080Path}`);
 
@@ -143,7 +147,7 @@ async function runTests() {
     }
 
     // Capture 4K Screenshot
-    const screenshot4KPath = path.join(__dirname, 'screenshot_4k_scaled.png');
+    const screenshot4KPath = path.join(OUT_DIR, 'screenshot_4k_scaled.png');
     await page.screenshot({ path: screenshot4KPath });
     console.log(`  ✓ Saved 4K screenshot: ${screenshot4KPath}`);
 
@@ -187,7 +191,7 @@ async function runTests() {
     if (!isConnected1) throw new Error('Failed to activate manifold after dial');
 
     // Capture Active Manifold Screenshot
-    const screenshotActivePath = path.join(__dirname, 'screenshot_active_manifold.png');
+    const screenshotActivePath = path.join(OUT_DIR, 'screenshot_active_manifold.png');
     await page.screenshot({ path: screenshotActivePath });
     console.log(`  ✓ Saved active manifold screenshot: ${screenshotActivePath}`);
 
@@ -269,7 +273,7 @@ async function runTests() {
     if (!holdRejected) throw new Error('Review Hold failed to block transmission');
 
     // Capture Review Hold Screenshot
-    const screenshotHoldPath = path.join(__dirname, 'screenshot_review_hold.png');
+    const screenshotHoldPath = path.join(OUT_DIR, 'screenshot_review_hold.png');
     await page.screenshot({ path: screenshotHoldPath });
     console.log(`  ✓ Saved review hold screenshot: ${screenshotHoldPath}`);
 
@@ -310,7 +314,7 @@ async function runTests() {
     if (!t2Active) throw new Error('Tier 2 quick-dial failed');
 
     // Capture Quick-Dial Active Screenshot
-    const screenshotQuickPath = path.join(__dirname, 'screenshot_quickdial_active.png');
+    const screenshotQuickPath = path.join(OUT_DIR, 'screenshot_quickdial_active.png');
     await page.screenshot({ path: screenshotQuickPath });
     console.log(`  ✓ Saved quick dial screenshot: ${screenshotQuickPath}`);
 

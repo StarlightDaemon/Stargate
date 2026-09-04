@@ -10,6 +10,10 @@ const path = require('path');
 
 const PORT = 8083;
 const CDP_PORT = 9333;
+// Verification screenshots go to the gitignored test/ directory, never the
+// build root (STARGATE_BUILD_STANDARDS.md section 3).
+const OUT_DIR = path.join(__dirname, 'test');
+fs.mkdirSync(OUT_DIR, { recursive: true });
 // Browser resolution. No absolute local filesystem path is committed here:
 // CHROME_PATH (or PUPPETEER_EXECUTABLE_PATH) wins, otherwise puppeteer's own
 // executable path is used. Anything else is an explicit error.
@@ -157,7 +161,7 @@ async function runTests() {
     if (transform4k === 'none' || !transform4k) {
       throw new Error('Transform validation failed at 4K!');
     }
-    await cdp.screenshot(path.join(__dirname, 'screenshot_4k.png'));
+    await cdp.screenshot(path.join(OUT_DIR, 'screenshot_4k.png'));
 
     // Reset to 1080p
     await cdp.send('Emulation.setDeviceMetricsOverride', {
@@ -168,7 +172,7 @@ async function runTests() {
     });
     await cdp.eval(`window.dispatchEvent(new Event('resize'))`);
     await sleep(500);
-    await cdp.screenshot(path.join(__dirname, 'screenshot_1080p.png'));
+    await cdp.screenshot(path.join(OUT_DIR, 'screenshot_1080p.png'));
 
     async function hitAndClick(selector) {
       const rect = await cdp.eval(`(() => {
@@ -279,7 +283,7 @@ async function runTests() {
       throw new Error('FAIL: Manual activation did not transition to BIOSPHERE POWER CONDUIT ACTIVE.');
     }
 
-    await cdp.screenshot(path.join(__dirname, 'screenshot_active.png'));
+    await cdp.screenshot(path.join(OUT_DIR, 'screenshot_active.png'));
 
     // Disengage active conduit
     console.log('Disengaging active conduit via Scram button...');
@@ -309,7 +313,7 @@ async function runTests() {
       s.locked = parseInt(s.locked, 10);
       replaySamples.push(s);
       console.log(`  t=${Date.now() - clickT0}ms:`, JSON.stringify(s));
-      await cdp.screenshot(path.join(__dirname, `screenshot_replay_t${off}.png`));
+      await cdp.screenshot(path.join(OUT_DIR, `screenshot_replay_t${off}.png`));
     }
     const rCounts = replaySamples.map(s => s.locked);
     const stagedOk = rCounts.every((v, i) => i === 0 || v > rCounts[i - 1]) &&
@@ -349,7 +353,7 @@ async function runTests() {
     if (!afterAbortState.includes('0 / 8')) {
       throw new Error('FAIL: SCRAM during replay left orphaned relay timers still coupling substations.');
     }
-    await cdp.screenshot(path.join(__dirname, 'screenshot_mid_replay_abort.png'));
+    await cdp.screenshot(path.join(OUT_DIR, 'screenshot_mid_replay_abort.png'));
     console.log('>>> MID-REPLAY SCRAM CONFIRMED: no orphaned locks after disengage.');
 
     // --- TEST SUPERCONDUCTING BUS OVERLOAD HOLD ---

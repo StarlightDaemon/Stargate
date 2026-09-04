@@ -427,7 +427,10 @@ async function runTestSuite() {
     console.log('AUTOMATED VERIFICATION COMPLETED SUCCESSFULLY!');
     console.log('================================================================');
 
-    fs.writeFileSync(path.join(__dirname, 'test_results.json'), JSON.stringify(testResults, null, 2));
+    // Run logs go to the gitignored test/ directory, never the build root
+    // (STARGATE_BUILD_STANDARDS.md section 3).
+    fs.mkdirSync(path.join(__dirname, 'test'), { recursive: true });
+    fs.writeFileSync(path.join(__dirname, 'test', 'test_results.json'), JSON.stringify(testResults, null, 2));
     console.log('Wrote test_results.json');
 
   } catch (err) {

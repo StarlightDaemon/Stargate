@@ -1,4 +1,10 @@
 const puppeteer = require('puppeteer');
+const path = require('path');
+const fs = require('fs');
+// Verification screenshots go to the gitignored test/ directory next to this
+// script, never the build root or the caller's cwd (STARGATE_BUILD_STANDARDS.md section 3).
+const OUT_DIR = path.join(__dirname, 'test');
+fs.mkdirSync(OUT_DIR, { recursive: true });
 
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
@@ -19,7 +25,7 @@ const delay = ms => new Promise(r => setTimeout(r, ms));
         await page.goto('http://127.0.0.1:8080/index.html', { waitUntil: 'networkidle0' });
         
         console.log('Taking idle screenshot...');
-        await page.screenshot({ path: 'screenshot_idle.png' });
+        await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_idle.png') });
         
         for (let cycle = 1; cycle <= 2; cycle++) {
             console.log(`\n--- Starting Cycle ${cycle} ---`);
@@ -47,7 +53,7 @@ const delay = ms => new Promise(r => setTimeout(r, ms));
             
             if (cycle === 1) {
                 console.log('Taking engaged screenshot...');
-                await page.screenshot({ path: 'screenshot_engaged.png' });
+                await page.screenshot({ path: path.join(OUT_DIR, 'screenshot_engaged.png') });
             }
             
             console.log('Checking DISCONNECT button reachability...');
