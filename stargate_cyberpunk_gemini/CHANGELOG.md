@@ -5,6 +5,18 @@ All notable changes to the Khepri Cipher Terminal project will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--primary-color`, 3px offset) on every `button`, `a` and `input`. Added alongside the existing hover rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` pauses the pending-state aperture core, the active-target address slot pulse and the ready-state execute button pulse. Breach-sequence feedback is untouched.
+- Declared client-side persistence: `"persistence": "localStorage"` in `version.json` and a **Persistence:** line in the README naming `khepri_terminal_settings` (theme, master/drone/sfx/noise volumes, scanline intensity, reduced-motion flag) and `khepri_viewed_archives` (archive entries viewed), read from the storage code. No storage behaviour changed.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name`, `title` and `genre` preserved verbatim under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
+
 ## [1.0.1] - 2026-09-03
 
 **Verified by:** Claude Sonnet.

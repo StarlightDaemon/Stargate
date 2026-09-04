@@ -3,6 +3,20 @@
 All notable changes to MERIDIAN RING are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+- Added keyboard focus indicators: a `:focus-visible` outline in `--cyan`
+  with a cyan glow on the `.key`, `.dest`, `.ctl`, `.opref-btn` and
+  `.opref-close` controls, and a cyan outline on `.credit`. Added alongside
+  the existing hover rules; no existing rule altered.
+- `version.json` restructured to the catalog's common shape: `version`,
+  `model` and `built` at top level (the former `date` key moved verbatim to
+  `built`), with `name` and `device` preserved under a `meta` object.
+  Version value unchanged.
+- No changes to any gate mechanic, visual, sound, or lore/copy.
+
 ## [1.1.0] - 2026-08-16
 
 **Built by:** Claude Fable 5

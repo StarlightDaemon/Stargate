@@ -5,6 +5,17 @@ All notable changes to the Aeolos Stagnation Plenum (ASP-9) Transonic Aerodynami
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--cyan-bright`, 3px offset) with the cyan glow on every `button`, range input and `select`. Added alongside the existing rules; no existing rule altered.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name`, `title` and `genre` preserved verbatim under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
+- Test harness `verify.js` now writes its run log to the gitignored `test/test_results.json`, created on demand, instead of `test_results.json` at the build root. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-09-03
 
 **Built by:** Gemini 3.8 Flash (High Reasoning)

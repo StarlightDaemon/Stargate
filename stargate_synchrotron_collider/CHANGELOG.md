@@ -5,6 +5,20 @@ All notable changes to the Aethel-Ring Collider (ARC) Synchrotron Portal Gateway
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--neon-cyan`, 3px offset) with a cyan glow on every `button`, the corner attribution link and range inputs, plus a cyan outline on the `.toggle-switch-label` when the quench-interlock checkbox is focused. Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` slows the collider badge pulse to 12s. Dial and activation feedback are untouched.
+
+### Fixed
+- The quench-interlock toggle checkbox (`.toggle-switch-input`) was `display: none`, which removed it from the accessibility tree and the tab order. It is now visually hidden instead (1px, clipped, absolutely positioned inside `.toggle-switch-container`, which became `position: relative`), so it is reachable by Tab and toggles with Space while the styled label still draws it.
+
+### Changed
+- Test harness `verify.js`: the hardcoded Chrome path constant was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. It now also writes its run log to the gitignored `test/test_results.json`, created on demand, instead of `test_results.json` at the build root. Harness only; runtime unchanged.
+
 ## [1.1.0] - 2026-08-15
 
 **Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.7 Flash (High Reasoning))

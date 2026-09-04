@@ -2,6 +2,18 @@
 
 All notable changes to the DSV-9 ARCHELON Bathyscaphe Pilot Console & Abyssal Gateway Interface will be documented in this file.
 
+## [1.0.0] - 2026-09-04 - Catalog maintenance pass (Claude sessions)
+
+**Performed by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04; NOT the original builder. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators (`src/css/main.css`): `:focus-visible` outline in `--accent-cyan` (so it follows the active colour theme) with the build's subtle glow on the nav tabs, preset drawer, audio toggle, operator help, drawer close, preset cards, waypoint buttons, interlock, commence-descent, category filters, log actions, theme options, settings selects, mixer ranges, modal close, dismiss-help and brand link; `--accent-red` with the red glow on the emergency-blow button. Added alongside the existing hover/focus rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` (`src/css/cockpit.css`) pauses the slow dashed aperture-gate ring rotation (`.gauge-aperture-gate`, decorative, 60s/turn). The ready, buildup, flicker and breakthrough feedback animations are untouched.
+- Declared client-side persistence: `"persistence": "localStorage"` in `version.json` and a **Persistence:** line in the README naming `archelon_pilot_preferences_v1` (theme, density, motion, mute and mixer volumes), `archelon_pilot_dives_v1` (last 50 completed dives) and `archelon_pilot_viewed_archives_v1` (archive entries opened), read from the storage code. No storage behaviour changed.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `buildDate` key moved verbatim to `built`), with `name`, `vessel`, `consortium` and `interface` preserved under a `meta` object. Version value unchanged.
+
 ## [1.0.0] - 2026-08-23 - Independent automated re-verification (Claude session)
 
 **Performed by:** an automated Claude Code session (Fable 5), NOT the original builder.

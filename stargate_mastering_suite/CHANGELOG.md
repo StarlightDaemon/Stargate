@@ -5,6 +5,16 @@ All notable changes to the Axiom Audio Research & Mastering Facility (Portal Dia
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--color-cyan` on every `button` and `select`, on the `.patch-jack` controls, and on the visible `.slider` of the toggle switch's hidden checkbox. Added alongside the existing rules; no existing rule altered.
+
+### Fixed
+- The ten patchbay jacks (`#patch-jack-0` to `#patch-jack-9`) were plain `div`s and could not be reached or activated from the keyboard. `index.html` now gives each `role="button"` and `tabindex="0"`, and `js/app.js` adds an Enter/Space keydown handler that performs the same channel-patch toggle as a click.
+
 ## [1.1.0] - 2026-08-15
 
 **Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.7 Flash (High))

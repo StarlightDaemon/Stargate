@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators (`css/theme.css`): `:focus-visible` outline in `--cyan-primary` with the small cyan glow on every `button`. Added alongside the existing hover rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` (`css/layout.css`) slows the ambient idle heartbeat `.status-dot` to 6s. The sync pulse, armed pulse and button jitter in `components.css` are untouched.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `timestamp` key moved verbatim to `built`, full ISO datetime kept), with `build_name` and `system_id` preserved under a `meta` object. Version value unchanged.
+- Test harness `scripts/verify.js`: the hardcoded Chrome/Edge candidate list was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash (High Reasoning)

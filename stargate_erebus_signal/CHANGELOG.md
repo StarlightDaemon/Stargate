@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- The standard viewport meta tag (`width=device-width, initial-scale=1.0`), which was absent from `index.html`.
+- Keyboard focus indicators: `:focus-visible` outline (2px `--text`, 3px offset) on every `button` and `a`. Added alongside the existing hover rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` pauses only the gate's rapid position jitter (`gateShake`) during the seeking state, which is a vestibular trigger redundant with the tracking-line scan and chevron flicker that still convey seeking. Every other state animation is untouched.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `date` key moved verbatim to `built`), with `name` and `device` preserved under a `meta` object. Version value unchanged.
+
 ## [1.1.0] - 2026-08-11
 
 **Built by:** Gemini 3.1 Pro (high reasoning)

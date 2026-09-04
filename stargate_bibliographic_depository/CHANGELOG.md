@@ -2,6 +2,14 @@
 
 All notable changes to the **Pan-Harmonic Bibliographic Depository** (`stargate_bibliographic_depository`) console will be documented in this file.
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (catalog-wide keyboard-focus and reduced-motion CSS pass, 2026-09-04). Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diff. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--phosphor-primary` (so it follows the emerald/amber/cobalt theme) with the phosphor glow on the nav tabs, nav help, taxon buttons, preset cards, table-load, modal close, footer link, category select, master actuator and the settings selects, ranges and checkboxes; `--crimson-alert` on the disengage-vault button; and on the visible `.switch-slider` of the opacity-hidden custom checkbox. Added alongside the existing hover/focus rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` damps the decorative loops only: header seal slowed to 30s, hub brass rim rotation paused, footer ticker dot and Deep Stacks map ping slowed to 4s, and the holographic folio bob slowed to 8s with a 2px amplitude. `vortexSpin`, `pulseRing` and `pulseReady` are untouched because they communicate live dial/activation state.
+
 ## [1.0.0] - 2026-08-22
 **Built by:** Gemini 3.7 Flash (High reasoning)
 

@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--glow-primary`, 3px offset) on every `button`. Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` pauses the ambient ward-barrier rotation. The living-surface pulse and chevron seek pulse communicate active dial state and are untouched.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `date` key moved verbatim to `built`), with `name` and `device` preserved under a `meta` object. Version value unchanged.
+- Test harness `puppeteer_test.js` now writes its idle and engaged screenshots to a `test/` directory resolved relative to the script (gitignored, created on demand) instead of bare cwd-relative filenames, so the destination no longer depends on where the harness is launched from. Harness only; runtime unchanged.
+
 ## [1.2.0] - 2026-08-11
 
 **Built by:** Gemini 3.1 Pro (high reasoning)

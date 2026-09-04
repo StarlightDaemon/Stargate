@@ -1,5 +1,20 @@
 # Changelog
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators (`css/futurist-core.css`): `:focus-visible` outline in `--accent-speed` on every `button`, `a` and range input, and on the `.preset-card` and `.archive-entry-item` controls. Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` slows the brand crest to 12s (`futurist-core.css`) and pauses the outer-teeth and flywheel-core ring rotation while the gate is idle (`futurist-ring.css`). Buildup, breakthrough and active ring feedback are untouched.
+- Declared client-side persistence: `"persistence": "localStorage"` in `version.json` and a **Persistence:** line in the README naming the single key `idpt_gateway_state` (theme, motion intensity, audio volumes, dial history, unlocked dossier records, session log), read from the storage code. No storage behaviour changed.
+
+### Fixed
+- The quick-dial preset cards and the archive entry list items were plain `div`s and could not be reached or activated from the keyboard. `js/app.js` now renders them with `role="button"` and `tabindex="0"` and gives each an Enter/Space keydown handler that performs the same click behaviour (auto-dial the preset; show the dossier).
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name`, `institution`, `artisticRegister` and `description` preserved verbatim under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
+
 ## [1.0.0] - 2026-08-23
 
 ### Initial Release: Istituto Dinamico di Propulsione e Traslazione (IDPT)

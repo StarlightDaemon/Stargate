@@ -5,6 +5,17 @@ All notable changes to the **Caïssa Neural Recursion Workstation** (`stargate_c
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--border-bright` with a cyan glow on `.icon-btn`, `.candidate-move-btn`, `.preset-btn`, `.action-btn`, `.close-modal-btn` and the bottom-bar link. Added alongside the existing hover rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` stops the status-pill indicator dot pulse, which runs regardless of engine/dial state. Buildup pulse, breakthrough flash, sustained aurora and ready strobe are untouched.
+
+### Fixed
+- The viewport meta tag no longer carries `maximum-scale=1.0` and `user-scalable=no`, so pinch zoom is no longer blocked. It now reads `width=device-width, initial-scale=1.0`.
+
 ## [1.1.0] - 2026-08-15
 
 **Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.7 Flash)

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Fable 5.1 (catalog-wide maintenance commits of 2026-09-04). Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Declared client-side persistence: `"persistence": "localStorage"` in `version.json` and a **Persistence:** line in the README naming `hg.visited` (ids of destinations already reached) and `hg.muted` (`"1"`/`"0"`; audio stays muted unless explicitly `"0"`), read from the storage code. No storage behaviour changed.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `date` key moved verbatim to `built`), with `name` and `device` preserved under a `meta` object. Version value unchanged.
+
 ## [1.1.0] - 2026-08-16
 
 **Built by:** Claude Sonnet 5

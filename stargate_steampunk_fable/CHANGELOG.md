@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- OS-level `prefers-reduced-motion: reduce` support alongside the build's own `data-motion` setting: the armed engage lever's idle breathing glow (`#btn-engage.armed`) is disabled, since border and label colour already convey the armed state, and the cross-section modal's flywheel rotation (`.xs-spin.turning` under `data-motion="full"`) is slowed to 32s rather than stopped. Refusal flash, the buildup/breakthrough/active annunciator states and the reader-card feed transition are untouched. No focus-visible rule was added.
+- Declared client-side persistence: `"persistence": "localStorage"` in `version.json` and a **Persistence:** line in the README naming the single key `perpetua.v1` (theme, density, motion, master/ambient/mechanism/bell volumes, the last 40 dial history entries and archive entries viewed), read from the storage code. No storage behaviour changed.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name` preserved under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
+- Test harness `test/run-tests.mjs`: the hardcoded Chrome path constant was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-09-01
 
 **Built by:** Claude Fable 5. Reasoning level was not recorded at build time.

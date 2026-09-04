@@ -2,6 +2,21 @@
 
 All notable changes to BONEYARD are documented here. Format follows Keep a Changelog.
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--amber` with an amber glow on `.btn`, `.drop`, `.cass`, and on the `.rotary`, `.toggle`, `.breach-hit` and `.hinge` controls. Added alongside the existing hover rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` pauses the CRT grain jitter. Dial and activation feedback are untouched.
+
+### Fixed
+- The rotary mark selector, SEAT toggle, BREACH lever, cover hinge, YARD LOCKOUT toggle and speaker toggle were `role="button"` `div`s without `tabindex`, so they could not be reached or activated from the keyboard. `index.html` now gives each `tabindex="0"`, and `app.js` adds an Enter/Space keydown handler per control that does what a click does: the rotary steps one notch, the breach lever with the cover down routes to the cover's shut refusal (as a mouse click would), and the rest call their existing click path. Propagation is stopped so the window-level Enter = seat shortcut does not double-fire.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level, with `name` and `reasoning` preserved verbatim under a `meta` object. Version value unchanged.
+- Test harness `test/run-tests.mjs`: the hardcoded Chrome candidate list (Windows, Linux and macOS paths) was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-09-02
 
 **Built by:** Claude Fable 5.1 (reasoning level: low, effort setting 25 as observed in-session)

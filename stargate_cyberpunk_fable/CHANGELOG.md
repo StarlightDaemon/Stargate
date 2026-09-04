@@ -5,6 +5,19 @@ All notable changes to NIGHTGLASS will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--accent`, 3px offset) on every `button`, `a` and range input. Added alongside the existing hover rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` pauses the ambient loops: `.lightstream`, `.ring-rot`, `.ring-rot-rev`, the pending-state `#aperture-breath`, `.addr-slot.next`, the armed `#btn-open`, the engaged `#btn-ward` and `.ch-edge.known`. Dial feedback is untouched; this sits alongside the build's own `data-motion="still"` setting, which is unchanged.
+- Declared client-side persistence: `"persistence": "localStorage"` in `version.json` and a **Persistence:** line in the README naming `nightglass.prefs` (theme, density, motion, audio mix), `nightglass.history` (last 40 weave entries) and `nightglass.seen` (archive entries viewed), read from the storage code. No storage behaviour changed.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name` preserved under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
+- Test harness `test/run-tests.mjs`: the hardcoded Chrome candidate list (Windows, Linux and macOS paths) was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] — 2026-09-01
 
 **Built by:** Claude Fable 5 (model id `claude-fable-5`). Reasoning level was not recorded at build time.

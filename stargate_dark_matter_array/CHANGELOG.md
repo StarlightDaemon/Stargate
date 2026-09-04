@@ -2,6 +2,18 @@
 
 All notable changes to the BOREAS-IX Subterranean Cryogenic Dark Matter Array project will be documented in this file.
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--accent-cyan`, 3px offset) on every `button`, `a`, `input` and `select`, and on the visible `.switch-slider` of the 0x0 blind-lock checkbox (`#toggle-blind-lock`). Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` pauses the ready-to-commit pulse on the commit button. Buildup, active-flow and discriminating pulses and the veto strobe are untouched.
+- Declared client-side persistence: `"persistence": "localStorage"` in `version.json` and a **Persistence:** line in the README naming the single key `boreas_ix_dark_matter_state_v1` (theme, density, motion, audio mix and mute, viewed archive ids, dial history, operator notes, session statistics; the blind-analysis lock is stored but always restored as released), read from the storage code. No storage behaviour changed.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `releaseDate` key moved verbatim to `built`), with `system` and `codename` preserved under a `meta` object. Version value unchanged.
+
 ## [1.1.2] - 2026-08-23
 
 **Built by:** Gemini 3.7 Flash

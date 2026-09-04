@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--gold-leaf` with the gold glow on `.gothic-btn`, `.palette-btn`, `.preset-card-btn`, `.modal-close-btn` and `.starlight-link`. Added alongside the existing hover rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` stops the ambient candle flicker (`.candle-flame`). Sunbeam shift/glow, kaleidoscope spin, the ignition button's pending/active pulses and the glass-seat/spark lock feedback are untouched.
+
+### Changed
+- Test harness `tests/verify.js`: the hardcoded Chrome/Edge candidate list was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-08-22
 
 ### Added

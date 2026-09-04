@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--eco-cyan`, 3px offset) with a cyan glow on every `button` and `a`. Added alongside the existing rules; no existing rule altered. Noted in the CSS and not fixed here: the "SUPERCONDUCTING BUS OVERLOAD HOLD" checkbox is `display: none` and so still not keyboard-reachable; the substation chevrons and route slots are plain `div`s outside the tab order.
+- `prefers-reduced-motion: reduce` slows the central synchro-core rotor to 20s and the footer status heartbeat dot to 5s. The pending-eco ready glow on the engage button is untouched.
+
+### Changed
+- Test harness `test_build.js` (raw CDP): the hardcoded Chrome path constant was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to a dynamically required puppeteer/puppeteer-core `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. It now also writes its verification screenshots to the gitignored `test/` directory, created on demand, instead of the build root. Harness only; runtime unchanged.
+
 ## [1.1.0] - 2026-08-15
 
 **Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.6 Flash (high reasoning))

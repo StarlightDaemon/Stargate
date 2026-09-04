@@ -1,5 +1,16 @@
 # Changelog - TX-77 'AURA' Reactor Criticality Console & Gateway
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--accent-cyan` with the cyan glow on the header, channel, RPS toggle, activate, deck tab, load-config, log mini, theme, run-preset, modal close and modal ack buttons, the archive search and filter, the settings slider, the preset dropdown, the footer author link and the check-wrap inputs; `--accent-red` with the SCRAM glow on the SCRAM button. Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` disables the header reactor-state beacon blink, which runs the same continuous blink in every state (only its colour changes). Dial and activation feedback are untouched.
+
+### Changed
+- Test harness `scripts/cdp_browser_capture.js` (raw CDP): the hardcoded Chrome path was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to a dynamically required puppeteer/puppeteer-core `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. It now also writes its capture output to the gitignored `test/` directory, created on demand, instead of the parent build root. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash (High)  

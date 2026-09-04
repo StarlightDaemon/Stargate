@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--line-bright-cyan` with the build's cyan glow on `.cad-mini-btn`, `.operator-ref-btn`, `.site-plan-card`, `.glyph-btn`, `.action-btn`, `.sub-btn`, `.modal-close-x`, `.modal-btn-dismiss` and `.attribution-link`. Added alongside the existing hover rules; no existing rule altered.
+
+### Changed
+- Test harness `verify.js` now writes its five verification screenshots (1080p dormant, 4K scaled, active manifold, review hold, quick-dial active) to the gitignored `test/` directory, created on demand, instead of the build root. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-08-12
 
 ### Known Issues

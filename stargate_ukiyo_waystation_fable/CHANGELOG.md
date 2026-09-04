@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- `preview.png` for the gallery card, committed at 800x450 (dimensions read from the PNG header).
+- Keyboard focus indicators: a 3px `--vermil` outline on every `button` and on `#author-corner`. Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` pauses the drifting sky clouds (`.cloud-a`, `.cloud-b`). Dial, portal and activation feedback are untouched.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name` preserved under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
+
 ## [1.0.1] - 2026-08-25
 
 **Built by:** Claude Fable 5, high reasoning

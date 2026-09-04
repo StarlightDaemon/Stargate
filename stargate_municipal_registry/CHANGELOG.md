@@ -5,6 +5,18 @@ All notable changes to the Stargate Municipal Conduit Registry Terminal will be 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--phosphor-green-bright` with the green glow on the audio toggle, glyph, quick-dial and engage buttons and the starlight link, and on the modal dismiss button; `--amber-warning` on the help button and lockout switch; `--red-reject` on the disengage and modal close buttons. Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` disables the ambient screen flicker (held at 0.98 opacity). Dial and activation feedback are untouched.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `date` key moved verbatim to `built`), with `name` and `device` preserved under a `meta` object. Version value unchanged.
+- Test harness `verify_test.js` now writes its seven verification screenshots (idle, dialed, engaged, disengaged/redialed, lockout rejection, quick-dial, help modal) to the gitignored `test/` directory, created on demand, instead of the build root. Harness only; runtime unchanged.
+
 ## [1.1.0] - 2026-08-11
 
 **Built by:** Gemini 3.6 Flash (high reasoning)

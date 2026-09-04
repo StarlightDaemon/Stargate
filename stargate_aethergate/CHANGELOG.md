@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: a `:focus-visible` rule (2px `--cyan` outline, 2px offset, soft cyan halo) on the `.chip`, `.btn`, `.pad-key`, `.dest`, `.op-ref-btn` and `.credit` controls. Added alongside the existing hover rules; no existing rule altered. The build's existing `prefers-reduced-motion` block was left as it was.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `date` key moved verbatim to `built`), with `name` and `device` preserved under a `meta` object. Version value unchanged.
+
 ## [1.1.0] - 2026-08-16
 
 **Built by:** Claude Fable 5

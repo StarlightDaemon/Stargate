@@ -2,6 +2,16 @@
 
 All notable changes to the **Stargate Konstrukt Transit** platform are documented in this file.
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: a `:focus-visible` double ring (2px `--c-canvas-pure` inside 5px `--c-blue`, drawn with `box-shadow`, native outline suppressed) on every `button` and `a`, with an explicit override so the ring wins over the hard-shadow resting state of the two master engage/disengage buttons. Added alongside the existing rules; no existing rule altered.
+
+### Changed
+- Test harness `tests/test_flow.js`: the hardcoded Chrome/Edge candidate list was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash

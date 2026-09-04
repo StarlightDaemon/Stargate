@@ -5,6 +5,17 @@ All notable changes to the Vesper Deep-Aperture Technosignature Console will be 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--cyan-primary`, 3px offset) with the cyan glow on every `button` and `a`; the generous offset keeps the ring on the dark chrome around buttons whose own fill turns bright in active states. Added alongside the existing rules; no existing rule altered. Noted in the CSS and not fixed here: the "ENGAGE VERIFICATION HOLD" checkbox is `display: none` and so still not keyboard-reachable; that needs an HTML/JS-level change.
+- `prefers-reduced-motion: reduce` slows the header logo glow pulse to 16s and the spectrogram radar dot to 8s. Badge blink, active glow, hold flash and the activate pulse are untouched.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `buildDate` key moved verbatim to `built`), with `name`, `observatory`, `interferometer`, `dishCount` and `addressLength` preserved under a `meta` object. Version value unchanged.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash (High reasoning)

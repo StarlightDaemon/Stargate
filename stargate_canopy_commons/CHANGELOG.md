@@ -5,6 +5,17 @@ All notable changes to **TRELLIS — Hollin Reach Canopy Commons · Sunspan Ring
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: a 3px `--terracotta` outline (the build's existing held/engaged accent) drawn outside the control on `.wm`, `.route` (2px offset), `.shelf-btn`, `.open-btn`, `.fold-btn`, `.latch-btn`, `.guide-close` and the corner link. Additive only; the existing `prefers-reduced-motion` block and hover rules are unchanged.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level, with `name`, `folder` and `status` preserved verbatim under a `meta` object. The stray `port` key (local dev-server environment data) was removed. Version value unchanged.
+- Test harness `test/run-tests.mjs`: the hardcoded Chrome candidate list (Windows, Linux and macOS paths plus a probe of puppeteer's home-directory cache) was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-09-02
 
 **Built by:** Claude Fable 5.1 (claude-fable-5-1), standard reasoning effort

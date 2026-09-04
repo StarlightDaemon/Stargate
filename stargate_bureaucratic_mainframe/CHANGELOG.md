@@ -14,6 +14,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 > as found, not verified against any independent record. Do not treat
 > either as established fact.
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators (`css/main.css`): `:focus-visible` outline in `--crt-border-bright` with `--glow-md` on the operator-reference, theme, audio, text-action, action, keypad and modal-close buttons and the starlight link, and on the `.chk-custom` box of the terminal checkbox; the properties are theme-scoped so the green phosphor theme is covered. Added alongside the existing hover/focus rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` disables the ambient CRT flicker (`css/main.css`) and the banner-icon pulse and cursor blink (`css/terminal.css`, cursor held at full opacity). Chevron pulse, keypad flash, status pulse and receipt feed are untouched.
+- The "**Built by:** unknown" line under `[1.0.0]` in this changelog, pointing at the provenance notice; no attribution was invented.
+
+### Changed
+- `version.json` gains `"model": "unknown"`, matching the provenance notice in this changelog. Version value unchanged.
+
 ## [1.0.0] - 2026-08-07
 
 **Built by:** unknown — see the provenance notice at the top of this file; no attribution record exists for this build.

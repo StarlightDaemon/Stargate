@@ -5,6 +5,17 @@ All notable changes to the Stargate Orthographic CAD Terminal project will be do
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--cyan-bright` with the vector glow on the CAD icon, help, glyph-key, primary-action, toggle, preset card and secondary buttons and the starlight link; `--accent-red` on the disengage and modal close buttons. Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` disables the bureau badge icon pulse and the light-sweep shimmer layered on the ready-state execute button; the READY state stays communicated by the button's colour/border change and its untouched ready-pulse glow.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name`, `bureau` and `docRef` preserved verbatim under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
+
 ## [1.0.0] - 2026-08-21
 
 ### Milestone Note

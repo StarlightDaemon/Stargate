@@ -35,6 +35,17 @@ this close-out.** No further iteration is planned unless a new issue is found la
 
 ---
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: a 3px `--vermillion-shu` outline on every `button` and the footer-left link (`css/style.css`), and on the `.latch-slider` when the visually 0-size latch checkbox is focused (`css/modal.css`). Added alongside the existing rules; no existing rule altered.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `patchModel` preserved verbatim under a `meta` object; a trailing newline was added. No date key existed, so no `built` field was added. Version value unchanged.
+- Test harness `scripts/test_e2e.js`: the hardcoded Chrome path constant was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`; the start-up log line no longer prints the browser path. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.3] - 2026-08-25
 
 **Built by:** Claude Opus 5

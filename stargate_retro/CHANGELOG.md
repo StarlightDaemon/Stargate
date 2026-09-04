@@ -4,6 +4,16 @@ All notable changes to AUGUR (stargate_retro) are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- `prefers-reduced-motion: reduce` disables the terminal cursor blink (`.cursor`, held at full opacity). The toggle throw, cover flip, opacity fades and canvas-driven trace/dial rendering are untouched. No focus-visible rule was added.
+
+### Changed
+- `version.json` reformatted from a single line to the catalog's common shape: `version` and `model` at top level, with the former free-text `note` key renamed to `model` and its value kept verbatim (`v1.1.0 recall servo-retune fix by Claude Opus; original build by Claude Fable`). No date key existed, so no `built` field was added. Version value unchanged.
+
 ## [1.1.0] - 2026-08-15
 
 **Built by:** Claude Opus (auto-dial staging fix; original build by Claude Fable)

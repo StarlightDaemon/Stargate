@@ -2,6 +2,17 @@
 
 All notable changes to the **Stargate: Le Nimbus Florié (Art Nouveau Botanical Portal)** project will be documented in this file.
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--teal-deep` with a soft shadow on the nav ribbon, operator reference, activate, clear-sequence, modal close, litho plate and archive category buttons, the archive search input, the footer credit link, range inputs and the safety latch; `--vermeil-gold-light` on the disengage button; `--rose-deep` on the codex link. Added alongside the existing rules; no existing rule altered.
+- Declared client-side persistence: `"persistence": "localStorage"` in `version.json` and a **Persistence:** line in the README naming the single key `nouveau_nimbus_session_v1` (dial history, discovered and bookmarked archive entries, session logs, operator notes, colour mood, motion intensity, gaslight flicker, last-saved timestamp; gate state and the safety interlock are not persisted), read from the storage code. No storage behaviour changed.
+
+### Fixed
+- The botanical safety latch (`#safety-latch-toggle`) was a plain `div` and could not be reached or activated from the keyboard. `index.html` now gives it `role="button"` and `tabindex="0"`, and `js/app.js` adds an Enter/Space keydown handler that toggles the latch exactly as a click does, stopping propagation so the window-level Enter/Space activate shortcut does not fire on top of it.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash

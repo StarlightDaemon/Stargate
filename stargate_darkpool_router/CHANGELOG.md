@@ -2,6 +2,17 @@
 
 All notable changes to the VALENCE-9 Cross-Venue Dark Route Console (`stargate_darkpool_router`) will be documented in this file.
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--color-cyan`, 3px offset) on every `button` and `a`, and on the visible `.switch-slider` of the 0x0 risk-toggle checkbox (`#risk-toggle`). Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` disables the ambient alarm/ready pulses: the ready status pill, the active alarm banner, the ready-state activate button, the engaged risk LED and the alarm shake on the risk panel. Buildup, breakthrough and active stage feedback are untouched.
+
+### Changed
+- Test harness `tests/test_suite.js`: the hardcoded Chrome path constant was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash (High reasoning)

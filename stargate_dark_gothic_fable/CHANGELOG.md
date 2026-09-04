@@ -5,6 +5,17 @@ All notable changes to **WIDDERSHINS — The Gatehouse at Corvane Hollow** are d
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- `prefers-reduced-motion: reduce` damps the idle ambience only: the lantern's candle flicker and cast (at rest and while the gate stands active), a caught ward's ember breathing (it stays lit), the rays' idle shimmer while active (held at a static 0.5 opacity), the laid salt line's pulse, the bell's pending-state pulse, and the fog banks' drift (paused). Buildup, breakthrough, the one-shot ward-catch cues, the warning blink and the quick-dial key turn are untouched. No focus-visible rule was added in this pass.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level, with `name`, `folder` and `status` preserved verbatim under a `meta` object. The stray `port` key (local dev-server environment data) was removed. Version value unchanged.
+- Test harness `test/run-tests.mjs`: the hardcoded Chrome candidate list (Windows, Linux and macOS paths) was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-09-03
 
 **Built by:** Claude Fable 5.1 (`claude-fable-5-1`), the runtime identity reported to the build session. Reasoning level: not observable from inside the build session, so not recorded rather than guessed.

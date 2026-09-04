@@ -9,6 +9,16 @@ This file and `version.json` were backfilled on 2026-08-16 from the build's git
 history (one commit = one version, starting at v1.0.0), following the same
 convention used for the other pre-existing builds in this monorepo.
 
+## [Unreleased]
+
+**Built by:** Claude Fable 5.1 (catalog-wide maintenance commits of 2026-09-04). Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Declared client-side persistence: `"persistence": "localStorage"` in `version.json` and a **Persistence:** line in the README naming the single key `sidereum.memory.v1` (the Ring's remembered Ways with id, name, seven-symbol address and uncharted flag, plus the count of uncharted Ways taken; the Forget control effaces it), read from the storage code. No storage behaviour changed.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `date` key moved verbatim to `built`), with `name` and `device` preserved under a `meta` object. The `model` value stays `unknown`. Version value unchanged.
+
 ## [1.1.0] - 2026-08-16
 
 **Built by:** unknown

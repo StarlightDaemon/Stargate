@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outlines in `--amber-bright` on the HUD buttons, manual-modal close, tier tabs, modal tab buttons, glyph buttons, dispatch throttle, clear-staged button and footer link, and in `--aether-cyan` on the safety switch and emergency vent button. Added alongside the existing hover rules; no existing rule altered.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name`, `description` and `private` preserved verbatim under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
+- Test harness `run_tests.js` now writes its four verification screenshots (idle 1080p, 4K, active conduit, manual modal) to the gitignored `test/` directory, created on demand, instead of the build root. Harness only; runtime unchanged.
+
 ## [1.1.0] - 2026-08-12
 
 **Built by:** Gemini 3.6 Flash (high reasoning)

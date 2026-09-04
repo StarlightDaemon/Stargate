@@ -3,6 +3,14 @@
 All notable changes to SPLITTERLICHT are documented here. Format follows
 Keep a Changelog; versions follow Semantic Versioning.
 
+## [Unreleased]
+
+**Built by:** Claude Fable 5.1 (catalog-wide maintenance commits of 2026-09-04). Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level, with `name`, `reasoning`, `status`, `verification` and `creative_status` preserved verbatim under a `meta` object. Version value unchanged.
+- Test harness `test/run-tests.mjs`: the hardcoded Chrome candidate list (Windows, Linux and macOS paths) was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-09-03
 
 **Built by:** Claude Fable 5.1 (reasoning effort 25, as exposed by the session harness).

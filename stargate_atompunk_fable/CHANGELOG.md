@@ -5,6 +5,17 @@ All notable changes to **AUREOLE — Meadowlark Atomic Exposition · Threshold P
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outlines (2px, 3px offset) in `--turq` on the `.iso` isotope keys, `#discharge`, `#shutter` and the `#corner` buttons; in `--cream` on the `.preset` cards; and in `--coral` on `#excite` and `#guideClose`. Added alongside the existing hover rules; no existing rule altered.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level, with `name`, `folder` and `status` preserved verbatim under a `meta` object. The stray `port` key (local dev-server environment data) was removed. Version value unchanged.
+- Test harness `test/run-tests.mjs`: the hardcoded Chrome candidate list (Windows, Linux and macOS paths) was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-09-02
 
 **Built by:** Claude Fable 5.1 (`claude-fable-5-1`). Reasoning level: not observable from inside the build session, so not recorded rather than guessed.

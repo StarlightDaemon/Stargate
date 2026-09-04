@@ -4,6 +4,13 @@ All notable changes to the Modern Gate Console (stargate_modern) are documented 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased] — catalog maintenance pass (2026-09-04)
+
+**Built by:** Claude Sonnet 5 (catalog-wide keyboard-focus and reduced-motion CSS pass, 2026-09-04). Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diff. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in `--cyan` with the cyan glow on the nav tabs, help-ref, preset, tool, glyph-key, power, iris, info load/fast, log filter, db load/fast, modal close and alert close buttons and the db search field, db filter select and settings inputs; `--amber` on the lock button; `--ruby` on the engage button; and cyan on the corner credit link. Added alongside the existing rules; no existing rule altered. No reduced-motion rule was added.
+
 ## [Unreleased] — proposed 1.0.1 (2026-08-07 repair pass)
 
 Full interactive verification and repair pass against the v1.0.0 completion

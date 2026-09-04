@@ -5,6 +5,17 @@ All notable changes to the Argos DeepScope Interferometric Technosignature Conso
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline in the theme's own `--accent` (so it follows the cyan/amber/emerald/violet palette) with the accent glow on every `button`, `a` and `input`. Added alongside the existing rules; no existing rule altered.
+- `prefers-reduced-motion: reduce` slows the header emblem ring and aperture lens rings to 90s, the emblem core to 8s, and the status/alert heartbeat dots and toast icon to 4s. The amber dish-verification pulse, the engage pulse and the JS-driven stage transitions are untouched.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `build_model` key renamed to `model` and `release_date` moved to `built`, values kept verbatim), with `name`, `short_name`, `array_elements`, `address_length`, `default_safety_hold` and `observatory` preserved under a `meta` object. Version value unchanged.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash (High reasoning)

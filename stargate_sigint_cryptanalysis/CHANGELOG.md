@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: `:focus-visible` outline (2px `--accent-cyan`, 3px offset) with the cyan glow on every `button` and `a`. Added alongside the existing rules; no existing rule altered. The eight register slots are plain `div`s without `tabindex` and are not in the tab order, so no rule targets them.
+- `prefers-reduced-motion: reduce` slows the header badge icon pulse to 10s and the live stream indicator dot to 5s. Testing strobe, interlock alert pulse and ready pulse are untouched.
+
+### Changed
+- Test harness `test_suite.js`: the hardcoded Chrome path constant was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. It now also writes its run log to the gitignored `test/test_results.json`, created on demand, instead of `test_results.json` at the build root. Harness only; runtime unchanged.
+
 ## [1.0.0] - 2026-08-15
 
 **Built by:** Gemini 3.7 Flash (High)

@@ -1,5 +1,13 @@
 # Changelog — DSV-7 Cerulean Lantern Pilot Console
 
+## Catalog maintenance pass — 2026-09-04
+
+**Performed by:** Claude Fable 5.1, in catalog-wide maintenance commits of 2026-09-04, independently of the build session. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review. No runtime file was touched.
+
+- Declared client-side persistence: `"persistence": "localStorage"` added to `version.json` and a **Persistence:** line added to the README naming the `lantern.v1.` prefix and its `prefs` (mood, density, motion, master volume, audio layer toggles, auto-audio), `history` (pilot dive record), `viewed` (archive entries read) and `sessions` (per-device session counter) keys, read from the storage code. No storage behaviour changed.
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level, with `name`, `title`, `institute` and `architecture` preserved verbatim under a `meta` object. Version value unchanged.
+- This changelog's release heading was changed from `v1.0.0 — 2026-08-23` to `[1.0.0] - 2026-08-23`, the bracketed Keep-a-Changelog form used by the rest of the catalog. No other line of the file was altered.
+
 ## Close-out re-verification — 2026-08-23
 
 **Performed by:** an automated Claude session (Claude Fable 5), independently of the build session, using a freshly written Puppeteer harness (`verify/closeout.js`, `verify/closeout_stages.js`). **This is automated verification only — the operator has NOT yet personally clicked through this build, and nothing here should be read as operator confirmation.**

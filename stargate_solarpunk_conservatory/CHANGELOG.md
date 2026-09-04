@@ -2,6 +2,17 @@
 
 All notable changes to this build are documented here. Format follows Keep a Changelog.
 
+## [Unreleased]
+
+**Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
+
+### Added
+- Keyboard focus indicators: a 3px `--ink` outline with a cream halo and green glow on the `.seed`, `.pressing` and `.tool` controls. Added alongside the existing hover/active rules and the existing `prefers-reduced-motion` block, none of which are altered.
+
+### Changed
+- `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level, with `name`, `folder` and `status` preserved verbatim under a `meta` object. The stray `port` key (local dev-server environment data) was removed. Version value unchanged.
+- Test harnesses `test/capture.mjs` and `test/run-tests.mjs`: the hardcoded Chrome default was replaced by `resolveChrome()`, which takes `CHROME_PATH`, `PUPPETEER_EXECUTABLE_PATH` or the harnesses' own older `CHROME` variable, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in either harness. Harness only; runtime unchanged.
+
 ## [1.0.0] — 2026-09-02
 
 **Built by:** Claude Fable 5.1 (Claude Code, autonomous session; default reasoning effort).
