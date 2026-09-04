@@ -7,14 +7,29 @@ const puppeteer = require('puppeteer-core');
 const path = require('path');
 const fs = require('fs');
 
-const CHROME_PATH = process.env.CHROME_PATH ||
-  (process.env.PROGRAMFILES ? path.join(process.env.PROGRAMFILES, 'Google', 'Chrome', 'Application', 'chrome.exe') : 'google-chrome');
 const SCREENSHOT_DIR = path.join(__dirname, 'test_screenshots');
 const TEST_PORT = process.env.PORT || 8094;
 const BASE_URL = `http://localhost:${TEST_PORT}/`;
 
 if (!fs.existsSync(SCREENSHOT_DIR)) {
   fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
+}
+
+// Browser resolution. No absolute local filesystem path is committed here:
+// CHROME_PATH (or PUPPETEER_EXECUTABLE_PATH) wins, otherwise puppeteer's own
+// executable path is used. Anything else is an explicit error.
+async function resolveChrome() {
+  const fromEnv = process.env.CHROME_PATH || process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (fromEnv) return fromEnv;
+  let why;
+  try {
+    const p = await puppeteer.executablePath();
+    if (p && fs.existsSync(p)) return p;
+    why = p ? `puppeteer's executable path does not exist: ${p}` : 'puppeteer reported no executable path';
+  } catch (e) {
+    why = `puppeteer could not resolve an executable path (${e.message})`;
+  }
+  throw new Error(`No browser found: ${why}. Set CHROME_PATH to a Chrome/Chromium executable.`);
 }
 
 function sleep(ms) {
@@ -35,7 +50,8 @@ async function clickElementCenter(page, selector) {
 async function runVerification() {
   console.log('=== STARTING AEOLOS STAGNATION PLENUM (ASP-9) VERIFICATION ===');
   console.log(`Target URL: ${BASE_URL}`);
-  console.log(`Chrome Executable: ${CHROME_PATH}`);
+  const executablePath = await resolveChrome();
+  console.log(`Chrome Executable: ${executablePath}`);
 
   const results = {
     timestamp: new Date().toISOString(),
@@ -44,7 +60,7 @@ async function runVerification() {
   };
 
   const browser = await puppeteer.launch({
-    executablePath: CHROME_PATH,
+    executablePath,
     headless: 'new',
     args: [
       '--no-sandbox',

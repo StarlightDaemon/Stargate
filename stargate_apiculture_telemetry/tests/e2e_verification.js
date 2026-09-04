@@ -27,21 +27,31 @@ if (!fs.existsSync(SCREENSHOT_DIR)) {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Browser resolution. No absolute local filesystem path is committed here:
+// CHROME_PATH (or PUPPETEER_EXECUTABLE_PATH) wins, otherwise puppeteer's own
+// executable path is used. Anything else is an explicit error.
+async function resolveChrome() {
+  const fromEnv = process.env.CHROME_PATH || process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (fromEnv) return fromEnv;
+  let why;
+  try {
+    const p = await puppeteer.executablePath();
+    if (p && fs.existsSync(p)) return p;
+    why = p ? `puppeteer's executable path does not exist: ${p}` : 'puppeteer reported no executable path';
+  } catch (e) {
+    why = `puppeteer could not resolve an executable path (${e.message})`;
+  }
+  throw new Error(`No browser found: ${why}. Set CHROME_PATH to a Chrome/Chromium executable.`);
+}
+
 async function runVerification() {
   console.log('===============================================================');
   console.log(' IPATC APICULTURE TELEMETRY NETWORK — PUPPETEER E2E TEST SUITE ');
   console.log('===============================================================');
 
-  // Find installed chrome executable if present
-  let executablePath;
-  const localChrome = path.join(__dirname, '..', 'chrome', 'win64-154.0.8016.0', 'chrome-win64', 'chrome.exe');
-  if (fs.existsSync(localChrome)) {
-    executablePath = localChrome;
-  }
-
   const browser = await puppeteer.launch({
     headless: 'new',
-    executablePath,
+    executablePath: await resolveChrome(),
     defaultViewport: null,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1920,1080', '--autoplay-policy=no-user-gesture-required']
   });

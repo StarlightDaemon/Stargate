@@ -3,18 +3,24 @@ import puppeteer from 'puppeteer-core';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-function findChrome() {
-  for (const base of [process.env.PROGRAMFILES, process.env['PROGRAMFILES(X86)'], process.env.LOCALAPPDATA]) {
-    if (!base) continue;
-    for (const p of [join(base, 'Google', 'Chrome', 'Application', 'chrome.exe'),
-                     join(base, 'Microsoft', 'Edge', 'Application', 'msedge.exe')]) {
-      if (existsSync(p)) return p;
-    }
+// Browser resolution. No absolute local filesystem path is committed here:
+// CHROME_PATH (or PUPPETEER_EXECUTABLE_PATH) wins, otherwise puppeteer's own
+// executable path is used. Anything else is an explicit error.
+async function resolveChrome() {
+  const fromEnv = process.env.CHROME_PATH || process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (fromEnv) return fromEnv;
+  let why;
+  try {
+    const p = await puppeteer.executablePath();
+    if (p && existsSync(p)) return p;
+    why = p ? `puppeteer's executable path does not exist: ${p}` : 'puppeteer reported no executable path';
+  } catch (e) {
+    why = `puppeteer could not resolve an executable path (${e.message})`;
   }
-  throw new Error('no browser');
+  throw new Error(`No browser found: ${why}. Set CHROME_PATH to a Chrome/Chromium executable.`);
 }
 
-const browser = await puppeteer.launch({ executablePath: findChrome(), headless: 'new', args: ['--mute-audio'] });
+const browser = await puppeteer.launch({ executablePath: await resolveChrome(), headless: 'new', args: ['--mute-audio'] });
 const page = await browser.newPage();
 
 async function probe(w, h) {
