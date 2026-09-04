@@ -1,0 +1,397 @@
+/* gate.css — SVG Spindle Ring, Bone Pins, Woven Threads, and Hearth Aperture
+   RUSHLIGHT: Stargate Low Magic Console */
+
+.gate-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.gate-svg-wrapper {
+  width: 100%;
+  max-width: 520px;
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+#gate-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+/* Background Plate & Tracks */
+.ring-plate-outer {
+  fill: var(--bg-parchment-warm);
+  stroke: var(--ink-lampblack);
+  stroke-width: 2.5;
+}
+
+.ring-stitch-border {
+  fill: none;
+  stroke: #a8947e;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+
+.ring-track {
+  fill: var(--bg-parchment-deep);
+  stroke: var(--ink-faded);
+  stroke-width: 1.5;
+}
+
+.inner-track {
+  fill: #faf6ed;
+  stroke: var(--ink-lampblack);
+  stroke-width: 1.8;
+}
+
+.inner-track-divider {
+  fill: none;
+  stroke: #c8b9a3;
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+/* Botanical Marginalia */
+.botanical-leaf {
+  fill: var(--dye-sage);
+  stroke: var(--dye-sage-dark);
+  stroke-width: 0.8;
+  opacity: 0.65;
+}
+
+/* 36 Folk Glyphs */
+.glyph-roundel {
+  cursor: pointer;
+}
+
+.glyph-roundel-bg {
+  fill: #fdfaf3;
+  stroke: var(--ink-faded);
+  stroke-width: 1.2;
+  transition: fill 0.2s, stroke 0.2s;
+}
+
+.glyph-roundel-border {
+  fill: none;
+  stroke: #d0c0aa;
+  stroke-width: 0.8;
+  stroke-dasharray: 2 2;
+}
+
+.glyph-path {
+  fill: none;
+  stroke: var(--ink-lampblack);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.2s;
+}
+
+.glyph-number {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  fill: var(--ink-faded);
+  font-weight: bold;
+}
+
+.glyph-locked .glyph-roundel-bg {
+  fill: #fceddb;
+  stroke: var(--dye-madder);
+  stroke-width: 2;
+}
+
+.glyph-locked .glyph-path {
+  stroke: var(--dye-madder);
+  stroke-width: 2.2;
+}
+
+/* 7 Perimeter Bone Pins */
+.bone-pin-assembly {
+  pointer-events: none;
+}
+
+.pin-bracket {
+  fill: #5b4737;
+  stroke: var(--ink-lampblack);
+  stroke-width: 1.5;
+}
+
+.bone-pin-body {
+  fill: var(--bone-white);
+  stroke: var(--ink-lampblack);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.bone-carving {
+  stroke: var(--ink-faded);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.bone-eyelet {
+  fill: #26201a;
+  stroke: none;
+}
+
+.bone-knot-center {
+  fill: var(--dye-madder);
+}
+
+.bone-pin-carrier {
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.bone-pin-carrier.pin-seated {
+  transform: translateY(18px);
+}
+
+.bone-pin-carrier.pin-seated .bone-pin-body {
+  fill: #fcf4e8;
+  stroke: var(--dye-madder);
+}
+
+/* Woven Linen Threads */
+.woven-thread-strand {
+  fill: none;
+  stroke: var(--dye-madder);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: weave-twine 0.35s ease-out forwards;
+}
+
+@keyframes weave-twine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.thread-tensioned {
+  stroke: var(--dye-beeswax);
+  animation: thread-vibrate 0.12s infinite alternate;
+}
+
+@keyframes thread-vibrate {
+  from { stroke-width: 2.2; }
+  to { stroke-width: 2.6; }
+}
+
+.thread-active-glow {
+  stroke: var(--dye-amber-glow);
+  stroke-width: 2.4;
+  filter: drop-shadow(0 0 2px rgba(230, 126, 34, 0.6));
+}
+
+/* Salt Line & Central Aperture */
+.salt-line-ring {
+  fill: #d5c8b5;
+  stroke: #f7f5f0;
+  stroke-width: 4;
+  stroke-dasharray: 8 4;
+  transition: stroke 0.3s, stroke-width 0.3s;
+}
+
+.salt-dot-ring {
+  fill: none;
+  stroke: #8d7e6c;
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+}
+
+.hearthstone-disc {
+  fill: #2b2520;
+  stroke: var(--ink-lampblack);
+  stroke-width: 2.5;
+}
+
+.hearth-sprig-stem {
+  fill: none;
+  stroke: #665b4f;
+  stroke-width: 1.5;
+  stroke-dasharray: 3 2;
+}
+
+.hearth-berry {
+  fill: #8b382d;
+}
+
+.rushlight-pith-clip {
+  fill: #7c7267;
+  stroke: #1e1915;
+  stroke-width: 1.2;
+}
+
+.rushlight-tallow-stem {
+  stroke: #d5c8b5;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.cold-hearth-dim {
+  opacity: 0.35;
+  transition: opacity 0.5s;
+}
+
+/* Hearth Activation Stages */
+.hearth-hidden {
+  display: none;
+}
+
+.hearth-buildup {
+  display: block;
+  opacity: 0.75;
+  animation: flame-smoke-rise 1.8s ease-in forwards;
+}
+
+.hearth-breakthrough {
+  display: block;
+  opacity: 1;
+  transform: scale(1.08);
+  transition: transform 0.2s ease-out;
+}
+
+.hearth-sustained {
+  display: block;
+  opacity: 1;
+  animation: flame-gentle-sway 3.2s infinite ease-in-out alternate;
+}
+
+/* Salt Line Reactions */
+.salt-ring-warming {
+  stroke: #ffe6b0;
+  stroke-width: 5;
+}
+
+.salt-ring-flare {
+  stroke: #ffffff !important;
+  stroke-width: 8 !important;
+  filter: url(#salt-flash);
+}
+
+.salt-ring-active {
+  stroke: #ffffff;
+  stroke-width: 4.5;
+  filter: drop-shadow(0 0 4px rgba(247, 245, 238, 0.8));
+}
+
+/* Living Hearth Flame 2D Folk Layers */
+.flame-outer {
+  fill: #bf431b;
+  transform-origin: 0 40px;
+}
+
+.flame-mid {
+  fill: #d96d24;
+  transform-origin: 0 35px;
+}
+
+.flame-core {
+  fill: #f5b041;
+  transform-origin: 0 25px;
+}
+
+/* Woodcut Smoke Wisps during Kindling Buildup */
+.smoke-wisp-line {
+  fill: none;
+  stroke: #8d7e6c;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-dasharray: 6 4;
+  opacity: 0;
+}
+
+.hearth-buildup .smoke-wisp-line {
+  animation: smoke-rise 1.8s ease-out forwards;
+}
+
+@keyframes smoke-rise {
+  0% { opacity: 0; transform: translateY(15px); }
+  30% { opacity: 0.7; }
+  100% { opacity: 0; transform: translateY(-40px); }
+}
+
+.mote-herbal {
+  fill: #9fb08d;
+  opacity: 0.8;
+  animation: mote-float 2.2s infinite ease-in-out alternate;
+}
+
+.mote-spark {
+  fill: #ffd180;
+  opacity: 0.9;
+  animation: mote-float 1.7s infinite ease-in-out alternate-reverse;
+}
+
+.mote-petal {
+  fill: #fffdf5;
+  stroke: #d8c8a8;
+  stroke-width: 0.8;
+  opacity: 0.85;
+  animation: petal-drift 2.8s infinite ease-in-out alternate;
+}
+
+@keyframes petal-drift {
+  from { transform: translateY(0px) rotate(0deg); }
+  to { transform: translateY(-16px) rotate(25deg); }
+}
+
+@keyframes flame-gentle-sway {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.02) rotate(-1.5deg); }
+  100% { transform: scale(0.99) rotate(1.5deg); }
+}
+
+@keyframes flame-smoke-rise {
+  0% { transform: scale(0.3); opacity: 0.2; }
+  60% { transform: scale(0.85); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 0.95; }
+}
+
+@keyframes mote-float {
+  from { transform: translateY(0px) translateX(0px); }
+  to { transform: translateY(-12px) translateX(4px); }
+}
+
+/* Spindle Center Hub */
+.spindle-hub-plate {
+  fill: #4a3e35;
+  stroke: var(--ink-lampblack);
+  stroke-width: 2;
+}
+
+.spindle-hub-inner {
+  fill: var(--bone-white);
+  stroke: var(--ink-lampblack);
+  stroke-width: 1.5;
+}
+
+.spindle-pin-eye {
+  fill: var(--dye-madder);
+}
+
+/* prefers-reduced-motion compliance */
+@media (prefers-reduced-motion: reduce), (update: slow) {
+  #spindle-ring {
+    transition: none !important;
+  }
+  .woven-thread-strand {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .thread-tensioned {
+    animation: none !important;
+  }
+  .hearth-sustained, .hearth-buildup {
+    animation: none !important;
+  }
+  .mote-herbal, .mote-spark {
+    animation: none !important;
+  }
+}

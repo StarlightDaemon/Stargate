@@ -1,0 +1,631 @@
+/* controls.css — Interactive folk controls, typeahead dropdown, striker bar, and accessibility
+   RUSHLIGHT: Stargate Low Magic Console */
+
+/* Common Focus-Visible Standard across all controls */
+button:focus-visible,
+input:focus-visible,
+[role="button"]:focus-visible,
+[role="option"]:focus-visible {
+  outline: 2px dashed var(--dye-madder) !important;
+  outline-offset: 3px !important;
+}
+
+/* Selected Runes Ribbon (7 Pin Slots) */
+.ribbon-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.ribbon-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--ink-faded);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.selected-runes-ribbon {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.35rem;
+  background: var(--bg-parchment-warm);
+  border: 1px solid #cfbeaa;
+  padding: 0.4rem;
+  border-radius: 4px;
+}
+
+.rune-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  background: #fbf9f4;
+  border: 1px dashed #d1c1ad;
+  border-radius: 3px;
+  padding: 0.2rem;
+  font-size: 0.72rem;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.rune-slot.filled {
+  background: #fff8f0;
+  border: 1.5px solid var(--dye-madder);
+  box-shadow: 0 1px 3px rgba(166, 61, 47, 0.15);
+}
+
+.slot-icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--dye-madder);
+  stroke-width: 2;
+  margin-bottom: 2px;
+}
+
+.slot-num {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: bold;
+  color: var(--ink-faded);
+}
+
+.slot-name {
+  font-size: 0.65rem;
+  line-height: 1.1;
+  color: var(--ink-lampblack);
+  max-width: 58px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slot-empty-label {
+  color: #a49788;
+  font-style: italic;
+  font-size: 0.7rem;
+}
+
+/* Primary Hearth Controls Cluster */
+.hearth-controls-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.primary-buttons-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 0.75rem;
+  position: relative;
+}
+
+/* Strike Rushlight Button */
+.strike-btn-wrap {
+  position: relative;
+  display: flex;
+}
+
+.strike-btn {
+  width: 100%;
+  background: var(--dye-madder);
+  color: var(--bone-white);
+  border: 2px solid var(--ink-lampblack);
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--ink-lampblack);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+}
+
+.strike-btn:hover:not(:disabled) {
+  background: #bd4838;
+  box-shadow: 0 4px 0 var(--ink-lampblack);
+}
+
+.strike-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--ink-lampblack);
+}
+
+.strike-btn:disabled {
+  background: #c2b6a7;
+  color: #7b6e5f;
+  border-color: #8f8171;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Dropped Wrought-Iron Bar Overlay when Interlocked */
+.interlock-bar-overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(43, 37, 32, 0.88);
+  color: #ffbba8;
+  border: 2px solid #1a1613;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  pointer-events: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.4rem;
+}
+
+.interlock-bar-overlay.bar-dropped {
+  display: flex;
+  animation: iron-bar-drop 0.25s cubic-bezier(0.2, 0.8, 0.4, 1.2);
+}
+
+@keyframes iron-bar-drop {
+  from { transform: translateY(-12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Sweep Salt / Disengage Button */
+.disengage-btn {
+  background: #f0eae1;
+  color: var(--ink-lampblack);
+  border: 2px solid var(--ink-lampblack);
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-flat);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+}
+
+.disengage-btn:hover {
+  background: #ffffff;
+  box-shadow: 0 3px 0 var(--ink-lampblack);
+}
+
+.disengage-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--ink-lampblack);
+}
+
+/* Auxiliary Controls Row (Interlock + Audio) */
+.aux-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.interlock-btn {
+  background: var(--bg-parchment-warm);
+  color: var(--ink-lampblack);
+  border: 1.5px solid var(--ink-faded);
+  border-radius: 3px;
+  padding: 0.45rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s;
+}
+
+.interlock-btn.interlock-engaged {
+  background: #3e3328;
+  color: #ffcfbe;
+  border-color: #1a1613;
+}
+
+.interlock-alert-flash {
+  animation: alert-flash 0.3s 3;
+}
+
+@keyframes alert-flash {
+  0%, 100% { color: var(--ink-faded); }
+  50% { color: var(--dye-madder); font-weight: bold; }
+}
+
+.sound-toggle-btn {
+  background: transparent;
+  border: 1px solid #baa894;
+  border-radius: 3px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+  color: var(--ink-faded);
+  cursor: pointer;
+}
+
+.sound-toggle-btn:hover {
+  background: var(--bg-parchment-warm);
+  color: var(--ink-lampblack);
+}
+
+/* Destination Search & Autocomplete */
+.combobox-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--ink-subtle);
+  pointer-events: none;
+}
+
+.destination-input {
+  width: 100%;
+  padding: 0.65rem 0.75rem 0.65rem 2.2rem;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  border: 1.5px solid #a89680;
+  border-radius: 3px;
+  background: #ffffff;
+  color: var(--ink-lampblack);
+}
+
+.destination-input:focus {
+  border-color: var(--dye-madder);
+}
+
+/* Dropdown Menu */
+.autocomplete-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #fffdfa;
+  border: 1.5px solid var(--ink-lampblack);
+  border-radius: 4px;
+  box-shadow: var(--shadow-lift);
+  z-index: 100;
+}
+
+.dropdown-hidden {
+  display: none;
+}
+
+.autocomplete-empty {
+  padding: 1rem;
+  text-align: center;
+  color: var(--ink-faded);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.autocomplete-item {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid #f0e6d6;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+  background: #fbf0df;
+}
+
+.dest-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.dest-item-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--ink-lampblack);
+}
+
+.dest-item-cat {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--dye-sage-dark);
+  background: #eef3e8;
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+}
+
+.dest-item-lore {
+  font-size: 0.85rem;
+  color: var(--ink-faded);
+  margin-top: 0.15rem;
+}
+
+.dest-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--ink-subtle);
+}
+
+.dest-runes-seq {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.mini-rune-pill {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  background: #f0e6d4;
+  color: var(--ink-lampblack);
+  padding: 0.05rem 0.3rem;
+  border-radius: 2px;
+}
+
+/* Active Destination Summary Card */
+.active-dest-card {
+  background: #fbf7ee;
+  border: 1px solid #dcd0bc;
+  border-radius: 3px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.active-dest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.active-dest-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: var(--ink-lampblack);
+}
+
+.autodial-btn {
+  background: var(--dye-sage);
+  color: var(--bone-white);
+  border: 1.5px solid var(--dye-sage-dark);
+  border-radius: 3px;
+  padding: 0.45rem 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s;
+}
+
+.autodial-btn:hover:not(:disabled) {
+  background: var(--dye-sage-dark);
+}
+
+.autodial-btn:disabled {
+  background: #c5b8a6;
+  border-color: #a49683;
+  color: #7b6f60;
+  cursor: not-allowed;
+}
+
+/* Preset Catalog & Filters */
+.catalog-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.filter-tab {
+  background: var(--bg-parchment-warm);
+  border: 1px solid #cfc0ad;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--ink-faded);
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.filter-tab.active {
+  background: var(--ink-lampblack);
+  color: var(--bone-white);
+  border-color: var(--ink-lampblack);
+}
+
+.dest-presets-scroll {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.5rem;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.preset-card {
+  background: #ffffff;
+  border: 1px solid #dcd1be;
+  border-radius: 3px;
+  padding: 0.5rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  transition: all 0.15s;
+}
+
+.preset-card:hover {
+  background: #fbf5ea;
+  border-color: var(--dye-madder);
+}
+
+.preset-card.active-preset {
+  border: 1.5px solid var(--dye-madder);
+  background: #fff8f0;
+}
+
+.preset-name {
+  font-family: var(--font-display);
+  font-weight: bold;
+  font-size: 0.88rem;
+  color: var(--ink-lampblack);
+}
+
+.preset-category-tag {
+  font-size: 0.65rem;
+  color: var(--dye-sage-dark);
+}
+
+.preset-lore-snippet {
+  font-size: 0.72rem;
+  color: var(--ink-faded);
+  line-height: 1.2;
+}
+
+.preset-herb-tag {
+  font-size: 0.68rem;
+  color: var(--ink-subtle);
+  font-style: italic;
+}
+
+/* 36-Sigil Manual Dialing Pad */
+.rune-pad-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0.35rem;
+}
+
+@media (max-width: 600px) {
+  .rune-pad-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.rune-btn {
+  background: #ffffff;
+  border: 1px solid #cbbaa5;
+  border-radius: 3px;
+  padding: 0.35rem 0.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.rune-btn:hover:not(:disabled) {
+  background: #fff4e5;
+  border-color: var(--dye-madder);
+}
+
+.rune-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.rune-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #eae3d5;
+}
+
+.rune-btn.rune-active-dialed {
+  background: #fceee8;
+  border-color: var(--dye-madder);
+  opacity: 1 !important;
+}
+
+.rune-pad-icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--ink-lampblack);
+  stroke-width: 2;
+  margin-bottom: 2px;
+}
+
+.rune-btn.rune-active-dialed .rune-pad-icon {
+  stroke: var(--dye-madder);
+}
+
+.rune-pad-num {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--ink-faded);
+}
+
+.rune-pad-label {
+  display: none;
+}
+
+/* Telemetry & Almanac Section */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  background: var(--bg-parchment-warm);
+  border: 1px solid #d4c5b0;
+  border-radius: 3px;
+  padding: 0.65rem;
+}
+
+.telemetry-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.telemetry-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-faded);
+  text-transform: uppercase;
+}
+
+.telemetry-value {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--ink-lampblack);
+}

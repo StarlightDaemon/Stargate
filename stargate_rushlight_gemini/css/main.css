@@ -1,0 +1,261 @@
+/* main.css — Folk-craft design tokens, typography, and two-leaf folio layout
+   RUSHLIGHT: Stargate Low Magic Console */
+
+:root {
+  --bg-parchment: #f6f1e7;
+  --bg-parchment-warm: #ede4d0;
+  --bg-parchment-deep: #dfd3bd;
+  --bg-card: #f9f6f0;
+
+  --ink-lampblack: #26201a;
+  --ink-iron-gall: #3d342a;
+  --ink-faded: #6c6052;
+  --ink-subtle: #96897b;
+
+  --dye-madder: #a63d2f;
+  --dye-madder-dark: #7a271c;
+  --dye-sage: #56694e;
+  --dye-sage-dark: #3a4735;
+  --dye-elderberry: #683248;
+  --dye-woad: #395268;
+  --dye-beeswax: #dca03d;
+  --dye-amber-glow: #e67e22;
+
+  --bone-white: #f7f5ee;
+  --salt-white: #ffffff;
+  --charcoal-ash: #484039;
+
+  --border-stitch: 2px dashed #b8a690;
+  --border-solid: 1px solid #c8b9a3;
+  --border-ink: 1.5px solid #3d342a;
+
+  --font-serif: "Crimson Pro", "Alegreya", "Georgia", "Garamond", "Times New Roman", serif;
+  --font-display: "Alegreya", "Cinzel Decorative", "Palatino", "Georgia", serif;
+  --font-mono: "Courier Prime", "Consolas", monospace;
+
+  --shadow-flat: 0 2px 0 rgba(38, 32, 26, 0.15);
+  --shadow-lift: 0 4px 12px rgba(38, 32, 26, 0.1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-parchment);
+  color: var(--ink-lampblack);
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background-image:
+    radial-gradient(var(--bg-parchment-warm) 1px, transparent 1px),
+    linear-gradient(to bottom, #fcf9f2, var(--bg-parchment));
+  background-size: 24px 24px, 100% 100%;
+}
+
+/* Header Banner */
+.folio-header {
+  border-bottom: 2px solid var(--ink-lampblack);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.header-brand h1 {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-lampblack);
+}
+
+.codename-badge {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: var(--dye-madder);
+  color: var(--bone-white);
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.theme-subtitle {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--ink-faded);
+  margin-top: 0.15rem;
+}
+
+.header-status-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.state-badge {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: bold;
+  padding: 0.3rem 0.75rem;
+  border-radius: 3px;
+  border: var(--border-ink);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.state-idle {
+  background: var(--bg-parchment-warm);
+  color: var(--ink-faded);
+}
+.state-dialing {
+  background: #eef2e6;
+  color: var(--dye-sage-dark);
+  border-color: var(--dye-sage);
+}
+.state-pending {
+  background: #fdf3e2;
+  color: #8c5310;
+  border-color: var(--dye-beeswax);
+  animation: pulse-border 2s infinite ease-in-out;
+}
+.state-buildup {
+  background: #fae8e5;
+  color: var(--dye-madder-dark);
+  border-color: var(--dye-madder);
+}
+.state-breakthrough {
+  background: #ffffff;
+  color: var(--dye-madder);
+  border-color: var(--dye-madder);
+  box-shadow: 0 0 10px rgba(230, 126, 34, 0.4);
+}
+.state-active {
+  background: #fef0dc;
+  color: #934305;
+  border-color: var(--dye-amber-glow);
+  box-shadow: 0 0 8px rgba(220, 160, 61, 0.3);
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: var(--dye-beeswax); }
+  50% { border-color: var(--dye-madder); }
+}
+
+.reduced-motion-badge {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: var(--dye-sage);
+  color: var(--bone-white);
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+}
+
+/* Two-Leaf Folio Layout */
+.folio-main {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 1.75rem;
+  flex: 1;
+}
+
+@media (max-width: 1050px) {
+  .folio-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Folio Leaf Panel */
+.folio-leaf {
+  background: var(--bg-card);
+  border: var(--border-ink);
+  border-radius: 4px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-lift);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.folio-leaf::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px dashed #d0c0aa;
+  pointer-events: none;
+}
+
+.leaf-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--ink-lampblack);
+  border-bottom: 1px solid var(--ink-lampblack);
+  padding-bottom: 0.35rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.leaf-title-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-faded);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Live Announcer (Accessible screen reader & reduced motion text) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Footer / Colophon */
+.folio-footer {
+  margin-top: 1.5rem;
+  border-top: 1px solid #d4c6b2;
+  padding-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--ink-faded);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.colophon-link {
+  color: var(--dye-madder);
+  text-decoration: none;
+}
+.colophon-link:hover {
+  text-decoration: underline;
+}
