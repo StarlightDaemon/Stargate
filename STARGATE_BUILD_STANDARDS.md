@@ -163,6 +163,21 @@ elements, at any density.
   end-to-end account), and flag plainly that operator hands-on testing is
   the real final check — do not present automated passes as equivalent to
   confirmed-working.
+- **Anything scheduled during dialing or activation must not survive a
+  disengage.** This applies to state transitions, audio, animation, and any
+  other deferred side effect — not just stage transitions. Two mechanisms
+  satisfy it. Either advance by comparing elapsed time inside a frame tick,
+  so nothing is scheduled and there is nothing to cancel (the shape used in
+  `stargate_bathyscaphe_pilot_fable/js/sim.js`). Or, if a timer is used,
+  store its handle where the disengage path can reach and clear it, and
+  re-check current state at the top of the callback before it acts (the
+  shape used by `later(fn, ms)` and `clearTimers()` at
+  `stargate_atompunk_fable/app.js:159-163`). Both halves are required, since
+  either alone has failed in this catalog. Late callbacks must also not
+  assume data they captured still exists, since disengage may have cleared
+  it. Verify by dispatching disengage roughly half a second into buildup
+  and confirming, after at least eight seconds of no further input, that
+  state, visuals, and sound are all still idle.
 
 ## 9. Content-sensitivity guardrails
 
