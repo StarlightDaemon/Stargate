@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2026-08-07
 
+**Built by:** unknown — see the provenance notice at the top of this file; no attribution record exists for this build.
+
 ### Added
 - Core municipal portal interface belonging to the Department of Sub-Aetheric Transit & Conduit Licensure (D.S.T.C.L.), operating under Terminal OS/88-V (Rev 4.19).
 - Functional Conduit Buffer Commutator & Telemetry Resolver ring with 36 addressable commutator sectors, harmonic oscilloscope carrier wave track, radial parity locking wedges, and dimensional event aperture.

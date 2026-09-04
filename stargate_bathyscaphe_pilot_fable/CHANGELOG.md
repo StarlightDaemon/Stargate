@@ -21,7 +21,7 @@ Method: a fresh `node server.js 8747` (HTTP 200 confirmed with curl), headless C
 
 Harness note (not an app issue): the first pass flagged one check because a 1080p PNG encode (~0.6–0.9 s) outran the 0.9 s breakthrough stage before the *post*-capture state read; the image content already showed the breakthrough frame. The check was replaced by page-clock bracketing plus an image-content test (the breakthrough-only white rim), which passes. Also noted: a stale `node server.js 8747` (pid 7988) from the build session was still running on start-up; it was stopped and a fresh server started for this pass, then stopped again.
 
-## v1.0.0 — 2026-08-23
+## [1.0.0] - 2026-08-23
 
 **Built by:** Claude Fable 5 (high reasoning)
 
