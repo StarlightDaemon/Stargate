@@ -17,10 +17,8 @@
   ],
   "author": "StarlightDaemon",
   "license": "MIT",
-  "dependencies": {
-    "serve": "^14.2.4"
-  },
   "devDependencies": {
-    "puppeteer": "^25.9.0"
+    "puppeteer": "^25.9.0",
+    "serve": "^14.2.4"
   }
 }
