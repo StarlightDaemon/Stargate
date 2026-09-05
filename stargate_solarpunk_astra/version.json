@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "model": "gpt-6-astra",
+  "reasoning": "high",
+  "persistence": {
+    "mechanism": "localStorage",
+    "keys": {
+      "loamwake.preferences.v1": ["muted"],
+      "loamwake.ledger.v1": ["bookmarks", "lastEntry"],
+      "loamwake.lastExchange.v1": ["address", "routeName"]
+    },
+    "restored": ["sound preference", "ledger bookmarks", "last selected ledger entry", "last sustained exchange summary"],
+    "neverRestored": ["address in progress", "activation state", "soil hold", "current view", "search", "bookmark filter"]
+  }
+}

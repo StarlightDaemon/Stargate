@@ -1,0 +1,7 @@
+{
+  "name": "loamwake-commons",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A fictional community soil-restoration exchange",
+  "scripts": { "start": "node server.cjs" }
+}

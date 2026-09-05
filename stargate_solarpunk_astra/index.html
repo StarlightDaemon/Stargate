@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#153f32">
+  <title>The Loamwake Commons — Root exchange</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<div class="stage" id="stage">
+  <aside class="ledger-rail">
+    <a class="wordmark" href="#" id="home-link" aria-label="The Loamwake Commons, root exchange"><svg class="brand-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M7 7v13q0 8 17 8T41 20V7M7 7q17 0 17 21V43M41 7Q24 7 24 28M10 40l14-12 14 12" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="24" cy="28" r="4" fill="currentColor"/></svg><span>LOAMWAKE<br>COMMONS</span><span class="edition">FIELD<br>STATION 04</span></a>
+    <div class="rail-story"><span class="eyebrow">A PUBLIC SOIL EXCHANGE</span><h1>Good soil.<br> Shared<br> <em>futures.</em></h1><p>Small acts of restoration,<br> connected beneath our feet.</p></div>
+    <nav class="view-nav" aria-label="Station views"><button class="selected" id="exchange-tab" aria-pressed="true">01 <span>Root exchange</span><span>↗</span></button><button id="atlas-tab" aria-pressed="false">02 <span>Field ledger</span><span>↗</span></button></nav>
+    <section class="field-routes" aria-labelledby="routes-title"><div class="section-heading"><h2 id="routes-title">STEWARDS’ TRACINGS</h2><span>04 SIGNS EACH</span></div><p>Follow a remembered root-path.<br>Each sign is traced before the next.</p><button class="preset" data-route="hollow"><span class="route-number">A</span><span><strong>Morrow Hollow</strong><small>Orchard soil · shared compost</small></span><span>↗</span></button><button class="preset" data-route="bank"><span class="route-number">B</span><span><strong>Thimble Bank</strong><small>Living banks · patient repair</small></span><span>↗</span></button><div class="last-route" id="last-route">No recent exchange in this browser.</div></section>
+    <footer class="rail-footer"><span class="tiny-root" aria-hidden="true">┴</span><span>Held in common.<br>Tended by many.</span><span class="folio">LW—04<br>VOL. 01</span></footer>
+  </aside>
+  <main class="workspace">
+    <header class="workspace-header"><div><span class="status-dot"></span><span>THE UNDERSTORY NETWORK</span><span class="header-divider">/</span><span id="view-name">ROOT EXCHANGE</span></div><div><button id="ledger-disengage" class="audio-toggle" hidden>↙ Disengage exchange</button><button class="audio-toggle" id="audio" aria-pressed="true">♫ <span>Sound on</span></button></div></header>
+    <section id="exchange-view" class="exchange-view" aria-label="Root exchange instrument">
+      <div class="instrument" id="instrument" data-state="idle">
+        <div class="instrument-heading"><span class="eyebrow">ANASTOMOSIS ARRAY</span><h2>Meet at the roots.</h2><p>Choose four signs. Let the paths join.</p></div>
+        <div class="instrument-index"><span>LOCAL UNION</span><strong id="union-count">00<span>/04</span></strong><span id="ring-status">AWAITING A TRACING</span></div>
+        <div class="ring-wrap"><svg id="ring" viewBox="0 0 760 630" role="img" aria-labelledby="ring-title ring-desc"><title id="ring-title">Root union instrument</title><desc id="ring-desc">Four root bundles fuse in sequence as each address sign locks.</desc><defs><filter id="glow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="3"/></filter><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#b3d5ad" stroke-opacity=".045"/></pattern></defs><rect width="760" height="630" fill="url(#grid)"/><g class="array-base"><circle cx="380" cy="315" r="250"/><circle cx="380" cy="315" r="233" stroke-dasharray="1 10"/><circle cx="380" cy="315" r="208"/><circle cx="380" cy="315" r="136" stroke-dasharray="2 8"/><path d="M380 40V75M380 555V590M105 315H140M620 315H655"/><path d="M162 98l22 22M576 510l22 22M162 532l22-22M576 120l22-22"/></g><g id="root-bundles"></g><g id="ring-symbols"></g><g id="rotor"><circle cx="380" cy="93" r="4"/><path d="M380 103V118M373 113l7 6 7-6"/></g><g id="rising-roots"></g><g class="active-field"><ellipse cx="380" cy="315" rx="103" ry="62"/><ellipse cx="380" cy="315" rx="103" ry="62" transform="rotate(60 380 315)"/><ellipse cx="380" cy="315" rx="103" ry="62" transform="rotate(120 380 315)"/></g><circle class="break-wave" cx="380" cy="315" r="155"/><g class="center-label"><text x="380" y="290" id="center-kicker">ROOTS FIND A WAY</text><text x="380" y="331" id="center-main">Begin below.</text><text x="380" y="359" id="center-sub">FOUR SIGNS · ONE SHARED PATH</text></g></svg></div>
+        <div class="diagram-note note-left"><span class="note-line"></span>ROOT-TO-ROOT<br>RECIPROCAL CONTACT</div><div class="diagram-note note-right">NO SOIL TRAVELS ALONE<br><span id="phase-readout">UNION PRESSURE · 00%</span></div>
+        <div class="live-strip"><span class="live-mark" aria-hidden="true">↳</span><p id="caption" role="status" aria-live="polite">Trace four signs to make a path. The exchange opens only when you choose.</p><span id="phase">IDLE</span></div>
+      </div>
+      <div class="control-deck">
+        <section class="compose-controls" aria-labelledby="compose-title"><div class="section-heading"><h2 id="compose-title">01 / COMPOSE ROUTE</h2><span id="address-count">0 OF 4 JOINED</span></div><div class="address" id="address" aria-label="Current address"></div><div class="symbol-palette" id="symbol-palette"></div></section>
+        <section class="passage-controls" aria-labelledby="passage-title"><div class="section-heading"><h2 id="passage-title">02 / TEND PASSAGE</h2><button id="hold" class="hold" aria-pressed="false"><span></span>Soil hold: released</button></div><button id="activate" class="activate" disabled><span>Open exchange</span><span>↗</span></button><button id="disengage" class="disengage"><span>Disengage</span><span>↙</span></button></section>
+      </div>
+    </section>
+    <section id="atlas-view" class="atlas-view" hidden aria-label="Cross-referenced field ledger"><div class="atlas-title"><span class="eyebrow">KNOWLEDGE GROWS BETWEEN ENTRIES</span><h2>The living ledger.</h2><p>Places, practices, and small lives. Follow their connections.</p></div><div class="atlas-tools"><label for="archive-search">Find a field note</label><input id="archive-search" type="search" placeholder="Try “compost” or “bank”…"><button id="saved-filter" aria-pressed="false">Bookmarked only</button></div><div class="atlas-columns"><div id="entry-list" class="entry-list" aria-label="Ledger entries"></div><article id="entry-detail" class="entry-detail"></article></div><p class="atlas-footer">A working record, kept by the people who return to these places.</p></section>
+    <footer class="workspace-footer"><span><span class="status-dot"></span>COMMON GROUND, OPEN KNOWLEDGE</span><span>RESTORATION IS A PRACTICE, NOT AN ARRIVAL.</span></footer>
+  </main>
+</div>
+</body>
+</html>
