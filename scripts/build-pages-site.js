@@ -34,6 +34,60 @@ const OG_DIST_DIR = path.join(OG_DIR, "dist");
 const OG_PREVIEW_CANDIDATES = ["preview.png", "preview.jpg", "preview.jpeg"];
 const OUTPUT_DIR = path.resolve(process.argv[2] || path.join(ROOT, "_site"));
 
+function isWithin(parent, candidate) {
+  const relative = path.relative(parent, candidate);
+  return relative !== "" &&
+    relative !== ".." &&
+    !relative.startsWith(`..${path.sep}`) &&
+    !path.isAbsolute(relative);
+}
+
+function nearestExistingAncestor(candidate) {
+  let current = candidate;
+  while (!fs.existsSync(current)) {
+    const parent = path.dirname(current);
+    if (parent === current) return current;
+    current = parent;
+  }
+  return current;
+}
+
+function assertSafeOutputDir(outputDir) {
+  const resolvedRoot = path.resolve(ROOT);
+  const resolvedOutput = path.resolve(outputDir);
+  if (!isWithin(resolvedRoot, resolvedOutput)) {
+    throw new Error(
+      `Refusing to replace output directory outside the repository: ${resolvedOutput}`
+    );
+  }
+
+  const relative = path.relative(resolvedRoot, resolvedOutput);
+  const firstSegment = relative.split(path.sep)[0];
+  if (firstSegment.toLowerCase() === ".git") {
+    throw new Error(`Refusing to replace output directory inside .git: ${resolvedOutput}`);
+  }
+
+  const rootReal = fs.realpathSync(resolvedRoot);
+  const existingAncestor = nearestExistingAncestor(resolvedOutput);
+  const ancestorReal = fs.realpathSync(existingAncestor);
+  if (ancestorReal !== rootReal && !isWithin(rootReal, ancestorReal)) {
+    throw new Error(
+      `Refusing output directory whose real path leaves the repository: ${resolvedOutput}`
+    );
+  }
+
+  const tracked = execFileSync(
+    "git",
+    ["-C", resolvedRoot, "ls-files", "--", relative.split(path.sep).join("/")],
+    { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }
+  ).trim();
+  if (tracked) {
+    throw new Error(
+      `Refusing to replace output directory containing tracked files: ${resolvedOutput}`
+    );
+  }
+}
+
 // Test-output and editor/agent session directories are never part of the
 // served site. Verification screenshots and run logs live under these
 // names inside build folders (see STARGATE_BUILD_STANDARDS.md section 3), and
@@ -78,6 +132,7 @@ function main() {
     fs.readFileSync(path.join(HUB_DIR, "index.json"), "utf8")
   );
 
+  assertSafeOutputDir(OUTPUT_DIR);
   fs.rmSync(OUTPUT_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
@@ -144,4 +199,6 @@ function main() {
   console.log(`  (root) -> index.html [redirect to hub/]`);
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = { assertSafeOutputDir };

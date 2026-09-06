@@ -159,7 +159,7 @@
       "link": "../stargate_caissa_workstation/index.html",
       "preview": "../stargate_caissa_workstation/preview.png",
       "status": "live",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "series": null,
       "note": null
     },
@@ -195,7 +195,7 @@
       "link": "../stargate_futurist_dynamism/index.html",
       "preview": "../stargate_futurist_dynamism/preview.png",
       "status": "live",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "series": "Artistic Register",
       "note": "Operator review: complete and functional but underwhelming as an execution of the Futurist register — closed without further iteration."
     },
@@ -219,7 +219,7 @@
       "link": "../stargate_nouveau_nimbus/index.html",
       "preview": "../stargate_nouveau_nimbus/preview.png",
       "status": "live",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "series": "Artistic Register",
       "note": null
     },
@@ -363,7 +363,7 @@
       "link": "../stargate_epigraphic_spectrometry/index.html",
       "preview": "../stargate_epigraphic_spectrometry/preview.png",
       "status": "live",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "series": null,
       "note": null
     },
@@ -375,7 +375,7 @@
       "link": "../stargate_erebus_signal/index.html",
       "preview": "../stargate_erebus_signal/preview.png",
       "status": "live",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "series": null,
       "note": null
     },
@@ -411,7 +411,7 @@
       "link": "../stargate_genomic_sequencer/index.html",
       "preview": "../stargate_genomic_sequencer/preview.png",
       "status": "live",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "series": null,
       "note": null
     },
@@ -500,6 +500,18 @@
       "note": null
     },
     {
+      "id": "stargate-lowmagic-gemini",
+      "folder": "stargate_lowmagic_gemini",
+      "title": "Stargate Rushlight Hearth (`stargate_lowmagic_gemini`)",
+      "blurb": "An interactive novelty portal-dialing website set in the register of Low Magic: humble, domestic, everyday folk magic. Here there are no grand celestial arches, cosmic cathedrals, or glowing technomantic circuits.…",
+      "link": "../stargate_lowmagic_gemini/index.html",
+      "preview": "../stargate_lowmagic_gemini/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-lumina-grove",
       "folder": "stargate_lumina_grove",
       "title": "Lumina Grove — Bioluminescent Conduit Lattice",
@@ -519,7 +531,7 @@
       "link": "../stargate_mastering_suite/index.html",
       "preview": "../stargate_mastering_suite/preview.png",
       "status": "live",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "series": null,
       "note": null
     },
@@ -543,7 +555,7 @@
       "link": "../stargate_meteorological_nexrad/index.html",
       "preview": "../stargate_meteorological_nexrad/preview.png",
       "status": "live",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "series": null,
       "note": null
     },
@@ -632,6 +644,18 @@
       "note": null
     },
     {
+      "id": "stargate-rushlight-gemini",
+      "folder": "stargate_rushlight_gemini",
+      "title": "Stargate: Rushlight — Low Magic Portal Console",
+      "blurb": "A low-magic, domestic folk-craft portal console rooted in humble kitchen witchery, hearth wards, and herbal crafts. Built under the working codename RUSHLIGHT, this console turns away from grand cathedral mysticism and…",
+      "link": "../stargate_rushlight_gemini/index.html",
+      "preview": "../stargate_rushlight_gemini/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-salvage-terminal",
       "folder": "stargate_salvage_terminal",
       "title": "BONEYARD",
@@ -639,7 +663,7 @@
       "link": "../stargate_salvage_terminal/index.html",
       "preview": "../stargate_salvage_terminal/preview.png",
       "status": "live",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "series": null,
       "note": null
     },
@@ -692,6 +716,18 @@
       "note": null
     },
     {
+      "id": "stargate-solarpunk-astra",
+      "folder": "stargate_solarpunk_astra",
+      "title": "The Loamwake Commons",
+      "blurb": "The Loamwake Commons is an independent, fictional community soil-restoration exchange. A luminous root-union instrument connects neighbors through four small agreements, while a living field ledger links places,…",
+      "link": "../stargate_solarpunk_astra/index.html",
+      "preview": "../stargate_solarpunk_astra/preview.png",
+      "status": "live",
+      "version": "1.0.0",
+      "series": null,
+      "note": null
+    },
+    {
       "id": "stargate-solarpunk-conservatory",
       "folder": "stargate_solarpunk_conservatory",
       "title": "HELIANTH — Wrenfield Commons Conservatory · Lantern Gate",
@@ -723,7 +759,7 @@
       "link": "../stargate_sonar_abyssal/index.html",
       "preview": "../stargate_sonar_abyssal/preview.png",
       "status": "live",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "series": null,
       "note": null
     },
@@ -759,7 +795,7 @@
       "link": "../stargate_synchrotron_collider/index.html",
       "preview": "../stargate_synchrotron_collider/preview.png",
       "status": "live",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "series": null,
       "note": null
     },

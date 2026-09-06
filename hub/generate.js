@@ -34,6 +34,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { execFileSync } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const HUB_DIR = __dirname;
@@ -198,6 +199,34 @@ const REQUIRED_PREVIEW_WIDTH = 800;
 const REQUIRED_PREVIEW_HEIGHT = 450;
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
+// The gallery is a view of the repository, not of one developer's working
+// directory. Load the git index once so qualifying files and optional metadata
+// cannot leak into the catalog before they are actually tracked.
+function loadTrackedFiles() {
+  try {
+    const output = execFileSync("git", ["-C", ROOT, "ls-files", "-z"], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    return new Set(output.split("\0").filter(Boolean));
+  } catch (error) {
+    throw new Error(
+      `Unable to read tracked files from ${ROOT}; gallery generation must run inside its git checkout.`,
+      { cause: error }
+    );
+  }
+}
+
+const TRACKED_FILES = loadTrackedFiles();
+
+function repoPath(filePath) {
+  return path.relative(ROOT, filePath).split(path.sep).join("/");
+}
+
+function isTracked(filePath) {
+  return TRACKED_FILES.has(repoPath(filePath));
+}
+
 // Reads width/height straight out of the PNG IHDR chunk (always the first
 // chunk, immediately after the 8-byte signature) — no image library needed.
 // Returns null if the file isn't a well-formed PNG.
@@ -237,7 +266,8 @@ function isExcluded(name) {
 function findEntryPoint(dir) {
   const candidates = ["index.html", "index.htm"];
   for (const c of candidates) {
-    if (fs.existsSync(path.join(dir, c))) return c;
+    const filePath = path.join(dir, c);
+    if (fs.existsSync(filePath) && isTracked(filePath)) return c;
   }
   return null;
 }
@@ -245,7 +275,8 @@ function findEntryPoint(dir) {
 function findPreview(dir) {
   const candidates = ["preview.png", "preview.jpg", "preview.jpeg"];
   for (const c of candidates) {
-    if (fs.existsSync(path.join(dir, c))) return c;
+    const filePath = path.join(dir, c);
+    if (fs.existsSync(filePath) && isTracked(filePath)) return c;
   }
   return null;
 }
@@ -342,7 +373,7 @@ function extractTitleAndBlurb(readmePath) {
 
 function readVersion(dir) {
   const p = path.join(dir, "version.json");
-  if (!fs.existsSync(p)) return null;
+  if (!fs.existsSync(p) || !isTracked(p)) return null;
   try {
     const data = JSON.parse(fs.readFileSync(p, "utf8"));
     return typeof data.version === "string" ? data.version : null;
@@ -352,7 +383,8 @@ function readVersion(dir) {
 }
 
 function scanOne(dir, name, { linkPrefix, status, checkPreviewDimensions }) {
-  const hasReadme = fs.existsSync(path.join(dir, "README.md"));
+  const readmePath = path.join(dir, "README.md");
+  const hasReadme = fs.existsSync(readmePath) && isTracked(readmePath);
   const entryFile = findEntryPoint(dir);
 
   if (!hasReadme || !entryFile) {
@@ -360,15 +392,15 @@ function scanOne(dir, name, { linkPrefix, status, checkPreviewDimensions }) {
       skip: {
         folder: name,
         reason: !hasReadme && !entryFile
-          ? "missing README.md and index.html"
+          ? "missing committed README.md and index.html"
           : !hasReadme
-          ? "missing README.md"
-          : "missing index.html",
+          ? "missing committed README.md"
+          : "missing committed index.html",
       },
     };
   }
 
-  const extracted = extractTitleAndBlurb(path.join(dir, "README.md"));
+  const extracted = extractTitleAndBlurb(readmePath);
   if (!extracted) {
     return {
       skip: {
@@ -522,7 +554,39 @@ function main() {
   const featured = scanFeatured();
   const output = { featured, entries: included };
   const outPath = path.join(HUB_DIR, "index.json");
-  fs.writeFileSync(outPath, JSON.stringify(output, null, 2) + "\n", "utf8");
+  const serialized = JSON.stringify(output, null, 2) + "\n";
+
+  if (process.argv.includes("--check")) {
+    const current = fs.existsSync(outPath) ? fs.readFileSync(outPath, "utf8") : "";
+    if (current !== serialized) {
+      let currentEntries = [];
+      try {
+        currentEntries = JSON.parse(current).entries || [];
+      } catch {
+        // A missing or invalid catalog is already fully described by the
+        // out-of-date result below; leave its comparison set empty.
+      }
+
+      const currentFolders = new Set(currentEntries.map((entry) => entry.folder));
+      const generatedFolders = new Set(included.map((entry) => entry.folder));
+      const additions = [...generatedFolders].filter((folder) => !currentFolders.has(folder));
+      const removals = [...currentFolders].filter((folder) => !generatedFolders.has(folder));
+
+      console.error("hub/index.json is out of date. Run `node hub/generate.js` and commit the result.");
+      if (additions.length) console.error(`  Missing entries: ${additions.join(", ")}`);
+      if (removals.length) console.error(`  Stale entries: ${removals.join(", ")}`);
+      if (!additions.length && !removals.length) {
+        console.error("  Entry metadata or featured-build data has changed.");
+      }
+      process.exitCode = 1;
+      return;
+    }
+
+    console.log(`hub/index.json is current (${included.length} entries).`);
+    return;
+  }
+
+  fs.writeFileSync(outPath, serialized, "utf8");
 
   console.log(`Wrote ${included.length} entries to ${path.relative(ROOT, outPath)}`);
   for (const e of included) {
