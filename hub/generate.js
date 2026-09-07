@@ -89,6 +89,14 @@ const STATUS_OVERRIDES = {
   // explicit entry records that the status is hand-verified, not merely
   // defaulted.
   stargate_atompunk_fable: "live",
+  // README.md and CHANGELOG.md record the operator's 2026-09-06
+  // decision to discontinue this build and retain it for archive/direct
+  // access only. Retired entries are excluded from the default LIVE view.
+  stargate_expressionism_fable: "retired",
+  // README.md and CHANGELOG.md record the operator's 2026-09-06
+  // decision to discontinue BONEYARD and retain it for archive/direct
+  // access only. Retired entries are excluded from the default LIVE view.
+  stargate_salvage_terminal: "retired",
 };
 
 // Short caveat lines surfaced on the card itself, so entries with an
@@ -133,6 +141,10 @@ const NOTES = {
   // verification reporting it — a discrepancy left unresolved.
   stargate_ukiyo_waystation_fable:
     "Closed as a single, one-off attempt: underperformed its sibling build on the quick-dial auto-dial behavior, which didn't read as present or working during real use despite the build's own automated verification reporting it — unresolved.",
+  stargate_expressionism_fable:
+    "Retired by operator decision — discontinued and retained for archive/direct access only.",
+  stargate_salvage_terminal:
+    "Retired by operator decision — discontinued and retained for archive/direct access only.",
 };
 
 // Thematic series groupings. Members render a series tag and are

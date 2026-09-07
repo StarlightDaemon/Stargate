@@ -4,6 +4,8 @@ Torkammer Neun at the Nachtwerk Kesselgrund, 1921. A gate console in the registe
 
 **Status:** functionally complete and confirmed. The automated Puppeteer harness passed 116/116 checks at build time, and the operator has since personally tested the build by hand and confirmed it functional (2026-09-03).
 
+**Catalog status:** retired/discontinued as of 2026-09-06 by operator decision. The build remains available by direct link and in the retired archive, but is excluded from the default live gallery.
+
 **Creative status:** closed, no further iteration. The build leans harder into Expressionist horror and dread, in the Caligari film-set manner, than a general "Expressionism" brief called for. The operator's reaction was mixed: not what they expected, but accepted as a legitimate result. Recorded as a creative-fit outcome, not a technical defect.
 
 **Built by:** Claude Fable 5.1 (reasoning effort 25, as exposed by the session harness).

@@ -4,6 +4,8 @@ Aperture Bench 3 at the Halvard Reach breakers' yard: a portal-dialing console t
 
 Status: v1.0.0, built 2026-09-02, closed out 2026-09-03. Automated Puppeteer bench 77/77 on the committed code, four runs in total; the fourth ran during the close-out session on 2026-09-03 at 10:14 UTC and covers the alarm keyframe change. **Not operator-verified.** No human has dialed this build by hand, and no human has watched it render live in a browser. Automated passes in this project have repeatedly failed to hold up under real operator testing, so treat it as unconfirmed until someone actually dials it.
 
+**Catalog status:** retired/discontinued as of 2026-09-06 by operator decision. The build remains available by direct link and in the retired archive, but is excluded from the default live gallery.
+
 Built by Claude Fable 5.1 (reasoning level: low, effort setting 25 as observed in-session).
 
 ## How to dial
