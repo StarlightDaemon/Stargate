@@ -302,8 +302,42 @@ async function runTestSuite() {
 
     record('Cycle 2 Disengage Succeeded', stateAfterDisengage2.state === 'IDLE' && stateAfterDisengage2.stagedCount === 0, `State: ${stateAfterDisengage2.state}`);
 
-    // 5. Test Operator Reference Manual Modal
-    console.log('\n--- TEST 5: Operator Reference Manual Modal ---');
+    // 5. Regression: an overflowing log must not stretch the deck or displace the ring.
+    console.log('\n--- TEST 5: Repeated Quick-Dial Layout Stability ---');
+    const layoutBeforeRepeatedQuickDial = await page.evaluate(() => {
+      const ring = document.getElementById('ring-stage-container').getBoundingClientRect();
+      return { y: ring.y, height: ring.height };
+    });
+
+    for (let i = 0; i < 40; i++) {
+      await clickAtRenderedCenter(page, '#qd-card-qd-calcutta .inject-btn');
+    }
+    await new Promise(r => setTimeout(r, 180 * 7 + 500));
+
+    const repeatedQuickDialLayout = await page.evaluate(() => {
+      const ring = document.getElementById('ring-stage-container').getBoundingClientRect();
+      const log = document.getElementById('ticker-log-box');
+      const inst = window.terminalInstance;
+      return {
+        ring: { y: ring.y, height: ring.height },
+        stagedCount: inst.stagedGlyphs.length,
+        logOverflows: log.scrollHeight > log.clientHeight,
+        hasDocumentScroll: document.documentElement.scrollHeight > window.innerHeight
+      };
+    });
+
+    record(
+      'Repeated Quick-Dial Keeps Ring Fixed',
+      repeatedQuickDialLayout.stagedCount === 7 &&
+        repeatedQuickDialLayout.logOverflows &&
+        !repeatedQuickDialLayout.hasDocumentScroll &&
+        repeatedQuickDialLayout.ring.y === layoutBeforeRepeatedQuickDial.y &&
+        repeatedQuickDialLayout.ring.height === layoutBeforeRepeatedQuickDial.height,
+      `Staged: ${repeatedQuickDialLayout.stagedCount}, Ring Y: ${repeatedQuickDialLayout.ring.y}, Log scrolls: ${repeatedQuickDialLayout.logOverflows}`
+    );
+
+    // 6. Test Operator Reference Manual Modal
+    console.log('\n--- TEST 6: Operator Reference Manual Modal ---');
     await clickAtRenderedCenter(page, '#manual-modal-open-btn');
     await new Promise(r => setTimeout(r, 200));
 
@@ -333,8 +367,8 @@ async function runTestSuite() {
     });
     record('Operator Manual Closes', modalClosedState, 'Modal backdrop closed');
 
-    // 6. Test Footer Links & Metadata
-    console.log('\n--- TEST 6: Footer Links & Attribution ---');
+    // 7. Test Footer Links & Metadata
+    console.log('\n--- TEST 7: Footer Links & Attribution ---');
     const footerMeta = await page.evaluate(() => {
       const link = document.querySelector('footer a.footer-link');
       const versionEl = document.querySelector('footer .footer-version');

@@ -20,6 +20,7 @@ class StargateAethericTerminal {
     this.state = AppState.IDLE;
     this.stagedGlyphs = [];
     this.lockedEscapements = new Set();
+    this.quickDialTimers = [];
     this.isSafetyHoldEngaged = true; // Review/Safety Hold default engaged
     this.ringRotationAngle = 0;
     this.activeConduit = null;
@@ -416,6 +417,8 @@ class StargateAethericTerminal {
   }
 
   dialSingleGlyph(glyph) {
+    if (this.state === AppState.ACTIVE || this.state === AppState.IGNITING || this.stagedGlyphs.length >= 7) return;
+
     const slotIdx = this.stagedGlyphs.length;
     this.stagedGlyphs.push(glyph);
     const escapementId = slotIdx + 1;
@@ -472,6 +475,7 @@ class StargateAethericTerminal {
     const entry = QUICK_DIAL_ENTRIES.find(e => e.id === entryId);
     if (!entry) return;
 
+    this.cancelPendingQuickDialSequence();
     this.purgeStagedSequence(false);
     this.activeConduit = entry;
     this.logTelemetry(`Injecting calibrated telegraph ledger: [${entry.name}] (${entry.jurisdiction})...`, 'highlight');
@@ -484,13 +488,20 @@ class StargateAethericTerminal {
 
     // Rapid sequential coordinate lock
     entry.sequence.forEach((glyphId, i) => {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
+        this.quickDialTimers = this.quickDialTimers.filter(pendingTimer => pendingTimer !== timer);
         const glyph = MERIDIAN_GLYPHS.find(g => g.id === glyphId);
         if (glyph) {
           this.dialSingleGlyph(glyph);
         }
       }, i * 180);
+      this.quickDialTimers.push(timer);
     });
+  }
+
+  cancelPendingQuickDialSequence() {
+    this.quickDialTimers.forEach(timer => clearTimeout(timer));
+    this.quickDialTimers = [];
   }
 
   updateEscapementNodeVisual(escapementId, isLocked) {
@@ -631,6 +642,8 @@ class StargateAethericTerminal {
   // DISENGAGE / EMERGENCY VENT STEAM
   // =========================================================================
   disengageAndVentSteam() {
+    this.cancelPendingQuickDialSequence();
+
     if (this.state === AppState.IDLE && this.stagedGlyphs.length === 0) {
       soundEngine.playEmergencyVent();
       this.logTelemetry("Emergency steam vent bypass purged (system idle).");
@@ -672,6 +685,7 @@ class StargateAethericTerminal {
   purgeStagedSequence(logAction = true) {
     if (this.state === AppState.ACTIVE || this.state === AppState.IGNITING) return;
 
+    this.cancelPendingQuickDialSequence();
     soundEngine.playSteamPuff(0.25, 0.2);
     this.state = AppState.IDLE;
     this.stagedGlyphs = [];
