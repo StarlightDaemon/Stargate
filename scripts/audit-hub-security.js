@@ -167,6 +167,10 @@ function checkBrowserSurface() {
   const resourcePattern = /<(?:script|link|img)\b[^>]*?\b(?:src|href)\s*=\s*"([^"]+)"/gi;
   for (const match of html.matchAll(resourcePattern)) {
     const reference = match[1];
+    if (/^<link\b[^>]*\brel="canonical"/i.test(match[0])) {
+      if (!reference.startsWith("https://")) error(`Hub canonical URL is not HTTPS: ${reference}`);
+      continue;
+    }
     if (reference.startsWith("data:image/svg+xml,")) continue;
     if (reference.startsWith("/") || reference.startsWith("//") || /^[a-z][a-z0-9+.-]*:/i.test(reference)) {
       error(`hub/index.html loads a non-local browser resource: ${reference}`);

@@ -45,15 +45,30 @@ gallery.load().catch((err) => {
   $("grid").hidden = true;
   const empty = $("empty-state");
   empty.hidden = false;
-  empty.textContent = "Catalog failed to load — see console.";
+  empty.setAttribute("role", "alert");
+  empty.textContent = "Catalog failed to load. Reload the page to try again.";
   console.error(err);
 });
 
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+let animationFrame = 0;
+
 function frame(now) {
   starfield.render(now / 1000);
-  requestAnimationFrame(frame);
+  animationFrame = requestAnimationFrame(frame);
 }
-requestAnimationFrame(frame);
+
+function syncStarfieldMotion() {
+  cancelAnimationFrame(animationFrame);
+  if (reducedMotion.matches) {
+    starfield.render(0);
+    return;
+  }
+  animationFrame = requestAnimationFrame(frame);
+}
+
+reducedMotion.addEventListener("change", syncStarfieldMotion);
+syncStarfieldMotion();
 
 window.__hub = {
   gallery,

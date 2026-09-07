@@ -10,7 +10,8 @@
     "security:hub:strict": "node scripts/audit-hub-security.js --strict",
     "security:deps": "npm audit --omit=dev",
     "security:deps:featured": "npm --prefix Stargate_OG audit",
-    "test:pages-output-guard": "node scripts/test-build-pages-output-guard.js"
+    "test:pages-output-guard": "node scripts/test-build-pages-output-guard.js",
+    "test:pages-release": "node scripts/audit-pages-release.js"
   },
   "dependencies": {
     "sharp": "^0.35.4"

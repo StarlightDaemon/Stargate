@@ -29,10 +29,13 @@ const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
 const HUB_DIR = path.join(ROOT, "hub");
+const PAGES_DIR = path.join(ROOT, "pages");
 const OG_DIR = path.join(ROOT, "Stargate_OG");
 const OG_DIST_DIR = path.join(OG_DIR, "dist");
 const OG_PREVIEW_CANDIDATES = ["preview.png", "preview.jpg", "preview.jpeg"];
 const OUTPUT_DIR = path.resolve(process.argv[2] || path.join(ROOT, "_site"));
+const SITE_ORIGIN = "https://starlightdaemon.github.io";
+const BASE_PATH = "/Stargate/";
 
 function isWithin(parent, candidate) {
   const relative = path.relative(parent, candidate);
@@ -109,18 +112,78 @@ const SKIP_ENTRIES = new Set([
   "scripts",
 ]);
 
-function copyDir(src, dest) {
+const SKIP_FILES = new Set([
+  "README.md",
+  "CHANGELOG.md",
+  "package.json",
+  "package-lock.json",
+  "npm-shrinkwrap.json",
+]);
+
+const ROOT_DEVELOPMENT_FILE = /^(?:(?:test|verify|diag|audit)(?:[_-].*)?|.*[_-](?:test|spec)|run[_-]?tests?(?:[_-].*)?|server)\.(?:[cm]?js|ts|html)$/i;
+
+// Google Fonts requests disclose a visitor's IP address to a third party and
+// make each standalone build depend on an off-site render-blocking resource.
+// The source builds already declare usable local fallback stacks, so Pages
+// artifacts intentionally omit those remote font links/imports. This applies
+// only to copied HTML/CSS output; it does not rewrite a build's source files.
+function withoutHostedGoogleFonts(source, extension) {
+  if (extension === ".html") {
+    return source.replace(/\s*<link\b[^>]*(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>\s*/gi, "\n");
+  }
+  if (extension === ".css") {
+    return source.replace(/@import\s+url\(\s*["']?https:\/\/fonts\.googleapis\.com\/[^)]*\)\s*;\s*/gi, "");
+  }
+  return source;
+}
+
+function copyDir(src, dest, relativePath = "") {
   fs.mkdirSync(dest, { recursive: true });
   for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
     if (SKIP_ENTRIES.has(entry.name)) continue;
     const s = path.join(src, entry.name);
     const d = path.join(dest, entry.name);
     if (entry.isDirectory()) {
-      copyDir(s, d);
+      copyDir(s, d, path.join(relativePath, entry.name));
     } else if (entry.isFile()) {
-      fs.copyFileSync(s, d);
+      if (SKIP_FILES.has(entry.name)) continue;
+      if (relativePath === "" && ROOT_DEVELOPMENT_FILE.test(entry.name)) continue;
+      const extension = path.extname(entry.name).toLowerCase();
+      if (extension === ".html" || extension === ".css") {
+        fs.writeFileSync(d, withoutHostedGoogleFonts(fs.readFileSync(s, "utf8"), extension));
+      } else {
+        fs.copyFileSync(s, d);
+      }
     }
   }
+}
+
+function escapeXml(value) {
+  return value.replace(/[<>&'\"]/g, (character) => ({
+    "<": "&lt;",
+    ">": "&gt;",
+    "&": "&amp;",
+    "'": "&apos;",
+    "\"": "&quot;",
+  })[character]);
+}
+
+function writeSitemap(index) {
+  const hubUrl = `${SITE_ORIGIN}${BASE_PATH}hub/`;
+  const references = [
+    index.featured?.link,
+    ...index.entries.map((entry) => entry.link),
+  ].filter(Boolean);
+  const urls = [hubUrl, ...references.map((reference) => new URL(reference, hubUrl).href)];
+  const uniqueUrls = [...new Set(urls)];
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...uniqueUrls.map((url) => `  <url><loc>${escapeXml(url)}</loc></url>`),
+    '</urlset>',
+    '',
+  ].join("\n");
+  fs.writeFileSync(path.join(OUTPUT_DIR, "sitemap.xml"), xml);
 }
 
 function main() {
@@ -179,13 +242,11 @@ function main() {
     );
   }
 
-  // Root landing page: the Pages URL root has nothing else to serve
-  // (hub lives at /hub/, mirroring the repo layout above), so drop in
-  // a redirect. Generated into the build output only — not a repo file.
-  fs.writeFileSync(
-    path.join(OUTPUT_DIR, "index.html"),
-    '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=hub/"><a href="hub/">Continue to the hub</a>\n'
-  );
+  // Pages-only root surfaces stay separate from hub/ source so the same
+  // project-base-aware 404, redirect, crawler policy, and .nojekyll marker
+  // are assembled consistently in local verification and CI.
+  copyDir(PAGES_DIR, OUTPUT_DIR);
+  writeSitemap(index);
 
   console.log(`\nAssembled static site at ${path.relative(ROOT, OUTPUT_DIR) || "."}`);
   console.log(`  hub/ -> hub/`);
@@ -196,7 +257,8 @@ function main() {
   if (ogPreview) {
     console.log(`  Stargate_OG/${ogPreview} -> Stargate_OG/${ogPreview}`);
   }
-  console.log(`  (root) -> index.html [redirect to hub/]`);
+  console.log(`  pages/ -> (root) [redirect, 404, robots, .nojekyll]`);
+  console.log(`  (generated) -> sitemap.xml [${index.entries.length + (index.featured ? 2 : 1)} URLs]`);
 }
 
 if (require.main === module) main();

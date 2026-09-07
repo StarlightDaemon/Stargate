@@ -44,6 +44,9 @@ jobs:
       - name: Assemble static site (hub + qualifying build folders)
         run: node scripts/build-pages-site.js "$GITHUB_WORKSPACE/_site"
 
+      - name: Audit assembled Pages artifact
+        run: node scripts/audit-pages-release.js "$GITHUB_WORKSPACE/_site"
+
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
@@ -51,6 +54,9 @@ jobs:
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: _site
+          # The assembled artifact intentionally includes pages/.nojekyll.
+          # Preserve it while the release audit guarantees no stray dotfiles.
+          include-hidden-files: true
 
   deploy:
     needs: build

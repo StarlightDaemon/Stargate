@@ -70,6 +70,10 @@ export class Gallery {
       const img = document.createElement("img");
       img.src = this.featured.preview;
       img.alt = `${this.featured.title} preview`;
+      img.width = 1920;
+      img.height = 1080;
+      img.decoding = "async";
+      img.fetchPriority = "high";
       img.addEventListener("error", () => preview.remove());
       preview.appendChild(img);
       card.appendChild(preview);
@@ -117,6 +121,7 @@ export class Gallery {
     img.src = entry.preview || PLACEHOLDER_PREVIEW;
     img.alt = `${entry.title} preview`;
     img.loading = "lazy";
+    img.decoding = "async";
     img.addEventListener("error", () => {
       if (img.src.indexOf("preview-placeholder") === -1) img.src = PLACEHOLDER_PREVIEW;
     });
