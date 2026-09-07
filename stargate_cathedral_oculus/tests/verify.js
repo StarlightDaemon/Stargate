@@ -6,6 +6,7 @@ const path = require('path');
 const PORT = 8089;
 const ROOT_DIR = path.resolve(__dirname, '..');
 const SCREENSHOTS_DIR = path.join(__dirname, 'screenshots');
+fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
 
 // MIME types helper
 const MIME_TYPES = {
