@@ -1,0 +1,54 @@
+name: Verify hub build (no deploy)
+
+# PR-time mirror of the BUILD/VERIFY half of deploy-pages.yml. It never
+# configures, uploads to, or deploys GitHub Pages and never requests Pages
+# permissions; it exists so pull requests get the same build + audit
+# signal that the default-branch deploy job runs.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Install featured app (Stargate_OG)
+        working-directory: Stargate_OG
+        run: npm ci
+
+      - name: Audit featured app dependencies
+        working-directory: Stargate_OG
+        run: npm audit
+
+      - name: Test featured app
+        working-directory: Stargate_OG
+        run: npm test
+
+      - name: Build featured app
+        working-directory: Stargate_OG
+        run: npm run build
+
+      - name: Gallery index is current
+        run: node hub/generate.js --check
+
+      - name: Pages output guard
+        run: node scripts/test-build-pages-output-guard.js
+
+      - name: Assemble static site (not published)
+        run: node scripts/build-pages-site.js "$GITHUB_WORKSPACE/_site"
+
+      - name: Audit assembled Pages output
+        run: node scripts/audit-pages-release.js "$GITHUB_WORKSPACE/_site"
+
+      - name: Hub security audit (strict)
+        run: node scripts/audit-hub-security.js --strict
