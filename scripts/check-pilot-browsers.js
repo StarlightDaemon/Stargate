@@ -73,11 +73,12 @@ async function until(page, pilot, predicate, label, observations) {
 async function qualify(browser, pilot, mode) {
   const server = mode === "legacy" ? await legacy(pilot) : await startPreview({ ...selectExhibit(pilot.name), port: 0 });
   const context = await browser.createBrowserContext(); const page = await context.newPage();
-  const result = { exhibit:pilot.name, mode, observations:[], pageErrors:[], consoleErrors:[], failedRequests:[], screenshots:[] };
+  const result = { exhibit:pilot.name, mode, observations:[], pageErrors:[], consoleErrors:[], failedRequests:[], httpErrors:[], screenshots:[] };
   const shot = async name => { const file = `${pilot.name}-${mode}-${name}.png`; await page.screenshot({path:path.join(OUTPUT,file)}); result.screenshots.push(file); };
   page.on("pageerror", e => result.pageErrors.push(e.message));
   page.on("console", m => { if(m.type()==="error") result.consoleErrors.push(m.text()); });
   page.on("requestfailed", r => result.failedRequests.push({url:r.url().replace(server.url,"ORIGIN"), error:r.failure()?.errorText}));
+  page.on("response", r => { if(r.status()>=400) result.httpErrors.push({url:r.url().replace(server.url,"ORIGIN"),status:r.status()}); });
   try {
     await page.setViewport({width:1920,height:1080});
     const response = await page.goto(server.url, {waitUntil:"networkidle0",timeout:30000}); assert.equal(response.status(),200);
@@ -124,7 +125,7 @@ async function main() {
     const failures=report.results.filter(r=>r.interactionAssertions!=="PASS"||r.pageErrors.length);
     report.status=failures.length?"FAIL":"PASS";
     // Network/console observations are retained independently, including baseline missing favicons.
-    report.loadingObservations=report.results.filter(r=>r.consoleErrors.length||r.failedRequests.length).map(r=>({exhibit:r.exhibit,mode:r.mode,consoleErrors:r.consoleErrors,failedRequests:r.failedRequests}));
+    report.loadingObservations=report.results.filter(r=>r.consoleErrors.length||r.failedRequests.length||r.httpErrors.length).map(r=>({exhibit:r.exhibit,mode:r.mode,consoleErrors:r.consoleErrors,failedRequests:r.failedRequests,httpErrors:r.httpErrors}));
     if(report.loadingObservations.length) report.status="FAIL";
   } catch(error) {report.status="ENVIRONMENT-BLOCKED";report.error=error.message;console.error(error.message);}
   finally {if(browser)await browser.close();fs.writeFileSync(path.join(OUTPUT,"report.json"),JSON.stringify(report,null,2)+"\n");}

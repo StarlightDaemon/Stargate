@@ -86,7 +86,16 @@ The separate test:preview:handlers command tests request handlers without HTTP
 transport. It is supplementary evidence. It does not replace test:preview,
 which exercises real sockets, symlinks/junctions, port conflicts and lifecycle.
 The preview-tools PR workflow runs those tests on Linux and Windows without
-installing npm packages. It neither deploys nor replaces the existing release CI.
+installing npm packages. A separate browser job installs the existing locked
+Aetheric Puppeteer dependency and runs `node scripts/check-pilot-browsers.js`
+with STARGATE_PUPPETEER_MODULE and PUPPETEER_EXECUTABLE_PATH configured. It compares
+the retained legacy handlers with shared serving, using loopback listeners.
+It records real pointer interactions, staged presets, explicit activation,
+disengage/redial, cancellation, runtime/resource errors and screenshots under
+test/pilot-browser/. CI retains these as the pilot-browser-evidence artifact.
+This supplementary checker does not replace the original exhibit suites or
+qualify keyboard, reduced motion, sound, visual quality or operator acceptance.
+The workflow neither deploys nor replaces the existing release CI.
 
 ## Contributor and agent workflow
 
@@ -126,6 +135,12 @@ The recovery session could execute Node, Git, handlers and static checks, but
 loopback client connections were denied, test junction creation was prohibited,
 Chrome could not launch and npm DNS was unavailable. Those observations do not
 establish a product regression or excuse a passing HTTP/browser/security claim.
-Retain the old servers until those gates pass. Their previously reproduced
+Subsequent CI passed all 17 tooling tests on Linux and Windows, including real
+HTTP and filesystem-link rejection. Browser comparisons reproduced an existing
+Aetheric defect under both servers: cancelling during ignition leaves an
+uncancelled callback that restores ACTIVE with zero staged glyphs. Bathyscaphe
+and Solarpunk passed the supplementary interaction checks, with resource errors
+still reported. These results do not establish full pilot acceptance.
+Retain the old servers until the remaining gates pass. Their previously reproduced
 containment defects remain unresolved in the legacy commands while migration
 is on hold. No infrastructure file has been deleted during this foundation step.
