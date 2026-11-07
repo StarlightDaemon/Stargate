@@ -4,6 +4,10 @@
   "private": true,
   "description": "Repository-level tooling dependencies for scripts/ (preview capture). Individual builds carry their own package.json.",
   "scripts": {
+    "preview": "node scripts/preview.js",
+    "verify": "node scripts/verify.js",
+    "test:preview": "node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-verification.js",
+    "test:preview:handlers": "node --test --test-isolation=none scripts/test-preview-handlers.js",
     "gallery:generate": "node hub/generate.js",
     "gallery:check": "node hub/generate.js --check",
     "security:hub": "node scripts/audit-hub-security.js",
