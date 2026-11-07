@@ -6,6 +6,12 @@ The Loamwake Commons is an independent, fictional community soil-restoration exc
 
 Run `node server.cjs` from this directory and open [the local station](http://localhost:4177). The site also works on a static host; it has no production dependencies, external fonts, network services, or build step. Set the `PORT` environment variable to choose another local port.
 
+The launcher uses the shared loopback-only preview server in the parent Stargate
+checkout. Keep the repository tools available for local preview; they are not a
+production dependency. Only tracked public assets are served. The original
+verification was recorded in the changelog without a tracked executable suite;
+`scripts/check-pilot-browsers.js` now supplies supplementary interaction checks.
+
 1. Choose four signs in **Compose route**. Each manual root union takes 900 ms.
 2. The fourth sign leaves the route **ready**. Choose **Open exchange** in **Tend passage** to activate it.
 3. Watch a 2,100 ms buildup, an 800 ms breakthrough, then the sustained exchange. **Disengage** releases every union and stops its sound immediately.

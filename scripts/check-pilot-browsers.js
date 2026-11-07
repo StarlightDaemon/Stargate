@@ -5,6 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const http = require("node:http");
 const vm = require("node:vm");
+const { execFileSync } = require("node:child_process");
 const { startPreview, selectExhibit } = require("./preview.js");
 const ROOT = path.resolve(__dirname, "..");
 const OUTPUT = path.join(ROOT, "test", "pilot-browser");
@@ -35,7 +36,10 @@ function legacy(pilot) {
       };
       return server;
     } };
-    vm.runInNewContext(fs.readFileSync(path.join(directory, pilot.server), "utf8"), {
+    // Historical comparison only: retired handler implementations stay in Git,
+    // never in active launch commands. CI must fetch this pinned baseline commit.
+    const source = execFileSync("git", ["show", `8c3f718c3e31cd19c169c7cf87ab2feeee7242c1:${pilot.name}/${pilot.server}`], { cwd: ROOT, encoding: "utf8" });
+    vm.runInNewContext(source, {
       require: name => /^(?:node:)?http$/.test(name) ? intercepted : require(name),
       __dirname: directory, process: { env: {} }, console: { log() {} }, URL,
     }, { filename: pilot.server });

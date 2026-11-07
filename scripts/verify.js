@@ -64,13 +64,14 @@ function get(url) {
   });
 }
 function parseArgs(args) {
-  const options = { exhibits: [], http: false, browser: false };
+  const options = { exhibits: [], http: false, browser: false, suites: false };
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--http") options.http = true;
     else if (args[i] === "--browser") options.browser = true;
+    else if (args[i] === "--suites") options.suites = true;
     else if (args[i] === "--exhibit" && args[i+1]) options.exhibits.push(args[++i]);
     else if (args[i] === "--changed" && args[i+1] && !options.changed) options.changed = args[++i];
-    else throw new Error("Usage: node scripts/verify.js [--exhibit EXACT_DIRECTORY ... | --changed REF] [--http] [--browser]");
+    else throw new Error("Usage: node scripts/verify.js [--exhibit EXACT_DIRECTORY ... | --changed REF] [--http] [--browser] [--suites]");
   }
   if (options.changed && options.exhibits.length) throw new Error("Choose --changed or --exhibit, not both.");
   return options;
@@ -149,7 +150,19 @@ async function main(args = process.argv.slice(2)) {
       if (!options.http) record(item.checks, "http-resources", "UNVERIFIED", "Not requested; use --http.");
       if (!options.browser || browserBlock) record(item.checks, "browser-load", browserBlock ? "ENVIRONMENT-BLOCKED" : "UNVERIFIED", browserBlock || "Not requested; use --browser with an installed Puppeteer and browser.");
       let pkg = {}; try { pkg = JSON.parse(fs.readFileSync(path.join(selection.root, "package.json"), "utf8")); } catch {}
-      record(item.checks, "existing-tests", "UNVERIFIED", { scripts: pkg.scripts || {}, reason: "Harness adapters require verified pilot migration; no existing assertions have been removed or executed here." });
+      const { suites, runSuite } = require("./run-pilot-suites.js");
+      const adapter = suites.find(s => s.name === entry.folder);
+      if (options.suites && adapter) {
+        try {
+          const output = path.join(ROOT, "test", "verification", `${Date.now()}-${crypto.randomUUID()}`, entry.folder);
+          const result = await runSuite(adapter, "shared", output);
+          record(item.checks, "existing-tests", result.status, result);
+        } catch (error) {
+          record(item.checks, "existing-tests", ["EACCES", "EPERM", "EADDRINUSE"].includes(error.code) ? "ENVIRONMENT-BLOCKED" : "FAIL", error.message);
+        }
+      } else {
+        record(item.checks, "existing-tests", "UNVERIFIED", { scripts: pkg.scripts || {}, reason: adapter ? "Not requested; use --suites to run the original suite against the shared server." : "No qualified original-suite adapter is available for this exhibit." });
+      }
       record(item.checks, "interaction-and-operator", "UNVERIFIED", "Dialing, activation, cancellation, sound, keyboard, reduced motion and hands-on acceptance are separate gates.");
     }
   } finally { if (browser) await browser.close(); }

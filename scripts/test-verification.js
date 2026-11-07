@@ -37,5 +37,6 @@ test("target selection rejects ambiguous or incomplete flags", () => {
   assert.throws(() => parseArgs(["--changed", "main", "--exhibit", "example"]));
   assert.throws(() => parseArgs(["--exhibit"]));
   assert.throws(() => parseArgs(["--unknown"]));
+  assert.equal(parseArgs(["--suites"]).suites, true);
   assert.deepEqual(parseArgs(["--exhibit", "example", "--http"]).exhibits, ["example"]);
 });

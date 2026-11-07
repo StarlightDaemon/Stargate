@@ -8,10 +8,14 @@ Themed, single-page "portal dialing" console: a deep-ocean submersible HUD for t
 
 ```
 npm run dev          # node server.js -> http://127.0.0.1:3000  (PORT env var overrides)
-npm test             # node test/verify.js  (builder's Puppeteer suite; expects the server on :3000)
+npm test             # original builder suite; starts/closes its own shared preview on a free port
 ```
 
 Static files only (`index.html`, `src/css`, `src/js`); no build step.
+The dev command uses the repository's shared loopback-only preview server; keep
+the exhibit inside the Stargate checkout. Run `npm ci` for the locked test
+dependency. `STARGATE_TEST_URL` optionally selects an existing server for tests.
+The serving migration does not change the display, engine or saved preferences.
 
 ## How it works
 

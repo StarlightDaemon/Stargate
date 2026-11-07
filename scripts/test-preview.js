@@ -129,3 +129,28 @@ test("CLI rejects unknown options and reports port conflicts without private pat
   const conflict = await run(["--exhibit", "stargate_solarpunk_astra", "--port", String(f.server.address().port)]);
   assert.equal(conflict.code, 1); assert.match(conflict.output, /port is already in use/); assert.ok(!conflict.output.includes(ROOT));
 });
+test("existing pilot launch commands use the shared security policy and PORT override", { timeout: 20000 }, async () => {
+  for (const [folder, file] of [["stargate_aetheric_telegraph", "server.js"], ["stargate_bathyscaphe_pilot", "server.js"], ["stargate_solarpunk_astra", "server.cjs"]]) {
+    const child = spawn(process.execPath, [file], { cwd: path.join(ROOT, folder), env: { ...process.env, PORT: "0" }, windowsHide: true });
+    const closed = new Promise(resolve => child.once("close", resolve));
+    try {
+      const url = await new Promise((resolve, reject) => {
+        let output = "";
+        const timer = setTimeout(() => reject(new Error(`Launcher timeout: ${folder}`)), 5000);
+        child.stdout.on("data", data => {
+          output += data;
+          const match = output.match(/http:\/\/127\.0\.0\.1:\d+/);
+          if (match) { clearTimeout(timer); resolve(match[0]); }
+        });
+        child.stderr.on("data", data => { clearTimeout(timer); reject(new Error(String(data))); });
+        child.once("error", error => { clearTimeout(timer); reject(error); });
+        child.once("close", () => { clearTimeout(timer); reject(new Error("Launcher exited before serving")); });
+      });
+      assert.deepEqual((await request(url)).body, fs.readFileSync(path.join(ROOT, folder, "index.html")));
+      assert.equal((await request(url, "/", "POST")).status, 405);
+      assert.equal((await request(url, "/" + file)).status, 403);
+      assert.equal((await request(url, "/../README.md")).status, 403);
+      assert.equal((await request(url, "/../stargate_bathyscaphe_pilot_fable/index.html")).status, 403);
+    } finally { child.kill(); await closed; }
+  }
+});

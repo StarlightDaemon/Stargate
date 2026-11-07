@@ -2,53 +2,15 @@
  * Automated Verification Suite for Imperial Aetheric Telegraph Terminal
  */
 
-const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
+const { startPreview, selectExhibit } = require('../scripts/preview.js');
 
-const PORT = 8420;
-const ROOT_DIR = __dirname;
 // Verification screenshots go to the gitignored test/ directory, never the
 // build root (STARGATE_BUILD_STANDARDS.md section 3).
 const OUT_DIR = process.env.STARGATE_TEST_OUTPUT || path.join(__dirname, 'test');
 fs.mkdirSync(OUT_DIR, { recursive: true });
-
-// Simple HTTP Server
-function createServer() {
-  const mimeTypes = {
-    '.html': 'text/html',
-    '.css': 'text/css',
-    '.js': 'application/javascript',
-    '.json': 'application/json',
-    '.png': 'image/png',
-    '.svg': 'image/svg+xml'
-  };
-
-  const server = http.createServer((req, res) => {
-    let reqPath = req.url === '/' ? '/index.html' : req.url.split('?')[0];
-    const filePath = path.join(ROOT_DIR, reqPath);
-
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('404 Not Found');
-        return;
-      }
-      const ext = path.extname(filePath).toLowerCase();
-      const contentType = mimeTypes[ext] || 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': contentType });
-      res.end(data);
-    });
-  });
-
-  return new Promise((resolve) => {
-    server.listen(PORT, () => {
-      console.log(`[TEST SERVER] Running on http://localhost:${PORT}`);
-      resolve(server);
-    });
-  });
-}
 
 // Real pointer dispatch helper via elementFromPoint
 async function clickAtRenderedCenter(page, selector) {
@@ -82,8 +44,8 @@ async function clickAtRenderedCenter(page, selector) {
 }
 
 async function runTestSuite() {
-  const server = process.env.STARGATE_TEST_URL ? { close() {} } : await createServer();
-  const baseUrl = process.env.STARGATE_TEST_URL || `http://localhost:${PORT}`;
+  const server = process.env.STARGATE_TEST_URL ? null : await startPreview({ ...selectExhibit('stargate_aetheric_telegraph'), port: 0 });
+  const baseUrl = process.env.STARGATE_TEST_URL || server.url;
   const testResults = [];
 
   function record(testName, passed, details = '') {
@@ -399,8 +361,7 @@ async function runTestSuite() {
   } finally {
     fs.writeFileSync(path.join(OUT_DIR, 'suite-results.json'), JSON.stringify(testResults, null, 2));
     if (browser) await browser.close();
-    // Leave server running or close if script finishes (we will keep dev server running separately)
-    server.close();
+    if (server) await server.close();
   }
 }
 

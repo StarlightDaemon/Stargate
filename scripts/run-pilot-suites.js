@@ -12,13 +12,18 @@ const suites = [
 ];
 async function runSuite(pilot, mode, output) {
   fs.mkdirSync(output, { recursive: true });
-  const preview = mode === "legacy" ? await legacy(pilot) : await startPreview({ ...selectExhibit(pilot.name), port: 0 });
+  try { require.resolve("puppeteer", { paths: [path.join(ROOT, pilot.name)] }); }
+  catch { return { exhibit: pilot.name, mode, status: "ENVIRONMENT-BLOCKED", error: "Install this exhibit's locked Puppeteer dependency with npm ci before running its original suite." }; }
+  const preview = mode === "command" ? null : mode === "legacy" ? await legacy(pilot) : await startPreview({ ...selectExhibit(pilot.name), port: 0 });
   try {
     return await new Promise(resolve => {
       const log = fs.createWriteStream(path.join(output, "suite.log"));
+      const env = { ...process.env, STARGATE_TEST_OUTPUT: output };
+      if (preview) env.STARGATE_TEST_URL = preview.url;
+      else delete env.STARGATE_TEST_URL;
       const child = spawn(process.execPath, [path.join(ROOT, pilot.name, pilot.script)], {
         cwd: path.join(ROOT, pilot.name), windowsHide: true,
-        env: { ...process.env, STARGATE_TEST_URL: preview.url, STARGATE_TEST_OUTPUT: output },
+        env,
         stdio: ["ignore", "pipe", "pipe"],
       });
       let timedOut = false;
@@ -29,15 +34,19 @@ async function runSuite(pilot, mode, output) {
       child.on("error", e => { error = e.message; });
       child.on("close", (code, signal) => {
         clearTimeout(timeout);
-        log.end(() => resolve({ exhibit: pilot.name, mode, status: code === 0 && !timedOut ? "PASS" : "FAIL", code, signal, timedOut, error, output: path.relative(ROOT, output) }));
+        log.end(() => {
+          const text = fs.readFileSync(path.join(output, "suite.log"), "utf8");
+          const summary = text.match(/VERIFICATION SUMMARY:.*|ALL 9 VERIFICATION TEST PHASES.*/g) || [];
+          resolve({ exhibit: pilot.name, mode, status: code === 0 && !timedOut ? "PASS" : "FAIL", code, signal, timedOut, error, summary, output: path.relative(ROOT, output) });
+        });
       });
     });
-  } finally { await preview.close(); }
+  } finally { if (preview) await preview.close(); }
 }
 async function main() {
   const output = path.join(ROOT, "test", "pilot-suites");
   const results = [];
-  for (const pilot of suites) for (const mode of ["legacy", "shared"]) {
+  for (const pilot of suites) for (const mode of ["legacy", "shared", "command"]) {
     const result = await runSuite(pilot, mode, path.join(output, `${pilot.name}-${mode}`));
     results.push(result); console.log(JSON.stringify(result));
   }

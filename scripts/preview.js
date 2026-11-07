@@ -147,8 +147,9 @@ async function main(args = process.argv.slice(2)) {
   process.once("SIGINT", close); process.once("SIGTERM", close);
   preview.server.on("error", () => { console.error("Preview server failed."); process.exitCode = 1; close(); });
 }
-if (require.main === module) main().catch(error => {
+function runCli(args) { return main(args).catch(error => {
   console.error(error.code === "EADDRINUSE" ? "Preview port is already in use." : error.code ? "Preview could not start; check the selected exhibit and local access." : error.message);
   process.exitCode = 1;
-});
-module.exports = { startPreview, selectExhibit, trackedAssets, publicAsset, requestPath };
+}); }
+if (require.main === module) runCli();
+module.exports = { startPreview, selectExhibit, trackedAssets, publicAsset, requestPath, runCli };

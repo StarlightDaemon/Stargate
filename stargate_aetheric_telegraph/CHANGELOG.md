@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   URL/output directory, enabling sandboxed Chrome, reporting failed assertions via
   exit status, and saving named assertion results. Shared-server rollout is under
   verification; automated results do not replace operator hands-on acceptance.
+- After both legacy/shared original-suite runs passed, replace the dedicated
+  server with a compatibility launcher (port 8420, PORT override) and remove the
+  harness's embedded serving implementation. The original suite now owns an
+  ephemeral shared preview unless an explicit test URL is supplied.
 
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 

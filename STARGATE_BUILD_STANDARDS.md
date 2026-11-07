@@ -237,8 +237,8 @@ exception is an explicitly-scoped security audit.
 ## 11. Shared maintenance tools
 
 Use [scripts/MAINTENANCE.md](scripts/MAINTENANCE.md) for the current preview and
-verification commands, report semantics and rollout gates. The shared server is
-opt-in while its three pilots await complete acceptance. Do not delete or replace
+verification commands, report semantics and rollout gates. The three pilot
+launchers now use shared serving; broader rollout awaits acceptance. Do not delete or replace
 an exhibit's server or weaken its specialized assertions merely because the
 shared handler tests pass. A metadata/resource report is not an interaction test
 or operator qualification. Record FAIL, SKIP, UNVERIFIED and ENVIRONMENT-BLOCKED

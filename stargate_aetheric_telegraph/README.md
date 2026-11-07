@@ -18,3 +18,12 @@ An interactive Victorian technical drafting instrument panel and glowing vector 
 node server.js
 ```
 Navigate to `http://localhost:8420`.
+
+The command now launches the repository's shared loopback-only preview server;
+keep this exhibit inside the Stargate checkout. `PORT` overrides 8420. Public
+tracked assets are served; development files and traversal requests are denied.
+Run `node run_tests.js` after installing this exhibit's locked dependencies with
+`npm ci`. The original suite starts and closes its own shared preview on a free
+port. `STARGATE_TEST_URL` can select an already-running test server.
+The 2026-11-07 cancellation repair and serving migration still require operator
+hands-on acceptance; the historical status note above does not qualify them.

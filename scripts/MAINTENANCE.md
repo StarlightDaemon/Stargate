@@ -6,11 +6,13 @@ never browser dependencies and are not copied into the Pages site.
 
 ## Current rollout status
 
-The shared server is opt-in. The three pilot exhibits are Aetheric Telegraph,
-Bathyscaphe Pilot and Solarpunk Astra. Their old servers and specialized tests
-are retained pending full HTTP, browser and interaction acceptance. No pilot
-package command has been redirected, and no gallery status has been changed.
-Do not treat this foundation as a completed server migration.
+The three pilots (Aetheric Telegraph, Bathyscaphe Pilot and Solarpunk Astra) now
+use shared serving through their existing server.js/server.cjs commands. Ports
+8420, 3000 and 4177 and PORT overrides are preserved. Keep the parent repository
+tools available for local preview. Their browser applications remain independent.
+The original Aetheric/Bathyscaphe assertions are retained; both suites now own
+ephemeral previews and close them when finished. No gallery status changed.
+Broader migration, merge and deployment remain gated on full acceptance.
 
 ## Preview one exhibit
 
@@ -43,6 +45,8 @@ Retired entries are deliberately excluded from preview selection.
 npm run verify
 npm run verify -- --exhibit stargate_bathyscaphe_pilot --http
 npm run verify -- --changed main --http --browser
+npm run verify -- --exhibit stargate_aetheric_telegraph --suites
+npm run test:pilots
 npm run test:preview
 ```
 
@@ -76,11 +80,16 @@ href/src/poster attributes, CSS url() values and relative JavaScript imports;
 it does not resolve arbitrary generated URLs, srcset, CSS escapes or all network
 calls. Keep browser and publication audits as separate requirements.
 
-The existing specialized suites are reported but not yet invoked through
-adapters. Aetheric's suite owns an embedded server; Bathyscaphe's suite expects
-port 3000. Their assertions must remain intact when those adapters are completed.
-Solarpunk's earlier interaction evidence is documented in its changelog; a
-new tracked adapter still needs to be prepared and qualified.
+--suites runs the original Aetheric and Bathyscaphe suites against shared serving.
+Install each exhibit's locked dependencies with npm ci first. Missing dependencies
+are ENVIRONMENT-BLOCKED; failed original assertions are FAIL. Other exhibits keep
+UNVERIFIED adapter entries. Logs/screenshots are saved beside the JSON report.
+test:pilots compares the original suites against historical/shared handlers and
+also exercises their self-hosting test commands. Historical handlers are loaded
+read-only from baseline commit 8c3f718c3e31cd19c169c7cf87ab2feeee7242c1; use a full
+checkout containing that commit. They are never restored as active launchers.
+Solarpunk has historical changelog evidence but no original tracked executable
+suite; check-pilot-browsers.js supplies current supplementary interaction evidence.
 
 The separate test:preview:handlers command tests request handlers without HTTP
 transport. It is supplementary evidence. It does not replace test:preview,
@@ -137,10 +146,12 @@ Chrome could not launch and npm DNS was unavailable. Those observations do not
 establish a product regression or excuse a passing HTTP/browser/security claim.
 Subsequent CI passed all 17 tooling tests on Linux and Windows, including real
 HTTP and filesystem-link rejection. Browser comparisons reproduced an existing
-Aetheric defect under both servers: cancelling during ignition leaves an
-uncancelled callback that restores ACTIVE with zero staged glyphs. Bathyscaphe
-and Solarpunk passed the supplementary interaction checks, with resource errors
-still reported. These results do not establish full pilot acceptance.
-Retain the old servers until the remaining gates pass. Their previously reproduced
-containment defects remain unresolved in the legacy commands while migration
-is on hold. No infrastructure file has been deleted during this foundation step.
+Aetheric defect under both servers: cancelling during ignition left an
+uncancelled callback that restored ACTIVE with zero staged glyphs. The continuation
+stores/clears that timer and checks state in its callback. Both original pilot
+suites passed against legacy/shared serving before their implementations were
+replaced. The compatibility launchers now use the tested shared security policy;
+Aetheric's embedded test server is removed. No server path was deleted.
+Browser checks retain the baseline Bathyscaphe/Solarpunk favicon 404 observations.
+They do not establish sound quality, visual or hands-on acceptance. Operator
+qualification, broader consolidation and publication remain on HOLD.

@@ -2,6 +2,17 @@
 
 All notable changes to the DSV-9 ARCHELON Bathyscaphe Pilot Console & Abyssal Gateway Interface will be documented in this file.
 
+## [Unreleased] — 2026-11-07 maintenance
+
+**Performed by:** GPT-6 Astra (high reasoning), not the original builder.
+- Replace duplicated serving with a shared secure-preview compatibility launcher;
+  preserve `npm run dev`, port 3000 and PORT override.
+- Preserve all original suite assertions. `npm test` now starts/closes an ephemeral
+  shared preview, accepts an explicit test URL/output directory, and keeps Chrome's
+  sandbox enabled. Baseline original suites passed against legacy/shared serving.
+- No display, dialing engine, storage, original attribution or version changes.
+  Operator acceptance of the migration remains pending.
+
 ## [1.0.0] - 2026-09-04 - Catalog maintenance pass (Claude sessions)
 
 **Performed by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04; NOT the original builder. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.

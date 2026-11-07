@@ -6,6 +6,7 @@
   "scripts": {
     "preview": "node scripts/preview.js",
     "verify": "node scripts/verify.js",
+    "test:pilots": "node scripts/run-pilot-suites.js",
     "test:preview": "node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-verification.js",
     "test:preview:handlers": "node --test --test-isolation=none scripts/test-preview-handlers.js",
     "gallery:generate": "node hub/generate.js",
