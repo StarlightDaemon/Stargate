@@ -11,7 +11,7 @@ const PORT = 8420;
 const ROOT_DIR = __dirname;
 // Verification screenshots go to the gitignored test/ directory, never the
 // build root (STARGATE_BUILD_STANDARDS.md section 3).
-const OUT_DIR = path.join(__dirname, 'test');
+const OUT_DIR = process.env.STARGATE_TEST_OUTPUT || path.join(__dirname, 'test');
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
 // Simple HTTP Server
@@ -82,7 +82,8 @@ async function clickAtRenderedCenter(page, selector) {
 }
 
 async function runTestSuite() {
-  const server = await createServer();
+  const server = process.env.STARGATE_TEST_URL ? { close() {} } : await createServer();
+  const baseUrl = process.env.STARGATE_TEST_URL || `http://localhost:${PORT}`;
   const testResults = [];
 
   function record(testName, passed, details = '') {
@@ -94,7 +95,7 @@ async function runTestSuite() {
   try {
     browser = await puppeteer.launch({
       headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu']
+      ...(process.env.PUPPETEER_EXECUTABLE_PATH ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH } : {})
     });
 
     const page = await browser.newPage();
@@ -105,7 +106,7 @@ async function runTestSuite() {
     // 1. Test 1080p Resolution & CSS Scale Transform
     console.log('\n--- TEST 1: 1080p Viewport Scaling & Layout ---');
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto(`http://localhost:${PORT}/index.html`, { waitUntil: 'networkidle0' });
+    await page.goto(`${baseUrl}/index.html`, { waitUntil: 'networkidle0' });
 
     const scale1080 = await page.evaluate(() => {
       const scaler = document.getElementById('app-scaler');
@@ -152,7 +153,7 @@ async function runTestSuite() {
     // Reset back to 1080p and reload for pristine interactive tests
     console.log('\n--- Resetting to 1080p for Interactive Cycles ---');
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto(`http://localhost:${PORT}/index.html`, { waitUntil: 'networkidle0' });
+    await page.goto(`${baseUrl}/index.html`, { waitUntil: 'networkidle0' });
     await new Promise(r => setTimeout(r, 200));
 
     // 3. Interactive Dial Cycle 1: Manual 7-Glyph Dial -> Safety Hold Lockout -> Cleared Ignition -> Disengage
@@ -389,10 +390,14 @@ async function runTestSuite() {
     console.log(`\n========================================`);
     console.log(`VERIFICATION SUMMARY: ${totalPassed} / ${testResults.length} TESTS PASSED`);
     console.log(`========================================\n`);
+    if (totalPassed !== testResults.length) process.exitCode = 1;
 
   } catch (err) {
     console.error('[FATAL ERROR IN TEST SUITE]', err);
+    testResults.push({ testName: 'Suite execution', passed: false, details: err.message });
+    process.exitCode = 1;
   } finally {
+    fs.writeFileSync(path.join(OUT_DIR, 'suite-results.json'), JSON.stringify(testResults, null, 2));
     if (browser) await browser.close();
     // Leave server running or close if script finishes (we will keep dev server running separately)
     server.close();

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Maintenance — 2026-11-07 (GPT-6 Astra, high reasoning)
+- Store and cancel the ignition transition timer on emergency vent; its callback
+  also checks that ignition is still current before restoring ACTIVE. This fixes
+  the reproduced return to ACTIVE with zero glyphs after cancelling during buildup.
+- Preserve the original verification assertions while accepting an explicit test
+  URL/output directory, enabling sandboxed Chrome, reporting failed assertions via
+  exit status, and saving named assertion results. Shared-server rollout is under
+  verification; automated results do not replace operator hands-on acceptance.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added

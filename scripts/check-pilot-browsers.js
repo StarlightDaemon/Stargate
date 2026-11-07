@@ -106,6 +106,15 @@ async function qualify(browser, pilot, mode) {
     if((await snapshot(page,pilot)).hold) await click(page,pilot.hold);
     await click(page,pilot.open); await delay(500); await click(page,pilot.stop); await delay(8250);
     result.cancelled=await snapshot(page,pilot); assert.equal(result.cancelled.state,pilot.idle); assert.equal(result.cancelled.count,0); await shot("cancelled");
+    if(pilot.kind === "aether") {
+      result.cancellationDetails = await page.evaluate(async () => {
+        const { soundEngine } = await import('./audio.js');
+        return { timer: window.terminalInstance.ignitionTimer,
+          beams: document.getElementById('active-conduit-energy-beams').children.length,
+          drone: Boolean(soundEngine.activeVortexDrone), governor: Boolean(soundEngine.activeGovernorWhirl) };
+      });
+      assert.deepEqual(result.cancellationDetails, {timer:null, beams:0, drone:false, governor:false});
+    }
     result.interactionAssertions="PASS";
   } catch(error) {result.interactionAssertions="FAIL";result.error=error.message;try{await shot("failure");}catch{}}
   finally {await context.close();await server.close();}
@@ -132,3 +141,4 @@ async function main() {
   console.log(`Pilot browser result: ${report.status}`);process.exitCode=report.status==="PASS"?0:1;
 }
 if(require.main===module)main().catch(error=>{console.error(error);process.exitCode=1;});
+module.exports = { legacy };

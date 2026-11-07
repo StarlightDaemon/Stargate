@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
-const SCREENSHOT_DIR = path.join(__dirname, 'screenshots');
+const SCREENSHOT_DIR = process.env.STARGATE_TEST_OUTPUT || path.join(__dirname, 'screenshots');
 if (!fs.existsSync(SCREENSHOT_DIR)) {
   fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
 }
@@ -18,7 +18,7 @@ async function runTestSuite() {
 
   const browser = await puppeteer.launch({
     headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
+    ...(process.env.PUPPETEER_EXECUTABLE_PATH ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH } : {})
   });
 
   try {
@@ -29,7 +29,7 @@ async function runTestSuite() {
     // -------------------------------------------------------------------------
     console.log('\n[TEST 1] Testing 1920x1080 Standard Viewport (Cold Start)...');
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto('http://127.0.0.1:3000', { waitUntil: 'networkidle0' });
+    await page.goto(process.env.STARGATE_TEST_URL || 'http://127.0.0.1:3000', { waitUntil: 'networkidle0' });
     await sleep(500);
 
     const scale1080 = await page.evaluate(() => {
@@ -394,7 +394,7 @@ async function runTestSuite() {
 
   } catch (err) {
     console.error('VERIFICATION SUITE ERROR:', err);
-    process.exit(1);
+    process.exitCode = 1;
   } finally {
     await browser.close();
   }

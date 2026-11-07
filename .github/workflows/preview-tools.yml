@@ -30,7 +30,7 @@ jobs:
 
   pilot-browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_aetheric_telegraph/node_modules/puppeteer
@@ -43,12 +43,19 @@ jobs:
         run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
       - name: Install existing locked browser-test dependency
         run: npm ci --prefix stargate_aetheric_telegraph
+      - name: Install Bathyscaphe's existing locked test dependency
+        run: npm ci --prefix stargate_bathyscaphe_pilot
+      - name: Run original builder suites against both servers
+        run: node scripts/run-pilot-suites.js
       - name: Compare pilot browser behavior with legacy and shared serving
+        if: ${{ !cancelled() }}
         run: node scripts/check-pilot-browsers.js
       - name: Preserve diagnostic evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: pilot-browser-evidence
-          path: test/pilot-browser/
+          path: |
+            test/pilot-browser/
+            test/pilot-suites/
           retention-days: 30
