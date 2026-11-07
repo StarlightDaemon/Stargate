@@ -5,6 +5,8 @@ All notable changes to The Loamwake Commons are documented here, following Keep 
 ## [Unreleased] — 2026-11-07 maintenance
 
 **Performed by:** GPT-6 Astra (high reasoning).
+- Reuse the existing root-union wordmark as a local SVG favicon, with an explicit
+  icon link so the browser no longer requests a missing favicon.ico.
 - Replace the duplicated static handler with a shared secure-preview launcher,
   preserving `node server.cjs`, port 4177 and PORT override. No client engine,
   display, storage or production dependency changes.

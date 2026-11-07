@@ -5,6 +5,9 @@ All notable changes to the DSV-9 ARCHELON Bathyscaphe Pilot Console & Abyssal Ga
 ## [Unreleased] — 2026-11-07 maintenance
 
 **Performed by:** GPT-6 Astra (high reasoning), not the original builder.
+- Add a local SVG instrument favicon and explicit icon link, resolving the
+  browser's missing favicon request without filtering network errors in tests.
+- Add the missing exhibit .gitignore for dependencies and verification output.
 - Replace duplicated serving with a shared secure-preview compatibility launcher;
   preserve `npm run dev`, port 3000 and PORT override.
 - Preserve all original suite assertions. `npm test` now starts/closes an ephemeral

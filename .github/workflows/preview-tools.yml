@@ -7,6 +7,21 @@ permissions:
   contents: read
 
 jobs:
+  dependency-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Prepare compatible security updates for review (no repository write)
+        working-directory: Stargate_OG
+        run: npm install --package-lock-only --ignore-scripts --save-dev --save-prefix='^' vite@8.3.3 vitest@4.1.12
+      - name: Return exact npm-generated candidate for review
+        working-directory: Stargate_OG
+        run: |
+          node -e 'const fs=require("node:fs"),z=require("node:zlib"); console.log("STARGATE_CANDIDATE="+z.gzipSync(Buffer.from(JSON.stringify({manifest:fs.readFileSync("package.json","utf8"),lock:fs.readFileSync("package-lock.json","utf8")}))).toString("base64"))'
   preview:
     strategy:
       fail-fast: false
