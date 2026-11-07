@@ -23,6 +23,12 @@ see is what actually exists.
 
 ## Structure
 
+Repository maintenance tools and their current rollout gates are described in
+[scripts/MAINTENANCE.md](scripts/MAINTENANCE.md). The opt-in `npm run preview --
+--exhibit EXACT_DIRECTORY` command serves one active static build; `npm run verify`
+reports checks and explicit verification gaps. Existing exhibit workflows remain
+available while the shared-server pilots await acceptance.
+
 - `hub/` - the gallery site itself: scans every build, generates
   the catalog, and renders it as a browsable grid.
 - `stargate_*/` - each individual build, self-contained and
