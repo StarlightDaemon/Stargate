@@ -113,6 +113,7 @@ const SKIP_ENTRIES = new Set([
 ]);
 
 const SKIP_FILES = new Set([
+  ".gitignore",
   "README.md",
   "CHANGELOG.md",
   "package.json",

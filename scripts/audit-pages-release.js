@@ -188,7 +188,7 @@ function checkSecurityAndSize() {
     const name = path.basename(file);
     const parent = path.dirname(relativeOutput(file));
     const isBuildRoot = !parent.includes("/") || parent.startsWith("_sequestered/") && parent.split("/").length === 2;
-    return ["README.md", "CHANGELOG.md", "package.json", "package-lock.json", "npm-shrinkwrap.json"].includes(name) ||
+    return [".gitignore", "README.md", "CHANGELOG.md", "package.json", "package-lock.json", "npm-shrinkwrap.json"].includes(name) ||
       isBuildRoot && /^(?:(?:test|verify|diag|audit)(?:[_-].*)?|.*[_-](?:test|spec)|run[_-]?tests?(?:[_-].*)?|server)\.(?:[cm]?js|ts|html)$/i.test(name);
   });
   if (developmentFiles.length) {

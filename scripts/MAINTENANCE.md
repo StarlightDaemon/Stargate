@@ -152,6 +152,28 @@ stores/clears that timer and checks state in its callback. Both original pilot
 suites passed against legacy/shared serving before their implementations were
 replaced. The compatibility launchers now use the tested shared security policy;
 Aetheric's embedded test server is removed. No server path was deleted.
-Browser checks retain the baseline Bathyscaphe/Solarpunk favicon 404 observations.
-They do not establish sound quality, visual or hands-on acceptance. Operator
+Bathyscaphe/Solarpunk now declare local SVG favicons. The 17 missing exhibit
+.gitignore files are added; Pages assembly excludes these development files and
+the release audit rejects any that leak into its output. Browser checks continue
+to fail on resource errors; none are filtered to obtain a pass.
+Automated checks do not establish sound quality, visual or hands-on acceptance. Operator
 qualification, broader consolidation and publication remain on HOLD.
+
+## Dependency reconciliation — 2026-11-07
+
+PR #9 explicitly incorporates PR #8's exact source-map-js 1.2.2 lock correction
+from e2e2374892c34d153aae02bdfed5b6738cec4404. This is reused work, not an
+independent fix. PR #8 remains open and unchanged; its eventual supersession
+needs an explicit disposition. PR #7 is stacked on #8 and contains accessibility
+changes, which are not copied here. Its release-audit file also changes, so
+review the combined audit diff before any later integration. PR #6 changes
+apiculture's proxy-addr dependency and is unrelated to the flagship findings.
+Neither #6 nor #7 is merged or modified by this campaign.
+
+The flagship's development minima are raised to Vite ^8.3.3 and Vitest ^4.1.12.
+Its npm-generated lock updates the matching Vitest family and Rolldown bindings;
+runtime dependencies are unchanged. The candidate was generated with npm in
+read-only hosted CI because local registry DNS is blocked, reviewed, then
+committed for fresh npm ci, audit, tests and build through the existing release
+workflow. Historical green PR checks are not current security qualification.
+Merge and deployment remain HOLD regardless of automated CI results.
