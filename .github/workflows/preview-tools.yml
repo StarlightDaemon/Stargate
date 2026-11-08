@@ -112,6 +112,27 @@ jobs:
           - target: bathyscaphe-regressions
             command: node scripts/check-bathyscaphe-regressions.js
             evidence: test/bathyscaphe-regressions/
+          - target: harness-celestial-astrolabe
+            command: node scripts/check-remaining-harnesses.js stargate_celestial_astrolabe
+            evidence: test/remaining-harnesses/stargate_celestial_astrolabe/
+          - target: harness-darkpool-router
+            command: node scripts/check-remaining-harnesses.js stargate_darkpool_router
+            evidence: test/remaining-harnesses/stargate_darkpool_router/
+          - target: harness-lumina-grove
+            command: node scripts/check-remaining-harnesses.js stargate_lumina_grove
+            evidence: test/remaining-harnesses/stargate_lumina_grove/
+          - target: harness-high-scifi
+            command: node scripts/check-remaining-harnesses.js stargate_high_scifi
+            evidence: test/remaining-harnesses/stargate_high_scifi/
+          - target: harness-aetheric-telegraph
+            command: node scripts/check-remaining-harnesses.js stargate_aetheric_telegraph
+            evidence: test/remaining-harnesses/stargate_aetheric_telegraph/
+          - target: harness-bibliographic-depository
+            command: node scripts/check-remaining-harnesses.js stargate_bibliographic_depository
+            evidence: test/remaining-harnesses/stargate_bibliographic_depository/
+          - target: harness-solarpunk-conservatory
+            command: node scripts/check-remaining-harnesses.js stargate_solarpunk_conservatory
+            evidence: test/remaining-harnesses/stargate_solarpunk_conservatory/
           - target: hub-loading
             command: node scripts/check-hub-loading.js
             evidence: test/hub-loading/

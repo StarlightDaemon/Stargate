@@ -26,7 +26,7 @@ function close(server) {
 }
 
 test("converted imported exhibit APIs retain native Server contracts and security", async t => {
-  for (const name of ["stargate_canopy_commons", "stargate_dark_gothic_fable", "stargate_nouveau_nimbus", "stargate_futurist_dynamism"]) {
+  for (const name of ["stargate_atompunk_fable", "stargate_canopy_commons", "stargate_dark_gothic_fable", "stargate_nouveau_nimbus", "stargate_futurist_dynamism"]) {
     const api = require(path.join(ROOT, name, "server.js"));
     let server;
     if (name === "stargate_futurist_dynamism") {
