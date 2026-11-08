@@ -2,6 +2,18 @@
 
 All notable changes to the DSV-9 ARCHELON Bathyscaphe Pilot Console & Abyssal Gateway Interface will be documented in this file.
 
+## [Unreleased] — 2026-11-08 confirmed-defect repairs
+
+### Fixed
+- Cancellation: disengage now resets the simulator to surface depth, zero velocity and consistent derived telemetry. Normal descent still uses the original physical integration. Pending preset, trim and ballast-settle callbacks are canceled and guarded; immediate redial cannot be overwritten by an old settle callback. Prior transient audio is stopped and the sustained resonance returns to its original ambient setting.
+- Telemetry: aperture captions, event text and operator help identify 11,800 m as the target rather than claiming immediate arrival. Saved aperture records retain the existing schema and target depth, with measured pressure and actual elapsed activation seconds replacing fixed values. The velocity label distinguishes ascent, descent and idle vertical rate.
+- Archives: category totals are calculated from the existing ten records (3 mission logs, 2 incidents, 3 anomalies, 2 crew journals). Saved Local Dives reflects persisted history on initialization and after successful saves, retaining the fifty-record cap and storage keys.
+
+### Verification and remaining gate
+- Deterministic checks execute the actual modules with controlled clocks: two full activations, six preset interruption timings, buildup interruption at 500 ms, immediate redial, and at least 8.25 seconds of idle observation after cancellation. Surface pressure is 1.01325 bar, depth/velocity remain zero, and only the two original ambient audio sources remain at the original 140 Hz filter setting.
+- The same checks cover measured activation records, all archive categories, persisted counter reload, the fifty-record cap, failed writes and invalid stored JSON. Evidence is written only under ignored test directories.
+- Real pointer/key browser verification and rerunning the unchanged original nine-phase suite are pending. The historical operator-testing status remains NONE; these repairs do not change the gallery status or grant final acceptance. The historical issue list below is retained as the original observation record.
+
 ## [Unreleased] — 2026-11-07 maintenance
 
 **Performed by:** GPT-6 Astra (high reasoning), not the original builder.

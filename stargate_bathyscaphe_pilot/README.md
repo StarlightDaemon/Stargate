@@ -2,7 +2,7 @@
 
 Themed, single-page "portal dialing" console: a deep-ocean submersible HUD for the fictional Hadal Exploration & Abyssal Research Consortium (HEARC). Version 1.0.0, originally built by Gemini 3.7 Flash (see `CHANGELOG.md`).
 
-**Persistence:** `localStorage` only, under `archelon_pilot_preferences_v1` (theme, density, motion, audio mute and the master/ballast/thruster/hull/drone volumes), `archelon_pilot_dives_v1` (the last 50 completed dives) and `archelon_pilot_viewed_archives_v1` (archive entries already opened). The session event log is in-memory only and resets on reload.
+**Persistence:** `localStorage` only, under `archelon_pilot_preferences_v1` (theme, density, motion, audio mute and the master/ballast/thruster/hull/drone volumes), `archelon_pilot_dives_v1` (the last 50 completed aperture-sequence records: planned target depth, measured pressure and elapsed activation time) and `archelon_pilot_viewed_archives_v1` (archive entries already opened). The session event log is in-memory only and resets on reload.
 
 ## Run
 
@@ -21,8 +21,8 @@ The serving migration does not change the display, engine or saved preferences.
 
 - **Dial control:** 8 depth waypoints (WP-1 .. WP-8, 850 m .. 11,800 m) in Cluster 01. Each click runs a 10-channel ballast/trim convergence and locks the waypoint. Keys `1`-`8` also work.
 - **Safety interlock:** Cluster 02 toggle, defaults to **RELEASED**. When engaged, the actuator is disabled and refuses clicks / `Space`.
-- **Activation:** with 8/8 locked the profile is **ARMED / PENDING** and never auto-fires. Pressing **COMMENCE DESCENT APERTURE** (or `Space`/`Enter`) runs three stages: BUILDUP (2.0 s) -> BREAKTHROUGH (0.8 s) -> SUSTAINED ACTIVE.
-- **Disengage:** **EMERGENCY ASCENT // BLOW ALL BALLAST** (or `Esc`) is always enabled; it clears all locks and returns to IDLE.
+- **Activation:** with 8/8 locked the profile is **ARMED / PENDING** and never auto-fires. Pressing **COMMENCE DESCENT APERTURE** (or `Space`/`Enter`) runs three stages: BUILDUP (2.0 s) -> BREAKTHROUGH (0.8 s) -> SUSTAINED ACTIVE. These are aperture stages; the physical depth continues to integrate toward the 11,800 m target and does not jump there on activation.
+- **Disengage:** **EMERGENCY ASCENT // BLOW ALL BALLAST** (or `Esc`) is always enabled; it clears all locks, cancels queued dialing and sounds, resets the simulation to surface depth and zero velocity, and returns to IDLE after the brief ballast-blow effect. This is a simulation reset, not a modeled ascent.
 - **Quick-dial presets:** `DIVE PRESETS` drawer (`P`), 3 Tier I + 3 Tier II profiles; replay locks waypoints progressively and lands in ARMED / PENDING.
 - **Tabs:** Piloting HUD, Vessel Engineering, Dive Archives, Telemetry Matrix, Session Log, Settings; `?` opens the operator manual.
 
@@ -42,4 +42,6 @@ The serving migration does not change the display, engine or saved preferences.
 
 **This is automated verification only. The operator has NOT personally clicked through this build.** Nothing here should be read as operator confirmation.
 
-Known issues found by that session and left unfixed (details in `CHANGELOG.md`): depth telemetry lags the "11,800 m" stage text by minutes; archive sidebar counts (32/12/8/7/5) are hard-coded while only 10 records exist; the "Saved Local Dives" counter never updates; `node_modules/` is committed with no `.gitignore`; no favicon.
+The historical issues and measurements remain recorded in `CHANGELOG.md`. The maintenance repairs distinguish target depth from actual depth, derive archive counts from the ten existing records, and refresh Saved Local Dives after successful saves and reload. Cancellation now clears pending preset/trim/settle work, restores surface telemetry, and resets active sound to its ambient state. The earlier infrastructure maintenance added the missing favicon and ignore rules.
+
+Focused regression command from the repository root: `node scripts/check-bathyscaphe-regressions.js` (`--offline` runs deterministic module checks only). The deterministic checks pass; real-browser verification of these repairs is pending. The original `npm test` suite remains unchanged. Gallery status and the operator acceptance gate remain unchanged.
