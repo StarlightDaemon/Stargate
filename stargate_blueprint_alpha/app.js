@@ -27,6 +27,7 @@
     pendingDraftTimers.forEach(timer => clearTimeout(timer));
     pendingDraftTimers.clear();
     state.isPlottingPlan = false;
+    window.blueprintAudio.cancelTransientWork();
   }
   function laterInDraft(callback, delay) {
     const generation = draftGeneration;
