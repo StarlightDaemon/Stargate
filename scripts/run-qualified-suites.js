@@ -16,10 +16,36 @@ function scanFindings(value, prefix = "", findings = []) {
   for (const [key, child] of Object.entries(value)) {
     const location = prefix ? prefix + "." + key : key;
     if ((key === "functionalAcceptance" || key === "functionalStatus") && typeof child === "string" && /^FAIL\b/.test(child)) findings.push({ kind: "functional", location, detail: child });
-    else if (key === "status" && child === "FAIL") findings.push({ kind: "assertion", location, detail: "Existing checker recorded FAIL" });
+    else if ((key === "status" || key === "originalSuiteStatus") && child === "FAIL") findings.push({ kind: "assertion", location, detail: "Existing checker recorded FAIL" });
     if (child && typeof child === "object") scanFindings(child, location, findings);
   }
   return findings;
+}
+const valueAt = (value, dotted) => dotted.split(".").reduce((value, key) => value?.[key], value);
+const evidenceStatus = value => ["PASS", "FAIL", "ENVIRONMENT-BLOCKED"].includes(value) ? value : "UNVERIFIED";
+function originalStatuses(document, rows, contract) {
+  if (!contract) return [];
+  const statuses = [];
+  if (Object.hasOwn(document, "originalSuiteStatus")) statuses.push({ location: "originalSuiteStatus", status: evidenceStatus(document.originalSuiteStatus) });
+  const sources = contract.at === "document" ? [document] : rows.filter(row => !contract.modes || contract.modes.includes(row.mode));
+  for (const source of sources) {
+    const location = (source.mode || "document") + "." + contract.path;
+    if (Object.hasOwn(source, "originalSuiteStatus")) { statuses.push({ location, status: evidenceStatus(source.originalSuiteStatus) }); continue; }
+    const value = valueAt(source, contract.path);
+    if (contract.kind === "status") statuses.push({ location, status: evidenceStatus(value) });
+    else if (contract.kind === "suite-array") {
+      if (!Array.isArray(value) || !value.length) { statuses.push({ location, status: "UNVERIFIED", reason: "Missing original suite results" }); continue; }
+      for (const suite of contract.suites) {
+        const matches = value.filter(item => item.suite === suite);
+        statuses.push({ location: location + ":" + suite, status: matches.length === 1 ? evidenceStatus(matches[0].status) : "UNVERIFIED", ...(matches.length === 1 ? {} : { reason: "Original suite result missing or duplicated" }) });
+      }
+    } else if (contract.kind === "assertion-log") {
+      const summaries = Array.isArray(value) ? value.map(line => String(line).match(new RegExp(contract.summary))).filter(Boolean) : [];
+      const status = summaries.length !== 1 ? "UNVERIFIED" : Number(summaries[0][2]) > 0 || value.some(line => /^\[FAIL\]/.test(line)) ? "FAIL" : Number(summaries[0][1]) > 0 ? "PASS" : "UNVERIFIED";
+      statuses.push({ location, status });
+    } else statuses.push({ location, status: "UNVERIFIED", reason: "Unknown original-suite evidence contract" });
+  }
+  return statuses;
 }
 function assessEvidence(document, spec, exhibit) {
   const errors = [], findings = [];
@@ -41,7 +67,7 @@ function assessEvidence(document, spec, exhibit) {
   }
   // Root original-suite results are current; historicalServe is intentionally not scanned.
   if (document.originalSuite) scanFindings(document.originalSuite, "originalSuite", findings);
-  return { errors, findings };
+  return { errors, findings, originalStatuses: originalStatuses(document, rows, spec.originalSuite) };
 }
 function stopOwnedChild(child) {
   if (!child.pid) return;
@@ -86,8 +112,8 @@ async function executeStep(step, output) {
   }
   return result;
 }
-function summarize(entry, executions) {
-  const errors = [], findings = [];
+function summarize(entry, executions, skippedSteps = []) {
+  const errors = [], findings = [], originalEvidence = [];
   let environmentBlocked = false;
   for (const execution of executions) {
     if (execution.spawnError) { environmentBlocked = ["EACCES", "EPERM", "ENOENT"].includes(execution.spawnError.code); errors.push(execution.spawnError.message); }
@@ -99,16 +125,21 @@ function summarize(entry, executions) {
       const assessment = assessEvidence(artifact.document, artifact, entry.exhibit);
       errors.push(...assessment.errors.map(error => artifact.source + ": " + error));
       findings.push(...assessment.findings.map(finding => ({ artifact: artifact.snapshot, ...finding })));
+      originalEvidence.push(...(assessment.originalStatuses || []).map(status => ({ artifact: artifact.snapshot, ...status })));
     }
   }
   const preservationStatus = errors.length ? environmentBlocked ? "ENVIRONMENT-BLOCKED" : "FAIL" : "PASS";
   const functionalStatus = findings.some(finding => finding.kind === "functional") ? "FAIL" : "UNVERIFIED";
   const assertionFailure = findings.some(finding => finding.kind === "assertion");
+  const originalSuiteStatus = originalEvidence.some(row => row.status === "FAIL") ? "FAIL"
+    : entry.scope === "supplementary-only" || !originalEvidence.length || originalEvidence.some(row => row.status !== "PASS") ? "UNVERIFIED" : "PASS";
+  const coverageStatus = skippedSteps.length ? "UNVERIFIED" : "PASS";
+  const failed = functionalStatus === "FAIL" || assertionFailure || originalSuiteStatus === "FAIL" || preservationStatus === "FAIL";
   return { exhibit: entry.exhibit, qualification: entry.qualification, scope: entry.scope,
-    status: functionalStatus === "FAIL" || assertionFailure ? "FAIL" : preservationStatus,
-    preservationStatus, originalSuiteStatus: entry.scope === "supplementary-only" ? "UNVERIFIED" : assertionFailure ? "FAIL" : preservationStatus,
-    functionalStatus, operatorStatus: "UNVERIFIED", acceptanceStatus: functionalStatus === "FAIL" || assertionFailure || preservationStatus === "FAIL" ? "FAIL" : "UNVERIFIED",
-    errors, findings, executions: executions.map(execution => ({ ...execution, artifacts: execution.artifacts.map(({ document, ...artifact }) => artifact) })) };
+    status: failed ? "FAIL" : preservationStatus === "ENVIRONMENT-BLOCKED" ? "ENVIRONMENT-BLOCKED" : originalSuiteStatus !== "PASS" || coverageStatus !== "PASS" ? "UNVERIFIED" : preservationStatus,
+    preservationStatus, originalSuiteStatus, coverageStatus, originalEvidence,
+    functionalStatus, operatorStatus: "UNVERIFIED", acceptanceStatus: failed ? "FAIL" : "UNVERIFIED",
+    errors, findings, skippedSteps, executions: executions.map(execution => ({ ...execution, artifacts: execution.artifacts.map(({ document, ...artifact }) => artifact) })) };
 }
 async function runQualifiedSuites(exhibits, options = {}) {
   // Cache is deliberately scoped to one sequential batch. Shared pilot checkers run once.
@@ -123,13 +154,14 @@ async function runQualifiedSuites(exhibits, options = {}) {
         reason: entry ? "Qualification pending; use includePending to execute its existing checker explicitly" : "No registered comparison checker" });
       continue;
     }
-    const executions = [];
+    const executions = [], skippedSteps = [];
     for (const step of entry.steps) {
+      if (step.qualification === "pending" && !options.includePending) { skippedSteps.push({ id: step.id, status: "UNVERIFIED", reason: "Ancillary checker qualification pending" }); continue; }
       const key = JSON.stringify([step.script, step.args]);
       if (!cache.has(key)) cache.set(key, await executeStep(step, path.join(output, step.id)));
       executions.push(cache.get(key));
     }
-    results.push(summarize(entry, executions));
+    results.push(summarize(entry, executions, skippedSteps));
   }
   const report = { scope: "Current-client suite preservation and bounded automated probes; full functional, visual, sound and operator acceptance remain separate", results, artifactDirectory: relative(output) };
   fs.writeFileSync(path.join(output, "report.json"), JSON.stringify(report, null, 2) + "\n");
@@ -152,4 +184,4 @@ async function main() {
   process.exitCode = report.results.some(result => result.status === "FAIL") ? 1 : report.results.some(result => result.status !== "PASS") ? 2 : 0;
 }
 if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
-module.exports = { runQualifiedSuites, runQualifiedSuite, assessEvidence, summarize };
+module.exports = { runQualifiedSuites, runQualifiedSuite, assessEvidence, summarize, executeStep };

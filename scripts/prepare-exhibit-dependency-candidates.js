@@ -75,8 +75,21 @@ function atLeast(value, floor) {
 }
 function verifyLock(folder, plan) {
   const lock = JSON.parse(fs.readFileSync(path.join(folder, "package-lock.json"), "utf8"));
-  assert.ok(lock.packages && lock.packages[""], "Modern npm lock with root entry required");
-  for (const section of SECTIONS) for (const name of SHARED) assert.ok(!lock.packages[""][section]?.[name], "No duplicate browser declaration remains");
+  const manifest = plan.candidate;
+  assert.ok(manifest && typeof manifest === "object", "Candidate manifest required to validate lock");
+  assert.ok([2, 3].includes(lock.lockfileVersion), "Modern npm lock version required");
+  assert.ok(lock.packages && typeof lock.packages === "object" && !Array.isArray(lock.packages), "Modern npm packages object required");
+  const rootEntry = lock.packages[""];
+  if (!rootEntry) {
+    assert.equal(Object.keys(lock.packages).length, 0, "Root omission only permitted for an empty lock graph");
+    assert.ok(SECTIONS.every(section => !Object.keys(manifest[section] || {}).length), "Root omission only permitted without dependency declarations");
+    assert.ok(!manifest.workspaces && !manifest.bundleDependencies && !manifest.bundledDependencies, "Root omission cannot conceal workspace or bundled dependencies");
+  }
+  if (lock.name !== undefined) assert.equal(lock.name, manifest.name || path.basename(folder), "Lock name must match manifest or npm's anonymous-directory name");
+  if (rootEntry?.name !== undefined && manifest.name !== undefined) assert.equal(rootEntry.name, manifest.name, "Root package name consistency");
+  if (lock.version !== undefined && manifest.version !== undefined) assert.equal(lock.version, manifest.version, "Lock version consistency");
+  if (rootEntry?.version !== undefined && manifest.version !== undefined) assert.equal(rootEntry.version, manifest.version, "Root package version consistency");
+  for (const section of SECTIONS) for (const name of SHARED) assert.ok(!rootEntry?.[section]?.[name], "No duplicate browser declaration remains");
   for (const [location, pkg] of Object.entries(lock.packages)) {
     for (const name of SHARED) assert.ok(!location.endsWith("node_modules/" + name), "No redundant browser/image package in exhibit lock");
     if (plan.changes.some(change => change.dependency === "express" && change.action === "remove-unused")) assert.ok(!location.endsWith("node_modules/express"), "Unused Express removed from lock");
@@ -153,7 +166,13 @@ function main(args = process.argv.slice(2)) {
           }
           item.audit = audit(folder); item.status = options.install ? "CANDIDATE_INSTALL_PASS" : "CANDIDATE_LOCK_PASS";
           if (options.emit) emit(name, folder);
-        } catch (error) { item.status = "FAIL"; item.error = error.message; }
+        } catch (error) {
+          item.status = "FAIL"; item.error = error.message;
+          try {
+            const lock = JSON.parse(fs.readFileSync(path.join(folder, "package-lock.json"), "utf8"));
+            item.failedLockShape = { name: lock.name, lockfileVersion: lock.lockfileVersion, packages: lock.packages && typeof lock.packages === "object" ? Object.keys(lock.packages).length : null, rootEntryPresent: Boolean(lock.packages?.[""]) };
+          } catch (lockError) { item.failedLockShape = { error: lockError.message }; }
+        }
       }
       item.files = Object.fromEntries(["package.json", "package-lock.json"].map(file => [file, { sha256: hash(path.join(folder, file)), bytes: fs.existsSync(path.join(folder, file)) ? fs.statSync(path.join(folder, file)).size : null }]));
       console.log("EXHIBIT_DEPENDENCY_CANDIDATE_RESULT " + JSON.stringify(item));
