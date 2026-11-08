@@ -156,6 +156,7 @@ async function state(page, name) {
     if (name === "stargate_cathedral_oculus") return { state: document.getElementById("telem-state").textContent.trim(), count: document.querySelectorAll(".triforium-slot.filled").length };
     if (name === "stargate_blueprint_drafting") return { state: document.getElementById("drawing-status").textContent.trim(), count: document.querySelectorAll("#address-buffer span").length };
     if (name === "stargate_seti_deepscope") return { state: window.deepScopeApp.state, count: window.deepScopeApp.lockedCarriers.length, slots: document.querySelectorAll("#register-slots .reg-slot.filled").length, cycling: window.deepScopeApp.isAutoDialing };
+    if (name === "stargate_seti_freeform") return { state: window.__APP__.systemState, count: window.__APP__.currentAddress.length, slots: document.querySelectorAll(".address-slot.filled").length, cycling: window.__APP__.isAutoDialing, dishActivity: document.querySelectorAll(".dish-card.scanning, .dish-card.locked, .dish-led.scanning, .dish-led.locked").length };
     const app = name === "stargate_mastering_suite" ? window.AxiomApp : name === "stargate_orthographic_cad" ? window.__STARGATE_CAD_APP.dialer
       : name === "stargate_radio_interferometry" ? window.__stargateConsole : name === "stargate_seti_deepscope" ? window.deepScopeApp : window.__APP__;
     return { state: app.state || app.systemState, count: (app.patchedChannels || app.currentAddress || app.address || app.lockedCarriers).length };
@@ -194,8 +195,38 @@ async function cancellation(browser, target, url, folder) {
       }
       await page.screenshot({ path: path.join(folder, "cancel-restart-regression.png") });
     }
+    if (target.name === "stargate_seti_freeform") {
+      const idle = { state: "IDLE", count: 0, slots: 0, cycling: false, dishActivity: 0 };
+      const manual = result.manualCancellation = { status: "FAIL", restarts: [] };
+      await click(page, "#candidate-btn-1"); await delay(100);
+      manual.before = await state(page, target.name);
+      await click(page, target.stop); manual.immediate = await state(page, target.name);
+      assert.deepEqual(manual.immediate, idle, "Manual cancellation immediately resets state/register/dishes");
+      await delay(8250); manual.after8250ms = await state(page, target.name);
+      assert.deepEqual(manual.after8250ms, idle, "Cancelled coincidence callbacks cannot restore carrier or dish visuals");
+      for (const [kind, cancelAfterMs] of [["manual", 25], ["preset", 100]]) {
+        await click(page, "#candidate-btn-1"); await delay(cancelAfterMs); await click(page, target.stop);
+        assert.deepEqual(await state(page, target.name), idle);
+        await click(page, kind === "manual" ? "#candidate-btn-2" : target.preset);
+        await page.waitForFunction(kind => kind === "manual"
+          ? window.__APP__.currentAddress.length === 1 && window.__APP__.currentAddress[0] === 2
+          : window.__APP__.systemState === "READY" && window.__APP__.currentAddress.length === 7 && !window.__APP__.isAutoDialing,
+        { timeout: 12000 }, kind);
+        const restarted = await state(page, target.name);
+        assert.equal(restarted.slots, kind === "manual" ? 1 : 7);
+        assert.equal(await page.evaluate(() => new Set(window.__APP__.currentAddress).size), kind === "manual" ? 1 : 7);
+        await click(page, target.stop); await delay(8250);
+        const after8250ms = await state(page, target.name); assert.deepEqual(after8250ms, idle);
+        manual.restarts.push({ kind, cancelAfterMs, restarted, after8250ms, status: "PASS" });
+      }
+      manual.status = "PASS";
+      await page.screenshot({ path: path.join(folder, "manual-cancel-restart-regression.png") });
+    }
     assert.deepEqual(result.pageErrors, []); result.status = "PASS";
-  } catch (error) { result.error = error.message; }
+  } catch (error) {
+    result.error = error.message;
+    if (result.manualCancellation?.status === "FAIL") result.functionalAcceptance = "FAIL: manual cancellation/restart regression: " + error.message;
+  }
   finally { await context.close(); }
   return result;
 }

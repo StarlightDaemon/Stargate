@@ -9,6 +9,9 @@ class TechnosignatureApp {
     this.verificationHoldEngaged = false; // MUST DEFAULT TO RELEASED
     this.isAutoDialing = false;
     this.autoDialTimer = null;
+    this.coincidenceGeneration = 0;
+    this.coincidenceIntervals = new Set();
+    this.coincidenceTimeouts = new Set();
     this.buildupTimer = null;
     this.activeDurationTimer = null;
     this.snrValue = 14.2;
@@ -361,8 +364,10 @@ class TechnosignatureApp {
   performCoincidenceCheck(candidateId, callback) {
     const dishes = DISH_CONFIG;
     let dishIdx = 0;
+    const generation = this.coincidenceGeneration;
 
     const interval = setInterval(() => {
+      if (generation !== this.coincidenceGeneration) return;
       if (dishIdx < dishes.length) {
         const dish = dishes[dishIdx];
         const card = document.getElementById(`dish-${dish.id}`);
@@ -375,19 +380,24 @@ class TechnosignatureApp {
 
         audioEngine.playDishSample();
 
-        setTimeout(() => {
+        const settleTimer = setTimeout(() => {
+          if (generation !== this.coincidenceGeneration) return;
+          this.coincidenceTimeouts.delete(settleTimer);
           if (card) card.classList.remove('scanning');
           if (card) card.classList.add('locked');
           if (led) led.className = 'dish-led locked';
           if (status) status.innerText = 'LOCKED';
         }, 120);
+        this.coincidenceTimeouts.add(settleTimer);
 
         dishIdx++;
       } else {
         clearInterval(interval);
+        this.coincidenceIntervals.delete(interval);
         callback(true);
       }
     }, 28);
+    this.coincidenceIntervals.add(interval);
   }
 
   updateSlotUI(slotIdx, candidate) {
@@ -574,6 +584,12 @@ class TechnosignatureApp {
 
   // Disengage / Reset Method (Always reachable)
   disengage(playAudio = true) {
+    // Invalidate old manual-verification callbacks before resetting their UI/state.
+    this.coincidenceGeneration++;
+    for (const interval of this.coincidenceIntervals) clearInterval(interval);
+    for (const timeout of this.coincidenceTimeouts) clearTimeout(timeout);
+    this.coincidenceIntervals.clear();
+    this.coincidenceTimeouts.clear();
     if (this.isAutoDialing) {
       clearInterval(this.autoDialTimer);
       this.isAutoDialing = false;

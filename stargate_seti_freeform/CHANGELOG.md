@@ -1,5 +1,12 @@
 # Changelog
 
+## Manual cancellation repair — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Own and invalidate manual coincidence intervals and dish-settle callbacks on disengage. Before the fix, cancelling after 100 ms returned to IDLE immediately but stale work restored DIALING with one carrier after 8.25 seconds.
+- Preserve the original 28 ms dish cadence, 120 ms settle delay, seven-carrier sequence and original test assertions. Deterministic regressions cover concurrent checks, stale callback delivery, manual/preset restart and ordinary completion; real browser regressions remain independently reported.
+- The historical fixed-350 ms manual test failure remains separate from this confirmed cancellation repair. No operator or release acceptance is claimed.
+
 ## Maintenance — 2026-11-08
 
 **Maintained by:** Codex maintenance session.
