@@ -200,12 +200,16 @@ async function cancellation(browser, target, url, folder) {
       const manual = result.manualCancellation = { status: "FAIL", restarts: [] };
       await click(page, "#candidate-btn-1"); await delay(100);
       manual.before = await state(page, target.name);
+      assert.equal(manual.before.count, 0, "Manual cancellation begins before any carrier commits");
+      assert.ok(await page.evaluate(() => window.__APP__.coincidenceIntervals.size > 0), "Manual coincidence scan is actually pending before cancellation");
       await click(page, target.stop); manual.immediate = await state(page, target.name);
       assert.deepEqual(manual.immediate, idle, "Manual cancellation immediately resets state/register/dishes");
       await delay(8250); manual.after8250ms = await state(page, target.name);
       assert.deepEqual(manual.after8250ms, idle, "Cancelled coincidence callbacks cannot restore carrier or dish visuals");
       for (const [kind, cancelAfterMs] of [["manual", 25], ["preset", 100]]) {
-        await click(page, "#candidate-btn-1"); await delay(cancelAfterMs); await click(page, target.stop);
+        await click(page, "#candidate-btn-1"); await delay(cancelAfterMs);
+        assert.ok(await page.evaluate(() => window.__APP__.coincidenceIntervals.size > 0), "Restart race cancels an in-flight manual scan");
+        await click(page, target.stop);
         assert.deepEqual(await state(page, target.name), idle);
         await click(page, kind === "manual" ? "#candidate-btn-2" : target.preset);
         await page.waitForFunction(kind => kind === "manual"
