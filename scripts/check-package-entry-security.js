@@ -100,9 +100,10 @@ async function runSuite(browser, target, suite, url, folder) {
   const format = values => values.map(value => value?.stack || (typeof value === "object" ? JSON.stringify(value) : String(value))).join(" ");
   const log = { log: (...values) => lines.push(format(values)), warn: (...values) => lines.push(format(values)), error: (...values) => { errors.push(format(values)); lines.push(format(values)); } };
   const processAdapter = { env: process.env, cwd: () => path.join(ROOT, target.name), exitCode: 0, exit(code) { this.exitCode = code; throw new Error("Original process.exit(" + code + ")"); } };
-  const puppeteer = { executablePath: () => process.env.PUPPETEER_EXECUTABLE_PATH, launch: async () => ({
+  const puppeteer = { executablePath: () => process.env.PUPPETEER_EXECUTABLE_PATH, launch: async (options = {}) => ({
     async newPage() {
       const page = await context.newPage(), screenshot = page.screenshot.bind(page);
+      if (options.defaultViewport != null) await page.setViewport(options.defaultViewport);
       if (target.name === "stargate_seti_freeform") {
         // Reuse the diagnosed load/observed-network-idle adapter from the 57-page
         // gate. Preserve the original 15s total deadline and every test assertion.
