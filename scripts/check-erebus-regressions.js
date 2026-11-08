@@ -105,7 +105,7 @@ async function run(browser, url, baseline) {
           await page.waitForFunction(count => sequence.length === count && !isBusy, { timeout: 4000 }, symbol + 1);
         }
         await pending([0, 1, 2, 3]); await click(page, "#engage-btn");
-        await page.waitForFunction(() => isConnected && !isBusy, { timeout: 5000 });
+        await page.waitForFunction(() => isConnected && !isBusy && !document.body.classList.contains("breakthrough-flash"), { timeout: 5000 });
         await click(page, "#engage-btn"); await page.waitForFunction(() => !isConnected && !isBusy && sequence.length === 0);
         result.checks.push("Manual explicit activation/disconnect cycle " + (cycle + 1));
       }
@@ -114,7 +114,7 @@ async function run(browser, url, baseline) {
       await click(page, "#engage-btn"); await page.waitForFunction(() => document.getElementById("surface").classList.contains("rejected"));
       await click(page, "#engage-btn"); await click(page, ".lockout-toggle");
       await click(page, ".quick-dial-btn:nth-child(3)"); result.afterRejection = await pending([4, 5, 6, 7]);
-      await click(page, "#engage-btn"); await page.waitForFunction(() => isConnected && !isBusy);
+      await click(page, "#engage-btn"); await page.waitForFunction(() => isConnected && !isBusy && !document.body.classList.contains("breakthrough-flash"));
       await click(page, "#engage-btn"); result.finalIdle = await stableIdle();
     }
     // Audio ownership probe is separate from the real-pointer workflow above.
@@ -131,7 +131,16 @@ async function run(browser, url, baseline) {
     assert.equal(result.audioReplacement.retained, !baseline);
     if (!baseline) assert.equal(result.audioReplacement.oldEnded, true);
     assert.deepEqual(result.errors, []); result.status = "PASS";
-  } catch (error) { result.status = "FAIL"; result.error = error.stack; }
+  } catch (error) {
+    result.status = "FAIL"; result.error = error.stack;
+    result.pointerDiagnostic = await page.evaluate(() => {
+      const control = document.getElementById("engage-btn"), box = control.getBoundingClientRect();
+      const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+      return { bodyClass: document.body.className, bodyHeight: document.body.getBoundingClientRect().height,
+        control: { x: box.x, y: box.y, width: box.width, height: box.height, disabled: control.disabled },
+        hit: hit ? { tag: hit.tagName, id: hit.id, className: hit.className } : null };
+    }).catch(() => null);
+  }
   finally { await context.close(); }
   return result;
 }

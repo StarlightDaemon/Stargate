@@ -32,8 +32,20 @@ async function originalSuite(browser, url, mode) {
         error: (...v) => lines.push(v.map(String).join(" ")) });
     fs.writeFileSync(path.join(folder, "results.json"), JSON.stringify(values, null, 2));
     assert.deepEqual(Object.keys(values).sort(), [...EXPECTED].sort(), "All original predicates must execute");
-    for (const name of EXPECTED) assert.equal(values[name], true, "Original assertion: " + name);
-    return { status: "PASS", assertions: values, note: "Original harness records booleans without failing exit; adapter enforces all twelve." };
+    for (const name of EXPECTED.filter(name => name !== "cornerAttributionValid")) assert.equal(values[name], true, "Original assertion: " + name);
+    // The retained suite pins the old displayed version. Keep that result visible,
+    // then enforce the identical attribution checks against current metadata.
+    const cornerLine = lines.find(line => line.startsWith("Corner Attribution: "));
+    assert.ok(cornerLine, "Original attribution observation must execute");
+    const corner = JSON.parse(cornerLine.slice("Corner Attribution: ".length));
+    const version = JSON.parse(fs.readFileSync(path.join(DIR, "version.json"), "utf8")).version;
+    assert.equal(corner.attrHref, "https://github.com/StarlightDaemon");
+    assert.equal(corner.attrText, "StarlightDaemon"); assert.ok(corner.attrRel.includes("noopener"));
+    assert.equal(corner.version, "v" + version, "Displayed version must match current metadata");
+    assert.equal(values.cornerAttributionValid, corner.version === "v1.1.0", "Historical predicate remains unchanged");
+    return { status: values.cornerAttributionValid ? "PASS" : "FAIL", assertions: values,
+      currentMetadataContract: { status: "PASS", observed: corner, expectedVersion: "v" + version },
+      note: "Original twelve predicates retained; old literal v1.1.0 mismatch remains FAIL. Current metadata and unchanged attribution are independently enforced." };
   } finally { fs.writeFileSync(path.join(folder, "run.log"), lines.join("\n")); await context.close(); }
 }
 async function qualify(browser, mode) {
@@ -119,7 +131,8 @@ async function qualify(browser, mode) {
     await shot("cancelled");
     result.metadataObservation = await page.$eval("#corner-version", el => el.textContent.trim());
     result.metadataVersion = JSON.parse(fs.readFileSync(path.join(DIR, "version.json"))).version;
-    result.acceptance = "Preservation only: displayed version and metadata differ; favicon/resource findings retained. Full operator, sound and three-stage visual acceptance not established.";
+    assert.equal(result.metadataObservation, "v" + result.metadataVersion);
+    result.acceptance = "Current metadata alignment and preservation checked. Historical version-literal FAIL retained; full operator and sound acceptance not established.";
     assert.deepEqual(result.pageErrors, []);
     result.status = "PASS";
     return result;
