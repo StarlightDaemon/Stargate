@@ -13,3 +13,13 @@ An interactive portal-dialing interface built in the artistic register of **Bauh
 - **Safety Interlock:** *Vector Interference Interlock (Detent 08)* defaulting to `RELEASED`, providing unmissable hazard feedback when engaged.
 - **Functionalist Audio Synthesis:** Web Audio API procedural sound engine generating mechanical detents, squeegee friction sweeps, heavy platen clamp thuds, and industrial motor drone.
 - **Responsive Viewport:** Master 1920x1080 design scaling dynamically to 4K (3840x2160) without scrolling.
+
+
+## Shared local preview
+
+Run `node server.js` from this exhibit directory. The compatibility launcher uses
+the repository shared server at `http://127.0.0.1:8088`; `PORT` overrides the port.
+Only tracked public assets are served; development files and unsupported methods
+are denied. Keep the exhibit inside this repository. Original verification suites
+and client behavior remain independently qualified; security migration does not
+assert new operator acceptance.
