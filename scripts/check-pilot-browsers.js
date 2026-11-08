@@ -41,7 +41,7 @@ function legacy(pilot) {
     const source = execFileSync("git", ["show", `8c3f718c3e31cd19c169c7cf87ab2feeee7242c1:${pilot.name}/${pilot.server}`], { cwd: ROOT, encoding: "utf8" });
     vm.runInNewContext(source, {
       require: name => /^(?:node:)?http$/.test(name) ? intercepted : require(name),
-      __dirname: directory, process: { env: {} }, console: { log() {} }, URL,
+      __dirname: path.dirname(path.join(directory, pilot.server)), process: { env: {} }, console: { log() {} }, URL,
     }, { filename: pilot.server });
   });
 }
