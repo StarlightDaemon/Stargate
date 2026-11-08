@@ -5,6 +5,23 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { metadata, staticReferences, parseArgs } = require("./verify.js");
 const base = path.resolve(__dirname, "../test"); fs.mkdirSync(base, { recursive: true });
+
+test("browser load waits for both readiness signals within one unchanged deadline", async () => {
+  const { loadPage } = require("./browser-load.js");
+  let clock = 100, idle;
+  const response = { status: () => 200 };
+  const page = {
+    async goto(url, options) { assert.equal(url, "http://fixture/"); assert.deepEqual(options, { waitUntil: "load", timeout: 15000 }); clock += 900; return response; },
+    async waitForNetworkIdle(options) { idle = options; }
+  };
+  assert.equal(await loadPage(page, "http://fixture/", 15000, () => clock), response);
+  assert.deepEqual(idle, { idleTime: 500, timeout: 14100 });
+  page.goto = async () => { clock += 15001; return response; };
+  await assert.rejects(loadPage(page, "http://fixture/", 15000, () => clock), /exhausted/);
+  page.goto = async () => response;
+  page.waitForNetworkIdle = async () => { throw new Error("still requesting"); };
+  await assert.rejects(loadPage(page, "http://fixture/", 15000, () => clock), /still requesting/);
+});
 test("reference audit catches missing, case-mismatched and escaping assets while decoding valid paths", () => {
   const root = fs.mkdtempSync(path.join(base, "references-"));
   fs.writeFileSync(path.join(root, "index.html"), '<script src="app.js"></script><img src="hello%20world.svg"><link href="style.css"><a href="#section">Section</a>');

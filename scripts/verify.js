@@ -144,7 +144,7 @@ async function main(args = process.argv.slice(2)) {
               page.on("response", r => { if (r.status() >= 400) errors.push(`${r.url()}: HTTP ${r.status()}`); });
               await page.setViewport({ width: 1920, height: 1080 });
               let response, navigationError;
-              try { response = await page.goto(preview.url, { waitUntil: "networkidle0", timeout: 15000 }); }
+              try { response = await require("./browser-load.js").loadPage(page, preview.url); }
               catch (error) { navigationError = error.message; }
               record(item.checks, "browser-load", navigationError || errors.length || response?.status() !== 200 ? "FAIL" : "PASS",
                 { errors, status: response?.status(), navigationError, pendingRequests: [...pending].map(url => url.replace(preview.url, "ORIGIN")), viewport: "1920x1080", qualification: "initial loading only; each exhibit uses an isolated browser context" });
