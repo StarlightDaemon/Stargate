@@ -180,14 +180,15 @@ async function qualify(name) {
     fs.mkdirSync(path.join(folder, "built"), { recursive: true });
     result.cancellation = await cancellation(browser, target, built.url, path.join(folder, "built"));
     result.originalSuiteStatus = result.suites.every(suite => suite.status === "PASS") ? "PASS" : "FAIL";
-    assert.equal(result.originalSuiteStatus, "PASS", "Full original suite against built artifact");
-    assert.equal(result.cancellation.status, "PASS");
-    assert.ok(!result.cancellation.functionalAcceptance?.startsWith("FAIL"), "Built-artifact cancellation remains functional");
     await built.stop(); fs.writeFileSync(path.join(folder, "preview.log"), built.output()); built = undefined;
     const rebound = http.createServer();
     await new Promise((resolve, reject) => { rebound.once("error", reject); rebound.listen(4173, "127.0.0.1", resolve); });
     await new Promise(resolve => rebound.close(resolve)); result.portReleased = "PASS";
     assert.deepEqual(Object.fromEntries(Object.keys(before).map(file => [file, crypto.createHash("sha256").update(fs.readFileSync(path.join(cwd, file))).digest("hex")])), before, "Commands, locks and original suites unchanged");
+    // Known original failures must not suppress independent shutdown/integrity proof.
+    assert.equal(result.originalSuiteStatus, "PASS", "Full original suite against built artifact");
+    assert.equal(result.cancellation.status, "PASS");
+    assert.ok(!result.cancellation.functionalAcceptance?.startsWith("FAIL"), "Built-artifact cancellation remains functional");
     result.status = "PASS";
   } catch (error) { result.error = error.stack; }
   finally {
