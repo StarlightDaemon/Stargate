@@ -14,7 +14,9 @@ NIGHTGLASS is a purely decorative, fully client-side novelty website: the privat
 npm run serve
 ```
 
-Then open `http://localhost:8637`. The page is a single 1920×1080 stage that scales itself cleanly from small windows up through 3840×2160.
+Then open `http://127.0.0.1:8637` (or set `PORT` to choose another port). The page is a single 1920×1080 stage that scales itself cleanly from small windows up through 3840×2160.
+
+`serve.js` delegates to the repository's shared preview server. It binds to loopback, serves the tracked public assets, rejects unsupported methods, and keeps development files private. Launch it from this repository checkout; no build step is required.
 
 ## The fiction
 

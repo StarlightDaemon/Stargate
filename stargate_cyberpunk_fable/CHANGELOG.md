@@ -25,6 +25,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a local SVG favicon using the existing palette and lattice spire motif,
   with an explicit HTML icon link to prevent the missing favicon request.
 
+### Development server consolidation — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the duplicate `serve.js` handler with the shared loopback preview launcher, retaining `npm run serve` and default port 8637. `PORT` can select another port.
+- Development sources, tests, package metadata and documentation are no longer served; unsupported methods return 405, and malformed URLs return 400 instead of throwing from the handler.
+- Before replacement, hosted qualification job `128822958190` compared all 10 tracked public assets byte-for-byte through the original and shared handlers. The unchanged original harness passed all 42 assertions in both modes, including pointer interaction, pending/manual approval, three activation stages, cancellation, persistence, telemetry and 4K controls. Shared-stage screenshots were reviewed. Original handler security probes returned development files and accepted POST; shared probes returned 403/405.
+- Client behavior, artwork, original test predicates, release version and original attribution are unchanged. Campaign merge and deployment remain on HOLD.
+
 ## [1.0.0] — 2026-09-01
 
 **Built by:** Claude Fable 5 (model id `claude-fable-5`). Reasoning level was not recorded at build time.
