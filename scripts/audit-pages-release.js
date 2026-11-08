@@ -189,7 +189,7 @@ function checkSecurityAndSize() {
     const parent = path.dirname(relativeOutput(file));
     const isBuildRoot = !parent.includes("/") || parent.startsWith("_sequestered/") && parent.split("/").length === 2;
     return [".gitignore", "README.md", "CHANGELOG.md", "package.json", "package-lock.json", "npm-shrinkwrap.json"].includes(name) ||
-      isBuildRoot && /^(?:(?:test|verify|diag|audit)(?:[_-].*)?|.*[_-](?:test|spec)|run[_-]?tests?(?:[_-].*)?|server)\.(?:[cm]?js|ts|html)$/i.test(name);
+      isBuildRoot && /^(?:(?:test|verify|diag|audit)(?:[_-].*)?|.*[_-](?:test|spec)|run[_-]?tests?(?:[_-].*)?|(?:dev-)?serve(?:r)?)\.(?:[cm]?js|ts|html)$/i.test(name);
   });
   if (developmentFiles.length) {
     fail(`Development-only files shipped: ${developmentFiles.map(relativeOutput).join(", ")}`);

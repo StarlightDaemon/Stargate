@@ -22,7 +22,7 @@ const TYPES = Object.freeze({
 });
 const PRIVATE_DIRS = new Set(["node_modules", "test", "tests", "verify", "scripts", "screenshots",
   "test_screenshots", "test_artifacts", "test-artifacts", "coverage"]);
-const PRIVATE_FILES = /^(?:readme(?:\..*)?|changelog(?:\..*)?|license(?:\..*)?|package(?:-lock)?\.json|npm-shrinkwrap\.json|.*\.lock|.*\.log|.*\.(?:pem|key|crt)|(?:dev-)?server\.[cm]?js|(?:test|verify|diag|audit)(?:[_-].*)?\.[cm]?js|.*[_-](?:test|spec)\.[cm]?js|run[_-]?tests?(?:[_-].*)?\.[cm]?js)$/i;
+const PRIVATE_FILES = /^(?:readme(?:\..*)?|changelog(?:\..*)?|license(?:\..*)?|package(?:-lock)?\.json|npm-shrinkwrap\.json|.*\.lock|.*\.log|.*\.(?:pem|key|crt)|(?:dev-)?serve(?:r)?\.[cm]?js|(?:test|verify|diag|audit)(?:[_-].*)?\.[cm]?js|.*[_-](?:test|spec)\.[cm]?js|run[_-]?tests?(?:[_-].*)?\.[cm]?js)$/i;
 function within(root, file) {
   const rel = path.relative(root, file);
   return rel !== "" && rel !== ".." && !rel.startsWith(`..${path.sep}`) && !path.isAbsolute(rel);

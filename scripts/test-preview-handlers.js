@@ -19,7 +19,7 @@ function dispatch(preview, url, method = "GET", host = new URL(preview.url).host
   });
 }
 test("offline URL validation preserves raw traversal evidence", () => {
-  for (const p of ["/../index.html", "/%2e%2e/index.html", "/a/../../index.html", "/server.js", "/server.cjs", "/.git/config", "/package-lock.json", "/test/report.json"]) assert.equal(requestPath(p).status, 403, p);
+  for (const p of ["/../index.html", "/%2e%2e/index.html", "/a/../../index.html", "/server.js", "/server.cjs", "/serve.js", "/dev-serve.cjs", "/.git/config", "/package-lock.json", "/test/report.json"]) assert.equal(requestPath(p).status, 403, p);
   for (const p of ["/%ZZ", "/%2e%2e%2findex.html", "/%252e%252e/index.html", "/%5cindex.html", "/%00.js", "http://example/index.html"]) assert.equal(requestPath(p).status, 400, p);
 });
 for (const exhibit of ["stargate_aetheric_telegraph", "stargate_bathyscaphe_pilot", "stargate_solarpunk_astra", "stargate_erebus_signal", "stargate_reactor_criticality", "stargate_blueprint_alpha", "stargate_synchrotron_collider", "stargate_sigint_cryptanalysis", "stargate_konstrukt_transit", "stargate_epigraphic_spectrometry", "stargate_genomic_sequencer", "stargate_windtunnel_aerodynamics"]) {
