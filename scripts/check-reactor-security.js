@@ -74,7 +74,13 @@ async function qualify(browser, mode) {
         await shot("ready");
         await click(page, "#rps-toggle-btn");
         assert.equal((await snapshot()).hold, true);
-        assert.equal(await page.$eval("#activate-criticality-btn", el => el.disabled), true);
+        // The existing UI leaves activation enabled and rejects it with an alert.
+        let warning;
+        page.once("dialog", async dialog => { warning = dialog.message(); await dialog.accept(); });
+        await click(page, "#activate-criticality-btn");
+        assert.match(warning || "", /RPS.*HOLD ACTIVE/);
+        await delay(500); await waitState("PENDING");
+        result.interlock = { blockedActivation: true, warning };
         await click(page, "#rps-toggle-btn");
       }
       assert.equal(await page.$eval("#activate-criticality-btn", el => el.disabled), false);
