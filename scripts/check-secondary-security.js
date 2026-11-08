@@ -33,6 +33,30 @@ function probes(target) {
   if (target.suites.length) out.push(["GET", "/" + target.suites[0], target.suites[0]], ["GET", "/package.json", "package.json"]);
   return out;
 }
+function replayCancellationRegression() {
+  const scheduled = new Map(); let nextTimer = 0, address = [];
+  const window = { Portal: { getState: () => "IDLE" }, HearthDial: {
+    clearDial() { window.App.cancelAutoDial(); address = []; },
+    dialSymbol(symbol) { address.push(symbol); }
+  } };
+  const app = vm.runInNewContext(fs.readFileSync(path.join(ROOT, "stargate_lowmagic_gemini/js/app.js"), "utf8") + "\nnew RushlightApp();", {
+    window, document: { addEventListener() {} },
+    setInterval(fn) { const timer = ++nextTimer; scheduled.set(timer, fn); return timer; },
+    clearInterval(timer) { scheduled.delete(timer); }
+  });
+  window.App = app;
+  app.startSequentialAutoDial(["old-1", "old-2"]);
+  const queuedOldTick = scheduled.get(app.autoDialTimer); queuedOldTick(); assert.deepEqual(address, ["old-1"]);
+  app.cancelAutoDial(); assert.equal(scheduled.size, 0); assert.equal(app.autoDialTimer, null);
+  window.HearthDial.clearDial(); app.startSequentialAutoDial(["new-1", "new-2"]);
+  const newTimer = app.autoDialTimer, queuedNewTick = scheduled.get(newTimer);
+  queuedOldTick(); assert.deepEqual(address, []); assert.equal(app.autoDialTimer, newTimer);
+  queuedNewTick(); assert.deepEqual(address, ["new-1"]);
+  window.HearthDial.clearDial(); queuedNewTick(); assert.deepEqual(address, []); assert.equal(scheduled.size, 0);
+  app.startSequentialAutoDial(["last-1", "last-2"]); const lastTick = scheduled.get(app.autoDialTimer);
+  lastTick(); lastTick(); lastTick(); assert.deepEqual(address, ["last-1", "last-2"]); assert.equal(scheduled.size, 0);
+  return { status: "PASS", checks: "Cancelled, replaced, and completed replay callbacks cannot append stale symbols or clear a newer interval." };
+}
 async function offline(target) {
   let fn, binding;
   handler(target, f => { fn = f; return { listen(...args) { binding = args.slice(0, -1); } }; });
@@ -87,7 +111,7 @@ function artifactIO(target, folder) {
   } };
 }
 async function emitVisuals(context, folder, target, suite) {
-  const files = fs.readdirSync(folder, { recursive: true }).filter(file => /(?:cold_start|stage[123]?[_-]|buildup|breakthrough|sustained).*\.png$/.test(file) && !/4k/i.test(file));
+  const files = fs.readdirSync(folder, { recursive: true }).filter(file => /(?:cold_start|stage[123]?[_-]|pending|buildup|breakthrough|sustained|active).*\.png$/.test(file) && !/4k/i.test(file));
   const page = await context.newPage();
   for (const file of files.slice(0, 8)) {
     const data = await page.evaluate(async base64 => {
@@ -193,9 +217,33 @@ async function lowmagic(browser, url, folder, mode) {
     await click(page, "#btn-snuff-portal"); await delay(8250); result.activationCancelled = await snapshot();
     assert.equal(result.activationCancelled.state, "IDLE"); assert.equal(result.activationCancelled.count, 0); assert.equal(result.activationCancelled.timers, 0);
     await click(page, ".hearth-preset-btn"); await delay(550); result.beforeReplayCancel = await snapshot();
-    await click(page, "#btn-snuff-portal"); await delay(2200); result.replayCancelled = await snapshot();
+    assert.equal(result.beforeReplayCancel.state, "DIALING");
+    assert.ok(result.beforeReplayCancel.count > 0 && result.beforeReplayCancel.count < 7); assert.equal(result.beforeReplayCancel.replay, true);
+    await click(page, "#btn-snuff-portal"); result.immediateReplayCancel = await snapshot();
+    assert.equal(result.immediateReplayCancel.state, "IDLE"); assert.equal(result.immediateReplayCancel.count, 0);
+    assert.equal(result.immediateReplayCancel.replay, false); assert.equal(result.immediateReplayCancel.timers, 0);
+    await delay(8250); result.replayCancelled = await snapshot();
     if (result.replayCancelled.state !== "IDLE" || result.replayCancelled.count !== 0 || result.replayCancelled.replay)
       result.defects.push("Snuff during preset replay leaves subsequent glyph locks after cancellation.");
+    assert.equal(result.replayCancelled.state, "IDLE"); assert.equal(result.replayCancelled.count, 0);
+    assert.equal(result.replayCancelled.replay, false); assert.equal(result.replayCancelled.timers, 0);
+    await click(page, ".hearth-preset-btn"); await delay(550); await click(page, "#btn-clear-hearth"); await delay(8250);
+    result.clearedReplay = await snapshot(); assert.equal(result.clearedReplay.state, "IDLE");
+    assert.equal(result.clearedReplay.count, 0); assert.equal(result.clearedReplay.replay, false);
+    const presets = await page.$$eval(".hearth-preset-btn", els => els.slice(0, 2).map(el => ({
+      selector: '.hearth-preset-btn[data-dest-id="' + el.dataset.destId + '"]',
+      symbols: FOLK_DESTINATIONS.find(destination => destination.id === el.dataset.destId).symbols
+    })));
+    assert.equal(presets.length, 2);
+    await click(page, presets[0].selector); await delay(550); await click(page, "#btn-snuff-portal");
+    await click(page, presets[1].selector); await wait("PENDING_KINDLE"); await delay(8250);
+    result.restartedReplay = await snapshot();
+    assert.equal(result.restartedReplay.state, "PENDING_KINDLE"); assert.equal(result.restartedReplay.count, 7);
+    assert.equal(result.restartedReplay.replay, false);
+    assert.deepEqual(await page.evaluate(() => HearthDial.currentAddress), presets[1].symbols, "Restart contains only the replacement address");
+    await click(page, "#btn-snuff-portal"); await delay(8250); result.finalIdle = await snapshot();
+    assert.equal(result.finalIdle.state, "IDLE"); assert.equal(result.finalIdle.count, 0);
+    assert.equal(result.finalIdle.replay, false); assert.equal(result.finalIdle.timers, 0);
     await shot("cancelled");
     assert.deepEqual(result.errors, []); result.status = result.defects.length ? "FAIL" : "PASS";
     return result;
@@ -237,6 +285,7 @@ async function main() {
   const names = process.argv.slice(2).filter(name => name !== "--offline");
   const targets = names.length ? TARGETS.filter(target => names.includes(target.name)) : TARGETS;
   assert.equal(targets.length, names.length || TARGETS.length, "Unknown or duplicate target");
+  if (targets.some(target => target.name === "stargate_lowmagic_gemini")) console.log("LOWMAGIC_REPLAY_REGRESSION " + JSON.stringify(replayCancellationRegression()));
   if (process.argv.includes("--offline")) {
     const results = [];
     for (const target of targets) { for (const suite of target.suites) original(target, suite); results.push(await offline(target)); }

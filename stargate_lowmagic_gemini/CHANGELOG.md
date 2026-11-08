@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Preset cancellation repair — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Snuffing or clearing the hearth now cancels the app-owned preset interval as
+  well as resetting the portal and dial. Previously, snuffing after two preset
+  symbols allowed the remaining five symbols to bind after cancellation.
+- Each replay has a generation guard so a queued callback from a cancelled or
+  replaced replay cannot add symbols to the next address.
+- Verification retains the original no-suite classification and adds real
+  pointer cancellation/restart checks, delayed idle checks, and a deterministic
+  queued-callback regression probe. Hosted acceptance is recorded separately.
+
 ### Browser icon compatibility — 2026-11-08
 
 **Performed by:** Codex maintenance session.
