@@ -17,11 +17,18 @@ and Ukiyo Waystation Fable entry points. Cerulean Lantern's migration preserves
 nine public assets and the original 185/185 close-out checks in both modes;
 its build suite still records 132/133 (normalized-heading mismatch) and its
 stage suite 23/24 (breakthrough white-rim predicate). These original failures
-remain visible and prevent a full acceptance claim. Seven package-command
-entry points still await their separate serving migration: Blueprint Drafting,
-Cathedral Oculus, Mastering Suite, Orthographic CAD, Radio Interferometry,
-SETI Deepscope and SETI Freeform. Their dependency adoption does not qualify
-Vite/http-server exposure or binding policy.
+remain visible and prevent a full acceptance claim. Six additional package-source
+entry points now use shared loopback serving: Blueprint Drafting, Cathedral
+Oculus, Mastering Suite, Orthographic CAD, Radio Interferometry and SETI Deepscope.
+SETI Freeform remains under qualification. These counts distinguish the original
+33-server scope, three additional entry points and seven package-source entries.
+
+Orthographic CAD, Radio Interferometry, SETI Deepscope and SETI Freeform retain
+Vite build and built-artifact preview as separate specialist contracts. Source
+preview does not replace a build or qualify its output. The built-preview gate
+runs actual npm commands, compares public dist bytes and source/built rendering,
+checks Host/origin/method restrictions, and verifies port conflict and shutdown.
+Its results remain separate from source-serving and original-suite evidence.
 
 The all-active-page load gate covered 57 exhibits: 231 PASS, 0 FAIL, 1 SKIP and
 116 UNVERIFIED. This covers metadata, resources and initial browser loading;
@@ -34,11 +41,11 @@ is not closed by automation. Gallery dispositions and builder attribution remain
 unchanged.
 
 The root toolchain and all 35 scoped exhibit dependency candidates are adopted;
-the remaining package-command serving migrations are still pending.
+the remaining Freeform source migration and four built-preview contracts are separate gates.
 See dependency reconciliation below. Qualification evidence is preserved in the
 [preview-tools workflow](../.github/workflows/preview-tools.yml),
 [suite registry](suite-registry.js) and
-[hosted run 42512175752](https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752).
+[hosted run 42515274539](https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539).
 Registry eligibility is not a fresh test result. Full functional, visual, sound
 and hands-on operator acceptance remain separate gates. Merge and deployment
 remain **HOLD**, including after a green subset of automated checks.
@@ -214,7 +221,9 @@ and Conservatory capture checks. Those last five are observational or tooling
 evidence and cannot establish original-suite PASS. Registered focused regression
 steps cover Blueprint Alpha, Bathyscaphe Pilot, Erebus, Reactor, Nimbus notes
 and Ecogrid/SETI Freeform keyboard reachability. Municipal stage and Blueprint
-Drafting current-contract routes remain pending until their hosted proof passes.
+Drafting current-contract routes report independent evidence. Drafting’s eight
+current-contract cycles passed; Municipal’s stronger audio/pixel check requires
+fresh proof after a render-frame sampling correction.
 Supplementary status documents require an explicit current PASS path and fresh
 evidence; they cannot override historical original failures or operator status.
 
@@ -363,9 +372,14 @@ Existing commands, including Blueprint Alpha's explicit current/historical test
 commands, were preserved. Five Vite trees now resolve Vite 6.4.5 and
 source-map-js 1.2.2; the two retained http-server trees resolve follow-redirects
 1.16.3 and qs 6.17.1. This is dependency evidence, independent of functional
-failures and the pending package-command serving policy.
+failures and the separately qualified package-command serving policy.
 
 `node scripts/check-dependency-baseline.js`
 collects fresh per-tree audits without installs or lock repair; missing locks
 remain UNVERIFIED and registry denial is ENVIRONMENT-BLOCKED. Fresh checks on
-the adopted branch and final release acceptance are still required.
+the adopted branch report 37 audited PASS, 0 FAIL and eight dependency-free
+SKIP results in run `42514572291`, job `128834660881`. CI audits tracked empty
+lock graphs too, and fails on findings, invalid locks or unavailable registry
+evidence. One-off candidate-generation jobs are retired after adoption; the
+preparation tools remain available for explicitly scoped future updates.
+Clean dependency evidence does not establish final release acceptance.
