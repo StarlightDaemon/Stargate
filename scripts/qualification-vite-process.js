@@ -78,7 +78,10 @@ async function startOwnedVite(target, packageFile, folder, phase = () => {}, bou
     } };
   } catch (error) {
     phase("owned-vite-startup", "FAIL", error.message);
-    if (child.pid) await killOwned(child, exit);
+    if (child.pid) {
+      const termination = await killOwned(child, exit);
+      if (termination) phase("owned-vite-forced-termination", "FAIL", termination);
+    }
     throw error;
   }
 }

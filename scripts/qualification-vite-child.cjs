@@ -7,8 +7,13 @@ const within = (base, file) => { const rel = path.relative(base, file); return r
 assert.equal(path.dirname(root), ROOT);
 assert.ok(path.basename(root).startsWith("stargate_"));
 assert.ok(within(ROOT, packageFile) && within(path.join(ROOT, "test"), cacheDir));
-let instance, closing = false;
-const send = value => { if (process.connected) process.send(value); };
+let instance, closing = false, failing = false;
+const send = value => {
+  if (process.connected) process.send(value, error => {
+    // The disconnect handler owns cleanup if the parent vanishes mid-send.
+    if (error && !process.connected) close().catch(fail);
+  });
+};
 async function close() {
   if (closing) return; closing = true;
   send({ type: "phase", phase: "vite-close", status: "START" });
@@ -24,10 +29,25 @@ process.on("disconnect", () => {
   setTimeout(() => process.exit(1), 1000);
   close().catch(fail);
 });
-function fail(error) {
+async function fail(error) {
+  if (failing) return;
+  failing = true; closing = true;
   console.error(error.stack || error);
-  if (process.connected) process.send({ type: "error", message: error.message }, () => process.exit(1));
-  else process.exit(1);
+  let timer, cleanupError;
+  try {
+    instance?.httpServer?.closeAllConnections?.();
+    await Promise.race([
+      instance?.close(),
+      new Promise((_, reject) => { timer = setTimeout(() => reject(new Error("Failed Vite startup cleanup exceeded 1000ms")), 1000); })
+    ]);
+  } catch (failure) { cleanupError = failure.message; console.error(cleanupError); }
+  finally { clearTimeout(timer); }
+  if (process.connected) {
+    send({ type: "error", message: error.message, cleanupError });
+    // Keep the owned group leader alive until its parent terminates the group/tree.
+    // Exiting here can orphan optimizer descendants before tree termination starts.
+    // The message listener keeps IPC referenced; disconnect has its own bounded exit.
+  } else process.exit(1);
 }
 (async () => {
   send({ type: "phase", phase: "vite-create", status: "START" });
