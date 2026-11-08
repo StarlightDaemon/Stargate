@@ -67,6 +67,7 @@ test("package-source entry points preserve defaults and explicit port precedence
     ["stargate_orthographic_cad", "dev", 5173, "test"],
     ["stargate_radio_interferometry", "dev", 5173, "test:e2e"],
     ["stargate_seti_deepscope", "dev", 5173, null],
+    ["stargate_seti_freeform", "dev", 5173, null],
     ["stargate_blueprint_drafting", "start", 5173, "test"]
   ];
   for (const [folder, command, defaultPort, testCommand] of targets) {

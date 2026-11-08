@@ -1,5 +1,13 @@
 # Changelog
 
+## Source-entry consolidation — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Route `npm run dev` through the shared loopback source preview while retaining port 5173, `PORT`, `--port` and `-p` precedence. Add this entry to the shared CLI contract matrix.
+- Preserve `vite build` and the Vite built-`dist` preview as a specialist exception; bind preview explicitly to `127.0.0.1` with strict port selection (default 4173). Dependency declarations, lockfile, original test assertions and builder attribution are unchanged.
+- Preserve the matched original manual-cadence FAIL in legacy/shared source qualification (run `42515274539`, job `128836833598`), separately from matching asset/security/preset-cancellation evidence. Do not treat security consolidation as functional acceptance.
+- Fresh browser manual-cancellation, completion-aware supplemental verification and actual migrated CLI validation remain pending. Merge and deployment remain on HOLD.
+
 ## Manual cancellation repair — 2026-11-08
 
 **Maintained by:** Codex maintenance session.

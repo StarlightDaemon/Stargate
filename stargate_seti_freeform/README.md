@@ -34,14 +34,15 @@ The **Vesper Deep-Aperture Technosignature Console** is an interactive, digital 
 ## Development & Usage
 
 ```bash
-# Install dependencies
-npm install
+# Install this exhibit's retained Vite build dependencies
+npm ci --ignore-scripts
 
 # Start local development server
 npm run dev
 
-# Run automated end-to-end Puppeteer verification suite
-node test_e2e.js
+# Run the owned comparison harness with the unchanged original suite
+# Install shared tools at the repository root first.
+node ../scripts/check-package-entry-security.js stargate_seti_freeform
 ```
 
 
@@ -49,4 +50,14 @@ node test_e2e.js
 
 Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.
 
-This exhibit still has its own development-server dependencies: also run `npm ci --ignore-scripts` in this directory for the existing Vite/http-server commands. Dependency qualification does not qualify those serving policies; entry-point security remains a separate migration.
+This exhibit retains Vite for its original-server comparison and build commands; run `npm ci --ignore-scripts` in this directory for those uses.
+
+## Source serving and retained build preview — 2026-11-08
+
+`npm run dev` now uses the repository's shared source preview, bound to loopback at port 5173. `PORT`, `--port` and `-p` remain supported; an explicit port takes precedence over `PORT`. The shared policy serves public exhibit assets and rejects private source/test metadata, traversal, unsupported methods and foreign Host headers.
+
+`npm run build` retains the audited Vite build. `npm run preview` deliberately remains Vite's built-`dist` preview, explicitly bound to `127.0.0.1` with strict port selection (default 4173). This specialist build contract is separate from source serving; Vite's SPA fallback is not the shared source policy.
+
+The original `test_e2e.js` is preserved. Use the owned comparison command above for bounded loopback listeners, artifact ownership and separate original/security/cancellation results. The recorded source comparison in run `42515274539`, job `128836833598`, retains the same original fixed-350 ms manual-cadence failure in both modes, with matching public assets, security observations and preset cancellation evidence. The built-preview run's original failure is likewise retained, not relabeled as a pass.
+
+The manual-cancellation repair has deterministic regression coverage; its fresh browser proof and the separately labeled completion-aware contract are pending in run `42516017150`. Run `node ../scripts/check-freeform-manual-contract.js` for that supplemental contract. It does not replace the original assertions or historical operator record. Actual migrated command validation is also pending; merge and deployment remain on HOLD.
