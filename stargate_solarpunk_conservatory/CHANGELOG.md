@@ -4,6 +4,20 @@ All notable changes to this build are documented here. Format follows Keep a Cha
 
 ## [Unreleased]
 
+### Shared preview consolidation — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the private handler with shared preview after real HTTP asset/security
+  qualification and paired pending/activation visual review. Preserves default
+  port 8685 and `PORT`; `HOST` no longer broadens the loopback-only binding.
+  Source/test/package requests receive 403 and POST 405.
+- Client assets and original 42 predicates remain unchanged. Both modes report
+  41/42 in run `42509607423`; the original oculus pair-distance `≥12` failure
+  remains FAIL (buildup/breakthrough distances 9.0 historical, 10.6 shared).
+- This is infrastructure equivalence with a diagnosed baseline failure, not full
+  functional acceptance. Original operator history is preserved; release HOLD.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added

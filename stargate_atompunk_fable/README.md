@@ -100,7 +100,22 @@ tradition.
 npm run serve
 ```
 
-Serves at `http://localhost:8733/` (plain Node, no dependencies).
+Serves at `http://127.0.0.1:8733/` through the repository's dependency-free shared
+preview. `PORT` overrides the default; binding stays on loopback. The exported
+`startServer(port)` still returns a listening native HTTP server synchronously.
+Only tracked public assets are served; source, test and package files are denied.
+
+**Maintenance qualification (2026-11-08):** eight public assets matched exactly
+under the pinned historical handler and shared preview. Original 104 predicates
+remain intact. Run `42509607423` passed 103/104 historical and 102/104 shared;
+pending aperture luminance was 48.3/45.9 against the original `<45` requirement.
+The stage-pair `≥25` requirement passed historical but failed shared (pending /
+buildup / breakthrough / active: 48.3/76.9/220.4/175.7 versus
+45.9/63.0/220.3/176.5). That pair failure was already present under both handlers
+in run `42508178082`. Paired pending and activation screenshots preserve the
+composition and visible stage behavior, with animation-phase differences. This
+qualifies handler consolidation with diagnosed baseline failures; the full suite
+remains **FAIL**, and release/operator acceptance is not newly granted.
 
 ```bash
 npm install
