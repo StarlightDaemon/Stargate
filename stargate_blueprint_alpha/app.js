@@ -15,8 +15,28 @@
     isEngaging: false,      // Animation in progress
     isConnected: false,     // Manifold locked and transmitting
     audioEnabled: true,
-    currentSitePlan: null
+    currentSitePlan: null,
+    isPlottingPlan: false
   };
+
+  // Every deferred UI operation belongs to the current draft generation.
+  const pendingDraftTimers = new Set();
+  let draftGeneration = 0;
+  function cancelDraftWork() {
+    draftGeneration++;
+    pendingDraftTimers.forEach(timer => clearTimeout(timer));
+    pendingDraftTimers.clear();
+    state.isPlottingPlan = false;
+  }
+  function laterInDraft(callback, delay) {
+    const generation = draftGeneration;
+    const timer = setTimeout(() => {
+      pendingDraftTimers.delete(timer);
+      if (generation !== draftGeneration) return;
+      callback();
+    }, delay);
+    pendingDraftTimers.add(timer);
+  }
 
   // 16 Vector Glyph Definitions
   const GLYPHS = [
@@ -240,7 +260,7 @@
   }
 
   // Handle Glyph Selection (Core Loop Action)
-  function handleGlyphSelect(glyphIndex) {
+  function handleGlyphSelect(glyphIndex, fromPlan = false) {
     if (state.isConnected) {
       logMessage('CONNECTION ACTIVE — DISENGAGE OR VOID DRAFT BEFORE RE-PLOTTING.');
       return;
@@ -251,6 +271,12 @@
     }
 
     const glyph = GLYPHS[glyphIndex];
+    if (!glyph) return;
+    if (!fromPlan && state.isPlottingPlan) {
+      cancelDraftWork();
+      state.currentSitePlan = null;
+      DOM.sitePlanCards.forEach(card => card.classList.remove('active-loaded'));
+    }
     state.stagedGlyphs.push(glyphIndex);
 
     // Lock corresponding radial node (0 to 7)
@@ -326,6 +352,7 @@
 
   // Engage / Plot & Approve Manifold
   function handleEngageManifold() {
+    if (state.isConnected || state.isPlottingPlan) return;
     if (state.stagedGlyphs.length < 6) {
       logMessage('INCOMPLETE SPECIFICATION — 6 COORDINATE VECTORS REQUIRED.');
       return;
@@ -349,7 +376,9 @@
     window.blueprintAudio.playApprovalAndActivation();
 
     // Show Blueprint Approval Stamp
-    setTimeout(() => {
+    laterInDraft(() => {
+      if (!state.isConnected) return;
+      state.isEngaging = false;
       DOM.approvalStamp.classList.remove('hidden');
       DOM.systemStatus.textContent = 'TOPOLOGY ACTIVE // LOCKED';
       DOM.systemStatus.className = 'val status-indicator active';
@@ -369,7 +398,8 @@
     DOM.systemStatus.className = 'val status-indicator hold';
     logMessage('⚠ HOLD REJECT: PENDING PEER ARCHITECTURAL REVIEW SIGN-OFF. TRANSMISSION BLOCKED.');
 
-    setTimeout(() => {
+    laterInDraft(() => {
+      if (!state.reviewHoldActive) return;
       DOM.reviewHoldStamp.classList.add('hidden');
       if (!state.isConnected) {
         DOM.systemStatus.textContent = 'HOLD ENGAGED // STAGED';
@@ -380,6 +410,7 @@
 
   // DISENGAGE CONTROL (HARD REQUIREMENT: Always reachable, never disabled)
   function handleDisengageManifold() {
+    cancelDraftWork();
     window.blueprintAudio.playDisengage();
 
     state.isConnected = false;
@@ -464,11 +495,16 @@
 
   // Clear Staged Buffer without full disengage
   function clearStagedBuffer() {
+    cancelDraftWork();
+    state.currentSitePlan = null;
     if (state.isConnected) {
       handleDisengageManifold();
       return;
     }
     window.blueprintAudio.playPenScratch();
+    DOM.reviewHoldStamp.classList.add('hidden');
+    DOM.systemStatus.textContent = state.reviewHoldActive ? 'HOLD ENGAGED // READY' : 'STANDBY / READY';
+    DOM.systemStatus.className = state.reviewHoldActive ? 'val status-indicator hold' : 'val status-indicator';
     state.stagedGlyphs = [];
     state.lockedNodes = [];
     DOM.lockNodes.forEach((node, idx) => {
@@ -484,47 +520,37 @@
     updateControls();
   }
 
-  // Load and Auto-Dial Approved Preloaded Site Plan (Single Action)
+  // Archive plotter replays each coordinate through the manual inking path.
+  // It stages a draft only; approval always requires a separate action.
   function loadSitePlan(planId, symbols, cardElement) {
-    if (state.isConnected) {
-      handleDisengageManifold();
-    }
-
-    DOM.sitePlanCards.forEach(c => c.classList.remove('active-loaded'));
+    if (symbols.length !== 6 || symbols.some(index => !GLYPHS[index])) return;
+    handleDisengageManifold();
     if (cardElement) cardElement.classList.add('active-loaded');
     state.currentSitePlan = planId;
-
-    // Fast-plot the 6 symbols
-    state.stagedGlyphs = [];
-    state.lockedNodes = [];
-    DOM.lockNodes.forEach((node, idx) => {
-      node.classList.remove('locked');
-      const statEl = document.getElementById(`node-stat-${idx}`);
-      if (statEl) statEl.textContent = 'UNLOCKED';
-    });
-
-    symbols.forEach((glyphIdx, i) => {
-      state.stagedGlyphs.push(glyphIdx);
-      const glyph = GLYPHS[glyphIdx];
-      lockRadialNode(i, glyph);
-    });
-
-    const lastGlyph = GLYPHS[symbols[symbols.length - 1]];
-    rotateCaliperArm(lastGlyph.angle);
-    updateStagedSlots();
-
-    logMessage(`ARCHIVED SITE PLAN [${planId.toUpperCase()}] LOADED. EXECUTING INKING PASS...`);
-
-    // Auto-engage the blueprint
-    setTimeout(() => {
-      handleEngageManifold();
-    }, 100);
+    state.isPlottingPlan = true;
+    const generation = draftGeneration;
+    let cursor = 0;
+    const plotNext = () => {
+      if (generation !== draftGeneration || !state.isPlottingPlan || state.isConnected) return;
+      handleGlyphSelect(symbols[cursor++], true);
+      if (cursor < symbols.length) {
+        logMessage(`ARCHIVE PLOTTER [${planId.toUpperCase()}]: INKING VECTOR ${cursor}/6...`);
+        laterInDraft(plotNext, 120);
+      } else {
+        state.isPlottingPlan = false;
+        DOM.systemStatus.textContent = 'PLAN STAGED // AWAITING APPROVAL';
+        DOM.systemStatus.className = 'val status-indicator';
+        logMessage(`SITE PLAN [${planId.toUpperCase()}] STAGED — PRESS ENGAGE TO APPROVE.`);
+        updateControls();
+      }
+    };
+    plotNext();
   }
 
   // Update UI Control States
   function updateControls() {
     // Engage button is active only when exactly 6 glyphs are staged
-    if (state.stagedGlyphs.length === 6 && !state.isConnected) {
+    if (state.stagedGlyphs.length === 6 && !state.isConnected && !state.isPlottingPlan) {
       DOM.btnEngage.disabled = false;
     } else {
       DOM.btnEngage.disabled = true;
