@@ -152,10 +152,10 @@ supplementary("blueprint_drafting", { id: "blueprint-drafting-contract", script:
   evidence: [{ file: "test/blueprint-drafting-current-contract/result.json", kind: "status", statusPath: "currentContractStatus", currentPath: "cycles" }] });
 // Latest completed source/contract evidence. Eligibility includes checkers that
 // truthfully reproduce a known failure; it never converts that failure to PASS.
-function latestEvidence(job, status, detail, originalSuiteStatus = "UNVERIFIED") {
-  return { status, originalSuiteStatus, detail, run: 42514572291, job,
+function latestEvidence(job, status, detail, originalSuiteStatus = "UNVERIFIED", run = 42514572291) {
+  return { status, originalSuiteStatus, detail, run, job,
     operatorStatus: "UNVERIFIED", acceptanceStatus: "UNVERIFIED",
-    url: "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/" + job };
+    url: "https://github.com/StarlightDaemon/Stargate/actions/runs/" + run + "/job/" + job };
 }
 for (const [name, job, status, originalStatus, detail] of [
   ["cathedral_oculus", 128834661763, "PASS", "PASS", "Original 32 records and eight public assets passed in both modes. Separate layout diagnostic does not establish visual acceptance."],
@@ -184,5 +184,29 @@ for (const [name, id, job, detail] of [
 }
 registry.find(item => item.exhibit === "stargate_municipal_registry").steps.find(step => step.id === "municipal-regressions").qualificationEvidence =
   latestEvidence(128834661710, "FAIL", "Latest stage-color predicate failed; the diagnosed render-frame sampling correction still requires fresh hosted proof. This supplementary step remains pending.");
+// The following fresh executions supersede those two historical failures.
+const deepscope = registry.find(item => item.exhibit === "stargate_seti_deepscope");
+deepscope.qualificationHistory = [deepscope.qualificationEvidence];
+deepscope.qualificationEvidence = latestEvidence(128836833564, "PASS",
+  "Full original assertions, fifteen public assets, cancellation/restart and owned Vite cleanup passed in both source modes. The earlier cleanup FAIL is historical.", "PASS", 42515274539);
+const municipalRegression = registry.find(item => item.exhibit === "stargate_municipal_registry").steps.find(step => step.id === "municipal-regressions");
+municipalRegression.qualificationHistory = [municipalRegression.qualificationEvidence];
+municipalRegression.qualification = "established";
+municipalRegression.qualificationEvidence = latestEvidence(128836833671, "PASS",
+  "Deterministic and strengthened browser regressions passed: stage oscillator starts 26/32/34, exactly two sustained oscillators, seven cancellations with zero active oscillators after 8.25s, no muted starts, and unchanged pixel thresholds. Audio quality and operator acceptance remain separate.", "UNVERIFIED", 42515274539);
+for (const [name, job, status, detail] of [
+  ["radio_interferometry", 128836833556, "PASS", "Four exact built assets, Host/origin policy, rendering, full originals, cancellation, port conflict and shutdown passed."],
+  ["orthographic_cad", 128836833546, "PASS", "Four exact built assets, Host/origin policy, rendering, full originals, cancellation, port conflict and shutdown passed."],
+  ["seti_deepscope", 128836833502, "PASS", "Four exact built assets, Host/origin policy, rendering, full originals, cancellation, port conflict and shutdown passed."],
+  ["seti_freeform", 128836833483, "FAIL", "Four built assets, Host/origin policy, rendering and cancellation passed; the retained original 350ms manual assertion reports DIALING instead of READY. Port release was not recorded before that assertion failed in this run. No full built-contract PASS."]
+]) {
+  const item = registry.find(item => item.exhibit === "stargate_" + name);
+  item.steps.push({ id: "built-" + name, script: "scripts/check-vite-built-preview.js", args: [item.exhibit], timeoutMs: 1200000,
+    qualification: "established", scope: "supplementary-built-artifact",
+    qualificationEvidence: latestEvidence(job, status, detail, status, 42515274539),
+    evidence: [{ file: "test/vite-built-preview/" + item.exhibit + "/result.json", kind: "status", statusPath: "status" }] });
+}
+supplementary("seti_freeform", { id: "freeform-manual-contract", script: "scripts/check-freeform-manual-contract.js", args: [], timeoutMs: 1200000,
+  evidence: [{ file: "test/freeform-manual-contract/result.json", kind: "status", statusPath: "currentContractStatus", currentPath: "cycles" }] });
 function getSuite(exhibit) { return registry.find(item => item.exhibit === exhibit); }
 module.exports = { registry, getSuite };
