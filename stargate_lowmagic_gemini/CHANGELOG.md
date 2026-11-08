@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and hearth flame motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-09-04
 
 **Built by:** Gemini 3.8 Flash (High)

@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `date` key moved verbatim to `built`), with `name` and `device` preserved under a `meta` object. Version value unchanged.
 - Test harness `puppeteer_test.js` now writes its idle and engaged screenshots to a `test/` directory resolved relative to the script (gitignored, created on demand) instead of bare cwd-relative filenames, so the destination no longer depends on where the harness is launched from. Harness only; runtime unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and luminous leaf motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.2.0] - 2026-08-11
 
 **Built by:** Gemini 3.1 Pro (high reasoning)

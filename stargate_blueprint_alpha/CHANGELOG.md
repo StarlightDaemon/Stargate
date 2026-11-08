@@ -60,6 +60,13 @@ The attribution and entries below describe earlier catalog maintenance only.
 ### Changed
 - Test harness `verify.js` now writes its five verification screenshots (1080p dormant, 4K scaled, active manifold, review hold, quick-dial active) to the gitignored `test/` directory, created on demand, instead of the build root. Harness only; runtime unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and drafting manifold motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-08-12
 
 ### Known Issues

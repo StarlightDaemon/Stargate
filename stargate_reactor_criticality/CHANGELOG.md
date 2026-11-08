@@ -39,6 +39,13 @@
 ### Changed
 - Test harness `scripts/cdp_browser_capture.js` (raw CDP): the hardcoded Chrome path was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to a dynamically required puppeteer/puppeteer-core `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. It now also writes its capture output to the gitignored `test/` directory, created on demand, instead of the parent build root. Harness only; runtime unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and annular reactor motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash (High)  

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Subspace gateway</title>
+  <rect width="32" height="32" rx="5" fill="#03060f"/>
+  <g fill="none" stroke="#00f0ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="11"/><path d="M10 21 16 9 22 21M13 17H19"/></g>
+</svg>

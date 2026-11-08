@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name`, `title` and `genre` preserved verbatim under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and cipher circuit motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.1] - 2026-09-03
 
 **Verified by:** Claude Sonnet.

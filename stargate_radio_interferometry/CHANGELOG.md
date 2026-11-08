@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `timestamp` key moved verbatim to `built`, full ISO datetime kept), with `system` preserved under a `meta` object. Version value unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and interferometer baselines motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-08-21
 
 **Built by:** Gemini 3.7 Flash (High reasoning)

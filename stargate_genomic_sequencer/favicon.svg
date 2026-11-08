@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Double helix</title>
+  <rect width="32" height="32" rx="5" fill="#07040f"/>
+  <g fill="none" stroke="#c084fc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C28 10 4 22 24 28M24 4C4 10 28 22 8 28M10 7H22M11 13H21M11 19H21M10 25H22"/></g>
+</svg>

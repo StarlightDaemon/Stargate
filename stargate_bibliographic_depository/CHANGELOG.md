@@ -12,6 +12,13 @@
 
 All notable changes to the **Pan-Harmonic Bibliographic Depository** (`stargate_bibliographic_depository`) console will be documented in this file.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and open archival volume motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [Unreleased]
 
 **Built by:** Claude Sonnet 5 (catalog-wide keyboard-focus and reduced-motion CSS pass, 2026-09-04). Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diff. Version number left unchanged; whether any item warrants a bump is for operator review.

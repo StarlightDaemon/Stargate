@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name`, `title` and `genre` preserved verbatim under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
 - Test harness `verify.js` now writes its run log to the gitignored `test/test_results.json`, created on demand, instead of `test_results.json` at the build root. Harness only; runtime unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and airfoil flow motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-09-03
 
 **Built by:** Gemini 3.8 Flash (High Reasoning)

@@ -10,6 +10,13 @@ All notable changes to the Stargate Apiculture Telemetry Network console are doc
 - Keyboard focus indicators: `:focus-visible` outlines in `--accent-cyan` on the nav-drawer, help-circle, quick-dial engage, colony-key, filter, modal-close and footer-link buttons and on the quick-dial select, search input, settings selects, master-volume slider and mute toggle; `--accent-emerald` on the primary activation button and `--accent-crimson` on the disengage button, each with the build's own glow. Added alongside the existing hover/focus rules; no existing rule altered.
 - `prefers-reduced-motion: reduce` slows the always-on system-status heartbeat dot (`.status-dot`) to an 8s cycle. Dial and activation feedback animations are untouched.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and hive cell motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash (High reasoning)

@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Test harnesses `test.js` and `run_tests_with_vite.js` now write their idle screenshot to a `test/` directory resolved relative to the script (gitignored, created on demand) instead of a bare cwd-relative filename, so the destination no longer depends on where the harness is launched from. Harness only; runtime unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and orbital drafting geometry motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-08-11
 ### Added
 - Complete initial build of the Aeon Structural Dynamics CAD drafting terminal.

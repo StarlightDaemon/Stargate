@@ -10,6 +10,13 @@ All notable changes to the **VXD-9000 Chrono-Celestial Projector Console** (`sta
 - Keyboard focus indicators: `:focus-visible` outline in `--color-cyan` on every `button`, on the `.sector-node` controls (4px offset) and on the visible `.slider` of the switch container's hidden checkbox. Added alongside the existing rules; no existing rule altered.
 - `prefers-reduced-motion: reduce` slows the pulse beacon, live dot, master-power LED and banner icon to 6s and the lens reticle spin to 90s. Dial and activation feedback are untouched.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and projector dome motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash (High Reasoning)
