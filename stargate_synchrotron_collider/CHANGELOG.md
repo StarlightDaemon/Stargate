@@ -87,3 +87,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Collision Event History Ledger**: Timestamped log recording integrated luminosity, invariant mass resonances, and beam dump records.
 - **Operator Reference Manual (`?`)**: Modal walk-through for manual steering, quick-dialing, quench protection, and beam abort protocols.
 - **Responsive 1080p/4K Layout**: Dynamic unitless scale calculation (`--ui-scale`) preventing CSS unit division bugs, corner attribution link (`StarlightDaemon`), and version tag (`v1.0.0`).
+
+
+## Metadata display maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Align the displayed corner version with the existing version.json value 1.1.1. No new version or builder attribution is introduced.
