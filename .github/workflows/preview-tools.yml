@@ -157,6 +157,9 @@ jobs:
           - target: reactor-regressions
             command: node scripts/check-reactor-regressions.js
             evidence: test/reactor-regressions/
+          - target: registered-regression-dispatch
+            command: node scripts/run-qualified-suites.js --exhibit stargate_nouveau_nimbus
+            evidence: test/qualified-suites/
           - target: registered-suite-dispatch
             command: node scripts/run-qualified-suites.js --exhibit stargate_solarpunk_astra --exhibit stargate_konstrukt_transit
             evidence: test/qualified-suites/

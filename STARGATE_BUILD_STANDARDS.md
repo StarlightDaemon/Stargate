@@ -238,8 +238,10 @@ exception is an explicitly-scoped security audit.
 
 Use [scripts/MAINTENANCE.md](scripts/MAINTENANCE.md) for the current preview and
 verification commands, report semantics and the dated rollout checkpoint. Shared
-serving now extends beyond the three pilots; each remaining launcher requires its
-own qualification. The root lockfile supplies shared browser and image tooling;
+serving covers all 33 original launchers and three additional entries at the
+2026-11-08 checkpoint; seven package-command entry points still require their
+separate serving migration. All 35 scoped dependency candidates are adopted.
+The root lockfile supplies shared browser and image tooling;
 browser applications and the flagship build remain independent. Do not delete or replace
 an exhibit's server or weaken its specialized assertions merely because the
 shared handler tests pass. A metadata/resource report is not an interaction test

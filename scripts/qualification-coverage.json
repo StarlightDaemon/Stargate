@@ -96,10 +96,18 @@
         },
         {
           "command": "node scripts/check-remaining-harnesses.js stargate_aetheric_telegraph",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/remaining-harnesses/stargate_aetheric_telegraph/result.json"
-          ]
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "dependency-load-smoke",
+            "run": 42512175752,
+            "job": 128827398275,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398275"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_aetheric_telegraph --http --browser"
@@ -219,6 +227,22 @@
           "artifacts": [
             "test/pilot-browser/report.json"
           ]
+        },
+        {
+          "command": "node scripts/check-bathyscaphe-regressions.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/bathyscaphe-regressions/deterministic.json",
+            "test/bathyscaphe-regressions/browser.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "run": 42512175752,
+            "job": 128827398351,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398351"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_bathyscaphe_pilot --http --browser"
@@ -228,7 +252,7 @@
       "originalHarnessPresence": "recorded",
       "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
       "registration": {
-        "qualification": "pending",
+        "qualification": "established",
         "scope": "original-suite-preservation"
       },
       "lastReported": {
@@ -270,7 +294,7 @@
       "checks": [
         {
           "command": "node scripts/check-secondary-security.js stargate_bathyscaphe_pilot_fable",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/secondary-security/stargate_bathyscaphe_pilot_fable/legacy/result.json",
             "test/secondary-security/stargate_bathyscaphe_pilot_fable/shared/result.json"
@@ -314,10 +338,18 @@
         },
         {
           "command": "node scripts/check-remaining-harnesses.js stargate_bibliographic_depository",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/remaining-harnesses/stargate_bibliographic_depository/result.json"
-          ]
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "unused-mock-scaffold-only",
+            "run": 42512175752,
+            "job": 128827398209,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398209"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_bibliographic_depository --http --browser"
@@ -348,6 +380,22 @@
           "artifacts": [
             "test/blueprint-security/report.json"
           ]
+        },
+        {
+          "command": "node scripts/check-blueprint-regressions.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/blueprint-regressions/deterministic.json",
+            "test/blueprint-regressions/browser.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "run": 42512175752,
+            "job": 128827398288,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398288"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_blueprint_alpha --http --browser",
@@ -396,6 +444,14 @@
             "test/package-entry-security/stargate_blueprint_drafting/legacy/result.json",
             "test/package-entry-security/stargate_blueprint_drafting/shared/result.json"
           ]
+        },
+        {
+          "command": "node scripts/check-blueprint-drafting-contract.js",
+          "qualification": "pending",
+          "artifacts": [
+            "test/blueprint-drafting-current-contract/result.json"
+          ],
+          "scope": "supplementary-current-regression"
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_blueprint_drafting --http --browser"
@@ -514,7 +570,7 @@
       "originalHarnessPresence": "recorded",
       "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
       "registration": {
-        "qualification": "pending",
+        "qualification": "established",
         "scope": "supplementary-only"
       },
       "lastReported": {
@@ -532,10 +588,18 @@
       "checks": [
         {
           "command": "node scripts/check-remaining-harnesses.js stargate_celestial_astrolabe",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/remaining-harnesses/stargate_celestial_astrolabe/result.json"
-          ]
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "original-observational-harness",
+            "run": 42512175752,
+            "job": 128827398206,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398206"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_celestial_astrolabe --http --browser"
@@ -696,7 +760,7 @@
       "originalHarnessPresence": "recorded",
       "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
       "registration": {
-        "qualification": "pending",
+        "qualification": "established",
         "scope": "original-suite-preservation"
       },
       "lastReported": {
@@ -714,10 +778,18 @@
       "checks": [
         {
           "command": "node scripts/check-remaining-harnesses.js stargate_darkpool_router",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/remaining-harnesses/stargate_darkpool_router/result.json"
-          ]
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "PASS",
+            "scope": "original-suite",
+            "run": 42512175752,
+            "job": 128827398217,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398217"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_darkpool_router --http --browser",
@@ -782,6 +854,21 @@
           "artifacts": [
             "test/erebus-security/report.json"
           ]
+        },
+        {
+          "command": "node scripts/check-erebus-regressions.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/erebus-regressions/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "run": 42512175752,
+            "job": 128827398241,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398241"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_erebus_signal --http --browser"
@@ -935,7 +1022,7 @@
       "originalHarnessPresence": "recorded",
       "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
       "registration": {
-        "qualification": "pending",
+        "qualification": "established",
         "scope": "supplementary-only"
       },
       "lastReported": {
@@ -953,10 +1040,18 @@
       "checks": [
         {
           "command": "node scripts/check-remaining-harnesses.js stargate_high_scifi",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/remaining-harnesses/stargate_high_scifi/result.json"
-          ]
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "original-diagnostic-with-supplementary-guards",
+            "run": 42512175752,
+            "job": 128827398184,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398184"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_high_scifi --http --browser"
@@ -1025,7 +1120,7 @@
       "originalHarnessPresence": "recorded",
       "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
       "registration": {
-        "qualification": "pending",
+        "qualification": "established",
         "scope": "original-suite-preservation"
       },
       "lastReported": {
@@ -1043,10 +1138,18 @@
       "checks": [
         {
           "command": "node scripts/check-remaining-harnesses.js stargate_lumina_grove",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/remaining-harnesses/stargate_lumina_grove/result.json"
-          ]
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "PASS",
+            "scope": "original-suite",
+            "run": 42512175752,
+            "job": 128827398324,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398324"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_lumina_grove --http --browser",
@@ -1177,6 +1280,15 @@
           "artifacts": [
             "test/municipal-security/report.json"
           ]
+        },
+        {
+          "command": "node scripts/check-municipal-regressions.js",
+          "qualification": "pending",
+          "artifacts": [
+            "test/municipal-regressions/report.json",
+            "test/municipal-regressions/report.json"
+          ],
+          "scope": "supplementary-current-regression"
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_municipal_registry --http --browser"
@@ -1208,6 +1320,21 @@
             "test/specialist-security/stargate_nouveau_nimbus/legacy/result.json",
             "test/specialist-security/stargate_nouveau_nimbus/shared/result.json"
           ]
+        },
+        {
+          "command": "node scripts/check-nimbus-notes-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/nimbus-notes-security/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "run": 42512175752,
+            "job": 128827398259,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398259"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_nouveau_nimbus --http --browser"
@@ -1339,6 +1466,21 @@
           "artifacts": [
             "test/reactor-security/report.json"
           ]
+        },
+        {
+          "command": "node scripts/check-reactor-regressions.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/reactor-regressions/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "run": 42512175752,
+            "job": 128827398421,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398421"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_reactor_criticality --http --browser"
@@ -1471,6 +1613,21 @@
             "test/package-entry-security/stargate_seti_freeform/legacy/result.json",
             "test/package-entry-security/stargate_seti_freeform/shared/result.json"
           ]
+        },
+        {
+          "command": "node scripts/check-keyboard-interlocks.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/keyboard-interlocks/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "run": 42512175752,
+            "job": 128827398337,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398337"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_seti_freeform --http --browser"
@@ -1570,10 +1727,18 @@
         },
         {
           "command": "node scripts/check-remaining-harnesses.js stargate_solarpunk_conservatory",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/remaining-harnesses/stargate_solarpunk_conservatory/result.json"
-          ]
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "original-preview-capture-tool",
+            "run": 42512175752,
+            "job": 128827398290,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398290"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_solarpunk_conservatory --http --browser"
@@ -1605,6 +1770,21 @@
             "test/telemetry-security/stargate_solarpunk_ecogrid/legacy/result.json",
             "test/telemetry-security/stargate_solarpunk_ecogrid/shared/result.json"
           ]
+        },
+        {
+          "command": "node scripts/check-keyboard-interlocks.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/keyboard-interlocks/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "run": 42512175752,
+            "job": 128827398337,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398337"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_solarpunk_ecogrid --http --browser"

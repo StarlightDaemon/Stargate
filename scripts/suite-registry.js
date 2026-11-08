@@ -105,5 +105,50 @@ cyberpunkFable.qualification = "established";
 cyberpunkFable.qualificationEvidence = { status: "PASS", run: 42510716794, job: 128822958190,
   detail: "Original 42/42 in both modes, 10 assets; reported paired-stage visual review passed. Full operator acceptance remains separate.",
   url: "https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794/job/128822958190" };
+const lantern = registry.find(item => item.exhibit === "stargate_bathyscaphe_pilot_fable");
+lantern.qualification = "established";
+lantern.qualificationEvidence = { status: "BASELINE_FAILURE_PRESERVED", run: 42510045209, job: 128820919093,
+  detail: "Nine exact public assets and close-out 185/185 in both modes. Build 132/133 retains the normalized-heading mismatch; stages 23/24 retain breakthrough white-rim failure. Smoke is diagnostic. Launcher migration does not turn these originals into PASS.",
+  url: "https://github.com/StarlightDaemon/Stargate/actions/runs/42510045209/job/128820919093" };
+// Fresh proof qualifies execution, while each harness keeps its original meaning.
+for (const [name, job, scope, originalSuiteStatus] of [
+  ["high_scifi", 128827398184, "original-diagnostic-with-supplementary-guards", "UNVERIFIED"],
+  ["celestial_astrolabe", 128827398206, "original-observational-harness", "UNVERIFIED"],
+  ["bibliographic_depository", 128827398209, "unused-mock-scaffold-only", "UNVERIFIED"],
+  ["darkpool_router", 128827398217, "original-suite", "PASS"],
+  ["aetheric_telegraph", 128827398275, "dependency-load-smoke", "UNVERIFIED"],
+  ["lumina_grove", 128827398324, "original-suite", "PASS"],
+  ["solarpunk_conservatory", 128827398290, "original-preview-capture-tool", "UNVERIFIED"]
+]) {
+  const item = registry.find(item => item.exhibit === "stargate_" + name);
+  const step = item.steps.find(step => step.id === "remaining-" + name);
+  step.qualification = "established";
+  step.qualificationEvidence = { status: "PASS", originalSuiteStatus, scope, run: 42512175752, job,
+    url: "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/" + job };
+  if (["high_scifi", "celestial_astrolabe", "darkpool_router", "lumina_grove"].includes(name)) item.qualification = "established";
+}
+function supplementary(name, step, job) {
+  step.scope = "supplementary-current-regression";
+  step.qualification = job ? "established" : "pending";
+  if (job) step.qualificationEvidence = { status: "PASS", originalSuiteStatus: "UNVERIFIED", run: 42512175752, job,
+    url: "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/" + job };
+  registry.find(item => item.exhibit === "stargate_" + name).steps.push(step);
+}
+for (const [name, id, job] of [
+  ["erebus_signal", "erebus-regressions", 128827398241],
+  ["nouveau_nimbus", "nimbus-notes-security", 128827398259],
+  ["reactor_criticality", "reactor-regressions", 128827398421]
+]) supplementary(name, report(id, "check-" + id, "test/" + id + "/report.json", ["baseline-client", "repaired-client"]), job);
+for (const [name, id, job] of [
+  ["blueprint_alpha", "blueprint-regressions", 128827398288],
+  ["bathyscaphe_pilot", "bathyscaphe-regressions", 128827398351]
+]) supplementary(name, { id, script: "scripts/check-" + id + ".js", args: [], timeoutMs: 1200000,
+  evidence: ["deterministic", "browser"].map(file => ({ file: "test/" + id + "/" + file + ".json", kind: "status", statusPath: "status" })) }, job);
+for (const name of ["solarpunk_ecogrid", "seti_freeform"]) supplementary(name,
+  report("keyboard-interlocks", "check-keyboard-interlocks", "test/keyboard-interlocks/report.json", ["baseline", "repaired"]), 128827398337);
+supplementary("municipal_registry", { id: "municipal-regressions", script: "scripts/check-municipal-regressions.js", args: [], timeoutMs: 1200000,
+  evidence: ["deterministic.status", "browser.repaired.status"].map(statusPath => ({ file: "test/municipal-regressions/report.json", kind: "status", statusPath })) });
+supplementary("blueprint_drafting", { id: "blueprint-drafting-contract", script: "scripts/check-blueprint-drafting-contract.js", args: [], timeoutMs: 1200000,
+  evidence: [{ file: "test/blueprint-drafting-current-contract/result.json", kind: "status", statusPath: "currentContractStatus", currentPath: "cycles" }] });
 function getSuite(exhibit) { return registry.find(item => item.exhibit === exhibit); }
 module.exports = { registry, getSuite };

@@ -10,8 +10,49 @@ test("registry covers exact package/browser targets and preserves known failed o
   assert.equal(registry.length, 47); assert.equal(new Set(registry.map(item => item.exhibit)).size, 47);
   for (const item of registry) for (const step of item.steps) { assert.ok(fs.existsSync(path.join(ROOT, item.exhibit))); assert.ok(fs.existsSync(path.join(ROOT, step.script))); assert.ok(step.timeoutMs > 0); }
   assert.deepEqual(getSuite("stargate_cyberpunk_gemini").steps[0].args, ["--exhibit", "stargate_cyberpunk_gemini"]);
-  for (const name of ["stargate_cathedral_oculus", "stargate_darkpool_router"]) assert.equal(getSuite(name).qualification, "pending");
-  for (const name of ["stargate_atompunk_fable", "stargate_solarpunk_conservatory"]) { const item = getSuite(name); assert.equal(item.qualification, "established"); assert.equal(item.qualificationEvidence.status, "BASELINE_FAILURE_PRESERVED"); }
+  assert.equal(getSuite("stargate_cathedral_oculus").qualification, "pending");
+  for (const name of ["stargate_darkpool_router", "stargate_lumina_grove", "stargate_high_scifi", "stargate_celestial_astrolabe"]) assert.equal(getSuite(name).qualification, "established");
+  for (const name of ["stargate_atompunk_fable", "stargate_solarpunk_conservatory", "stargate_bathyscaphe_pilot_fable"]) { const item = getSuite(name); assert.equal(item.qualification, "established"); assert.equal(item.qualificationEvidence.status, "BASELINE_FAILURE_PRESERVED"); }
+});
+test("supplementary status contracts require exact fresh PASS without rewriting historical or original status", () => {
+  const spec = { kind: "status", statusPath: "current.status" };
+  const document = { historical: { status: "FAIL" }, current: { status: "PASS" }, originalSuiteStatus: "UNVERIFIED" };
+  const execution = value => [{ id: "supplementary", code: 0, artifacts: [{ ...spec, document: value }] }];
+  let result = summarize(entry, execution(document));
+  assert.equal(result.preservationStatus, "PASS"); assert.equal(result.originalSuiteStatus, "UNVERIFIED");
+  assert.equal(result.operatorStatus, "UNVERIFIED"); assert.equal(result.status, "UNVERIFIED");
+  for (const value of [undefined, null, true, 1, "UNVERIFIED", "FAIL", {}]) {
+    result = summarize(entry, execution({ ...document, current: { status: value } }));
+    assert.equal(result.preservationStatus, "FAIL");
+  }
+  assert.ok(assessEvidence(document, { kind: "status" }, entry.exhibit).errors.length);
+  assert.ok(assessEvidence(document, { ...spec, currentPath: "missing" }, entry.exhibit).errors.length);
+  assert.ok(assessEvidence(document, { ...spec, originalSuite: { kind: "status", path: "current.status" } }, entry.exhibit).errors.length);
+  result = summarize(entry, execution({ ...document, current: { status: "PASS", child: { status: "FAIL" } } }));
+  assert.equal(result.status, "FAIL", "Current nested failures cannot hide behind their parent's PASS");
+  result = summarize(entry, [{ id: "stale-supplementary", code: 0, artifacts: [{ ...spec, error: "Missing or stale evidence" }] }]);
+  assert.equal(result.status, "FAIL");
+  const originalFail = execution({ mode: "shared", status: "PASS", originalSuiteStatus: "FAIL" });
+  originalFail[0].artifacts[0] = { kind: "mode", mode: "shared", originalSuite: { kind: "status", path: "originalSuiteStatus" }, document: originalFail[0].artifacts[0].document };
+  result = summarize(entry, [...originalFail, ...execution(document)]);
+  assert.equal(result.originalSuiteStatus, "FAIL"); assert.equal(result.status, "FAIL");
+});
+test("coverage retains the saved counts and mirrors current routing without inventing passes", () => {
+  const coverage = require("./qualification-coverage.json");
+  assert.equal(coverage.counts.activeTargets, 57); assert.equal(coverage.counts.recordedHarnessPaths, 62);
+  assert.equal(coverage.targets.length, 57);
+  for (const item of registry) {
+    const row = coverage.targets.find(row => row.exhibit === item.exhibit);
+    assert.equal(row.registration.qualification, item.qualification);
+    assert.deepEqual(row.checks.map(check => check.command), item.steps.map(step => ["node", step.script, ...step.args].join(" ")));
+    assert.deepEqual(row.checks.map(check => check.qualification), item.steps.map(step => step.qualification || item.qualification));
+    if (row.lastReported.status === "PASS") assert.ok(row.lastReported.run && row.lastReported.job, "Historical PASS needs its retained evidence reference");
+    assert.notEqual(row.lastReported.operatorStatus, "PASS");
+    for (const step of item.steps.filter(step => step.scope === "supplementary-current-regression")) assert.ok(step.evidence.every(spec => !spec.originalSuite));
+  }
+  for (const name of ["high_scifi", "celestial_astrolabe", "darkpool_router", "lumina_grove"]) {
+    assert.notEqual(coverage.targets.find(row => row.exhibit === "stargate_" + name).lastReported.status, "PASS", "Promoting routing does not overwrite last reported acceptance");
+  }
 });
 test("original status is explicit: diagnostic/report PASS cannot invent original PASS", () => {
   const document = { mode: "shared", status: "PASS", originalSuiteStatus: "UNVERIFIED" };
@@ -58,4 +99,10 @@ test("real owned children require fresh valid evidence, successful exit and boun
   actual = await run("malformed"); assert.equal(actual.result.status, "FAIL");
   actual = await run("fail"); assert.equal(actual.result.status, "FAIL"); assert.ok(actual.execution.artifacts[0].sha256);
   actual = await run("hang"); assert.equal(actual.result.status, "FAIL"); assert.equal(actual.execution.timedOut, true);
+  const statusStep = action => ({ ...step(action), evidence: [{ kind: "status", statusPath: "status", file: path.relative(ROOT, source) }] });
+  let statusExecution = await executeStep(statusStep("write"), path.join(folder, "status-write"));
+  let statusResult = summarize(entry, [statusExecution]);
+  assert.equal(statusResult.preservationStatus, "PASS"); assert.equal(statusResult.originalSuiteStatus, "UNVERIFIED");
+  statusExecution = await executeStep(statusStep("stale"), path.join(folder, "status-stale"));
+  assert.equal(summarize(entry, [statusExecution]).status, "FAIL", "Supplementary status evidence must also be freshly rewritten");
 });

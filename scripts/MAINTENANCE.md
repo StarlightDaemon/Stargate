@@ -11,13 +11,17 @@ own package installation and build workflow.
 
 ## Current rollout status
 
-Interim checkpoint, 2026-11-08: 32 of the 33 original scoped server launchers
-have migrated to shared serving. Steampunk Fable and Ukiyo Waystation Fable are
-additional migrated entry points. Cyberpunk Fable has now earned qualification
-(42 original assertions in each mode and ten exact public assets); its launcher
-adoption remains pending at this checkpoint. Cerulean Lantern remains pending
-because its exact original baseline fails. Preserve that failure while diagnosing
-the specialist harness; do not replace its launcher on handler tests alone.
+Checkpoint, 2026-11-08: all 33 original scoped server launchers have migrated to
+shared serving, together with the additional Cyberpunk Fable, Steampunk Fable
+and Ukiyo Waystation Fable entry points. Cerulean Lantern's migration preserves
+nine public assets and the original 185/185 close-out checks in both modes;
+its build suite still records 132/133 (normalized-heading mismatch) and its
+stage suite 23/24 (breakthrough white-rim predicate). These original failures
+remain visible and prevent a full acceptance claim. Seven package-command
+entry points still await their separate serving migration: Blueprint Drafting,
+Cathedral Oculus, Mastering Suite, Orthographic CAD, Radio Interferometry,
+SETI Deepscope and SETI Freeform. Their dependency adoption does not qualify
+Vite/http-server exposure or binding policy.
 
 The all-active-page load gate covered 57 exhibits: 231 PASS, 0 FAIL, 1 SKIP and
 116 UNVERIFIED. This covers metadata, resources and initial browser loading;
@@ -29,12 +33,12 @@ acceptance is reported separately. Its operator-reported manual-dialing issue
 is not closed by automation. Gallery dispositions and builder attribution remain
 unchanged.
 
-The root toolchain and 19 qualified exhibit dependency trees are adopted;
-remaining dependency candidates and development entry points are still pending.
+The root toolchain and all 35 scoped exhibit dependency candidates are adopted;
+the remaining package-command serving migrations are still pending.
 See dependency reconciliation below. Qualification evidence is preserved in the
 [preview-tools workflow](../.github/workflows/preview-tools.yml),
 [suite registry](suite-registry.js) and
-[hosted run 42510716794](https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794).
+[hosted run 42512175752](https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752).
 Registry eligibility is not a fresh test result. Full functional, visual, sound
 and hands-on operator acceptance remain separate gates. Merge and deployment
 remain **HOLD**, including after a green subset of automated checks.
@@ -202,6 +206,18 @@ or stale evidence cannot become PASS, and supplementary probes cannot create
 an original-suite pass. Install any remaining exhibit-specific dependencies
 according to its README in addition to the root toolchain.
 
+The saved coverage ledger in `qualification-coverage.json` retains 57 active
+targets and 62 recorded original harness paths; it is not a new inventory.
+Fresh qualification now enables the Darkpool and Lumina original suites and
+the remaining Celestial, High SciFi, Aetheric environment, Bibliographic scaffold
+and Conservatory capture checks. Those last five are observational or tooling
+evidence and cannot establish original-suite PASS. Registered focused regression
+steps cover Blueprint Alpha, Bathyscaphe Pilot, Erebus, Reactor, Nimbus notes
+and Ecogrid/SETI Freeform keyboard reachability. Municipal stage and Blueprint
+Drafting current-contract routes remain pending until their hosted proof passes.
+Supplementary status documents require an explicit current PASS path and fresh
+evidence; they cannot override historical original failures or operator status.
+
 test:pilots compares the original suites against historical/shared handlers and
 also exercises their self-hosting test commands. Historical handlers are loaded
 read-only from baseline commit 8c3f718c3e31cd19c169c7cf87ab2feeee7242c1; use a full
@@ -327,10 +343,29 @@ dependencies were removed from these targets, with the additional Apiculture
 removal described above. Atompunk and Conservatory original pixel failures
 remain distinct from dependency qualification; their assertions were not weakened.
 
-The overall candidate job failed on four other empty-lock guards (Aetheric
+That first candidate job failed on four other empty-lock guards (Aetheric
 Telegraph, Erebus Signal, Municipal Registry and Synchrotron Collider). Those
-four and the remaining unadopted candidates are not covered by this adoption.
-Do not report that batch as wholly clean. `node scripts/check-dependency-baseline.js`
+four and the other pending candidates were not covered by the first adoption.
+Do not report that historical batch as wholly clean.
+
+Commit `53ef1a2` adopts the remaining 16 candidates after
+[job 128827397973](https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827397973)
+passed all 35 scoped candidates. The four dependency-free anonymous manifests
+legitimately produce empty npm lock graphs; the qualified guard now accepts
+that exact shape without accepting missing roots in nonempty graphs. All 32
+new emitted files were byte-count/SHA256 checked, installed cleanly, resolved
+shared modules natively from CJS and ESM, and audited with zero findings.
+The additional targets are Aetheric Telegraph, Cerulean Lantern, Blueprint Alpha,
+Blueprint Drafting, Cathedral Oculus, Cyberpunk Fable, Darkpool Router, Erebus
+Signal, Lumina Grove, Mastering Suite, Municipal Registry, Orthographic CAD,
+Radio Interferometry, SETI Deepscope, SETI Freeform and Synchrotron Collider.
+Existing commands, including Blueprint Alpha's explicit current/historical test
+commands, were preserved. Five Vite trees now resolve Vite 6.4.5 and
+source-map-js 1.2.2; the two retained http-server trees resolve follow-redirects
+1.16.3 and qs 6.17.1. This is dependency evidence, independent of functional
+failures and the pending package-command serving policy.
+
+`node scripts/check-dependency-baseline.js`
 collects fresh per-tree audits without installs or lock repair; missing locks
 remain UNVERIFIED and registry denial is ENVIRONMENT-BLOCKED. Fresh checks on
 the adopted branch and final release acceptance are still required.

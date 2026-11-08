@@ -51,6 +51,23 @@ function assessEvidence(document, spec, exhibit) {
   const errors = [], findings = [];
   if (!document || typeof document !== "object" || Array.isArray(document)) return { errors: ["Evidence must be a result object"], findings };
   if (document.exhibit && document.exhibit !== exhibit) errors.push("Evidence belongs to another exhibit: " + document.exhibit);
+  if (spec.kind === "status") {
+    // Supplementary status contracts are explicit and never supply original-suite evidence.
+    // Select the current result subtree so separately recorded historical failures stay historical.
+    if (typeof spec.statusPath !== "string" || !/^[A-Za-z][A-Za-z0-9_]*(?:\.[A-Za-z][A-Za-z0-9_]*)*$/.test(spec.statusPath)) {
+      errors.push("Supplementary status evidence requires an explicit statusPath");
+    } else {
+      const status = valueAt(document, spec.statusPath);
+      if (status !== "PASS") errors.push("Supplementary " + spec.statusPath + " did not pass: " + String(status));
+      const parent = spec.statusPath.split(".").slice(0, -1).join(".");
+      const currentPath = spec.currentPath ?? parent;
+      const current = currentPath ? valueAt(document, currentPath) : document;
+      if (current === undefined || current === null) errors.push("Missing current evidence subtree: " + currentPath);
+      else scanFindings(current, currentPath, findings);
+    }
+    if (spec.originalSuite) errors.push("Supplementary status evidence cannot declare an original-suite contract");
+    return { errors, findings, originalStatuses: [] };
+  }
   if (document.status && document.status !== "PASS") errors.push("Report status: " + document.status);
   let rows;
   if (spec.kind === "mode") {
