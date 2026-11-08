@@ -1,10 +1,10 @@
 "use strict";
 const assert = require("node:assert/strict");
 const http = require("node:http");
-function request(url, pathname, method = "GET") {
+function request(url, pathname, method = "GET", headers = {}) {
   const target = new URL(url);
   return new Promise((resolve, reject) => {
-    const req = http.request({ hostname: target.hostname, port: target.port, path: pathname, method }, res => {
+    const req = http.request({ hostname: target.hostname, port: target.port, path: pathname, method, headers }, res => {
       const chunks = [];
       res.on("data", c => chunks.push(c));
       res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body: Buffer.concat(chunks) }));

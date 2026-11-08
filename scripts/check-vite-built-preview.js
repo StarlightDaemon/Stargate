@@ -135,6 +135,10 @@ async function qualify(name) {
     const exit = await finish(build, 120000); assert.equal(exit.code, 0, "Actual npm build succeeds: " + build.output());
     const dist = path.join(cwd, "dist"), files = filesIn(dist); assert.ok(files.includes("index.html"));
     built = await preview(cwd, folder);
+    assert.equal((await request(built.url, "/", "GET", { Host: "untrusted.invalid" })).status, 403, "Built preview rejects untrusted Host headers");
+    const foreignOrigin = await request(built.url, "/", "GET", { Origin: "https://untrusted.invalid" });
+    assert.equal(foreignOrigin.headers["access-control-allow-origin"], undefined, "Built preview does not grant a foreign origin access");
+    result.hostAndOrigin = "PASS";
     for (const file of files) {
       const response = await request(built.url, "/" + file.split("/").map(encodeURIComponent).join("/"));
       assert.equal(response.status, 200, file); assert.deepEqual(response.body, fs.readFileSync(path.join(dist, file)), "Actual built bytes " + file);
@@ -151,7 +155,11 @@ async function qualify(name) {
       assert.ok(!privateBytes.some(bytes => bytes.equals(response.body)), "No raw source or private file returned: " + route);
       result.probes.push({ method: "GET", route, status: response.status, privateBytesExposed: false, note: response.status === 200 ? "Vite SPA HTML fallback; not shared-preview deny policy" : undefined });
     }
-    for (const method of ["POST", "OPTIONS"]) result.probes.push({ method, route: "/", status: (await request(built.url, "/", method)).status, scope: "Observed native Vite preview method policy" });
+    for (const method of ["POST", "OPTIONS"]) {
+      const status = (await request(built.url, "/", method)).status;
+      if (method === "POST") assert.ok(status >= 400, "Built preview rejects POST");
+      result.probes.push({ method, route: "/", status, scope: "Native Vite preview method policy; POST must be rejected" });
+    }
     const conflict = npmProcess(["run", "preview", "--", "--host", "127.0.0.1", "--strictPort"], cwd);
     try {
       const exit = await finish(conflict, 15000);
