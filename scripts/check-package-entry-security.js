@@ -4,6 +4,7 @@
 const assert = require("node:assert/strict"), fs = require("node:fs"), path = require("node:path"), crypto = require("node:crypto");
 const { createRequire } = require("node:module"), { pathToFileURL } = require("node:url"), { execFileSync } = require("node:child_process");
 const { request, click } = require("./browser-check-helpers.js"), { selectExhibit, startPreview } = require("./preview.js");
+const { loadPage } = require("./browser-load.js");
 const ROOT = path.resolve(__dirname, ".."), OUTPUT = path.join(ROOT, "test/package-entry-security"), BASE = "8c3f718c3e31cd19c169c7cf87ab2feeee7242c1";
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const TARGETS = [
@@ -102,6 +103,15 @@ async function runSuite(browser, target, suite, url, folder) {
   const puppeteer = { executablePath: () => process.env.PUPPETEER_EXECUTABLE_PATH, launch: async () => ({
     async newPage() {
       const page = await context.newPage(), screenshot = page.screenshot.bind(page);
+      if (target.name === "stargate_seti_freeform") {
+        // Reuse the diagnosed load/observed-network-idle adapter from the 57-page
+        // gate. Preserve the original 15s total deadline and every test assertion.
+        const navigation = { goto: page.goto.bind(page), waitForNetworkIdle: page.waitForNetworkIdle.bind(page) };
+        page.goto = (destination, options) => {
+          assert.equal(options.waitUntil, "networkidle0"); assert.equal(options.timeout, 15000);
+          return loadPage(navigation, destination, options.timeout);
+        };
+      }
       page.on("pageerror", error => pageErrors.push(error.message));
       page.on("response", response => { if (response.status() >= 400) resources.push(response.url().replace(url, "ORIGIN") + ":" + response.status()); });
       page.screenshot = options => {
@@ -117,6 +127,7 @@ async function runSuite(browser, target, suite, url, folder) {
   };
   const load = name => ["puppeteer", "puppeteer-core"].includes(name) ? puppeteer : name === "fs" ? artifacts.io : name === "child_process" ? { spawn } : require(name);
   const result = { suite: suite.file, sourceSHA256: crypto.createHash("sha256").update(original(target, suite)).digest("hex"), status: "FAIL", pageErrors, resources };
+  if (target.name === "stargate_seti_freeform") result.navigationAdapter = "Load event plus observed 500ms network idle, within the unchanged original 15000ms deadline; no request/error suppression";
   let timer;
   try {
     await Promise.race([
@@ -154,7 +165,7 @@ async function cancellation(browser, target, url, folder) {
   const context = await browser.createBrowserContext(), page = await context.newPage(), result = { status: "FAIL", pageErrors: [] };
   page.on("pageerror", error => result.pageErrors.push(error.message));
   try {
-    await page.setViewport({ width: 1920, height: 1080 }); await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 });
+    await page.setViewport({ width: 1920, height: 1080 }); await loadPage(page, url, 30000);
     result.initial = await state(page, target.name);
     await click(page, target.preset); await delay(450); result.beforeCancel = await state(page, target.name);
     await click(page, target.stop); result.immediate = await state(page, target.name); await delay(8250);
