@@ -157,22 +157,18 @@ async function main(args = process.argv.slice(2)) {
       if (!options.http) record(item.checks, "http-resources", "UNVERIFIED", "Not requested; use --http.");
       if (!options.browser || browserBlock) record(item.checks, "browser-load", browserBlock ? "ENVIRONMENT-BLOCKED" : "UNVERIFIED", browserBlock || "Not requested; use --browser with an installed Puppeteer and browser.");
       let pkg = {}; try { pkg = JSON.parse(fs.readFileSync(path.join(selection.root, "package.json"), "utf8")); } catch {}
-      const { suites, runSuite } = require("./run-pilot-suites.js");
-      const adapter = suites.find(s => s.name === entry.folder);
-      if (options.suites && adapter) {
-        try {
-          const output = path.join(ROOT, "test", "verification", `${Date.now()}-${crypto.randomUUID()}`, entry.folder);
-          const result = await runSuite(adapter, "shared", output);
-          record(item.checks, "existing-tests", result.status, result);
-        } catch (error) {
-          record(item.checks, "existing-tests", ["EACCES", "EPERM", "EADDRINUSE"].includes(error.code) ? "ENVIRONMENT-BLOCKED" : "FAIL", error.message);
-        }
-      } else {
-        record(item.checks, "existing-tests", "UNVERIFIED", { scripts: pkg.scripts || {}, reason: adapter ? "Not requested; use --suites to run the original suite against the shared server." : "No qualified original-suite adapter is available for this exhibit." });
-      }
+      if (!options.suites) record(item.checks, "existing-tests", "UNVERIFIED", { scripts: pkg.scripts || {}, reason: "Not requested; --suites runs the registered original comparison and supplementary checks." });
       record(item.checks, "interaction-and-operator", "UNVERIFIED", "Dialing, activation, cancellation, sound, keyboard, reduced motion and hands-on acceptance are separate gates.");
     }
   } finally { if (browser) await browser.close(); }
+  if (options.suites) {
+    const suiteReport = await require("./run-qualified-suites.js").runQualifiedSuites(report.exhibits.map(item => item.exhibit));
+    report.suiteArtifacts = suiteReport.artifactDirectory;
+    for (const item of report.exhibits) {
+      const result = suiteReport.results.find(result => result.exhibit === item.exhibit);
+      record(item.checks, "existing-tests", result.status, result);
+    }
+  }
   const checks = [...report.checks, ...report.exhibits.flatMap(e => e.checks)];
   report.summary = Object.fromEntries(["PASS", "FAIL", "SKIP", "UNVERIFIED", "ENVIRONMENT-BLOCKED"].map(s => [s, checks.filter(c => c.status === s).length]));
   report.exitCode = report.summary.FAIL ? 1 : report.summary.UNVERIFIED || report.summary["ENVIRONMENT-BLOCKED"] ? 2 : 0;

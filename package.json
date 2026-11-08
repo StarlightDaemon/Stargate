@@ -16,7 +16,8 @@
     "security:deps": "npm audit --include=dev --include=optional --include=peer",
     "security:deps:featured": "npm --prefix Stargate_OG audit",
     "test:pages-output-guard": "node scripts/test-build-pages-output-guard.js",
-    "test:pages-release": "node scripts/audit-pages-release.js"
+    "test:pages-release": "node scripts/audit-pages-release.js",
+    "test:suites": "node scripts/run-qualified-suites.js"
   },
   "dependencies": {
     "sharp": "^0.35.5"
