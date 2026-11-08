@@ -50,7 +50,14 @@ async function packageServer(target, folder) {
   await new Promise((resolve, reject) => { instance.server.once("error", reject); instance.listen(0, "127.0.0.1", resolve); });
   assert.equal(instance.server.address().address, "127.0.0.1");
   return { url: "http://127.0.0.1:" + instance.server.address().port, version,
-    close: () => new Promise(resolve => { instance.close(resolve); instance.server.closeAllConnections?.(); }) };
+    // http-server 14.1.1's wrapper close() drops callback arguments.
+    close: () => closeOwnedHttpServer(instance.server) };
+}
+function closeOwnedHttpServer(server) {
+  return new Promise((resolve, reject) => {
+    server.close(error => error ? reject(error) : resolve());
+    server.closeAllConnections?.();
+  });
 }
 function artifactIO(target, folder) {
   const exhibit = path.join(ROOT, target.name);
@@ -137,6 +144,7 @@ async function state(page, name) {
   return page.evaluate(name => {
     if (name === "stargate_cathedral_oculus") return { state: document.getElementById("telem-state").textContent.trim(), count: document.querySelectorAll(".triforium-slot.filled").length };
     if (name === "stargate_blueprint_drafting") return { state: document.getElementById("drawing-status").textContent.trim(), count: document.querySelectorAll("#address-buffer span").length };
+    if (name === "stargate_seti_deepscope") return { state: window.deepScopeApp.state, count: window.deepScopeApp.lockedCarriers.length, slots: document.querySelectorAll("#register-slots .reg-slot.filled").length, cycling: window.deepScopeApp.isAutoDialing };
     const app = name === "stargate_mastering_suite" ? window.AxiomApp : name === "stargate_orthographic_cad" ? window.__STARGATE_CAD_APP.dialer
       : name === "stargate_radio_interferometry" ? window.__stargateConsole : name === "stargate_seti_deepscope" ? window.deepScopeApp : window.__APP__;
     return { state: app.state || app.systemState, count: (app.patchedChannels || app.currentAddress || app.address || app.lockedCarriers).length };
@@ -154,6 +162,27 @@ async function cancellation(browser, target, url, folder) {
     result.functionalAcceptance = result.after8250ms.state === result.initial.state && result.after8250ms.count === 0
       ? "UNVERIFIED: preset cancellation remains idle after 8.25s; full operator/sound acceptance separate"
       : "FAIL: preset cancellation does not remain idle after 8.25s";
+    if (target.name === "stargate_seti_deepscope") {
+      const idle = { state: "IDLE", count: 0, slots: 0, cycling: false };
+      assert.deepEqual(result.immediate, idle, "Preset cancellation immediately clears state and register");
+      assert.deepEqual(result.after8250ms, idle, "Preset cancellation stays clear after 8.25s");
+      result.restartRaces = [];
+      for (const cancelAfterMs of [25, 450]) {
+        await click(page, target.preset); await delay(cancelAfterMs); await click(page, target.stop);
+        const cancelled = await state(page, target.name);
+        assert.deepEqual(cancelled, idle, "Repeated cancellation immediately clears the register");
+        await click(page, target.preset);
+        await page.waitForFunction(() => window.deepScopeApp.state === "PENDING" && window.deepScopeApp.lockedCarriers.length === 7 && !window.deepScopeApp.isAutoDialing, { timeout: 12000 });
+        const restarted = await state(page, target.name);
+        assert.deepEqual(restarted, { state: "PENDING", count: 7, slots: 7, cycling: false }, "Replacement preset completes exactly seven slots");
+        assert.equal(await page.evaluate(() => new Set(window.deepScopeApp.lockedCarriers).size), 7, "No stale duplicate carrier from the cancelled sequence");
+        await click(page, target.stop); await delay(8250);
+        const after8250ms = await state(page, target.name);
+        assert.deepEqual(after8250ms, idle, "Replacement preset flush remains idle after 8.25s");
+        result.restartRaces.push({ cancelAfterMs, cancelled, restarted, after8250ms, status: "PASS" });
+      }
+      await page.screenshot({ path: path.join(folder, "cancel-restart-regression.png") });
+    }
     assert.deepEqual(result.pageErrors, []); result.status = "PASS";
   } catch (error) { result.error = error.message; }
   finally { await context.close(); }
@@ -224,4 +253,4 @@ async function main(args = process.argv.slice(2)) {
   assert.ok(reports.every(result => result.status === "PASS"), "Package entry qualification remains incomplete");
 }
 if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
-module.exports = { TARGETS, compiledSuite, artifactIO };
+module.exports = { TARGETS, compiledSuite, artifactIO, closeOwnedHttpServer };
