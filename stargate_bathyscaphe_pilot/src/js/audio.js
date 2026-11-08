@@ -29,6 +29,23 @@ const SoundEngine = (() => {
 
   // Dynamic sound loops / interval trackers
   let hullCreakTimer = null;
+  const transientSources = new Set();
+  const startTransient = source => {
+    transientSources.add(source);
+    source.onended = () => { transientSources.delete(source); source.disconnect(); };
+    source.start();
+  };
+  const resetAfterDisengage = () => {
+    for (const source of transientSources) {
+      source.stop();
+      source.disconnect();
+    }
+    transientSources.clear();
+    if (droneFilter && audioCtx) {
+      droneFilter.frequency.cancelScheduledValues(audioCtx.currentTime);
+      droneFilter.frequency.setValueAtTime(140, audioCtx.currentTime);
+    }
+  };
 
   const init = () => {
     if (isInitialized) return;
@@ -142,7 +159,7 @@ const SoundEngine = (() => {
     filter.connect(hissEnvelope);
     hissEnvelope.connect(ballastGain);
 
-    noiseSource.start();
+    startTransient(noiseSource);
     noiseSource.stop(audioCtx.currentTime + duration);
   };
 
@@ -183,8 +200,8 @@ const SoundEngine = (() => {
     filter.connect(env);
     env.connect(thrusterGain);
 
-    osc1.start();
-    osc2.start();
+    startTransient(osc1);
+    startTransient(osc2);
     osc1.stop(audioCtx.currentTime + duration);
     osc2.stop(audioCtx.currentTime + duration);
   };
@@ -227,8 +244,8 @@ const SoundEngine = (() => {
     filter.connect(env);
     env.connect(hullGain);
 
-    carrier.start();
-    modulator.start();
+    startTransient(carrier);
+    startTransient(modulator);
     carrier.stop(audioCtx.currentTime + dur);
     modulator.stop(audioCtx.currentTime + dur);
   };
@@ -267,7 +284,7 @@ const SoundEngine = (() => {
     osc.connect(env);
     env.connect(masterGain);
 
-    osc.start();
+    startTransient(osc);
     osc.stop(audioCtx.currentTime + 0.03);
   };
 
@@ -304,7 +321,7 @@ const SoundEngine = (() => {
       filter.connect(env);
       env.connect(masterGain);
 
-      osc.start();
+      startTransient(osc);
       osc.stop(audioCtx.currentTime + 1.2);
     } else if (stage === 3) {
       // Stage 3: Sustained active gate resonance
@@ -341,6 +358,7 @@ const SoundEngine = (() => {
   return {
     init,
     resumeContext,
+    resetAfterDisengage,
     playBallastHiss,
     playThrusterWhine,
     playHullCreak,

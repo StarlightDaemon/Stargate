@@ -39,6 +39,8 @@ const Dialer = (() => {
   let isInterlockEngaged = false; // MUST default to false (RELEASED)
   let trimAnimationTimer = null;
   let stagedDescentTimers = [];
+  let emergencySettleTimer = null;
+  let trimGeneration = 0;
 
   const getWaypoints = () => WAYPOINTS;
   const getTrimChannels = () => TRIM_CHANNELS;
@@ -89,6 +91,8 @@ const Dialer = (() => {
       return false;
     }
 
+    clearEmergencySettle();
+    const generation = ++trimGeneration;
     SoundEngine.resumeContext();
     SoundEngine.playSolenoidClick();
     SoundEngine.playBallastHiss(speed === 'computer' ? 0.25 : 0.45, true);
@@ -110,6 +114,7 @@ const Dialer = (() => {
     if (trimAnimationTimer) clearInterval(trimAnimationTimer);
 
     trimAnimationTimer = setInterval(() => {
+      if (generation !== trimGeneration || dialerState !== 'TRIMMING') return;
       step++;
       const progress = step / stepCount;
 
@@ -246,7 +251,11 @@ const Dialer = (() => {
    * Always reachable, immediately purges profile and surfaces the vehicle.
    */
   const emergencyBlowBallast = () => {
+    if (window.QuickDial) QuickDial.cancelAutoDial();
+    clearEmergencySettle();
+    trimGeneration++;
     clearStagedTimers();
+    SoundEngine.resetAfterDisengage();
     if (trimAnimationTimer) {
       clearInterval(trimAnimationTimer);
       trimAnimationTimer = null;
@@ -262,8 +271,8 @@ const Dialer = (() => {
     // Reset locked waypoints
     lockedWaypoints = [];
 
-    // Surface vehicle immediately
-    Physics.setTargetDepth(0, 2.5);
+    // Restore the documented surface reset; retain the brief ballast-blow effect.
+    Physics.resetToSurface();
     Physics.setBuoyancyDelta(8.5); // Strong positive buoyancy during ascent
 
     TRIM_CHANNELS.forEach(ch => { ch.fill = 15; });
@@ -272,7 +281,9 @@ const Dialer = (() => {
     const fxLayer = document.getElementById('aperture-fx-layer');
     if (fxLayer) fxLayer.className = 'aperture-fx-layer';
 
-    setTimeout(() => {
+    emergencySettleTimer = setTimeout(() => {
+      if (dialerState !== 'EMERGENCY_ASCENT') return;
+      emergencySettleTimer = null;
       Physics.setBuoyancyDelta(0.0);
       TRIM_CHANNELS.forEach(ch => { ch.fill = 50; });
       renderTrimBars();
@@ -281,6 +292,11 @@ const Dialer = (() => {
     }, 1200);
 
     updateUIState();
+  };
+
+  const clearEmergencySettle = () => {
+    if (emergencySettleTimer !== null) clearTimeout(emergencySettleTimer);
+    emergencySettleTimer = null;
   };
 
   const clearStagedTimers = () => {
