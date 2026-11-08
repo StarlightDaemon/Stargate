@@ -103,6 +103,24 @@
     isProcessingBatch: false
   };
 
+  let workflowGeneration = 0;
+  const workflowTimers = new Set();
+  function cancelWorkflow() {
+    workflowGeneration++;
+    for (const timer of workflowTimers) clearTimeout(timer);
+    workflowTimers.clear();
+    state.isProcessingBatch = false;
+  }
+  function scheduleWorkflow(callback, delay) {
+    const generation = workflowGeneration;
+    const timer = setTimeout(() => {
+      workflowTimers.delete(timer);
+      if (generation === workflowGeneration) callback();
+    }, delay);
+    workflowTimers.add(timer);
+    return timer;
+  }
+
   function generateDocketId() {
     const num = Math.floor(1000 + Math.random() * 9000);
     const letter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
@@ -734,6 +752,7 @@
     if (state.isProcessingBatch || state.systemStatus === 'ENGAGED') return;
     if (state.enteredGlyphs.length >= REQUIRED_ADDRESS_LENGTH) return;
 
+    if (state.systemStatus === 'TERMINATING') resetTerminalFull();
     audio.playKeyClick();
     const targetSlotIndex = state.enteredGlyphs.length;
     state.enteredGlyphs.push({ ...glyph, index: glyphIndex });
@@ -742,7 +761,7 @@
     setSlotSeeking(targetSlotIndex, glyph);
 
     // 2. After micro-delay for dot-matrix carriage indexing, slam stamp to LOCKED
-    setTimeout(() => {
+    scheduleWorkflow(() => {
       lockSlot(targetSlotIndex, glyph);
       updateUIState();
     }, 140);
@@ -817,17 +836,17 @@
     audio.playKeyClick();
     logTeleprinter(`LOADING PRESET [${preset.code}] - ${preset.name.toUpperCase()} (TIER ${preset.tier})...`, 'alert');
 
-    // Reset current dial slots cleanly
-    resetDialStateOnly();
+    // Reset current dial slots and invalidate delayed teardown or old stamps.
+    resetTerminalFull();
     state.isProcessingBatch = true;
 
     preset.sequence.forEach((glyphIdx, step) => {
-      setTimeout(() => {
+      scheduleWorkflow(() => {
         const glyph = MUNICIPAL_GLYPHS[glyphIdx];
         if (glyph) {
           state.enteredGlyphs.push({ ...glyph, index: glyphIdx });
           setSlotSeeking(step, glyph);
-          setTimeout(() => {
+          scheduleWorkflow(() => {
             lockSlot(step, glyph);
             updateUIState();
             if (step === preset.sequence.length - 1) {
@@ -841,6 +860,7 @@
   }
 
   function resetDialStateOnly() {
+    cancelWorkflow();
     state.enteredGlyphs = [];
     state.systemStatus = 'DORMANT';
 
@@ -939,7 +959,7 @@
     logTeleprinter(`FORM 1099-TX REJECTED FOR DOCKET ${state.activeDocketId}: MUNICIPAL COMPLIANCE FREEZE ENGAGED.`, 'error');
 
     // Auto dismiss rejection stamp after 2.5s
-    setTimeout(() => {
+    scheduleWorkflow(() => {
       if (state.systemStatus === 'REJECTED') {
         if (dom.centerStampOverlay) dom.centerStampOverlay.className = 'center-stamp-overlay';
         state.systemStatus = 'FILED_READY';
@@ -1008,6 +1028,7 @@
   // DISENGAGE SEQUENCE (HARD REQUIREMENT: VISIBLE, RELIABLE, FULL TEARDOWN)
   // =========================================================================
   function handleDisengageClick() {
+    cancelWorkflow();
     audio.playDisengageTear();
     audio.stopMainframeCarrier();
 
@@ -1028,7 +1049,7 @@
       if (dom.stampMeta) dom.stampMeta.textContent = 'SESSION VOIDED // DKT CLOSED';
     }
 
-    setTimeout(() => {
+    scheduleWorkflow(() => {
       // Full reset to DORMANT state
       resetTerminalFull();
     }, 450);

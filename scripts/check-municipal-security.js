@@ -157,6 +157,16 @@ async function observe(browser, server, mode) {
     result.presetCancelled = await snapshot();
     result.presetCancellationIdle = result.presetCancelled.count === 0 && result.presetCancelled.locked === 0 && result.presetCancelled.seeking === 0 && !result.presetCancelled.authorized;
     await shot("preset-cancelled");
+    assert.equal(result.presetCancellationIdle, true, "Cancelled preset must not file later glyphs");
+    // Cancel a pending manual stamp and replace it before the 450ms teardown.
+    await click(page, "#glyphBtn-0"); await delay(30); await click(page, "#disengageBtn");
+    await click(page, "#qdRoute2"); await delay(8250);
+    result.replacement = await snapshot();
+    assert.equal(result.replacement.count, 8); assert.equal(result.replacement.locked, 8);
+    assert.equal(result.replacement.authorized, false); assert.equal(result.replacement.seeking, 0);
+    result.replacementCodes = await page.$eval('.chevron-slot-card.state-locked .slot-name', elements => elements.map(element => element.textContent.split(' // ')[0]));
+    assert.deepEqual(result.replacementCodes, ['HYD-02', 'ALT-08', 'CLR-17', 'VAP-30', 'VOL-22', 'WBD-05', 'SUR-23', 'SUM-32']);
+    await click(page, "#disengageBtn"); await delay(8250); result.finalIdle = await idle();
     result.activationObservation = "Authorization is already active at the 300ms sample. Three distinct activation stages and sound quality are not qualified.";
     result.functionalAcceptance = result.presetCancellationIdle ? "UNVERIFIED: remaining functional and operator gates" : "FAIL: interrupted preset leaves later filed glyphs after disengage";
     assert.deepEqual(result.pageErrors, []); assert.deepEqual(result.consoleErrors, []); assert.deepEqual(result.resources, []); assert.deepEqual(result.requestFailures, []);

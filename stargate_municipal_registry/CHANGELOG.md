@@ -78,3 +78,10 @@ tagged at `cebb7ff`, the release commit.
 - Operator Reference (`?`) modal with Bureaucratic Standard Operating Procedures.
 - Vector CRT Oscilloscope Canvas displaying municipal conduit raster lines, packet vectors, and event horizon authorization plane.
 - Corner metadata links: `StarlightDaemon` (bottom-left) and version label `v1.0.0` (bottom-right).
+
+
+## Cancellation repair — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Own and invalidate manual-stamp, preset, rejection and delayed-teardown callbacks. Cancellation prevents later filed glyphs; a replacement address cannot be erased by the prior teardown.
+- Preserves original eight-phase assertions and existing timing/visual design. Dedicated cancellation/replacement probes wait 8.25 seconds. Three-stage activation and operator acceptance remain separate unresolved gates.
