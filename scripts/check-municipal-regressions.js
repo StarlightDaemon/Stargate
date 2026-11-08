@@ -90,7 +90,11 @@ async function browserRun(browser, url, baseline) {
     assert.ok(beforeEngage.oscillatorStarts > 0, 'First trusted cold pointer workflow must actually start audio sources');
     const pixels = [];
     for (const stage of ["BUILDUP", "BREAKTHROUGH", "SUSTAINED_ACTIVE"]) {
-      await wait(stage); const value = await snapshot(); assert.equal(value.canCancel, true);
+      await wait(stage);
+      // State changes synchronously; the canvas renders on the next animation frame.
+      // Two frames also cover a waitForFunction poll that ran before the app's render callback.
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      const value = await snapshot(); assert.equal(value.stage, stage); assert.equal(value.canCancel, true);
       if (stage !== "SUSTAINED_ACTIVE") { assert.notEqual(value.auth, "CONDUIT AUTHORIZED"); assert.equal(value.flux, "0.00 MB/s"); assert.equal(value.stamp, "center-stamp-overlay"); }
       else { assert.equal(value.auth, "CONDUIT AUTHORIZED"); assert.equal(value.activeOscillators, 2, 'Both sustained carrier oscillators are actually running'); }
       if (stage === 'BUILDUP') assert.ok(value.oscillatorStarts > beforeEngage.oscillatorStarts, 'Buildup actually starts its seek chirp');
@@ -98,7 +102,9 @@ async function browserRun(browser, url, baseline) {
       pixels.push(await page.evaluate(() => { const image = document.getElementById("conduitCanvas").getContext("2d").getImageData(0, 0, 560, 420).data;
         let sum = 0, amberPixels = 0; for (let i = 0; i < image.length; i += 4) { sum += (image[i] + image[i + 1] + image[i + 2]) / 3;
           if (image[i] > 180 && image[i + 1] > 80 && image[i + 1] < 220 && image[i + 2] < 50) amberPixels++; }
-        return { meanRGB: sum / (image.length / 4), amberPixels }; }));
+        return { stage: document.body.dataset.activationStage, meanRGB: sum / (image.length / 4), amberPixels }; }));
+      assert.equal(pixels[pixels.length - 1].stage, stage);
+      console.log("MUNICIPAL_STAGE_SAMPLE " + JSON.stringify({ state: value, pixels: pixels[pixels.length - 1] }));
       await shot(stage.toLowerCase());
     }
     assert.ok(pixels[1].meanRGB > pixels[0].meanRGB + 10 && pixels[1].meanRGB > pixels[2].meanRGB + 10, "Breakthrough phosphor flash differs from buildup and sustained raster");
@@ -134,7 +140,7 @@ async function browserRun(browser, url, baseline) {
 async function main() {
   fs.mkdirSync(OUT, { recursive: true }); const report = { deterministic: deterministic(), browser: "NOT_RUN" };
   if (!process.argv.includes("--offline")) {
-    const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(ROOT, "node_modules/puppeteer"));
+    const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
     const server = await startPreview({ ...selectExhibit(NAME), port: 0 }), browser = await puppeteer.launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
     try { report.browser = { baseline: await browserRun(browser, server.url, true), repaired: await browserRun(browser, server.url, false) }; }
     finally { await browser.close(); await server.close(); }
