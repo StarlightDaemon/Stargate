@@ -135,7 +135,9 @@ async function main() {
     const baseline = await qualify(browser, "legacy"), shared = await qualify(browser, "shared");
     assert.deepEqual(shared.originalSuite, baseline.originalSuite);
     assert.deepEqual(shared.cycles, baseline.cycles);
-    assert.deepEqual(shared.cancelled, baseline.cancelled);
+    // Portal decay is frame-timed; both modes independently require radius <0.01.
+    for (const key of ["state", "count", "hold", "canvas", "target", "replayTimers", "detectorRate"])
+      assert.equal(shared.cancelled[key], baseline.cancelled[key], "Cancelled " + key);
     for (const key of ["resources", "requestFailures"]) assert.deepEqual([...new Set(shared[key])].sort(), [...new Set(baseline[key])].sort(), key);
     console.log("SYNCHROTRON_PRESERVATION PASS");
   } finally { await browser.close(); }
