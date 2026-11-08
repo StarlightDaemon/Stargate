@@ -237,9 +237,15 @@ exception is an explicitly-scoped security audit.
 ## 11. Shared maintenance tools
 
 Use [scripts/MAINTENANCE.md](scripts/MAINTENANCE.md) for the current preview and
-verification commands, report semantics and rollout gates. The three pilot
-launchers now use shared serving; broader rollout awaits acceptance. Do not delete or replace
+verification commands, report semantics and the dated rollout checkpoint. Shared
+serving now extends beyond the three pilots; each remaining launcher requires its
+own qualification. The root lockfile supplies shared browser and image tooling;
+browser applications and the flagship build remain independent. Do not delete or replace
 an exhibit's server or weaken its specialized assertions merely because the
 shared handler tests pass. A metadata/resource report is not an interaction test
 or operator qualification. Record FAIL, SKIP, UNVERIFIED and ENVIRONMENT-BLOCKED
 results explicitly; keep the existing gallery status and retirement rules.
+Preserve historical assertion failures separately from any explicitly revised
+current contract. A qualified adapter or clean dependency audit is not full
+functional acceptance. Merge and deployment remain on HOLD until the required
+acceptance evidence and separate publication authorization are present.

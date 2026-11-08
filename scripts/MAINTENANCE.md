@@ -1,10 +1,50 @@
 # Development and verification
 
-Use Node.js 24 and Git. The shared tools use Node built-ins and need no package
-installation. Exhibit application code remains independent; these tools are
-never browser dependencies and are not copied into the Pages site.
+Use Node.js 24 and Git. Preview, static verification and handler tests use Node
+built-ins. Browser tests and image tools use the shared root lockfile; run
+`npm ci --ignore-scripts` from the repository root before using them. Supply an
+installed Chrome through `PUPPETEER_EXECUTABLE_PATH`; installation does not fetch
+a browser. The root toolchain owns Puppeteer, Puppeteer Core, pngjs and sharp.
+Exhibit application code remains independent; these tools are never browser
+dependencies and are not copied into the Pages site. The flagship retains its
+own package installation and build workflow.
 
 ## Current rollout status
+
+Interim checkpoint, 2026-11-08: 32 of the 33 original scoped server launchers
+have migrated to shared serving. Steampunk Fable and Ukiyo Waystation Fable are
+additional migrated entry points. Cyberpunk Fable has now earned qualification
+(42 original assertions in each mode and ten exact public assets); its launcher
+adoption remains pending at this checkpoint. Cerulean Lantern remains pending
+because its exact original baseline fails. Preserve that failure while diagnosing
+the specialist harness; do not replace its launcher on handler tests alone.
+
+The all-active-page load gate covered 57 exhibits: 231 PASS, 0 FAIL, 1 SKIP and
+116 UNVERIFIED. This covers metadata, resources and initial browser loading;
+it does not qualify every original suite, interaction or operator requirement.
+Original Atompunk Fable and Solarpunk Conservatory pixel assertions still record
+baseline failures. Blueprint Alpha's original suite retains its historical
+automatic-preset/500 ms activation contract; current staged/manual-Engage
+acceptance is reported separately. Its operator-reported manual-dialing issue
+is not closed by automation. Gallery dispositions and builder attribution remain
+unchanged.
+
+The root toolchain and 19 qualified exhibit dependency trees are adopted;
+remaining dependency candidates and development entry points are still pending.
+See dependency reconciliation below. Qualification evidence is preserved in the
+[preview-tools workflow](../.github/workflows/preview-tools.yml),
+[suite registry](suite-registry.js) and
+[hosted run 42510716794](https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794).
+Registry eligibility is not a fresh test result. Full functional, visual, sound
+and hands-on operator acceptance remain separate gates. Merge and deployment
+remain **HOLD**, including after a green subset of automated checks.
+
+## Early rollout history — 2026-11-07–08
+
+The following records preserve the initial eight migrations and their findings.
+Their ordinal counts, pending work and dependency descriptions describe those
+checkpoints, not the current rollout. Later repairs retain the original evidence
+in the relevant exhibit CHANGELOG and comparison reports.
 
 The three pilots (Aetheric Telegraph, Bathyscaphe Pilot and Solarpunk Astra) now
 use shared serving through their existing server.js/server.cjs commands. Ports
@@ -114,6 +154,8 @@ npm run verify
 npm run verify -- --exhibit stargate_bathyscaphe_pilot --http
 npm run verify -- --changed main --http --browser
 npm run verify -- --exhibit stargate_aetheric_telegraph --suites
+npm run test:suites -- --list
+npm run test:suites -- --exhibit stargate_municipal_registry
 npm run test:pilots
 npm run test:preview
 ```
@@ -128,9 +170,9 @@ with no affected active exhibit checks repository safeguards only.
 
 --http checks every allowed asset through real loopback HTTP. --browser checks
 initial loading at 1920x1080 and records page errors, console errors, request
-failures and HTTP errors. It uses an installed Puppeteer module; install it via
-an existing approved exhibit dependency workflow, or set STARGATE_PUPPETEER_MODULE
-to that installed module's absolute path. PUPPETEER_EXECUTABLE_PATH may select
+failures and HTTP errors. It uses the installed root Puppeteer module; set
+STARGATE_PUPPETEER_MODULE to another qualified installed module's absolute path
+when needed. PUPPETEER_EXECUTABLE_PATH may select
 an installed Chrome. No browser is downloaded and no sandbox flags are disabled
 by these tools. Remote font/resource failures remain visible in the report.
 
@@ -148,10 +190,18 @@ href/src/poster attributes, CSS url() values and relative JavaScript imports;
 it does not resolve arbitrary generated URLs, srcset, CSS escapes or all network
 calls. Keep browser and publication audits as separate requirements.
 
---suites runs the original Aetheric and Bathyscaphe suites against shared serving.
-Install each exhibit's locked dependencies with npm ci first. Missing dependencies
-are ENVIRONMENT-BLOCKED; failed original assertions are FAIL. Other exhibits keep
-UNVERIFIED adapter entries. Logs/screenshots are saved beside the JSON report.
+--suites routes selected exhibits through `suite-registry.js` and
+`run-qualified-suites.js`. `npm run test:suites -- --list` prints available
+contracts; use repeated `--exhibit` selections or explicit `--all`. Pending
+adapters remain UNVERIFIED unless deliberately selected with `--include-pending`
+on `test:suites`. This option executes a checker; it does not qualify it.
+Missing dependencies are ENVIRONMENT-BLOCKED; failed original assertions are
+FAIL. Fresh per-run evidence under ignored `test/qualified-suites/` separates
+preservation, original-suite, coverage, functional and operator status. Missing
+or stale evidence cannot become PASS, and supplementary probes cannot create
+an original-suite pass. Install any remaining exhibit-specific dependencies
+according to its README in addition to the root toolchain.
+
 test:pilots compares the original suites against historical/shared handlers and
 also exercises their self-hosting test commands. Historical handlers are loaded
 read-only from baseline commit 8c3f718c3e31cd19c169c7cf87ab2feeee7242c1; use a full
@@ -162,9 +212,9 @@ suite; check-pilot-browsers.js supplies current supplementary interaction eviden
 The separate test:preview:handlers command tests request handlers without HTTP
 transport. It is supplementary evidence. It does not replace test:preview,
 which exercises real sockets, symlinks/junctions, port conflicts and lifecycle.
-The preview-tools PR workflow runs those tests on Linux and Windows without
-installing npm packages. A separate browser job installs the existing locked
-Aetheric Puppeteer dependency and runs `node scripts/check-pilot-browsers.js`
+The preview-tools PR workflow runs tooling tests on Linux and Windows. Separate
+browser jobs install the shared root lockfile and run the registered comparison
+and regression checkers, including `node scripts/check-pilot-browsers.js`,
 with STARGATE_PUPPETEER_MODULE and PUPPETEER_EXECUTABLE_PATH configured. It compares
 the retained legacy handlers with shared serving, using loopback listeners.
 It records real pointer interactions, staged presets, explicit activation,
@@ -206,9 +256,10 @@ The workflow neither deploys nor replaces the existing release CI.
    operator gates explicit. Merging main may deploy Pages; merge only after
    required evidence, then verify deployment and public URLs separately.
 
-## Known rollout limitations
+## Recovery history and continuing acceptance limits
 
-The recovery session could execute Node, Git, handlers and static checks, but
+At the initial recovery checkpoint, the session could execute Node, Git,
+handlers and static checks, but
 loopback client connections were denied, test junction creation was prohibited,
 Chrome could not launch and npm DNS was unavailable. Those observations do not
 establish a product regression or excuse a passing HTTP/browser/security claim.
@@ -224,18 +275,29 @@ Bathyscaphe/Solarpunk now declare local SVG favicons. The 17 missing exhibit
 .gitignore files are added; Pages assembly excludes these development files and
 the release audit rejects any that leak into its output. Browser checks continue
 to fail on resource errors; none are filtered to obtain a pass.
-Automated checks do not establish sound quality, visual or hands-on acceptance. Operator
-qualification, broader consolidation and publication remain on HOLD.
+These are historical environment observations, not blanket blockers on the
+subsequent hosted qualification and consolidation recorded above. Automated
+checks do not establish sound quality or hands-on acceptance. Visual review must
+identify the actual captures and scope reviewed. Operator qualification and
+publication remain on HOLD; authorized consolidation continues with per-target
+evidence and preserved failure records.
 
-## Dependency reconciliation — 2026-11-07
+## Dependency reconciliation — updated 2026-11-08
 
 PR #9 explicitly incorporates PR #8's exact source-map-js 1.2.2 lock correction
 from e2e2374892c34d153aae02bdfed5b6738cec4404. This is reused work, not an
 independent fix. PR #8 remains open and unchanged; its eventual supersession
 needs an explicit disposition. PR #7 is stacked on #8 and contains accessibility
-changes. On 2026-11-08 the exact three-file patch from a26cea51dbd404c054e776a535008cc87415e63e was incorporated into this branch with its loading/status release-audit invariants; this reuses PR #7 rather than claiming a new fix. Combined release/browser checks remain required. PR #6 changes
-apiculture's proxy-addr dependency and is unrelated to the flagship findings.
-Neither #6 nor #7 is merged or modified by this campaign.
+changes. On 2026-11-08 the exact three-file patch from
+a26cea51dbd404c054e776a535008cc87415e63e was incorporated into this branch with
+its loading/status release-audit invariants; this reuses PR #7 rather than
+claiming a new fix. Combined release/browser checks remain required.
+
+PR #6 updates Apiculture's transitive proxy-addr from 2.0.7 to 2.0.8. After
+qualifying Apiculture's original suite and server, this campaign removed its
+unused Express dependency and associated qs override. That removal eliminates
+the dependency path addressed by PR #6; it does not merge or close the PR.
+PRs #6, #7 and #8 remain unmerged and require an explicit final disposition.
 
 The flagship's development minima are raised to Vite ^8.3.3 and Vitest ^4.1.12.
 Its npm-generated lock updates the matching Vitest family and Rolldown bindings;
@@ -244,3 +306,31 @@ read-only hosted CI because local registry DNS is blocked, reviewed, then
 committed for fresh npm ci, audit, tests and build through the existing release
 workflow. Historical green PR checks are not current security qualification.
 Merge and deployment remain HOLD regardless of automated CI results.
+
+The shared root toolchain uses Puppeteer/Puppeteer Core ^25.16.0, pngjs ^7.0.0
+and sharp ^0.35.5. Commit `5ff28b2` adopts npm-generated manifest/lock bytes for
+these 19 qualified targets:
+
+- Apiculture Telemetry, Atompunk Fable, Bathyscaphe Pilot, Caissa Workstation,
+  Canopy Commons, Futurist Dynamism and Konstrukt Transit.
+- Nouveau Nimbus, Ukiyo Waystation, Cyberpunk Gemini, Dark Gothic Fable,
+  Dark Matter Array and Fulldome Planetarium.
+- Seismic Triangulation, SIGINT Cryptanalysis, Solarpunk Conservatory,
+  Steampunk Fable, Ukiyo Waystation Fable and Windtunnel Aerodynamics.
+
+Each selected candidate passed clean install, dependency graph, native CJS/ESM
+root-module resolution and a zero-finding full-tree audit in
+[candidate job 128822957920](https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794/job/128822957920).
+All 38 emitted files were validated by byte count and SHA256 before adoption;
+package commands and unrelated metadata were preserved. Duplicate browser/image
+dependencies were removed from these targets, with the additional Apiculture
+removal described above. Atompunk and Conservatory original pixel failures
+remain distinct from dependency qualification; their assertions were not weakened.
+
+The overall candidate job failed on four other empty-lock guards (Aetheric
+Telegraph, Erebus Signal, Municipal Registry and Synchrotron Collider). Those
+four and the remaining unadopted candidates are not covered by this adoption.
+Do not report that batch as wholly clean. `node scripts/check-dependency-baseline.js`
+collects fresh per-tree audits without installs or lock repair; missing locks
+remain UNVERIFIED and registry denial is ENVIRONMENT-BLOCKED. Fresh checks on
+the adopted branch and final release acceptance are still required.
