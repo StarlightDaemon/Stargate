@@ -66,7 +66,21 @@ Historical `serve` qualification is preserved at commit
 `d4ce5294bc65182bcff1a17e085a69700ecf2f10`, workflow run `42462388786`; its original
 suite redirect FAIL remains evidence, while the removed CLI's current rerun is
 explicitly SKIP. Custom/shared original suites and current entry-point checks
-continue to run. Twenty-six original active server implementations remain.
+continue to run.
+
+Synchrotron Collider is the eighth shared-server exhibit. `node server.js`
+preserves port 3042 and accepts `PORT`. The historical handler exposed parent,
+sibling and development files and accepted POST; its listener had no explicit
+host restriction. The shared replacement rejects those requests and binds only
+to loopback. `node scripts/check-synchrotron-security.js` enforces all twelve
+unchanged original predicates, checks eight public assets, two manual cycles,
+staged presets without auto-fire and cancellation followed by 8.25 idle seconds.
+The original suite records booleans without a failing exit; the adapter enforces
+every result. It borrows the existing qualified Blueprint browser dependency
+without changing the target's dependencies. The original suite and application
+files remain unchanged. Favicon 404 and displayed v1.1.0 versus metadata1.1.1
+remain existing observations; preservation is not full operator acceptance.
+Twenty-five original active server implementations remain.
 
 ## Preview one exhibit
 

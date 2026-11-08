@@ -5,6 +5,35 @@ All notable changes to the Aethel-Ring Collider (ARC) Synchrotron Portal Gateway
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — development-server security
+
+### Fixed
+
+- Replaced the raw-path development handler with the shared secure preview after
+  historical/shared qualification. Raw HTTP previously returned repository and
+  sibling files, development source and manifests, and accepted POST. These
+  requests now receive 403 or 405; serving is restricted to loopback.
+- Preserved `node server.js` and default port 3042; added `PORT` support.
+  Client files, original verification suite, version, attribution, dependency
+  manifests and locks are unchanged.
+
+### Verification
+
+- All twelve original boolean predicates pass under historical/shared serving,
+  including 1080p/4K scaling, interlock rejection, manual no-auto-fire, staged
+  presets and mid-replay beam dump. The adapter enforces failures that the
+  original harness only records; none of its predicates is weakened.
+- All eight public assets match source bytes. Supplementary hit-tested checks
+  pass two manual cycles per mode, observe preset counts 0 through 6 without
+  auto-fire, and confirm standby after cancellation followed by 8.25 idle seconds.
+  Portal radius interpolates toward zero; checks await sub-pixel decay and
+  require zero target radius instead of comparing frame-timed floats exactly.
+- Six 1920x1080 captures reviewed: idle, ready, activation, active, dumped and
+  cancelled. Controls, sector locks and portal state remain visible. The existing
+  favicon 404 and displayed v1.1.0/metadata 1.1.1 discrepancy remain recorded.
+  Full sound, responsive, three-stage visual and operator qualification remain
+  separate; no gallery status change is made.
+
 ## [1.1.1] - 2026-09-04
 
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.

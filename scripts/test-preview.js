@@ -130,7 +130,7 @@ test("CLI rejects unknown options and reports port conflicts without private pat
   assert.equal(conflict.code, 1); assert.match(conflict.output, /port is already in use/); assert.ok(!conflict.output.includes(ROOT));
 });
 test("converted exhibit launch commands use the shared security policy and PORT override", { timeout: 20000 }, async () => {
-  for (const [folder, file] of [["stargate_aetheric_telegraph", "server.js"], ["stargate_bathyscaphe_pilot", "server.js"], ["stargate_solarpunk_astra", "server.cjs"], ["stargate_bibliographic_depository", "server.js"], ["stargate_erebus_signal", "server.js"], ["stargate_reactor_criticality", "scripts/server.js"], ["stargate_blueprint_alpha", "server.js"]]) {
+  for (const [folder, file] of [["stargate_aetheric_telegraph", "server.js"], ["stargate_bathyscaphe_pilot", "server.js"], ["stargate_solarpunk_astra", "server.cjs"], ["stargate_bibliographic_depository", "server.js"], ["stargate_erebus_signal", "server.js"], ["stargate_reactor_criticality", "scripts/server.js"], ["stargate_blueprint_alpha", "server.js"], ["stargate_synchrotron_collider", "server.js"]]) {
     const child = spawn(process.execPath, [file], { cwd: path.join(ROOT, folder), env: { ...process.env, PORT: "0" }, windowsHide: true });
     const closed = new Promise(resolve => child.once("close", resolve));
     try {
