@@ -39,3 +39,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breakout Mission-Control Composition**: Balanced symmetrical instrument array breaking the standard hero-left rut.
 - **Operator Reference Modal**: Collapsible quick-guide with signal-versus-noise mechanics and array telemetry manual.
 - **Pixel-Perfect 16:9 Viewport**: Responsive scale-to-fit system ensuring zero-scroll operation at 1080p and 4K displays.
+
+
+## Keyboard interlock repair — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Keep the native safety checkbox keyboard-focusable and show a focus ring on its existing visual switch. Space toggles the same control as pointer activation; default RELEASED state and existing styling remain.
+- Resolves the previously recorded display:none keyboard limitation. Hosted keyboard regression remains required; no general accessibility certification is claimed.

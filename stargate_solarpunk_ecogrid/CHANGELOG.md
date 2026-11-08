@@ -67,3 +67,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Retained the default port and original client behavior; added PORT selection
   where absent. Development files, malformed requests and unsupported methods
   are denied by the shared loopback-only server.
+
+
+## Keyboard interlock repair — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Keep the native safety checkbox keyboard-focusable and show a focus ring on its existing visual switch. Space toggles the same control as pointer activation; default RELEASED state and existing styling remain.
+- Resolves the previously recorded display:none keyboard limitation. Hosted keyboard regression remains required; no general accessibility certification is claimed.
