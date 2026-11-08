@@ -140,7 +140,10 @@ async function runSuite(browser, target, suite, url, folder) {
       const summary = lines.join("\n").match(/ALL TESTS PASSED: (\d+) \/ (\d+)/); assert.ok(summary); assert.equal(summary[1], summary[2]); result.assertions = Number(summary[1]);
     }
     result.status = "PASS";
-  } catch (error) { result.error = error.message; }
+  } catch (error) {
+    result.error = error.message;
+    result.originalLogTail = lines.slice(-20).map(line => line.slice(0, 2000));
+  }
   finally {
     clearTimeout(timer);
     try { await emitVisuals(context, target, suite, folder); } catch (error) { result.visualError = error.message; }

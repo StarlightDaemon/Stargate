@@ -1,12 +1,12 @@
 "use strict";
-// Read-only diagnosis: no client/suite/CSS patches and no scrollIntoView calls.
+// Diagnosis only: client/suite source remains untouched; isolated CSS experiment is restored.
 const assert = require("node:assert/strict"), fs = require("node:fs"), path = require("node:path"), crypto = require("node:crypto");
 const { startPreview, selectExhibit } = require("./preview.js");
 const ROOT = path.resolve(__dirname, ".."), NAME = "stargate_cathedral_oculus", OUT = path.join(ROOT, "test/cathedral-layout");
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function geometry(page) {
   return page.evaluate(() => {
-    const selectors = ['html', 'body', '.cathedral-scaler', '.cathedral-app', '.cathedral-tympanum', '.header-center', '.cathedral-title', '.cathedral-subtitle', '.cathedral-facade', '.cathedral-plinth'];
+    const selectors = ['html', 'body', '.cathedral-scaler', '.cathedral-app', '.cathedral-vault-backdrop', '.clerestory-sunbeams', '.cathedral-tympanum', '.header-center', '.cathedral-title', '.cathedral-subtitle', '.cathedral-facade', '.cathedral-plinth'];
     const boxes = selectors.map(selector => {
       const element = document.querySelector(selector), rect = element.getBoundingClientRect(), css = getComputedStyle(element);
       const range = document.createRange(); range.selectNodeContents(element);
@@ -56,6 +56,23 @@ async function main() {
         await pointer(page, '#btn-activate-portal');
         await page.waitForFunction(() => document.getElementById('telem-state').textContent.includes('Sustained Active'), { timeout: 10000 });
         await capture('active-1080', true); await capture('active-1080', false); await delay(150); await capture('active-repeat-1080', true);
+        // Hold the sunbeam transform at a reproducible nonzero phase. Compare the
+        // same client with only its atmospheric backdrop's overflow isolated,
+        // then restore it. This is causal diagnosis, not an acceptance adapter.
+        await page.evaluate(() => document.querySelector('.clerestory-sunbeams').getAnimations().forEach(animation => {
+          animation.pause(); animation.currentTime = 2000;
+        }));
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        await capture('experiment-sunbeams-paused-baseline-1080', true);
+        const previousOverflow = await page.$eval('.cathedral-vault-backdrop', element => {
+          const previous = element.style.overflow; element.style.overflow = 'hidden'; return previous;
+        });
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        await capture('experiment-backdrop-clipped-1080', true);
+        await page.$eval('.cathedral-vault-backdrop', (element, previous) => { element.style.overflow = previous; }, previousOverflow);
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        await capture('experiment-backdrop-restored-1080', true);
+        await page.evaluate(() => document.querySelector('.clerestory-sunbeams').getAnimations().forEach(animation => animation.play()));
         await page.setViewport({ width: 3840, height: 2160 }); await delay(300); await capture('active-4k', true);
         await pointer(page, '#btn-disengage'); assert.deepEqual(errors, []);
       } finally {
