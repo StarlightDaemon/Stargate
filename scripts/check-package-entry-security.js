@@ -172,6 +172,17 @@ async function qualify(browser, target, mode) {
       if (mode === "shared" || target.package !== "vite" || !/\.(?:html|js|mjs|css)$/.test(file)) assert.ok(exactBytes, "Public asset bytes: " + file);
       result.assets.push({ file, status: response.status, exactBytes, transformation: !exactBytes ? "Vite development transform; original suites must qualify behavior" : undefined });
     }
+    // Requesting Node-only test source through Vite discovers its dependencies and
+    // can trigger optimizer errors/HMR. Run original browser assertions first, then
+    // probe a separate listener/cache so those deliberate requests cannot affect
+    // functional evidence. Both listeners still use the installed package defaults.
+    for (const suite of target.suites) result.suites.push(await runSuite(browser, target, suite, server.url, path.join(folder, suite.file.replace(/[/.]/g, "-"))));
+    result.cancellation = await cancellation(browser, target, server.url, folder);
+    if (mode === "legacy" && target.package === "vite") {
+      await server.close(); server = undefined;
+      server = await packageServer(target, path.join(folder, "security-listener"));
+      result.transport.securityIsolation = "Separate listener and optimizer cache, started after all browser contexts closed";
+    }
     const fixture = path.join(folder, "controlled-traversal.txt"), bytes = Buffer.from("Controlled qualification fixture " + target.name + "\n"); fs.writeFileSync(fixture, bytes);
     const probes = [["GET", "/package.json", 403], ["GET", "/README.md", 403], ...target.suites.map(suite => ["GET", "/" + suite.file, 403]),
       ["POST", "/", 405], ["OPTIONS", "/", 405], ["GET", "/%ZZ", 400],
@@ -183,8 +194,6 @@ async function qualify(browser, target, mode) {
       result.security.push({ method, route, status: response.status, controlledFixtureExposed: response.body.equals(bytes) });
     }
     assert.equal((await request(server.url, "/")).status, 200, "Listener survives malformed/traversal probes");
-    for (const suite of target.suites) result.suites.push(await runSuite(browser, target, suite, server.url, path.join(folder, suite.file.replace(/[/.]/g, "-"))));
-    result.cancellation = await cancellation(browser, target, server.url, folder);
     result.status = result.suites.every(suite => suite.status === "PASS") && result.cancellation.status === "PASS" ? "PASS" : "FAIL";
     return result;
   } catch (error) { result.error = error.stack; return result; }
