@@ -111,7 +111,8 @@ async function qualify(browser, mode) {
       assert.equal(await page.$eval("#engage-btn", el => el.disabled), false);
       if (!cycle) await shot("ready");
       await click(page, "#engage-btn");
-      await page.waitForFunction(() => isConnected && !isBusy, { timeout: 10000 });
+      // isConnected flips during the 200ms breakthrough flash; sample sustained active afterward.
+      await page.waitForFunction(() => isConnected && !isBusy && !document.body.classList.contains("breakthrough-flash"), { timeout: 10000 });
       if (!cycle) await shot("active");
       assert.equal(await page.$eval("#engage-btn", el => el.disabled), false);
       await click(page, "#engage-btn");
@@ -155,4 +156,3 @@ async function main() {
   }
 }
 if (require.main === module) main().catch(e => { console.error(e); process.exitCode = 1; });
-
