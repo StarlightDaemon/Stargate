@@ -54,3 +54,10 @@ Initial operational release of the Mount Tycho Zenith Fulldome Observatory & Pub
   - Top-right circular technical documentation modal.
   - Bottom-left `StarlightDaemon` external link (`rel="noopener noreferrer"`).
   - Bottom-right version identifier (`v1.0.0 // VXD-9000`).
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace the independently maintained server with the shared loopback/public-file transport after hosted qualification; original client assets and tests are retained.
+- Actual migrated command checks and broader acceptance remain separate.

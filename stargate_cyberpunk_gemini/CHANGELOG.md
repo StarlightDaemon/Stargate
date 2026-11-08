@@ -61,3 +61,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Full session persistence via `localStorage`.
 - Settings deck with theme switching (Neon Emerald, Cyber Violet, Solar Amber, Glitch Monochrome), audio layering, and motion toggles.
 - Corner display credentials with link to StarlightDaemon.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace the independently maintained server with the shared loopback/public-file transport after hosted qualification; original client assets and tests are retained.
+- Actual migrated command checks and broader acceptance remain separate.

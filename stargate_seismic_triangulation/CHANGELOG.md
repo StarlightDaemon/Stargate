@@ -36,3 +36,10 @@
 - **Safety Interlock**: "Crustal Shear Lockout" defaulting to RELEASED (safe), featuring unmissable audio-visual alert states when engaged.
 - **Audio Synthesizer**: Native Web Audio API procedural synthesis for infrasonic sub-bass tremor hum, phase-lock chirps, breakthrough rupture shockwave, and sustained harmonic resonance.
 - **Scalability & UX**: Strict 16:9 1920x1080 native fit with JS-computed scale transform up to 4K (3840x2160), operator reference modal (`?`), and attribution links.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace the independently maintained server with the shared loopback/public-file transport after hosted qualification; original client assets and tests are retained.
+- Actual migrated command checks and broader acceptance remain separate.

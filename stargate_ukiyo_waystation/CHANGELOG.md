@@ -277,3 +277,10 @@ aperture.
 - **Always-Reachable Disengage Control**: Accessible at all times to clear the dial or disengage an active portal.
 - **Operator Reference Guide Overlay**: Traditional accordion travel manual (*Orihon*) style help modal accessible via top-right `?` button.
 - **Corner Attribution & Responsive Viewport Scaling**: Fixed 1920x1080 design cleanly scaling to 4K (3840x2160) without scrollbars, with StarlightDaemon link and version label.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace the independently maintained server with the shared loopback/public-file transport after hosted qualification; original client assets and tests are retained.
+- Actual migrated command checks and broader acceptance remain separate.

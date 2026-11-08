@@ -45,3 +45,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cold-Iron Threshold Nail safety interlock (defaults to Released) with visual warning rhyme when engaged.
 - Procedural Web Audio engine producing folk acoustic sounds (plucked twine, chalk scrapes, bellows breath, sheep-shear snip, and hearth bell).
 - Accessibility support including `prefers-reduced-motion` compliance, live region state captioning, and full keyboard operability.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace the independently maintained server with the shared loopback/public-file transport after hosted qualification; original client assets and tests are retained.
+- Actual migrated command checks and broader acceptance remain separate.

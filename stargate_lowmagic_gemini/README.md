@@ -36,3 +36,10 @@ An interactive novelty portal-dialing website set in the register of **Low Magic
 node scripts/server.js
 # Then visit http://localhost:8655/
 ```
+
+
+## Shared preview maintenance — 2026-11-08
+
+The existing launch command delegates to the central public-file allowlist on `127.0.0.1:8655`. `PORT` selects another port (`0` requests a free port). It serves original tracked client assets, denies development/private files and rejects unsupported methods. Port conflicts fail explicitly; scripts must not silently move the preview to another port. Requires the complete repository checkout.
+
+Hosted qualification run42509607423 passed original-suite preservation and two hit-tested cycles/cancellation where applicable. Lowmagic has no original tracked suite; its supplementary cancellation/no-auto-fire checks passed instead. Existing operator and creative dispositions remain unchanged.
