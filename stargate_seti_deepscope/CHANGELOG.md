@@ -23,6 +23,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a local SVG favicon using the existing palette and deep-space receiver motif,
   with an explicit HTML icon link to prevent the missing favicon request.
 
+### Preset cancellation correction — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Disengage now cancels the pending dish-verification timer and invalidates old
+  dialing callbacks, preventing a cancelled preset from restoring a carrier or
+  interfering with a newly started sequence. Normal dish pacing and activation
+  stages remain unchanged; original builder attribution is preserved.
+
 ## [1.0.0] - 2026-08-22
 
 **Built by:** Gemini 3.7 Flash (High reasoning)
