@@ -35,3 +35,12 @@ To run automated verification suites:
 node test/verify_tabs.js
 node test/verify_viewport_scaling.js
 ```
+
+
+## Shared local preview
+
+`node server.js` uses the repository shared server at `http://127.0.0.1:8080`.
+`PORT` selects another port. Keep the exhibit inside the repository. Only tracked
+public assets are served, with GET/HEAD, loopback binding and contained paths.
+The original test suites, client sources and operator/creative-fit notes remain
+unchanged; infrastructure qualification does not imply new operator acceptance.

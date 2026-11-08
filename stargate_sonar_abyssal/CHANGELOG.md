@@ -62,3 +62,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dual-tiered quick-dial hydro-acoustic signature library with 6 abyssal destination presets.
 - Web Audio API acoustic synthesizer generating authentic sonar pings, cavitation noise, and transducer resonance.
 - Operator reference modal, corner branding, and dynamic responsive scaling from 1080p to 4K UHD.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite, asset and HTTP qualification.
+- Retained the default port and original client behavior; added PORT selection
+  where absent. Development files, malformed requests and unsupported methods
+  are denied by the shared loopback-only server.

@@ -57,3 +57,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dual-tiered quick-dispatch biosphere archive with 6 renewable mega-habitat presets.
 - Web Audio API pure electric harmonic synthesizer generating 60Hz grid hums, phase-lock sine pulses, and clean energy surge chords.
 - Operator reference modal, corner branding, and dynamic responsive scaling from 1080p to 4K UHD.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite, asset and HTTP qualification.
+- Retained the default port and original client behavior; added PORT selection
+  where absent. Development files, malformed requests and unsupported methods
+  are denied by the shared loopback-only server.

@@ -57,3 +57,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Operator Reference Guide**: Dismissible modal overlay (`?` button) detailing workstation architecture, minimax notation, and activation protocols.
 - **Responsive 16:9 1080p -> 4K Scale Engine**: Unitless JavaScript-computed CSS transform scaling cleanly without scrolling or aspect distortion.
 - **Corner Attribution & Branding**: Dedicated links for StarlightDaemon repository and version identifier.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite, asset and HTTP qualification.
+- Retained the default port and original client behavior; added PORT selection
+  where absent. Development files, malformed requests and unsupported methods
+  are denied by the shared loopback-only server.

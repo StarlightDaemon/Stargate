@@ -66,3 +66,13 @@ All notable changes to the BOREAS-IX Subterranean Cryogenic Dark Matter Array pr
 - **Blind-Analysis Safety Interlock:** Defaults to RELEASED (unlocked), with explicit protocol warnings when active.
 - **Session Event Logger & LocalStorage Persistence:** Dialing history, preferences, theme moods, and operator logs persist across page reloads.
 - **Responsive 1920x1080 to 4K Design:** Unitless scaling architecture fitting standard HD and Ultra HD monitors without scrollbars.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite, asset and HTTP qualification.
+- Retained the default port and original client behavior; added PORT selection
+  where absent. Development files, malformed requests and unsupported methods
+  are denied by the shared loopback-only server.
