@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Shared source preview — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Routed `npm start` through shared loopback serving with default port `5173` and `PORT`, `--port`, `-p` overrides. `npm test` owns the comparison listeners and preserves all three original suites; Vite dependency declarations and lockfile remain unchanged.
+- Retained the matched historical autoapproval failures in `test.js` and `run_tests_with_vite.js` on both transports (run `42514572291`, job `128834661761`). `test_fix.js`, public assets, cancellation and shared security/cleanup passed. The separate current explicit-Engage contract passed eight pointer cycles; neither result overrides the existing unresolved operator warning.
+- Application behavior, original attribution and the closed-as-is disposition are preserved. Merge and deployment remain on HOLD.
+
 ### Shared verification dependencies — 2026-11-08
 
 - Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
