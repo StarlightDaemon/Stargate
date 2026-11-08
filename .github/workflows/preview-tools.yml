@@ -23,11 +23,17 @@ jobs:
       - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
       - run: npm ci --prefix stargate_aetheric_telegraph
       - run: node scripts/check-consolidation.js
+      - name: Qualify Erebus security replacement and preserve its existing behavior
+        env:
+          STARGATE_LOG_VISUALS: '1'
+        run: node scripts/check-erebus-security.js
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: consolidation-evidence
-          path: test/consolidation/
+          path: |
+            test/consolidation/
+            test/erebus-security/
           retention-days: 30
   preview:
     strategy:
