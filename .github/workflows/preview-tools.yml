@@ -112,6 +112,12 @@ jobs:
           - target: bathyscaphe-regressions
             command: node scripts/check-bathyscaphe-regressions.js
             evidence: test/bathyscaphe-regressions/
+          - target: hub-loading
+            command: node scripts/check-hub-loading.js
+            evidence: test/hub-loading/
+          - target: nimbus-notes-security
+            command: node scripts/check-nimbus-notes-security.js
+            evidence: test/nimbus-notes-security/
           - target: blueprint-regressions
             command: node scripts/check-blueprint-regressions.js
             evidence: test/blueprint-regressions/
