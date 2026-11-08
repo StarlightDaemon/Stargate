@@ -1647,3 +1647,24 @@ html, body {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
 }
+
+/* Approval stages reuse the existing drafting linework and stamp. */
+#drafting-station-frame[data-activation-stage="BUILDUP"] .caliper-pointer-line {
+  stroke: var(--status-hold);
+  stroke-width: 4;
+}
+#drafting-station-frame[data-activation-stage="BUILDUP"] .aperture-grid-circle {
+  stroke: var(--status-hold);
+  stroke-dasharray: 6 8;
+  animation: calibrationTrace 0.8s linear infinite;
+}
+#drafting-station-frame[data-activation-stage="BREAKTHROUGH"] .aperture-boundary {
+  stroke: var(--line-ink-white);
+  stroke-width: 6;
+  filter: drop-shadow(0 0 12px var(--line-bright-cyan));
+}
+@keyframes calibrationTrace { to { stroke-dashoffset: -84; } }
+@media (prefers-reduced-motion: reduce) {
+  #drafting-station-frame[data-activation-stage="BUILDUP"] .aperture-grid-circle,
+  .status-indicator.engaging { animation: none; }
+}

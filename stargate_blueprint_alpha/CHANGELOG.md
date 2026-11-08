@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Three-stage drawing approval — 2026-11-08
+
+- Replaced the 200 ms approval flip with 1.6 seconds of caliper calibration, a 0.6-second certification breakthrough, then sustained active topology. The buildup uses the existing drafting grid and an accelerating plotter cadence; breakthrough pairs the existing stamp and impact sound; the canvas and continuous hum begin only in the sustained stage.
+- Stage captions and the operator reference now distinguish pending coordinates, calibration, certification and active transmission. Reduced-motion mode retains these captions and static stage colors while disabling the new calibration trace motion.
+- All stage transitions and cadence sounds use the existing cancellation owner. Disengage and Clear Buffer remain reachable throughout; engaging Review Hold during approval cancels the draft safely.
+- Deterministic checks pass immediately before/at 1600 ms and 2200 ms, and after canceling at 500/1800/2500 ms followed by 8.25 seconds idle. Hosted checks are prepared for real pointer/key cycles, instrument-region screenshot differences between all three stages, every-stage cancellation, control reachability at 1080p/4K and reduced-motion captions. Those browser checks are pending, not claimed as passed here.
+- The unchanged original suite now conflicts first with its manual 500 ms active assertion, in addition to its automatic-preset assertions. Those historical contract failures remain explicit; no original assertions or timings were weakened. The operator-reported manual-dial failure below remains unresolved pending hands-on acceptance.
+
+
 ### Staged archive plotting and cancellation — 2026-11-08
 
 - Archived site plans now replay six coordinates through the existing manual inking path, with 120 ms between coordinates. Each selection replaces the prior draft exactly and stops pending work. Completed plans remain staged; only ENGAGE starts approval. Manual input during a preset cancels the remaining replay and continues the visible partial draft.

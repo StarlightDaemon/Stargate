@@ -61,15 +61,6 @@ function fixture(realAudio = false) {
   const snapshot = () => ({ ...JSON.parse(JSON.stringify(ctx.__BLUEPRINT_CAD_API__.getState())), stamp: !element("approval-stamp-group").classList.contains("hidden"), status: element("system-status-indicator").textContent, filled: slots.filter(slot => slot.classList.contains("filled")).length });
   return { ctx, api: ctx.__BLUEPRINT_CAD_API__, element, glyphs, cards, nodes, slots, advance, snapshot, calls, activeAudio };
 }
-function diagnose() {
-  const f = fixture(); f.api.loadPlan(plans[0].id); const instant = f.snapshot(); f.advance(300); const automatic = f.snapshot();
-  const c = fixture(); for (let i = 0; i < 6; i++) c.api.selectGlyph(i); c.api.engage(); c.advance(50); c.api.disengage(); c.advance(8250);
-  const a = fixture(true); a.ctx.blueprintAudio.playApprovalAndActivation(); a.advance(50); a.ctx.blueprintAudio.playDisengage(); a.advance(50); a.ctx.blueprintAudio.playApprovalAndActivation(); a.advance(650);
-  return { instant, automatic, cancelledActivation: c.snapshot(), rapidRedialAudioNodes: a.ctx.blueprintAudio.ambientHumNodes.length,
-    originalSuiteConflict: "verify.js phase9 asserts preset auto-activation after800ms; retained unchanged and incompatible with no-auto-fire requirement" };
-}
-if (require.main === module && process.argv.includes("--diagnose")) { fs.mkdirSync(OUTPUT, { recursive: true }); const report = diagnose(); fs.writeFileSync(path.join(OUTPUT, "baseline.json"), JSON.stringify(report, null, 2)); console.log(JSON.stringify(report)); }
-module.exports = { fixture, plans, diagnose };
 function assertIdle(f) {
   const state = f.snapshot(); assert.deepEqual(state.stagedGlyphs, []); assert.deepEqual(state.lockedNodes, []);
   assert.equal(state.isConnected, false); assert.equal(state.isEngaging, false); assert.equal(state.isPlottingPlan, false);
@@ -84,7 +75,9 @@ function deterministic() {
       assert.deepEqual(state.stagedGlyphs, plan.symbols.slice(0, i + 1)); assert.equal(state.filled, i + 1); assert.equal(state.isConnected, false); assert.equal(state.stamp, false);
     }
     f.advance(8250); assert.equal(f.snapshot().isConnected, false); assert.equal(f.element("btn-engage-draft").disabled, false);
-    f.api.engage(); f.advance(200); assert.equal(f.snapshot().stamp, true);
+    f.api.engage(); f.advance(1599); assert.equal(f.snapshot().activationStage, "BUILDUP"); assert.equal(f.snapshot().stamp, false);
+    f.advance(1); assert.equal(f.snapshot().activationStage, "BREAKTHROUGH"); assert.equal(f.snapshot().stamp, true); assert.equal(f.snapshot().isConnected, false);
+    f.advance(599); assert.equal(f.snapshot().activationStage, "BREAKTHROUGH"); f.advance(1); assert.equal(f.snapshot().activationStage, "SUSTAINED_ACTIVE"); assert.equal(f.snapshot().isConnected, true);
     f.api.disengage(); f.advance(8250); assertIdle(f); rows.push({ plan: plan.id, counts, exactSymbols: plan.symbols });
   }
   for (const at of [0, 60, 240, 500, 590]) for (const cancel of ["disengage", "clearBuffer"]) {
@@ -95,6 +88,11 @@ function deterministic() {
   const manual = fixture(true); manual.api.loadPlan(plans[0].id); manual.advance(240); manual.api.selectGlyph(15); manual.advance(8250);
   assert.deepEqual(manual.snapshot().stagedGlyphs, [0, 1, 2, 15]); assert.equal(manual.snapshot().currentSitePlan, null);
   const activation = fixture(true); for (let i = 0; i < 6; i++) activation.api.selectGlyph(i); activation.api.engage(); activation.advance(50); activation.api.disengage(); activation.advance(8250); assertIdle(activation);
+  for (const [at, stage] of [[500, "BUILDUP"], [1800, "BREAKTHROUGH"], [2500, "SUSTAINED_ACTIVE"]]) {
+    const f = fixture(true); f.api.loadPlan(plans[0].id); f.advance(600); f.api.engage(); f.advance(at);
+    assert.equal(f.snapshot().activationStage, stage); f.api.disengage(); f.advance(8250); assertIdle(f); assert.equal(f.snapshot().activationStage, "IDLE");
+  }
+  const duringHold = fixture(true); duringHold.api.loadPlan(plans[0].id); duringHold.advance(600); duringHold.api.engage(); duringHold.advance(500); duringHold.api.toggleHold(); duringHold.advance(8250); assertIdle(duringHold); assert.equal(duringHold.snapshot().reviewHoldActive, true);
   const hold = fixture(true); for (let i = 0; i < 6; i++) hold.api.selectGlyph(i); hold.api.toggleHold(); hold.api.engage(); hold.api.clearBuffer(); hold.advance(8250); assertIdle(hold); assert.equal(hold.element("review-hold-stamp-group").classList.contains("hidden"), true);
   const audio = fixture(true), engine = audio.ctx.blueprintAudio; let penStrokes = 0; const scratch = engine.playPenScratch.bind(engine); engine.playPenScratch = () => { penStrokes++; scratch(); };
   engine.playCaliperSnap(); audio.advance(10); engine.playDisengage(); audio.advance(100); assert.equal(penStrokes, 0);
@@ -104,13 +102,13 @@ function deterministic() {
   const timings = [];
   for (const interval of [0, 80, 350]) { const f = fixture(); for (let i = 0; i < 6; i++) { f.glyphs[i].click({}); f.advance(interval); } assert.equal(f.snapshot().filled, 6); assert.equal(f.snapshot().isConnected, false); timings.push({ intervalMs: interval, filled: 6 }); }
   return { status: "PASS", plans: rows, interruptionTimesMs: [0, 60, 240, 500, 590], cancellationControls: ["disengage", "clearBuffer"], idleObservationMs: 8250,
-    exactReplacement: plans[3].symbols, manualTakeover: [0, 1, 2, 15], lateActivationCancelledAtMs: 50, rapidRedialAmbientNodes: 3, cancelledPenStrokes: penStrokes, manualTiming: timings,
-    operatorIssue: "UNRESOLVED: automated manual staging does not supersede operator-reported failure", originalSuite: "CONTRACT_CONFLICT: unchanged phase9 requires forbidden automatic activation" };
+    exactReplacement: plans[3].symbols, manualTakeover: [0, 1, 2, 15], lateActivationCancelledAtMs: 50, stageBoundariesMs: [1600, 2200], stageCancellationsMs: [500, 1800, 2500], rapidRedialAmbientNodes: 3, cancelledPenStrokes: penStrokes, manualTiming: timings,
+    operatorIssue: "UNRESOLVED: automated manual staging does not supersede operator-reported failure", originalSuite: "CONTRACT_CONFLICT: unchanged manual500ms and phase9 automatic-activation assertions conflict with staged activation" };
 }
 async function browserChecks() {
   const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(DIR, "node_modules/puppeteer"));
   const server = await startPreview({ ...selectExhibit(NAME), port: 0 }); let browser;
-  const report = { status: "FAIL", errors: [], manual: [], plans: [], cancellations: [] };
+  const report = { status: "FAIL", errors: [], manual: [], geometry: [], plans: [], cancellations: [] };
   try {
     browser = await puppeteer.launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
     const page = await browser.newPage();
@@ -133,13 +131,18 @@ async function browserChecks() {
       status: document.getElementById("system-status-indicator").textContent, engageDisabled: document.getElementById("btn-engage-draft").disabled,
       audioSources: window.__blueprintSources.size, ambientHumNodes: window.blueprintAudio.ambientHumNodes.length }));
     const shot = async name => {
-      await page.screenshot({ path: path.join(OUTPUT, name + ".png") });
+      const png = await page.screenshot({ path: path.join(OUTPUT, name + ".png") });
       if (process.env.STARGATE_LOG_VISUALS === "1") { const data = await page.screenshot({ type: "jpeg", quality: 65, encoding: "base64" });
         for (let offset = 0; offset < data.length; offset += 16000) console.log("STARGATE_VISUAL blueprint-" + name + ".jpg " + offset + " " + data.slice(offset, offset + 16000)); }
+      return Buffer.from(png).toString("base64");
     };
     const pending = async symbols => {
       await page.waitForFunction(() => { const state = window.__BLUEPRINT_CAD_API__.getState(); return state.stagedGlyphs.length === 6 && !state.isPlottingPlan; });
       const state = await snapshot(); assert.deepEqual(state.stagedGlyphs, symbols); assert.equal(state.filled, 6); assert.equal(state.locked, 6); assert.equal(state.isConnected, false); assert.equal(state.stamp, false); assert.equal(state.canvas, false); assert.equal(state.engageDisabled, false); return state;
+    };
+    const active = async () => {
+      await page.waitForFunction(() => window.__BLUEPRINT_CAD_API__.getState().activationStage === "SUSTAINED_ACTIVE");
+      const state = await snapshot(); assert.equal(state.isConnected, true); assert.equal(state.stamp, true); assert.equal(state.canvas, true); return state;
     };
     const idle = async label => {
       await delay(8250); const state = await snapshot(); assert.deepEqual(state.stagedGlyphs, []); assert.equal(state.filled, 0); assert.equal(state.locked, 0);
@@ -153,14 +156,43 @@ async function browserChecks() {
           return { selector, x, y, width: box.width, height: box.height, inViewport: x >= 0 && y >= 0 && x <= innerWidth && y <= innerHeight, reachable: hit === element || element.contains(hit) }; });
       });
       assert.ok(geometry.every(item => item.reachable && item.inViewport));
+      report.geometry.push({ viewport: [width, height], controls: geometry });
       for (const interval of [0, 80, 350]) {
         const start = Date.now(); for (let i = 0; i < 6; i++) { await click(page, '.glyph-btn[data-glyph-index="' + i + '"]'); if (interval) await delay(interval); }
-        const state = await pending([0, 1, 2, 3, 4, 5]); await click(page, "#btn-engage-draft"); await delay(300); assert.equal((await snapshot()).stamp, true);
+        const state = await pending([0, 1, 2, 3, 4, 5]); await click(page, "#btn-engage-draft"); await active();
         await click(page, "#btn-disengage-draft"); await delay(100); assert.equal((await snapshot()).filled, 0);
-        report.manual.push({ viewport: [width, height], requestedIntervalMs: interval, elapsedMs: Date.now() - start, staged: state.stagedGlyphs, geometry });
+        report.manual.push({ viewport: [width, height], requestedIntervalMs: interval, elapsedMs: Date.now() - start, staged: state.stagedGlyphs });
       }
     }
     await page.setViewport({ width: 1920, height: 1080 }); await delay(100);
+    await click(page, '[data-plan-id="civil-helios"]'); await pending(plans[0].symbols);
+    const stageImages = [], stageStart = Date.now(); report.stages = [];
+    await click(page, "#btn-engage-draft"); await delay(500);
+    for (const stage of ["BUILDUP", "BREAKTHROUGH", "SUSTAINED_ACTIVE"]) {
+      await page.waitForFunction(expected => window.__BLUEPRINT_CAD_API__.getState().activationStage === expected, {}, stage);
+      if (stage === "SUSTAINED_ACTIVE") await delay(400);
+      const before = await snapshot(); assert.equal(before.activationStage, stage);
+      assert.equal(before.stamp, stage !== "BUILDUP"); assert.equal(before.canvas, stage === "SUSTAINED_ACTIVE");
+      stageImages.push(await shot("stage-" + stage.toLowerCase()));
+      assert.equal((await snapshot()).activationStage, stage, "Capture must remain inside the named stage");
+      report.stages.push({ stage, elapsedMs: Date.now() - stageStart, stamp: before.stamp, canvas: before.canvas, connected: before.isConnected });
+    }
+    const region = await page.$eval(".drawing-canvas-wrapper", element => { const r = element.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; });
+    report.stagePixels = await page.evaluate(async (images, region) => {
+      const frames = [];
+      for (const data of images) {
+        const image = new Image(); image.src = "data:image/png;base64," + data; await image.decode();
+        const canvas = document.createElement("canvas"); canvas.width = Math.round(region.width); canvas.height = Math.round(region.height);
+        const ctx = canvas.getContext("2d"); ctx.drawImage(image, region.x, region.y, region.width, region.height, 0, 0, canvas.width, canvas.height);
+        frames.push(ctx.getImageData(0, 0, canvas.width, canvas.height).data);
+      }
+      return [[0, 1], [1, 2], [0, 2]].map(([a, b]) => {
+        let changed = 0; for (let i = 0; i < frames[a].length; i += 4) if (Math.abs(frames[a][i] - frames[b][i]) + Math.abs(frames[a][i + 1] - frames[b][i + 1]) + Math.abs(frames[a][i + 2] - frames[b][i + 2]) > 24) changed++;
+        return { pair: [a, b], changedFraction: changed / (frames[a].length / 4) };
+      });
+    }, stageImages, region);
+    assert.ok(report.stagePixels.every(pair => pair.changedFraction > 0.002), "All three central instrument captures must differ visibly");
+    await click(page, "#btn-disengage-draft");
     for (const plan of plans) {
       await click(page, '.site-plan-card[data-plan-id="' + plan.id + '"]'); const samples = [], start = Date.now();
       while (Date.now() - start < 800) { const state = await snapshot(); samples.push({ count: state.filled, symbols: state.stagedGlyphs, connected: state.isConnected }); if (plan === plans[0] && state.filled === 3) await shot("preset-in-progress"); await delay(25); }
@@ -168,7 +200,7 @@ async function browserChecks() {
       assert.ok(samples.some(s => s.count > 0 && s.count < 6)); assert.ok(samples.every(s => !s.connected));
       for (const sample of samples) assert.deepEqual(sample.symbols, plan.symbols.slice(0, sample.count));
       if (plan === plans[0]) await shot("preset-pending");
-      await click(page, "#btn-engage-draft"); await delay(300); assert.equal((await snapshot()).stamp, true);
+      await click(page, "#btn-engage-draft"); await active();
       await click(page, "#btn-disengage-draft"); report.plans.push({ id: plan.id, samples, pendingState });
     }
     await click(page, '[data-plan-id="civil-helios"]'); await delay(250); await click(page, '[data-plan-id="class-oort"]'); await pending(plans[3].symbols);
@@ -176,22 +208,41 @@ async function browserChecks() {
     for (const [button, at] of [["#btn-disengage-draft", 50], ["#btn-clear-buffer", 300]]) {
       await click(page, '[data-plan-id="civil-helios"]'); await delay(at); await click(page, button); await idle("preset-" + at + "-cancelled");
     }
-    await click(page, '[data-plan-id="civil-helios"]'); await pending(plans[0].symbols); await click(page, "#btn-engage-draft"); await delay(50); await click(page, "#btn-disengage-draft"); await idle("activation-cancelled");
-    // Fast keyboard redial exercises the old550ms ambient cleanup against a newer connection.
-    await page.focus('.glyph-btn[data-glyph-index="0"]'); for (let i = 0; i < 6; i++) await page.keyboard.press("Enter");
-    await click(page, "#btn-engage-draft"); await delay(50); await click(page, "#btn-disengage-draft");
-    await page.focus('.glyph-btn[data-glyph-index="0"]'); for (let i = 0; i < 6; i++) await page.keyboard.press("Enter");
-    await click(page, "#btn-engage-draft"); await delay(700); report.rapidRedial = await snapshot(); assert.equal(report.rapidRedial.ambientHumNodes, 3); assert.equal(report.rapidRedial.stamp, true);
+    for (const stage of ["BUILDUP", "BREAKTHROUGH", "SUSTAINED_ACTIVE"]) {
+      await click(page, '[data-plan-id="civil-helios"]'); await pending(plans[0].symbols); await click(page, "#btn-engage-draft");
+      await page.waitForFunction(expected => window.__BLUEPRINT_CAD_API__.getState().activationStage === expected, {}, stage);
+      if (stage === "BUILDUP") await delay(500);
+      assert.equal((await snapshot()).activationStage, stage); await click(page, "#btn-disengage-draft"); await idle(stage.toLowerCase() + "-cancelled");
+    }
+    // Real keyboard redial checks the complete staged path; the deterministic audio case isolates the550ms cleanup race.
+    for (let i = 0; i < 6; i++) { await page.focus('.glyph-btn[data-glyph-index="' + i + '"]'); await page.keyboard.press("Enter"); }
+    await click(page, "#btn-engage-draft"); await active(); await click(page, "#btn-disengage-draft");
+    for (let i = 0; i < 6; i++) { await page.focus('.glyph-btn[data-glyph-index="' + i + '"]'); await page.keyboard.press("Enter"); }
+    await click(page, "#btn-engage-draft"); await active(); await delay(700); report.rapidRedial = await snapshot(); assert.equal(report.rapidRedial.ambientHumNodes, 3); assert.equal(report.rapidRedial.stamp, true);
     await click(page, "#btn-disengage-draft"); await idle("rapid-redial-cancelled");
+    await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
+    await click(page, '[data-plan-id="civil-helios"]'); await pending(plans[0].symbols); await click(page, "#btn-engage-draft"); await delay(500);
+    report.reducedMotion = await page.evaluate(() => ({ stage: window.__BLUEPRINT_CAD_API__.getState().activationStage,
+      traceAnimation: getComputedStyle(document.querySelector('.aperture-grid-circle')).animationName,
+      statusAnimation: getComputedStyle(document.getElementById('system-status-indicator')).animationName,
+      caption: document.getElementById('aperture-status-text').textContent }));
+    assert.equal(report.reducedMotion.stage, "BUILDUP"); assert.equal(report.reducedMotion.traceAnimation, "none"); assert.equal(report.reducedMotion.statusAnimation, "none"); assert.match(report.reducedMotion.caption, /BUILDUP/);
+    await active(); await click(page, "#btn-disengage-draft");
     assert.deepEqual(report.errors, []); report.operatorIssue = "UNRESOLVED: pointer/key automation cannot overturn operator-reported manual failure";
-    report.originalSuite = "CONTRACT_CONFLICT: verify.js phase9 still requires automatic preset activation; no assertions altered or shimmed";
-    report.activationStages = "UNVERIFIED: existing200ms approval is preserved, not claimed as three-stage acceptance"; report.status = "PASS"; return report;
+    report.originalSuite = "CONTRACT_CONFLICT: verify.js still requires active at500ms and automatic presets; no assertions altered or shimmed";
+    report.activationStages = "PASS:1600ms buildup,600ms breakthrough then sustained; central screenshot pairs compared and every stage canceled"; report.status = "PASS"; return report;
   } catch (error) { report.error = error.stack; throw error; }
   finally { fs.writeFileSync(path.join(OUTPUT, "browser.json"), JSON.stringify(report, null, 2)); if (browser) await browser.close(); await server.close(); }
 }
 async function main() {
   fs.mkdirSync(OUTPUT, { recursive: true }); const local = deterministic(); fs.writeFileSync(path.join(OUTPUT, "deterministic.json"), JSON.stringify(local, null, 2)); console.log("BLUEPRINT_REGRESSIONS " + JSON.stringify(local));
-  if (!process.argv.includes("--offline")) console.log("BLUEPRINT_BROWSER_REGRESSIONS " + JSON.stringify(await browserChecks()));
+  if (!process.argv.includes("--offline")) {
+    const report = await browserChecks();
+    console.log("BLUEPRINT_BROWSER_REGRESSIONS " + JSON.stringify({ status: report.status, manual: report.manual,
+      geometry: report.geometry, plans: report.plans.map(row => ({ id: row.id, sampledCounts: [...new Set(row.samples.map(sample => sample.count))] })),
+      stages: report.stages, stagePixels: report.stagePixels, cancellations: report.cancellations.map(row => ({ label: row.label, stage: row.state.activationStage, count: row.state.filled, audioSources: row.state.audioSources })),
+      reducedMotion: report.reducedMotion, operatorIssue: report.operatorIssue, originalSuite: report.originalSuite }));
+  }
 }
-if (require.main === module && !process.argv.includes("--diagnose")) main().catch(error => { console.error(error); process.exitCode = 1; });
+if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
 module.exports = { fixture, plans, deterministic, browserChecks };

@@ -194,7 +194,7 @@ class BlueprintAudioEngine {
   }
 
   // Drawing Approval Stamp Impact & Harmonic Manifold Swell
-  playApprovalAndActivation() {
+  playApprovalAndActivation(startAmbient = true) {
     if (!this.enabled) return;
     this.init();
     const now = this.ctx.currentTime;
@@ -231,8 +231,8 @@ class BlueprintAudioEngine {
       osc.stop(now + 1.7);
     });
 
-    // Start continuous topological ambient hum
-    this.startAmbientHum();
+    // Approval impact and sustained resonance may belong to separate stages.
+    if (startAmbient) this.startAmbientHum();
   }
 
   // Continuous Topological Aperture Hum

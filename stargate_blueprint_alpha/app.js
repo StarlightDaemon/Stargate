@@ -16,7 +16,8 @@
     isConnected: false,     // Manifold locked and transmitting
     audioEnabled: true,
     currentSitePlan: null,
-    isPlottingPlan: false
+    isPlottingPlan: false,
+    activationStage: 'IDLE'
   };
 
   // Every deferred UI operation belongs to the current draft generation.
@@ -77,6 +78,8 @@
     modalCloseX: document.getElementById('modal-close-btn'),
     modalDismissBtn: document.getElementById('modal-dismiss-btn'),
     approvalStamp: document.getElementById('approval-stamp-group'),
+    apertureStatus: document.getElementById('aperture-status-text'),
+    stampSignature: document.querySelector('.stamp-sig'),
     reviewHoldStamp: document.getElementById('review-hold-stamp-group'),
     holdLed: document.getElementById('hold-led'),
     holdBtnText: document.getElementById('hold-btn-text'),
@@ -108,6 +111,7 @@
     setupEventListeners();
     setupCanvas();
     updateClock();
+    setActivationStage('IDLE');
     setInterval(updateClock, 1000);
     updateControls();
     logMessage('DRAFTING STATION ONLINE — SELECT 6 COORDINATE GLYPHS OR LOAD ARCHIVED SITE PLAN.');
@@ -262,8 +266,8 @@
 
   // Handle Glyph Selection (Core Loop Action)
   function handleGlyphSelect(glyphIndex, fromPlan = false) {
-    if (state.isConnected) {
-      logMessage('CONNECTION ACTIVE — DISENGAGE OR VOID DRAFT BEFORE RE-PLOTTING.');
+    if (state.isConnected || state.isEngaging) {
+      logMessage('APPROVAL OR CONNECTION ACTIVE — DISENGAGE OR VOID DRAFT BEFORE RE-PLOTTING.');
       return;
     }
     if (state.stagedGlyphs.length >= 6) {
@@ -351,44 +355,67 @@
     });
   }
 
-  // Engage / Plot & Approve Manifold
+  function setActivationStage(stage) {
+    state.activationStage = stage;
+    DOM.frame.dataset.activationStage = stage;
+    const labels = {
+      IDLE: 'TOPOLOGY DORMANT // READY',
+      BUILDUP: 'CALIPER CALIBRATION // BUILDUP',
+      BREAKTHROUGH: 'DRAWING CERTIFIED // APERTURE FORMING',
+      SUSTAINED_ACTIVE: 'TOPOLOGY ACTIVE // LOCKED'
+    };
+    if (DOM.apertureStatus) DOM.apertureStatus.textContent = labels[stage];
+  }
+
+  // Approve the staged drawing: calibrate, stamp the breakthrough, then sustain flux.
   function handleEngageManifold() {
-    if (state.isConnected || state.isPlottingPlan) return;
+    if (state.isConnected || state.isEngaging || state.isPlottingPlan) return;
     if (state.stagedGlyphs.length < 6) {
       logMessage('INCOMPLETE SPECIFICATION — 6 COORDINATE VECTORS REQUIRED.');
       return;
     }
-
-    // CHECK REVIEW HOLD SUB-SYSTEM (Permit Review Safety Lockout)
-    if (state.reviewHoldActive) {
-      triggerReviewHoldRejection();
-      return;
-    }
+    if (state.reviewHoldActive) { triggerReviewHoldRejection(); return; }
 
     state.isEngaging = true;
-    state.isConnected = true;
+    setActivationStage('BUILDUP');
     updateControls();
-
-    logMessage('CALIBRATING NON-EUCLIDEAN TENSION... APPROVING ARCHITECTURAL DRAFT.');
-    DOM.systemStatus.textContent = 'COMMITTING DRAFT...';
+    DOM.systemStatus.textContent = 'BUILDUP // CALIBRATING DRAFT';
     DOM.systemStatus.className = 'val status-indicator engaging';
+    DOM.telemetryFlux.textContent = 'CALIBRATING // NOT CONNECTED';
+    logMessage('CALIPER CALIBRATION: PLOTTER CADENCE RISING — APPROVAL PENDING.');
+    // Accelerating mechanical plotter cadence builds tension without opening flux.
+    [0, 300, 550, 750, 900, 1020, 1120, 1200, 1260, 1320].forEach(delay => {
+      laterInDraft(() => {
+        if (state.activationStage === 'BUILDUP') window.blueprintAudio.playPlotterStep();
+      }, delay);
+    });
 
-    // Play Approval and Activation Audio
-    window.blueprintAudio.playApprovalAndActivation();
-
-    // Show Blueprint Approval Stamp
     laterInDraft(() => {
-      if (!state.isConnected) return;
-      state.isEngaging = false;
+      if (!state.isEngaging || state.activationStage !== 'BUILDUP') return;
+      setActivationStage('BREAKTHROUGH');
+      window.blueprintAudio.playApprovalAndActivation(false);
+      if (DOM.stampSignature) DOM.stampSignature.textContent = 'DRAWING CERTIFIED // APERTURE FORMING';
       DOM.approvalStamp.classList.remove('hidden');
-      DOM.systemStatus.textContent = 'TOPOLOGY ACTIVE // LOCKED';
-      DOM.systemStatus.className = 'val status-indicator active';
-      DOM.telemetryFlux.textContent = '8,420.50 Å-RAD (STEADY)';
-      logMessage('METRIC EXPANSION MANIFOLD RESOLVED — TOPOLOGICAL TRANSIT CHANNEL OPEN.');
+      DOM.systemStatus.textContent = 'BREAKTHROUGH // DRAWING CERTIFIED';
+      DOM.systemStatus.className = 'val status-indicator engaging';
+      DOM.telemetryFlux.textContent = 'APERTURE FORMING // NOT CONNECTED';
+      logMessage('APPROVAL IMPACT CONFIRMED — METRIC APERTURE FORMING.');
 
-      // Start Flux Animation
-      startFluxAnimation();
-    }, 200);
+      laterInDraft(() => {
+        if (!state.isEngaging || state.activationStage !== 'BREAKTHROUGH') return;
+        state.isEngaging = false;
+        state.isConnected = true;
+        setActivationStage('SUSTAINED_ACTIVE');
+        if (DOM.stampSignature) DOM.stampSignature.textContent = 'METRIC EXPANSION MANIFOLD: ACTIVE';
+        DOM.systemStatus.textContent = 'TOPOLOGY ACTIVE // LOCKED';
+        DOM.systemStatus.className = 'val status-indicator active';
+        DOM.telemetryFlux.textContent = '8,420.50 Å-RAD (STEADY)';
+        logMessage('METRIC EXPANSION MANIFOLD RESOLVED — TOPOLOGICAL TRANSIT CHANNEL OPEN.');
+        window.blueprintAudio.startAmbientHum();
+        startFluxAnimation();
+        updateControls();
+      }, 600);
+    }, 1600);
   }
 
   // Review Hold Rejection Routine
@@ -416,6 +443,7 @@
 
     state.isConnected = false;
     state.isEngaging = false;
+    setActivationStage('IDLE');
     state.currentSitePlan = null;
 
     // Reset stamps
@@ -463,6 +491,7 @@
   // Toggle Review Hold Subsystem
   function toggleReviewHold() {
     state.reviewHoldActive = !state.reviewHoldActive;
+    if (state.reviewHoldActive && state.isEngaging) handleDisengageManifold();
     window.blueprintAudio.playPlotterStep();
 
     if (state.reviewHoldActive) {
@@ -498,7 +527,7 @@
   function clearStagedBuffer() {
     cancelDraftWork();
     state.currentSitePlan = null;
-    if (state.isConnected) {
+    if (state.isConnected || state.isEngaging) {
       handleDisengageManifold();
       return;
     }
@@ -551,7 +580,7 @@
   // Update UI Control States
   function updateControls() {
     // Engage button is active only when exactly 6 glyphs are staged
-    if (state.stagedGlyphs.length === 6 && !state.isConnected && !state.isPlottingPlan) {
+    if (state.stagedGlyphs.length === 6 && !state.isConnected && !state.isEngaging && !state.isPlottingPlan) {
       DOM.btnEngage.disabled = false;
     } else {
       DOM.btnEngage.disabled = true;
