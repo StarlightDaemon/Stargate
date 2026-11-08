@@ -4,6 +4,21 @@ All notable changes to the **Stargate: Le Nimbus Florié (Art Nouveau Botanical 
 
 ## [Unreleased]
 
+### Operator-note HTML injection repair — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Settings now assigns persisted operator notes through the textarea's `value`
+  property. Previously the notes were interpolated into HTML, so a literal
+  closing textarea tag could create executable markup when Settings reopened.
+- Preserves notes verbatim and retains `nouveau_nimbus_session_v1`, its schema,
+  the existing change handler, layout and original test assertions.
+- The actual-renderer offline probe demonstrates the unsafe baseline markup and
+  corrected text property. A separate hosted browser regression enters a harmless
+  in-page sentinel through the notes control, reloads the page, and checks that
+  the repaired build preserves the text without creating injected elements or
+  executing the sentinel. Hosted results are recorded separately.
+
 ### Browser icon compatibility — 2026-11-08
 
 **Performed by:** Codex maintenance session.
