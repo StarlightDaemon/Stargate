@@ -78,7 +78,16 @@ async function qualify(browser, pilot, mode) {
   const server = mode === "legacy" ? await legacy(pilot) : await startPreview({ ...selectExhibit(pilot.name), port: 0 });
   const context = await browser.createBrowserContext(); const page = await context.newPage();
   const result = { exhibit:pilot.name, mode, observations:[], pageErrors:[], consoleErrors:[], failedRequests:[], httpErrors:[], screenshots:[] };
-  const shot = async name => { const file = `${pilot.name}-${mode}-${name}.png`; await page.screenshot({path:path.join(OUTPUT,file)}); result.screenshots.push(file); };
+  const shot = async name => {
+    const file = `${pilot.name}-${mode}-${name}.png`;
+    await page.screenshot({path:path.join(OUTPUT,file)}); result.screenshots.push(file);
+    // Optional connector-readable evidence when artifact downloads are unavailable.
+    if (mode === "shared" && process.env.STARGATE_LOG_VISUALS === "1") {
+      const jpeg = await page.screenshot({type:"jpeg", quality:65, encoding:"base64"});
+      for(let offset=0;offset<jpeg.length;offset+=16000)
+        console.log(`STARGATE_VISUAL ${file.replace(/\.png$/, ".jpg")} ${offset} ${jpeg.slice(offset,offset+16000)}`);
+    }
+  };
   page.on("pageerror", e => result.pageErrors.push(e.message));
   page.on("console", m => { if(m.type()==="error") result.consoleErrors.push(m.text()); });
   page.on("requestfailed", r => result.failedRequests.push({url:r.url().replace(server.url,"ORIGIN"), error:r.failure()?.errorText}));

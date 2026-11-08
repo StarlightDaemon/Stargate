@@ -36,6 +36,7 @@ jobs:
     timeout-minutes: 15
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
+      STARGATE_LOG_VISUALS: '1'
       STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_aetheric_telegraph/node_modules/puppeteer
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
