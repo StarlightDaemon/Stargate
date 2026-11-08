@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Staged archive plotting and cancellation — 2026-11-08
+
+- Archived site plans now replay six coordinates through the existing manual inking path, with 120 ms between coordinates. Each selection replaces the prior draft exactly and stops pending work. Completed plans remain staged; only ENGAGE starts approval. Manual input during a preset cancels the remaining replay and continues the visible partial draft.
+- Draft timers are owned and generation-guarded. Disengage and Clear Buffer cancel pending plotting, approval and hold callbacks, preventing an old approval stamp from reappearing after reset.
+- Audio cancellation separately owns the delayed pen stroke and finite sources. Ambient fade cleanup captures its own nodes and gain, so rapid redial cannot stop a newer connection.
+- Deterministic regressions passed for all six exact presets; interrupted plotting at 0/60/240/500/590 ms via both cancellation controls; replacement and manual takeover; approval interruption at 50 ms; and 8.25-second idle observations. Audio checks reproduce and repair the old pen callback and rapid-redial cleanup defects. Browser pointer/key, reachability and timing checks are prepared but pending hosted execution.
+- The original `verify.js` remains unchanged. Its phase 9 explicitly requires automatic preset activation after 800 ms, so it now conflicts with the required no-auto-fire behavior and is expected to FAIL that historical assertion. The new focused suite enforces staged/pending followed by explicit manual approval; it does not silently adapt or relabel the original suite.
+- The operator-reported Manual Dialing Failure below remains unresolved. Deterministic staging accepts 0/80/350 ms intervals, but automated results cannot overturn the operator report. The existing 200 ms approval transition is also not qualified as a genuine three-stage activation; that requires a separate scoped repair and acceptance.
+
+
 ### Development dependency maintenance — 2026-11-08
 
 - Removed unused `serve` and its dependency tree after the entry points moved to
