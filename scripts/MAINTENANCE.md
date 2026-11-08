@@ -58,10 +58,15 @@ is retained as a transport FAIL; original-suite shared/custom comparisons pass.
 Actual development commands and the test-owned listener are security checked.
 The self-hosted `npm test` command also runs without disabling Chrome's sandbox.
 Operator-reported manual dialing remains unresolved; preset auto-activation and
-favicon 404 remain explicit. Dependency audit findings are separate from the
-entry-point gate. The existing `serve` dependency is retained for pinned baseline
-qualification; removing unused packages and resolving audit findings needs a
-separate scoped task. Twenty-six original active server implementations remain.
+favicon 404 remain explicit. Blueprint now removes unused `serve`, raises
+Puppeteer to ^25.16.0 and locks its supported dependency tree, including Zod 4.6.7.
+The full-tree audit (including development dependencies) blocks CI on any finding;
+fresh install, dependency graph and lockfile stability are checked separately.
+Historical `serve` qualification is preserved at commit
+`d4ce5294bc65182bcff1a17e085a69700ecf2f10`, workflow run `42462388786`; its original
+suite redirect FAIL remains evidence, while the removed CLI's current rerun is
+explicitly SKIP. Custom/shared original suites and current entry-point checks
+continue to run. Twenty-six original active server implementations remain.
 
 ## Preview one exhibit
 

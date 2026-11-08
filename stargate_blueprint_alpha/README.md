@@ -31,5 +31,7 @@ sandbox remains enabled. Screenshots go to ignored `test/` output.
 
 Automated preservation does not resolve the operator-reported issue above.
 Preset auto-activation and a missing favicon were also reproduced during security
-qualification. Dependency audit findings remain open; the serving change is not
-a claim that the development dependency tree is vulnerability-free.
+qualification. The unused `serve` dependency has been removed. Browser tests
+use Puppeteer ^25.16.0 with an npm-generated lock; CI requires a fresh full-tree
+audit with zero findings, including development dependencies. Historical `serve`
+qualification remains recorded separately and is no longer rerun.

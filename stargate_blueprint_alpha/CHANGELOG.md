@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Development dependency maintenance — 2026-11-08
+
+- Removed unused `serve` and its dependency tree after the entry points moved to
+  the shared preview. Updated Puppeteer from 25.9.0 to 25.16.0 and raised its
+  declared minimum accordingly. The npm-generated lock resolves Zod 4.6.7 via
+  Puppeteer's supported dependency tree without overrides; all packages are
+  development-only. Locked package count falls from 108 to 26.
+- Changed the existing full-tree audit from diagnostic output to a blocking
+  zero-findings gate. CI checks a fresh `npm ci`, installed dependency graph,
+  lockfile stability, original functional assertions, self-hosted `npm test`,
+  all current entry points and historical/shared browser preservation.
+- Retained prior `serve` qualification evidence at commit
+  `d4ce5294bc65182bcff1a17e085a69700ecf2f10`, workflow run `42462388786`.
+  Its traversal rejection, private-file exposure, POST acceptance and original
+  suite's 301 redirect failure remain historical findings. That obsolete CLI
+  is no longer installed or rerun; the report marks this explicitly as SKIP.
+- Application files, original functional assertions, version, attribution and
+  known-issue status are unchanged. The UI issues below remain separately scoped.
+
 ### Development entry-point security maintenance — 2026-11-08
 
 - Routed `node server.js`, `npm start` and the verification suite's embedded

@@ -47,15 +47,6 @@ function npmCli() {
   const found = [process.env.npm_execpath, path.join(base, "node_modules/npm/bin/npm-cli.js"), path.join(base, "../lib/node_modules/npm/bin/npm-cli.js")].find(p => p && fs.existsSync(p));
   assert.ok(found, "npm CLI must be available"); return found;
 }
-async function serveBaseline() {
-  const pkg = JSON.parse(fs.readFileSync(path.join(DIR, "node_modules/serve/package.json"), "utf8"));
-  assert.equal(pkg.version, "14.2.6", "Use the version pinned in the existing lock");
-  const script = JSON.parse(historical("package.json")).scripts.start;
-  assert.equal(script, "serve . -l 8088 --no-clipboard");
-  const bin = typeof pkg.bin === "string" ? pkg.bin : pkg.bin.serve;
-  // Same locked CLI and serving options; only the listener is constrained for diagnostics.
-  return childServer([path.join(DIR, "node_modules/serve", bin), ".", "-l", "tcp://127.0.0.1:0", "--no-clipboard"]);
-}
 async function embeddedBaseline() {
   let handler;
   const definition = original.slice(original.indexOf("function createServer()"), original.indexOf("// Helper to make real HTTP"));
@@ -82,7 +73,6 @@ async function security(server, mode) {
     const r = await request(server.url, url, method);
     if (["shared", "node-command", "npm-start", "shared-test"].includes(mode)) assert.equal(r.status, method === "POST" ? 405 : 403, mode + " " + url);
     if (["legacy-custom", "legacy-test"].includes(mode)) { assert.equal(r.status, 200); assert.deepEqual(r.body, fs.readFileSync(target)); }
-    // serve has its own containment behavior; measure it without assuming the custom-handler vulnerability.
     results.push({ method, url, status: r.status, returnedTargetBytes: r.body.equals(fs.readFileSync(target)) });
   }
   return results;
@@ -162,7 +152,11 @@ async function observe(browser, server, mode) {
 }
 async function main() {
   fs.mkdirSync(OUTPUT, { recursive: true });
-  const report = { scope: "Blueprint entry-point security and preservation; operator known-issue status retained.", results: [] };
+  const report = { scope: "Blueprint dependency and entry-point security; functional preservation does not resolve operator known issues.",
+    historicalServe: { status: "SKIP", reason: "Obsolete serve dependency removed; prior qualification is retained, not rerun or relabeled.",
+      commit: "d4ce5294bc65182bcff1a17e085a69700ecf2f10", run: 42462388786,
+      originalSuite: "FAIL: /index.html redirects with 301", browserCyclesPerMode: 2,
+      traversalStatus: 400, developmentFilesStatus: 200, postStatus: 200 }, results: [] };
   let browser;
   try {
     const functionalBody = source => {
@@ -173,7 +167,7 @@ async function main() {
     };
     assert.equal(functionalBody(fs.readFileSync(path.join(DIR, "verify.js"), "utf8")), functionalBody(original));
     report.originalFunctionalAssertions = "UNCHANGED";
-    // Record dependency findings separately; this is an entry-point security gate, not an audit pass.
+    // Fresh full-tree audit is a blocking gate, including development dependencies.
     let auditText;
     try { auditText = execFileSync(process.execPath, [npmCli(), "audit", "--prefix", DIR, "--json"], { encoding: "utf8", timeout: 60000 }); }
     catch (e) { if (e.status !== 1 || !e.stdout) throw e; auditText = e.stdout; }
@@ -183,28 +177,19 @@ async function main() {
     report.dependencyAudit = { status: audit.metadata.vulnerabilities.total ? "FAIL" : "PASS", counts: audit.metadata.vulnerabilities,
       packages: Object.values(audit.vulnerabilities || {}).map(v => ({ name: v.name, severity: v.severity, isDirect: v.isDirect, fixAvailable: v.fixAvailable, via: v.via })) };
     console.log("BLUEPRINT_DEPENDENCY_AUDIT " + JSON.stringify(report.dependencyAudit));
+    assert.equal(audit.metadata.vulnerabilities.total, 0, "Blueprint dependency audit must be clean");
     const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(DIR, "node_modules/puppeteer"));
     browser = await puppeteer.launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
-    for (const mode of ["legacy-custom", "legacy-test", "legacy-serve", "shared"]) {
+    for (const mode of ["legacy-custom", "legacy-test", "shared"]) {
       const server = mode === "legacy-custom" ? await legacy({ name: NAME, server: "server.js" })
-        : mode === "legacy-test" ? await embeddedBaseline() : mode === "legacy-serve" ? await serveBaseline()
+        : mode === "legacy-test" ? await embeddedBaseline()
         : await startPreview({ ...selectExhibit(NAME), port: 0 });
       const row = { mode, assets: 0 };
       try {
         row.security = await security(server, mode);
         if (mode !== "legacy-test") {
           for (const file of selectExhibit(NAME).files) {
-            let response = await request(server.url, "/" + file);
-            if (mode === "legacy-serve" && file === "index.html") {
-              assert.equal(response.status, 301);
-              row.canonicalRedirects = [];
-              for (let count = 0; response.status === 301 && count < 5; count++) {
-                const destination = new URL(response.headers.location, server.url);
-                assert.equal(destination.origin, server.url);
-                row.canonicalRedirects.push({ to: destination.pathname, status: response.status });
-                response = await request(server.url, destination.pathname + destination.search);
-              }
-            }
+            const response = await request(server.url, "/" + file);
             assert.equal(response.status, 200, mode + " " + file);
             assert.deepEqual(response.body, fs.readFileSync(path.join(DIR, file))); row.assets++;
           }
@@ -215,15 +200,14 @@ async function main() {
       } finally { await server.close(); report.results.push(row); console.log(JSON.stringify(row)); }
     }
     const baseline = report.results.find(r => r.mode === "legacy-custom");
+    // A dependency update must not turn both comparisons into matching failures.
+    assert.equal(baseline.originalSuite.status, "PASS", "Qualified original suite must still pass");
+    assert.equal(baseline.browser.failure, undefined);
+    assert.equal(baseline.browser.cycles.length, 2);
+    assert.deepEqual(baseline.browser.pageErrors, []);
     for (const row of report.results.filter(r => r.originalSuite)) {
-      if (row.mode === "legacy-serve") {
-        // Preserve the unmodified suite's actual transport failure; browser behavior is checked separately.
-        assert.equal(row.originalSuite.status, "FAIL");
-        assert.match(row.originalSuite.failure, /Endpoint check failed for \/index.html: status 301/);
-      } else {
-        assert.equal(row.originalSuite.status, baseline.originalSuite.status, row.mode + " original suite regression");
-        assert.equal(row.originalSuite.failure, baseline.originalSuite.failure, row.mode + " original failure changed");
-      }
+      assert.equal(row.originalSuite.status, baseline.originalSuite.status, row.mode + " original suite regression");
+      assert.equal(row.originalSuite.failure, baseline.originalSuite.failure, row.mode + " original failure changed");
       assert.deepEqual(row.originalSuite.pageErrors, baseline.originalSuite.pageErrors);
       assert.deepEqual(row.browser.pageErrors, baseline.browser.pageErrors);
       assert.equal(row.browser.failure, baseline.browser.failure, row.mode + " pointer behavior changed");

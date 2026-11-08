@@ -18,7 +18,6 @@
   "author": "StarlightDaemon",
   "license": "MIT",
   "devDependencies": {
-    "puppeteer": "^25.9.0",
-    "serve": "^14.2.4"
+    "puppeteer": "^25.16.0"
   }
 }
