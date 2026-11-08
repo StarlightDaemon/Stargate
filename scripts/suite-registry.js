@@ -208,5 +208,25 @@ for (const [name, job, status, detail] of [
 }
 supplementary("seti_freeform", { id: "freeform-manual-contract", script: "scripts/check-freeform-manual-contract.js", args: [], timeoutMs: 1200000,
   evidence: [{ file: "test/freeform-manual-contract/result.json", kind: "status", statusPath: "currentContractStatus", currentPath: "cycles" }] });
+// Execution eligibility is now complete; retained failures and intermittent
+// comparison infrastructure failures still prevent an all-green acceptance claim.
+function supersedeQualification(subject, evidence) {
+  if (subject.qualificationEvidence) subject.qualificationHistory = [...(subject.qualificationHistory || []), subject.qualificationEvidence];
+  subject.qualification = "established";
+  subject.qualificationEvidence = evidence;
+}
+const freeform = registry.find(item => item.exhibit === "stargate_seti_freeform");
+supersedeQualification(freeform, latestEvidence(128839086446, "FAIL",
+  "Both modes preserve the original fixed-350ms READY assertion failure. Nine public assets, eight shared security probes, verified in-flight manual cancellation/restarts followed by 8.25s idle, and listener cleanup pass. Qualification establishes truthful execution, not original-suite PASS.", "FAIL", 42516017150));
+supersedeQualification(freeform.steps.find(step => step.id === "freeform-manual-contract"), latestEvidence(128839086216, "PASS",
+  "Completion-aware real-pointer manual cycles passed at 1080p and 4K, including hold, explicit activation, all three stages and reset. Observed callbacks took 344–628ms. The observation-only fixed-cadence cycle reached READY in this run, but does not rerun or supersede the separately failing full original suite.", "UNVERIFIED", 42516017150));
+supersedeQualification(freeform.steps.find(step => step.id === "built-seti_freeform"), latestEvidence(128839086419, "FAIL",
+  "The original fixed-350ms READY assertion is the recorded failure. Built assets, Host/origin policy, rendering, verified in-flight manual cancellation/restarts, port conflict and port release pass. No full built-contract or operator PASS.", "FAIL", 42516017150));
+supersedeQualification(registry.find(item => item.exhibit === "stargate_orthographic_cad"), latestEvidence(128839086300, "FAIL",
+  "Original 41/41 passes in both modes and shared cleanup passes. Legacy Vite graceful close exceeded 10000ms, so latest aggregate source qualification is FAIL. Earlier successful source runs and separate built-preview PASS remain historical evidence; this is intermittent comparison cleanup infrastructure.", "PASS", 42516017150));
+supersedeQualification(registry.find(item => item.exhibit === "stargate_blueprint_alpha").steps.find(step => step.id === "blueprint-regressions"), latestEvidence(128839086319, "FAIL",
+  "Deterministic checks pass, but browser capture failed its named-stage containment assertion. The capture/logging correction requires fresh proof; this failure does not establish a new client defect or replace prior successful mute/stage evidence.", "UNVERIFIED", 42516017150));
+registry.find(item => item.exhibit === "stargate_cathedral_oculus").diagnosticEvidence = latestEvidence(128839086336, "UNVERIFIED",
+  "Diagnostic job succeeded with OBSERVATIONS_RECORDED_NOT_ACCEPTANCE and geometryClippingObserved=false. The observed screenshot-clipping cause remains unresolved; neither visual acceptance nor a client fix is established.", "UNVERIFIED", 42516017150);
 function getSuite(exhibit) { return registry.find(item => item.exhibit === exhibit); }
 module.exports = { registry, getSuite };

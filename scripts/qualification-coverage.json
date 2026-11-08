@@ -406,14 +406,14 @@
           ],
           "scope": "supplementary-current-regression",
           "qualificationEvidence": {
-            "status": "PASS",
+            "status": "FAIL",
             "originalSuiteStatus": "UNVERIFIED",
-            "detail": "Deterministic and browser regressions passed, including staged activation, header geometry and mute restoration; retained historical originals and operator issue are separate.",
-            "run": 42514572291,
-            "job": 128834661643,
+            "detail": "Deterministic checks pass, but browser capture failed its named-stage containment assertion. The capture/logging correction requires fresh proof; this failure does not establish a new client defect or replace prior successful mute/stage evidence.",
+            "run": 42516017150,
+            "job": 128839086319,
             "operatorStatus": "UNVERIFIED",
             "acceptanceStatus": "UNVERIFIED",
-            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661643"
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086319"
           }
         }
       ],
@@ -422,6 +422,19 @@
         "Fresh historicalSuite.status is the original gate. currentContract PASS does not erase historicalSuite FAIL. Archived historicalServe evidence is separate."
       ],
       "lastSupplementaryReports": [
+        {
+          "step": "blueprint-regressions",
+          "status": "FAIL",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Deterministic checks pass, but browser capture failed its named-stage containment assertion. The capture/logging correction requires fresh proof; this failure does not establish a new client defect or replace prior successful mute/stage evidence.",
+          "run": 42516017150,
+          "job": 128839086319,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086319"
+        }
+      ],
+      "previousSupplementaryReports": [
         {
           "step": "blueprint-regressions",
           "status": "PASS",
@@ -664,7 +677,20 @@
           "status": "UNVERIFIED",
           "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
         }
-      ]
+      ],
+      "lastDiagnosticReport": {
+        "status": "UNVERIFIED",
+        "originalSuiteStatus": "UNVERIFIED",
+        "detail": "Diagnostic job succeeded with OBSERVATIONS_RECORDED_NOT_ACCEPTANCE and geometryClippingObserved=false. The observed screenshot-clipping cause remains unresolved; neither visual acceptance nor a client fix is established.",
+        "run": 42516017150,
+        "job": 128839086336,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086336",
+        "jobConclusion": "SUCCESS",
+        "reportedStatus": "OBSERVATIONS_RECORDED_NOT_ACCEPTANCE",
+        "geometryClippingObserved": false
+      }
     },
     {
       "exhibit": "stargate_celestial_astrolabe",
@@ -1597,26 +1623,26 @@
         "qualification": "established",
         "scope": "original-suite-preservation",
         "qualificationEvidence": {
-          "status": "PASS",
+          "status": "FAIL",
           "originalSuiteStatus": "PASS",
-          "detail": "Original 41/41 and eleven public assets passed in both source modes; built-preview qualification remains separate.",
-          "run": 42514572291,
-          "job": 128834661654,
+          "detail": "Original 41/41 passes in both modes and shared cleanup passes. Legacy Vite graceful close exceeded 10000ms, so latest aggregate source qualification is FAIL. Earlier successful source runs and separate built-preview PASS remain historical evidence; this is intermittent comparison cleanup infrastructure.",
+          "run": 42516017150,
+          "job": 128839086300,
           "operatorStatus": "UNVERIFIED",
           "acceptanceStatus": "UNVERIFIED",
-          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661654"
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086300"
         }
       },
       "lastReported": {
-        "status": "PASS",
+        "status": "FAIL",
         "originalSuiteStatus": "PASS",
-        "detail": "Original 41/41 and eleven public assets passed in both source modes; built-preview qualification remains separate.",
-        "run": 42514572291,
-        "job": 128834661654,
+        "detail": "Original 41/41 passes in both modes and shared cleanup passes. Legacy Vite graceful close exceeded 10000ms, so latest aggregate source qualification is FAIL. Earlier successful source runs and separate built-preview PASS remain historical evidence; this is intermittent comparison cleanup infrastructure.",
+        "run": 42516017150,
+        "job": 128839086300,
         "operatorStatus": "UNVERIFIED",
         "acceptanceStatus": "UNVERIFIED",
-        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661654",
-        "scope": "Reported source-suite/transport qualification only; independent operator and specialist build gates remain open"
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086300",
+        "scope": "Reported source-suite/transport qualification; independent full acceptance remains open"
       },
       "harnesses": [
         {
@@ -1662,6 +1688,17 @@
           "run": 42510716794,
           "job": 128822958226,
           "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794/job/128822958226"
+        },
+        {
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Original 41/41 and eleven public assets passed in both source modes; built-preview qualification remains separate.",
+          "run": 42514572291,
+          "job": 128834661654,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661654",
+          "scope": "Reported source-suite/transport qualification only; independent operator and specialist build gates remain open"
         }
       ],
       "previousSupplementaryReports": [],
@@ -1986,12 +2023,29 @@
       "originalHarnessPresence": "recorded",
       "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
       "registration": {
-        "qualification": "pending",
-        "scope": "original-suite-preservation"
+        "qualification": "established",
+        "scope": "original-suite-preservation",
+        "qualificationEvidence": {
+          "status": "FAIL",
+          "originalSuiteStatus": "FAIL",
+          "detail": "Both modes preserve the original fixed-350ms READY assertion failure. Nine public assets, eight shared security probes, verified in-flight manual cancellation/restarts followed by 8.25s idle, and listener cleanup pass. Qualification establishes truthful execution, not original-suite PASS.",
+          "run": 42516017150,
+          "job": 128839086446,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086446"
+        }
       },
       "lastReported": {
-        "status": "UNVERIFIED",
-        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+        "status": "FAIL",
+        "originalSuiteStatus": "FAIL",
+        "detail": "Both modes preserve the original fixed-350ms READY assertion failure. Nine public assets, eight shared security probes, verified in-flight manual cancellation/restarts followed by 8.25s idle, and listener cleanup pass. Qualification establishes truthful execution, not original-suite PASS.",
+        "run": 42516017150,
+        "job": 128839086446,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086446",
+        "scope": "Reported source-suite/transport qualification; independent full acceptance remains open"
       },
       "harnesses": [
         {
@@ -2003,7 +2057,7 @@
       "checks": [
         {
           "command": "node scripts/check-package-entry-security.js stargate_seti_freeform",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/package-entry-security/stargate_seti_freeform/legacy/result.json",
             "test/package-entry-security/stargate_seti_freeform/shared/result.json"
@@ -2037,21 +2091,31 @@
           "qualificationEvidence": {
             "status": "FAIL",
             "originalSuiteStatus": "FAIL",
-            "detail": "Four built assets, Host/origin policy, rendering and cancellation passed; the retained original 350ms manual assertion reports DIALING instead of READY. Port release was not recorded before that assertion failed in this run. No full built-contract PASS.",
-            "run": 42515274539,
-            "job": 128836833483,
+            "detail": "The original fixed-350ms READY assertion is the recorded failure. Built assets, Host/origin policy, rendering, verified in-flight manual cancellation/restarts, port conflict and port release pass. No full built-contract or operator PASS.",
+            "run": 42516017150,
+            "job": 128839086419,
             "operatorStatus": "UNVERIFIED",
             "acceptanceStatus": "UNVERIFIED",
-            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833483"
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086419"
           }
         },
         {
           "command": "node scripts/check-freeform-manual-contract.js",
-          "qualification": "pending",
+          "qualification": "established",
           "artifacts": [
             "test/freeform-manual-contract/result.json"
           ],
-          "scope": "supplementary-current-regression"
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "detail": "Completion-aware real-pointer manual cycles passed at 1080p and 4K, including hold, explicit activation, all three stages and reset. Observed callbacks took 344–628ms. The observation-only fixed-cadence cycle reached READY in this run, but does not rerun or supersede the separately failing full original suite.",
+            "run": 42516017150,
+            "job": 128839086216,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086216"
+          }
         }
       ],
       "supplementaryCommand": "node scripts/verify.js --exhibit stargate_seti_freeform --http --browser",
@@ -2071,6 +2135,30 @@
           "step": "built-seti_freeform",
           "status": "FAIL",
           "originalSuiteStatus": "FAIL",
+          "detail": "The original fixed-350ms READY assertion is the recorded failure. Built assets, Host/origin policy, rendering, verified in-flight manual cancellation/restarts, port conflict and port release pass. No full built-contract or operator PASS.",
+          "run": 42516017150,
+          "job": 128839086419,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086419"
+        },
+        {
+          "step": "freeform-manual-contract",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Completion-aware real-pointer manual cycles passed at 1080p and 4K, including hold, explicit activation, all three stages and reset. Observed callbacks took 344–628ms. The observation-only fixed-cadence cycle reached READY in this run, but does not rerun or supersede the separately failing full original suite.",
+          "run": 42516017150,
+          "job": 128839086216,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086216"
+        }
+      ],
+      "previousSupplementaryReports": [
+        {
+          "step": "built-seti_freeform",
+          "status": "FAIL",
+          "originalSuiteStatus": "FAIL",
           "detail": "Four built assets, Host/origin policy, rendering and cancellation passed; the retained original 350ms manual assertion reports DIALING instead of READY. Port release was not recorded before that assertion failed in this run. No full built-contract PASS.",
           "run": 42515274539,
           "job": 128836833483,
@@ -2079,7 +2167,12 @@
           "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833483"
         }
       ],
-      "previousSupplementaryReports": []
+      "previousReports": [
+        {
+          "status": "UNVERIFIED",
+          "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+        }
+      ]
     },
     {
       "exhibit": "stargate_sigint_cryptanalysis",

@@ -18,7 +18,15 @@ test("registry covers exact package/browser targets and preserves known failed o
   assert.equal(getSuite("stargate_municipal_registry").steps.find(step => step.id === "municipal-regressions").qualification, "established");
   const freeform = getSuite("stargate_seti_freeform");
   assert.equal(freeform.steps.find(step => step.id === "built-seti_freeform").qualificationEvidence.status, "FAIL");
-  assert.equal(freeform.steps.find(step => step.id === "freeform-manual-contract").qualification, "pending");
+  assert.equal(freeform.qualification, "established");
+  assert.equal(freeform.qualificationEvidence.originalSuiteStatus, "FAIL");
+  const currentManual = freeform.steps.find(step => step.id === "freeform-manual-contract");
+  assert.equal(currentManual.qualification, "established");
+  assert.equal(currentManual.qualificationEvidence.status, "PASS");
+  assert.ok(currentManual.evidence.every(spec => !spec.originalSuite), "Supplementary completion-aware PASS cannot rewrite originals");
+  assert.equal(getSuite("stargate_orthographic_cad").qualificationEvidence.status, "FAIL");
+  assert.equal(getSuite("stargate_orthographic_cad").qualificationEvidence.originalSuiteStatus, "PASS");
+  assert.equal(getSuite("stargate_cathedral_oculus").diagnosticEvidence.status, "UNVERIFIED");
   for (const name of ["stargate_darkpool_router", "stargate_lumina_grove", "stargate_high_scifi", "stargate_celestial_astrolabe"]) assert.equal(getSuite(name).qualification, "established");
   for (const name of ["stargate_atompunk_fable", "stargate_solarpunk_conservatory", "stargate_bathyscaphe_pilot_fable"]) { const item = getSuite(name); assert.equal(item.qualification, "established"); assert.equal(item.qualificationEvidence.status, "BASELINE_FAILURE_PRESERVED"); }
 });
