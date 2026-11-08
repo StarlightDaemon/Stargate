@@ -38,6 +38,7 @@ async function main(){
   }catch(e){result.status='FAIL';result.error=e.message;}
   finally{await context.close();await server.close();results.push(result);console.log(JSON.stringify(result));}
  }}finally{await browser.close();fs.writeFileSync(path.join(output,'report.json'),JSON.stringify({scope:'Original assertions, asset bytes and two manual cycles; resource observations retained, no operator acceptance',results},null,2));}
+ assert.deepEqual(results[0].resources.slice().sort(),results[1].resources.slice().sort(), 'Shared serving must not introduce resource failures');
  process.exitCode=results.every(r=>r.status==='PASS')?0:1;
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

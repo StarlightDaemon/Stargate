@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased] — 2026-11-08 maintenance
+
+**Performed by:** GPT-6 Astra (high reasoning), not the original builder.
+- After historical/shared byte, original assertion and two-cycle browser checks,
+  consolidate local serving through the shared secure preview. Preserve command
+  paths, port 5173 and PORT overrides. Remove wildcard CORS from local preview;
+  no application API needs cross-origin access. No client engine or layout change.
+- Original test assertions retained; failures now produce a nonzero exit status.
+- Operator qualification and publication remain on HOLD.
+
 All notable changes to the **Pan-Harmonic Bibliographic Depository** (`stargate_bibliographic_depository`) console will be documented in this file.
 
 ## [Unreleased]

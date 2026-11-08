@@ -6,6 +6,13 @@
 
 ## Overview
 
+Local `npm start` / `npm run dev` now use the repository's shared loopback
+preview server, preserving port 5173 and PORT overrides. Keep the parent
+repository tools available. Development files and cross-origin access are not
+served; the browser application and stored data remain unchanged.
+`node scripts/check-consolidation.js` from the repository root runs the original
+assertions plus real browser cycles against historical/shared serving.
+
 An interactive digital archival retrieval console and deep-storage stasis portal belonging to the **Pan-Harmonic Bibliographic Institute & Depository (PBID-7)**.
 
 Rather than dialing physical destination coordinates, this console locates preserved bibliographic accession records across millions of universal documents, materializing retrieved items through a high-energy stasis aperture.

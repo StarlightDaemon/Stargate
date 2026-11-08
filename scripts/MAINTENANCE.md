@@ -14,6 +14,14 @@ The original Aetheric/Bathyscaphe assertions are retained; both suites now own
 ephemeral previews and close them when finished. No gallery status changed.
 Broader migration, merge and deployment remain gated on full acceptance.
 
+The first expansion target, Bibliographic Depository, also uses shared serving
+through npm start/dev and server.js (port 5173, PORT override). Its 27 original
+assertions, all five public assets and two real-browser manual cycles were
+qualified against historical/shared handlers before replacement. Existing missing
+favicon observations remain explicit. AUREOLE's exported server API and Cerulean
+Lantern's positional-port/specialist harnesses need separate adapters; they have
+not been bulk-replaced. Operator acceptance and publication remain on HOLD.
+
 ## Preview one exhibit
 
 From the repository root:
