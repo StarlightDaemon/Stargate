@@ -32,6 +32,8 @@ Deliberately not the symmetric top-bar / hero / two-wings / bottom-deck skeleton
 
 ## Running locally
 
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.
+
 ```bash
 npm run serve
 ```

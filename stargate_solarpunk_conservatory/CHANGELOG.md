@@ -4,6 +4,12 @@ All notable changes to this build are documented here. Format follows Keep a Cha
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer-core`, `pngjs` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- The existing original-suite oculus pair-distance pixel failure remains FAIL; no predicate or runtime asset was changed. Historical operator disposition is preserved.
+
 ### Shared preview consolidation — 2026-11-08
 
 **Performed by:** Codex maintenance session.

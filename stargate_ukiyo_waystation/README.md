@@ -41,3 +41,8 @@ node scripts/test_e2e.js
 The existing launch command delegates to the central public-file allowlist on `127.0.0.1:8742`. `PORT` selects another port (`0` requests a free port). It serves original tracked client assets, denies development/private files and rejects unsupported methods. Port conflicts fail explicitly; scripts must not silently move the preview to another port. Requires the complete repository checkout.
 
 Hosted qualification run42509607423 passed original-suite preservation and two hit-tested cycles/cancellation where applicable. Lowmagic has no original tracked suite; its supplementary cancellation/no-auto-fire checks passed instead. Existing operator and creative dispositions remain unchanged.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.

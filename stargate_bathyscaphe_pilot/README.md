@@ -6,6 +6,8 @@ Themed, single-page "portal dialing" console: a deep-ocean submersible HUD for t
 
 ## Run
 
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.
+
 ```
 npm run dev          # node server.js -> http://127.0.0.1:3000  (PORT env var overrides)
 npm test             # original builder suite; starts/closes its own shared preview on a free port

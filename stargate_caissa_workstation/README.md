@@ -12,3 +12,8 @@ Everything here is fictional and fully client-side: no backend, no server proces
 public assets are served, with GET/HEAD, loopback binding and contained paths.
 The original test suites, client sources and operator/creative-fit notes remain
 unchanged; infrastructure qualification does not imply new operator acceptance.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.

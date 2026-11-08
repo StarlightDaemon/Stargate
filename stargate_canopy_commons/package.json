@@ -6,9 +6,5 @@
   "scripts": {
     "serve": "node server.js",
     "test": "node test/run-tests.mjs"
-  },
-  "devDependencies": {
-    "pngjs": "^7.0.0",
-    "puppeteer-core": "^25.9.0"
   }
 }

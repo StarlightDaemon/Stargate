@@ -15,8 +15,5 @@
     "web-audio"
   ],
   "author": "StarlightDaemon",
-  "license": "MIT",
-  "devDependencies": {
-    "puppeteer-core": "^25.9.0"
-  }
+  "license": "MIT"
 }

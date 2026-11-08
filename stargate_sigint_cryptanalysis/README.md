@@ -13,3 +13,8 @@ Only tracked public assets are served; development files and unsupported methods
 are denied. Keep the exhibit inside this repository. Original verification suites
 and client behavior remain independently qualified; security migration does not
 assert new operator acceptance.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.
