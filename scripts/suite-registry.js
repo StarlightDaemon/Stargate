@@ -150,5 +150,39 @@ supplementary("municipal_registry", { id: "municipal-regressions", script: "scri
   evidence: ["deterministic.status", "browser.repaired.status"].map(statusPath => ({ file: "test/municipal-regressions/report.json", kind: "status", statusPath })) });
 supplementary("blueprint_drafting", { id: "blueprint-drafting-contract", script: "scripts/check-blueprint-drafting-contract.js", args: [], timeoutMs: 1200000,
   evidence: [{ file: "test/blueprint-drafting-current-contract/result.json", kind: "status", statusPath: "currentContractStatus", currentPath: "cycles" }] });
+// Latest completed source/contract evidence. Eligibility includes checkers that
+// truthfully reproduce a known failure; it never converts that failure to PASS.
+function latestEvidence(job, status, detail, originalSuiteStatus = "UNVERIFIED") {
+  return { status, originalSuiteStatus, detail, run: 42514572291, job,
+    operatorStatus: "UNVERIFIED", acceptanceStatus: "UNVERIFIED",
+    url: "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/" + job };
+}
+for (const [name, job, status, originalStatus, detail] of [
+  ["cathedral_oculus", 128834661763, "PASS", "PASS", "Original 32 records and eight public assets passed in both modes. Separate layout diagnostic does not establish visual acceptance."],
+  ["mastering_suite", 128834661646, "PASS", "PASS", "Full original test_suite.js and ten public assets passed in both modes."],
+  ["orthographic_cad", 128834661654, "PASS", "PASS", "Original 41/41 and eleven public assets passed in both source modes; built-preview qualification remains separate."],
+  ["radio_interferometry", 128834661724, "PASS", "PASS", "Full original test_e2e.mjs and eight public assets passed in both source modes; built-preview qualification remains separate."],
+  ["seti_deepscope", 128834661714, "FAIL", "PASS", "Full original test_e2e.js passed in both modes. Legacy Vite cleanup exceeded 10000ms, so aggregate preservation remains FAIL despite shared PASS; fresh cleanup and built-preview proof required."],
+  ["blueprint_drafting", 128834661761, "FAIL", "FAIL", "Both modes retain the automatic-approval assertion failures in test.js and run_tests_with_vite.js; test_fix.js passes. The explicit-Engage current contract is a separate step."],
+  ["nouveau_nimbus", 128834662081, "PASS", "PASS", "Full original assertions passed in legacy and shared modes; notes-injection regression remains a separate step."]
+]) {
+  const item = registry.find(item => item.exhibit === "stargate_" + name);
+  item.qualification = "established";
+  item.qualificationEvidence = latestEvidence(job, status, detail, originalStatus);
+}
+for (const [name, id, job, detail] of [
+  ["blueprint_drafting", "blueprint-drafting-contract", 128834661891, "Eight current-contract pointer cycles passed; historical automatic-approval originals remain FAIL."],
+  ["blueprint_alpha", "blueprint-regressions", 128834661643, "Deterministic and browser regressions passed, including staged activation, header geometry and mute restoration; retained historical originals and operator issue are separate."],
+  ["bathyscaphe_pilot", "bathyscaphe-regressions", 128834661691, "Deterministic and browser regressions passed, including manual takeover, cancellation telemetry, and archive counters."],
+  ["nouveau_nimbus", "nimbus-notes-security", 128834661673, "Baseline-client and repaired-client injection regressions passed."],
+  ["solarpunk_ecogrid", "keyboard-interlocks", 128834661830, "Baseline and repaired keyboard interlock regressions passed."],
+  ["seti_freeform", "keyboard-interlocks", 128834661830, "Baseline and repaired keyboard interlock regressions passed; the package-source checker remains independently pending."]
+]) {
+  const step = registry.find(item => item.exhibit === "stargate_" + name).steps.find(step => step.id === id);
+  step.qualification = "established";
+  step.qualificationEvidence = latestEvidence(job, "PASS", detail);
+}
+registry.find(item => item.exhibit === "stargate_municipal_registry").steps.find(step => step.id === "municipal-regressions").qualificationEvidence =
+  latestEvidence(128834661710, "FAIL", "Latest stage-color predicate failed; the diagnosed render-frame sampling correction still requires fresh hosted proof. This supplementary step remains pending.");
 function getSuite(exhibit) { return registry.find(item => item.exhibit === exhibit); }
 module.exports = { registry, getSuite };

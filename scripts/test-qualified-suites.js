@@ -10,7 +10,10 @@ test("registry covers exact package/browser targets and preserves known failed o
   assert.equal(registry.length, 47); assert.equal(new Set(registry.map(item => item.exhibit)).size, 47);
   for (const item of registry) for (const step of item.steps) { assert.ok(fs.existsSync(path.join(ROOT, item.exhibit))); assert.ok(fs.existsSync(path.join(ROOT, step.script))); assert.ok(step.timeoutMs > 0); }
   assert.deepEqual(getSuite("stargate_cyberpunk_gemini").steps[0].args, ["--exhibit", "stargate_cyberpunk_gemini"]);
-  assert.equal(getSuite("stargate_cathedral_oculus").qualification, "pending");
+  assert.equal(getSuite("stargate_cathedral_oculus").qualification, "established");
+  assert.equal(getSuite("stargate_seti_deepscope").qualificationEvidence.status, "FAIL");
+  assert.equal(getSuite("stargate_seti_deepscope").qualificationEvidence.originalSuiteStatus, "PASS");
+  assert.equal(getSuite("stargate_blueprint_drafting").qualificationEvidence.originalSuiteStatus, "FAIL");
   for (const name of ["stargate_darkpool_router", "stargate_lumina_grove", "stargate_high_scifi", "stargate_celestial_astrolabe"]) assert.equal(getSuite(name).qualification, "established");
   for (const name of ["stargate_atompunk_fable", "stargate_solarpunk_conservatory", "stargate_bathyscaphe_pilot_fable"]) { const item = getSuite(name); assert.equal(item.qualification, "established"); assert.equal(item.qualificationEvidence.status, "BASELINE_FAILURE_PRESERVED"); }
 });
@@ -86,7 +89,14 @@ test("evidence rejects wrong targets/modes and requires all named original suite
 test("pending tooling is disclosed without rewriting established original evidence", async () => {
   const result = summarize(entry, execution({ mode: "shared", status: "PASS", originalSuiteStatus: "PASS" }), [{ id: "pending-tool", status: "UNVERIFIED" }]);
   assert.equal(result.originalSuiteStatus, "PASS"); assert.equal(result.coverageStatus, "UNVERIFIED"); assert.equal(result.status, "UNVERIFIED");
-  assert.equal((await runQualifiedSuite("stargate_cathedral_oculus")).status, "UNVERIFIED");
+  const pending = { exhibit: "controlled-pending-qualification", qualification: "pending", steps: [{ script: "must-not-execute.cjs" }] };
+  registry.push(pending);
+  try {
+    const result = await runQualifiedSuite(pending.exhibit);
+    assert.equal(result.status, "UNVERIFIED");
+    assert.match(result.reason, /Qualification pending/);
+    assert.equal(result.executions, undefined, "Pending qualification must not launch a command");
+  } finally { registry.splice(registry.indexOf(pending), 1); }
 });
 test("real owned children require fresh valid evidence, successful exit and bounded completion", async () => {
   const folder = fs.mkdtempSync(path.join(BASE, "qualified-runner-test-")), source = path.join(folder, "result.json"), script = path.join(folder, "child.cjs");
