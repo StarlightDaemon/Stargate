@@ -32,9 +32,9 @@ async function embeddedBaseline(current = false) {
     close: () => new Promise(resolve => { server.close(resolve); server.closeAllConnections(); }) };
 }
 
-async function originalSuite(browser, server, mode) {
+async function originalSuite(browser, server, mode, contract = "historical") {
   const context = await browser.createBrowserContext(), lines = [];
-  const folder = path.join(OUTPUT, mode, "original"); fs.mkdirSync(folder, { recursive: true });
+  const folder = path.join(OUTPUT, mode, contract); fs.mkdirSync(folder, { recursive: true });
   const current = fs.readFileSync(path.join(DIR, "verify_test.js"), "utf8").replace(/\r\n/g, "\n");
   const assertions = text => text.slice(text.indexOf("async function makeHttpRequest"), text.indexOf("\nrunVerification().catch"));
   assert.equal(assertions(current), assertions(original), "Original HTTP helper and complete verification body remain identical after checkout newline normalization");
@@ -44,6 +44,14 @@ async function originalSuite(browser, server, mode) {
   source = source.slice(0, end) + "\nreturn runVerification();";
   const body = text => text.slice(text.indexOf("async function runVerification()"), text.indexOf("\nrunVerification().catch"));
   assert.ok(source.includes(body(original)), "Every original verification statement must be preserved");
+  if (contract === "current") {
+    const action = "    await page.click('#engageBtn');\n    await new Promise(r => setTimeout(r, 600));";
+    const insertion = "\n    await page.waitForFunction(() => document.body.dataset.activationStage === 'SUSTAINED_ACTIVE', { timeout: 10000 });";
+    assert.equal(source.split(action).length - 1, 2, "Exactly two original manual activation waits");
+    const adapted = source.replaceAll(action, action + insertion);
+    assert.equal(adapted.replaceAll(insertion, ""), source, "Removing two declared waits restores every original statement");
+    source = adapted;
+  }
   const listener = { listen: (...args) => { args.at(-1)(); return listener; }, close() {} };
   const browserAdapter = { launch: async () => ({ newPage: () => context.newPage(), close: async () => {} }) };
   const log = (...values) => lines.push(values.map(value => typeof value === "object" ? JSON.stringify(value) : String(value)).join(" "));
@@ -59,10 +67,15 @@ async function originalSuite(browser, server, mode) {
       'Status after Second Disengage: "AWAITING FILING (0/8)"',
       'Zero console or runtime errors detected!',
     ];
-    for (const line of expected) assert.ok(lines.includes(line), "Original diagnostic: " + line);
+    const missingDiagnostics = expected.filter(line => !lines.includes(line));
+    if (contract === "current") for (const line of expected) assert.ok(lines.includes(line), "Current-contract diagnostic: " + line);
+    else assert.ok(missingDiagnostics.every(line => /Status after (?:Second )?Engage:/.test(line)), "Only historical instantaneous activation diagnostics may differ");
     assert.ok(lines.some(line => line.includes("ALL VERIFICATION TESTS PASSED SUCCESSFULLY")));
-    return { status: "PASS", phases: 8, originalChecks: "Four HTTP status checks, enabled engage control, and zero runtime/console errors; entire original flow retained.",
-      enforcedDiagnostics: expected, note: "Only port, evidence path and transport/browser ownership adapted. Existing Chrome sandbox remains enabled." };
+    return { status: "PASS", contract: contract.toUpperCase(), phases: 8, originalChecks: "Four HTTP status checks, enabled engage control, and zero runtime/console errors; entire original flow retained.",
+      diagnosticsStatus: missingDiagnostics.length ? "FAIL_HISTORICAL_TIMING" : "PASS", missingDiagnostics,
+      declaredInsertions: contract === "current" ? 2 : 0,
+      note: contract === "current" ? "Two explicit sustained-stage waits added after unchanged original manual 600ms waits; every original positive assertion retained. This is CURRENT contract acceptance."
+        : "Original suite positive assertions pass; its non-asserted 600ms authorization observations cannot qualify the new three-stage contract. Historical diagnostic mismatch is retained, not relabeled PASS." };
   } catch (error) { return { status: "FAIL", error: error.message }; }
   finally { fs.writeFileSync(path.join(folder, "run.log"), lines.join("\n")); await context.close(); }
 }
@@ -137,6 +150,8 @@ async function observe(browser, server, mode) {
       const ready = await snapshot(); assert.equal(ready.count, 8); assert.equal(ready.locked, 8); assert.equal(ready.authorized, false); assert.equal(ready.engageDisabled, false);
       if (!cycle) await shot("ready");
       await click(page, "#engageBtn"); await delay(300);
+      assert.equal((await snapshot()).authorized, false, "300ms is BUILDUP, not authorization");
+      await page.waitForFunction(() => document.body.dataset.activationStage === 'SUSTAINED_ACTIVE', { timeout: 10000 });
       const active = await snapshot(); assert.equal(active.authorized, true);
       if (!cycle) await shot("active");
       await click(page, "#disengageBtn"); await delay(600); const reset = await idle();
@@ -167,7 +182,7 @@ async function observe(browser, server, mode) {
     result.replacementCodes = await page.$$eval('.chevron-slot-card.state-locked .slot-name', elements => elements.map(element => element.textContent.split(' // ')[0]));
     assert.deepEqual(result.replacementCodes, ['HYD-02', 'ALT-08', 'CLR-17', 'VAP-30', 'VOL-22', 'WBD-05', 'SUR-23', 'SUM-32']);
     await click(page, "#disengageBtn"); await delay(8250); result.finalIdle = await idle();
-    result.activationObservation = "Authorization is already active at the 300ms sample. Three distinct activation stages and sound quality are not qualified.";
+    result.activationObservation = "Current contract: pending at the 300ms buildup sample, then explicit sustained-stage wait; focused staged visual/audio regression is reported separately.";
     result.functionalAcceptance = result.presetCancellationIdle ? "UNVERIFIED: remaining functional and operator gates" : "FAIL: interrupted preset leaves later filed glyphs after disengage";
     assert.deepEqual(result.pageErrors, []); assert.deepEqual(result.consoleErrors, []); assert.deepEqual(result.resources, []); assert.deepEqual(result.requestFailures, []);
     result.status = "PASS";
@@ -192,14 +207,16 @@ async function main() {
           assert.deepEqual(response.body, fs.readFileSync(path.join(DIR, file))); row.assets++;
         }
         row.originalSuite = await originalSuite(browser, server, mode);
+        row.currentContract = await originalSuite(browser, server, mode, "current");
         if (!mode.endsWith("-embedded")) row.browser = await observe(browser, server, mode);
-        row.status = row.originalSuite.status === "PASS" && (!row.browser || row.browser.status === "PASS") ? "PASS" : "FAIL";
+        row.status = row.originalSuite.status === "PASS" && row.currentContract.status === "PASS" && (!row.browser || row.browser.status === "PASS") ? "PASS" : "FAIL";
       } catch (error) { row.status = "FAIL"; row.error = error.stack; }
       finally { await server.close(); report.results.push(row); console.log("MUNICIPAL_RESULT " + JSON.stringify(row)); }
     }
     for (const row of report.results) assert.equal(row.status, "PASS", row.mode + " qualification");
     const baseline = report.results.find(row => row.mode === "legacy"), shared = report.results.find(row => row.mode === "shared");
     for (const row of report.results) assert.deepEqual(row.originalSuite, baseline.originalSuite);
+    for (const row of report.results) assert.deepEqual(row.currentContract, baseline.currentContract);
     assert.deepEqual(shared.browser.cycles, baseline.browser.cycles);
     assert.deepEqual(shared.browser.activationCancelled, baseline.browser.activationCancelled);
     assert.equal(shared.browser.presetCancellationIdle, baseline.browser.presetCancellationIdle);

@@ -94,7 +94,7 @@
   const state = {
     audioEnabled: true,
     isLockoutActive: false, // Administrative Compliance Freeze
-    systemStatus: 'DORMANT', // DORMANT, SEEKING, FILED_READY, ENGAGED, TERMINATING, REJECTED
+    systemStatus: 'DORMANT', // DORMANT, SEEKING, FILED_READY, BUILDUP, BREAKTHROUGH, ENGAGED, TERMINATING, REJECTED
     enteredGlyphs: [], // Array of selected glyph objects (up to 8)
     activeDocketId: generateDocketId(),
     activeSessionStartTime: null,
@@ -444,6 +444,31 @@
           this.ctx.fill();
         });
 
+      } else if (state.systemStatus === 'BUILDUP') {
+        // The existing amber indexing trace contracts toward the filing aperture.
+        this.ctx.strokeStyle = '#ffb000';
+        this.ctx.lineWidth = 2;
+        for (let ring = 0; ring < 3; ring++) {
+          const radius = 35 + ((this.phase * 28 + ring * 35) % 105);
+          this.ctx.beginPath();
+          this.ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+          this.ctx.stroke();
+        }
+      } else if (state.systemStatus === 'BREAKTHROUGH') {
+        // A phosphor authorization flash precedes the existing sustained raster.
+        this.ctx.fillStyle = 'rgba(170, 255, 190, 0.85)';
+        this.ctx.beginPath();
+        this.ctx.arc(cx, cy, 125, 0, Math.PI * 2);
+        this.ctx.fill();
+        this.ctx.strokeStyle = '#effff2';
+        this.ctx.lineWidth = 3;
+        for (let ray = 0; ray < 12; ray++) {
+          const angle = ray * Math.PI / 6;
+          this.ctx.beginPath();
+          this.ctx.moveTo(cx + Math.cos(angle) * 20, cy + Math.sin(angle) * 20);
+          this.ctx.lineTo(cx + Math.cos(angle) * 140, cy + Math.sin(angle) * 140);
+          this.ctx.stroke();
+        }
       } else if (state.systemStatus === 'SEEKING' || state.systemStatus === 'FILED_READY') {
         // Scanning radar sweep & locked sector polygons
         const sweepAngle = this.phase * 1.5;
@@ -749,7 +774,7 @@
   // =========================================================================
 
   function handleGlyphSelection(glyph, glyphIndex) {
-    if (state.isProcessingBatch || state.systemStatus === 'ENGAGED') return;
+    if (state.isProcessingBatch || ['BUILDUP', 'BREAKTHROUGH', 'ENGAGED'].includes(state.systemStatus)) return;
     if (state.enteredGlyphs.length >= REQUIRED_ADDRESS_LENGTH) return;
 
     if (state.systemStatus === 'TERMINATING') resetTerminalFull();
@@ -798,6 +823,7 @@
 
   function lockSlot(slotIdx, glyph) {
     audio.playStampLock();
+    if (slotIdx === REQUIRED_ADDRESS_LENGTH - 1 && state.enteredGlyphs.length === REQUIRED_ADDRESS_LENGTH) state.systemStatus = 'FILED_READY';
 
     // Radial station
     const radialStation = document.getElementById(`radialStation-${slotIdx}`);
@@ -831,7 +857,7 @@
   // =========================================================================
   function handleQuickDial(presetId) {
     const preset = QUICK_DIAL_PRESETS[presetId];
-    if (!preset || state.systemStatus === 'ENGAGED' || state.isProcessingBatch) return;
+    if (!preset || ['BUILDUP', 'BREAKTHROUGH', 'ENGAGED'].includes(state.systemStatus) || state.isProcessingBatch) return;
 
     audio.playKeyClick();
     logTeleprinter(`LOADING PRESET [${preset.code}] - ${preset.name.toUpperCase()} (TIER ${preset.tier})...`, 'alert');
@@ -852,6 +878,7 @@
             if (step === preset.sequence.length - 1) {
               state.isProcessingBatch = false;
               logTeleprinter(`BATCH ENTRY COMPLETE: ALL 8 FIELDS FILED FOR DOCKET ${state.activeDocketId}.`, 'stamp');
+              updateUIState();
             }
           }, 80);
         }
@@ -914,6 +941,7 @@
     }
 
     if (state.isLockoutActive) {
+      if (['BUILDUP', 'BREAKTHROUGH'].includes(state.systemStatus)) handleDisengageClick();
       audio.playErrorBuzzer();
       logTeleprinter('RULE 9-B COMPLIANCE FREEZE APPLIED BY MUNICIPAL AUDITOR. ALL CONDUIT OPENINGS RESTRICTED.', 'error');
     } else {
@@ -927,7 +955,8 @@
   // ENGAGE SEQUENCE (FILE APPLICATION & CONDUIT APERTURE)
   // =========================================================================
   function handleEngageClick() {
-    if (state.enteredGlyphs.length < REQUIRED_ADDRESS_LENGTH) return;
+    if (state.enteredGlyphs.length < REQUIRED_ADDRESS_LENGTH || state.isProcessingBatch ||
+      !['FILED_READY', 'REJECTED'].includes(state.systemStatus)) return;
 
     // Check Lockout compliance hold
     if (state.isLockoutActive) {
@@ -935,8 +964,25 @@
       return;
     }
 
-    // Execute Conduit Authorization
-    executeAuthorizationSuccess();
+    // Own every stage/chirp in the existing cancellable workflow generation.
+    cancelWorkflow();
+    state.systemStatus = 'BUILDUP';
+    if (dom.centerStampOverlay) dom.centerStampOverlay.className = 'center-stamp-overlay';
+    if (dom.conduitStatusMsg) dom.conduitStatusMsg.textContent = 'VALIDATING CONDUIT // INDEXING AUTHORIZATION CARRIER';
+    audio.playSeekChirp();
+    for (const delay of [400, 750, 1050, 1250]) scheduleWorkflow(() => audio.playSeekChirp(), delay);
+    logTeleprinter('FORM 1099-TX: AUTHORIZATION CARRIER RISING. REVOCATION REMAINS AVAILABLE.', 'alert');
+    updateUIState();
+    scheduleWorkflow(() => {
+      if (state.systemStatus !== 'BUILDUP') return;
+      state.systemStatus = 'BREAKTHROUGH';
+      audio.playStampLock();
+      if (dom.conduitStatusMsg) dom.conduitStatusMsg.textContent = 'AUTHORIZATION IMPACT // CONDUIT APERTURE OPENING';
+      updateUIState();
+    }, 1400);
+    scheduleWorkflow(() => {
+      if (state.systemStatus === 'BREAKTHROUGH') executeAuthorizationSuccess();
+    }, 2200);
   }
 
   function triggerLockoutRejection() {
@@ -970,7 +1016,6 @@
 
   function executeAuthorizationSuccess() {
     state.systemStatus = 'ENGAGED';
-    audio.playStampLock();
     audio.startMainframeCarrier();
 
     // Show Approved Stamp Overlay
@@ -1038,6 +1083,7 @@
     }
 
     state.systemStatus = 'TERMINATING';
+    updateUIState();
     logTeleprinter(`REVOKING TRANSIT PERMIT FOR DOCKET ${state.activeDocketId}...`, 'alert');
 
     // Stamp Voiced
@@ -1093,6 +1139,9 @@
     const enteredCount = state.enteredGlyphs.length;
     const isFull = enteredCount === REQUIRED_ADDRESS_LENGTH;
     const isEngaged = state.systemStatus === 'ENGAGED';
+    const isActivating = ['BUILDUP', 'BREAKTHROUGH'].includes(state.systemStatus);
+    const isBusy = isActivating || state.systemStatus === 'TERMINATING' || state.systemStatus === 'SEEKING' || state.isProcessingBatch;
+    document.body.dataset.activationStage = isEngaged ? 'SUSTAINED_ACTIVE' : state.systemStatus;
 
     // Update Counter
     if (dom.counterCurrent) dom.counterCurrent.textContent = enteredCount;
@@ -1102,6 +1151,9 @@
       if (isEngaged) {
         dom.sysStatusText.textContent = 'CONDUIT ACTIVE [ONLINE]';
         dom.sysStatusText.className = 'val status-online';
+      } else if (isActivating) {
+        dom.sysStatusText.textContent = state.systemStatus === 'BUILDUP' ? 'CARRIER INDEXING [BUILDUP]' : 'APERTURE OPENING [BREAKTHROUGH]';
+        dom.sysStatusText.className = 'val';
       } else if (state.isLockoutActive) {
         dom.sysStatusText.textContent = 'AUDIT FREEZE [HOLD]';
         dom.sysStatusText.className = 'val';
@@ -1120,7 +1172,7 @@
         dom.engageBtn.disabled = true;
         dom.engageBtn.className = 'btn-actuator btn-engage engaged-active';
       } else {
-        dom.engageBtn.disabled = !isFull;
+        dom.engageBtn.disabled = !isFull || isBusy;
         dom.engageBtn.className = 'btn-actuator btn-engage';
       }
     }
@@ -1130,6 +1182,9 @@
       if (isEngaged) {
         dom.authStatusPill.textContent = 'CONDUIT AUTHORIZED';
         dom.authStatusPill.className = 'auth-status-pill engaged';
+      } else if (isActivating) {
+        dom.authStatusPill.textContent = state.systemStatus === 'BUILDUP' ? 'VALIDATING CARRIER' : 'AUTHORIZATION IMPACT';
+        dom.authStatusPill.className = 'auth-status-pill ready';
       } else if (state.isLockoutActive) {
         dom.authStatusPill.textContent = 'AUDIT FREEZE ACTIVE';
         dom.authStatusPill.className = 'auth-status-pill lockout';
@@ -1150,7 +1205,7 @@
       } else {
         btn.classList.remove('selected-in-docket');
       }
-      btn.disabled = isEngaged || (isFull && !isSelected);
+      btn.disabled = isEngaged || isActivating || (isFull && !isSelected);
     });
   }
 

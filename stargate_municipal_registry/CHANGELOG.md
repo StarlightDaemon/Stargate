@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Cancellable staged authorization — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Diagnosed immediate `ENGAGED` state, carrier and telemetry startup in the original Engage handler; hosted observations found authorization already active at 300ms, contrary to the required distinct buildup, breakthrough and sustained phases.
+- Added 1.4 seconds of amber carrier-indexing rings and accelerating existing seek chirps, followed by an 0.8-second phosphor authorization flash with the existing stamp impact. The established sustained green raster, approved stamp, carrier and live telemetry start afterward. Existing palette, terminal composition, controls and attribution are preserved.
+- Stage callbacks and chirps use the cancellation generation introduced by the preset repair. REVOKE PERMIT and mid-activation Compliance Freeze invalidate pending work. Inputs cannot restart an activation already in progress; the final glyph lock establishes ready state before approval becomes available.
+- Added a focused deterministic/browser regression for baseline immediate activation, stage feedback, distinct canvas frames, cancellation during both transitional stages, 8.25-second stable idle, oscillator shutdown, exact preset replacement and two manual redial cycles. Deterministic checks pass; hosted browser and visual acceptance remain pending.
+- The original eight-phase verification source and positive assertions are unchanged. Its logged 600ms authorization observations now describe buildup. The explicit CURRENT adapter inserts only two sustained-stage waits and retains historical timing mismatches separately. No historical timing diagnostic is relabeled as a current-contract PASS. Merge and deployment remain on HOLD.
+
 ### Security maintenance
 
 - Replaced the standalone development handler and the verification suite's embedded handler with the shared public-asset allowlist server. Loopback defaults, launch commands and ports 8840/8899 remain. Parent-directory reads, implementation-file exposure and unsupported request methods are denied.
