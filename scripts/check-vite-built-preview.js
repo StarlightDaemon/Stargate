@@ -3,6 +3,7 @@
 // actual package commands and unchanged original assertions; it is not release acceptance.
 const assert = require("node:assert/strict"), fs = require("node:fs"), path = require("node:path");
 const crypto = require("node:crypto"), http = require("node:http"), { spawn } = require("node:child_process");
+const { stripVTControlCharacters } = require("node:util");
 const { TARGETS, runSuite, cancellation } = require("./check-package-entry-security");
 const { selectExhibit, startPreview, publicAsset } = require("./preview");
 const { request } = require("./browser-check-helpers");
@@ -10,6 +11,7 @@ const { loadPage } = require("./browser-load");
 const ROOT = path.resolve(__dirname, ".."), OUTPUT = path.join(ROOT, "test/vite-built-preview");
 const NAMES = ["stargate_orthographic_cad", "stargate_radio_interferometry", "stargate_seti_deepscope", "stargate_seti_freeform"];
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+function previewUrl(output) { return stripVTControlCharacters(output).match(/http:\/\/127\.0\.0\.1:\d+/)?.[0]; }
 function npmProcess(args, cwd) {
   assert.ok(args.every(arg => /^[a-zA-Z0-9_.:/-]+$/.test(arg)), "Only fixed npm command tokens");
   const options = { cwd, env: process.env, windowsHide: true, detached: process.platform !== "win32", stdio: ["ignore", "pipe", "pipe"] };
@@ -54,8 +56,8 @@ async function preview(cwd, folder) {
     const url = await Promise.race([
       new Promise((resolve, reject) => {
         timer = setInterval(() => {
-          const match = proc.output().match(/http:\/\/127\.0\.0\.1:(\d+)/);
-          if (match) { clearInterval(timer); resolve(match[0]); }
+          const url = previewUrl(proc.output());
+          if (url) { clearInterval(timer); resolve(url); }
           else if (proc.ended()) { clearInterval(timer); reject(new Error("Preview exited before binding: " + proc.output())); }
         }, 50);
       }), proc.done.then(() => { throw new Error("Preview exited before binding: " + proc.output()); }),
@@ -63,7 +65,10 @@ async function preview(cwd, folder) {
     ]);
     assert.equal(new URL(url).port, "4173", "Preserve Vite built-preview default port");
     return { ...proc, url };
-  } catch (error) { await proc.stop(); throw error; }
+  } catch (error) {
+    await proc.stop();
+    throw new Error(error.message + "\nCaptured npm preview output:\n" + stripVTControlCharacters(proc.output()).slice(-8000));
+  }
   finally { clearInterval(timer); fs.writeFileSync(path.join(folder, "preview-start.log"), proc.output()); }
 }
 function filesIn(directory) {
@@ -202,5 +207,5 @@ async function main(names = process.argv.slice(2)) {
   assert.ok(rows.every(row => row.status === "PASS"), "Built-preview specialist qualification incomplete");
 }
 if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
-module.exports = { NAMES, filesIn, compareRender };
+module.exports = { NAMES, filesIn, compareRender, previewUrl };
 

@@ -1,7 +1,12 @@
 "use strict";
 const test = require("node:test"), assert = require("node:assert/strict");
 const fs = require("node:fs"), path = require("node:path");
-const { filesIn, compareRender } = require("./check-vite-built-preview");
+const { filesIn, compareRender, previewUrl } = require("./check-vite-built-preview");
+test("Vite readiness parses ANSI styling inside the printed URL port", () => {
+  assert.equal(previewUrl("Local: http://127.0.0.1:4173/"), "http://127.0.0.1:4173");
+  assert.equal(previewUrl("Local: \u001b[36mhttp://127.0.0.1:\u001b[1m4173\u001b[22m/\u001b[39m"), "http://127.0.0.1:4173");
+  assert.equal(previewUrl("npm command failed before listening"), undefined);
+});
 test("built-render comparison preserves visible control structure and geometry", () => {
   const row = { width: 1920, height: 1080, title: "Fixture", buttons: 8, canvases: 2,
     preset: { text: "Preset", x: 100, y: 200, width: 80, height: 30 },
