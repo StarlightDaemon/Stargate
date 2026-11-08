@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Shared source preview — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Routed `npm run dev` through shared loopback serving, preserving default port `5173` with `PORT`, `--port` and `-p` overrides. Documented the owned original-suite qualification command.
+- Preserved dependency declarations, lockfiles and Vite build output. The retained built-preview specialist path now explicitly binds `127.0.0.1:4173` and fails on port conflicts.
+- Both transports passed the full original suite, 15 public assets and strict cancellation/restart checks in run `42514572291`, job `128834661714`. Shared serving and cleanup passed. The isolated historical Vite security listener exceeded its 10-second close bound and was terminated as a recorded **FAIL**; that baseline cleanup failure remains visible and is not a functional-suite failure.
+- This source security migration does not grant built-artifact, sound, operator, merge or deployment acceptance.
+
 ### Shared verification dependencies — 2026-11-08
 
 - Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.

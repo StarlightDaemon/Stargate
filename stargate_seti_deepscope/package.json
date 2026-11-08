@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5173 --host",
+    "dev": "node server.cjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --host 127.0.0.1 --strictPort"
   },
   "devDependencies": {
     "vite": "^6.4.4"

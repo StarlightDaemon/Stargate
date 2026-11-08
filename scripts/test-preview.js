@@ -64,12 +64,14 @@ test("package-source entry points preserve defaults and explicit port precedence
   const targets = [
     ["stargate_cathedral_oculus", "start", 8080, "test"],
     ["stargate_mastering_suite", "start", 8080, "test"],
-    ["stargate_orthographic_cad", "dev", 5173, "test"]
+    ["stargate_orthographic_cad", "dev", 5173, "test"],
+    ["stargate_radio_interferometry", "dev", 5173, "test:e2e"],
+    ["stargate_seti_deepscope", "dev", 5173, null]
   ];
   for (const [folder, command, defaultPort, testCommand] of targets) {
     const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, folder, "package.json"), "utf8"));
     assert.equal(manifest.scripts[command], "node server.cjs");
-    assert.equal(manifest.scripts[testCommand], "node ../scripts/check-package-entry-security.js " + folder);
+    if (testCommand) assert.equal(manifest.scripts[testCommand], "node ../scripts/check-package-entry-security.js " + folder);
     for (const variant of [
       { env: undefined, args: [], expectedPort: defaultPort },
       { env: "0", args: [] },
