@@ -31,6 +31,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target: navigation-diagnostics
+            command: node scripts/check-navigation-diagnostics.js
+            evidence: test/navigation-diagnostics/
           - target: nexrad
             command: node scripts/check-telemetry-security.js stargate_meteorological_nexrad
             evidence: test/telemetry-security/stargate_meteorological_nexrad/
