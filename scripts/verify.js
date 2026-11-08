@@ -131,17 +131,24 @@ async function main(args = process.argv.slice(2)) {
             record(item.checks, "http-resources", errors.length ? "FAIL" : "PASS", { checked, errors });
           }
           if (browser) {
-            const page = await browser.newPage();
+            const context = await browser.createBrowserContext();
+            const page = await context.newPage();
             try {
-              const errors = [];
+              const errors = [], pending = new Set();
+              page.on("request", r => pending.add(r.url()));
+              page.on("requestfinished", r => pending.delete(r.url()));
+              page.on("requestfailed", r => pending.delete(r.url()));
               page.on("pageerror", e => errors.push(e.message));
               page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
               page.on("requestfailed", r => errors.push(`${r.url()}: ${r.failure()?.errorText}`));
               page.on("response", r => { if (r.status() >= 400) errors.push(`${r.url()}: HTTP ${r.status()}`); });
               await page.setViewport({ width: 1920, height: 1080 });
-              const response = await page.goto(preview.url, { waitUntil: "networkidle0", timeout: 15000 });
-              record(item.checks, "browser-load", errors.length || response.status() !== 200 ? "FAIL" : "PASS", { errors, status: response.status(), viewport: "1920x1080", qualification: "initial loading only" });
-            } finally { await page.close(); }
+              let response, navigationError;
+              try { response = await page.goto(preview.url, { waitUntil: "networkidle0", timeout: 15000 }); }
+              catch (error) { navigationError = error.message; }
+              record(item.checks, "browser-load", navigationError || errors.length || response?.status() !== 200 ? "FAIL" : "PASS",
+                { errors, status: response?.status(), navigationError, pendingRequests: [...pending].map(url => url.replace(preview.url, "ORIGIN")), viewport: "1920x1080", qualification: "initial loading only; each exhibit uses an isolated browser context" });
+            } finally { await context.close(); }
           }
         } catch (error) {
           record(item.checks, "runtime-check", ["EACCES", "EPERM", "EADDRINUSE", "ENOTFOUND"].includes(error.code) ? "ENVIRONMENT-BLOCKED" : "FAIL", error.message);
