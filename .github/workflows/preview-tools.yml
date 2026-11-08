@@ -31,6 +31,27 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target: municipal
+            command: node scripts/check-municipal-security.js
+            evidence: test/municipal-security/
+          - target: atompunk
+            command: node scripts/check-specialist-security.js stargate_atompunk_fable
+            evidence: test/specialist-security/stargate_atompunk_fable/
+            png: true
+          - target: canopy
+            command: node scripts/check-specialist-security.js stargate_canopy_commons
+            evidence: test/specialist-security/stargate_canopy_commons/
+            png: true
+          - target: dark-gothic
+            command: node scripts/check-specialist-security.js stargate_dark_gothic_fable
+            evidence: test/specialist-security/stargate_dark_gothic_fable/
+            png: true
+          - target: nimbus
+            command: node scripts/check-specialist-security.js stargate_nouveau_nimbus
+            evidence: test/specialist-security/stargate_nouveau_nimbus/
+          - target: futurist
+            command: node scripts/check-specialist-security.js stargate_futurist_dynamism
+            evidence: test/specialist-security/stargate_futurist_dynamism/
           - target: sigint
             command: node scripts/check-sigint-security.js
             evidence: test/sigint-security/
@@ -47,11 +68,12 @@ jobs:
             command: node scripts/check-science-security.js stargate_windtunnel_aerodynamics
             evidence: test/science-security/stargate_windtunnel_aerodynamics/
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       STARGATE_LOG_VISUALS: '1'
       STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_blueprint_alpha/node_modules/puppeteer
+      STARGATE_PNG_MODULE: ${{ github.workspace }}/stargate_atompunk_fable/node_modules/pngjs
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -61,6 +83,9 @@ jobs:
           node-version: 24
       - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
       - run: npm ci --prefix stargate_blueprint_alpha
+      - name: Install existing locked PNG decoder for original pixel assertions
+        if: ${{ matrix.png == true }}
+        run: npm ci --ignore-scripts --prefix stargate_atompunk_fable
       - name: Preserve original suites and reproduce security findings
         run: ${{ matrix.command }}
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
