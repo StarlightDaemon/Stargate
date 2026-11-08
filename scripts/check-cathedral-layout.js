@@ -14,11 +14,21 @@ async function geometry(page) {
       return { selector, top: rect.top, left: rect.left, width: rect.width, height: rect.height, bottom: rect.bottom,
         scrollTop: element.scrollTop, scrollHeight: element.scrollHeight, clientHeight: element.clientHeight,
         transform: css.transform, flex: css.flex, minHeight: css.minHeight, overflow: css.overflow,
+        zIndex: css.zIndex, position: css.position, opacity: css.opacity, filter: css.filter, clipPath: css.clipPath,
+        mask: css.mask, mixBlendMode: css.mixBlendMode, isolation: css.isolation, willChange: css.willChange,
         font: css.font, lineHeight: css.lineHeight, textRects };
     });
+    const title = document.querySelector('.cathedral-title').getBoundingClientRect();
+    const paintOverlap = [title.top + 1, title.top + title.height / 2].map(y => ({ x: title.left + title.width / 2, y,
+      stack: document.elementsFromPoint(title.left + title.width / 2, y).map(element => {
+        const css = getComputedStyle(element), r = element.getBoundingClientRect();
+        return { tag: element.tagName, id: element.id, className: element.className, top: r.top, bottom: r.bottom,
+          zIndex: css.zIndex, position: css.position, transform: css.transform, filter: css.filter, clipPath: css.clipPath,
+          mask: css.mask, opacity: css.opacity, pointerEvents: css.pointerEvents, mixBlendMode: css.mixBlendMode };
+      }) }));
     return { viewport: { width: innerWidth, height: innerHeight, scrollX, scrollY, visualTop: visualViewport.offsetTop, visualHeight: visualViewport.height },
       fonts: { status: document.fonts.status, title: document.fonts.check('26px "Cinzel Decorative"'), body: document.fonts.check('12px "Cinzel"') },
-      state: document.getElementById('telem-state').textContent.trim(), activeElement: document.activeElement?.id, boxes };
+      state: document.getElementById('telem-state').textContent.trim(), activeElement: document.activeElement?.id, boxes, paintOverlap };
   });
 }
 async function pointer(page, selector) {
@@ -39,10 +49,10 @@ async function main() {
     for (let cycle = 0; cycle < 2; cycle++) {
       const context = await browser.createBrowserContext(), page = await context.newPage(), errors = [], samples = [];
       page.on('pageerror', error => errors.push(error.message)); page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
-      const capture = async (label, captureBeyondViewport) => {
+      const capture = async (label, captureBeyondViewport, fromSurface = true) => {
         const filename = `cycle${cycle}-${label}-${captureBeyondViewport ? 'beyond' : 'viewport'}.png`, before = await geometry(page);
-        await page.screenshot({ path: path.join(OUT, filename), captureBeyondViewport });
-        const after = await geometry(page); samples.push({ filename, captureBeyondViewport, before, after });
+        await page.screenshot({ path: path.join(OUT, filename), captureBeyondViewport, fromSurface });
+        const after = await geometry(page); samples.push({ filename, captureBeyondViewport, fromSurface, before, after });
       };
       try {
         await page.setViewport({ width: 1920, height: 1080 }); await page.goto(server.url, { waitUntil: 'networkidle0' }); await delay(600);
@@ -56,22 +66,23 @@ async function main() {
         await pointer(page, '#btn-activate-portal');
         await page.waitForFunction(() => document.getElementById('telem-state').textContent.includes('Sustained Active'), { timeout: 10000 });
         await capture('active-1080', true); await capture('active-1080', false); await delay(150); await capture('active-repeat-1080', true);
-        // Hold the sunbeam transform at a reproducible nonzero phase. Compare the
-        // same client with only its atmospheric backdrop's overflow isolated,
-        // then restore it. This is causal diagnosis, not an acceptance adapter.
+        // Prior overflow isolation did not reliably fix clipping. Hold the sunbeam
+        // phase while comparing compositor/view capture and a separate header paint
+        // layer, then restore it. No client source or aesthetic change is made.
         await page.evaluate(() => document.querySelector('.clerestory-sunbeams').getAnimations().forEach(animation => {
           animation.pause(); animation.currentTime = 2000;
         }));
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-        await capture('experiment-sunbeams-paused-baseline-1080', true);
-        const previousOverflow = await page.$eval('.cathedral-vault-backdrop', element => {
-          const previous = element.style.overflow; element.style.overflow = 'hidden'; return previous;
+        await capture('experiment-surface-baseline-1080', false, true);
+        await capture('experiment-view-capture-1080', false, false);
+        const previousTransform = await page.$eval('.cathedral-tympanum', element => {
+          const previous = element.style.transform; element.style.transform = 'translateZ(0)'; return previous;
         });
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-        await capture('experiment-backdrop-clipped-1080', true);
-        await page.$eval('.cathedral-vault-backdrop', (element, previous) => { element.style.overflow = previous; }, previousOverflow);
+        await capture('experiment-header-layer-1080', false, true);
+        await page.$eval('.cathedral-tympanum', (element, previous) => { element.style.transform = previous; }, previousTransform);
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-        await capture('experiment-backdrop-restored-1080', true);
+        await capture('experiment-header-restored-1080', false, true);
         await page.evaluate(() => document.querySelector('.clerestory-sunbeams').getAnimations().forEach(animation => animation.play()));
         await page.setViewport({ width: 3840, height: 2160 }); await delay(300); await capture('active-4k', true);
         await pointer(page, '#btn-disengage'); assert.deepEqual(errors, []);

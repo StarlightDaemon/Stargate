@@ -333,8 +333,9 @@ workflow. Historical green PR checks are not current security qualification.
 Merge and deployment remain HOLD regardless of automated CI results.
 
 The shared root toolchain uses Puppeteer/Puppeteer Core ^25.16.0, pngjs ^7.0.0
-and sharp ^0.35.5. Commit `5ff28b2` adopts npm-generated manifest/lock bytes for
-these 19 qualified targets:
+and sharp ^0.35.5. Local checkpoint `5ff28b2` adopts npm-generated manifest/lock bytes for
+these 19 qualified targets (published commit IDs differ; linked hosted jobs
+provide the shared evidence provenance):
 
 - Apiculture Telemetry, Atompunk Fable, Bathyscaphe Pilot, Caissa Workstation,
   Canopy Commons, Futurist Dynamism and Konstrukt Transit.
@@ -357,7 +358,7 @@ Telegraph, Erebus Signal, Municipal Registry and Synchrotron Collider). Those
 four and the other pending candidates were not covered by the first adoption.
 Do not report that historical batch as wholly clean.
 
-Commit `53ef1a2` adopts the remaining 16 candidates after
+Local checkpoint `53ef1a2` adopts the remaining 16 candidates after
 [job 128827397973](https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827397973)
 passed all 35 scoped candidates. The four dependency-free anonymous manifests
 legitimately produce empty npm lock graphs; the qualified guard now accepts
