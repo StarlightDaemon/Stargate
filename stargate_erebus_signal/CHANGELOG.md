@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] — development-server security
 
+### Explicit activation and cancellation repair — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Presets retain the four visible symbol-seeking steps and now stop pending. The
+  operator must press `ENGAGE_LINK` to activate, as with manual dialing.
+- The existing link control reads `CANCEL_LINK` during seeking, a partial
+  address, activation buildup, or rejection, and remains reachable. Cancellation
+  clears the address and owned workflow timers; generation checks prevent an old
+  preset or rejection callback from changing a replacement attempt.
+- Active disconnect retains its degradation animation and stops the hum. No
+  visual assets, layout, URLs, original attribution or original suite changed.
+- Audio cleanup owns the fading oscillator instead of looking up a mutable
+  current oscillator after a delay. A reproduced stop/restart race previously
+  stopped the replacement hum and left the old one running. Delayed lock tones
+  and transient sources are now cancelled with their abandoned workflow.
+- An offline probe using the actual workflow methods reproduced both baseline
+  defects (automatic activation and ineffective busy cancellation), then passed
+  exact-address cancellation/restart with the repair. Separate hosted browser
+  regression coverage includes explicit activation, real-pointer cancellation,
+  rejection/restart, two manual cycles and 8.25-second idle checks. Hosted results
+  are recorded separately; full operator and sound acceptance remain separate.
+
 ### Fixed
 
 - Replaced the development handler with the shared secure preview launcher after
