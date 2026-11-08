@@ -9,4 +9,8 @@ Everything here is fictional and fully client-side: no backend, no server proces
 
 Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.
 
-This exhibit still has its own development-server dependencies: also run `npm ci --ignore-scripts` in this directory for the existing Vite/http-server commands. Dependency qualification does not qualify those serving policies; entry-point security remains a separate migration.
+Normal source preview uses the shared loopback server: `npm start` opens `http://127.0.0.1:8080`. Set `PORT` or pass `-- --port NUMBER` (also `-p`) to select another port; an explicit argument takes precedence. Invalid or occupied ports fail instead of selecting another interface or port. Only tracked public assets are served; development files, raw traversal and unsupported methods are refused.
+
+`npm test` now owns both loopback comparison listeners and the browser. It runs the unchanged original suite through the qualification adapter, including public-asset and security probes. Run `npm ci --ignore-scripts` in this directory before this comparison; the retained `http-server` dependency supplies the historical package transport. Direct historical test files remain preserved as evidence, rather than the supported test entry point.
+
+Source-serving qualification: hosted run `42512882276`, job `128829555760`, passed the full original suite on installed package and shared transports, public assets and cancellation observations. Built-artifact, sound and operator acceptance are separate; merge and deployment remain on HOLD.

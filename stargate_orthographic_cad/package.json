@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5173 --host",
+    "dev": "node server.cjs",
     "build": "vite build",
-    "preview": "vite preview",
-    "test": "node tests/e2e.test.mjs"
+    "preview": "vite preview --host 127.0.0.1 --strictPort",
+    "test": "node ../scripts/check-package-entry-security.js stargate_orthographic_cad"
   },
   "devDependencies": {
     "vite": "^6.4.4"

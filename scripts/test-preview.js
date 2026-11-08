@@ -58,6 +58,53 @@ test("raw, encoded and sibling traversal never escape the selected directory", a
     const r = await request(f.url, p); assert.equal(r.status, 403, p); assert.equal(r.body.toString(), "Forbidden\n");
   }
 });
+
+
+test("package-source entry points preserve defaults and explicit port precedence under shared policy", { timeout: 60000 }, async () => {
+  const targets = [
+    ["stargate_cathedral_oculus", "start", 8080, "test"],
+    ["stargate_mastering_suite", "start", 8080, "test"],
+    ["stargate_orthographic_cad", "dev", 5173, "test"]
+  ];
+  for (const [folder, command, defaultPort, testCommand] of targets) {
+    const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, folder, "package.json"), "utf8"));
+    assert.equal(manifest.scripts[command], "node server.cjs");
+    assert.equal(manifest.scripts[testCommand], "node ../scripts/check-package-entry-security.js " + folder);
+    for (const variant of [
+      { env: undefined, args: [], expectedPort: defaultPort },
+      { env: "0", args: [] },
+      { env: "invalid-overridden-by-cli", args: ["--port", "0"] },
+      { env: "invalid-overridden-by-cli", args: ["-p", "0"] }
+    ]) {
+      const env = { ...process.env }; delete env.PORT;
+      if (variant.env !== undefined) env.PORT = variant.env;
+      // Execute the exact Node program declared by the package command.
+      const args = manifest.scripts[command].split(" ").slice(1).concat(variant.args);
+      const child = spawn(process.execPath, args, { cwd: path.join(ROOT, folder), env, windowsHide: true });
+      const closed = new Promise(resolve => child.once("close", resolve));
+      try {
+        const url = await new Promise((resolve, reject) => {
+          let output = "";
+          const timer = setTimeout(() => reject(new Error("Package launcher timeout: " + folder)), 5000);
+          child.stdout.on("data", data => {
+            output += data;
+            const match = output.match(/http:\/\/127\.0\.0\.1:\d+/);
+            if (match) { clearTimeout(timer); resolve(match[0]); }
+          });
+          child.stderr.on("data", data => { clearTimeout(timer); reject(new Error(String(data))); });
+          child.once("error", error => { clearTimeout(timer); reject(error); });
+          child.once("close", () => { clearTimeout(timer); reject(new Error("Package launcher exited before serving")); });
+        });
+        if (variant.expectedPort) assert.equal(Number(new URL(url).port), variant.expectedPort);
+        assert.deepEqual((await request(url)).body, fs.readFileSync(path.join(ROOT, folder, "index.html")));
+        for (const route of ["/server.cjs", "/package.json", "/../README.md"]) assert.equal((await request(url, route)).status, 403);
+        assert.equal((await request(url, "/", "POST")).status, 405);
+        assert.equal((await request(url, "/", "GET", { Host: "attacker.example" })).status, 403);
+      } finally { child.kill(); await closed; }
+    }
+  }
+});
+
 test("malformed and ambiguous URLs return bounded errors without paths", async t => {
   const f = await fixture(t);
   for (const p of ["/%ZZ", "/%c0%af", "/%2e%2e%2findex.html", "/%252e%252e/index.html", "/%5c..%5cindex.html", "/index.html?bad=%ZZ", "/%00.js", "/C:/private.js", "//elsewhere/index.html", "http://elsewhere/index.html"]) {

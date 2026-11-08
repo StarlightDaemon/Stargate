@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Shared source preview — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Routed `npm run dev` through the shared loopback preview while preserving default port `5173`, with `PORT`, `--port` and `-p` overrides. The original public assets and application choreography are unchanged.
+- Routed `npm test` through owned comparison listeners and the unchanged full original suite; historical embedded listeners are no longer the normal package test path.
+- Preserved dependency declarations and lockfiles for historical transport comparison and the retained Vite build/built-preview specialist contract. Built preview now binds `127.0.0.1` and fails on an occupied default `4173` port.
+- Qualification provenance: run `42512882276`, job `128829555762`. This security migration does not grant sound, operator, merge or deployment acceptance.
+
 ### Shared verification dependencies — 2026-11-08
 
 - Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.

@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Shared source preview — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Routed `npm start` through shared loopback serving, preserving default port `8080` with `PORT`, `--port` and `-p` overrides. `npm test` now owns its loopback listeners while preserving all 32 original assertions.
+- Retained dependency declarations and lockfiles for package-transport comparison. Source qualification passed both transports in run `42512882276`, job `128829555716`; intermittent top-title clipping appeared in both and remains a visual limitation. This migration does not grant sound, operator, merge or deployment acceptance.
+
 ### Shared verification dependencies — 2026-11-08
 
 - Removed duplicate `puppeteer-core` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
