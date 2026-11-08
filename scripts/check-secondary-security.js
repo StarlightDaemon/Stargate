@@ -183,7 +183,9 @@ async function runSuite(browser, target, suite, url, folder, mode) {
   finally {
     fs.writeFileSync(path.join(folder, "adapter.log"), lines.join("\n"));
     fs.writeFileSync(path.join(folder, "adapter-result.json"), JSON.stringify(result, null, 2));
-    if ((mode === "shared" || target.name === "stargate_solarpunk_conservatory") && process.env.STARGATE_LOG_VISUALS === "1") await emitVisuals(context, folder, target, suite, mode);
+    if ((mode === "shared" || target.name === "stargate_solarpunk_conservatory" ||
+      (target.name === "stargate_bathyscaphe_pilot_fable" && suite === "verify/closeout_stages.js")) &&
+      process.env.STARGATE_LOG_VISUALS === "1") await emitVisuals(context, folder, target, suite, mode);
     await context.close();
   }
   return result;
