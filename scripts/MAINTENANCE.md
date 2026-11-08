@@ -20,7 +20,8 @@ stage suite 23/24 (breakthrough white-rim predicate). These original failures
 remain visible and prevent a full acceptance claim. All seven additional package-source
 entry points now use shared loopback serving: Blueprint Drafting, Cathedral
 Oculus, Mastering Suite, Orthographic CAD, Radio Interferometry, SETI Deepscope
-and SETI Freeform. The last migrated command awaits its final hosted CLI check. These counts distinguish the original
+and SETI Freeform. Actual migrated commands pass on Linux and Windows in run
+`42516390075` (jobs `128840223230` and `128840223354`). These counts distinguish the original
 33-server scope, three additional entry points and seven package-source entries.
 
 Orthographic CAD, Radio Interferometry, SETI Deepscope and SETI Freeform retain
@@ -48,6 +49,17 @@ See dependency reconciliation below. Qualification evidence is preserved in the
 [preview-tools workflow](../.github/workflows/preview-tools.yml),
 [suite registry](suite-registry.js) and
 [hosted run 42515274539](https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539).
+Freeform’s exact original 350 ms cadence still fails in source and built modes.
+Measured coincidence callbacks take 344–628 ms; the separate completion-aware
+manual contract passes at 1080p/4K. Its new in-flight cancellation and manual/preset
+restart checks pass in legacy, shared and built modes, including 8.25 idle seconds.
+The original assertion is retained. Legacy Vite comparison cleanup intermittently
+exceeds its ten-second graceful-close bound; the owned process is terminated and
+the failure stays visible. Shared source and built-preview shutdown are separate.
+Cathedral’s intermittent clipped-header captures remain visually unresolved:
+geometry, hit testing and controlled paint-layer experiments did not prove a
+client-side cause, so no speculative aesthetic change was made.
+
 Registry eligibility is not a fresh test result. Full functional, visual, sound
 and hands-on operator acceptance remain separate gates. Merge and deployment
 remain **HOLD**, including after a green subset of automated checks.
