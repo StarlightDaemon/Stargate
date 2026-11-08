@@ -79,7 +79,7 @@ async function qualify(browser, mode) {
 }
 async function main() {
   fs.mkdirSync(OUTPUT, { recursive: true });
-  const browser = await require(process.env.STARGATE_PUPPETEER_MODULE).launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true });
+  const browser = await require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer").launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true });
   try {
     const before = await qualify(browser, "legacy"), after = await qualify(browser, "shared");
     for (const key of ["originalSuite", "cancelled"]) assert.deepEqual(after[key], before[key]);

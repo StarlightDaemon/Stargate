@@ -124,7 +124,7 @@ async function runSuite(browser, target, suite, url, folder, mode) {
     } else returned = "\nreturn { diagnostic: true };";
     const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
     result = { suite, ...await new AsyncFunction("puppeteer", "fs", "path", "PNG", "mkdirSync", "existsSync", "statSync", "join", "dirname", "process", "console", source + returned)(
-      puppeteer, fs, path, target.python ? undefined : require(process.env.STARGATE_PNG_MODULE).PNG,
+      puppeteer, fs, path, target.python ? undefined : require(process.env.STARGATE_PNG_MODULE || "pngjs").PNG,
       fs.mkdirSync, fs.existsSync, fs.statSync, path.join, path.dirname, processAdapter, log) };
     if (result.results) {
       assert.ok(result.results.length > 0, "Original assertion results returned");
@@ -181,7 +181,7 @@ async function main() {
     const result = []; for (const target of targets) { for (const suite of target.suites) original(target, suite); result.push(await offline(target)); }
     fs.writeFileSync(path.join(OUTPUT, "offline.json"), JSON.stringify(result, null, 2)); console.log(JSON.stringify(result)); return;
   }
-  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE);
+  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
   const browser = await puppeteer.launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true });
   try {
     for (const target of targets) {

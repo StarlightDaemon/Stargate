@@ -166,7 +166,7 @@ async function main() {
   if (process.argv.includes("--offline")) {
     const result = await offline(); fs.writeFileSync(path.join(OUTPUT, "offline.json"), JSON.stringify(result, null, 2)); console.log(JSON.stringify(result, null, 2)); return;
   }
-  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(ROOT, "stargate_blueprint_alpha/node_modules/puppeteer"));
+  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
   const browser = await puppeteer.launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, args: ["--autoplay-policy=no-user-gesture-required"] });
   try {
     const before = await qualify(browser, "legacy"), after = await qualify(browser, "shared");

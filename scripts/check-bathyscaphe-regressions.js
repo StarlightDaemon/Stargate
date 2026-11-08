@@ -158,7 +158,7 @@ async function browserTakeoverChecks(browser, url) {
   return results;
 }
 async function browserChecks() {
-  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(ROOT, "stargate_blueprint_alpha/node_modules/puppeteer"));
+  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
   const server = await startPreview({ ...selectExhibit(NAME), port: 0 });
   let browser;
   const report = { status: "FAIL", errors: [], cycles: [], cancellations: [] };

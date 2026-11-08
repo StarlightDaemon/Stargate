@@ -153,7 +153,7 @@ async function main(args = process.argv.slice(2)) {
   for (let i = 0; i < args.length; i++) if (args[i] === "--exhibit") { const name = args[++i]; const target = TARGETS.find(t => t.name === name); assert.ok(target, "Unknown exhibit: " + name); selected.push(target); } else assert.equal(args[i], "--offline", "Unknown argument");
   const targets = selected.length ? selected : TARGETS;
   if (args.includes("--offline")) { const results = []; for (const target of targets) results.push(await offline(target)); fs.writeFileSync(path.join(OUTPUT, "offline.json"), JSON.stringify(results, null, 2)); console.log(JSON.stringify(results)); return; }
-  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE), browser = await puppeteer.launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true }); const reports = [];
+  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer"), browser = await puppeteer.launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true }); const reports = [];
   try {
     for (const target of targets) {
       try {

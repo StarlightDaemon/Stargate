@@ -4,7 +4,7 @@ const { selectExhibit, startPreview } = require("./preview.js");
 const OUTPUT = path.resolve(__dirname, "../test/navigation-diagnostics");
 async function main() {
   fs.mkdirSync(OUTPUT, { recursive: true });
-  const browser = await require(process.env.STARGATE_PUPPETEER_MODULE).launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
+  const browser = await require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer").launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
   try {
     for (const name of ["stargate_heliora_annulus", "stargate_seti_freeform"]) {
       const server = await startPreview({ ...selectExhibit(name), port: 0 });

@@ -188,7 +188,7 @@ async function main() {
       packages: Object.values(audit.vulnerabilities || {}).map(v => ({ name: v.name, severity: v.severity, isDirect: v.isDirect, fixAvailable: v.fixAvailable, via: v.via })) };
     console.log("BLUEPRINT_DEPENDENCY_AUDIT " + JSON.stringify(report.dependencyAudit));
     assert.equal(audit.metadata.vulnerabilities.total, 0, "Blueprint dependency audit must be clean");
-    const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(DIR, "node_modules/puppeteer"));
+    const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
     browser = await puppeteer.launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
     for (const mode of ["legacy-custom", "legacy-test", "shared"]) {
       const server = mode === "legacy-custom" ? await legacy({ name: NAME, server: "server.js" })

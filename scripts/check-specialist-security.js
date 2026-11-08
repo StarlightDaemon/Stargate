@@ -119,7 +119,7 @@ async function originalSuite(browser, target, url, folder) {
       const start = source.indexOf("const PORT = "), end = source.lastIndexOf("\nmain()");
       assert.ok(start >= 0 && end > start); source = source.slice(start, end);
       source = replaceOnce(source, "const url = " + originalURL, "const url = " + JSON.stringify(url + "/") + ";");
-      const PNG = require(process.env.STARGATE_PNG_MODULE).PNG;
+      const PNG = require(process.env.STARGATE_PNG_MODULE || "pngjs").PNG;
       result = await new Function("fs", "path", "os", "puppeteer", "PNG", "__dirname", "startServer", "process", "console",
         source + "\nreturn main().then(() => ({ results }), error => ({ results, error: error.stack }));")(
         fs, path, require("node:os"), puppeteer, PNG, path.join(folder, "test"), () => fakeServer, processAdapter, log);
@@ -211,7 +211,7 @@ async function main() {
     for (const target of targets) { original(target); result.push(await offline(target)); }
     fs.writeFileSync(path.join(OUTPUT, "offline.json"), JSON.stringify(result, null, 2)); console.log(JSON.stringify(result)); return;
   }
-  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE);
+  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
   const browser = await puppeteer.launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true });
   try {
     for (const target of targets) {

@@ -175,7 +175,7 @@ async function browserMuteChecks(browser, url) {
   return results;
 }
 async function browserChecks() {
-  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(DIR, "node_modules/puppeteer"));
+  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
   const server = await startPreview({ ...selectExhibit(NAME), port: 0 }); let browser;
   const report = { status: "FAIL", errors: [], manual: [], geometry: [], plans: [], cancellations: [] };
   try {

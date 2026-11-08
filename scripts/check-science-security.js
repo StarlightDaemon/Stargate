@@ -201,7 +201,7 @@ async function main() {
     fs.writeFileSync(path.join(OUTPUT, "offline.json"), JSON.stringify(result, null, 2));
     console.log(JSON.stringify(result, null, 2)); return;
   }
-  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE);
+  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
   const browser = await puppeteer.launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true });
   try {
     for (const target of targets) {

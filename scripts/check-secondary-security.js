@@ -154,7 +154,7 @@ async function runSuite(browser, target, suite, url, folder, mode) {
       source = source.slice(source.indexOf("const URL = "));
       const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
       const value = await new AsyncFunction("puppeteer", "fs", "path", "PNG", "process", "console", source + "\nreturn summary;")(
-        puppeteer, artifacts.io, path, require(process.env.STARGATE_PNG_MODULE).PNG, processAdapter, log);
+        puppeteer, artifacts.io, path, require(process.env.STARGATE_PNG_MODULE || "pngjs").PNG, processAdapter, log);
       result = { suite, ...value }; assert.equal(value.total, 42, "All original HELIANTH checks executed");
     } else {
       source = source.replaceAll("'http://localhost:8080'", JSON.stringify(url))
@@ -197,7 +197,7 @@ async function runSuite(browser, target, suite, url, folder, mode) {
       assert.ok(file, "Original breakthrough evidence exists");
       const bytes = fs.readFileSync(path.join(folder, file));
       const decoded = require(path.join(ROOT, target.name, "verify/png.js")).decode(bytes);
-      const reference = require(process.env.STARGATE_PNG_MODULE).PNG.sync.read(bytes);
+      const reference = require(process.env.STARGATE_PNG_MODULE || "pngjs").PNG.sync.read(bytes);
       assert.deepEqual(decoded.data, reference.data, "Original PNG decoder matches independent pngjs decoder");
       const offsets = [-3, -1.5, 0, 1.5, 3, 5].map(offset => {
         const pixels = [];
@@ -330,7 +330,7 @@ async function main() {
     for (const target of targets) { for (const suite of target.suites) original(target, suite); results.push(await offline(target)); }
     fs.writeFileSync(path.join(OUTPUT, "offline.json"), JSON.stringify(results, null, 2)); console.log(JSON.stringify(results)); return;
   }
-  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE);
+  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
   const browser = await puppeteer.launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true });
   try {
     for (const target of targets) {

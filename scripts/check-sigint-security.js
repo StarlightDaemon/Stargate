@@ -138,7 +138,7 @@ async function qualify(browser, mode) {
 }
 async function main() {
   fs.mkdirSync(OUTPUT, { recursive: true });
-  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE);
+  const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || "puppeteer");
   const browser = await puppeteer.launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true });
   try {
     // Both serving modes load the current client; historical pre-fix client evidence is retained separately.
