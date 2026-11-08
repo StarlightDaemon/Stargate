@@ -175,7 +175,15 @@ async function main() {
         row.security = await security(server, mode);
         if (mode !== "legacy-test") {
           for (const file of selectExhibit(NAME).files) {
-            const response = await request(server.url, "/" + file);
+            let response = await request(server.url, "/" + file);
+            if (mode === "legacy-serve" && file === "index.html") {
+              assert.equal(response.status, 301);
+              const destination = new URL(response.headers.location, server.url);
+              assert.equal(destination.origin, server.url);
+              assert.equal(destination.pathname, "/");
+              row.canonicalRedirect = { from: "/index.html", to: "/", status: 301 };
+              response = await request(server.url, "/");
+            }
             assert.equal(response.status, 200, mode + " " + file);
             assert.deepEqual(response.body, fs.readFileSync(path.join(DIR, file))); row.assets++;
           }
@@ -187,8 +195,14 @@ async function main() {
     }
     const baseline = report.results.find(r => r.mode === "legacy-custom");
     for (const row of report.results.filter(r => r.originalSuite)) {
-      assert.equal(row.originalSuite.status, baseline.originalSuite.status, row.mode + " original suite regression");
-      assert.equal(row.originalSuite.failure, baseline.originalSuite.failure, row.mode + " original failure changed");
+      if (row.mode === "legacy-serve") {
+        // Preserve the unmodified suite's actual transport failure; browser behavior is checked separately.
+        assert.equal(row.originalSuite.status, "FAIL");
+        assert.match(row.originalSuite.failure, /Endpoint check failed for \/index.html: status 301/);
+      } else {
+        assert.equal(row.originalSuite.status, baseline.originalSuite.status, row.mode + " original suite regression");
+        assert.equal(row.originalSuite.failure, baseline.originalSuite.failure, row.mode + " original failure changed");
+      }
       assert.deepEqual(row.originalSuite.pageErrors, baseline.originalSuite.pageErrors);
       assert.equal(row.browser.failure, baseline.browser.failure, row.mode + " pointer behavior changed");
       assert.deepEqual(row.browser.cycles, baseline.browser.cycles);
