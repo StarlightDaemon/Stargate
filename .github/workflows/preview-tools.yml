@@ -7,30 +7,6 @@ permissions:
   contents: read
 
 jobs:
-  # Temporary read-only recovery of a completed comparison's original assertions.
-  recover-cyberpunk-evidence:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      actions: read
-      contents: read
-    steps:
-      - name: Read the recorded failure without rerunning or changing its predicates
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh api repos/StarlightDaemon/Stargate/actions/artifacts/13632101247/zip > "$RUNNER_TEMP/cyberpunk-prior.zip"
-          python - <<'PY'
-          import os, zipfile
-          archive = zipfile.ZipFile(os.path.join(os.environ['RUNNER_TEMP'], 'cyberpunk-prior.zip'))
-          logs = [name for name in archive.namelist() if name.endswith('/original/run.log')]
-          assert logs, 'Saved original run.log is required'
-          for name in logs:
-              print('RECOVERED_ORIGINAL_LOG', name)
-              for line in archive.read(name).decode('utf-8').splitlines():
-                  if line.startswith(('[PASS]', '[FAIL]')):
-                      print(line)
-          PY
   # One-off candidate generation is complete. CI now verifies committed locks.
   shared-toolchain:
     runs-on: ubuntu-latest

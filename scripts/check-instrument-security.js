@@ -60,7 +60,26 @@ async function originalSuite(browser, target, url, output) {
     .replace(/^const SCREENSHOT_DIR = .*;$/m, "const SCREENSHOT_DIR = " + JSON.stringify(output) + ";");
   assert.notEqual(adapted, source.slice(0, end));
   const adapter = { executablePath: () => process.env.PUPPETEER_EXECUTABLE_PATH,
-    launch: async () => ({ newPage: () => context.newPage(), close: async () => {} }) };
+    launch: async () => ({ newPage: async () => {
+      const page = await context.newPage();
+      if (target.kind === "cyber") await page.evaluateOnNewDocument(() => {
+        const events = window.__stargateQualificationEvents = [];
+        const observe = (event, phase) => {
+          const vector = event.target?.closest?.('.vector-btn');
+          events.push({ type: event.type, phase, vector: vector?.id || null, target: event.target?.id,
+            x: event.clientX, y: event.clientY, at: performance.now(), trusted: event.isTrusted, viewport: [innerWidth, innerHeight],
+            address: [...(window.CipherDialer?.currentAddress || [])], stage: window.CipherDialer?.stage,
+            scale: getComputedStyle(document.documentElement).getPropertyValue('--app-scale').trim() });
+        };
+        for (const type of ['pointerdown', 'pointerup', 'click']) {
+          document.addEventListener(type, event => observe(event, 'capture'), { capture: true, passive: true });
+          document.addEventListener(type, event => observe(event, 'bubble'), { passive: true });
+        }
+        window.addEventListener('error', event => events.push({ type: 'error', message: event.message, at: performance.now() }));
+        window.addEventListener('unhandledrejection', event => events.push({ type: 'unhandledrejection', message: String(event.reason), at: performance.now() }));
+      });
+      return page;
+    }, close: async () => {} }) };
   try {
     await new Function("require", "__dirname", "console", "process", adapted + "\nreturn " + target.entry + "();")(
       n => ["puppeteer", "puppeteer-core"].includes(n) ? adapter : require(n), path.dirname(originalPath),
@@ -82,7 +101,19 @@ async function originalSuite(browser, target, url, output) {
       assert.ok(records, "All twelve original completion records execute"); result.records = records.map(x => x.test);
     }
     return result;
-  } finally { fs.writeFileSync(path.join(output, "run.log"), lines.join("\n")); await context.close(); }
+  } catch (error) {
+    console.log("INSTRUMENT_ORIGINAL_FAILURE " + JSON.stringify({ exhibit: target.name, output: path.relative(ROOT, output), error: error.message, records: lines.filter(line => /^\[(?:PASS|FAIL|TEST)\]/.test(line)), logTail: lines.slice(-12) }));
+    throw error;
+  } finally {
+    fs.writeFileSync(path.join(output, "run.log"), lines.join("\n"));
+    try {
+      if (target.kind === "cyber") for (const page of await context.pages()) {
+        const events = await page.evaluate(() => window.__stargateQualificationEvents || []);
+        fs.writeFileSync(path.join(output, "pointer-events.json"), JSON.stringify(events, null, 2));
+        console.log("CYBER_ORIGINAL_POINTER_TRACE " + JSON.stringify({ output: path.relative(ROOT, output), events }));
+      }
+    } finally { await context.close(); }
+  }
 }
 async function snapshot(page, kind) {
   return page.evaluate(kind => {
@@ -157,7 +188,13 @@ async function main(args = process.argv.slice(2)) {
   try {
     for (const target of targets) {
       try {
-        const legacyTransport = await qualify(browser, target, "legacy"), shared = await qualify(browser, target, "shared");
+        const modes = {}, failures = [];
+        for (const mode of ["legacy", "shared"]) {
+          try { modes[mode] = await qualify(browser, target, mode); }
+          catch (error) { failures.push(mode + ": " + error.message); }
+        }
+        assert.deepEqual(failures, [], "Both comparison modes must pass; each failed mode retains its original evidence");
+        const legacyTransport = modes.legacy, shared = modes.shared;
         assert.deepEqual(shared.original, legacyTransport.original);
         for (const key of ["initial", "cycles", "cancelled", "functionalAcceptance"]) assert.deepEqual(shared.supplemental[key], legacyTransport.supplemental[key], target.name + " " + key);
         for (const key of ["resources", "requestFailures"]) assert.deepEqual([...new Set(shared.supplemental[key])].sort(), [...new Set(legacyTransport.supplemental[key])].sort());
