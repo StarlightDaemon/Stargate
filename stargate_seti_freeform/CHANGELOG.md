@@ -1,5 +1,11 @@
 # Changelog
 
+## Maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Add a local spectrogram favicon using the existing cyan/green palette; resolves the browser favicon 404. Original attribution and version remain unchanged.
+
+
 All notable changes to the Vesper Deep-Aperture Technosignature Console will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
