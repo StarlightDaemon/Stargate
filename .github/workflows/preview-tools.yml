@@ -7,6 +7,24 @@ permissions:
   contents: read
 
 jobs:
+  shared-toolchain-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: node scripts/prepare-dependency-candidates.js --install --emit
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: shared-toolchain-candidate
+          path: |
+            test/dependency-candidates/**/report.json
+            test/dependency-candidates/*/package*.json
+            test/dependency-candidates/*/*.log
+          retention-days: 30
   dependency-baseline:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -31,6 +49,21 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target: apiculture
+            command: node scripts/check-apiculture-security.js
+            evidence: test/apiculture-security/
+          - target: cyberpunk-fable
+            command: node scripts/check-extra-entry-security.js stargate_cyberpunk_fable
+            evidence: test/extra-entry-security/stargate_cyberpunk_fable/
+            png: true
+          - target: steampunk-fable
+            command: node scripts/check-extra-entry-security.js stargate_steampunk_fable
+            evidence: test/extra-entry-security/stargate_steampunk_fable/
+            png: true
+          - target: ukiyo-fable
+            command: node scripts/check-extra-entry-security.js stargate_ukiyo_waystation_fable
+            evidence: test/extra-entry-security/stargate_ukiyo_waystation_fable/
+            png: true
           - target: navigation-diagnostics
             command: node scripts/check-navigation-diagnostics.js
             evidence: test/navigation-diagnostics/
