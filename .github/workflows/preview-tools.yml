@@ -62,6 +62,9 @@ jobs:
             command: node scripts/check-vite-built-preview.js stargate_seti_freeform
             evidence: test/vite-built-preview/stargate_seti_freeform/
             package: stargate_seti_freeform
+          - target: cathedral-layout
+            command: node scripts/check-cathedral-layout.js
+            evidence: test/cathedral-layout/
           - target: cathedral-oculus
             command: node scripts/check-package-entry-security.js stargate_cathedral_oculus
             evidence: test/package-entry-security/stargate_cathedral_oculus/
