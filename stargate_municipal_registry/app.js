@@ -697,6 +697,14 @@
   // EVENT BINDINGS
   // =========================================================================
   function bindEvents() {
+    // Default AUDIO: ON must unlock on real input before that gesture's sounds.
+    // Muted input never initializes/resumes audio; the explicit ON toggle does.
+    const unlockAudio = event => {
+      if (event.isTrusted && state.audioEnabled) audio.init();
+    };
+    window.addEventListener('pointerdown', unlockAudio, { capture: true });
+    window.addEventListener('keydown', unlockAudio, { capture: true });
+
     // Audio toggle
     if (dom.audioToggleBtn) {
       dom.audioToggleBtn.addEventListener('click', () => {

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Cold-start audio initialization — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Hosted stage regression `128829555788` passed visual/cancellation checks but recorded zero oscillator starts in every state. Inspection confirmed that the initial AUDIO: ON state never initialized Web Audio on ordinary controls; all sound methods returned before their own initialization call. Only manually toggling audio OFF then ON initialized the context. The earlier zero-source cancellation check was therefore insufficient audio evidence.
+- Initialize/resume audio on trusted pointer or keyboard input while AUDIO: ON, before that gesture's control handler runs. Muted input does not initialize/resume audio. The existing explicit audio toggle and its session-only preference are preserved; no persistence schema or default changed.
+- Strengthened browser regression to reproduce the silent baseline, require actual cold-workflow and buildup oscillator starts, require both sustained carrier oscillators, verify muted workflows start no new sources, and require zero active sources after 8.25-second cancellation windows. Deterministic gesture/mute checks pass; hosted audio lifecycle verification is pending. This does not claim subjective sound-quality acceptance.
+
 ### Shared verification dependencies — 2026-11-08
 
 - Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.

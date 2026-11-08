@@ -6,9 +6,9 @@ const ROOT = path.resolve(__dirname, ".."), NAME = "stargate_municipal_registry"
 const BASE = "8c3f718c3e31cd19c169c7cf87ab2feeee7242c1", delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const original = () => execFileSync("git", ["show", BASE + ":" + NAME + "/app.js"], { cwd: ROOT, encoding: "utf8" });
 function probe(source) {
-  let time = 0, next = 0; const timers = new Map(), sounds = [];
-  const window = { addEventListener() {} }, document = { body: { dataset: {} }, getElementById: () => null, querySelectorAll: () => [] };
-  source = source.replace(/\}\)\(\);\s*$/, "window.__probe = { state, audio, handleEngageClick, handleDisengageClick, handleQuickDial, toggleLockout };})();");
+  let time = 0, next = 0; const timers = new Map(), sounds = [], listeners = new Map();
+  const window = { addEventListener(name, fn) { if (!listeners.has(name)) listeners.set(name, []); listeners.get(name).push(fn); } }, document = { body: { dataset: {} }, getElementById: () => null, querySelectorAll: () => [] };
+  source = source.replace(/\}\)\(\);\s*$/, "window.__probe = { state, audio, bindEvents, handleEngageClick, handleDisengageClick, handleQuickDial, toggleLockout };})();");
   vm.runInNewContext(source, { window, document, setTimeout: (fn, ms) => { timers.set(++next, { fn, time: time + ms }); return next; },
     clearTimeout: id => timers.delete(id), setInterval: () => ++next, clearInterval() {}, requestAnimationFrame() {} });
   const api = window.__probe;
@@ -17,7 +17,7 @@ function probe(source) {
   const advance = ms => { const end = time + ms; for (;;) { const due = [...timers].filter(([, t]) => t.time <= end).sort((a, b) => a[1].time - b[1].time)[0];
     if (!due) break; timers.delete(due[0]); time = due[1].time; due[1].fn(); } time = end; };
   const ready = () => { api.state.enteredGlyphs = Array.from({ length: 8 }, (_, index) => ({ index })); api.state.systemStatus = "FILED_READY"; };
-  return { api, timers, sounds, advance, ready };
+  return { api, timers, sounds, advance, ready, dispatch: (name, event) => (listeners.get(name) || []).forEach(fn => fn(event)) };
 }
 function deterministic() {
   const before = probe(original()); before.ready(); before.api.handleEngageClick();
@@ -39,7 +39,13 @@ function deterministic() {
   }
   const hold = probe(source); hold.ready(); hold.api.handleEngageClick(); hold.advance(1500); hold.api.toggleLockout(); hold.advance(8250);
   assert.equal(hold.api.state.systemStatus, "DORMANT"); assert.equal(hold.api.state.isLockoutActive, true);
-  return { status: "PASS", baseline: "Synchronous ENGAGED; no transitional stages", fixed: "1400ms BUILDUP, 800ms BREAKTHROUGH, then ENGAGED", cancelledAt: [500, 1600], staleCallbacks: "Ignored", exactReplacement: [1, 7, 16, 29, 21, 4, 22, 31], midStageHold: "Cancelled" };
+  const unlock = probe(source); let initializations = 0; unlock.api.audio.init = () => initializations++; unlock.api.bindEvents();
+  unlock.dispatch('pointerdown', { isTrusted: false }); assert.equal(initializations, 0);
+  unlock.dispatch('pointerdown', { isTrusted: true }); assert.equal(initializations, 1);
+  unlock.api.state.audioEnabled = false;
+  unlock.dispatch('pointerdown', { isTrusted: true }); unlock.dispatch('keydown', { isTrusted: true }); assert.equal(initializations, 1);
+  unlock.api.state.audioEnabled = true; unlock.dispatch('keydown', { isTrusted: true }); assert.equal(initializations, 2);
+  return { status: "PASS", baseline: "Synchronous ENGAGED; no transitional stages", fixed: "1400ms BUILDUP, 800ms BREAKTHROUGH, then ENGAGED", cancelledAt: [500, 1600], staleCallbacks: "Ignored", exactReplacement: [1, 7, 16, 29, 21, 4, 22, 31], midStageHold: "Cancelled", audioUnlock: "Only trusted pointer/key input while AUDIO: ON initializes audio" };
 }
 async function browserRun(browser, url, baseline) {
   const context = await browser.createBrowserContext(), page = await context.newPage(), errors = [];
@@ -61,7 +67,8 @@ async function browserRun(browser, url, baseline) {
     count: Number(document.getElementById("counterCurrent").textContent), auth: document.getElementById("authStatusPill").textContent,
     stamp: document.getElementById("centerStampOverlay").className, flux: document.getElementById("monFlux").textContent,
     canCancel: !document.getElementById("disengageBtn").disabled,
-    activeOscillators: window.__municipalAudio.filter(x => x.started && x.stop > x.ctx.currentTime).length,
+    activeOscillators: window.__municipalAudio.filter(x => x.started && x.ctx.state === 'running' && x.stop > x.ctx.currentTime).length,
+    audioContextStates: [...new Set(window.__municipalAudio.map(x => x.ctx.state))],
     oscillatorStarts: window.__municipalAudio.filter(x => x.started).length }));
   const wait = stage => page.waitForFunction(stage => document.body.dataset.activationStage === stage, { timeout: 10000 }, stage);
   const pending = async () => { await page.waitForFunction(() => Number(document.getElementById("counterCurrent").textContent) === 8 && !document.getElementById("engageBtn").disabled); };
@@ -76,13 +83,17 @@ async function browserRun(browser, url, baseline) {
   try {
     await page.setViewport({ width: 1920, height: 1080 }); await page.goto(url, { waitUntil: "networkidle0" });
     assert.equal(await page.$eval("#lockoutToggleBtn", element => element.getAttribute("aria-pressed")), "false");
-    await click(page, "#qdRoute1"); await pending(); await click(page, "#engageBtn");
-    if (baseline) { await delay(100); result.at100ms = await snapshot(); assert.equal(result.at100ms.auth, "CONDUIT AUTHORIZED"); result.status = "DEFECT_REPRODUCED"; return result; }
+    await click(page, "#qdRoute1"); await pending(); const beforeEngage = await snapshot(); await click(page, "#engageBtn");
+    if (baseline) { await delay(100); result.at100ms = await snapshot(); assert.equal(result.at100ms.auth, "CONDUIT AUTHORIZED");
+      assert.equal(result.at100ms.oscillatorStarts, 0); result.audioDefect = "Default AUDIO: ON never initializes on ordinary cold pointer workflow";
+      result.status = "DEFECT_REPRODUCED"; return result; }
+    assert.ok(beforeEngage.oscillatorStarts > 0, 'First trusted cold pointer workflow must actually start audio sources');
     const pixels = [];
     for (const stage of ["BUILDUP", "BREAKTHROUGH", "SUSTAINED_ACTIVE"]) {
       await wait(stage); const value = await snapshot(); assert.equal(value.canCancel, true);
       if (stage !== "SUSTAINED_ACTIVE") { assert.notEqual(value.auth, "CONDUIT AUTHORIZED"); assert.equal(value.flux, "0.00 MB/s"); assert.equal(value.stamp, "center-stamp-overlay"); }
-      else assert.equal(value.auth, "CONDUIT AUTHORIZED");
+      else { assert.equal(value.auth, "CONDUIT AUTHORIZED"); assert.equal(value.activeOscillators, 2, 'Both sustained carrier oscillators are actually running'); }
+      if (stage === 'BUILDUP') assert.ok(value.oscillatorStarts > beforeEngage.oscillatorStarts, 'Buildup actually starts its seek chirp');
       result.stages.push(value);
       pixels.push(await page.evaluate(() => { const image = document.getElementById("conduitCanvas").getContext("2d").getImageData(0, 0, 560, 420).data;
         let sum = 0, amberPixels = 0; for (let i = 0; i < image.length; i += 4) { sum += (image[i] + image[i + 1] + image[i + 2]) / 3;
@@ -93,6 +104,12 @@ async function browserRun(browser, url, baseline) {
     assert.ok(pixels[1].meanRGB > pixels[0].meanRGB + 10 && pixels[1].meanRGB > pixels[2].meanRGB + 10, "Breakthrough phosphor flash differs from buildup and sustained raster");
     assert.ok(pixels[0].amberPixels > 500 && pixels[2].amberPixels === 0, "Amber contracting buildup rings differ from sustained green raster");
     result.canvasPixels = pixels; result.cancellations.push(await cancel());
+    const beforeMute = await snapshot(); await click(page, '#audioToggleBtn');
+    assert.equal(await page.$eval('#audioLabel', element => element.textContent), 'AUDIO: MUTED');
+    await click(page, '#qdRoute1'); await pending(); await click(page, '#engageBtn'); await wait('SUSTAINED_ACTIVE');
+    result.muted = await snapshot(); assert.equal(result.muted.activeOscillators, 0); assert.equal(result.muted.oscillatorStarts, beforeMute.oscillatorStarts, 'Muted pointer workflow starts no new oscillators');
+    result.cancellations.push(await cancel()); await click(page, '#audioToggleBtn');
+    assert.equal(await page.$eval('#audioLabel', element => element.textContent), 'AUDIO: ON');
     for (const stage of ["BUILDUP", "BREAKTHROUGH"]) {
       await click(page, "#qdRoute2"); await pending(); await click(page, "#engageBtn"); await wait(stage);
       if (stage === "BUILDUP") await delay(500);
