@@ -53,3 +53,12 @@ Atmospheric horror only — no gore, viscera, or depictions of death. Draws on g
 
 ### Known issues
 - None. Neither the automated harness nor the operator's hands-on testing found a defect. The one caveat above (interactive-pane transition timing) was resolved as environment noise.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite and asset qualification.
+- Preserved the imported server contract; listener is loopback-only, malformed
+  URLs and development-file requests are rejected, and methods are restricted.

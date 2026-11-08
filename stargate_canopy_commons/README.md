@@ -55,3 +55,12 @@ npm test
 - `server.js` — tiny static server
 - `test/run-tests.mjs` — verification harness
 - `version.json`, `CHANGELOG.md`
+
+
+## Shared local preview
+
+`node server.js` uses the repository shared server at `http://127.0.0.1:8709`.
+`PORT` overrides the port. Keep this exhibit inside the repository. The original
+synchronous `startServer(port)` returning a native HTTP server contract is retained.
+Only tracked public assets are served; unsupported methods and development files
+are denied. Original creative-fit and operator dispositions remain unchanged.

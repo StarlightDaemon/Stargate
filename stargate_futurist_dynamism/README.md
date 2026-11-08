@@ -34,3 +34,12 @@ Navigate to `http://localhost:3000/`.
 ```bash
 node test/verify.js
 ```
+
+
+## Shared local preview
+
+`node server.js` uses the repository shared server at `http://127.0.0.1:3000`.
+`PORT` overrides the port. Keep this exhibit inside the repository. The original
+unstarted native HTTP server export and `.listen(port)` contract is retained.
+Only tracked public assets are served; unsupported methods and development files
+are denied. Original creative-fit and operator dispositions remain unchanged.

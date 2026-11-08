@@ -50,3 +50,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Known issues
 - None found by the automated harness. Operator hands-on testing has not yet been performed; this section should be updated after it.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite and asset qualification.
+- Preserved the imported server contract; listener is loopback-only, malformed
+  URLs and development-file requests are rejected, and methods are restricted.

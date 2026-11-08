@@ -58,3 +58,12 @@
   - **Period Themes:** 4 authentic Futurist color palettes (*Boccioni Dynamism, Balla Electric Prism, Severini Carbon, Sant'Elia Industrial*).
   - **Operator Reference:** Comprehensive dismissible reference manual styled in Futurist typography.
   - **Viewport Scaling:** Responsive 1920x1080 native layout scaling cleanly up to 3840x2160 (4K).
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite and asset qualification.
+- Preserved the imported server contract; listener is loopback-only, malformed
+  URLs and development-file requests are rejected, and methods are restricted.

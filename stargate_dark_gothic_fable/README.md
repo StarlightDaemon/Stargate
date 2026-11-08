@@ -143,3 +143,12 @@ and 3840×2160 (`--fit` 2).
 lantern, fit), `audio.js` (procedural Web Audio), `wards.js` (wards, roads,
 remembered hands), `server.js`, `test/run-tests.mjs`, `favicon.svg`,
 `version.json`, `CHANGELOG.md`.
+
+
+## Shared local preview
+
+`node server.js` uses the repository shared server at `http://127.0.0.1:8797`.
+`PORT` overrides the port. Keep this exhibit inside the repository. The original
+synchronous `startServer(port)` returning a native HTTP server contract is retained.
+Only tracked public assets are served; unsupported methods and development files
+are denied. Original creative-fit and operator dispositions remain unchanged.

@@ -44,3 +44,13 @@ All notable changes to the **Stargate: Le Nimbus Florié (Art Nouveau Botanical 
 - **Period Color Moods**: 4 selectable authentic palettes (*Vermeil & Teal de Nancy*, *Secession Rose & Obsidian*, *Verdigris & Absinthe*, *Gold Leaf & Sèvres Azure*).
 - **Operator Reference & Operational Folio**: Belle Époque reference overlay (`?` button) and live timestamped session event logger.
 - **Universal Viewport Scaling**: Flawless scaling from 1080p to 4K (3840x2160) without scroll.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite and asset qualification.
+- Preserved the imported server contract; listener is loopback-only, malformed
+  URLs and development-file requests are rejected, and methods are restricted.
+- Port conflicts fail clearly instead of recursively opening an unmanaged listener.

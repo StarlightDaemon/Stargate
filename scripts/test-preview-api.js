@@ -24,6 +24,26 @@ function close(server) {
     server.close(error => error ? reject(error) : resolve()); server.closeAllConnections();
   });
 }
+
+test("converted imported exhibit APIs retain native Server contracts and security", async t => {
+  for (const name of ["stargate_canopy_commons", "stargate_dark_gothic_fable", "stargate_nouveau_nimbus", "stargate_futurist_dynamism"]) {
+    const api = require(path.join(ROOT, name, "server.js"));
+    let server;
+    if (name === "stargate_futurist_dynamism") {
+      assert.ok(api instanceof http.Server); assert.equal(api.listening, false); server = api.listen(0);
+    } else { assert.equal(typeof api.startServer, "function"); server = api.startServer(0); }
+    assert.ok(server instanceof http.Server);
+    t.after(async () => { if (server.listening) await close(server); });
+    if (!server.listening) await once(server, "listening");
+    assert.equal(server.address().address, "127.0.0.1");
+    const url = "http://127.0.0.1:" + server.address().port;
+    assert.deepEqual((await request(url, "/")).body, fs.readFileSync(path.join(ROOT, name, "index.html")));
+    assert.equal((await request(url, "/server.js")).status, 403);
+    assert.equal((await request(url, "/%ZZ")).status, 400);
+    assert.equal((await request(url, "/", "POST")).status, 405);
+    await close(server);
+  }
+});
 test("synchronous API creates an unstarted native Server and rejects unsafe listen arguments", t => {
   const { create } = fixture(t), server = create();
   assert.ok(server instanceof http.Server);
