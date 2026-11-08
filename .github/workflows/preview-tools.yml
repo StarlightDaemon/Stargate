@@ -139,6 +139,9 @@ jobs:
           - target: nimbus-notes-security
             command: node scripts/check-nimbus-notes-security.js
             evidence: test/nimbus-notes-security/
+          - target: blueprint-drafting-contract
+            command: node scripts/check-blueprint-drafting-contract.js
+            evidence: test/blueprint-drafting-current-contract/
           - target: blueprint-regressions
             command: node scripts/check-blueprint-regressions.js
             evidence: test/blueprint-regressions/
