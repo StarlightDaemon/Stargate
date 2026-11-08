@@ -25,6 +25,20 @@ jobs:
             test/dependency-candidates/*/package*.json
             test/dependency-candidates/*/*.log
           retention-days: 30
+  shared-toolchain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts
+      - run: npm ls --all
+      - run: npm run security:deps
+      - run: git diff --exit-code -- package.json package-lock.json
   dependency-baseline:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -148,8 +162,8 @@ jobs:
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       STARGATE_LOG_VISUALS: '1'
-      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_blueprint_alpha/node_modules/puppeteer
-      STARGATE_PNG_MODULE: ${{ github.workspace }}/stargate_atompunk_fable/node_modules/pngjs
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
+      STARGATE_PNG_MODULE: ${{ github.workspace }}/node_modules/pngjs
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -158,10 +172,7 @@ jobs:
         with:
           node-version: 24
       - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
-      - run: npm ci --prefix stargate_blueprint_alpha
-      - name: Install existing locked PNG decoder for original pixel assertions
-        if: ${{ matrix.png == true }}
-        run: npm ci --ignore-scripts --prefix stargate_atompunk_fable
+      - run: npm ci --ignore-scripts
       - name: Preserve original suites and reproduce security findings
         run: ${{ matrix.command }}
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -175,14 +186,14 @@ jobs:
     timeout-minutes: 10
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
-      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_blueprint_alpha/node_modules/puppeteer
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
       - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
-      - run: npm ci --prefix stargate_blueprint_alpha
+      - run: npm ci --ignore-scripts
       - name: Check every active static exhibit and its resources
         run: >-
           node -e 'require("./scripts/verify.js").main(["--http","--browser"]).then(r=>{process.exitCode=r.summary.FAIL||r.summary["ENVIRONMENT-BLOCKED"]?1:0;console.log("Page loading only; interaction and operator acceptance remain separate gates.")}).catch(e=>{console.error(e);process.exitCode=1})'
@@ -198,7 +209,7 @@ jobs:
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       STARGATE_LOG_VISUALS: '1'
-      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_blueprint_alpha/node_modules/puppeteer
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -207,7 +218,7 @@ jobs:
         with:
           node-version: 24
       - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
-      - run: npm ci --prefix stargate_blueprint_alpha
+      - run: npm ci --ignore-scripts
       - name: Qualify Synchrotron security and original behavior
         run: node scripts/check-synchrotron-security.js
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -230,7 +241,8 @@ jobs:
         with:
           node-version: 24
       - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
-      - run: npm ci --prefix stargate_blueprint_alpha
+      - run: npm ci --ignore-scripts
+      - run: npm ci --ignore-scripts --prefix stargate_blueprint_alpha
       - name: Validate installed Blueprint dependency graph and unchanged lock
         run: |
           npm ls --prefix stargate_blueprint_alpha --all
@@ -249,7 +261,7 @@ jobs:
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       STARGATE_LOG_VISUALS: '1'
-      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_aetheric_telegraph/node_modules/puppeteer
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -258,7 +270,7 @@ jobs:
         with:
           node-version: 24
       - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
-      - run: npm ci --prefix stargate_aetheric_telegraph
+      - run: npm ci --ignore-scripts
       - name: Preserve original Reactor suite and compare historical/shared security and interactions
         run: node scripts/check-reactor-security.js
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -272,7 +284,7 @@ jobs:
     timeout-minutes: 5
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
-      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_aetheric_telegraph/node_modules/puppeteer
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -281,7 +293,7 @@ jobs:
         with:
           node-version: 24
       - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
-      - run: npm ci --prefix stargate_aetheric_telegraph
+      - run: npm ci --ignore-scripts
       - run: node scripts/check-consolidation.js
       - name: Qualify Erebus security replacement and preserve its existing behavior
         env:
@@ -325,7 +337,7 @@ jobs:
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       STARGATE_LOG_VISUALS: '1'
-      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_aetheric_telegraph/node_modules/puppeteer
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -335,10 +347,8 @@ jobs:
           node-version: 24
       - name: Locate existing Chrome
         run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
-      - name: Install existing locked browser-test dependency
-        run: npm ci --prefix stargate_aetheric_telegraph
-      - name: Install Bathyscaphe's existing locked test dependency
-        run: npm ci --prefix stargate_bathyscaphe_pilot
+      - name: Install shared locked browser-test dependency
+        run: npm ci --ignore-scripts
       - name: Run original builder suites against both servers
         run: node scripts/run-pilot-suites.js
       - name: Compare pilot browser behavior with legacy and shared serving
