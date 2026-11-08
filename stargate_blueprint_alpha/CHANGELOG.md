@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breakthrough header layout — 2026-11-08
+
+- Visual review of hosted job `128827398288` found that the breakthrough status forced the firm title and metadata onto extra lines, although the staged functional and pixel checks passed. Shortened only that header label to `BREAKTHROUGH // CERTIFIED`; the central aperture and approval stamp retain the full drawing-certification captions. Brand text, typography, styling and stage duration are unchanged.
+- Added a browser layout regression that replays the previous label and measures its wrapping, then verifies the corrected label at 1080p and 4K. Actual buildup, breakthrough and sustained headers are checked at both sizes; the existing three-stage screenshots and pixel predicates remain intact. Hosted verification of this focused layout repair is pending.
+
 ### Shared verification dependencies — 2026-11-08
 
 - Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.

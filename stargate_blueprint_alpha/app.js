@@ -396,7 +396,7 @@
       window.blueprintAudio.playApprovalAndActivation(false);
       if (DOM.stampSignature) DOM.stampSignature.textContent = 'DRAWING CERTIFIED // APERTURE FORMING';
       DOM.approvalStamp.classList.remove('hidden');
-      DOM.systemStatus.textContent = 'BREAKTHROUGH // DRAWING CERTIFIED';
+      DOM.systemStatus.textContent = 'BREAKTHROUGH // CERTIFIED';
       DOM.systemStatus.className = 'val status-indicator engaging';
       DOM.telemetryFlux.textContent = 'APERTURE FORMING // NOT CONNECTED';
       logMessage('APPROVAL IMPACT CONFIRMED — METRIC APERTURE FORMING.');

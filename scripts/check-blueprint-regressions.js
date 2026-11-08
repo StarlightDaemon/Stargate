@@ -148,8 +148,37 @@ async function browserChecks() {
       await delay(8250); const state = await snapshot(); assert.deepEqual(state.stagedGlyphs, []); assert.equal(state.filled, 0); assert.equal(state.locked, 0);
       assert.equal(state.isConnected, false); assert.equal(state.stamp, false); assert.equal(state.canvas, false); assert.equal(state.audioSources, 0); assert.equal(state.ambientHumNodes, 0); report.cancellations.push({ label, state }); await shot(label);
     };
+    const headerLayout = async replacement => page.evaluate(replacement => {
+      const status = document.getElementById('system-status-indicator'), previous = status.textContent;
+      if (replacement) status.textContent = replacement;
+      const selectors = ['.firm-main-title', '.firm-sub-title', '.telemetry-item', '#sound-toggle-btn'];
+      const items = selectors.flatMap(selector => [...document.querySelectorAll(selector)].map(element => {
+        const range = document.createRange(); range.selectNodeContents(element);
+        const bands = [];
+        for (const rect of [...range.getClientRects()].filter(r => r.width && r.height)) {
+          const center = rect.top + rect.height / 2;
+          // Inline icons/spans may differ slightly in font metrics on one line.
+          if (!bands.some(band => Math.abs(band.center - center) < Math.min(band.height, rect.height) / 2)) bands.push({ center, height: rect.height });
+        }
+        const r = element.getBoundingClientRect();
+        return { selector, lines: bands.length, top: r.top, height: r.height, visible: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight };
+      }));
+      if (replacement) status.textContent = previous;
+      return items;
+    }, replacement);
+    const assertStableHeader = layout => {
+      assert.ok(layout.every(item => item.visible), 'Header text remains inside the viewport');
+      assert.ok(layout.every(item => item.lines === 1), 'Brand, metadata and audio control retain single-line layout');
+    };
+    report.headerLayout = []; report.stageHeaderLayout = [];
     for (const [width, height] of [[1920, 1080], [3840, 2160]]) {
       await page.setViewport({ width, height }); await delay(100);
+      await page.evaluate(() => document.fonts.ready);
+      const beforeHeader = await headerLayout('BREAKTHROUGH // DRAWING CERTIFIED');
+      const afterHeader = await headerLayout('BREAKTHROUGH // CERTIFIED');
+      assert.ok(beforeHeader.find(item => item.selector === '.firm-main-title').lines > 1, 'Prior status text reproduces brand wrapping in the actual browser');
+      assertStableHeader(afterHeader);
+      report.headerLayout.push({ viewport: [width, height], baseline: 'Prior status label replayed in the same DOM/CSS', before: beforeHeader, after: afterHeader });
       const geometry = await page.evaluate(() => {
         const selectors = [...Array.from({ length: 16 }, (_, i) => '.glyph-btn[data-glyph-index="' + i + '"]'), "#btn-engage-draft", "#btn-disengage-draft"];
         return selectors.map(selector => { const element = document.querySelector(selector), box = element.getBoundingClientRect(), x = box.x + box.width / 2, y = box.y + box.height / 2, hit = document.elementFromPoint(x, y);
@@ -172,6 +201,8 @@ async function browserChecks() {
       await page.waitForFunction(expected => window.__BLUEPRINT_CAD_API__.getState().activationStage === expected, {}, stage);
       if (stage === "SUSTAINED_ACTIVE") await delay(400);
       const before = await snapshot(); assert.equal(before.activationStage, stage);
+      const layout = await headerLayout(); assertStableHeader(layout);
+      report.stageHeaderLayout.push({ viewport: [1920, 1080], stage, layout });
       assert.equal(before.stamp, stage !== "BUILDUP"); assert.equal(before.canvas, stage === "SUSTAINED_ACTIVE");
       stageImages.push(await shot("stage-" + stage.toLowerCase()));
       assert.equal((await snapshot()).activationStage, stage, "Capture must remain inside the named stage");
@@ -193,6 +224,13 @@ async function browserChecks() {
     }, stageImages, region);
     assert.ok(report.stagePixels.every(pair => pair.changedFraction > 0.002), "All three central instrument captures must differ visibly");
     await click(page, "#btn-disengage-draft");
+    await page.setViewport({ width: 3840, height: 2160 }); await delay(100);
+    await click(page, '[data-plan-id="civil-helios"]'); await pending(plans[0].symbols); await click(page, '#btn-engage-draft');
+    for (const stage of ['BUILDUP', 'BREAKTHROUGH', 'SUSTAINED_ACTIVE']) {
+      await page.waitForFunction(expected => window.__BLUEPRINT_CAD_API__.getState().activationStage === expected, {}, stage);
+      const layout = await headerLayout(); assertStableHeader(layout); report.stageHeaderLayout.push({ viewport: [3840, 2160], stage, layout });
+    }
+    await click(page, '#btn-disengage-draft'); await page.setViewport({ width: 1920, height: 1080 }); await delay(100);
     for (const plan of plans) {
       await click(page, '.site-plan-card[data-plan-id="' + plan.id + '"]'); const samples = [], start = Date.now();
       while (Date.now() - start < 800) { const state = await snapshot(); samples.push({ count: state.filled, symbols: state.stagedGlyphs, connected: state.isConnected }); if (plan === plans[0] && state.filled === 3) await shot("preset-in-progress"); await delay(25); }
@@ -241,6 +279,7 @@ async function main() {
     console.log("BLUEPRINT_BROWSER_REGRESSIONS " + JSON.stringify({ status: report.status, manual: report.manual,
       geometry: report.geometry, plans: report.plans.map(row => ({ id: row.id, sampledCounts: [...new Set(row.samples.map(sample => sample.count))] })),
       stages: report.stages, stagePixels: report.stagePixels, cancellations: report.cancellations.map(row => ({ label: row.label, stage: row.state.activationStage, count: row.state.filled, audioSources: row.state.audioSources })),
+      headerLayout: report.headerLayout, stageHeaderLayout: report.stageHeaderLayout,
       reducedMotion: report.reducedMotion, operatorIssue: report.operatorIssue, originalSuite: report.originalSuite }));
   }
 }
