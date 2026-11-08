@@ -91,7 +91,7 @@ function main(args = process.argv.slice(2)) {
     if (!row) { report.noManifest.push(folder); continue; }
     report.packages.push(row);
     if (!row.status) {
-      if (!row.hasDeclaredDependencies) Object.assign(row, { status: "SKIP", reason: "No dependencies declared; no registry audit requested." });
+      if (!row.hasDeclaredDependencies && !row.lock) Object.assign(row, { status: "SKIP", reason: "No dependencies declared and no tracked lock graph; no registry audit requested." });
       else if (QUALIFIED.has(folder) && !options.includeQualified) Object.assign(row, { status: "SKIP", reason: QUALIFIED.get(folder) });
       else if (!row.lock) Object.assign(row, { status: "UNVERIFIED", reason: "No tracked package-lock.json or npm-shrinkwrap.json; no lock generated and no audit attempted." });
       else if (!options.audit) Object.assign(row, { status: "UNVERIFIED", reason: "Read-only manifest/entry-point classification only; registry audit not requested." });
