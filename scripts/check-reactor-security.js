@@ -48,6 +48,8 @@ async function qualify(browser, mode) {
       hold: reactorPhysics.rpsHoldEngaged, calibrating: reactorPhysics.channels.filter(c => c.isCalibrating).length,
       locked: reactorPhysics.channels.filter(c => c.isCalibrated).length,
       presetRunning: hmiApp.presets.isRunning,
+      activationLabel: document.getElementById("activate-btn-label").textContent,
+      presetLabel: document.getElementById("preset-status-indicator").textContent,
       bannerHidden: document.getElementById("aperture-activation-banner").classList.contains("hidden")
     }));
     const shot = async name => {
@@ -90,6 +92,12 @@ async function qualify(browser, mode) {
       await waitState("BREAKTHROUGH");
       if (!cycle) await shot("breakthrough");
       await waitState("SUSTAINED");
+      if (!cycle) {
+        const active = await snapshot();
+        result.visualFindings = [];
+        if (!active.activationLabel.includes("SUSTAINED")) result.visualFindings.push("Activation label remains stale in sustained state");
+        if (active.bannerHidden) result.visualFindings.push("Activation banner remains hidden in sustained state");
+      }
       if (!cycle) await shot("active");
       assert.equal(await page.$eval("#scram-disengage-btn", el => el.disabled), false);
       await click(page, "#scram-disengage-btn");
@@ -122,6 +130,8 @@ async function qualify(browser, mode) {
     assert.equal(cancelled.locked, 0); assert.equal(cancelled.calibrating, 0);
     assert.equal(cancelled.presetRunning, false); assert.equal(cancelled.bannerHidden, true);
     result.cancelled = cancelled;
+    if (cancelled.presetLabel.includes("PENDING")) result.visualFindings.push("Preset status remains pending after SCRAM");
+    result.functionalAcceptance = result.visualFindings.length ? "FAIL: existing UI state-feedback defects" : "UNVERIFIED: remaining exhibit/operator qualification";
     await shot("cancelled");
     assert.deepEqual(result.pageErrors, []);
     result.status = "PASS";
@@ -151,6 +161,7 @@ async function main() {
     const [before, after] = report.results;
     assert.deepEqual([...new Set(after.resources)].sort(), [...new Set(before.resources)].sort(), "Resource regression");
     assert.deepEqual([...new Set(after.requestFailures)].sort(), [...new Set(before.requestFailures)].sort(), "Request regression");
+    assert.deepEqual(after.visualFindings, before.visualFindings, "UI feedback behavior changed");
     report.status = "PASS";
   } catch (e) { report.status = "FAIL"; report.error = e.stack; throw e; }
   finally {

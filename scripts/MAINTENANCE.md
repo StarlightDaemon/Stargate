@@ -34,6 +34,18 @@ Erebus presets auto-activate under both handlers, and both have a favicon 404.
 These existing defects remain explicit; no full exhibit or operator pass is claimed.
 The browser environment variables are the same as the pilot checks below.
 
+Reactor Criticality is the sixth shared-server exhibit. Its nested
+`node scripts/server.js` command keeps port 8080 and accepts `PORT`. The original
+handler's parent/sibling/source exposure, unrestricted POST, wildcard CORS and
+all-interface binding are replaced by the shared policy. The historical loader
+resolves the actual script directory for nested servers. Common HTTP and hit-test
+helpers are shared by the Erebus and Reactor comparison scripts.
+`node scripts/check-reactor-security.js` retains the original 79-assertion engine
+suite, checks 11 public assets and compares two manual browser cycles, interlock
+rejection, stepped presets, three activation stages and cancellation. Stale action
+labels/hidden activation banner, stale preset status after SCRAM and favicon 404
+are reported as existing behavior; preservation PASS is not full exhibit acceptance.
+
 ## Preview one exhibit
 
 From the repository root:

@@ -2,6 +2,34 @@
 
 ## [Unreleased]
 
+### Development-server security maintenance
+
+- Replaced the exposed development handler with the shared loopback-only preview
+  after historical/shared qualification. Parent/sibling-file and server-source
+  requests now receive 403; POST receives 405. Wildcard CORS is removed.
+- Preserved `node scripts/server.js` and default port 8080; added `PORT` override.
+  Client HTML/CSS/JavaScript, version, original attribution and original assertions
+  are unchanged. No package dependencies were introduced.
+- The original mock-DOM integration suite passes 79/79 assertions. Real HTTP
+  matches all 11 public assets. Browser comparison covers two manual cycles,
+  explicit activation, all three stages, interlock rejection, stepped presets
+  without auto-activation and cancellation during buildup followed by 8.25 seconds.
+- Seven 1920x1080 captures reviewed: idle, ready, buildup, breakthrough, sustained,
+  preset dialing and cancelled. Core states and primary controls remain visible.
+  Full sound, responsive and operator acceptance remain separate.
+
+### Known issues observed during maintenance
+
+- The activation label remains on buildup and its banner stays hidden after the
+  automatic transition to sustained state. The frame loop updates physics,
+  telemetry and channel controls but does not refresh the action controls.
+- The preset status remains pending after SCRAM, although the reactor returns to
+  subcritical with an empty sequence. These client feedback defects are separate
+  from serving and remain pending a narrowly scoped functional repair.
+- Both historical and shared serving report the existing missing `/favicon.ico`.
+
+### Earlier maintenance attribution
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
