@@ -200,11 +200,24 @@ async function browserChecks() {
       stamp: !document.getElementById("approval-stamp-group").classList.contains("hidden"), canvas: document.getElementById("aperture-flux-canvas").classList.contains("active"),
       status: document.getElementById("system-status-indicator").textContent, engageDisabled: document.getElementById("btn-engage-draft").disabled,
       audioSources: window.__blueprintSources.size, ambientHumNodes: window.blueprintAudio.ambientHumNodes.length }));
+    const capturedImages = [];
     const shot = async name => {
-      const png = await page.screenshot({ path: path.join(OUTPUT, name + ".png") });
-      if (process.env.STARGATE_LOG_VISUALS === "1") { const data = await page.screenshot({ type: "jpeg", quality: 65, encoding: "base64" });
-        for (let offset = 0; offset < data.length; offset += 16000) console.log("STARGATE_VISUAL blueprint-" + name + ".jpg " + offset + " " + data.slice(offset, offset + 16000)); }
-      return Buffer.from(png).toString("base64");
+      const png = Buffer.from(await page.screenshot({ path: path.join(OUTPUT, name + ".png") })).toString("base64");
+      capturedImages.push({ name, png });
+      return png;
+    };
+    const emitCapturedImages = async () => {
+      if (process.env.STARGATE_LOG_VISUALS !== "1") return;
+      // Convert the exact asserted PNG after timing-sensitive checks. A second live
+      // screenshot can show a later stage and consume the 600 ms breakthrough window.
+      for (const { name, png } of capturedImages) {
+        const data = await page.evaluate(async png => {
+          const image = new Image(); image.src = "data:image/png;base64," + png; await image.decode();
+          const canvas = document.createElement("canvas"); canvas.width = image.width; canvas.height = image.height;
+          canvas.getContext("2d").drawImage(image, 0, 0); return canvas.toDataURL("image/jpeg", 0.65).split(",")[1];
+        }, png);
+        for (let offset = 0; offset < data.length; offset += 16000) console.log("STARGATE_VISUAL blueprint-" + name + ".jpg " + offset + " " + data.slice(offset, offset + 16000));
+      }
     };
     const pending = async symbols => {
       await page.waitForFunction(() => { const state = window.__BLUEPRINT_CAD_API__.getState(); return state.stagedGlyphs.length === 6 && !state.isPlottingPlan; });
@@ -338,6 +351,7 @@ async function browserChecks() {
     await active(); await click(page, "#btn-disengage-draft");
     assert.deepEqual(report.errors, []); report.operatorIssue = "UNRESOLVED: pointer/key automation cannot overturn operator-reported manual failure";
     report.originalSuite = "CONTRACT_CONFLICT: verify.js still requires active at500ms and automatic presets; no assertions altered or shimmed";
+    await emitCapturedImages();
     report.activationStages = "PASS:1600ms buildup,600ms breakthrough then sustained; central screenshot pairs compared and every stage canceled"; report.status = "PASS"; return report;
   } catch (error) { report.error = error.stack; throw error; }
   finally { fs.writeFileSync(path.join(OUTPUT, "browser.json"), JSON.stringify(report, null, 2)); if (browser) await browser.close(); await server.close(); }
