@@ -64,3 +64,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   card clack, ratchet trains, steam chuff, proving bell.
 - Puppeteer verification suite (`npm test`) with hit-tested events and
   1080p/4K screenshot capture.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace unrestricted static transport with the shared loopback public-file allowlist; original client and test assertions are unchanged.
+- Qualification: hosted run 42508696229; Apiculture10original phases, Steampunk42assertions, Ukiyo36assertions plus ring checks and diagnostics. Operator acceptance remains separate.

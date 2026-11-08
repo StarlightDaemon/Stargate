@@ -122,3 +122,10 @@ rendering style, palette, station content, and sound design unchanged.
 - Fully synthesized WebAudio sound design: woodblock thuds, paper rustle,
   bronze bell, wind and water ambience.
 - Operator's reference overlay, version label, and author corner links.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace unrestricted static transport with the shared loopback public-file allowlist; original client and test assertions are unchanged.
+- Qualification: hosted run 42508696229; Apiculture10original phases, Steampunk42assertions, Ukiyo36assertions plus ring checks and diagnostics. Operator acceptance remains separate.

@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "serve": "python -m http.server 8613",
+    "serve": "node ../scripts/preview.js --exhibit stargate_ukiyo_waystation_fable --port 8613",
     "test": "node test/run-tests.mjs"
   },
   "devDependencies": {

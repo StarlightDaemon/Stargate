@@ -43,3 +43,10 @@ All notable changes to the Stargate Apiculture Telemetry Network console are doc
 - **Operator Reference Guide (`?`) & Corner Displays**: Full tutorial overlay, version indicator, and `StarlightDaemon` footer link.
 - **Resolution Scaling**: Dynamic JS-driven unitless scaling supporting seamless display from 1080p to 4K without CSS calc scale pitfalls.
 - **Automated Verification Suite**: Puppeteer end-to-end integration test validating the entire dial-activate-disengage cycle, negative auto-fire safety, and secondary drawers.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace unrestricted static transport with the shared loopback public-file allowlist; original client and test assertions are unchanged.
+- Qualification: hosted run 42508696229; Apiculture10original phases, Steampunk42assertions, Ukiyo36assertions plus ring checks and diagnostics. Operator acceptance remains separate.

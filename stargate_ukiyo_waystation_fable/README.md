@@ -57,3 +57,8 @@ viewport and scales cleanly up to 3840×2160.
 - The knotted Release Cord disengages at any moment, even mid-passage.
 - If the Barrier Writ has been posted (an unfavorable omen closes the pass), the
   Seal will refuse until the writ is lifted. The pass stands open by default.
+
+
+## Shared preview maintenance — 2026-11-08
+
+The existing launch command now uses the repository shared preview, bound to `127.0.0.1`. It serves tracked public assets only; source harnesses and package metadata return 403, unsupported methods return 405. Run from a complete repository checkout. Hosted original-suite and asset equivalence passed before migration; post-migration launcher checks remain required. This infrastructure change preserves the historical creative and operator disposition.
