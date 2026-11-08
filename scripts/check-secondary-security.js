@@ -178,6 +178,42 @@ async function runSuite(browser, target, suite, url, folder, mode) {
     }
     result.exitCode = processAdapter.exitCode; result.pageErrors = pageErrors;
     result.failureDetails = lines.filter(line => /\bFAIL\b/.test(line));
+    if (target.name === "stargate_bathyscaphe_pilot_fable" && suite === "verify/run.js") {
+      const changelog = fs.readFileSync(path.join(ROOT, target.name, "CHANGELOG.md"), "utf8");
+      const version = JSON.parse(fs.readFileSync(path.join(ROOT, target.name, "version.json"), "utf8"));
+      result.currentMetadataContract = {
+        historicalLiteralPreserved: "## v1.0.0",
+        releaseVersion: version.version,
+        semverHeading: /^## \[1\.0\.0\] - 2026-08-23$/m.test(changelog),
+        exactBuilder: changelog.includes("**Built by:** Claude Fable 5 (high reasoning)"),
+        note: "Separate current metadata check for the documented September heading normalization; historical predicate remains unchanged and FAIL."
+      };
+      assert.equal(version.version, "1.0.0"); assert.equal(result.currentMetadataContract.semverHeading, true); assert.equal(result.currentMetadataContract.exactBuilder, true);
+    }
+    if (target.name === "stargate_bathyscaphe_pilot_fable" && suite === "verify/closeout_stages.js") {
+      // Read completed original evidence only. Do not add browser round-trips
+      // inside the bracketed captures or change any original pixel predicate.
+      const file = fs.readdirSync(folder, { recursive: true }).find(file => path.basename(file) === "04b_stage2_breakthrough_bracketed.png");
+      assert.ok(file, "Original breakthrough evidence exists");
+      const bytes = fs.readFileSync(path.join(folder, file));
+      const decoded = require(path.join(ROOT, target.name, "verify/png.js")).decode(bytes);
+      const reference = require(process.env.STARGATE_PNG_MODULE).PNG.sync.read(bytes);
+      assert.deepEqual(decoded.data, reference.data, "Original PNG decoder matches independent pngjs decoder");
+      const offsets = [-3, -1.5, 0, 1.5, 3, 5].map(offset => {
+        const pixels = [];
+        // Fixed original 1920x1080 layout: sphere assembly (540,62),
+        // wrap (90,90), 660px diameter; no replacement geometry assertion.
+        for (let angle = 0; angle < 360; angle += 5) {
+          const x = Math.round(960 + (330 + offset) * Math.cos(angle * Math.PI / 180));
+          const y = Math.round(482 + (330 + offset) * Math.sin(angle * Math.PI / 180));
+          const index = (y * decoded.width + x) * 4; pixels.push([...decoded.data.subarray(index, index + 3)]);
+        }
+        return { offset, whiteFraction: pixels.filter(rgb => rgb.every(v => v > 225)).length / pixels.length,
+          meanRGB: [0, 1, 2].map(channel => pixels.reduce((sum, rgb) => sum + rgb[channel], 0) / pixels.length) };
+      });
+      result.rimDiagnostic = { status: "OBSERVATION_ONLY", decoderMatch: true, geometry: { cx: 960, cy: 482, r: 330, basis: "Original fixed CSS layout" }, offsets,
+        timingAndLuminance: lines.filter(line => /INFO (page-clock|shot1|sphere-rim|pixel diff|frame luminance)/.test(line)) };
+    }
     result.status = !result.failed && !result.exitCode && !pageErrors.length ? "PASS" : "FAIL";
   } catch (error) { result.error = error.stack; result.status = "FAIL"; }
   finally {
