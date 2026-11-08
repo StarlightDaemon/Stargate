@@ -233,8 +233,7 @@ PR #9 explicitly incorporates PR #8's exact source-map-js 1.2.2 lock correction
 from e2e2374892c34d153aae02bdfed5b6738cec4404. This is reused work, not an
 independent fix. PR #8 remains open and unchanged; its eventual supersession
 needs an explicit disposition. PR #7 is stacked on #8 and contains accessibility
-changes, which are not copied here. Its release-audit file also changes, so
-review the combined audit diff before any later integration. PR #6 changes
+changes. On 2026-11-08 the exact three-file patch from a26cea51dbd404c054e776a535008cc87415e63e was incorporated into this branch with its loading/status release-audit invariants; this reuses PR #7 rather than claiming a new fix. Combined release/browser checks remain required. PR #6 changes
 apiculture's proxy-addr dependency and is unrelated to the flagship findings.
 Neither #6 nor #7 is merged or modified by this campaign.
 

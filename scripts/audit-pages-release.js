@@ -77,6 +77,8 @@ function checkReleaseShell() {
     ["Open Graph image", /<meta property="og:image" content="https:\/\/starlightdaemon\.github\.io\/Stargate\/[^"]+">/],
     ["Twitter card", /<meta name="twitter:card" content="summary_large_image">/],
     ["skip link", /<a class="skip-link" href="#main-content">/],
+    ["loading status", /<span id="filter-count" class="filter-count" role="status" aria-live="polite" aria-atomic="true">Loading gallery…<\/span>/],
+    ["gallery busy state", /<section id="grid" aria-label="Build gallery" aria-busy="true"><\/section>/],
   ];
   for (const [label, pattern] of invariants) {
     if (!pattern.test(html)) fail(`Hub HTML is missing its ${label}.`);

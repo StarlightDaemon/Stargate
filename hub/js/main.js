@@ -41,7 +41,11 @@ for (const b of filterButtons) {
   });
 }
 
-gallery.load().catch((err) => {
+gallery.load().then(() => {
+  $("grid").setAttribute("aria-busy", "false");
+}).catch((err) => {
+  $("grid").setAttribute("aria-busy", "false");
+  $("filter-count").textContent = "Catalog unavailable";
   $("grid").hidden = true;
   const empty = $("empty-state");
   empty.hidden = false;
