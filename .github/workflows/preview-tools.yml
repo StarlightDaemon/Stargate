@@ -7,6 +7,24 @@ permissions:
   contents: read
 
 jobs:
+  exhibit-dependency-candidates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - run: node scripts/prepare-exhibit-dependency-candidates.js --install --emit
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: exhibit-dependency-candidates
+          path: |
+            test/exhibit-dependency-candidates/*/report.json
+            test/exhibit-dependency-candidates/*/repo/*/package*.json
+            test/exhibit-dependency-candidates/*/repo/*/*.log
+          retention-days: 30
   shared-toolchain-candidate:
     runs-on: ubuntu-latest
     timeout-minutes: 8
@@ -94,6 +112,12 @@ jobs:
           - target: bathyscaphe-regressions
             command: node scripts/check-bathyscaphe-regressions.js
             evidence: test/bathyscaphe-regressions/
+          - target: blueprint-regressions
+            command: node scripts/check-blueprint-regressions.js
+            evidence: test/blueprint-regressions/
+          - target: keyboard-interlocks
+            command: node scripts/check-keyboard-interlocks.js
+            evidence: test/keyboard-interlocks/
           - target: erebus-regressions
             command: node scripts/check-erebus-regressions.js
             evidence: test/erebus-regressions/
