@@ -7,6 +7,54 @@ permissions:
   contents: read
 
 jobs:
+  blueprint-dependency-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - name: Generate isolated Blueprint lock candidate with npm
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const { execFileSync } = require('node:child_process');
+          const dir = path.resolve('test/blueprint-dependency-candidate');
+          fs.mkdirSync(dir, { recursive: true });
+          const pkg = JSON.parse(fs.readFileSync('stargate_blueprint_alpha/package.json'));
+          delete pkg.devDependencies.serve;
+          fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n');
+          fs.copyFileSync('stargate_blueprint_alpha/package-lock.json', path.join(dir, 'package-lock.json'));
+          const npm = args => execFileSync('npm', args, { cwd: dir, encoding: 'utf8', timeout: 90000 });
+          console.log(npm(['update', 'puppeteer', '--package-lock-only', '--ignore-scripts']));
+          let lock = JSON.parse(fs.readFileSync(path.join(dir, 'package-lock.json')));
+          const version = lock.packages['node_modules/puppeteer'].version;
+          if (!/^25\./.test(version)) throw new Error('Unexpected major: ' + version);
+          pkg.devDependencies.puppeteer = '^' + version;
+          fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg, null, 2) + '\n');
+          console.log(npm(['install', '--package-lock-only', '--ignore-scripts']));
+          let audit;
+          try { audit = npm(['audit', '--json']); }
+          catch (e) { if (e.status !== 1 || !e.stdout) throw e; audit = e.stdout; }
+          fs.writeFileSync(path.join(dir, 'audit.json'), audit);
+          console.log('BLUEPRINT_CANDIDATE_AUDIT ' + audit.replace(/\n/g, ''));
+          lock = JSON.parse(fs.readFileSync(path.join(dir, 'package-lock.json')));
+          console.log('BLUEPRINT_CANDIDATE_PACKAGES ' + JSON.stringify(Object.fromEntries(Object.entries(lock.packages).map(([k,v]) => [k, { version: v.version, dependencies: v.dependencies }]))));
+          for (const file of ['package.json', 'package-lock.json']) {
+            const data = fs.readFileSync(path.join(dir, file)).toString('base64');
+            for (let offset = 0; offset < data.length; offset += 16000) console.log('BLUEPRINT_CANDIDATE ' + file + ' ' + offset + ' ' + data.slice(offset, offset + 16000));
+          }
+          NODE
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: blueprint-dependency-candidate
+          path: test/blueprint-dependency-candidate/
+          retention-days: 30
   blueprint-security:
     runs-on: ubuntu-latest
     timeout-minutes: 6
