@@ -22,6 +22,18 @@ favicon observations remain explicit. AUREOLE's exported server API and Cerulean
 Lantern's positional-port/specialist harnesses need separate adapters; they have
 not been bulk-replaced. Operator acceptance and publication remain on HOLD.
 
+Erebus Signal is the fifth shared-server exhibit. Its `node server.js` command
+keeps port 8000 and now accepts `PORT`. Before replacement, raw HTTP reproduced
+parent/sibling-file exposure, source exposure and unrestricted POST in the
+historical handler. `node scripts/check-erebus-security.js` compares the pinned
+historical handler with shared serving: five exact public assets, the retained
+original flow's seven expected diagnostic values and two manual interaction cycles
+per mode. The launcher security test also exercises the actual exhibit command.
+The comparison reports preservation separately from functional acceptance:
+Erebus presets auto-activate under both handlers, and both have a favicon 404.
+These existing defects remain explicit; no full exhibit or operator pass is claimed.
+The browser environment variables are the same as the pilot checks below.
+
 ## Preview one exhibit
 
 From the repository root:

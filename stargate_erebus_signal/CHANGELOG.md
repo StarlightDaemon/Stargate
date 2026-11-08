@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — development-server security
+
+### Fixed
+
+- Replaced the development handler with the shared secure preview launcher after
+  historical/shared qualification. Raw HTTP requests previously returned parent
+  and sibling files outside this exhibit, exposed the server source and accepted
+  POST. The replacement rejects those requests and binds only to loopback.
+- Preserved `node server.js` and default port 8000; added the shared `PORT`
+  override. The published application, styles, original test flow, version and
+  original build attribution are unchanged.
+
+### Verification
+
+- Pre-replacement comparison matched all five public assets byte-for-byte,
+  checked all seven expected diagnostics from the original test flow, and passed
+  two hit-tested manual dial/activate/disconnect cycles under each server.
+- Manual completion remained pending until explicit activation. Desktop screenshots
+  and JSON reports are retained outside tracked content. Full animation, sound,
+  responsive and operator acceptance remain separate.
+
+### Known issues — separate functional work
+
+- Quick-dial presets automatically activate after dialing. Reproduced under both
+  the historical and shared handlers; this violates the explicit-activation
+  requirement and is not repaired by the server-security change.
+- Both handlers report the existing missing `/favicon.ico` resource.
+
 ## [1.1.1] - 2026-09-04
 
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
