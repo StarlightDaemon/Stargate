@@ -178,11 +178,13 @@ async function main() {
             let response = await request(server.url, "/" + file);
             if (mode === "legacy-serve" && file === "index.html") {
               assert.equal(response.status, 301);
-              const destination = new URL(response.headers.location, server.url);
-              assert.equal(destination.origin, server.url);
-              assert.equal(destination.pathname, "/");
-              row.canonicalRedirect = { from: "/index.html", to: "/", status: 301 };
-              response = await request(server.url, "/");
+              row.canonicalRedirects = [];
+              for (let count = 0; response.status === 301 && count < 5; count++) {
+                const destination = new URL(response.headers.location, server.url);
+                assert.equal(destination.origin, server.url);
+                row.canonicalRedirects.push({ to: destination.pathname, status: response.status });
+                response = await request(server.url, destination.pathname + destination.search);
+              }
             }
             assert.equal(response.status, 200, mode + " " + file);
             assert.deepEqual(response.body, fs.readFileSync(path.join(DIR, file))); row.assets++;
