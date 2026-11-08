@@ -81,6 +81,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target: built-orthographic_cad
+            command: node scripts/check-vite-built-preview.js stargate_orthographic_cad
+            evidence: test/vite-built-preview/stargate_orthographic_cad/
+            package: stargate_orthographic_cad
+          - target: built-radio_interferometry
+            command: node scripts/check-vite-built-preview.js stargate_radio_interferometry
+            evidence: test/vite-built-preview/stargate_radio_interferometry/
+            package: stargate_radio_interferometry
+          - target: built-seti_deepscope
+            command: node scripts/check-vite-built-preview.js stargate_seti_deepscope
+            evidence: test/vite-built-preview/stargate_seti_deepscope/
+            package: stargate_seti_deepscope
+          - target: built-seti_freeform
+            command: node scripts/check-vite-built-preview.js stargate_seti_freeform
+            evidence: test/vite-built-preview/stargate_seti_freeform/
+            package: stargate_seti_freeform
           - target: cathedral-oculus
             command: node scripts/check-package-entry-security.js stargate_cathedral_oculus
             evidence: test/package-entry-security/stargate_cathedral_oculus/
@@ -423,7 +439,7 @@ jobs:
         with:
           node-version: 24
       - name: Test real HTTP, containment, links, lifecycle and verification diagnostics
-        run: node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js scripts/test-qualified-suites.js scripts/test-exhibit-dependency-candidates.js scripts/test-deepscope-cancellation.js scripts/test-package-entry-adapter.js
+        run: node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js scripts/test-qualified-suites.js scripts/test-exhibit-dependency-candidates.js scripts/test-deepscope-cancellation.js scripts/test-package-entry-adapter.js scripts/test-vite-built-preview.js
       - name: Check gallery
         run: node hub/generate.js --check
       - name: Check Pages output guard

@@ -264,4 +264,4 @@ async function main(args = process.argv.slice(2)) {
   assert.ok(reports.every(result => result.status === "PASS"), "Package entry qualification remains incomplete");
 }
 if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
-module.exports = { TARGETS, compiledSuite, artifactIO, closeOwnedHttpServer };
+module.exports = { TARGETS, compiledSuite, artifactIO, closeOwnedHttpServer, runSuite, cancellation };
