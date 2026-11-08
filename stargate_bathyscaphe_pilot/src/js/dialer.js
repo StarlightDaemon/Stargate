@@ -91,6 +91,9 @@ const Dialer = (() => {
       return false;
     }
 
+    // An accepted manual waypoint owns the remaining profile. Stop the computer
+    // replay as well as its current trim callback so a later preset can start.
+    if (speed === 'manual' && window.QuickDial) QuickDial.cancelAutoDial();
     clearEmergencySettle();
     const generation = ++trimGeneration;
     SoundEngine.resumeContext();

@@ -2,13 +2,16 @@
 // Focused repairs, supplementary to the untouched original nine-phase suite.
 const assert = require("node:assert/strict");
 const fs = require("node:fs"), path = require("node:path"), vm = require("node:vm");
+const { execFileSync } = require("node:child_process");
 const { startPreview, selectExhibit } = require("./preview.js");
 const { click } = require("./browser-check-helpers.js");
 const ROOT = path.resolve(__dirname, ".."), NAME = "stargate_bathyscaphe_pilot";
 const DIR = path.join(ROOT, NAME), OUTPUT = path.join(ROOT, "test/bathyscaphe-regressions");
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+const TAKEOVER_BASELINE = { commit: "eebe6beee81f3872230eb038bdc9b65c9cbcdbfc", blob: "171fa21245ce4a94655c603de8c1eb87aa818591" };
+const previousDialer = () => execFileSync("git", ["show", TAKEOVER_BASELINE.blob], { cwd: ROOT, encoding: "utf8" });
 
-function fixture() {
+function fixture(sourceOverrides = {}) {
   let now = 0, timerId = 0;
   const timers = new Map(), elements = new Map(), stored = new Map(), listeners = new Map(), sources = new Set(), filters = [];
   const schedule = (fn, ms, repeat = false) => { const id = ++timerId; timers.set(id, { fn, ms, time: now + ms, repeat }); return id; };
@@ -47,7 +50,7 @@ function fixture() {
     Viewport: { init() {} }, Engineering: { init() {} }, Settings: { init() {} },
     setTimeout: (fn, ms) => schedule(fn, ms), setInterval: (fn, ms) => schedule(fn, ms, true), clearTimeout: id => timers.delete(id), clearInterval: id => timers.delete(id) };
   ctx.window = ctx; vm.createContext(ctx);
-  for (const file of ["storage", "physics", "audio", "dialer", "quickdial", "archive", "app"]) vm.runInContext(fs.readFileSync(path.join(DIR, "src/js", file + ".js"), "utf8"), ctx, { filename: file + ".js" });
+  for (const file of ["storage", "physics", "audio", "dialer", "quickdial", "archive", "app"]) vm.runInContext(sourceOverrides[file] || fs.readFileSync(path.join(DIR, "src/js", file + ".js"), "utf8"), ctx, { filename: file + ".js" });
   listeners.get("DOMContentLoaded")();
   function advance(ms) {
     const end = now + ms;
@@ -84,6 +87,23 @@ function deterministic() {
   for (const at of [0, 160, 300, 500, 1000, 1400]) {
     const q = fixture(); q.ctx.QuickDial.executePresetAutoDial("PRESET-VER-01"); q.advance(at); q.ctx.Dialer.emergencyBlowBallast(); q.advance(8250); assertSurface(q);
   }
+  const baselineTakeover = fixture({ dialer: previousDialer() });
+  baselineTakeover.ctx.QuickDial.executePresetAutoDial("PRESET-VER-01"); baselineTakeover.advance(200);
+  baselineTakeover.ctx.Dialer.selectWaypoint(7); baselineTakeover.advance(2000);
+  baselineTakeover.ctx.QuickDial.executePresetAutoDial("PRESET-VER-02"); baselineTakeover.advance(2000);
+  assert.deepEqual(Array.from(baselineTakeover.ctx.Dialer.getLockedWaypoints(), wp => wp.id), ["WP-8"], "Historical manual takeover leaves later presets ignored");
+  const takeover = [];
+  for (const at of [0, 200, 300, 500, 1000]) {
+    const q = fixture(); q.ctx.QuickDial.executePresetAutoDial("PRESET-VER-01"); q.advance(at);
+    const completed = Array.from(q.ctx.Dialer.getLockedWaypoints(), wp => wp.id);
+    q.ctx.Dialer.selectWaypoint(7); q.advance(8250);
+    assert.deepEqual(Array.from(q.ctx.Dialer.getLockedWaypoints(), wp => wp.id), [...completed, "WP-8"]);
+    assert.equal(q.ctx.Dialer.getDialerState(), "IDLE", "Manual partial profile must not auto-activate");
+    q.ctx.QuickDial.executePresetAutoDial("PRESET-VER-02"); q.advance(8250);
+    assert.deepEqual(Array.from(q.ctx.Dialer.getLockedWaypoints(), wp => wp.id), Array.from({ length: 8 }, (_, i) => "WP-" + (i + 1)));
+    assert.equal(q.ctx.Dialer.getDialerState(), "PENDING_READY");
+    q.ctx.Dialer.emergencyBlowBallast(); q.advance(8250); assertSurface(q); takeover.push({ atMs: at, retainedCompleted: completed });
+  }
   const r = fixture(); r.ctx.Dialer.emergencyBlowBallast();
   for (let i = 0; i < 8; i++) { r.ctx.Dialer.selectWaypoint(i, "computer"); r.advance(140); }
   r.advance(120); assert.equal(r.ctx.Dialer.getDialerState(), "PENDING_READY", "An old settle callback cannot overwrite redial");
@@ -96,9 +116,47 @@ function deterministic() {
   f.ctx.Storage.saveCompletedDive({ depth: 11800, duration: 2.8 }); assert.equal(f.ctx.Storage.getDiveHistory().length, 50); assert.equal(f.element("local-dives-count").textContent, "50 recorded");
   f.ctx.localStorage.setItem = () => { throw Error("quota"); }; f.ctx.Storage.saveCompletedDive({ depth: 11800 }); assert.equal(f.element("local-dives-count").textContent, "50 recorded");
   f.stored.set(key, "invalid JSON"); vm.runInContext("Archive.init()", f.ctx); assert.equal(f.element("local-dives-count").textContent, "0 recorded");
-  return { status: "PASS", activationCycles: rows, presetCancellationTimesMs: [0, 160, 300, 500, 1000, 1400], buildupCancellationMs: 500, idleObservationMs: 8250, archiveCounts: [10, 3, 2, 3, 2], storage: "live refresh, reload, fifty-record cap, failed write, invalid JSON" };
+  return { status: "PASS", activationCycles: rows, presetCancellationTimesMs: [0, 160, 300, 500, 1000, 1400], buildupCancellationMs: 500, idleObservationMs: 8250, archiveCounts: [10, 3, 2, 3, 2], storage: "live refresh, reload, fifty-record cap, failed write, invalid JSON",
+    manualTakeover: { baseline: TAKEOVER_BASELINE, baselineNextPresetIgnored: true, repaired: takeover, nextPreset: "Exact eight waypoints, pending without auto-fire" } };
 }
 
+async function browserTakeoverChecks(browser, url) {
+  const results = [];
+  for (const [baseline, input] of [[true, "keyboard"], [false, "pointer"], [false, "keyboard"]]) {
+    const context = await browser.createBrowserContext(), page = await context.newPage(), errors = [];
+    try {
+      page.on("pageerror", error => errors.push(error.message));
+      page.on("requestfailed", request => errors.push(request.url()));
+      page.on("response", response => { if (response.status() >= 400) errors.push(response.status() + " " + response.url()); });
+      if (baseline) {
+        const source = previousDialer(); await page.setRequestInterception(true);
+        page.on("request", request => request.url() === url + "/src/js/dialer.js"
+          ? request.respond({ status: 200, contentType: "text/javascript", body: source }) : request.continue());
+      }
+      await page.setViewport({ width: 1920, height: 1080 }); await page.goto(url, { waitUntil: "networkidle0" });
+      const state = () => page.evaluate(() => ({ state: Dialer.getDialerState(), waypoints: Dialer.getLockedWaypoints().map(wp => wp.id) }));
+      const preset = async id => { await click(page, "#btn-quickdial-toggle"); await click(page, '[data-preset-id="' + id + '"]'); };
+      await preset("PRESET-VER-01");
+      await page.waitForFunction(() => Dialer.getDialerState() === "TRIMMING" && Dialer.getLockedWaypoints().length < 2);
+      if (input === "keyboard") await page.keyboard.press("8");
+      else await click(page, '[data-wp-index="7"]');
+      await delay(600); const manual = await state();
+      assert.equal(manual.waypoints.at(-1), "WP-8"); assert.ok(manual.waypoints.length < 8);
+      await delay(8250); assert.deepEqual(await state(), manual, "Stale computer callbacks cannot append to a manual partial profile");
+      await preset("PRESET-VER-02");
+      if (baseline) { await delay(2200); assert.deepEqual(await state(), manual, "Reproduce the historical latched preset-busy state"); }
+      else {
+        await page.waitForFunction(() => Dialer.getDialerState() === "PENDING_READY");
+        await delay(8250); assert.deepEqual(await state(), { state: "PENDING_READY", waypoints: Array.from({ length: 8 }, (_, i) => "WP-" + (i + 1)) });
+      }
+      results.push({ mode: baseline ? "baseline-dialer" : "repaired-dialer", input, status: "PASS", manual, afterNextPreset: await state(),
+        scope: baseline ? "Historical subsequent preset rejection reproduced" : "Manual takeover cancels stale replay; next preset replaces exactly and remains pending" });
+      await page.keyboard.press("Escape"); await delay(1250); assert.deepEqual(await state(), { state: "IDLE", waypoints: [] });
+      assert.deepEqual(errors, []);
+    } finally { await context.close(); }
+  }
+  return results;
+}
 async function browserChecks() {
   const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(ROOT, "stargate_blueprint_alpha/node_modules/puppeteer"));
   const server = await startPreview({ ...selectExhibit(NAME), port: 0 });
@@ -106,6 +164,7 @@ async function browserChecks() {
   const report = { status: "FAIL", errors: [], cycles: [], cancellations: [] };
   try {
     browser = await puppeteer.launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
+    report.manualTakeover = await browserTakeoverChecks(browser, server.url);
     const page = await browser.newPage();
     page.on("pageerror", error => report.errors.push(error.message));
     page.on("console", message => { if (message.type() === "error") report.errors.push(message.text()); });

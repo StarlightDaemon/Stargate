@@ -4,6 +4,12 @@ All notable changes to the DSV-9 ARCHELON Bathyscaphe Pilot Console & Abyssal Ga
 
 ## [Unreleased] — 2026-11-08 confirmed-defect repairs
 
+### Manual takeover of computer profiles — 2026-11-08
+
+- Reproduced the existing busy latch when a manual waypoint interrupted computer trimming: the replaced callback never released auto-dial ownership, so later presets were ignored. An accepted manual waypoint now cancels the remaining computer replay before taking over trimming. Completed waypoints stay staged; no stale computer waypoints are appended, and the next chosen preset still performs its existing full reset and exact replay.
+- Deterministic checks retain the prior dialer blob and reproduce the rejected subsequent preset. Current checks pass for takeover before replay, during trim and between waypoints (0/200/300/500/1000 ms), followed by 8.25 seconds idle observation, exact next-preset replacement and emergency cancellation.
+- Browser checks use real keyboard and pointer input, retain the prior dialer for baseline reproduction and require subsequent presets to finish pending without auto-fire. Hosted execution is pending. Original suites, storage schema, activation physics and operator acceptance requirements are unchanged.
+
 ### Shared verification dependencies — 2026-11-08
 
 - Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
