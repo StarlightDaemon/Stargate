@@ -91,7 +91,7 @@ async function qualify(browser, mode) {
     result.initial = await idle(); assert.equal(result.initial.hold, false); await shot("idle");
     for (let cycle = 0; cycle < 2; cycle++) {
       await dial(); await delay(700);
-      const ready = await snapshot(); assert.equal(ready.state, "ARMED"); assert.equal(ready.count, 6); assert.equal(ready.portal, 0);
+      const ready = await snapshot(); assert.equal(ready.state, "ARMED"); assert.equal(ready.count, 6); assert.equal(ready.target, 0); assert.ok(ready.portal < 0.01);
       if (!cycle) await shot("ready");
       await click(page, "#btn-trigger-collision"); await delay(400);
       const ramp = await snapshot(); assert.equal(ramp.state, "ACTIVATING");
@@ -101,6 +101,8 @@ async function qualify(browser, mode) {
       const active = await snapshot(); assert.ok(active.portal > 50);
       if (!cycle) await shot("active");
       await click(page, "#btn-beam-dump"); await delay(400);
+      // The existing renderer interpolates portal radius toward zero after dump.
+      await page.waitForFunction(() => window.arcApp.physicsCanvas.portalHorizonRadius < 0.01, { timeout: 5000 });
       const dumped = await idle();
       result.cycles.push({ ready: ready.state, ramp: ramp.state, active: active.state, dumped: dumped.state, cleared: dumped.count });
     }
@@ -111,7 +113,7 @@ async function qualify(browser, mode) {
     result.preset = [...new Set(counts.map(s => s.count))];
     assert.ok(result.preset.some(n => n > 0 && n < 6), "Preset must visibly stage");
     assert.ok(counts.every(s => ["STANDBY", "ARMED"].includes(s.state)), "No preset auto-fire");
-    const ready = await snapshot(); assert.equal(ready.state, "ARMED"); assert.equal(ready.count, 6); assert.equal(ready.portal, 0);
+    const ready = await snapshot(); assert.equal(ready.state, "ARMED"); assert.equal(ready.count, 6); assert.equal(ready.target, 0); assert.ok(ready.portal < 0.01);
     await click(page, "#btn-trigger-collision"); await delay(500); await click(page, "#btn-beam-dump");
     await delay(8250); result.cancelled = await idle(); assert.equal(result.cancelled.replayTimers, 0); assert.ok(result.cancelled.portal < 0.01);
     await shot("cancelled");
