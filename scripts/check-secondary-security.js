@@ -177,6 +177,7 @@ async function runSuite(browser, target, suite, url, folder, mode) {
       if (value !== undefined) result.returned = value;
     }
     result.exitCode = processAdapter.exitCode; result.pageErrors = pageErrors;
+    result.failureDetails = lines.filter(line => /\bFAIL\b/.test(line));
     result.status = !result.failed && !result.exitCode && !pageErrors.length ? "PASS" : "FAIL";
   } catch (error) { result.error = error.stack; result.status = "FAIL"; }
   finally {

@@ -42,6 +42,6 @@ for (const [group, names] of Object.entries(groups)) for (const name of names) {
 }
 // Hosted qualification: runs 42466761472, 42508178082 and 42508378871.
 // This makes the checker eligible for execution; fresh results still decide status.
-for (const name of ["sigint_cryptanalysis","konstrukt_transit","epigraphic_spectrometry","genomic_sequencer","windtunnel_aerodynamics","canopy_commons","dark_gothic_fable","nouveau_nimbus","futurist_dynamism","caissa_workstation","dark_matter_array","meteorological_nexrad","orbital_atc","solarpunk_ecogrid","sonar_abyssal"]) registry.find(entry => entry.exhibit === "stargate_" + name).qualification = "established";
+for (const name of ["apiculture_telemetry","steampunk_fable","ukiyo_waystation_fable","sigint_cryptanalysis","konstrukt_transit","epigraphic_spectrometry","genomic_sequencer","windtunnel_aerodynamics","canopy_commons","dark_gothic_fable","nouveau_nimbus","futurist_dynamism","caissa_workstation","dark_matter_array","meteorological_nexrad","orbital_atc","solarpunk_ecogrid","sonar_abyssal"]) registry.find(entry => entry.exhibit === "stargate_" + name).qualification = "established";
 function getSuite(exhibit) { return registry.find(item => item.exhibit === exhibit); }
 module.exports = { registry, getSuite };

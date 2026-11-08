@@ -63,6 +63,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target: bathyscaphe-regressions
+            command: node scripts/check-bathyscaphe-regressions.js
+            evidence: test/bathyscaphe-regressions/
+          - target: reactor-regressions
+            command: node scripts/check-reactor-regressions.js
+            evidence: test/reactor-regressions/
+          - target: registered-suite-dispatch
+            command: node scripts/run-qualified-suites.js --exhibit stargate_solarpunk_astra --exhibit stargate_konstrukt_transit
+            evidence: test/qualified-suites/
           - target: apiculture
             command: node scripts/check-apiculture-security.js
             evidence: test/apiculture-security/
