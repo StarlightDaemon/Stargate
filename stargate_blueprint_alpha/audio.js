@@ -10,6 +10,7 @@ class BlueprintAudioEngine {
     this.enabled = true;
     this.ambientHumGain = null;
     this.ambientHumNodes = [];
+    this.ambientRequested = false;
     this.pendingPenTimers = new Set();
     this.transientSources = new Set();
     this.ambientCleanups = new Set();
@@ -42,8 +43,26 @@ class BlueprintAudioEngine {
 
   toggleAudio() {
     this.enabled = !this.enabled;
-    if (!this.enabled && this.ambientHumGain) {
-      this.ambientHumGain.gain.setValueAtTime(0, this.ctx.currentTime);
+    if (!this.enabled) {
+      this.cancelTransientWork();
+      for (const cleanup of [...this.ambientCleanups]) {
+        clearTimeout(cleanup.timer);
+        cleanup.finish();
+      }
+      if (this.ambientHumGain) {
+        const now = this.ctx.currentTime;
+        this.ambientHumGain.gain.cancelScheduledValues(now);
+        this.ambientHumGain.gain.setValueAtTime(0, now);
+      }
+    } else if (this.ambientRequested) {
+      if (this.ambientHumGain) {
+        const now = this.ctx.currentTime;
+        this.ambientHumGain.gain.cancelScheduledValues(now);
+        this.ambientHumGain.gain.setValueAtTime(0, now);
+        this.ambientHumGain.gain.linearRampToValueAtTime(0.08, now + 0.1);
+      } else {
+        this.startAmbientHum();
+      }
     }
     return this.enabled;
   }
@@ -238,6 +257,7 @@ class BlueprintAudioEngine {
   // Continuous Topological Aperture Hum
   startAmbientHum() {
     this.stopAmbientHum();
+    this.ambientRequested = true;
     if (!this.enabled) return;
     this.init();
     const now = this.ctx.currentTime;
@@ -286,6 +306,7 @@ class BlueprintAudioEngine {
   }
 
   stopAmbientHum() {
+    this.ambientRequested = false;
     // Finish an older fade before scheduling another; it owns captured nodes only.
     for (const cleanup of [...this.ambientCleanups]) {
       clearTimeout(cleanup.timer);
@@ -302,7 +323,12 @@ class BlueprintAudioEngine {
       gain.disconnect();
     } };
     this.ambientCleanups.add(cleanup);
-    gain.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 0.5);
+    const now = this.ctx.currentTime;
+    if (this.enabled) gain.gain.linearRampToValueAtTime(0.001, now + 0.5);
+    else {
+      gain.gain.cancelScheduledValues(now);
+      gain.gain.setValueAtTime(0, now);
+    }
     cleanup.timer = setTimeout(cleanup.finish, 550);
   }
 

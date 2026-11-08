@@ -1,13 +1,17 @@
 "use strict";
 const assert = require("node:assert/strict"), fs = require("node:fs"), path = require("node:path"), vm = require("node:vm");
+const { execFileSync } = require("node:child_process");
 const { startPreview, selectExhibit } = require("./preview.js");
 const { click } = require("./browser-check-helpers.js");
 const ROOT = path.resolve(__dirname, ".."), NAME = "stargate_blueprint_alpha", DIR = path.join(ROOT, NAME);
 const OUTPUT = path.join(ROOT, "test/blueprint-regressions");
+// Blob identity survives the campaign's distinct local and API-published commit IDs.
+const MUTE_BASELINE = { commit: "eebe6beee81f3872230eb038bdc9b65c9cbcdbfc", blob: "c595dc2c4726869b5d64ea3b3344aa0f40a21a9f" };
+const previousAudio = () => execFileSync("git", ["show", MUTE_BASELINE.blob], { cwd: ROOT, encoding: "utf8" });
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const html = fs.readFileSync(path.join(DIR, "index.html"), "utf8");
 const plans = [...html.matchAll(/data-plan-id="([^"]+)" data-symbols="([^"]+)"/g)].map(([, id, symbols]) => ({ id, symbols: symbols.split(",").map(Number) }));
-function fixture(realAudio = false) {
+function fixture(realAudio = false, audioSourceText) {
   let now = 0, timerId = 0;
   const timers = new Map(), elements = new Map(), activeAudio = new Set(), calls = [];
   const schedule = (fn, ms, repeat = false) => { const id = ++timerId; timers.set(id, { fn, ms, time: now + ms, repeat }); return id; };
@@ -55,7 +59,7 @@ function fixture(realAudio = false) {
     setTimeout: (fn, ms) => schedule(fn, ms), setInterval: (fn, ms) => schedule(fn, ms, true), clearTimeout: id => timers.delete(id),
     requestAnimationFrame: () => 1, cancelAnimationFrame() {}, blueprintAudio: new Proxy({}, { get: (target, name) => (...args) => calls.push({ time: now, name, args }) }) };
   ctx.window = ctx; vm.createContext(ctx);
-  if (realAudio) vm.runInContext(fs.readFileSync(path.join(DIR, "audio.js"), "utf8"), ctx);
+  if (realAudio) vm.runInContext(audioSourceText || fs.readFileSync(path.join(DIR, "audio.js"), "utf8"), ctx);
   vm.runInContext(fs.readFileSync(path.join(DIR, "app.js"), "utf8"), ctx);
   const advance = ms => { const end = now + ms; while (now < end) { now = Math.min(now + 1, end); for (const [id, timer] of [...timers]) if (timer.time <= now && timers.has(id)) { if (timer.repeat) timer.time += timer.ms; else timers.delete(id); timer.fn(); } } };
   const snapshot = () => ({ ...JSON.parse(JSON.stringify(ctx.__BLUEPRINT_CAD_API__.getState())), stamp: !element("approval-stamp-group").classList.contains("hidden"), status: element("system-status-indicator").textContent, filled: slots.filter(slot => slot.classList.contains("filled")).length });
@@ -99,11 +103,76 @@ function deterministic() {
   engine.playApprovalAndActivation(); audio.advance(50); engine.playDisengage(); audio.advance(50); engine.playApprovalAndActivation(); audio.advance(650);
   assert.equal(engine.ambientHumNodes.length, 3); assert.ok(engine.ambientHumNodes.every(node => !node.stopped));
   engine.playDisengage(); audio.advance(8250); assert.equal(audio.activeAudio.size, 0);
+  const baselineMute = fixture(true, previousAudio()), oldAudio = baselineMute.ctx.blueprintAudio;
+  oldAudio.startAmbientHum(); baselineMute.advance(1200); oldAudio.toggleAudio(); oldAudio.toggleAudio(); baselineMute.advance(250);
+  assert.equal(oldAudio.enabled, true); assert.equal(oldAudio.ambientHumGain.gain.value, 0, "Retain the original mute/unmute defect proof");
+  const mute = fixture(true), sound = mute.ctx.blueprintAudio;
+  sound.startAmbientHum(); mute.advance(50); sound.toggleAudio(); mute.advance(1200);
+  assert.equal(sound.ambientHumGain.gain.value, 0); assert.equal(sound.enabled, false);
+  sound.toggleAudio(); mute.advance(250); assert.equal(sound.ambientHumGain.gain.value, 0.08);
+  sound.toggleAudio(); sound.playDisengage(); mute.advance(8250); assert.equal(mute.activeAudio.size, 0);
+  sound.toggleAudio(); mute.advance(1200); assert.equal(sound.ambientHumNodes.length, 0, "Unmuting idle does not restart a cancelled connection");
+  sound.toggleAudio(); sound.startAmbientHum(); assert.equal(sound.enabled, false); assert.equal(sound.ambientHumNodes.length, 0);
+  sound.toggleAudio(); mute.advance(1200); assert.equal(sound.ambientHumNodes.length, 3); assert.equal(sound.ambientHumGain.gain.value, 0.08);
+  sound.playDisengage(); mute.advance(10); sound.toggleAudio(); mute.advance(10);
+  assert.equal(sound.ambientCleanups.size, 0); assert.equal(mute.activeAudio.size, 0, "Muting a retiring connection stops its owned fade and transient sounds");
   const timings = [];
   for (const interval of [0, 80, 350]) { const f = fixture(); for (let i = 0; i < 6; i++) { f.glyphs[i].click({}); f.advance(interval); } assert.equal(f.snapshot().filled, 6); assert.equal(f.snapshot().isConnected, false); timings.push({ intervalMs: interval, filled: 6 }); }
   return { status: "PASS", plans: rows, interruptionTimesMs: [0, 60, 240, 500, 590], cancellationControls: ["disengage", "clearBuffer"], idleObservationMs: 8250,
     exactReplacement: plans[3].symbols, manualTakeover: [0, 1, 2, 15], lateActivationCancelledAtMs: 50, stageBoundariesMs: [1600, 2200], stageCancellationsMs: [500, 1800, 2500], rapidRedialAmbientNodes: 3, cancelledPenStrokes: penStrokes, manualTiming: timings,
+    mute: { baseline: MUTE_BASELINE, oldUnmutedGain: 0, repairedGain: 0.08, mutedActivation: "silent until unmuted", cancelledActivation: "does not resume on unmute", retiringFade: "stopped on mute" },
     operatorIssue: "UNRESOLVED: automated manual staging does not supersede operator-reported failure", originalSuite: "CONTRACT_CONFLICT: unchanged manual500ms and phase9 automatic-activation assertions conflict with staged activation" };
+}
+async function browserMuteChecks(browser, url) {
+  const results = [];
+  for (const baseline of [true, false]) {
+    const context = await browser.createBrowserContext(), page = await context.newPage(), errors = [];
+    try {
+      page.on("pageerror", error => errors.push(error.message));
+      page.on("requestfailed", request => errors.push(request.url()));
+      page.on("response", response => { if (response.status() >= 400) errors.push(response.status() + " " + response.url()); });
+      if (baseline) {
+        const source = previousAudio(); await page.setRequestInterception(true);
+        page.on("request", request => request.url() === url + "/audio.js"
+          ? request.respond({ status: 200, contentType: "text/javascript", body: source }) : request.continue());
+      }
+      await page.setViewport({ width: 1920, height: 1080 }); await page.goto(url, { waitUntil: "networkidle0" });
+      const state = () => page.evaluate(() => ({ enabled: window.blueprintAudio.enabled, gain: window.blueprintAudio.ambientHumGain?.gain.value ?? null,
+        nodes: window.blueprintAudio.ambientHumNodes.length, transients: window.blueprintAudio.transientSources.size,
+        cleanups: window.blueprintAudio.ambientCleanups.size, connected: window.__BLUEPRINT_CAD_API__.getState().isConnected }));
+      const engage = async () => {
+        await click(page, '[data-plan-id="civil-helios"]');
+        await page.waitForFunction(() => !document.getElementById("btn-engage-draft").disabled);
+        await click(page, "#btn-engage-draft");
+        await page.waitForFunction(() => window.__BLUEPRINT_CAD_API__.getState().isConnected);
+      };
+      await engage(); await delay(1250);
+      assert.ok((await state()).gain > 0.07);
+      await click(page, "#sound-toggle-btn"); await delay(100);
+      assert.equal((await state()).gain, 0);
+      await click(page, "#sound-toggle-btn"); await delay(250);
+      const resumed = await state(); assert.equal(resumed.enabled, true);
+      if (baseline) assert.equal(resumed.gain, 0, "Reproduce historical silent unmute through real pointer controls");
+      else {
+        assert.ok(resumed.gain > 0.07, "Unmute restores the connected ambient gain");
+        await click(page, "#sound-toggle-btn"); await click(page, "#btn-disengage-draft"); await delay(750);
+        let current = await state(); assert.equal(current.enabled, false); assert.equal(current.nodes, 0); assert.equal(current.transients, 0);
+        await click(page, "#sound-toggle-btn"); await delay(250);
+        current = await state(); assert.equal(current.nodes, 0); assert.equal(current.connected, false);
+        await click(page, "#sound-toggle-btn"); await engage(); await delay(1250);
+        current = await state(); assert.equal(current.enabled, false); assert.equal(current.nodes, 0); assert.equal(current.transients, 0);
+        await click(page, "#sound-toggle-btn"); await delay(50); await click(page, "#sound-toggle-btn"); await delay(1250);
+        current = await state(); assert.equal(current.enabled, false); assert.equal(current.gain, 0, "Muting cancels an in-progress gain ramp");
+        await click(page, "#sound-toggle-btn"); await delay(250); assert.ok((await state()).gain > 0.07);
+        await click(page, "#btn-disengage-draft"); await click(page, "#sound-toggle-btn"); await delay(8250);
+        current = await state(); assert.equal(current.enabled, false); assert.equal(current.nodes, 0); assert.equal(current.transients, 0); assert.equal(current.cleanups, 0);
+      }
+      assert.deepEqual(errors, []);
+      results.push({ mode: baseline ? "baseline-audio" : "repaired-audio", status: "PASS", resumed,
+        scope: baseline ? "Historical unmute defect reproduced" : "Real pointer mute, active/idle unmute, muted activation, ramp interruption and cancellation" });
+    } finally { await context.close(); }
+  }
+  return results;
 }
 async function browserChecks() {
   const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(DIR, "node_modules/puppeteer"));
@@ -111,6 +180,7 @@ async function browserChecks() {
   const report = { status: "FAIL", errors: [], manual: [], geometry: [], plans: [], cancellations: [] };
   try {
     browser = await puppeteer.launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
+    report.mute = await browserMuteChecks(browser, server.url);
     const page = await browser.newPage();
     page.on("pageerror", error => report.errors.push(error.message));
     page.on("console", message => { if (message.type() === "error") report.errors.push(message.text()); });
@@ -279,7 +349,7 @@ async function main() {
     console.log("BLUEPRINT_BROWSER_REGRESSIONS " + JSON.stringify({ status: report.status, manual: report.manual,
       geometry: report.geometry, plans: report.plans.map(row => ({ id: row.id, sampledCounts: [...new Set(row.samples.map(sample => sample.count))] })),
       stages: report.stages, stagePixels: report.stagePixels, cancellations: report.cancellations.map(row => ({ label: row.label, stage: row.state.activationStage, count: row.state.filled, audioSources: row.state.audioSources })),
-      headerLayout: report.headerLayout, stageHeaderLayout: report.stageHeaderLayout,
+      headerLayout: report.headerLayout, stageHeaderLayout: report.stageHeaderLayout, mute: report.mute,
       reducedMotion: report.reducedMotion, operatorIssue: report.operatorIssue, originalSuite: report.originalSuite }));
   }
 }

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Audio mute lifecycle — 2026-11-08
+
+- Reproduced the existing mute/unmute defect: an active connection's ambient gain stayed at zero after AUDIO returned to ON. Unmute now restores the existing gain, or starts the requested ambient connection if activation completed while muted. Disengage clears that request, so unmuting an idle terminal cannot restart a cancelled connection.
+- Mute cancels transient sounds, pending pen callbacks, retiring ambient fades and scheduled gain ramps. An explicitly muted preference remains muted through activation and disengage; cancellation does not raise its silent gain.
+- Deterministic baseline/current checks pass, including muted activation, fade/ramp interruption and cancellation. Real pointer browser checks retain the old audio source to reproduce silent unmute and test the repaired lifecycle; hosted execution is pending. Original verification assertions, stage timings, audio timbre and operator-known-issue status are unchanged.
+
 ### Breakthrough header layout — 2026-11-08
 
 - Visual review of hosted job `128827398288` found that the breakthrough status forced the firm title and metadata onto extra lines, although the staged functional and pixel checks passed. Shortened only that header label to `BREAKTHROUGH // CERTIFIED`; the central aperture and approval stamp retain the full drawing-certification captions. Brand text, typography, styling and stage duration are unchanged.
