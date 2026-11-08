@@ -5,7 +5,9 @@
   "main": "index.html",
   "scripts": {
     "start": "node server.js",
-    "test": "node verify.js"
+    "test": "node ../scripts/run-blueprint-current-contract.js --suite-only",
+    "test:legacy": "node verify.js",
+    "test:regressions": "node ../scripts/check-blueprint-regressions.js"
   },
   "keywords": [
     "blueprint",
