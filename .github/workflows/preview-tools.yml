@@ -12,6 +12,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target: sigint
+            command: node scripts/check-sigint-security.js
+            evidence: test/sigint-security/
           - target: konstrukt
             command: node scripts/check-konstrukt-security.js
             evidence: test/konstrukt-security/
