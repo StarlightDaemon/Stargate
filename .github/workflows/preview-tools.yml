@@ -31,6 +31,46 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target: nexrad
+            command: node scripts/check-telemetry-security.js stargate_meteorological_nexrad
+            evidence: test/telemetry-security/stargate_meteorological_nexrad/
+          - target: orbital
+            command: node scripts/check-telemetry-security.js stargate_orbital_atc
+            evidence: test/telemetry-security/stargate_orbital_atc/
+          - target: ecogrid
+            command: node scripts/check-telemetry-security.js stargate_solarpunk_ecogrid
+            evidence: test/telemetry-security/stargate_solarpunk_ecogrid/
+          - target: sonar
+            command: node scripts/check-telemetry-security.js stargate_sonar_abyssal
+            evidence: test/telemetry-security/stargate_sonar_abyssal/
+          - target: caissa
+            command: node scripts/check-instrument-security.js --exhibit stargate_caissa_workstation
+            evidence: test/instrument-security/stargate_caissa_workstation/
+          - target: cyberpunk
+            command: node scripts/check-instrument-security.js --exhibit stargate_cyberpunk_gemini
+            evidence: test/instrument-security/stargate_cyberpunk_gemini/
+          - target: fulldome
+            command: node scripts/check-instrument-security.js --exhibit stargate_fulldome_planetarium
+            evidence: test/instrument-security/stargate_fulldome_planetarium/
+          - target: seismic
+            command: node scripts/check-instrument-security.js --exhibit stargate_seismic_triangulation
+            evidence: test/instrument-security/stargate_seismic_triangulation/
+          - target: ukiyo
+            command: node scripts/check-instrument-security.js --exhibit stargate_ukiyo_waystation
+            evidence: test/instrument-security/stargate_ukiyo_waystation/
+          - target: lantern
+            command: node scripts/check-secondary-security.js stargate_bathyscaphe_pilot_fable
+            evidence: test/secondary-security/stargate_bathyscaphe_pilot_fable/
+          - target: dark-matter
+            command: node scripts/check-secondary-security.js stargate_dark_matter_array
+            evidence: test/secondary-security/stargate_dark_matter_array/
+          - target: conservatory
+            command: node scripts/check-secondary-security.js stargate_solarpunk_conservatory
+            evidence: test/secondary-security/stargate_solarpunk_conservatory/
+            png: true
+          - target: lowmagic
+            command: node scripts/check-secondary-security.js stargate_lowmagic_gemini
+            evidence: test/secondary-security/stargate_lowmagic_gemini/
           - target: municipal
             command: node scripts/check-municipal-security.js
             evidence: test/municipal-security/
@@ -68,7 +108,7 @@ jobs:
             command: node scripts/check-science-security.js stargate_windtunnel_aerodynamics
             evidence: test/science-security/stargate_windtunnel_aerodynamics/
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     env:
       PUPPETEER_SKIP_DOWNLOAD: 'true'
       STARGATE_LOG_VISUALS: '1'
