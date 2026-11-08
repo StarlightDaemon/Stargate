@@ -183,7 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
   };
 
-  window.onNewSessionEvent = () => {
+  window.onNewSessionEvent = event => {
+    if (event.source === 'DIVE_RECORDER') Archive.refreshSavedDiveCount();
     const feed = document.getElementById('event-log-feed');
     if (feed && feed.offsetParent !== null) {
       renderEventLogFeed();
