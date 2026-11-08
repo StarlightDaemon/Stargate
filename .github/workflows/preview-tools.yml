@@ -63,6 +63,34 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - target: cathedral-oculus
+            command: node scripts/check-package-entry-security.js stargate_cathedral_oculus
+            evidence: test/package-entry-security/stargate_cathedral_oculus/
+            package: stargate_cathedral_oculus
+          - target: mastering-suite
+            command: node scripts/check-package-entry-security.js stargate_mastering_suite
+            evidence: test/package-entry-security/stargate_mastering_suite/
+            package: stargate_mastering_suite
+          - target: blueprint-drafting
+            command: node scripts/check-package-entry-security.js stargate_blueprint_drafting
+            evidence: test/package-entry-security/stargate_blueprint_drafting/
+            package: stargate_blueprint_drafting
+          - target: orthographic-cad
+            command: node scripts/check-package-entry-security.js stargate_orthographic_cad
+            evidence: test/package-entry-security/stargate_orthographic_cad/
+            package: stargate_orthographic_cad
+          - target: radio-interferometry
+            command: node scripts/check-package-entry-security.js stargate_radio_interferometry
+            evidence: test/package-entry-security/stargate_radio_interferometry/
+            package: stargate_radio_interferometry
+          - target: seti-deepscope
+            command: node scripts/check-package-entry-security.js stargate_seti_deepscope
+            evidence: test/package-entry-security/stargate_seti_deepscope/
+            package: stargate_seti_deepscope
+          - target: seti-freeform
+            command: node scripts/check-package-entry-security.js stargate_seti_freeform
+            evidence: test/package-entry-security/stargate_seti_freeform/
+            package: stargate_seti_freeform
           - target: bathyscaphe-regressions
             command: node scripts/check-bathyscaphe-regressions.js
             evidence: test/bathyscaphe-regressions/
@@ -182,6 +210,9 @@ jobs:
           node-version: 24
       - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
       - run: npm ci --ignore-scripts
+      - name: Install locked historical package transport for qualification
+        if: ${{ matrix.package != null }}
+        run: npm ci --ignore-scripts --prefix ${{ matrix.package }}
       - name: Preserve original suites and reproduce security findings
         run: ${{ matrix.command }}
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

@@ -130,8 +130,9 @@ test("CLI rejects unknown options and reports port conflicts without private pat
   assert.equal(conflict.code, 1); assert.match(conflict.output, /port is already in use/); assert.ok(!conflict.output.includes(ROOT));
 });
 test("converted exhibit launch commands use the shared security policy and PORT override", { timeout: 20000 }, async () => {
-  for (const [folder, file] of [["stargate_aetheric_telegraph", "server.js"], ["stargate_bathyscaphe_pilot", "server.js"], ["stargate_solarpunk_astra", "server.cjs"], ["stargate_bibliographic_depository", "server.js"], ["stargate_erebus_signal", "server.js"], ["stargate_reactor_criticality", "scripts/server.js"], ["stargate_blueprint_alpha", "server.js"], ["stargate_synchrotron_collider", "server.js"], ["stargate_sigint_cryptanalysis", "server.js"], ["stargate_konstrukt_transit", "server.js"], ["stargate_epigraphic_spectrometry", "server.js"], ["stargate_genomic_sequencer", "server.js"], ["stargate_windtunnel_aerodynamics", "server.js"], ["stargate_canopy_commons", "server.js"], ["stargate_dark_gothic_fable", "server.js"], ["stargate_nouveau_nimbus", "server.js"], ["stargate_futurist_dynamism", "server.js"], ["stargate_caissa_workstation", "server.js"], ["stargate_dark_matter_array", "server.js"], ["stargate_meteorological_nexrad", "server.js"], ["stargate_orbital_atc", "server.js"], ["stargate_solarpunk_ecogrid", "server.js"], ["stargate_sonar_abyssal", "server.js"], ["stargate_municipal_registry", "server.js"], ["stargate_apiculture_telemetry", "scripts/server.js"], ["stargate_steampunk_fable", "serve.js"]]) {
-    const child = spawn(process.execPath, [file], { cwd: path.join(ROOT, folder), env: { ...process.env, PORT: "0" }, windowsHide: true });
+  for (const [folder, file] of [["stargate_aetheric_telegraph", "server.js"], ["stargate_bathyscaphe_pilot", "server.js"], ["stargate_solarpunk_astra", "server.cjs"], ["stargate_bibliographic_depository", "server.js"], ["stargate_erebus_signal", "server.js"], ["stargate_reactor_criticality", "scripts/server.js"], ["stargate_blueprint_alpha", "server.js"], ["stargate_synchrotron_collider", "server.js"], ["stargate_sigint_cryptanalysis", "server.js"], ["stargate_konstrukt_transit", "server.js"], ["stargate_epigraphic_spectrometry", "server.js"], ["stargate_genomic_sequencer", "server.js"], ["stargate_windtunnel_aerodynamics", "server.js"], ["stargate_canopy_commons", "server.js"], ["stargate_dark_gothic_fable", "server.js"], ["stargate_nouveau_nimbus", "server.js"], ["stargate_futurist_dynamism", "server.js"], ["stargate_caissa_workstation", "server.js"], ["stargate_dark_matter_array", "server.js"], ["stargate_meteorological_nexrad", "server.js"], ["stargate_orbital_atc", "server.js"], ["stargate_solarpunk_ecogrid", "server.js"], ["stargate_sonar_abyssal", "server.js"], ["stargate_municipal_registry", "server.js"], ["stargate_apiculture_telemetry", "scripts/server.js"], ["stargate_steampunk_fable", "serve.js"], ["stargate_ukiyo_waystation_fable", null]]) {
+    const args = file ? [file] : JSON.parse(fs.readFileSync(path.join(ROOT, folder, "package.json"), "utf8")).scripts.serve.split(" ").slice(1);
+    const child = spawn(process.execPath, args, { cwd: path.join(ROOT, folder), env: { ...process.env, PORT: "0" }, windowsHide: true });
     const closed = new Promise(resolve => child.once("close", resolve));
     try {
       const url = await new Promise((resolve, reject) => {
@@ -148,7 +149,7 @@ test("converted exhibit launch commands use the shared security policy and PORT 
       });
       assert.deepEqual((await request(url)).body, fs.readFileSync(path.join(ROOT, folder, "index.html")));
       assert.equal((await request(url, "/", "POST")).status, 405);
-      assert.equal((await request(url, "/" + file)).status, 403);
+      assert.equal((await request(url, "/" + (file || "package.json"))).status, 403);
       assert.equal((await request(url, "/../README.md")).status, 403);
       assert.equal((await request(url, "/../stargate_bathyscaphe_pilot_fable/index.html")).status, 403);
     } finally { child.kill(); await closed; }
