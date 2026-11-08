@@ -94,6 +94,9 @@ jobs:
           - target: bathyscaphe-regressions
             command: node scripts/check-bathyscaphe-regressions.js
             evidence: test/bathyscaphe-regressions/
+          - target: erebus-regressions
+            command: node scripts/check-erebus-regressions.js
+            evidence: test/erebus-regressions/
           - target: reactor-regressions
             command: node scripts/check-reactor-regressions.js
             evidence: test/reactor-regressions/
