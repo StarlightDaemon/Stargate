@@ -23,6 +23,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a local SVG favicon using the existing palette and cipher key motif,
   with an explicit HTML icon link to prevent the missing favicon request.
 
+### Preset cancellation repair — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Emergency Sever now cancels the active hypothesis interval and queued preset
+  replay. A generation check prevents stale callbacks from altering a restarted
+  dial. Accepted clear/reset and replacement presets also cancel prior dial work.
+- Preserved the 45 ms hypothesis ticks, six-tick pinning and 320 ms preset cadence.
+  The original verification suite remains unchanged; supplementary regression
+  checks cover an 8.25-second idle wait and repeated cancel/restart races.
+
 ## [1.0.0] - 2026-08-15
 
 **Built by:** Gemini 3.7 Flash (High)

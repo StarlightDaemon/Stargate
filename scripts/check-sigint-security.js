@@ -109,10 +109,24 @@ async function qualify(browser, mode) {
     }
     await dial(); await click(page, "#btn-activate"); await delay(500); await click(page, "#btn-disengage");
     await delay(8250); result.cancelledActivation = await idle(); await shot("cancelled");
-    // Preserve, but do not bless, any existing preset replay after emergency sever.
+    // Regression: sever must stop both the current pin and all queued preset pins.
     await click(page, "#preset-btn-p2"); await delay(450); await click(page, "#btn-disengage");
-    result.presetCancellationImmediate = await snapshot(); await delay(4000); result.presetCancellationSettled = await snapshot();
-    result.functionalAcceptance = result.presetCancellationSettled.state === "IDLE" && result.presetCancellationSettled.count === 0 ? "UNVERIFIED: bounded automation only; operator and sound acceptance pending" : "FAIL: original preset replay repopulates keys after emergency sever";
+    result.presetCancellationImmediate = await idle(); await delay(8250); result.presetCancellationSettled = await idle();
+    result.cancelRestartRaces = [];
+    for (const [first, restart, wait] of [["p2", "p4", 80], ["p4", "p2", 450], ["p2", "p2", 80]]) {
+      await click(page, "#preset-btn-" + first); await delay(wait); await click(page, "#btn-disengage"); await idle();
+      await click(page, "#preset-btn-" + restart);
+      await page.waitForFunction(() => window.__DSCR_STATE__.systemState === "READY", { timeout: 10000 });
+      // Wait beyond the old replay's entire lifetime before inspecting the new key.
+      await delay(1000);
+      const ready = await snapshot(); assert.equal(ready.state, "READY"); assert.equal(ready.count, 8); assert.equal(ready.slot, 8); assert.equal(ready.cycling, false);
+      const keys = await page.evaluate(() => ({ actual: window.__DSCR_STATE__.lockedKeys, expected: window.__DSCR_STATE__.currentPreset.keys }));
+      assert.deepEqual(keys.actual, keys.expected, "Restarted preset contains only its own keys");
+      result.cancelRestartRaces.push({ first, restart, wait, ready });
+      await click(page, "#btn-disengage"); await idle();
+    }
+    await delay(8250); result.finalCancelled = await idle();
+    result.functionalAcceptance = "Preset cancellation and restart regression PASS; full operator and sound acceptance remain UNVERIFIED.";
     result.metadataObservation = await page.$eval(".version-label", el => el.textContent.trim());
     result.metadataVersion = JSON.parse(fs.readFileSync(path.join(DIR, "version.json"))).version;
     assert.deepEqual(result.pageErrors, []); result.status = "PASS"; return result;
@@ -127,11 +141,12 @@ async function main() {
   const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE);
   const browser = await puppeteer.launch({ executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, headless: true });
   try {
-    const baseline = await qualify(browser, "legacy"), shared = await qualify(browser, "shared");
-    for (const key of ["originalSuite", "cycles", "cancelledActivation", "presetCancellationSettled", "functionalAcceptance"])
-      assert.deepEqual(shared[key], baseline[key], "Preservation " + key);
+    // Both serving modes load the current client; historical pre-fix client evidence is retained separately.
+    const legacyTransport = await qualify(browser, "legacy"), shared = await qualify(browser, "shared");
+    for (const key of ["originalSuite", "cycles", "cancelledActivation", "presetCancellationSettled", "cancelRestartRaces", "finalCancelled", "functionalAcceptance"])
+      assert.deepEqual(shared[key], legacyTransport[key], "Preservation " + key);
     for (const key of ["resources", "requestFailures"])
-      assert.deepEqual([...new Set(shared[key])].sort(), [...new Set(baseline[key])].sort(), key);
+      assert.deepEqual([...new Set(shared[key])].sort(), [...new Set(legacyTransport[key])].sort(), key);
     console.log("SIGINT_PRESERVATION PASS");
   } finally { await browser.close(); }
 }
