@@ -239,9 +239,9 @@ exception is an explicitly-scoped security audit.
 Use [scripts/MAINTENANCE.md](scripts/MAINTENANCE.md) for the current preview and
 verification commands, report semantics and the dated rollout checkpoint. Shared
 serving covers all 33 original launchers and three additional entries at the
-2026-11-08 checkpoint, plus six of seven additional package-source entries.
-SETI Freeform remains under qualification, and four Vite built-preview contracts
-remain separate specialist gates. All 35 scoped dependency candidates are adopted.
+2026-11-08 checkpoint, plus all seven additional package-source entries.
+Final command qualification and four retained Vite built-preview contracts
+remain separately recorded specialist gates. All 35 scoped dependency candidates are adopted.
 The root lockfile supplies shared browser and image tooling;
 browser applications and the flagship build remain independent. Do not delete or replace
 an exhibit's server or weaken its specialized assertions merely because the

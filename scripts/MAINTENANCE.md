@@ -17,10 +17,10 @@ and Ukiyo Waystation Fable entry points. Cerulean Lantern's migration preserves
 nine public assets and the original 185/185 close-out checks in both modes;
 its build suite still records 132/133 (normalized-heading mismatch) and its
 stage suite 23/24 (breakthrough white-rim predicate). These original failures
-remain visible and prevent a full acceptance claim. Six additional package-source
+remain visible and prevent a full acceptance claim. All seven additional package-source
 entry points now use shared loopback serving: Blueprint Drafting, Cathedral
-Oculus, Mastering Suite, Orthographic CAD, Radio Interferometry and SETI Deepscope.
-SETI Freeform remains under qualification. These counts distinguish the original
+Oculus, Mastering Suite, Orthographic CAD, Radio Interferometry, SETI Deepscope
+and SETI Freeform. The last migrated command awaits its final hosted CLI check. These counts distinguish the original
 33-server scope, three additional entry points and seven package-source entries.
 
 Orthographic CAD, Radio Interferometry, SETI Deepscope and SETI Freeform retain
@@ -41,7 +41,9 @@ is not closed by automation. Gallery dispositions and builder attribution remain
 unchanged.
 
 The root toolchain and all 35 scoped exhibit dependency candidates are adopted;
-the remaining Freeform source migration and four built-preview contracts are separate gates.
+all seven package-source migrations are implemented. Four built-preview contracts
+remain separate gates: Radio, Orthographic and DeepScope passed in run
+`42515274539`; Freeform retains its original manual-cadence failure.
 See dependency reconciliation below. Qualification evidence is preserved in the
 [preview-tools workflow](../.github/workflows/preview-tools.yml),
 [suite registry](suite-registry.js) and
@@ -222,8 +224,10 @@ evidence and cannot establish original-suite PASS. Registered focused regression
 steps cover Blueprint Alpha, Bathyscaphe Pilot, Erebus, Reactor, Nimbus notes
 and Ecogrid/SETI Freeform keyboard reachability. Municipal stage and Blueprint
 Drafting current-contract routes report independent evidence. Drafting’s eight
-current-contract cycles passed; Municipal’s stronger audio/pixel check requires
-fresh proof after a render-frame sampling correction.
+current-contract cycles passed. Municipal’s strengthened audio/pixel check passed
+in run `42515274539`, job `128836833671`: real audio starts, exactly two sustained
+oscillators, muted activation with no new starts, seven stable cancellations and
+unchanged stage-color thresholds. Earlier failures remain in the evidence history.
 Supplementary status documents require an explicit current PASS path and fresh
 evidence; they cannot override historical original failures or operator status.
 
