@@ -51,8 +51,9 @@ function assertIdle(f) {
     if (id.startsWith("led-")) assert.equal(element.className, "dish-led");
   }
 }
-if (require.main !== module) module.exports = { fixture };
-else {
+module.exports = { fixture };
+// Register tests in shared-process node --test runs as well as direct execution.
+{
   test("manual cancellation clears concurrent checks and late dish callbacks for 8.25 seconds", () => {
     const f = fixture();
     for (const id of [1, 2, 3]) f.app.selectCandidate(id);
