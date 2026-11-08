@@ -7,7 +7,7 @@
     "preview": "node scripts/preview.js",
     "verify": "node scripts/verify.js",
     "test:pilots": "node scripts/run-pilot-suites.js",
-    "test:preview": "node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js",
+    "test:preview": "node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js scripts/test-qualified-suites.js scripts/test-exhibit-dependency-candidates.js scripts/test-deepscope-cancellation.js scripts/test-package-entry-adapter.js",
     "test:preview:handlers": "node --test --test-isolation=none scripts/test-preview-handlers.js",
     "gallery:generate": "node hub/generate.js",
     "gallery:check": "node hub/generate.js --check",
@@ -17,7 +17,8 @@
     "security:deps:featured": "npm --prefix Stargate_OG audit",
     "test:pages-output-guard": "node scripts/test-build-pages-output-guard.js",
     "test:pages-release": "node scripts/audit-pages-release.js",
-    "test:suites": "node scripts/run-qualified-suites.js"
+    "test:suites": "node scripts/run-qualified-suites.js",
+    "security:deps:all": "node scripts/check-dependency-baseline.js --strict --include-qualified"
   },
   "dependencies": {
     "sharp": "^0.35.5"

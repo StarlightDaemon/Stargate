@@ -66,7 +66,7 @@ jobs:
         with:
           node-version: 24
       - name: Collect remaining active lockfile audits (findings remain acceptance failures)
-        run: node scripts/check-dependency-baseline.js
+        run: node scripts/check-dependency-baseline.js --strict --include-qualified
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
@@ -148,6 +148,9 @@ jobs:
           - target: erebus-regressions
             command: node scripts/check-erebus-regressions.js
             evidence: test/erebus-regressions/
+          - target: municipal-regressions
+            command: node scripts/check-municipal-regressions.js
+            evidence: test/municipal-regressions/
           - target: reactor-regressions
             command: node scripts/check-reactor-regressions.js
             evidence: test/reactor-regressions/
@@ -414,7 +417,7 @@ jobs:
         with:
           node-version: 24
       - name: Test real HTTP, containment, links, lifecycle and verification diagnostics
-        run: node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js scripts/test-qualified-suites.js scripts/test-exhibit-dependency-candidates.js
+        run: node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js scripts/test-qualified-suites.js scripts/test-exhibit-dependency-candidates.js scripts/test-deepscope-cancellation.js scripts/test-package-entry-adapter.js
       - name: Check gallery
         run: node hub/generate.js --check
       - name: Check Pages output guard
