@@ -91,11 +91,13 @@ async function openAsset(root, relative) {
     return { handle, stat };
   } catch (error) { await handle.close(); throw error; }
 }
-async function startPreview({ root, files, port = 4173 }) {
-  if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error("Port must be an integer from 0 through 65535.");
+// Keep a synchronous, unstarted Server for exhibits whose original test suites
+// import startServer(port) or server.listen(port). All entry points share the
+// same request handler and loopback policy.
+function createPreviewServer({ root, files }) {
   if (!Array.isArray(files)) throw new Error("An explicit public file list is required.");
   if (fs.lstatSync(root).isSymbolicLink()) throw new Error("Linked roots are not supported.");
-  root = await fs.promises.realpath(root);
+  root = fs.realpathSync(root);
   const allowed = new Set(files.filter(publicAsset));
   const server = http.createServer(async (req, res) => {
     if (req.method !== "GET" && req.method !== "HEAD") { reply(res, req.method, 405); return; }
@@ -119,6 +121,23 @@ async function startPreview({ root, files, port = 4173 }) {
   server.requestTimeout = 10000;
   server.headersTimeout = 10000;
   server.timeout = 10000;
+  server.listen = function(port, host, callback) {
+    if (arguments.length > 3) throw new Error("Expected listen(port[, host][, callback]).");
+    if (typeof port === "string" && /^\d+$/.test(port)) port = Number(port);
+    if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error("Port must be an integer from 0 through 65535.");
+    if (typeof host === "function") {
+      if (callback !== undefined) throw new Error("Expected one listen callback.");
+      callback = host; host = undefined;
+    }
+    if (host !== undefined && host !== "127.0.0.1" && host !== "localhost") throw new Error("Preview listeners must use loopback (127.0.0.1 or localhost).");
+    if (callback !== undefined && typeof callback !== "function") throw new Error("Listen callback must be a function.");
+    return http.Server.prototype.listen.call(this, port, "127.0.0.1", callback);
+  };
+  return server;
+}
+async function startPreview({ root, files, port = 4173 }) {
+  if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error("Port must be an integer from 0 through 65535.");
+  const server = createPreviewServer({ root, files });
   await new Promise((resolve, reject) => {
     server.once("error", reject);
     server.listen(port, "127.0.0.1", () => { server.removeListener("error", reject); resolve(); });
@@ -152,4 +171,4 @@ function runCli(args) { return main(args).catch(error => {
   process.exitCode = 1;
 }); }
 if (require.main === module) runCli();
-module.exports = { startPreview, selectExhibit, trackedAssets, publicAsset, requestPath, runCli };
+module.exports = { createPreviewServer, startPreview, selectExhibit, trackedAssets, publicAsset, requestPath, runCli };
