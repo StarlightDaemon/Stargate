@@ -407,7 +407,7 @@ jobs:
         with:
           node-version: 24
       - name: Test real HTTP, containment, links, lifecycle and verification diagnostics
-        run: node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js scripts/test-qualified-suites.js scripts/test-exhibit-dependency-candidates.js scripts/test-deepscope-cancellation.js scripts/test-package-entry-adapter.js scripts/test-vite-built-preview.js scripts/test-package-entry-viewport.js
+        run: node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js scripts/test-qualified-suites.js scripts/test-exhibit-dependency-candidates.js scripts/test-deepscope-cancellation.js scripts/test-package-entry-adapter.js scripts/test-vite-built-preview.js scripts/test-package-entry-viewport.js scripts/test-qualification-vite-process.js
       - name: Check gallery
         run: node hub/generate.js --check
       - name: Check Pages output guard

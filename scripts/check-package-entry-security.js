@@ -4,6 +4,7 @@
 const assert = require("node:assert/strict"), fs = require("node:fs"), path = require("node:path"), crypto = require("node:crypto");
 const { createRequire } = require("node:module"), { pathToFileURL } = require("node:url"), { execFileSync } = require("node:child_process");
 const { request, click } = require("./browser-check-helpers.js"), { selectExhibit, startPreview } = require("./preview.js");
+const { startOwnedVite, bounded } = require("./qualification-vite-process.js");
 const { loadPage } = require("./browser-load.js");
 const ROOT = path.resolve(__dirname, ".."), OUTPUT = path.join(ROOT, "test/package-entry-security"), BASE = "8c3f718c3e31cd19c169c7cf87ab2feeee7242c1";
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -36,16 +37,11 @@ function compiledSuite(target, suite, url) {
   if (suite.server) source += "\n" + suite.server + " = __ownedServer;";
   return new Function("require", "__suiteURL", "__suiteDir", "console", "process", "__ownedServer", source + "\nreturn " + suite.entry + "();");
 }
-async function packageServer(target, folder) {
+async function packageServer(target, folder, phase) {
   const root = path.join(ROOT, target.name), load = createRequire(path.join(root, "package.json"));
   const packageFile = load.resolve(target.package + "/package.json"), version = JSON.parse(fs.readFileSync(packageFile, "utf8")).version;
   if (target.package === "vite") {
-    const vite = await import(pathToFileURL(path.join(path.dirname(packageFile), "dist/node/index.js")).href);
-    const instance = await vite.createServer({ root, configFile: false, cacheDir: path.join(folder, "vite-cache"),
-      server: { host: "127.0.0.1", port: 0, strictPort: true, open: false }, logLevel: "error" });
-    await instance.listen();
-    assert.equal(instance.httpServer.address().address, "127.0.0.1");
-    return { url: "http://127.0.0.1:" + instance.httpServer.address().port, version, close: () => instance.close() };
+    return { ...await startOwnedVite(target, packageFile, folder, phase), version };
   }
   const instance = load("http-server").createServer({ root, cache: -1 });
   await new Promise((resolve, reject) => { instance.server.once("error", reject); instance.listen(0, "127.0.0.1", resolve); });
@@ -203,25 +199,52 @@ async function cancellation(browser, target, url, folder) {
 async function qualify(browser, target, mode) {
   const folder = path.join(OUTPUT, target.name, mode); fs.mkdirSync(folder, { recursive: true });
   const selection = selectExhibit(target.name), result = { exhibit: target.name, mode, status: "FAIL", assets: [], security: [], suites: [] };
+  result.phases = [];
+  const phase = (name, status, detail) => {
+    const event = { name, status, detail, at: new Date().toISOString() };
+    result.phases.push(event);
+    // Partial evidence is always FAIL until all qualification and cleanup finish.
+    fs.writeFileSync(path.join(folder, "result.json"), JSON.stringify({ ...result, status: "FAIL", complete: false }, null, 2));
+    console.log("PACKAGE_ENTRY_PHASE " + JSON.stringify({ exhibit: target.name, mode, ...event }));
+  };
+  const closeListener = async () => {
+    const owned = server; server = undefined;
+    if (!owned) return;
+    phase("listener-cleanup", "START");
+    try { await bounded(owned.close(), 20000, "Listener cleanup"); phase("listener-cleanup", "PASS"); }
+    catch (error) { phase("listener-cleanup", "FAIL", error.message); throw error; }
+  };
   let server;
   try {
-    server = mode === "legacy" ? await packageServer(target, folder) : await startPreview({ ...selection, port: 0 });
+    phase("listener-startup", "START");
+    server = mode === "legacy" ? await packageServer(target, folder, phase) : await startPreview({ ...selection, port: 0 });
+    phase("listener-startup", "PASS");
     result.transport = { package: mode === "legacy" ? target.package : "shared", version: server.version, binding: "127.0.0.1", note: "Installed package transport and current client source; ephemeral port and bind address owned by qualification" };
     for (const file of selection.files) {
+      phase("asset:" + file, "START");
       const response = await request(server.url, "/" + file); assert.equal(response.status, 200, file);
       const exactBytes = response.body.equals(fs.readFileSync(path.join(selection.root, file)));
       if (mode === "shared" || target.package !== "vite" || !/\.(?:html|js|mjs|css)$/.test(file)) assert.ok(exactBytes, "Public asset bytes: " + file);
       result.assets.push({ file, status: response.status, exactBytes, transformation: !exactBytes ? "Vite development transform; original suites must qualify behavior" : undefined });
+      phase("asset:" + file, "PASS");
     }
     // Requesting Node-only test source through Vite discovers its dependencies and
     // can trigger optimizer errors/HMR. Run original browser assertions first, then
     // probe a separate listener/cache so those deliberate requests cannot affect
     // functional evidence. Both listeners still use the installed package defaults.
-    for (const suite of target.suites) result.suites.push(await runSuite(browser, target, suite, server.url, path.join(folder, suite.file.replace(/[/.]/g, "-"))));
+    for (const suite of target.suites) {
+      phase("suite:" + suite.file, "START");
+      const original = await runSuite(browser, target, suite, server.url, path.join(folder, suite.file.replace(/[/.]/g, "-")));
+      result.suites.push(original); phase("suite:" + suite.file, original.status, original.error);
+    }
+    phase("cancellation", "START");
     result.cancellation = await cancellation(browser, target, server.url, folder);
+    phase("cancellation", result.cancellation.status, result.cancellation.functionalAcceptance);
     if (mode === "legacy" && target.package === "vite") {
-      await server.close(); server = undefined;
-      server = await packageServer(target, path.join(folder, "security-listener"));
+      await closeListener();
+      phase("security-listener-startup", "START");
+      server = await packageServer(target, path.join(folder, "security-listener"), phase);
+      phase("security-listener-startup", "PASS");
       result.transport.securityIsolation = "Separate listener and optimizer cache, started after all browser contexts closed";
     }
     const fixture = path.join(folder, "controlled-traversal.txt"), bytes = Buffer.from("Controlled qualification fixture " + target.name + "\n"); fs.writeFileSync(fixture, bytes);
@@ -230,15 +253,28 @@ async function qualify(browser, target, mode) {
       ["GET", "/../test/package-entry-security/" + target.name + "/" + mode + "/controlled-traversal.txt", 403],
       ["GET", "/@fs/" + fixture.replaceAll("\\", "/"), 403]];
     for (const [method, route, expected] of probes) {
+      phase("probe:" + method + " " + route, "START");
       const response = await request(server.url, route, method);
       if (mode === "shared") { assert.ok([expected, ...(route.startsWith("/@fs/") ? [404] : [])].includes(response.status), route + ": " + response.status); assert.ok(!response.body.equals(bytes), "No controlled traversal bytes"); }
       result.security.push({ method, route, status: response.status, controlledFixtureExposed: response.body.equals(bytes) });
+      phase("probe:" + method + " " + route, mode === "legacy" ? "OBSERVED" : "PASS", "HTTP " + response.status);
     }
     assert.equal((await request(server.url, "/")).status, 200, "Listener survives malformed/traversal probes");
     result.status = result.suites.every(suite => suite.status === "PASS") && result.cancellation.status === "PASS" ? "PASS" : "FAIL";
     return result;
-  } catch (error) { result.error = error.stack; return result; }
-  finally { if (server) await server.close(); fs.writeFileSync(path.join(folder, "result.json"), JSON.stringify(result, null, 2)); console.log("PACKAGE_ENTRY_RESULT " + JSON.stringify(result)); }
+  } catch (error) { result.status = "FAIL"; result.error = error.stack; phase("qualification", "FAIL", error.message); return result; }
+  finally {
+    try { await closeListener(); }
+    catch (error) { result.status = "FAIL"; result.cleanupError = error.message; }
+    result.complete = true;
+    fs.writeFileSync(path.join(folder, "result.json"), JSON.stringify(result, null, 2)); console.log("PACKAGE_ENTRY_RESULT " + JSON.stringify(result));
+  }
+}
+function originalSuiteStatus(target, modes) {
+  const names = target.suites.map(suite => suite.file);
+  if (modes.length !== 2 || names.length === 0) return "UNVERIFIED";
+  if (modes.some(mode => mode.suites?.some(suite => suite.status === "FAIL"))) return "FAIL";
+  return modes.every(mode => mode.suites?.length === names.length && names.every(name => mode.suites.filter(suite => suite.suite === name && suite.status === "PASS").length === 1)) ? "PASS" : "UNVERIFIED";
 }
 async function main(args = process.argv.slice(2)) {
   const names = args.filter(arg => arg !== "--offline"), targets = names.length ? TARGETS.filter(target => names.includes(target.name)) : TARGETS;
@@ -252,10 +288,10 @@ async function main(args = process.argv.slice(2)) {
   try {
     for (const target of targets) {
       const legacy = await qualify(browser, target, "legacy"), shared = await qualify(browser, target, "shared");
-      const originalSuiteStatus = legacy.status === "PASS" && shared.status === "PASS" ? "PASS" : "FAIL";
+      const suiteStatus = originalSuiteStatus(target, [legacy, shared]);
       const functionalStatus = [legacy, shared].some(result => result.cancellation?.functionalAcceptance?.startsWith("FAIL")) ? "FAIL" : "UNVERIFIED";
-      const result = { exhibit: target.name, originalSuiteStatus, functionalStatus, operatorStatus: "UNVERIFIED", status: originalSuiteStatus === "PASS" && functionalStatus !== "FAIL" ? "PASS" : "FAIL" };
-      if (originalSuiteStatus === "PASS") {
+      const result = { exhibit: target.name, originalSuiteStatus: suiteStatus, functionalStatus, operatorStatus: "UNVERIFIED", status: suiteStatus === "PASS" && legacy.status === "PASS" && shared.status === "PASS" && functionalStatus !== "FAIL" ? "PASS" : "FAIL" };
+      if (legacy.cancellation?.after8250ms && shared.cancellation?.after8250ms) {
         try { assert.deepEqual(shared.cancellation.after8250ms, legacy.cancellation.after8250ms, "Cancellation transport regression"); }
         catch (error) { result.status = "FAIL"; result.error = error.message; }
       }
@@ -265,4 +301,4 @@ async function main(args = process.argv.slice(2)) {
   assert.ok(reports.every(result => result.status === "PASS"), "Package entry qualification remains incomplete");
 }
 if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
-module.exports = { TARGETS, compiledSuite, artifactIO, closeOwnedHttpServer, runSuite, cancellation };
+module.exports = { TARGETS, compiledSuite, artifactIO, closeOwnedHttpServer, runSuite, cancellation, originalSuiteStatus };
