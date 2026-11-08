@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const http = require("node:http");
+const { createRequire } = require("node:module");
 const { execFileSync } = require("node:child_process");
 const { request, click } = require("./browser-check-helpers.js");
 const { legacy } = require("./check-pilot-browsers.js");
@@ -20,11 +21,12 @@ function evidencePath(source, folder) {
   return source.replace(marker, "const OUT_DIR = " + JSON.stringify(folder) + ";");
 }
 
-async function embeddedBaseline() {
-  const end = original.indexOf("async function makeHttpRequest"); assert.ok(end > 0);
-  // Execute the exact historical handler, excluding the unrelated test invocation.
-  const source = evidencePath(original.slice(0, end), path.join(OUTPUT, "legacy-embedded")) + "\nreturn server;";
-  const server = new Function("require", "__dirname", source)(require, DIR);
+async function embeddedBaseline(current = false) {
+  const entry = current ? fs.readFileSync(path.join(DIR, "verify_test.js"), "utf8").replace(/\r\n/g, "\n") : original;
+  const end = entry.indexOf("async function makeHttpRequest"); assert.ok(end > 0);
+  // Execute the actual selected entry-point transport, excluding the unrelated test invocation.
+  const source = evidencePath(entry.slice(0, end), path.join(OUTPUT, current ? "shared-embedded" : "legacy-embedded")) + "\nreturn server;";
+  const server = new Function("require", "__dirname", source)(createRequire(path.join(DIR, "verify_test.js")), DIR);
   await new Promise((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); });
   return { url: "http://127.0.0.1:" + server.address().port,
     close: () => new Promise(resolve => { server.close(resolve); server.closeAllConnections(); }) };
@@ -33,9 +35,11 @@ async function embeddedBaseline() {
 async function originalSuite(browser, server, mode) {
   const context = await browser.createBrowserContext(), lines = [];
   const folder = path.join(OUTPUT, mode, "original"); fs.mkdirSync(folder, { recursive: true });
-  // Qualification comes before modifying the original suite or server.
-  assert.equal(fs.readFileSync(path.join(DIR, "verify_test.js"), "utf8").replace(/\r\n/g, "\n"), original.replace(/\r\n/g, "\n"));
-  let source = evidencePath(original, folder).replace("const PORT = 8899;", "const PORT = " + new URL(server.url).port + ";");
+  const current = fs.readFileSync(path.join(DIR, "verify_test.js"), "utf8").replace(/\r\n/g, "\n");
+  const assertions = text => text.slice(text.indexOf("async function makeHttpRequest"), text.indexOf("\nrunVerification().catch"));
+  assert.equal(assertions(current), assertions(original), "Original HTTP helper and complete verification body remain identical after checkout newline normalization");
+  const entry = mode.startsWith("legacy") ? original : current;
+  let source = evidencePath(entry, folder).replace("const PORT = 8899;", "const PORT = " + new URL(server.url).port + ";");
   const end = source.indexOf("\nrunVerification().catch"); assert.ok(end > 0);
   source = source.slice(0, end) + "\nreturn runVerification();";
   const body = text => text.slice(text.indexOf("async function runVerification()"), text.indexOf("\nrunVerification().catch"));
@@ -45,7 +49,7 @@ async function originalSuite(browser, server, mode) {
   const log = (...values) => lines.push(values.map(value => typeof value === "object" ? JSON.stringify(value) : String(value)).join(" "));
   try {
     await new Function("require", "__dirname", "console", "process", "setTimeout", source)(
-      name => name === "http" ? { ...http, createServer: () => listener } : name === "puppeteer" ? browserAdapter : require(name),
+      name => name === "http" ? { ...http, createServer: () => listener } : name === "puppeteer" ? browserAdapter : name === "../scripts/preview.js" ? { ...require("./preview.js"), createPreviewServer: () => listener } : createRequire(path.join(DIR, "verify_test.js"))(name),
       DIR, { log, error: log }, { exit: code => { throw new Error("Original suite exited " + code); } }, setTimeout);
     const expected = [
       'Engage button disabled before click: false',
@@ -64,7 +68,7 @@ async function originalSuite(browser, server, mode) {
 }
 
 async function security(server, mode) {
-  const result = [], old = mode !== "shared";
+  const result = [], old = mode.startsWith("legacy");
   for (const [method, url, file] of [
     ["GET", "/../README.md", path.join(ROOT, "README.md")],
     ["GET", "/../stargate_blueprint_alpha/index.html", path.join(ROOT, "stargate_blueprint_alpha/index.html")],
@@ -168,9 +172,9 @@ async function main() {
   const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(ROOT, "stargate_blueprint_alpha/node_modules/puppeteer"));
   const browser = await puppeteer.launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
   try {
-    for (const mode of ["legacy", "legacy-embedded", "shared"]) {
+    for (const mode of ["legacy", "legacy-embedded", "shared", "shared-embedded"]) {
       const selection = selectExhibit(NAME), row = { mode, assets: 0 };
-      const server = mode === "legacy" ? await legacy({ name: NAME, server: "server.js" }) : mode === "legacy-embedded" ? await embeddedBaseline() : await startPreview({ ...selection, port: 0 });
+      const server = mode === "legacy" ? await legacy({ name: NAME, server: "server.js" }) : mode.endsWith("-embedded") ? await embeddedBaseline(mode === "shared-embedded") : await startPreview({ ...selection, port: 0 });
       try {
         row.security = await security(server, mode);
         for (const file of selection.files) {
@@ -178,7 +182,7 @@ async function main() {
           assert.deepEqual(response.body, fs.readFileSync(path.join(DIR, file))); row.assets++;
         }
         row.originalSuite = await originalSuite(browser, server, mode);
-        if (mode !== "legacy-embedded") row.browser = await observe(browser, server, mode);
+        if (!mode.endsWith("-embedded")) row.browser = await observe(browser, server, mode);
         row.status = row.originalSuite.status === "PASS" && (!row.browser || row.browser.status === "PASS") ? "PASS" : "FAIL";
       } catch (error) { row.status = "FAIL"; row.error = error.stack; }
       finally { await server.close(); report.results.push(row); console.log("MUNICIPAL_RESULT " + JSON.stringify(row)); }

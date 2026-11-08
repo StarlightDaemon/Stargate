@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security maintenance
+
+- Replaced the standalone development handler and the verification suite's embedded handler with the shared public-asset allowlist server. Loopback defaults, launch commands and ports 8840/8899 remain. Parent-directory reads, implementation-file exposure and unsupported request methods are denied.
+- Preserved the complete original HTTP checks and eight-phase browser verification body. Added comparisons against the historical standalone and embedded transports, including exact public-asset bytes and real HTTP denial probes. Historical/shared qualification passed in hosted run 42508178082; verification of the migrated entry points is pending the follow-up hosted run.
+- Retained existing application behavior and release identity. Interrupted quick-dial callbacks after disengage and qualification of three visibly distinct activation stages remain functional follow-ups; this infrastructure change does not grant operator acceptance.
+
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
