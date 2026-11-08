@@ -257,7 +257,7 @@ async function qualify(browser, target, mode) {
     phase("listener-startup", "START");
     server = mode === "legacy" ? await packageServer(target, folder, phase) : await startPreview({ ...selection, port: 0 });
     phase("listener-startup", "PASS");
-    result.transport = { package: mode === "legacy" ? target.package : "shared", version: server.version, binding: "127.0.0.1", note: "Installed package transport and current client source; ephemeral port and bind address owned by qualification" };
+    result.transport = { package: mode === "legacy" ? target.package : "shared", version: server.version, binding: "127.0.0.1", port: Number(new URL(server.url).port), note: "Installed package transport and current client source; loopback listener owned by qualification. Native Vite treats configured port 0 as default 5173; strict port binding prevents silent fallback." };
     for (const file of selection.files) {
       phase("asset:" + file, "START");
       const response = await request(server.url, "/" + file); assert.equal(response.status, 200, file);
