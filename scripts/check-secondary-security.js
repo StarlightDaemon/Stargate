@@ -110,7 +110,7 @@ function artifactIO(target, folder) {
     unlinkSync: file => fs.unlinkSync(safeWrite(file))
   } };
 }
-async function emitVisuals(context, folder, target, suite) {
+async function emitVisuals(context, folder, target, suite, mode) {
   const files = fs.readdirSync(folder, { recursive: true }).filter(file => /(?:cold_start|stage[123]?[_-]|pending|buildup|breakthrough|sustained|active).*\.png$/.test(file) && !/4k/i.test(file));
   const page = await context.newPage();
   for (const file of files.slice(0, 8)) {
@@ -119,7 +119,7 @@ async function emitVisuals(context, folder, target, suite) {
       const canvas = document.createElement("canvas"); canvas.width = img.width; canvas.height = img.height;
       canvas.getContext("2d").drawImage(img, 0, 0); return canvas.toDataURL("image/jpeg", 0.6).split(",")[1];
     }, fs.readFileSync(path.join(folder, file)).toString("base64"));
-    const name = target.name + "-" + path.basename(suite, path.extname(suite)) + "-" + path.basename(file, ".png") + ".jpg";
+    const name = target.name + "-" + mode + "-" + path.basename(suite, path.extname(suite)) + "-" + path.basename(file, ".png") + ".jpg";
     for (let offset = 0; offset < data.length; offset += 16000)
       console.log("STARGATE_VISUAL " + name + " " + offset + " " + data.slice(offset, offset + 16000));
   }
@@ -182,7 +182,7 @@ async function runSuite(browser, target, suite, url, folder, mode) {
   finally {
     fs.writeFileSync(path.join(folder, "adapter.log"), lines.join("\n"));
     fs.writeFileSync(path.join(folder, "adapter-result.json"), JSON.stringify(result, null, 2));
-    if (mode === "shared" && process.env.STARGATE_LOG_VISUALS === "1") await emitVisuals(context, folder, target, suite);
+    if ((mode === "shared" || target.name === "stargate_solarpunk_conservatory") && process.env.STARGATE_LOG_VISUALS === "1") await emitVisuals(context, folder, target, suite, mode);
     await context.close();
   }
   return result;
@@ -250,7 +250,7 @@ async function lowmagic(browser, url, folder, mode) {
   } catch (error) { result.status = "FAIL"; result.error = error.stack; return result; }
   finally {
     fs.writeFileSync(path.join(folder, "supplementary.json"), JSON.stringify(result, null, 2));
-    if (mode === "shared" && process.env.STARGATE_LOG_VISUALS === "1") await emitVisuals(context, folder, { name: "stargate_lowmagic_gemini" }, "supplementary");
+    if (mode === "shared" && process.env.STARGATE_LOG_VISUALS === "1") await emitVisuals(context, folder, { name: "stargate_lowmagic_gemini" }, "supplementary", mode);
     await context.close();
   }
 }

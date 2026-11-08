@@ -154,11 +154,12 @@ async function originalSuite(browser, target, url, folder) {
   } finally {
     fs.writeFileSync(path.join(folder, "run.log"), lines.join("\n"));
     fs.writeFileSync(path.join(folder, "result.json"), JSON.stringify(result, null, 2));
-    if (process.env.STARGATE_LOG_VISUALS === "1" && folder.includes(path.sep + "shared" + path.sep)) {
+    if (process.env.STARGATE_LOG_VISUALS === "1" && (folder.includes(path.sep + "shared" + path.sep) || target.name === "stargate_atompunk_fable")) {
       // Encode already-captured evidence after all timed predicates finish, so
       // connector-visible screenshots cannot perturb the original stage timing.
       const imagePage = await context.newPage();
-      const files = fs.readdirSync(folder, { recursive: true }).filter(file => /(?:cold_start_1080p|stage[123]_).*\.png$/.test(file));
+      const mode = folder.includes(path.sep + "shared" + path.sep) ? "shared" : "legacy";
+      const files = fs.readdirSync(folder, { recursive: true }).filter(file => /(?:cold_start_1080p|pending_ready_no_autofire|stage[123]_).*\.png$/.test(file));
       for (const file of files) {
         const data = await imagePage.evaluate(async base64 => {
           const image = new Image(); image.src = "data:image/png;base64," + base64; await image.decode();
@@ -167,7 +168,7 @@ async function originalSuite(browser, target, url, folder) {
           return canvas.toDataURL("image/jpeg", 0.6).split(",")[1];
         }, fs.readFileSync(path.join(folder, file)).toString("base64"));
         for (let offset = 0; offset < data.length; offset += 16000)
-          console.log("STARGATE_VISUAL " + target.name + "-shared-" + path.basename(file, ".png") + ".jpg " + offset + " " + data.slice(offset, offset + 16000));
+          console.log("STARGATE_VISUAL " + target.name + "-" + mode + "-" + path.basename(file, ".png") + ".jpg " + offset + " " + data.slice(offset, offset + 16000));
       }
     }
     await context.close();
