@@ -7,6 +7,30 @@ permissions:
   contents: read
 
 jobs:
+  synchrotron-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      STARGATE_LOG_VISUALS: '1'
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/stargate_blueprint_alpha/node_modules/puppeteer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+      - run: npm ci --prefix stargate_blueprint_alpha
+      - name: Qualify Synchrotron security and original behavior
+        run: node scripts/check-synchrotron-security.js
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: synchrotron-security-evidence
+          path: test/synchrotron-security/
+          retention-days: 30
   blueprint-security:
     runs-on: ubuntu-latest
     timeout-minutes: 6
