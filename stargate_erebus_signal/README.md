@@ -17,3 +17,8 @@ For the security and historical/shared behavior comparison, run
 test environment described in `scripts/MAINTENANCE.md`. The original `test.js`
 flow is retained; the comparison also asserts its seven expected diagnostic values.
 This is preservation evidence, not full functional or operator acceptance.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.

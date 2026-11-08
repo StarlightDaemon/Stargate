@@ -16,7 +16,7 @@ The launcher delegates to the repository's shared loopback preview server. It se
 ## Verify
 
 ```
-npm install                      # puppeteer
+npm --prefix .. ci --ignore-scripts # shared browser tools at repository root
 node verify/run.js               # build-session suite: screenshots → verify/shots/, report → verify/report.md
 node verify/closeout.js          # 2026-08-23 close-out suite: screenshots → verify/shots/closeout/, log → verify/closeout.log
 node verify/closeout_stages.js   # bracketed three-stage capture → verify/closeout_stages.log
@@ -42,3 +42,8 @@ This qualifies handler consolidation with documented baseline failures; it is no
 - `js/ui.js` — controller: clusters, telemetry, panels, persistence, session log
 
 Built by Claude Fable 5 (high reasoning). See `CHANGELOG.md` and `version.json`.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.

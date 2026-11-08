@@ -8,8 +8,7 @@
     "test": "node tests/verify.js"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "puppeteer-core": "^25.9.0"
+    "http-server": "^14.1.1"
   },
   "author": "Antigravity",
   "license": "MIT"

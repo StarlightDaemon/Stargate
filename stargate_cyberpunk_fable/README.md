@@ -42,7 +42,7 @@ Then open `http://127.0.0.1:8637` (or set `PORT` to choose another port). The pa
 ## Testing
 
 ```
-npm install
+npm --prefix .. ci --ignore-scripts
 npm test
 ```
 
@@ -53,3 +53,8 @@ The test harness drives the page in headless Chrome (`puppeteer-core`; set `CHRO
 Built by [StarlightDaemon](https://github.com/StarlightDaemon). All names, glyphs, places, and iconography are original to this piece.
 
 Built by Claude Fable 5 (reasoning level not recorded at build time). See `CHANGELOG.md` and `version.json`.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.

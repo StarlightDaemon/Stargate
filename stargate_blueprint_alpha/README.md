@@ -24,14 +24,25 @@ Set `PORT` to override it; `PORT=0` selects an available port. Keep the parent
 repository tools available. Only tracked public assets are served; development
 source, manifests and documentation are denied, and only GET/HEAD are accepted.
 
-After installing the existing locked test dependencies with `npm ci`, `npm test`
-runs the retained verification suite using its own ephemeral shared preview.
-`PUPPETEER_EXECUTABLE_PATH` can select an existing Chrome installation; the browser
-sandbox remains enabled. Screenshots go to ignored `test/` output.
+After installing the repository root tools with `npm ci --ignore-scripts`, run
+`npm test` here for the explicitly adapted current contract using an ephemeral
+shared preview. It retains all eleven original phases and their positive checks, waits for
+the completed activation stages and explicitly clicks ENGAGE after preset staging.
+`npm run test:legacy` retains the historical suite byte-for-byte; its 500 ms
+activation and automatic-preset expectations conflict with the current contract
+and remain an explicit historical FAIL. `npm run test:regressions` exercises
+staging, manual/key controls, cancellation, reduced motion and stage captures.
+`PUPPETEER_EXECUTABLE_PATH` selects installed Chrome; the sandbox stays enabled
+and evidence remains under ignored `test/` directories.
 
-Automated preservation does not resolve the operator-reported issue above.
-Preset auto-activation and a missing favicon were also reproduced during security
-qualification. The unused `serve` dependency has been removed. Browser tests
-use Puppeteer ^25.16.0 with an npm-generated lock; CI requires a fresh full-tree
-audit with zero findings, including development dependencies. Historical `serve`
-qualification remains recorded separately and is no longer rerun.
+Automated verification does not resolve the operator-reported issue above.
+Preset auto-activation was reproduced during security qualification and then
+repaired with staged plotting and explicit ENGAGE. The unused `serve` dependency
+has been removed; its old transport failure remains historical evidence. Browser
+tests now use the repository root Puppeteer lock rather than a duplicated local
+tree. Fresh full-tree audits and separate operator acceptance remain required.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.

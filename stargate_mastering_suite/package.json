@@ -8,8 +8,7 @@
     "test": "node test_suite.js"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "puppeteer": "^25.9.0"
+    "http-server": "^14.1.1"
   },
   "keywords": [
     "audio-mastering",

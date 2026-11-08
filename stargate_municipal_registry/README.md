@@ -12,3 +12,8 @@ Run `node server.js` from this directory. It keeps port 8840 (`PORT` may overrid
 The migration security and preservation suite is `node scripts/check-municipal-security.js` from the repository root. It compares the historical standalone and embedded handlers with both shared transports. The complete original eight-phase suite is retained. Its non-asserted authorization observations after 600ms now fall within buildup; the explicit CURRENT contract adds two sustained-stage waits while retaining all original positive assertions. Historical timing mismatches are reported separately.
 
 Authorization now indexes the carrier for 1.4 seconds, produces an 0.8-second phosphor authorization flash, then opens the existing sustained conduit raster, approval stamp and telemetry. REVOKE PERMIT cancels either transitional stage; Compliance Freeze also cancels an activation in progress. The focused `node scripts/check-municipal-regressions.js` proves the former immediate-activation defect, distinct stages, pending presets, cancellation stability and exact replacement routes. Hosted browser and visual acceptance of this repair is pending; infrastructure checks and deterministic tests do not establish operator acceptance. Merge and deployment remain on HOLD.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.

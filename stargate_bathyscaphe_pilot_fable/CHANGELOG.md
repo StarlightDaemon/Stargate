@@ -1,5 +1,12 @@
 # Changelog — DSV-7 Cerulean Lantern Pilot Console
 
+## Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- Existing build-suite heading and breakthrough white-rim predicate failures remain explicit; the original assertions and application assets are unchanged.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
+
 ## Development server consolidation — 2026-11-08
 
 **Performed by:** Codex maintenance session.

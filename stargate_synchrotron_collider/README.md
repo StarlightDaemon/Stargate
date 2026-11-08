@@ -22,3 +22,8 @@ already-qualified browser dependency and keeps Chrome's sandbox enabled.
 Preservation checks retain the existing missing favicon and the displayed
 `v1.1.0` versus metadata `1.1.1` discrepancy. They do not establish full sound,
 responsive, three-stage visual or hands-on operator acceptance.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.

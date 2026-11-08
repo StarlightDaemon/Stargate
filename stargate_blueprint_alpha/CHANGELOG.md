@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- Preserved the current-contract `npm test`, historical `test:legacy` and focused `test:regressions` commands. Historical timing/automatic-preset failures and the unresolved operator manual-dialing report remain separate from dependency qualification.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
+
 ### Three-stage drawing approval — 2026-11-08
 
 - Replaced the 200 ms approval flip with 1.6 seconds of caliper calibration, a 0.6-second certification breakthrough, then sustained active topology. The buildup uses the existing drafting grid and an accelerating plotter cadence; breakthrough pairs the existing stamp and impact sound; the canvas and continuous hum begin only in the sustained stage.

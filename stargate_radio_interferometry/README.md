@@ -19,3 +19,10 @@ npm install
 npm run dev      # Runs dev server at http://localhost:5173
 npm run test:e2e # Runs end-to-end automated validation suite
 ```
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.
+
+This exhibit still has its own development-server dependencies: also run `npm ci --ignore-scripts` in this directory for the existing Vite/http-server commands. Dependency qualification does not qualify those serving policies; entry-point security remains a separate migration.
