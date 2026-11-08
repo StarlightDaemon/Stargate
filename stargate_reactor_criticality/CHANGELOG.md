@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+### State-feedback repair — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Refresh activation controls after physics advances each frame, so the existing
+  sustained-state label and aperture banner appear when the model enters that
+  state. Previously they retained the buildup feedback until another UI action.
+- SCRAM resets the preset status indicator to `STANDBY` immediately instead of
+  leaving the previous `PENDING CRITICALITY` message after the address is cleared.
+- The original integration suite remains unchanged and passes 79/79 assertions.
+  A separate regression probe reproduces the original stale stage feedback and
+  verifies the corrected methods offline. Its hosted browser checks compare the
+  pinned original app with the repair, including stage feedback, manual/preset
+  operation and cancellation followed by 8.25 seconds; results are recorded
+  separately. This is not new operator or full functional acceptance.
+
 ### Development-server security maintenance
 
 - Replaced the exposed development handler with the shared loopback-only preview
