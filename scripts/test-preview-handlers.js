@@ -22,7 +22,7 @@ test("offline URL validation preserves raw traversal evidence", () => {
   for (const p of ["/../index.html", "/%2e%2e/index.html", "/a/../../index.html", "/server.js", "/server.cjs", "/.git/config", "/package-lock.json", "/test/report.json"]) assert.equal(requestPath(p).status, 403, p);
   for (const p of ["/%ZZ", "/%2e%2e%2findex.html", "/%252e%252e/index.html", "/%5cindex.html", "/%00.js", "http://example/index.html"]) assert.equal(requestPath(p).status, 400, p);
 });
-for (const exhibit of ["stargate_aetheric_telegraph", "stargate_bathyscaphe_pilot", "stargate_solarpunk_astra", "stargate_erebus_signal", "stargate_reactor_criticality"]) {
+for (const exhibit of ["stargate_aetheric_telegraph", "stargate_bathyscaphe_pilot", "stargate_solarpunk_astra", "stargate_erebus_signal", "stargate_reactor_criticality", "stargate_blueprint_alpha"]) {
   test(`offline handlers: ${exhibit} source bytes and security responses`, { timeout: 10000 }, async t => {
     const selection = selectExhibit(exhibit);
     const preview = await startPreview({ ...selection, port: 0 });

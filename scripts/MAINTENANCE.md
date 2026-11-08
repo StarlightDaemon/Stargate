@@ -46,6 +46,23 @@ rejection, stepped presets, three activation stages and cancellation. Stale acti
 labels/hidden activation banner, stale preset status after SCRAM and favicon 404
 are reported as existing behavior; preservation PASS is not full exhibit acceptance.
 
+Blueprint Alpha is the seventh shared-server exhibit. `node server.js` and
+`npm start` preserve port 8088 and accept `PORT`; `npm test` owns an ephemeral
+shared preview instead of another handwritten server. Historical raw HTTP
+reproduced traversal/source exposure in its custom and embedded-test handlers.
+The locked `serve` CLI blocked traversal but exposed development files and
+accepted POST. `node scripts/check-blueprint-security.js` records these distinct
+baselines, six exact public assets, original functional assertions and two
+hit-tested manual cycles. The original suite's `serve` redirect incompatibility
+is retained as a transport FAIL; original-suite shared/custom comparisons pass.
+Actual development commands and the test-owned listener are security checked.
+The self-hosted `npm test` command also runs without disabling Chrome's sandbox.
+Operator-reported manual dialing remains unresolved; preset auto-activation and
+favicon 404 remain explicit. Dependency audit findings are separate from the
+entry-point gate. The existing `serve` dependency is retained for pinned baseline
+qualification; removing unused packages and resolving audit findings needs a
+separate scoped task. Twenty-six original active server implementations remain.
+
 ## Preview one exhibit
 
 From the repository root:

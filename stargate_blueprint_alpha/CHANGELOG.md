@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Development entry-point security maintenance — 2026-11-08
+
+- Routed `node server.js`, `npm start` and the verification suite's embedded
+  listener through the shared loopback-only preview. The development commands
+  retain port 8088 and accept `PORT`; verification owns an ephemeral listener.
+- Historical raw HTTP checks reproduced parent/sibling-file exposure in both
+  handwritten handlers. The locked `serve` CLI rejected traversal but exposed
+  development files and accepted POST. Shared serving denies private files and
+  traversal with 403 and unsupported methods with 405.
+- Preserved the original functional assertions and client files. Verification
+  now expects denied documentation access and accepts standard JavaScript MIME;
+  metadata assertions still read the changelog from disk. Browser sandbox
+  disabling flags were removed and shutdown awaits listener closure.
+- Qualification checks all six public assets and two hit-tested manual cycles
+  against historical/shared serving. The original suite passes with both
+  handwritten/shared handlers; its existing `serve` redirect incompatibility
+  is reported as a transport FAIL, not hidden by a passing browser comparison.
+- Preserved the operator manual-dialing warning below. Preset auto-activation
+  and favicon 404 are existing observations, not fixed by this maintenance.
+  Existing dependency audit findings are recorded separately; locks unchanged.
+- Reviewed four 1920x1080 shared-preview captures: idle, six-symbol ready,
+  approved/active and disengaged. Primary controls, ring state and approval
+  stamp remain visible. This is not full responsive, sound or operator acceptance.
+
+The attribution and entries below describe earlier catalog maintenance only.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added

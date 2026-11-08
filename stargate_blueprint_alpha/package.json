@@ -4,7 +4,7 @@
   "description": "Vossen-Klein Topological Drafting Station Alpha - Interactive Blueprint Portal Terminal",
   "main": "index.html",
   "scripts": {
-    "start": "serve . -l 8088 --no-clipboard",
+    "start": "node server.js",
     "test": "node verify.js"
   },
   "keywords": [

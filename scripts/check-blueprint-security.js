@@ -80,7 +80,7 @@ async function security(server, mode) {
     ["POST", "/", path.join(DIR, "index.html")]
   ]) {
     const r = await request(server.url, url, method);
-    if (["shared", "node-command", "npm-start"].includes(mode)) assert.equal(r.status, method === "POST" ? 405 : 403, mode + " " + url);
+    if (["shared", "node-command", "npm-start", "shared-test"].includes(mode)) assert.equal(r.status, method === "POST" ? 405 : 403, mode + " " + url);
     if (["legacy-custom", "legacy-test"].includes(mode)) { assert.equal(r.status, 200); assert.deepEqual(r.body, fs.readFileSync(target)); }
     // serve has its own containment behavior; measure it without assuming the custom-handler vulnerability.
     results.push({ method, url, status: r.status, returnedTargetBytes: r.body.equals(fs.readFileSync(target)) });
@@ -90,6 +90,7 @@ async function security(server, mode) {
 function adaptTransport(source) {
   return source
     .replace("{ path: '/CHANGELOG.md', mime: 'text/markdown' }", "{ path: '/CHANGELOG.md', mime: 'text/plain', status: 403 }")
+    .replace("-> 200 OK (", "-> ${res.status} (")
     .replace("res.status === 200 && res.headers['content-type'].includes(ep.mime)", "res.status === (ep.status || 200) && (res.headers['content-type'].includes(ep.mime) || (ep.mime === 'application/javascript' && res.headers['content-type'].includes('text/javascript')))");
 }
 async function runOriginal(browser, server, mode) {
@@ -114,7 +115,7 @@ async function runOriginal(browser, server, mode) {
       processState);
     const failure = lines.find(l => l.includes("VERIFICATION TEST FAILED"));
     return { status: processState.exitCode ? "FAIL" : "PASS", failure: failure || null, pageErrors: errors, lines,
-      transportChanges: mode === "shared" ? ["CHANGELOG.md is denied with403; metadata still checked from disk", "Accept standard text/javascript MIME"] : [] };
+      transportChanges: mode === "shared" ? ["CHANGELOG.md is denied with 403; metadata still checked from disk", "Accept standard text/javascript MIME"] : [] };
   } finally { fs.writeFileSync(path.join(folder, "original-suite.log"), lines.join("\n")); await context.close(); }
 }
 async function observe(browser, server, mode) {
@@ -164,6 +165,24 @@ async function main() {
   const report = { scope: "Blueprint entry-point security and preservation; operator known-issue status retained.", results: [] };
   let browser;
   try {
+    const functionalBody = source => {
+      source = source.replace(/\r\n/g, "\n");
+      const start = source.indexOf("    // 4. Test"), end = source.indexOf("  } catch (err)");
+      assert.ok(start >= 0 && end > start + 5000, "Locate all original browser assertions");
+      return source.slice(start, end);
+    };
+    assert.equal(functionalBody(fs.readFileSync(path.join(DIR, "verify.js"), "utf8")), functionalBody(original));
+    report.originalFunctionalAssertions = "UNCHANGED";
+    // Record dependency findings separately; this is an entry-point security gate, not an audit pass.
+    let auditText;
+    try { auditText = execFileSync(process.execPath, [npmCli(), "audit", "--prefix", DIR, "--json"], { encoding: "utf8", timeout: 60000 }); }
+    catch (e) { if (e.status !== 1 || !e.stdout) throw e; auditText = e.stdout; }
+    const audit = JSON.parse(auditText);
+    assert.ok(audit.metadata?.vulnerabilities, "Audit must return findings, not a registry error");
+    fs.writeFileSync(path.join(OUTPUT, "dependency-audit.json"), JSON.stringify(audit, null, 2));
+    report.dependencyAudit = { status: audit.metadata.vulnerabilities.total ? "FAIL" : "PASS", counts: audit.metadata.vulnerabilities,
+      packages: Object.values(audit.vulnerabilities || {}).map(v => ({ name: v.name, severity: v.severity, isDirect: v.isDirect, fixAvailable: v.fixAvailable, via: v.via })) };
+    console.log("BLUEPRINT_DEPENDENCY_AUDIT " + JSON.stringify(report.dependencyAudit));
     const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || path.join(DIR, "node_modules/puppeteer"));
     browser = await puppeteer.launch({ headless: true, executablePath: process.env.PUPPETEER_EXECUTABLE_PATH });
     for (const mode of ["legacy-custom", "legacy-test", "legacy-serve", "shared"]) {
@@ -206,6 +225,7 @@ async function main() {
         assert.equal(row.originalSuite.failure, baseline.originalSuite.failure, row.mode + " original failure changed");
       }
       assert.deepEqual(row.originalSuite.pageErrors, baseline.originalSuite.pageErrors);
+      assert.deepEqual(row.browser.pageErrors, baseline.browser.pageErrors);
       assert.equal(row.browser.failure, baseline.browser.failure, row.mode + " pointer behavior changed");
       assert.deepEqual(row.browser.cycles, baseline.browser.cycles);
       assert.deepEqual(row.browser.preset, baseline.browser.preset);
@@ -218,6 +238,21 @@ async function main() {
         try { const row = { mode, security: await security(server, mode), status: "PASS" }; report.results.push(row); console.log(JSON.stringify(row)); }
         finally { await server.close(); }
       }
+      const testServer = await require(path.join(DIR, "verify.js")).createServer();
+      try {
+        assert.equal(testServer.server.address().address, "127.0.0.1");
+        const row = { mode: "shared-test", security: await security(testServer, "shared-test"), status: "PASS" };
+        report.results.push(row); console.log(JSON.stringify(row));
+      } finally { await testServer.close(); }
+      let output;
+      try {
+        output = execFileSync(process.execPath, [npmCli(), "test"], { cwd: DIR, encoding: "utf8", timeout: 90000,
+          env: { ...process.env, STARGATE_TEST_OUTPUT_DIR: path.join(OUTPUT, "npm-test") } });
+      } catch (e) { fs.writeFileSync(path.join(OUTPUT, "npm-test.log"), String(e.stdout || "") + String(e.stderr || "")); throw e; }
+      fs.writeFileSync(path.join(OUTPUT, "npm-test.log"), output);
+      assert.match(output, /ALL AUTOMATED VERIFICATION TESTS PASSED/);
+      const row = { mode: "npm-test", status: "PASS", output };
+      report.results.push(row); console.log(JSON.stringify(row));
     }
     report.status = "PASS";
   } catch (e) { report.status = "FAIL"; report.error = e.stack; throw e; }
