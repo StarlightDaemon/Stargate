@@ -2026,25 +2026,25 @@
         "qualification": "established",
         "scope": "original-suite-preservation",
         "qualificationEvidence": {
-          "status": "FAIL",
-          "originalSuiteStatus": "FAIL",
-          "detail": "Both modes preserve the original fixed-350ms READY assertion failure. Nine public assets, eight shared security probes, verified in-flight manual cancellation/restarts followed by 8.25s idle, and listener cleanup pass. Qualification establishes truthful execution, not original-suite PASS.",
-          "run": 42516017150,
-          "job": 128839086446,
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Anchored scan scheduling passes the full unchanged test_e2e.js in legacy and shared source modes. Nine exact assets, eight shared security probes, in-flight manual cancellation/restarts, 8.25s idle and both listener cleanups pass. Original test SHA256 remains 804de7eeaccd7d96e34e49924080eeca87545dbcb563851a95e3a7e7084564f0. Operator/sound acceptance is separate.",
+          "run": 42567482830,
+          "job": 128997071192,
           "operatorStatus": "UNVERIFIED",
           "acceptanceStatus": "UNVERIFIED",
-          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086446"
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071192"
         }
       },
       "lastReported": {
-        "status": "FAIL",
-        "originalSuiteStatus": "FAIL",
-        "detail": "Both modes preserve the original fixed-350ms READY assertion failure. Nine public assets, eight shared security probes, verified in-flight manual cancellation/restarts followed by 8.25s idle, and listener cleanup pass. Qualification establishes truthful execution, not original-suite PASS.",
-        "run": 42516017150,
-        "job": 128839086446,
+        "status": "PASS",
+        "originalSuiteStatus": "PASS",
+        "detail": "Anchored scan scheduling passes the full unchanged test_e2e.js in legacy and shared source modes. Nine exact assets, eight shared security probes, in-flight manual cancellation/restarts, 8.25s idle and both listener cleanups pass. Original test SHA256 remains 804de7eeaccd7d96e34e49924080eeca87545dbcb563851a95e3a7e7084564f0. Operator/sound acceptance is separate.",
+        "run": 42567482830,
+        "job": 128997071192,
         "operatorStatus": "UNVERIFIED",
         "acceptanceStatus": "UNVERIFIED",
-        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086446",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071192",
         "scope": "Reported source-suite/transport qualification; independent full acceptance remains open"
       },
       "harnesses": [
@@ -2089,14 +2089,14 @@
           ],
           "scope": "supplementary-built-artifact",
           "qualificationEvidence": {
-            "status": "FAIL",
-            "originalSuiteStatus": "FAIL",
-            "detail": "The original fixed-350ms READY assertion is the recorded failure. Built assets, Host/origin policy, rendering, verified in-flight manual cancellation/restarts, port conflict and port release pass. No full built-contract or operator PASS.",
-            "run": 42516017150,
-            "job": 128839086419,
+            "status": "PASS",
+            "originalSuiteStatus": "PASS",
+            "detail": "The same unchanged original suite now passes against built output. Four exact assets, Host/origin policy, source/built render contract, verified in-flight cancellation/restarts, port conflict and port release pass. Earlier fixed-350ms failures remain historical; full operator acceptance is not inferred.",
+            "run": 42567482830,
+            "job": 128997071211,
             "operatorStatus": "UNVERIFIED",
             "acceptanceStatus": "UNVERIFIED",
-            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086419"
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071211"
           }
         },
         {
@@ -2109,12 +2109,12 @@
           "qualificationEvidence": {
             "status": "PASS",
             "originalSuiteStatus": "UNVERIFIED",
-            "detail": "Completion-aware real-pointer manual cycles passed at 1080p and 4K, including hold, explicit activation, all three stages and reset. Observed callbacks took 344–628ms. The observation-only fixed-cadence cycle reached READY in this run, but does not rerun or supersede the separately failing full original suite.",
-            "run": 42516017150,
-            "job": 128839086216,
+            "detail": "Real-pointer manual cycles pass at 1080p/4K with exact seven-carrier addresses, hold blocking/release, explicit activation, three stage callbacks and 8.25s reset. Six ready/active/cancelled captures reviewed. Original-cadence observation reaches READY; this supplementary result does not replace the separately passing full originals. Measured callbacks span 311.8–384.2ms; no hard browser delivery deadline is claimed.",
+            "run": 42567482830,
+            "job": 128997071194,
             "operatorStatus": "UNVERIFIED",
             "acceptanceStatus": "UNVERIFIED",
-            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086216"
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071194"
           }
         }
       ],
@@ -2130,6 +2130,41 @@
           "operatorStatus": "UNVERIFIED",
           "acceptanceStatus": "UNVERIFIED",
           "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661830"
+        },
+        {
+          "step": "built-seti_freeform",
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "The same unchanged original suite now passes against built output. Four exact assets, Host/origin policy, source/built render contract, verified in-flight cancellation/restarts, port conflict and port release pass. Earlier fixed-350ms failures remain historical; full operator acceptance is not inferred.",
+          "run": 42567482830,
+          "job": 128997071211,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071211"
+        },
+        {
+          "step": "freeform-manual-contract",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Real-pointer manual cycles pass at 1080p/4K with exact seven-carrier addresses, hold blocking/release, explicit activation, three stage callbacks and 8.25s reset. Six ready/active/cancelled captures reviewed. Original-cadence observation reaches READY; this supplementary result does not replace the separately passing full originals. Measured callbacks span 311.8–384.2ms; no hard browser delivery deadline is claimed.",
+          "run": 42567482830,
+          "job": 128997071194,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071194"
+        }
+      ],
+      "previousSupplementaryReports": [
+        {
+          "step": "built-seti_freeform",
+          "status": "FAIL",
+          "originalSuiteStatus": "FAIL",
+          "detail": "Four built assets, Host/origin policy, rendering and cancellation passed; the retained original 350ms manual assertion reports DIALING instead of READY. Port release was not recorded before that assertion failed in this run. No full built-contract PASS.",
+          "run": 42515274539,
+          "job": 128836833483,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833483"
         },
         {
           "step": "built-seti_freeform",
@@ -2154,23 +2189,21 @@
           "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086216"
         }
       ],
-      "previousSupplementaryReports": [
-        {
-          "step": "built-seti_freeform",
-          "status": "FAIL",
-          "originalSuiteStatus": "FAIL",
-          "detail": "Four built assets, Host/origin policy, rendering and cancellation passed; the retained original 350ms manual assertion reports DIALING instead of READY. Port release was not recorded before that assertion failed in this run. No full built-contract PASS.",
-          "run": 42515274539,
-          "job": 128836833483,
-          "operatorStatus": "UNVERIFIED",
-          "acceptanceStatus": "UNVERIFIED",
-          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833483"
-        }
-      ],
       "previousReports": [
         {
           "status": "UNVERIFIED",
           "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+        },
+        {
+          "status": "FAIL",
+          "originalSuiteStatus": "FAIL",
+          "detail": "Both modes preserve the original fixed-350ms READY assertion failure. Nine public assets, eight shared security probes, verified in-flight manual cancellation/restarts followed by 8.25s idle, and listener cleanup pass. Qualification establishes truthful execution, not original-suite PASS.",
+          "run": 42516017150,
+          "job": 128839086446,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086446",
+          "scope": "Reported source-suite/transport qualification; independent full acceptance remains open"
         }
       ]
     },

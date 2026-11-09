@@ -5,7 +5,7 @@
 **Maintained by:** Codex maintenance session.
 - Schedule all ten dish steps and carrier completion from the selection event, so late timer delivery does not accumulate once per repeating callback. Keep the 28 ms scan steps, 120 ms settle delay and nominal 308 ms completion; preserve original test assertions and their 350 ms cadence.
 - Continue to own every timer and invalidate cancelled generations, including delayed scan/settle callbacks and manual/preset restart. Active scan tracking now describes checks rather than interval handles.
-- A controlled 8 ms delivery-lateness regression reproduces the old missed deadline and verifies all seven current selections, paced ten-dish scans and cancellation. Hosted original-suite, built-preview and visual qualification remain required; merge and deployment stay on HOLD.
+- A controlled 8 ms delivery-lateness regression reproduces the old missed deadline and verifies all seven current selections, paced ten-dish scans and cancellation. Hosted run `42567482830` passes the unchanged original suite in legacy/shared source modes (job `128997071192`) and built preview (`128997071211`), including security, cancellation/restarts and cleanup. The supplementary manual contract (`128997071194`) and six ready/active/cancelled image reviews pass at 1080p/4K. Tooling tests pass 83/83 on Windows and Linux. Prior failures remain in history; sound/operator acceptance is separate and merge/deployment stay on HOLD.
 
 ## Source-entry consolidation — 2026-11-08
 

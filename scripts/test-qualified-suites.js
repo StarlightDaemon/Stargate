@@ -17,9 +17,12 @@ test("registry covers exact package/browser targets and preserves known failed o
   assert.equal(getSuite("stargate_blueprint_drafting").qualificationEvidence.originalSuiteStatus, "FAIL");
   assert.equal(getSuite("stargate_municipal_registry").steps.find(step => step.id === "municipal-regressions").qualification, "established");
   const freeform = getSuite("stargate_seti_freeform");
-  assert.equal(freeform.steps.find(step => step.id === "built-seti_freeform").qualificationEvidence.status, "FAIL");
+  assert.equal(freeform.steps.find(step => step.id === "built-seti_freeform").qualificationHistory.at(-1).status, "FAIL");
+  assert.equal(freeform.steps.find(step => step.id === "built-seti_freeform").qualificationEvidence.status, "PASS");
   assert.equal(freeform.qualification, "established");
-  assert.equal(freeform.qualificationEvidence.originalSuiteStatus, "FAIL");
+  assert.equal(freeform.qualificationHistory.at(-1).originalSuiteStatus, "FAIL");
+  assert.equal(freeform.qualificationEvidence.originalSuiteStatus, "PASS");
+  assert.equal(freeform.qualificationEvidence.job, 128997071192);
   const currentManual = freeform.steps.find(step => step.id === "freeform-manual-contract");
   assert.equal(currentManual.qualification, "established");
   assert.equal(currentManual.qualificationEvidence.status, "PASS");

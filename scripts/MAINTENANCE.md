@@ -44,16 +44,25 @@ unchanged.
 The root toolchain and all 35 scoped exhibit dependency candidates are adopted;
 all seven package-source migrations are implemented. Four built-preview contracts
 remain separate gates: Radio, Orthographic and DeepScope passed in run
-`42515274539`; Freeform retains its original manual-cadence failure.
+`42515274539`; Freeform now passes in run `42567482830`, job `128997071211`.
 See dependency reconciliation below. Qualification evidence is preserved in the
 [preview-tools workflow](../.github/workflows/preview-tools.yml),
 [suite registry](suite-registry.js) and
 [hosted run 42515274539](https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539).
-Freeform’s exact original 350 ms cadence still fails in source and built modes.
-Measured coincidence callbacks take 344–628 ms; the separate completion-aware
-manual contract passes at 1080p/4K. Its new in-flight cancellation and manual/preset
-restart checks pass in legacy, shared and built modes, including 8.25 idle seconds.
-The original assertion is retained. Legacy Vite comparison cleanup intermittently
+Freeform's anchored scan scheduling repair removes cumulative repeating-timer
+lateness without changing the ten 28 ms steps, 120 ms settle, nominal 308 ms
+completion, or the original 350 ms test cadence. In
+[run 42567482830](https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830),
+the full unchanged original suite passes in legacy/shared source modes (job
+128997071192) and built preview (128997071211). Asset/security, in-flight
+cancellation/restarts, 8.25s idle and cleanup checks also pass. The supplemental
+manual contract (128997071194) passes at 1080p/4K; six ready/active/cancelled
+captures were reviewed. Measured callbacks span 311.8–384.2 ms, so this is not a
+hard delivery guarantee under browser load. Earlier 344–628 ms observations and
+original failures remain in qualification history. Tooling tests pass 83/83 on
+both Windows and Linux, including the controlled baseline-fails/repaired-passes
+regression. Original suite bytes and version/builder metadata are unchanged.
+Legacy Vite comparison cleanup intermittently
 exceeds its ten-second graceful-close bound; the owned process is terminated and
 the failure stays visible. Shared source and built-preview shutdown are separate.
 Cathedral’s intermittent clipped-header captures remain visually unresolved:

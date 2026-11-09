@@ -228,5 +228,12 @@ supersedeQualification(registry.find(item => item.exhibit === "stargate_blueprin
   "Deterministic checks pass, but browser capture failed its named-stage containment assertion. The capture/logging correction requires fresh proof; this failure does not establish a new client defect or replace prior successful mute/stage evidence.", "UNVERIFIED", 42516017150));
 registry.find(item => item.exhibit === "stargate_cathedral_oculus").diagnosticEvidence = latestEvidence(128839086336, "UNVERIFIED",
   "Diagnostic job succeeded with OBSERVATIONS_RECORDED_NOT_ACCEPTANCE and geometryClippingObserved=false. The observed screenshot-clipping cause remains unresolved; neither visual acceptance nor a client fix is established.", "UNVERIFIED", 42516017150);
+// Freeform timer repair: fresh unchanged originals supersede, but retain, the failed baseline.
+supersedeQualification(freeform, latestEvidence(128997071192, "PASS",
+  "Anchored scan scheduling passes the full unchanged test_e2e.js in legacy and shared source modes. Nine exact assets, eight shared security probes, in-flight manual cancellation/restarts, 8.25s idle and both listener cleanups pass. Original test SHA256 remains 804de7eeaccd7d96e34e49924080eeca87545dbcb563851a95e3a7e7084564f0. Operator/sound acceptance is separate.", "PASS", 42567482830));
+supersedeQualification(freeform.steps.find(step => step.id === "built-seti_freeform"), latestEvidence(128997071211, "PASS",
+  "The same unchanged original suite now passes against built output. Four exact assets, Host/origin policy, source/built render contract, verified in-flight cancellation/restarts, port conflict and port release pass. Earlier fixed-350ms failures remain historical; full operator acceptance is not inferred.", "PASS", 42567482830));
+supersedeQualification(freeform.steps.find(step => step.id === "freeform-manual-contract"), latestEvidence(128997071194, "PASS",
+  "Real-pointer manual cycles pass at 1080p/4K with exact seven-carrier addresses, hold blocking/release, explicit activation, three stage callbacks and 8.25s reset. Six ready/active/cancelled captures reviewed. Original-cadence observation reaches READY; this supplementary result does not replace the separately passing full originals. Measured callbacks span 311.8–384.2ms; no hard browser delivery deadline is claimed.", "UNVERIFIED", 42567482830));
 function getSuite(exhibit) { return registry.find(item => item.exhibit === exhibit); }
 module.exports = { registry, getSuite };
