@@ -4,15 +4,15 @@
 const test = require("node:test"), assert = require("node:assert/strict");
 const fs = require("node:fs"), path = require("node:path"), vm = require("node:vm");
 const ROOT = path.resolve(__dirname, "..");
-function fixture(source = fs.readFileSync(path.join(ROOT, "stargate_seti_freeform/src/main.js"), "utf8")) {
+function fixture(source = fs.readFileSync(path.join(ROOT, "stargate_seti_freeform/src/main.js"), "utf8"), { latenessMs = 0 } = {}) {
   let now = 0, next = 1;
-  const timers = new Map(), elements = new Map();
-  const add = (fn, ms, repeat) => { const id = next++; timers.set(id, { fn, ms, at: now + ms, repeat }); return id; };
+  const timers = new Map(), elements = new Map(), scans = [];
+  const add = (fn, ms, repeat) => { const id = next++; timers.set(id, { fn, ms, at: now + ms + latenessMs, repeat }); return id; };
   function element(id) {
     if (!elements.has(id)) {
       const classes = new Set();
       elements.set(id, { className: "", innerText: "", classes,
-        classList: { add: (...names) => names.forEach(name => classes.add(name)), remove: (...names) => names.forEach(name => classes.delete(name)) } });
+        classList: { add: (...names) => names.forEach(name => { classes.add(name); if (name === "scanning") scans.push({ id, at: now }); }), remove: (...names) => names.forEach(name => classes.delete(name)) } });
     }
     return elements.get(id);
   }
@@ -28,7 +28,7 @@ function fixture(source = fs.readFileSync(path.join(ROOT, "stargate_seti_freefor
   scope.App.prototype.init = () => {};
   const app = new scope.App();
   for (const name of ["updateUIState", "updateTelemetryValues", "updateSlotUI", "clearSlotUI"]) app[name] = () => {};
-  return { app, timers, elements, presets: scope.presets,
+  return { app, timers, elements, scans, presets: scope.presets,
     advance(ms) {
       const end = now + ms; let count = 0;
       for (;;) {
@@ -36,7 +36,7 @@ function fixture(source = fs.readFileSync(path.join(ROOT, "stargate_seti_freefor
         if (!entry || entry[1].at > end) break;
         assert.ok(count++ < 10000, "Bounded controlled timer execution");
         now = entry[1].at;
-        if (entry[1].repeat) entry[1].at += entry[1].ms; else timers.delete(entry[0]);
+        if (entry[1].repeat) entry[1].at += entry[1].ms + latenessMs; else timers.delete(entry[0]);
         entry[1].fn();
       }
       now = end;
@@ -91,3 +91,26 @@ module.exports = { fixture };
   });
 }
 
+
+test("late timer delivery does not accumulate into a lost 350ms manual deadline", () => {
+  const baseline = require("node:child_process").execFileSync("git", ["show", "0018629a0ff473667a5510fa3030ac751da9c0ed"], { cwd: ROOT, encoding: "utf8" });
+  const old = fixture(baseline, { latenessMs: 8 }); old.app.selectCandidate(1); old.advance(350);
+  assert.equal(old.app.currentAddress.length, 0, "Control reproduces repeated timer drift");
+  old.advance(100); assert.equal(old.app.currentAddress.length, 1);
+  const current = fixture(undefined, { latenessMs: 8 });
+  for (let id = 1; id <= 7; id++) {
+    current.app.selectCandidate(id); current.advance(350);
+    assert.deepEqual(Array.from(current.app.currentAddress), Array.from({ length: id }, (_, i) => i + 1), "Each original-cadence selection commits in order");
+    const scans = current.scans.slice((id - 1) * 10, id * 10);
+    assert.equal(scans.length, 10); assert.equal(new Set(scans.map(scan => scan.id)).size, 10);
+    assert.ok(scans.slice(1).every((scan, i) => scan.at - scans[i].at >= 20), "Dish progression remains visibly paced rather than locked in one batch");
+  }
+  assert.equal(current.app.systemState, "READY");
+  current.app.disengage(); current.advance(8250); assertIdle(current);
+});
+test("cancellation invalidates late scheduled scan and settle callbacks", () => {
+  const f = fixture(undefined, { latenessMs: 8 }); f.app.selectCandidate(1); f.advance(100);
+  const stale = [...f.timers.values()].map(timer => timer.fn), scanCount = f.scans.length;
+  f.app.disengage(); for (const callback of stale) callback(); f.advance(8250);
+  assertIdle(f); assert.equal(f.scans.length, scanCount, "Old work cannot restart dish activity");
+});

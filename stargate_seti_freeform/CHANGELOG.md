@@ -1,5 +1,12 @@
 # Changelog
 
+## Manual scan scheduling — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Schedule all ten dish steps and carrier completion from the selection event, so late timer delivery does not accumulate once per repeating callback. Keep the 28 ms scan steps, 120 ms settle delay and nominal 308 ms completion; preserve original test assertions and their 350 ms cadence.
+- Continue to own every timer and invalidate cancelled generations, including delayed scan/settle callbacks and manual/preset restart. Active scan tracking now describes checks rather than interval handles.
+- A controlled 8 ms delivery-lateness regression reproduces the old missed deadline and verifies all seven current selections, paced ten-dish scans and cancellation. Hosted original-suite, built-preview and visual qualification remain required; merge and deployment stay on HOLD.
+
 ## Source-entry consolidation — 2026-11-08
 
 **Maintained by:** Codex maintenance session.

@@ -10,7 +10,7 @@ class TechnosignatureApp {
     this.isAutoDialing = false;
     this.autoDialTimer = null;
     this.coincidenceGeneration = 0;
-    this.coincidenceIntervals = new Set();
+    this.coincidenceChecks = new Set();
     this.coincidenceTimeouts = new Set();
     this.buildupTimer = null;
     this.activeDurationTimer = null;
@@ -362,42 +362,41 @@ class TechnosignatureApp {
 
   // 10-Dish Interferometric Coincidence Scan Animation
   performCoincidenceCheck(candidateId, callback) {
-    const dishes = DISH_CONFIG;
-    let dishIdx = 0;
     const generation = this.coincidenceGeneration;
+    const check = {};
+    this.coincidenceChecks.add(check);
+    const schedule = (work, delay) => {
+      const timer = setTimeout(() => {
+        if (generation !== this.coincidenceGeneration) return;
+        this.coincidenceTimeouts.delete(timer);
+        work();
+      }, delay);
+      this.coincidenceTimeouts.add(timer);
+    };
 
-    const interval = setInterval(() => {
-      if (generation !== this.coincidenceGeneration) return;
-      if (dishIdx < dishes.length) {
-        const dish = dishes[dishIdx];
-        const card = document.getElementById(`dish-${dish.id}`);
-        const led = document.getElementById(`led-${dish.id}`);
-        const status = document.getElementById(`status-${dish.id}`);
+    // Anchor every scan to selection time. A repeating timer adds delivery delay
+    // to every dish; it can outlast the manual cadence even when each delay is small.
+    // Keep the ten 28 ms steps, 120 ms visual settle and 308 ms commit unchanged.
+    DISH_CONFIG.forEach((dish, index) => schedule(() => {
+      const card = document.getElementById(`dish-${dish.id}`);
+      const led = document.getElementById(`led-${dish.id}`);
+      const status = document.getElementById(`status-${dish.id}`);
+      if (card) card.classList.add('scanning');
+      if (led) led.className = 'dish-led scanning';
+      if (status) status.innerText = 'CORRELATING';
+      audioEngine.playDishSample();
 
-        if (card) card.classList.add('scanning');
-        if (led) led.className = 'dish-led scanning';
-        if (status) status.innerText = 'CORRELATING';
-
-        audioEngine.playDishSample();
-
-        const settleTimer = setTimeout(() => {
-          if (generation !== this.coincidenceGeneration) return;
-          this.coincidenceTimeouts.delete(settleTimer);
-          if (card) card.classList.remove('scanning');
-          if (card) card.classList.add('locked');
-          if (led) led.className = 'dish-led locked';
-          if (status) status.innerText = 'LOCKED';
-        }, 120);
-        this.coincidenceTimeouts.add(settleTimer);
-
-        dishIdx++;
-      } else {
-        clearInterval(interval);
-        this.coincidenceIntervals.delete(interval);
-        callback(true);
-      }
-    }, 28);
-    this.coincidenceIntervals.add(interval);
+      schedule(() => {
+        if (card) card.classList.remove('scanning');
+        if (card) card.classList.add('locked');
+        if (led) led.className = 'dish-led locked';
+        if (status) status.innerText = 'LOCKED';
+      }, 120);
+    }, (index + 1) * 28));
+    schedule(() => {
+      this.coincidenceChecks.delete(check);
+      callback(true);
+    }, (DISH_CONFIG.length + 1) * 28);
   }
 
   updateSlotUI(slotIdx, candidate) {
@@ -586,9 +585,8 @@ class TechnosignatureApp {
   disengage(playAudio = true) {
     // Invalidate old manual-verification callbacks before resetting their UI/state.
     this.coincidenceGeneration++;
-    for (const interval of this.coincidenceIntervals) clearInterval(interval);
     for (const timeout of this.coincidenceTimeouts) clearTimeout(timeout);
-    this.coincidenceIntervals.clear();
+    this.coincidenceChecks.clear();
     this.coincidenceTimeouts.clear();
     if (this.isAutoDialing) {
       clearInterval(this.autoDialTimer);
