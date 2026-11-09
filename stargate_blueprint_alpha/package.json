@@ -4,8 +4,10 @@
   "description": "Vossen-Klein Topological Drafting Station Alpha - Interactive Blueprint Portal Terminal",
   "main": "index.html",
   "scripts": {
-    "start": "serve . -l 8088 --no-clipboard",
-    "test": "node verify.js"
+    "start": "node server.js",
+    "test": "node ../scripts/run-blueprint-current-contract.js --suite-only",
+    "test:legacy": "node verify.js",
+    "test:regressions": "node ../scripts/check-blueprint-regressions.js"
   },
   "keywords": [
     "blueprint",
@@ -16,9 +18,5 @@
     "cyanotype"
   ],
   "author": "StarlightDaemon",
-  "license": "MIT",
-  "devDependencies": {
-    "puppeteer": "^25.9.0",
-    "serve": "^14.2.4"
-  }
+  "license": "MIT"
 }

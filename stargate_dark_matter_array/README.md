@@ -24,6 +24,8 @@ The **BOREAS-IX Deep Crust Cryogenic Observatory** (`Model DM-TPC-7X`) is an int
 ---
 
 ## Running Locally
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.
 To launch the server:
 ```bash
 node server.js
@@ -35,3 +37,12 @@ To run automated verification suites:
 node test/verify_tabs.js
 node test/verify_viewport_scaling.js
 ```
+
+
+## Shared local preview
+
+`node server.js` uses the repository shared server at `http://127.0.0.1:8080`.
+`PORT` selects another port. Keep the exhibit inside the repository. Only tracked
+public assets are served, with GET/HEAD, loopback binding and contained paths.
+The original test suites, client sources and operator/creative-fit notes remain
+unchanged; infrastructure qualification does not imply new operator acceptance.

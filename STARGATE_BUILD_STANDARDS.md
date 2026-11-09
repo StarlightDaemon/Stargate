@@ -233,3 +233,22 @@ not an external note.
 architecturally (the physical-material rendering trap) or are otherwise
 formally retired. It carries a standing no-touch policy — the only
 exception is an explicitly-scoped security audit.
+
+## 11. Shared maintenance tools
+
+Use [scripts/MAINTENANCE.md](scripts/MAINTENANCE.md) for the current preview and
+verification commands, report semantics and the dated rollout checkpoint. Shared
+serving covers all 33 original launchers and three additional entries at the
+2026-11-08 checkpoint, plus all seven additional package-source entries.
+Actual commands are qualified on Linux and Windows. Four retained Vite
+built-preview contracts remain separately recorded specialist gates. All 35 scoped dependency candidates are adopted.
+The root lockfile supplies shared browser and image tooling;
+browser applications and the flagship build remain independent. Do not delete or replace
+an exhibit's server or weaken its specialized assertions merely because the
+shared handler tests pass. A metadata/resource report is not an interaction test
+or operator qualification. Record FAIL, SKIP, UNVERIFIED and ENVIRONMENT-BLOCKED
+results explicitly; keep the existing gallery status and retirement rules.
+Preserve historical assertion failures separately from any explicitly revised
+current contract. A qualified adapter or clean dependency audit is not full
+functional acceptance. Merge and deployment remain on HOLD until the required
+acceptance evidence and separate publication authorization are present.

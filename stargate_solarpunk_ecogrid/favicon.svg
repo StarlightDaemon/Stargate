@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Renewable grid leaf</title>
+  <rect width="32" height="32" rx="5" fill="#051311"/>
+  <g fill="none" stroke="#00ffc8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 24C4 10 16 6 26 6 26 19 19 28 8 24ZM7 27 22 10M15 18H23M15 18V10"/></g>
+</svg>

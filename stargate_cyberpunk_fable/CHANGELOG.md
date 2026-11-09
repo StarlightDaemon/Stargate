@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer-core`, `pngjs` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
@@ -17,6 +23,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `name` preserved under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
 - Test harness `test/run-tests.mjs`: the hardcoded Chrome candidate list (Windows, Linux and macOS paths) was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and lattice spire motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
+### Development server consolidation — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the duplicate `serve.js` handler with the shared loopback preview launcher, retaining `npm run serve` and default port 8637. `PORT` can select another port.
+- Development sources, tests, package metadata and documentation are no longer served; unsupported methods return 405, and malformed URLs return 400 instead of throwing from the handler.
+- Before replacement, hosted qualification job `128822958190` compared all 10 tracked public assets byte-for-byte through the original and shared handlers. The unchanged original harness passed all 42 assertions in both modes, including pointer interaction, pending/manual approval, three activation stages, cancellation, persistence, telemetry and 4K controls. Shared-stage screenshots were reviewed. Original handler security probes returned development files and accepted POST; shared probes returned 403/405.
+- Client behavior, artwork, original test predicates, release version and original attribution are unchanged. Campaign merge and deployment remain on HOLD.
 
 ## [1.0.0] — 2026-09-01
 

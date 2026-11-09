@@ -2,6 +2,36 @@
 
 All notable changes to the **Stargate: Le Nimbus Florié (Art Nouveau Botanical Portal)** project will be documented in this file.
 
+## [Unreleased]
+
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- This dependency consolidation leaves the already-qualified browser behavior and original assertions intact; it does not grant new operator or release acceptance.
+
+### Operator-note HTML injection repair — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Settings now assigns persisted operator notes through the textarea's `value`
+  property. Previously the notes were interpolated into HTML, so a literal
+  closing textarea tag could create executable markup when Settings reopened.
+- Preserves notes verbatim and retains `nouveau_nimbus_session_v1`, its schema,
+  the existing change handler, layout and original test assertions.
+- The actual-renderer offline probe demonstrates the unsafe baseline markup and
+  corrected text property. A separate hosted browser regression enters a harmless
+  in-page sentinel through the notes control, reloads the page, and checks that
+  the repaired build preserves the text without creating injected elements or
+  executing the sentinel. Hosted results are recorded separately.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and botanical aperture motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.1] - 2026-09-04
 
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
@@ -35,3 +65,13 @@ All notable changes to the **Stargate: Le Nimbus Florié (Art Nouveau Botanical 
 - **Period Color Moods**: 4 selectable authentic palettes (*Vermeil & Teal de Nancy*, *Secession Rose & Obsidian*, *Verdigris & Absinthe*, *Gold Leaf & Sèvres Azure*).
 - **Operator Reference & Operational Folio**: Belle Époque reference overlay (`?` button) and live timestamped session event logger.
 - **Universal Viewport Scaling**: Flawless scaling from 1080p to 4K (3840x2160) without scroll.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite and asset qualification.
+- Preserved the imported server contract; listener is loopback-only, malformed
+  URLs and development-file requests are rejected, and methods are restricted.
+- Port conflicts fail clearly instead of recursively opening an unmanaged listener.

@@ -7,9 +7,6 @@
     "start": "node scripts/server.js",
     "test:verify": "node scripts/verify.js"
   },
-  "devDependencies": {
-    "puppeteer-core": "^25.9.0"
-  },
   "keywords": [
     "seismology",
     "portal",

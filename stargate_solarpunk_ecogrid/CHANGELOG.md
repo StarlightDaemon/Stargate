@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Test harness `test_build.js` (raw CDP): the hardcoded Chrome path constant was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to a dynamically required puppeteer/puppeteer-core `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. It now also writes its verification screenshots to the gitignored `test/` directory, created on demand, instead of the build root. Harness only; runtime unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and renewable grid leaf motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.1.0] - 2026-08-15
 
 **Built by:** Claude Opus (auto-dial staging fix; original build by Gemini 3.6 Flash (high reasoning))
@@ -50,3 +57,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dual-tiered quick-dispatch biosphere archive with 6 renewable mega-habitat presets.
 - Web Audio API pure electric harmonic synthesizer generating 60Hz grid hums, phase-lock sine pulses, and clean energy surge chords.
 - Operator reference modal, corner branding, and dynamic responsive scaling from 1080p to 4K UHD.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite, asset and HTTP qualification.
+- Retained the default port and original client behavior; added PORT selection
+  where absent. Development files, malformed requests and unsupported methods
+  are denied by the shared loopback-only server.
+
+
+## Keyboard interlock repair — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Keep the native safety checkbox keyboard-focusable and show a focus ring on its existing visual switch. Space toggles the same control as pointer activation; default RELEASED state and existing styling remain.
+- Resolves the previously recorded display:none keyboard limitation. Hosted keyboard regression remains required; no general accessibility certification is claimed.

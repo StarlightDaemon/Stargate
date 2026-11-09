@@ -4,6 +4,26 @@ All notable changes to this build are documented here. Format follows Keep a Cha
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer-core`, `pngjs` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- The existing original-suite oculus pair-distance pixel failure remains FAIL; no predicate or runtime asset was changed. Historical operator disposition is preserved.
+
+### Shared preview consolidation — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the private handler with shared preview after real HTTP asset/security
+  qualification and paired pending/activation visual review. Preserves default
+  port 8685 and `PORT`; `HOST` no longer broadens the loopback-only binding.
+  Source/test/package requests receive 403 and POST 405.
+- Client assets and original 42 predicates remain unchanged. Both modes report
+  41/42 in run `42509607423`; the original oculus pair-distance `≥12` failure
+  remains FAIL (buildup/breakthrough distances 9.0 historical, 10.6 shared).
+- This is infrastructure equivalence with a diagnosed baseline failure, not full
+  functional acceptance. Original operator history is preserved; release HOLD.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added

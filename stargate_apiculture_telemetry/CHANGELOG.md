@@ -4,11 +4,25 @@ All notable changes to the Stargate Apiculture Telemetry Network console are doc
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- Removed the unused Express development dependency and its `qs` override. The shared/native server does not use Express. [PR #6](https://github.com/StarlightDaemon/Stargate/pull/6) updates `proxy-addr` in that removed dependency tree; this removal supersedes that path only. The PR itself has not been merged or closed.
+- This dependency consolidation leaves the already-qualified browser behavior and original assertions intact; it does not grant new operator or release acceptance.
+
 **Built by:** Claude Sonnet 5 (catalog-wide keyboard-focus and reduced-motion CSS pass, 2026-09-04). Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diff. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
 - Keyboard focus indicators: `:focus-visible` outlines in `--accent-cyan` on the nav-drawer, help-circle, quick-dial engage, colony-key, filter, modal-close and footer-link buttons and on the quick-dial select, search input, settings selects, master-volume slider and mute toggle; `--accent-emerald` on the primary activation button and `--accent-crimson` on the disengage button, each with the build's own glow. Added alongside the existing hover/focus rules; no existing rule altered.
 - `prefers-reduced-motion: reduce` slows the always-on system-status heartbeat dot (`.status-dot`) to an 8s cycle. Dial and activation feedback animations are untouched.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and hive cell motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
 
 ## [1.0.0] - 2026-08-22
 
@@ -36,3 +50,10 @@ All notable changes to the Stargate Apiculture Telemetry Network console are doc
 - **Operator Reference Guide (`?`) & Corner Displays**: Full tutorial overlay, version indicator, and `StarlightDaemon` footer link.
 - **Resolution Scaling**: Dynamic JS-driven unitless scaling supporting seamless display from 1080p to 4K without CSS calc scale pitfalls.
 - **Automated Verification Suite**: Puppeteer end-to-end integration test validating the entire dial-activate-disengage cycle, negative auto-fire safety, and secondary drawers.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace unrestricted static transport with the shared loopback public-file allowlist; original client and test assertions are unchanged.
+- Qualification: hosted run 42508696229; Apiculture10original phases, Steampunk42assertions, Ukiyo36assertions plus ring checks and diagnostics. Operator acceptance remains separate.

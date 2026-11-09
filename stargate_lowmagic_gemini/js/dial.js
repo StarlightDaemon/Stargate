@@ -238,6 +238,7 @@ class HearthDialController {
 
   clearDial() {
     if (this.isLocked) return;
+    window.App.cancelAutoDial();
     this.currentAddress = [];
     this.renderAddressSlots();
     if (this.hearthCordSvgEl) {

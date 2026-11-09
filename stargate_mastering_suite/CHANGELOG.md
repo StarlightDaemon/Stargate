@@ -5,6 +5,31 @@ All notable changes to the Axiom Audio Research & Mastering Facility (Portal Dia
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Shared source preview — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Routed `npm start` through the shared loopback preview while preserving default port `8080`, with `PORT`, `--port` and `-p` overrides. The original public assets and application choreography are unchanged.
+- Routed `npm test` through owned comparison listeners and the unchanged full original suite; historical embedded listeners are no longer the normal package test path.
+- Preserved dependency declarations and lockfiles for historical transport comparison.
+- Qualification provenance: run `42512882276`, job `128829555760`. This security migration does not grant sound, operator, merge or deployment acceptance.
+
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- Retained the existing `http-server` declaration and commands while refreshing the patched `follow-redirects` and `qs` transitives within supported ranges. This does not qualify the development server's file exposure or method policy.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and equalizer channels motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.1.1] - 2026-09-04
 
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.

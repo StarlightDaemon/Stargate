@@ -2,6 +2,44 @@
 
 All notable changes to the DSV-9 ARCHELON Bathyscaphe Pilot Console & Abyssal Gateway Interface will be documented in this file.
 
+## [Unreleased] — 2026-11-08 confirmed-defect repairs
+
+### Manual takeover of computer profiles — 2026-11-08
+
+- Reproduced the existing busy latch when a manual waypoint interrupted computer trimming: the replaced callback never released auto-dial ownership, so later presets were ignored. An accepted manual waypoint now cancels the remaining computer replay before taking over trimming. Completed waypoints stay staged; no stale computer waypoints are appended, and the next chosen preset still performs its existing full reset and exact replay.
+- Deterministic checks retain the prior dialer blob and reproduce the rejected subsequent preset. Current checks pass for takeover before replay, during trim and between waypoints (0/200/300/500/1000 ms), followed by 8.25 seconds idle observation, exact next-preset replacement and emergency cancellation.
+- Browser checks use real keyboard and pointer input, retain the prior dialer for baseline reproduction and require subsequent presets to finish pending without auto-fire. Hosted execution is pending. Original suites, storage schema, activation physics and operator acceptance requirements are unchanged.
+
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- This dependency consolidation leaves the already-qualified browser behavior and original assertions intact; it does not grant new operator or release acceptance.
+
+### Fixed
+- Cancellation: disengage now resets the simulator to surface depth, zero velocity and consistent derived telemetry. Normal descent still uses the original physical integration. Pending preset, trim and ballast-settle callbacks are canceled and guarded; immediate redial cannot be overwritten by an old settle callback. Prior transient audio is stopped and the sustained resonance returns to its original ambient setting.
+- Telemetry: aperture captions, event text and operator help identify 11,800 m as the target rather than claiming immediate arrival. Saved aperture records retain the existing schema and target depth, with measured pressure and actual elapsed activation seconds replacing fixed values. The velocity label distinguishes ascent, descent and idle vertical rate.
+- Archives: category totals are calculated from the existing ten records (3 mission logs, 2 incidents, 3 anomalies, 2 crew journals). Saved Local Dives reflects persisted history on initialization and after successful saves, retaining the fifty-record cap and storage keys.
+
+### Verification and remaining gate
+- Deterministic checks execute the actual modules with controlled clocks: two full activations, six preset interruption timings, buildup interruption at 500 ms, immediate redial, and at least 8.25 seconds of idle observation after cancellation. Surface pressure is 1.01325 bar, depth/velocity remain zero, and only the two original ambient audio sources remain at the original 140 Hz filter setting.
+- The same checks cover measured activation records, all archive categories, persisted counter reload, the fifty-record cap, failed writes and invalid stored JSON. Evidence is written only under ignored test directories.
+- Real pointer/key browser verification and rerunning the unchanged original nine-phase suite are pending. The historical operator-testing status remains NONE; these repairs do not change the gallery status or grant final acceptance. The historical issue list below is retained as the original observation record.
+
+## [Unreleased] — 2026-11-07 maintenance
+
+**Performed by:** GPT-6 Astra (high reasoning), not the original builder.
+- Add a local SVG instrument favicon and explicit icon link, resolving the
+  browser's missing favicon request without filtering network errors in tests.
+- Add the missing exhibit .gitignore for dependencies and verification output.
+- Replace duplicated serving with a shared secure-preview compatibility launcher;
+  preserve `npm run dev`, port 3000 and PORT override.
+- Preserve all original suite assertions. `npm test` now starts/closes an ephemeral
+  shared preview, accepts an explicit test URL/output directory, and keeps Chrome's
+  sandbox enabled. Baseline original suites passed against legacy/shared serving.
+- No display, dialing engine, storage, original attribution or version changes.
+  Operator acceptance of the migration remains pending.
+
 ## [1.0.0] - 2026-09-04 - Catalog maintenance pass (Claude sessions)
 
 **Performed by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04; NOT the original builder. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.

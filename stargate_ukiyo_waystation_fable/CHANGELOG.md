@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer-core` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- This dependency consolidation leaves the already-qualified browser behavior and original assertions intact; it does not grant new operator or release acceptance.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
@@ -122,3 +128,10 @@ rendering style, palette, station content, and sound design unchanged.
 - Fully synthesized WebAudio sound design: woodblock thuds, paper rustle,
   bronze bell, wind and water ambience.
 - Operator's reference overlay, version label, and author corner links.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace unrestricted static transport with the shared loopback public-file allowlist; original client and test assertions are unchanged.
+- Qualification: hosted run 42508696229; Apiculture10original phases, Steampunk42assertions, Ukiyo36assertions plus ring checks and diagnostics. Operator acceptance remains separate.

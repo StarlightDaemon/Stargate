@@ -558,6 +558,19 @@
     }
   }
 
+  let dialGeneration = 0;
+  let hypothesisTimer = null;
+  let presetReplayTimer = null;
+
+  function cancelDialing() {
+    dialGeneration++;
+    clearInterval(hypothesisTimer);
+    clearTimeout(presetReplayTimer);
+    hypothesisTimer = null;
+    presetReplayTimer = null;
+    state.isHypothesisCycling = false;
+  }
+
   function pinKey(glyphSymbol) {
     if (state.isHypothesisCycling) return;
     if (state.activeSlotIndex >= REGISTER_COUNT) return;
@@ -575,9 +588,12 @@
     if (targetSlotEl) targetSlotEl.classList.add('testing-slot');
     if (statusEl) statusEl.textContent = 'TESTING...';
 
+    const generation = dialGeneration;
     let tickCount = 0;
     const maxTicks = 6;
     const tickInterval = setInterval(() => {
+      // A sever/reset invalidates even a callback already queued for delivery.
+      if (generation !== dialGeneration) { clearInterval(tickInterval); return; }
       const randomGlyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
       if (glyphEl) glyphEl.textContent = randomGlyph.symbol;
       if (hexEl) hexEl.textContent = randomGlyph.hex;
@@ -586,6 +602,7 @@
 
       if (tickCount >= maxTicks) {
         clearInterval(tickInterval);
+        hypothesisTimer = null;
         state.lockedKeys[targetSlotIndex] = glyphSymbol;
         state.activeSlotIndex++;
         state.isHypothesisCycling = false;
@@ -597,6 +614,7 @@
         updateKeySpaceMetrics();
       }
     }, 45);
+    hypothesisTimer = tickInterval;
   }
 
   function backspaceKey() {
@@ -621,6 +639,7 @@
       return;
     }
     audio.ensureContext();
+    cancelDialing();
     state.activeSlotIndex = 0;
     state.lockedKeys = new Array(REGISTER_COUNT).fill(null);
     state.currentPreset = null;
@@ -640,6 +659,7 @@
     }
 
     audio.ensureContext();
+    cancelDialing();
     state.currentPreset = preset;
     state.activeSlotIndex = 0;
     state.lockedKeys = new Array(REGISTER_COUNT).fill(null);
@@ -651,13 +671,16 @@
     addLog(`LOADING INTERCEPT: ${preset.callsign} [${preset.freq}]`, preset.tier === 'verified' ? 'sys' : 'warn');
 
     // Sequential rapid hypothesis locking
+    const generation = dialGeneration;
     let step = 0;
     function lockNext() {
+      if (generation !== dialGeneration) return;
+      presetReplayTimer = null;
       if (step < REGISTER_COUNT) {
         const keySym = preset.keys[step];
         pinKey(keySym);
         step++;
-        setTimeout(lockNext, 320);
+        presetReplayTimer = setTimeout(lockNext, 320);
       }
     }
     lockNext();
@@ -775,6 +798,7 @@
   // =========================================================================
 
   function disengageSystem() {
+    cancelDialing();
     audio.ensureContext();
     audio.stopSustainedHum();
     audio.playSever();

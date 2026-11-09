@@ -63,6 +63,7 @@ const QuickDial = (() => {
 
   let isAutoDialing = false;
   let autoDialTimer = null;
+  let autoDialGeneration = 0;
 
   const init = () => {
     renderPresetsList();
@@ -150,19 +151,20 @@ const QuickDial = (() => {
     Dialer.emergencyBlowBallast();
 
     isAutoDialing = true;
+    const generation = ++autoDialGeneration;
     Storage.logEvent('DIVE_COMPUTER', `Replaying stored dive profile [${preset.id}]: "${preset.name}" at computer bus speed`);
 
     const waypoints = [...preset.waypoints];
     let stepIndex = 0;
 
     const dialNext = () => {
-      if (!isAutoDialing) return;
+      if (!isAutoDialing || generation !== autoDialGeneration) return;
 
       if (stepIndex < waypoints.length) {
         const wpIdx = waypoints[stepIndex];
         stepIndex++;
         Dialer.selectWaypoint(wpIdx, 'computer', (success) => {
-          if (isAutoDialing) {
+          if (isAutoDialing && generation === autoDialGeneration) {
             // Small gap between computer locks
             autoDialTimer = setTimeout(dialNext, 40);
           }
@@ -179,6 +181,7 @@ const QuickDial = (() => {
   };
 
   const cancelAutoDial = () => {
+    autoDialGeneration++;
     if (autoDialTimer) {
       clearTimeout(autoDialTimer);
       autoDialTimer = null;

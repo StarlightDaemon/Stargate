@@ -2,18 +2,30 @@
   "name": "stargate-repo-scripts",
   "version": "1.0.0",
   "private": true,
-  "description": "Repository-level tooling dependencies for scripts/ (preview capture). Individual builds carry their own package.json.",
+  "description": "Shared repository preview, verification, browser-test and image tooling. Flagship build dependencies remain independent.",
   "scripts": {
+    "preview": "node scripts/preview.js",
+    "verify": "node scripts/verify.js",
+    "test:pilots": "node scripts/run-pilot-suites.js",
+    "test:preview": "node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js scripts/test-qualified-suites.js scripts/test-exhibit-dependency-candidates.js scripts/test-deepscope-cancellation.js scripts/test-package-entry-adapter.js scripts/test-vite-built-preview.js scripts/test-package-entry-viewport.js scripts/test-qualification-vite-process.js scripts/test-freeform-cancellation.js",
+    "test:preview:handlers": "node --test --test-isolation=none scripts/test-preview-handlers.js",
     "gallery:generate": "node hub/generate.js",
     "gallery:check": "node hub/generate.js --check",
     "security:hub": "node scripts/audit-hub-security.js",
     "security:hub:strict": "node scripts/audit-hub-security.js --strict",
-    "security:deps": "npm audit --omit=dev",
+    "security:deps": "npm audit --include=dev --include=optional --include=peer",
     "security:deps:featured": "npm --prefix Stargate_OG audit",
     "test:pages-output-guard": "node scripts/test-build-pages-output-guard.js",
-    "test:pages-release": "node scripts/audit-pages-release.js"
+    "test:pages-release": "node scripts/audit-pages-release.js",
+    "test:suites": "node scripts/run-qualified-suites.js",
+    "security:deps:all": "node scripts/check-dependency-baseline.js --strict --include-qualified"
   },
   "dependencies": {
-    "sharp": "^0.35.4"
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "puppeteer": "^25.16.0",
+    "puppeteer-core": "^25.16.0",
+    "pngjs": "^7.0.0"
   }
 }

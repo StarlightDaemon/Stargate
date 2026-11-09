@@ -1,11 +1,46 @@
 # Changelog
 
+## Manual scan scheduling — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Schedule all ten dish steps and carrier completion from the selection event, so late timer delivery does not accumulate once per repeating callback. Keep the 28 ms scan steps, 120 ms settle delay and nominal 308 ms completion; preserve original test assertions and their 350 ms cadence.
+- Continue to own every timer and invalidate cancelled generations, including delayed scan/settle callbacks and manual/preset restart. Active scan tracking now describes checks rather than interval handles.
+- A controlled 8 ms delivery-lateness regression reproduces the old missed deadline and verifies all seven current selections, paced ten-dish scans and cancellation. Hosted run `42567482830` passes the unchanged original suite in legacy/shared source modes (job `128997071192`) and built preview (`128997071211`), including security, cancellation/restarts and cleanup. The supplementary manual contract (`128997071194`) and six ready/active/cancelled image reviews pass at 1080p/4K. Tooling tests pass 83/83 on Windows and Linux. Prior failures remain in history; sound/operator acceptance is separate and merge/deployment stay on HOLD.
+
+## Source-entry consolidation — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Route `npm run dev` through the shared loopback source preview while retaining port 5173, `PORT`, `--port` and `-p` precedence. Add this entry to the shared CLI contract matrix.
+- Preserve `vite build` and the Vite built-`dist` preview as a specialist exception; bind preview explicitly to `127.0.0.1` with strict port selection (default 4173). Dependency declarations, lockfile, original test assertions and builder attribution are unchanged.
+- Preserve the matched original manual-cadence FAIL in legacy/shared source qualification (run `42515274539`, job `128836833598`), separately from matching asset/security/preset-cancellation evidence. Do not treat security consolidation as functional acceptance.
+- Fresh browser manual-cancellation, completion-aware supplemental verification and actual migrated CLI validation remain pending. Merge and deployment remain on HOLD.
+
+## Manual cancellation repair — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Own and invalidate manual coincidence intervals and dish-settle callbacks on disengage. Before the fix, cancelling after 100 ms returned to IDLE immediately but stale work restored DIALING with one carrier after 8.25 seconds.
+- Preserve the original 28 ms dish cadence, 120 ms settle delay, seven-carrier sequence and original test assertions. Deterministic regressions cover concurrent checks, stale callback delivery, manual/preset restart and ordinary completion; real browser regressions remain independently reported.
+- The historical fixed-350 ms manual test failure remains separate from this confirmed cancellation repair. No operator or release acceptance is claimed.
+
+## Maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Add a local spectrogram favicon using the existing cyan/green palette; resolves the browser favicon 404. Original attribution and version remain unchanged.
+
+
 All notable changes to the Vesper Deep-Aperture Technosignature Console will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- Raised the existing Vite 6 minimum to `^6.4.4` and refreshed `source-map-js` within supported ranges. Vite commands and build behavior remain unchanged by this dependency patch; serving security is a separate qualification.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
 
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
@@ -33,3 +68,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breakout Mission-Control Composition**: Balanced symmetrical instrument array breaking the standard hero-left rut.
 - **Operator Reference Modal**: Collapsible quick-guide with signal-versus-noise mechanics and array telemetry manual.
 - **Pixel-Perfect 16:9 Viewport**: Responsive scale-to-fit system ensuring zero-scroll operation at 1080p and 4K displays.
+
+
+## Keyboard interlock repair — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Keep the native safety checkbox keyboard-focusable and show a focus ring on its existing visual switch. Space toggles the same control as pointer activation; default RELEASED state and existing styling remain.
+- Resolves the previously recorded display:none keyboard limitation. Hosted keyboard regression remains required; no general accessibility certification is claimed.

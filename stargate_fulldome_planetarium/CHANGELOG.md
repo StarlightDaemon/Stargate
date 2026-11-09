@@ -4,11 +4,24 @@ All notable changes to the **VXD-9000 Chrono-Celestial Projector Console** (`sta
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- This dependency consolidation leaves the already-qualified browser behavior and original assertions intact; it does not grant new operator or release acceptance.
+
 **Built by:** Claude Sonnet 5 (catalog-wide keyboard-focus and reduced-motion CSS pass, 2026-09-04). Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diff. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
 - Keyboard focus indicators: `:focus-visible` outline in `--color-cyan` on every `button`, on the `.sector-node` controls (4px offset) and on the visible `.slider` of the switch container's hidden checkbox. Added alongside the existing rules; no existing rule altered.
 - `prefers-reduced-motion: reduce` slows the pulse beacon, live dot, master-power LED and banner icon to 6s and the lens reticle spin to 90s. Dial and activation feedback are untouched.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and projector dome motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
 
 ## [1.0.0] - 2026-08-22
 
@@ -47,3 +60,10 @@ Initial operational release of the Mount Tycho Zenith Fulldome Observatory & Pub
   - Top-right circular technical documentation modal.
   - Bottom-left `StarlightDaemon` external link (`rel="noopener noreferrer"`).
   - Bottom-right version identifier (`v1.0.0 // VXD-9000`).
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace the independently maintained server with the shared loopback/public-file transport after hosted qualification; original client assets and tests are retained.
+- Actual migrated command checks and broader acceptance remain separate.

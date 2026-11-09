@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Equalizer channels</title>
+  <rect width="32" height="32" rx="5" fill="#070a10"/>
+  <g fill="none" stroke="#708cb8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V25M16 4V28M25 10V23M4 15H10M13 20H19M22 16H28"/></g>
+</svg>

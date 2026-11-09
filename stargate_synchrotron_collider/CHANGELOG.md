@@ -5,6 +5,48 @@ All notable changes to the Aethel-Ring Collider (ARC) Synchrotron Portal Gateway
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — development-server security
+
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer-core` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
+
+### Fixed
+
+- Replaced the raw-path development handler with the shared secure preview after
+  historical/shared qualification. Raw HTTP previously returned repository and
+  sibling files, development source and manifests, and accepted POST. These
+  requests now receive 403 or 405; serving is restricted to loopback.
+- Preserved `node server.js` and default port 3042; added `PORT` support.
+  Client files, original verification suite, version, attribution, dependency
+  manifests and locks are unchanged.
+
+### Verification
+
+- All twelve original boolean predicates pass under historical/shared serving,
+  including 1080p/4K scaling, interlock rejection, manual no-auto-fire, staged
+  presets and mid-replay beam dump. The adapter enforces failures that the
+  original harness only records; none of its predicates is weakened.
+- All eight public assets match source bytes. Supplementary hit-tested checks
+  pass two manual cycles per mode, observe preset counts 0 through 6 without
+  auto-fire, and confirm standby after cancellation followed by 8.25 idle seconds.
+  Portal radius interpolates toward zero; checks await sub-pixel decay and
+  require zero target radius instead of comparing frame-timed floats exactly.
+- Six 1920x1080 captures reviewed: idle, ready, activation, active, dumped and
+  cancelled. Controls, sector locks and portal state remain visible. The existing
+  favicon 404 and displayed v1.1.0/metadata 1.1.1 discrepancy remain recorded.
+  Full sound, responsive, three-stage visual and operator qualification remain
+  separate; no gallery status change is made.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and collider beam ring motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.1.1] - 2026-09-04
 
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
@@ -51,3 +93,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Collision Event History Ledger**: Timestamped log recording integrated luminosity, invariant mass resonances, and beam dump records.
 - **Operator Reference Manual (`?`)**: Modal walk-through for manual steering, quick-dialing, quench protection, and beam abort protocols.
 - **Responsive 1080p/4K Layout**: Dynamic unitless scale calculation (`--ui-scale`) preventing CSS unit division bugs, corner attribution link (`StarlightDaemon`), and version tag (`v1.0.0`).
+
+
+## Metadata display maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Align the displayed corner version with the existing version.json value 1.1.1. No new version or builder attribution is introduced.

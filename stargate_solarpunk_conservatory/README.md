@@ -29,11 +29,26 @@ Deliberately not the usual top-bar / hero / two wings / bottom deck. The lantern
 
 ## Run it locally
 
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.
+
 ```bash
 npm run serve
 ```
 
-Then open <http://127.0.0.1:8685/>. The server is a zero-dependency Node static server (`server.js`, port 8685, `PORT`/`HOST` env overrides). The page itself is plain HTML/CSS/JS with no build step, no modules, no network calls and no shared files with any other folder.
+Then open <http://127.0.0.1:8685/>. `server.js` launches the repository's
+dependency-free shared preview. `PORT` overrides 8685; binding stays on loopback
+and `HOST` cannot expose it externally. Only tracked public assets are served;
+source, test and package files are denied. The page remains plain HTML/CSS/JS
+with no build step, no modules, no network calls and no shared client assets.
+
+**Maintenance qualification (2026-11-08):** five public assets matched exactly
+under the pinned historical handler and shared preview. Original 42 predicates
+remain intact. Both modes pass 41/42 in run `42509607423`; the original oculus
+pair-distance `≥12` predicate fails at buildup/breakthrough distances 9.0 and
+10.6. Paired pending/buildup/breakthrough/active screenshots preserve the dome,
+controls and stage behavior; this does not waive that numerical failure.
+Handler consolidation is qualified with a diagnosed baseline failure. The full
+suite remains **FAIL**, and release/operator acceptance is not newly granted.
 
 ## Self-test
 

@@ -1,0 +1,2634 @@
+{
+  "scope": "Targeted reconciliation of the existing saved inventory; no new inventory or all-green claim.",
+  "reconciledDate": "2026-11-08",
+  "inventoryProvenance": {
+    "commit": "8c3f718c3e31cd19c169c7cf87ab2feeee7242c1",
+    "date": "2026-11-07",
+    "source": "Campaign investigation artifact ../test/inventory.json; harness-presence snapshot only"
+  },
+  "counts": {
+    "activeTargets": 57,
+    "registeredTargets": 47,
+    "recordedHarnessPaths": 62,
+    "targetsWithoutRecordedOriginalHarness": 12
+  },
+  "releaseGate": {
+    "merge": "HOLD",
+    "deployment": "HOLD",
+    "fullAcceptance": "UNVERIFIED"
+  },
+  "statusRules": [
+    "Registration or checker exit zero alone is not original-suite PASS.",
+    "Original, current functional, preservation and operator statuses are independent.",
+    "Observational scripts, diagnostics, dependency smoke tests, capture tools, unused scaffolds and historical reports do not become original assertion suites.",
+    "Pending ancillary steps remain visible even when an established original suite passes."
+  ],
+  "missingOriginalSuites": [
+    "stargate_aethergate",
+    "stargate_astro_pavilion",
+    "stargate_bureaucratic_mainframe",
+    "stargate_heliacal_ring",
+    "stargate_heliora_annulus",
+    "stargate_high_magic",
+    "stargate_lowmagic_gemini",
+    "stargate_meridian_ring",
+    "stargate_modern",
+    "stargate_retro",
+    "stargate_rushlight_gemini",
+    "stargate_solarpunk_astra"
+  ],
+  "targets": [
+    {
+      "exhibit": "stargate_aethergate",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_aethergate --http --browser"
+    },
+    {
+      "exhibit": "stargate_aetheric_telegraph",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_aetheric_telegraph/run_tests.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/run-pilot-suites.js"
+        },
+        {
+          "path": "stargate_aetheric_telegraph/test_env.js",
+          "kind": "dependency-load-smoke",
+          "adapter": "scripts/check-remaining-harnesses.js",
+          "originalAssertionSuite": false
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/run-pilot-suites.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/pilot-suites/report.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-pilot-browsers.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/pilot-browser/report.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-remaining-harnesses.js stargate_aetheric_telegraph",
+          "qualification": "established",
+          "artifacts": [
+            "test/remaining-harnesses/stargate_aetheric_telegraph/result.json"
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "dependency-load-smoke",
+            "run": 42512175752,
+            "job": 128827398275,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398275"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_aetheric_telegraph --http --browser"
+    },
+    {
+      "exhibit": "stargate_apiculture_telemetry",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_apiculture_telemetry/tests/e2e_verification.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-apiculture-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-apiculture-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/apiculture-security/legacy.json",
+            "test/apiculture-security/shared.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_apiculture_telemetry --http --browser"
+    },
+    {
+      "exhibit": "stargate_astro_pavilion",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_astro_pavilion --http --browser"
+    },
+    {
+      "exhibit": "stargate_atompunk_fable",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "BASELINE_FAILURE_PRESERVED",
+        "run": 42509607423,
+        "job": 128819587859,
+        "detail": "Legacy 103/104; shared 102/104. Pending luminance fails both; original assertions remain FAIL.",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42509607423/job/128819587859",
+        "originalSuiteStatus": "FAIL"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_atompunk_fable/test/run-tests.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-specialist-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-specialist-security.js stargate_atompunk_fable",
+          "qualification": "established",
+          "artifacts": [
+            "test/specialist-security/stargate_atompunk_fable/legacy/result.json",
+            "test/specialist-security/stargate_atompunk_fable/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_atompunk_fable --http --browser"
+    },
+    {
+      "exhibit": "stargate_bathyscaphe_pilot",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_bathyscaphe_pilot/test/verify.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/run-pilot-suites.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/run-pilot-suites.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/pilot-suites/report.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-pilot-browsers.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/pilot-browser/report.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-bathyscaphe-regressions.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/bathyscaphe-regressions/deterministic.json",
+            "test/bathyscaphe-regressions/browser.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "detail": "Deterministic and browser regressions passed, including manual takeover, cancellation telemetry, and archive counters.",
+            "run": 42514572291,
+            "job": 128834661691,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661691"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_bathyscaphe_pilot --http --browser",
+      "lastSupplementaryReports": [
+        {
+          "step": "bathyscaphe-regressions",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Deterministic and browser regressions passed, including manual takeover, cancellation telemetry, and archive counters.",
+          "run": 42514572291,
+          "job": 128834661691,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661691"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_bathyscaphe_pilot_fable",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_bathyscaphe_pilot_fable/verify/closeout.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        },
+        {
+          "path": "stargate_bathyscaphe_pilot_fable/verify/closeout_stages.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        },
+        {
+          "path": "stargate_bathyscaphe_pilot_fable/verify/png.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        },
+        {
+          "path": "stargate_bathyscaphe_pilot_fable/verify/report.md",
+          "kind": "historical-report-only",
+          "executable": false
+        },
+        {
+          "path": "stargate_bathyscaphe_pilot_fable/verify/run.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        },
+        {
+          "path": "stargate_bathyscaphe_pilot_fable/verify/smoke.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-secondary-security.js stargate_bathyscaphe_pilot_fable",
+          "qualification": "established",
+          "artifacts": [
+            "test/secondary-security/stargate_bathyscaphe_pilot_fable/legacy/result.json",
+            "test/secondary-security/stargate_bathyscaphe_pilot_fable/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_bathyscaphe_pilot_fable --http --browser"
+    },
+    {
+      "exhibit": "stargate_bibliographic_depository",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_bibliographic_depository/test_e2e.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-consolidation.js"
+        },
+        {
+          "path": "stargate_bibliographic_depository/test_simulated_browser.js",
+          "kind": "unused-mock-scaffold-only",
+          "adapter": "scripts/check-remaining-harnesses.js",
+          "originalAssertionSuite": false
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-consolidation.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/consolidation/report.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-remaining-harnesses.js stargate_bibliographic_depository",
+          "qualification": "established",
+          "artifacts": [
+            "test/remaining-harnesses/stargate_bibliographic_depository/result.json"
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "unused-mock-scaffold-only",
+            "run": 42512175752,
+            "job": 128827398209,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398209"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_bibliographic_depository --http --browser"
+    },
+    {
+      "exhibit": "stargate_blueprint_alpha",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_blueprint_alpha/verify.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-blueprint-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-blueprint-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/blueprint-security/report.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-blueprint-regressions.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/blueprint-regressions/deterministic.json",
+            "test/blueprint-regressions/browser.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "FAIL",
+            "originalSuiteStatus": "UNVERIFIED",
+            "detail": "Deterministic checks pass, but browser capture failed its named-stage containment assertion. The capture/logging correction requires fresh proof; this failure does not establish a new client defect or replace prior successful mute/stage evidence.",
+            "run": 42516017150,
+            "job": 128839086319,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086319"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_blueprint_alpha --http --browser",
+      "notes": [
+        "Fresh historicalSuite.status is the original gate. currentContract PASS does not erase historicalSuite FAIL. Archived historicalServe evidence is separate."
+      ],
+      "lastSupplementaryReports": [
+        {
+          "step": "blueprint-regressions",
+          "status": "FAIL",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Deterministic checks pass, but browser capture failed its named-stage containment assertion. The capture/logging correction requires fresh proof; this failure does not establish a new client defect or replace prior successful mute/stage evidence.",
+          "run": 42516017150,
+          "job": 128839086319,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086319"
+        }
+      ],
+      "previousSupplementaryReports": [
+        {
+          "step": "blueprint-regressions",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Deterministic and browser regressions passed, including staged activation, header geometry and mute restoration; retained historical originals and operator issue are separate.",
+          "run": 42514572291,
+          "job": 128834661643,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661643"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_blueprint_drafting",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation",
+        "qualificationEvidence": {
+          "status": "FAIL",
+          "originalSuiteStatus": "FAIL",
+          "detail": "Both modes retain the automatic-approval assertion failures in test.js and run_tests_with_vite.js; test_fix.js passes. The explicit-Engage current contract is a separate step.",
+          "run": 42514572291,
+          "job": 128834661761,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661761"
+        }
+      },
+      "lastReported": {
+        "status": "FAIL",
+        "originalSuiteStatus": "FAIL",
+        "detail": "Both modes retain the automatic-approval assertion failures in test.js and run_tests_with_vite.js; test_fix.js passes. The explicit-Engage current contract is a separate step.",
+        "run": 42514572291,
+        "job": 128834661761,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661761",
+        "scope": "Reported source-suite/transport qualification only; independent operator and specialist build gates remain open"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_blueprint_drafting/run_tests_with_vite.js",
+          "kind": "original-suite",
+          "adapter": "scripts/check-package-entry-security.js"
+        },
+        {
+          "path": "stargate_blueprint_drafting/test.js",
+          "kind": "original-suite",
+          "adapter": "scripts/check-package-entry-security.js"
+        },
+        {
+          "path": "stargate_blueprint_drafting/test_fix.js",
+          "kind": "original-suite",
+          "adapter": "scripts/check-package-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-package-entry-security.js stargate_blueprint_drafting",
+          "qualification": "established",
+          "artifacts": [
+            "test/package-entry-security/stargate_blueprint_drafting/legacy/result.json",
+            "test/package-entry-security/stargate_blueprint_drafting/shared/result.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-blueprint-drafting-contract.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/blueprint-drafting-current-contract/result.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "detail": "Eight current-contract pointer cycles passed; historical automatic-approval originals remain FAIL.",
+            "run": 42514572291,
+            "job": 128834661891,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661891"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_blueprint_drafting --http --browser",
+      "previousReports": [
+        {
+          "status": "FAIL",
+          "originalSuiteStatus": "UNVERIFIED",
+          "reason": "Hosted checker failed; adapter-versus-client failure diagnosis pending at this checkpoint",
+          "run": 42510716794,
+          "job": 128822958253,
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794/job/128822958253"
+        }
+      ],
+      "lastSupplementaryReports": [
+        {
+          "step": "blueprint-drafting-contract",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Eight current-contract pointer cycles passed; historical automatic-approval originals remain FAIL.",
+          "run": 42514572291,
+          "job": 128834661891,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661891"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_bureaucratic_mainframe",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_bureaucratic_mainframe --http --browser"
+    },
+    {
+      "exhibit": "stargate_caissa_workstation",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_caissa_workstation/test_workstation.cjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-instrument-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-instrument-security.js --exhibit stargate_caissa_workstation",
+          "qualification": "established",
+          "artifacts": [
+            "test/instrument-security/stargate_caissa_workstation/legacy/result.json",
+            "test/instrument-security/stargate_caissa_workstation/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_caissa_workstation --http --browser"
+    },
+    {
+      "exhibit": "stargate_canopy_commons",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_canopy_commons/test/run-tests.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-specialist-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-specialist-security.js stargate_canopy_commons",
+          "qualification": "established",
+          "artifacts": [
+            "test/specialist-security/stargate_canopy_commons/legacy/result.json",
+            "test/specialist-security/stargate_canopy_commons/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_canopy_commons --http --browser"
+    },
+    {
+      "exhibit": "stargate_cathedral_oculus",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation",
+        "qualificationEvidence": {
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Original 32 records and eight public assets passed in both modes. Separate layout diagnostic does not establish visual acceptance.",
+          "run": 42514572291,
+          "job": 128834661763,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661763"
+        }
+      },
+      "lastReported": {
+        "status": "PASS",
+        "originalSuiteStatus": "PASS",
+        "detail": "Original 32 records and eight public assets passed in both modes. Separate layout diagnostic does not establish visual acceptance.",
+        "run": 42514572291,
+        "job": 128834661763,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661763",
+        "scope": "Reported source-suite/transport qualification only; independent operator and specialist build gates remain open"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_cathedral_oculus/tests/verify.js",
+          "kind": "original-suite",
+          "adapter": "scripts/check-package-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-package-entry-security.js stargate_cathedral_oculus",
+          "qualification": "established",
+          "artifacts": [
+            "test/package-entry-security/stargate_cathedral_oculus/legacy/result.json",
+            "test/package-entry-security/stargate_cathedral_oculus/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_cathedral_oculus --http --browser",
+      "previousReports": [
+        {
+          "status": "UNVERIFIED",
+          "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+        }
+      ],
+      "lastDiagnosticReport": {
+        "status": "UNVERIFIED",
+        "originalSuiteStatus": "UNVERIFIED",
+        "detail": "Diagnostic job succeeded with OBSERVATIONS_RECORDED_NOT_ACCEPTANCE and geometryClippingObserved=false. The observed screenshot-clipping cause remains unresolved; neither visual acceptance nor a client fix is established.",
+        "run": 42516017150,
+        "job": 128839086336,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086336",
+        "jobConclusion": "SUCCESS",
+        "reportedStatus": "OBSERVATIONS_RECORDED_NOT_ACCEPTANCE",
+        "geometryClippingObserved": false
+      }
+    },
+    {
+      "exhibit": "stargate_celestial_astrolabe",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_celestial_astrolabe/test_e2e.js",
+          "kind": "original-observational-harness",
+          "adapter": "scripts/check-remaining-harnesses.js",
+          "originalAssertionSuite": false
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-remaining-harnesses.js stargate_celestial_astrolabe",
+          "qualification": "established",
+          "artifacts": [
+            "test/remaining-harnesses/stargate_celestial_astrolabe/result.json"
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "original-observational-harness",
+            "run": 42512175752,
+            "job": 128827398206,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398206"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_celestial_astrolabe --http --browser"
+    },
+    {
+      "exhibit": "stargate_cyberpunk_fable",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "PASS",
+        "run": 42510716794,
+        "job": 128822958190,
+        "detail": "Original 42/42 in both modes, 10 assets; reported paired-stage visual review passed. Full operator acceptance remains separate.",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794/job/128822958190",
+        "originalSuiteStatus": "PASS"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_cyberpunk_fable/test/run-tests.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-extra-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-extra-entry-security.js stargate_cyberpunk_fable",
+          "qualification": "established",
+          "artifacts": [
+            "test/extra-entry-security/stargate_cyberpunk_fable/legacy/result.json",
+            "test/extra-entry-security/stargate_cyberpunk_fable/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_cyberpunk_fable --http --browser"
+    },
+    {
+      "exhibit": "stargate_cyberpunk_gemini",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "PASS",
+        "scope": "Reported automated preservation qualification, not full acceptance",
+        "run": 42509607423,
+        "job": 128819587801,
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42509607423/job/128819587801"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_cyberpunk_gemini/test/test-suite.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-instrument-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-instrument-security.js --exhibit stargate_cyberpunk_gemini",
+          "qualification": "established",
+          "artifacts": [
+            "test/instrument-security/stargate_cyberpunk_gemini/legacy/result.json",
+            "test/instrument-security/stargate_cyberpunk_gemini/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_cyberpunk_gemini --http --browser"
+    },
+    {
+      "exhibit": "stargate_dark_gothic_fable",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_dark_gothic_fable/test/run-tests.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-specialist-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-specialist-security.js stargate_dark_gothic_fable",
+          "qualification": "established",
+          "artifacts": [
+            "test/specialist-security/stargate_dark_gothic_fable/legacy/result.json",
+            "test/specialist-security/stargate_dark_gothic_fable/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_dark_gothic_fable --http --browser"
+    },
+    {
+      "exhibit": "stargate_dark_matter_array",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_dark_matter_array/test/diag_viewport.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        },
+        {
+          "path": "stargate_dark_matter_array/test/final_closeout_verify.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        },
+        {
+          "path": "stargate_dark_matter_array/test/verify.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        },
+        {
+          "path": "stargate_dark_matter_array/test/verify_tabs.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        },
+        {
+          "path": "stargate_dark_matter_array/test/verify_viewport_scaling.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-secondary-security.js stargate_dark_matter_array",
+          "qualification": "established",
+          "artifacts": [
+            "test/secondary-security/stargate_dark_matter_array/legacy/result.json",
+            "test/secondary-security/stargate_dark_matter_array/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_dark_matter_array --http --browser"
+    },
+    {
+      "exhibit": "stargate_darkpool_router",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_darkpool_router/tests/test_suite.js",
+          "kind": "original-suite",
+          "adapter": "scripts/check-remaining-harnesses.js",
+          "originalAssertionSuite": true
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-remaining-harnesses.js stargate_darkpool_router",
+          "qualification": "established",
+          "artifacts": [
+            "test/remaining-harnesses/stargate_darkpool_router/result.json"
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "PASS",
+            "scope": "original-suite",
+            "run": 42512175752,
+            "job": 128827398217,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398217"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_darkpool_router --http --browser",
+      "notes": [
+        "npm test is a placeholder failure; invoke the registered real original harness adapter."
+      ]
+    },
+    {
+      "exhibit": "stargate_epigraphic_spectrometry",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_epigraphic_spectrometry/test_build.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-science-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-science-security.js stargate_epigraphic_spectrometry",
+          "qualification": "established",
+          "artifacts": [
+            "test/science-security/stargate_epigraphic_spectrometry/legacy/result.json",
+            "test/science-security/stargate_epigraphic_spectrometry/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_epigraphic_spectrometry --http --browser"
+    },
+    {
+      "exhibit": "stargate_erebus_signal",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-observational-harness"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_erebus_signal/test.js",
+          "kind": "original-observations",
+          "adapter": "scripts/check-erebus-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-erebus-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/erebus-security/report.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-erebus-regressions.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/erebus-regressions/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "run": 42512175752,
+            "job": 128827398241,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398241"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_erebus_signal --http --browser"
+    },
+    {
+      "exhibit": "stargate_fulldome_planetarium",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "PASS",
+        "scope": "Reported automated preservation qualification, not full acceptance",
+        "run": 42509607423,
+        "job": 128819587863,
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42509607423/job/128819587863"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_fulldome_planetarium/scripts/verify_e2e.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-instrument-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-instrument-security.js --exhibit stargate_fulldome_planetarium",
+          "qualification": "established",
+          "artifacts": [
+            "test/instrument-security/stargate_fulldome_planetarium/legacy/result.json",
+            "test/instrument-security/stargate_fulldome_planetarium/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_fulldome_planetarium --http --browser"
+    },
+    {
+      "exhibit": "stargate_futurist_dynamism",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_futurist_dynamism/test/verify.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-specialist-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-specialist-security.js stargate_futurist_dynamism",
+          "qualification": "established",
+          "artifacts": [
+            "test/specialist-security/stargate_futurist_dynamism/legacy/result.json",
+            "test/specialist-security/stargate_futurist_dynamism/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_futurist_dynamism --http --browser"
+    },
+    {
+      "exhibit": "stargate_genomic_sequencer",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_genomic_sequencer/test_build.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-science-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-science-security.js stargate_genomic_sequencer",
+          "qualification": "established",
+          "artifacts": [
+            "test/science-security/stargate_genomic_sequencer/legacy/result.json",
+            "test/science-security/stargate_genomic_sequencer/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_genomic_sequencer --http --browser"
+    },
+    {
+      "exhibit": "stargate_heliacal_ring",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_heliacal_ring --http --browser"
+    },
+    {
+      "exhibit": "stargate_heliora_annulus",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_heliora_annulus --http --browser"
+    },
+    {
+      "exhibit": "stargate_high_magic",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_high_magic --http --browser"
+    },
+    {
+      "exhibit": "stargate_high_scifi",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_high_scifi/js/selftest.js",
+          "kind": "original-diagnostic-with-supplementary-guards",
+          "adapter": "scripts/check-remaining-harnesses.js",
+          "originalAssertionSuite": false
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-remaining-harnesses.js stargate_high_scifi",
+          "qualification": "established",
+          "artifacts": [
+            "test/remaining-harnesses/stargate_high_scifi/result.json"
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "original-diagnostic-with-supplementary-guards",
+            "run": 42512175752,
+            "job": 128827398184,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398184"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_high_scifi --http --browser"
+    },
+    {
+      "exhibit": "stargate_konstrukt_transit",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "exhibit": "stargate_konstrukt_transit",
+        "status": "PASS",
+        "preservationStatus": "PASS",
+        "originalSuiteStatus": "PASS",
+        "coverageStatus": "PASS",
+        "functionalStatus": "UNVERIFIED",
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "errors": [],
+        "findings": [],
+        "scope": "Fresh registered-suite dispatch, not full functional/operator acceptance",
+        "run": 42515274539,
+        "job": 128836833771,
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833771",
+        "commandExitCode": 2,
+        "reason": "Konstrukt original, preservation and coverage PASS. Combined CLI exits 2 because the independent Astra original status is UNVERIFIED."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_konstrukt_transit/tests/test_flow.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-konstrukt-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-konstrukt-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/konstrukt-security/legacy.json",
+            "test/konstrukt-security/shared.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_konstrukt_transit --http --browser",
+      "previousReports": [
+        {
+          "status": "UNVERIFIED",
+          "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_lowmagic_gemini",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "PASS",
+        "scope": "Reported automated preservation qualification, not full acceptance",
+        "run": 42509607423,
+        "job": 128819587843,
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42509607423/job/128819587843"
+      },
+      "harnesses": [],
+      "checks": [
+        {
+          "command": "node scripts/check-secondary-security.js stargate_lowmagic_gemini",
+          "qualification": "established",
+          "artifacts": [
+            "test/secondary-security/stargate_lowmagic_gemini/legacy/result.json",
+            "test/secondary-security/stargate_lowmagic_gemini/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_lowmagic_gemini --http --browser"
+    },
+    {
+      "exhibit": "stargate_lumina_grove",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_lumina_grove/puppeteer_test.js",
+          "kind": "original-suite",
+          "adapter": "scripts/check-remaining-harnesses.js",
+          "originalAssertionSuite": true
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-remaining-harnesses.js stargate_lumina_grove",
+          "qualification": "established",
+          "artifacts": [
+            "test/remaining-harnesses/stargate_lumina_grove/result.json"
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "PASS",
+            "scope": "original-suite",
+            "run": 42512175752,
+            "job": 128827398324,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398324"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_lumina_grove --http --browser",
+      "notes": [
+        "npm test is a placeholder failure; invoke the registered real original harness adapter."
+      ]
+    },
+    {
+      "exhibit": "stargate_mastering_suite",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation",
+        "qualificationEvidence": {
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Full original test_suite.js and ten public assets passed in both modes.",
+          "run": 42514572291,
+          "job": 128834661646,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661646"
+        }
+      },
+      "lastReported": {
+        "status": "PASS",
+        "originalSuiteStatus": "PASS",
+        "detail": "Full original test_suite.js and ten public assets passed in both modes.",
+        "run": 42514572291,
+        "job": 128834661646,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661646",
+        "scope": "Reported source-suite/transport qualification only; independent operator and specialist build gates remain open"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_mastering_suite/test_suite.js",
+          "kind": "original-suite",
+          "adapter": "scripts/check-package-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-package-entry-security.js stargate_mastering_suite",
+          "qualification": "established",
+          "artifacts": [
+            "test/package-entry-security/stargate_mastering_suite/legacy/result.json",
+            "test/package-entry-security/stargate_mastering_suite/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_mastering_suite --http --browser",
+      "previousReports": [
+        {
+          "status": "UNVERIFIED",
+          "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_meridian_ring",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_meridian_ring --http --browser"
+    },
+    {
+      "exhibit": "stargate_meteorological_nexrad",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_meteorological_nexrad/test_build.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-telemetry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-telemetry-security.js stargate_meteorological_nexrad",
+          "qualification": "established",
+          "artifacts": [
+            "test/telemetry-security/stargate_meteorological_nexrad/legacy/result.json",
+            "test/telemetry-security/stargate_meteorological_nexrad/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_meteorological_nexrad --http --browser"
+    },
+    {
+      "exhibit": "stargate_modern",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_modern --http --browser"
+    },
+    {
+      "exhibit": "stargate_municipal_registry",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "PASS",
+        "scope": "Reported automated preservation qualification, not full acceptance",
+        "run": 42509607423,
+        "job": 128819587934,
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42509607423/job/128819587934"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_municipal_registry/verify_test.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-municipal-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-municipal-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/municipal-security/report.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-municipal-regressions.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/municipal-regressions/report.json",
+            "test/municipal-regressions/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "detail": "Deterministic and strengthened browser regressions passed: stage oscillator starts 26/32/34, exactly two sustained oscillators, seven cancellations with zero active oscillators after 8.25s, no muted starts, and unchanged pixel thresholds. Audio quality and operator acceptance remain separate.",
+            "run": 42515274539,
+            "job": 128836833671,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833671"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_municipal_registry --http --browser",
+      "lastSupplementaryReports": [
+        {
+          "step": "municipal-regressions",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Deterministic and strengthened browser regressions passed: stage oscillator starts 26/32/34, exactly two sustained oscillators, seven cancellations with zero active oscillators after 8.25s, no muted starts, and unchanged pixel thresholds. Audio quality and operator acceptance remain separate.",
+          "run": 42515274539,
+          "job": 128836833671,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833671"
+        }
+      ],
+      "previousSupplementaryReports": [
+        {
+          "step": "municipal-regressions",
+          "status": "FAIL",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Latest stage-color predicate failed; the diagnosed render-frame sampling correction still requires fresh hosted proof. This supplementary step remains pending.",
+          "run": 42514572291,
+          "job": 128834661710,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661710"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_nouveau_nimbus",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation",
+        "qualificationEvidence": {
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Full original assertions passed in legacy and shared modes; notes-injection regression remains a separate step.",
+          "run": 42514572291,
+          "job": 128834662081,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834662081"
+        }
+      },
+      "lastReported": {
+        "status": "PASS",
+        "originalSuiteStatus": "PASS",
+        "detail": "Full original assertions passed in legacy and shared modes; notes-injection regression remains a separate step.",
+        "run": 42514572291,
+        "job": 128834662081,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834662081",
+        "scope": "Reported source-suite/transport qualification only; independent operator and specialist build gates remain open"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_nouveau_nimbus/test/verify.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-specialist-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-specialist-security.js stargate_nouveau_nimbus",
+          "qualification": "established",
+          "artifacts": [
+            "test/specialist-security/stargate_nouveau_nimbus/legacy/result.json",
+            "test/specialist-security/stargate_nouveau_nimbus/shared/result.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-nimbus-notes-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/nimbus-notes-security/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "detail": "Baseline-client and repaired-client injection regressions passed.",
+            "run": 42514572291,
+            "job": 128834661673,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661673"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_nouveau_nimbus --http --browser",
+      "previousReports": [
+        {
+          "status": "UNVERIFIED",
+          "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+        }
+      ],
+      "lastSupplementaryReports": [
+        {
+          "step": "nimbus-notes-security",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Baseline-client and repaired-client injection regressions passed.",
+          "run": 42514572291,
+          "job": 128834661673,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661673"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_orbital_atc",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_orbital_atc/test_build.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-telemetry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-telemetry-security.js stargate_orbital_atc",
+          "qualification": "established",
+          "artifacts": [
+            "test/telemetry-security/stargate_orbital_atc/legacy/result.json",
+            "test/telemetry-security/stargate_orbital_atc/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_orbital_atc --http --browser"
+    },
+    {
+      "exhibit": "stargate_orthographic_cad",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation",
+        "qualificationEvidence": {
+          "status": "FAIL",
+          "originalSuiteStatus": "PASS",
+          "detail": "Original 41/41 passes in both modes and shared cleanup passes. Legacy Vite graceful close exceeded 10000ms, so latest aggregate source qualification is FAIL. Earlier successful source runs and separate built-preview PASS remain historical evidence; this is intermittent comparison cleanup infrastructure.",
+          "run": 42516017150,
+          "job": 128839086300,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086300"
+        }
+      },
+      "lastReported": {
+        "status": "FAIL",
+        "originalSuiteStatus": "PASS",
+        "detail": "Original 41/41 passes in both modes and shared cleanup passes. Legacy Vite graceful close exceeded 10000ms, so latest aggregate source qualification is FAIL. Earlier successful source runs and separate built-preview PASS remain historical evidence; this is intermittent comparison cleanup infrastructure.",
+        "run": 42516017150,
+        "job": 128839086300,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086300",
+        "scope": "Reported source-suite/transport qualification; independent full acceptance remains open"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_orthographic_cad/tests/e2e.test.mjs",
+          "kind": "original-suite",
+          "adapter": "scripts/check-package-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-package-entry-security.js stargate_orthographic_cad",
+          "qualification": "established",
+          "artifacts": [
+            "test/package-entry-security/stargate_orthographic_cad/legacy/result.json",
+            "test/package-entry-security/stargate_orthographic_cad/shared/result.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-vite-built-preview.js stargate_orthographic_cad",
+          "qualification": "established",
+          "artifacts": [
+            "test/vite-built-preview/stargate_orthographic_cad/result.json"
+          ],
+          "scope": "supplementary-built-artifact",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "PASS",
+            "detail": "Four exact built assets, Host/origin policy, rendering, full originals, cancellation, port conflict and shutdown passed.",
+            "run": 42515274539,
+            "job": 128836833546,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833546"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_orthographic_cad --http --browser",
+      "previousReports": [
+        {
+          "status": "FAIL",
+          "originalSuiteStatus": "UNVERIFIED",
+          "reason": "Hosted checker failed; adapter-versus-client failure diagnosis pending at this checkpoint",
+          "run": 42510716794,
+          "job": 128822958226,
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794/job/128822958226"
+        },
+        {
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Original 41/41 and eleven public assets passed in both source modes; built-preview qualification remains separate.",
+          "run": 42514572291,
+          "job": 128834661654,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661654",
+          "scope": "Reported source-suite/transport qualification only; independent operator and specialist build gates remain open"
+        }
+      ],
+      "previousSupplementaryReports": [],
+      "lastSupplementaryReports": [
+        {
+          "step": "built-orthographic_cad",
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Four exact built assets, Host/origin policy, rendering, full originals, cancellation, port conflict and shutdown passed.",
+          "run": 42515274539,
+          "job": 128836833546,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833546"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_radio_interferometry",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation",
+        "qualificationEvidence": {
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Full original test_e2e.mjs and eight public assets passed in both source modes; built-preview qualification remains separate.",
+          "run": 42514572291,
+          "job": 128834661724,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661724"
+        }
+      },
+      "lastReported": {
+        "status": "PASS",
+        "originalSuiteStatus": "PASS",
+        "detail": "Full original test_e2e.mjs and eight public assets passed in both source modes; built-preview qualification remains separate.",
+        "run": 42514572291,
+        "job": 128834661724,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661724",
+        "scope": "Reported source-suite/transport qualification only; independent operator and specialist build gates remain open"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_radio_interferometry/test_e2e.mjs",
+          "kind": "original-suite",
+          "adapter": "scripts/check-package-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-package-entry-security.js stargate_radio_interferometry",
+          "qualification": "established",
+          "artifacts": [
+            "test/package-entry-security/stargate_radio_interferometry/legacy/result.json",
+            "test/package-entry-security/stargate_radio_interferometry/shared/result.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-vite-built-preview.js stargate_radio_interferometry",
+          "qualification": "established",
+          "artifacts": [
+            "test/vite-built-preview/stargate_radio_interferometry/result.json"
+          ],
+          "scope": "supplementary-built-artifact",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "PASS",
+            "detail": "Four exact built assets, Host/origin policy, rendering, full originals, cancellation, port conflict and shutdown passed.",
+            "run": 42515274539,
+            "job": 128836833556,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833556"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_radio_interferometry --http --browser",
+      "previousReports": [
+        {
+          "status": "FAIL",
+          "originalSuiteStatus": "UNVERIFIED",
+          "reason": "Hosted checker failed; adapter-versus-client failure diagnosis pending at this checkpoint",
+          "run": 42510716794,
+          "job": 128822958180,
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794/job/128822958180"
+        }
+      ],
+      "previousSupplementaryReports": [],
+      "lastSupplementaryReports": [
+        {
+          "step": "built-radio_interferometry",
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Four exact built assets, Host/origin policy, rendering, full originals, cancellation, port conflict and shutdown passed.",
+          "run": 42515274539,
+          "job": 128836833556,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833556"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_reactor_criticality",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_reactor_criticality/tests/integration_test.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-reactor-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-reactor-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/reactor-security/report.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-reactor-regressions.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/reactor-regressions/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "run": 42512175752,
+            "job": 128827398421,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398421"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_reactor_criticality --http --browser"
+    },
+    {
+      "exhibit": "stargate_retro",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_retro --http --browser"
+    },
+    {
+      "exhibit": "stargate_rushlight_gemini",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "no-original-suite",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "No original harness recorded; supplementary load checks cannot establish an original suite pass."
+      },
+      "harnesses": [],
+      "checks": [],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_rushlight_gemini --http --browser"
+    },
+    {
+      "exhibit": "stargate_seismic_triangulation",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "PASS",
+        "scope": "Reported automated preservation qualification, not full acceptance",
+        "run": 42509607423,
+        "job": 128819587917,
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42509607423/job/128819587917"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_seismic_triangulation/scripts/verify.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-instrument-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-instrument-security.js --exhibit stargate_seismic_triangulation",
+          "qualification": "established",
+          "artifacts": [
+            "test/instrument-security/stargate_seismic_triangulation/legacy/result.json",
+            "test/instrument-security/stargate_seismic_triangulation/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_seismic_triangulation --http --browser"
+    },
+    {
+      "exhibit": "stargate_seti_deepscope",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation",
+        "qualificationEvidence": {
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Full original assertions, fifteen public assets, cancellation/restart and owned Vite cleanup passed in both source modes. The earlier cleanup FAIL is historical.",
+          "run": 42515274539,
+          "job": 128836833564,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833564"
+        }
+      },
+      "lastReported": {
+        "status": "PASS",
+        "originalSuiteStatus": "PASS",
+        "detail": "Full original assertions, fifteen public assets, cancellation/restart and owned Vite cleanup passed in both source modes. The earlier cleanup FAIL is historical.",
+        "run": 42515274539,
+        "job": 128836833564,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833564",
+        "scope": "Reported source-suite/transport qualification only; full operator acceptance remains separate"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_seti_deepscope/test_e2e.js",
+          "kind": "original-suite",
+          "adapter": "scripts/check-package-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-package-entry-security.js stargate_seti_deepscope",
+          "qualification": "established",
+          "artifacts": [
+            "test/package-entry-security/stargate_seti_deepscope/legacy/result.json",
+            "test/package-entry-security/stargate_seti_deepscope/shared/result.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-vite-built-preview.js stargate_seti_deepscope",
+          "qualification": "established",
+          "artifacts": [
+            "test/vite-built-preview/stargate_seti_deepscope/result.json"
+          ],
+          "scope": "supplementary-built-artifact",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "PASS",
+            "detail": "Four exact built assets, Host/origin policy, rendering, full originals, cancellation, port conflict and shutdown passed.",
+            "run": 42515274539,
+            "job": 128836833502,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833502"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_seti_deepscope --http --browser",
+      "previousReports": [
+        {
+          "status": "FAIL",
+          "originalSuiteStatus": "UNVERIFIED",
+          "reason": "Hosted checker failed; adapter-versus-client failure diagnosis pending at this checkpoint",
+          "run": 42510716794,
+          "job": 128822958144,
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42510716794/job/128822958144"
+        },
+        {
+          "status": "FAIL",
+          "originalSuiteStatus": "PASS",
+          "detail": "Full original test_e2e.js passed in both modes. Legacy Vite cleanup exceeded 10000ms, so aggregate preservation remains FAIL despite shared PASS; fresh cleanup and built-preview proof required.",
+          "run": 42514572291,
+          "job": 128834661714,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661714",
+          "scope": "Reported source-suite/transport qualification only; independent operator and specialist build gates remain open"
+        }
+      ],
+      "previousSupplementaryReports": [],
+      "lastSupplementaryReports": [
+        {
+          "step": "built-seti_deepscope",
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Four exact built assets, Host/origin policy, rendering, full originals, cancellation, port conflict and shutdown passed.",
+          "run": 42515274539,
+          "job": 128836833502,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833502"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_seti_freeform",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation",
+        "qualificationEvidence": {
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "Anchored scan scheduling passes the full unchanged test_e2e.js in legacy and shared source modes. Nine exact assets, eight shared security probes, in-flight manual cancellation/restarts, 8.25s idle and both listener cleanups pass. Original test SHA256 remains 804de7eeaccd7d96e34e49924080eeca87545dbcb563851a95e3a7e7084564f0. Operator/sound acceptance is separate.",
+          "run": 42567482830,
+          "job": 128997071192,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071192"
+        }
+      },
+      "lastReported": {
+        "status": "PASS",
+        "originalSuiteStatus": "PASS",
+        "detail": "Anchored scan scheduling passes the full unchanged test_e2e.js in legacy and shared source modes. Nine exact assets, eight shared security probes, in-flight manual cancellation/restarts, 8.25s idle and both listener cleanups pass. Original test SHA256 remains 804de7eeaccd7d96e34e49924080eeca87545dbcb563851a95e3a7e7084564f0. Operator/sound acceptance is separate.",
+        "run": 42567482830,
+        "job": 128997071192,
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071192",
+        "scope": "Reported source-suite/transport qualification; independent full acceptance remains open"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_seti_freeform/test_e2e.js",
+          "kind": "original-suite",
+          "adapter": "scripts/check-package-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-package-entry-security.js stargate_seti_freeform",
+          "qualification": "established",
+          "artifacts": [
+            "test/package-entry-security/stargate_seti_freeform/legacy/result.json",
+            "test/package-entry-security/stargate_seti_freeform/shared/result.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-keyboard-interlocks.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/keyboard-interlocks/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "detail": "Baseline and repaired keyboard interlock regressions passed; the package-source checker remains independently pending.",
+            "run": 42514572291,
+            "job": 128834661830,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661830"
+          }
+        },
+        {
+          "command": "node scripts/check-vite-built-preview.js stargate_seti_freeform",
+          "qualification": "established",
+          "artifacts": [
+            "test/vite-built-preview/stargate_seti_freeform/result.json"
+          ],
+          "scope": "supplementary-built-artifact",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "PASS",
+            "detail": "The same unchanged original suite now passes against built output. Four exact assets, Host/origin policy, source/built render contract, verified in-flight cancellation/restarts, port conflict and port release pass. Earlier fixed-350ms failures remain historical; full operator acceptance is not inferred.",
+            "run": 42567482830,
+            "job": 128997071211,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071211"
+          }
+        },
+        {
+          "command": "node scripts/check-freeform-manual-contract.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/freeform-manual-contract/result.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "detail": "Real-pointer manual cycles pass at 1080p/4K with exact seven-carrier addresses, hold blocking/release, explicit activation, three stage callbacks and 8.25s reset. Six ready/active/cancelled captures reviewed. Original-cadence observation reaches READY; this supplementary result does not replace the separately passing full originals. Measured callbacks span 311.8–384.2ms; no hard browser delivery deadline is claimed.",
+            "run": 42567482830,
+            "job": 128997071194,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071194"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_seti_freeform --http --browser",
+      "lastSupplementaryReports": [
+        {
+          "step": "keyboard-interlocks",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Baseline and repaired keyboard interlock regressions passed; the package-source checker remains independently pending.",
+          "run": 42514572291,
+          "job": 128834661830,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661830"
+        },
+        {
+          "step": "built-seti_freeform",
+          "status": "PASS",
+          "originalSuiteStatus": "PASS",
+          "detail": "The same unchanged original suite now passes against built output. Four exact assets, Host/origin policy, source/built render contract, verified in-flight cancellation/restarts, port conflict and port release pass. Earlier fixed-350ms failures remain historical; full operator acceptance is not inferred.",
+          "run": 42567482830,
+          "job": 128997071211,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071211"
+        },
+        {
+          "step": "freeform-manual-contract",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Real-pointer manual cycles pass at 1080p/4K with exact seven-carrier addresses, hold blocking/release, explicit activation, three stage callbacks and 8.25s reset. Six ready/active/cancelled captures reviewed. Original-cadence observation reaches READY; this supplementary result does not replace the separately passing full originals. Measured callbacks span 311.8–384.2ms; no hard browser delivery deadline is claimed.",
+          "run": 42567482830,
+          "job": 128997071194,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42567482830/job/128997071194"
+        }
+      ],
+      "previousSupplementaryReports": [
+        {
+          "step": "built-seti_freeform",
+          "status": "FAIL",
+          "originalSuiteStatus": "FAIL",
+          "detail": "Four built assets, Host/origin policy, rendering and cancellation passed; the retained original 350ms manual assertion reports DIALING instead of READY. Port release was not recorded before that assertion failed in this run. No full built-contract PASS.",
+          "run": 42515274539,
+          "job": 128836833483,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833483"
+        },
+        {
+          "step": "built-seti_freeform",
+          "status": "FAIL",
+          "originalSuiteStatus": "FAIL",
+          "detail": "The original fixed-350ms READY assertion is the recorded failure. Built assets, Host/origin policy, rendering, verified in-flight manual cancellation/restarts, port conflict and port release pass. No full built-contract or operator PASS.",
+          "run": 42516017150,
+          "job": 128839086419,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086419"
+        },
+        {
+          "step": "freeform-manual-contract",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Completion-aware real-pointer manual cycles passed at 1080p and 4K, including hold, explicit activation, all three stages and reset. Observed callbacks took 344–628ms. The observation-only fixed-cadence cycle reached READY in this run, but does not rerun or supersede the separately failing full original suite.",
+          "run": 42516017150,
+          "job": 128839086216,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086216"
+        }
+      ],
+      "previousReports": [
+        {
+          "status": "UNVERIFIED",
+          "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+        },
+        {
+          "status": "FAIL",
+          "originalSuiteStatus": "FAIL",
+          "detail": "Both modes preserve the original fixed-350ms READY assertion failure. Nine public assets, eight shared security probes, verified in-flight manual cancellation/restarts followed by 8.25s idle, and listener cleanup pass. Qualification establishes truthful execution, not original-suite PASS.",
+          "run": 42516017150,
+          "job": 128839086446,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42516017150/job/128839086446",
+          "scope": "Reported source-suite/transport qualification; independent full acceptance remains open"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_sigint_cryptanalysis",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_sigint_cryptanalysis/test_suite.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-sigint-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-sigint-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/sigint-security/legacy.json",
+            "test/sigint-security/shared.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_sigint_cryptanalysis --http --browser"
+    },
+    {
+      "exhibit": "stargate_solarpunk_astra",
+      "originalHarnessPresence": "absent",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "supplementary-only"
+      },
+      "lastReported": {
+        "exhibit": "stargate_solarpunk_astra",
+        "status": "UNVERIFIED",
+        "preservationStatus": "PASS",
+        "originalSuiteStatus": "UNVERIFIED",
+        "coverageStatus": "PASS",
+        "functionalStatus": "UNVERIFIED",
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "errors": [],
+        "findings": [],
+        "scope": "Fresh registered-suite dispatch, not full functional/operator acceptance",
+        "run": 42515274539,
+        "job": 128836833771,
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42515274539/job/128836833771",
+        "commandExitCode": 2,
+        "reason": "Astra has no recorded original assertion suite. Preservation and coverage PASS; explicit original UNVERIFIED correctly makes the multi-target CLI exit 2."
+      },
+      "harnesses": [],
+      "checks": [
+        {
+          "command": "node scripts/check-pilot-browsers.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/pilot-browser/report.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_solarpunk_astra --http --browser",
+      "previousReports": [
+        {
+          "status": "UNVERIFIED",
+          "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_solarpunk_conservatory",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "BASELINE_FAILURE_PRESERVED",
+        "run": 42509607423,
+        "job": 128819587912,
+        "detail": "Legacy/shared 41/42; stage-pair distances 9.0/10.6 below required 12. Original assertions remain FAIL.",
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42509607423/job/128819587912",
+        "originalSuiteStatus": "FAIL"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_solarpunk_conservatory/test/capture.mjs",
+          "kind": "original-preview-capture-tool",
+          "adapter": "scripts/check-remaining-harnesses.js",
+          "originalAssertionSuite": false
+        },
+        {
+          "path": "stargate_solarpunk_conservatory/test/run-tests.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-secondary-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-secondary-security.js stargate_solarpunk_conservatory",
+          "qualification": "established",
+          "artifacts": [
+            "test/secondary-security/stargate_solarpunk_conservatory/legacy/result.json",
+            "test/secondary-security/stargate_solarpunk_conservatory/shared/result.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-remaining-harnesses.js stargate_solarpunk_conservatory",
+          "qualification": "established",
+          "artifacts": [
+            "test/remaining-harnesses/stargate_solarpunk_conservatory/result.json"
+          ],
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "scope": "original-preview-capture-tool",
+            "run": 42512175752,
+            "job": 128827398290,
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42512175752/job/128827398290"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_solarpunk_conservatory --http --browser"
+    },
+    {
+      "exhibit": "stargate_solarpunk_ecogrid",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_solarpunk_ecogrid/test_build.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-telemetry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-telemetry-security.js stargate_solarpunk_ecogrid",
+          "qualification": "established",
+          "artifacts": [
+            "test/telemetry-security/stargate_solarpunk_ecogrid/legacy/result.json",
+            "test/telemetry-security/stargate_solarpunk_ecogrid/shared/result.json"
+          ]
+        },
+        {
+          "command": "node scripts/check-keyboard-interlocks.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/keyboard-interlocks/report.json"
+          ],
+          "scope": "supplementary-current-regression",
+          "qualificationEvidence": {
+            "status": "PASS",
+            "originalSuiteStatus": "UNVERIFIED",
+            "detail": "Baseline and repaired keyboard interlock regressions passed.",
+            "run": 42514572291,
+            "job": 128834661830,
+            "operatorStatus": "UNVERIFIED",
+            "acceptanceStatus": "UNVERIFIED",
+            "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661830"
+          }
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_solarpunk_ecogrid --http --browser",
+      "lastSupplementaryReports": [
+        {
+          "step": "keyboard-interlocks",
+          "status": "PASS",
+          "originalSuiteStatus": "UNVERIFIED",
+          "detail": "Baseline and repaired keyboard interlock regressions passed.",
+          "run": 42514572291,
+          "job": 128834661830,
+          "operatorStatus": "UNVERIFIED",
+          "acceptanceStatus": "UNVERIFIED",
+          "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661830"
+        }
+      ]
+    },
+    {
+      "exhibit": "stargate_sonar_abyssal",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_sonar_abyssal/test_build.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-telemetry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-telemetry-security.js stargate_sonar_abyssal",
+          "qualification": "established",
+          "artifacts": [
+            "test/telemetry-security/stargate_sonar_abyssal/legacy/result.json",
+            "test/telemetry-security/stargate_sonar_abyssal/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_sonar_abyssal --http --browser"
+    },
+    {
+      "exhibit": "stargate_steampunk_fable",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_steampunk_fable/test/run-tests.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-extra-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-extra-entry-security.js stargate_steampunk_fable",
+          "qualification": "established",
+          "artifacts": [
+            "test/extra-entry-security/stargate_steampunk_fable/legacy/result.json",
+            "test/extra-entry-security/stargate_steampunk_fable/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_steampunk_fable --http --browser"
+    },
+    {
+      "exhibit": "stargate_synchrotron_collider",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_synchrotron_collider/verify.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-synchrotron-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-synchrotron-security.js",
+          "qualification": "established",
+          "artifacts": [
+            "test/synchrotron-security/legacy.json",
+            "test/synchrotron-security/shared.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_synchrotron_collider --http --browser",
+      "notes": [
+        "Fresh originalSuite.status remains the original gate; a passing currentMetadataContract cannot relabel an original version-assertion failure."
+      ]
+    },
+    {
+      "exhibit": "stargate_ukiyo_waystation",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "PASS",
+        "scope": "Reported automated preservation qualification, not full acceptance",
+        "run": 42509607423,
+        "job": 128819587977,
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42509607423/job/128819587977"
+      },
+      "harnesses": [
+        {
+          "path": "stargate_ukiyo_waystation/scripts/test_e2e.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-instrument-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-instrument-security.js --exhibit stargate_ukiyo_waystation",
+          "qualification": "established",
+          "artifacts": [
+            "test/instrument-security/stargate_ukiyo_waystation/legacy/result.json",
+            "test/instrument-security/stargate_ukiyo_waystation/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_ukiyo_waystation --http --browser"
+    },
+    {
+      "exhibit": "stargate_ukiyo_waystation_fable",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_ukiyo_waystation_fable/test/diagnose.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-extra-entry-security.js"
+        },
+        {
+          "path": "stargate_ukiyo_waystation_fable/test/probe-4k.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-extra-entry-security.js"
+        },
+        {
+          "path": "stargate_ukiyo_waystation_fable/test/ring-verify.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-extra-entry-security.js"
+        },
+        {
+          "path": "stargate_ukiyo_waystation_fable/test/run-tests.mjs",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-extra-entry-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-extra-entry-security.js stargate_ukiyo_waystation_fable",
+          "qualification": "established",
+          "artifacts": [
+            "test/extra-entry-security/stargate_ukiyo_waystation_fable/legacy/result.json",
+            "test/extra-entry-security/stargate_ukiyo_waystation_fable/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_ukiyo_waystation_fable --http --browser"
+    },
+    {
+      "exhibit": "stargate_windtunnel_aerodynamics",
+      "originalHarnessPresence": "recorded",
+      "originalSuiteAcceptance": "UNVERIFIED until explicit fresh original evidence, or FAIL where preserved failure is documented",
+      "registration": {
+        "qualification": "established",
+        "scope": "original-suite-preservation"
+      },
+      "lastReported": {
+        "status": "UNVERIFIED",
+        "reason": "Registration establishes routing only; inspect fresh execution evidence for success or failure."
+      },
+      "harnesses": [
+        {
+          "path": "stargate_windtunnel_aerodynamics/verify.js",
+          "kind": "original-harness-owned-by-existing-checker",
+          "adapter": "scripts/check-science-security.js"
+        }
+      ],
+      "checks": [
+        {
+          "command": "node scripts/check-science-security.js stargate_windtunnel_aerodynamics",
+          "qualification": "established",
+          "artifacts": [
+            "test/science-security/stargate_windtunnel_aerodynamics/legacy/result.json",
+            "test/science-security/stargate_windtunnel_aerodynamics/shared/result.json"
+          ]
+        }
+      ],
+      "supplementaryCommand": "node scripts/verify.js --exhibit stargate_windtunnel_aerodynamics --http --browser"
+    }
+  ],
+  "rootChecks": [
+    {
+      "command": "node scripts/check-hub-loading.js",
+      "qualification": "established",
+      "artifacts": [
+        "test/hub-loading/report.json"
+      ],
+      "scope": "Loading/failure/live-status and keyboard-filter regression only; not accessibility certification or original exhibit suite",
+      "lastReported": {
+        "status": "PASS",
+        "modes": [
+          "catalog-success",
+          "catalog-failure"
+        ],
+        "originalSuiteStatus": "UNVERIFIED",
+        "operatorStatus": "UNVERIFIED",
+        "acceptanceStatus": "UNVERIFIED",
+        "run": 42514572291,
+        "job": 128834661647,
+        "url": "https://github.com/StarlightDaemon/Stargate/actions/runs/42514572291/job/128834661647"
+      }
+    }
+  ]
+}

@@ -108,11 +108,21 @@ const Physics = (() => {
     state.buoyancyDeltaKN = kn;
   };
 
+  // Disengage is a simulator reset, not a time-compressed physical ascent.
+  // Activation continues to integrate depth normally toward its target.
+  const resetToSurface = () => {
+    Object.assign(state, { depth: 0, targetDepth: 0, velocity: 0, maxVelocity: 45,
+      buoyancyDeltaKN: 0, pitchDeg: 0, rollDeg: 0, isAscending: false, isDescending: false });
+    lastTime = performance.now();
+    update(); // Recompute every derived meter from surface depth immediately.
+  };
+
   const getState = () => state;
 
   return {
     update,
     setTargetDepth,
+    resetToSurface,
     setBuoyancyDelta,
     getState,
     CRUSH_DEPTH

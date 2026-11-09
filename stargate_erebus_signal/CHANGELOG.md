@@ -5,6 +5,70 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — development-server security
+
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
+
+### Explicit activation and cancellation repair — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Presets retain the four visible symbol-seeking steps and now stop pending. The
+  operator must press `ENGAGE_LINK` to activate, as with manual dialing.
+- The existing link control reads `CANCEL_LINK` during seeking, a partial
+  address, activation buildup, or rejection, and remains reachable. Cancellation
+  clears the address and owned workflow timers; generation checks prevent an old
+  preset or rejection callback from changing a replacement attempt.
+- Active disconnect retains its degradation animation and stops the hum. No
+  visual assets, layout, URLs, original attribution or original suite changed.
+- Audio cleanup owns the fading oscillator instead of looking up a mutable
+  current oscillator after a delay. A reproduced stop/restart race previously
+  stopped the replacement hum and left the old one running. Delayed lock tones
+  and transient sources are now cancelled with their abandoned workflow.
+- An offline probe using the actual workflow methods reproduced both baseline
+  defects (automatic activation and ineffective busy cancellation), then passed
+  exact-address cancellation/restart with the repair. Separate hosted browser
+  regression coverage includes explicit activation, real-pointer cancellation,
+  rejection/restart, two manual cycles and 8.25-second idle checks. Hosted results
+  are recorded separately; full operator and sound acceptance remain separate.
+
+### Fixed
+
+- Replaced the development handler with the shared secure preview launcher after
+  historical/shared qualification. Raw HTTP requests previously returned parent
+  and sibling files outside this exhibit, exposed the server source and accepted
+  POST. The replacement rejects those requests and binds only to loopback.
+- Preserved `node server.js` and default port 8000; added the shared `PORT`
+  override. The published application, styles, original test flow, version and
+  original build attribution are unchanged.
+
+### Verification
+
+- Pre-replacement comparison matched all five public assets byte-for-byte,
+  checked all seven expected diagnostics from the original test flow, and passed
+  two hit-tested manual dial/activate/disconnect cycles under each server.
+- Manual completion remained pending until explicit activation. Desktop screenshots
+  and JSON reports are retained outside tracked content. Full animation, sound,
+  responsive and operator acceptance remain separate.
+
+### Known issues — separate functional work
+
+- Quick-dial presets automatically activate after dialing. Reproduced under both
+  the historical and shared handlers; this violates the explicit-activation
+  requirement and is not repaired by the server-security change.
+- Both handlers report the existing missing `/favicon.ico` resource.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and intercept waveform motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.1.1] - 2026-09-04
 
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.

@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Cold-start audio initialization — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Hosted stage regression `128829555788` passed visual/cancellation checks but recorded zero oscillator starts in every state. Inspection confirmed that the initial AUDIO: ON state never initialized Web Audio on ordinary controls; all sound methods returned before their own initialization call. Only manually toggling audio OFF then ON initialized the context. The earlier zero-source cancellation check was therefore insufficient audio evidence.
+- Initialize/resume audio on trusted pointer or keyboard input while AUDIO: ON, before that gesture's control handler runs. Muted input does not initialize/resume audio. The existing explicit audio toggle and its session-only preference are preserved; no persistence schema or default changed.
+- Strengthened browser regression to reproduce the silent baseline, require actual cold-workflow and buildup oscillator starts, require both sustained carrier oscillators, verify muted workflows start no new sources, and require zero active sources after 8.25-second cancellation windows. Deterministic gesture/mute checks pass; hosted audio lifecycle verification is pending. This does not claim subjective sound-quality acceptance.
+
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
+
+### Cancellable staged authorization — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Diagnosed immediate `ENGAGED` state, carrier and telemetry startup in the original Engage handler; hosted observations found authorization already active at 300ms, contrary to the required distinct buildup, breakthrough and sustained phases.
+- Added 1.4 seconds of amber carrier-indexing rings and accelerating existing seek chirps, followed by an 0.8-second phosphor authorization flash with the existing stamp impact. The established sustained green raster, approved stamp, carrier and live telemetry start afterward. Existing palette, terminal composition, controls and attribution are preserved.
+- Stage callbacks and chirps use the cancellation generation introduced by the preset repair. REVOKE PERMIT and mid-activation Compliance Freeze invalidate pending work. Inputs cannot restart an activation already in progress; the final glyph lock establishes ready state before approval becomes available.
+- Added a focused deterministic/browser regression for baseline immediate activation, stage feedback, distinct canvas frames, cancellation during both transitional stages, 8.25-second stable idle, oscillator shutdown, exact preset replacement and two manual redial cycles. Deterministic checks pass; hosted browser and visual acceptance remain pending.
+- The original eight-phase verification source and positive assertions are unchanged. Its logged 600ms authorization observations now describe buildup. The explicit CURRENT adapter inserts only two sustained-stage waits and retains historical timing mismatches separately. No historical timing diagnostic is relabeled as a current-contract PASS. Merge and deployment remain on HOLD.
+
+### Security maintenance
+
+- Replaced the standalone development handler and the verification suite's embedded handler with the shared public-asset allowlist server. Loopback defaults, launch commands and ports 8840/8899 remain. Parent-directory reads, implementation-file exposure and unsupported request methods are denied.
+- Preserved the complete original HTTP checks and eight-phase browser verification body. Added comparisons against the historical standalone and embedded transports, including exact public-asset bytes and real HTTP denial probes. Historical/shared qualification passed in hosted run 42508178082; verification of the migrated entry points is pending the follow-up hosted run.
+- Retained existing application behavior and release identity. Interrupted quick-dial callbacks after disengage and qualification of three visibly distinct activation stages remain functional follow-ups; this infrastructure change does not grant operator acceptance.
+
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
@@ -71,3 +102,10 @@ tagged at `cebb7ff`, the release commit.
 - Operator Reference (`?`) modal with Bureaucratic Standard Operating Procedures.
 - Vector CRT Oscilloscope Canvas displaying municipal conduit raster lines, packet vectors, and event horizon authorization plane.
 - Corner metadata links: `StarlightDaemon` (bottom-left) and version label `v1.0.0` (bottom-right).
+
+
+## Cancellation repair — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Own and invalidate manual-stamp, preset, rejection and delayed-teardown callbacks. Cancellation prevents later filed glyphs; a replacement address cannot be erased by the prior teardown.
+- Preserves original eight-phase assertions and existing timing/visual design. Dedicated cancellation/replacement probes wait 8.25 seconds. Three-stage activation and operator acceptance remain separate unresolved gates.

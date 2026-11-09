@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer-core`, `pngjs` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- The existing original-suite aperture-luminance and stage-distance pixel failures remain FAIL; no predicate or runtime asset was changed. Historical operator disposition is preserved.
+
+### Shared preview consolidation — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the private static handler with shared loopback-only preview after
+  real HTTP asset/security qualification and paired original-stage visual review.
+  Preserves default port 8733, `PORT`, and synchronous `startServer(port)` / `PORT`
+  exports; private files receive 403, POST 405, malformed escapes 400.
+- Client assets and original 104 predicates remain unchanged. Historical/shared
+  run `42509607423` reports 103/104 and 102/104, respectively. The pending `<45`
+  and stage-pair `≥25` pixel failures remain recorded, including the earlier run
+  where both failed in both modes. README records exact current measurements.
+- This is infrastructure equivalence with diagnosed baseline failures, not full
+  functional acceptance. Original operator history is preserved; release HOLD.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added

@@ -86,6 +86,7 @@ async function runTests() {
 
   console.log('\n====================================================');
   console.log(`TEST SUMMARY: ${passed} PASSED, ${failed} FAILED`);
+  process.exitCode = failed ? 1 : 0;
   console.log('====================================================\n');
 }
 

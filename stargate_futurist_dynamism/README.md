@@ -23,6 +23,8 @@ An interactive client-side gateway-dialing terminal inspired by the visual langu
 
 ## Running Locally
 
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.
+
 ```bash
 node server.js
 ```
@@ -34,3 +36,12 @@ Navigate to `http://localhost:3000/`.
 ```bash
 node test/verify.js
 ```
+
+
+## Shared local preview
+
+`node server.js` uses the repository shared server at `http://127.0.0.1:3000`.
+`PORT` overrides the port. Keep this exhibit inside the repository. The original
+unstarted native HTTP server export and `.listen(port)` contract is retained.
+Only tracked public assets are served; unsupported methods and development files
+are denied. Original creative-fit and operator dispositions remain unchanged.

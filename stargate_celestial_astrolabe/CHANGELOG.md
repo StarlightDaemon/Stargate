@@ -13,6 +13,13 @@ All notable changes to the Stargate Celestial Astrolabe build will be documented
 - `version.json` restructured to the catalog's common shape: `version` and `model` at top level, with `build`, `institute` and `vessel` preserved verbatim under a `meta` object. No date key existed, so no `built` field was added. Version value unchanged.
 - Test harnesses `diag.js` and `test_e2e.js` (raw CDP, no puppeteer launch): the hardcoded Chrome path constant was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to a dynamically imported puppeteer/puppeteer-core `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. `test_e2e.js` additionally drops its hardcoded Windows temp-folder profile directory in favour of `os.tmpdir()`. No absolute local path remains in either harness. Harness only; runtime unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and astrolabe meridians motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-08-22
 
 > **Operator Verification Note:** Direct operator testing confirmed the build fully functional end-to-end — manual star-fix dialing, three-stage activation (Buildup, Breakthrough, Sustained Active), disengage field collapse, and quick-dial auto-dialing sequence were all verified working, along with all secondary telemetry panels (Horizon Sky-Dome, Dead-Reckoning Plotter, Deep Ephemeris Catalog, and Instrument Settings).

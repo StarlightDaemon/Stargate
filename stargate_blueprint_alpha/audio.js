@@ -10,6 +10,25 @@ class BlueprintAudioEngine {
     this.enabled = true;
     this.ambientHumGain = null;
     this.ambientHumNodes = [];
+    this.ambientRequested = false;
+    this.pendingPenTimers = new Set();
+    this.transientSources = new Set();
+    this.ambientCleanups = new Set();
+    this.soundGeneration = 0;
+  }
+
+  startTransient(source, when) {
+    this.transientSources.add(source);
+    source.onended = () => { this.transientSources.delete(source); source.disconnect(); };
+    source.start(when);
+  }
+
+  cancelTransientWork() {
+    this.soundGeneration++;
+    this.pendingPenTimers.forEach(timer => clearTimeout(timer));
+    this.pendingPenTimers.clear();
+    for (const source of this.transientSources) { source.stop(); source.disconnect(); }
+    this.transientSources.clear();
   }
 
   init() {
@@ -24,8 +43,26 @@ class BlueprintAudioEngine {
 
   toggleAudio() {
     this.enabled = !this.enabled;
-    if (!this.enabled && this.ambientHumGain) {
-      this.ambientHumGain.gain.setValueAtTime(0, this.ctx.currentTime);
+    if (!this.enabled) {
+      this.cancelTransientWork();
+      for (const cleanup of [...this.ambientCleanups]) {
+        clearTimeout(cleanup.timer);
+        cleanup.finish();
+      }
+      if (this.ambientHumGain) {
+        const now = this.ctx.currentTime;
+        this.ambientHumGain.gain.cancelScheduledValues(now);
+        this.ambientHumGain.gain.setValueAtTime(0, now);
+      }
+    } else if (this.ambientRequested) {
+      if (this.ambientHumGain) {
+        const now = this.ctx.currentTime;
+        this.ambientHumGain.gain.cancelScheduledValues(now);
+        this.ambientHumGain.gain.setValueAtTime(0, now);
+        this.ambientHumGain.gain.linearRampToValueAtTime(0.08, now + 0.1);
+      } else {
+        this.startAmbientHum();
+      }
     }
     return this.enabled;
   }
@@ -55,7 +92,7 @@ class BlueprintAudioEngine {
     filter.connect(gain);
     gain.connect(this.ctx.destination);
 
-    osc.start(now);
+    this.startTransient(osc, now);
     osc.stop(now + 0.04);
   }
 
@@ -97,7 +134,7 @@ class BlueprintAudioEngine {
     bandFilter.connect(gain);
     gain.connect(this.ctx.destination);
 
-    noise.start(now);
+    this.startTransient(noise, now);
   }
 
   // Caliper Clamp Snap (Locking gesture sound)
@@ -120,13 +157,16 @@ class BlueprintAudioEngine {
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
-    osc.start(now);
+    this.startTransient(osc, now);
     osc.stop(now + 0.1);
 
     // Complementary rapidograph pen stroke
-    setTimeout(() => {
-      this.playPenScratch();
+    const generation = this.soundGeneration;
+    const timer = setTimeout(() => {
+      this.pendingPenTimers.delete(timer);
+      if (generation === this.soundGeneration) this.playPenScratch();
     }, 40);
+    this.pendingPenTimers.add(timer);
   }
 
   // Structural Review Hold Warning Buzzer & Pips
@@ -153,7 +193,7 @@ class BlueprintAudioEngine {
     filter.connect(gain);
     gain.connect(this.ctx.destination);
 
-    osc.start(now);
+    this.startTransient(osc, now);
     osc.stop(now + 0.36);
 
     // 2 high warning pips
@@ -167,13 +207,13 @@ class BlueprintAudioEngine {
 
       pip.connect(pipGain);
       pipGain.connect(this.ctx.destination);
-      pip.start(now + offset);
+      this.startTransient(pip, now + offset);
       pip.stop(now + offset + 0.06);
     });
   }
 
   // Drawing Approval Stamp Impact & Harmonic Manifold Swell
-  playApprovalAndActivation() {
+  playApprovalAndActivation(startAmbient = true) {
     if (!this.enabled) return;
     this.init();
     const now = this.ctx.currentTime;
@@ -188,7 +228,7 @@ class BlueprintAudioEngine {
     thumpGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
     thump.connect(thumpGain);
     thumpGain.connect(this.ctx.destination);
-    thump.start(now);
+    this.startTransient(thump, now);
     thump.stop(now + 0.3);
 
     // Harmonic chords
@@ -206,17 +246,18 @@ class BlueprintAudioEngine {
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
-      osc.start(now + 0.1);
+      this.startTransient(osc, now + 0.1);
       osc.stop(now + 1.7);
     });
 
-    // Start continuous topological ambient hum
-    this.startAmbientHum();
+    // Approval impact and sustained resonance may belong to separate stages.
+    if (startAmbient) this.startAmbientHum();
   }
 
   // Continuous Topological Aperture Hum
   startAmbientHum() {
     this.stopAmbientHum();
+    this.ambientRequested = true;
     if (!this.enabled) return;
     this.init();
     const now = this.ctx.currentTime;
@@ -265,30 +306,35 @@ class BlueprintAudioEngine {
   }
 
   stopAmbientHum() {
-    if (this.ambientHumGain) {
-      try {
-        const now = this.ctx ? this.ctx.currentTime : 0;
-        this.ambientHumGain.gain.linearRampToValueAtTime(0.001, now + 0.5);
-        setTimeout(() => {
-          this.ambientHumNodes.forEach(node => {
-            try { node.stop(); } catch(e){}
-            try { node.disconnect(); } catch(e){}
-          });
-          this.ambientHumNodes = [];
-          if (this.ambientHumGain) {
-            this.ambientHumGain.disconnect();
-            this.ambientHumGain = null;
-          }
-        }, 550);
-      } catch(e) {
-        this.ambientHumNodes = [];
-        this.ambientHumGain = null;
-      }
+    this.ambientRequested = false;
+    // Finish an older fade before scheduling another; it owns captured nodes only.
+    for (const cleanup of [...this.ambientCleanups]) {
+      clearTimeout(cleanup.timer);
+      cleanup.finish();
     }
+    const gain = this.ambientHumGain;
+    const nodes = this.ambientHumNodes;
+    this.ambientHumGain = null;
+    this.ambientHumNodes = [];
+    if (!gain) return;
+    const cleanup = { timer: null, finish: () => {
+      if (!this.ambientCleanups.delete(cleanup)) return;
+      nodes.forEach(node => { node.stop(); node.disconnect(); });
+      gain.disconnect();
+    } };
+    this.ambientCleanups.add(cleanup);
+    const now = this.ctx.currentTime;
+    if (this.enabled) gain.gain.linearRampToValueAtTime(0.001, now + 0.5);
+    else {
+      gain.gain.cancelScheduledValues(now);
+      gain.gain.setValueAtTime(0, now);
+    }
+    cleanup.timer = setTimeout(cleanup.finish, 550);
   }
 
   // Plotter Sweep & Line Erase / Disengage sound
   playDisengage() {
+    this.cancelTransientWork();
     this.stopAmbientHum();
     if (!this.enabled) return;
     this.init();
@@ -313,7 +359,7 @@ class BlueprintAudioEngine {
     filter.connect(sweepGain);
     sweepGain.connect(this.ctx.destination);
 
-    sweep.start(now);
+    this.startTransient(sweep, now);
     sweep.stop(now + 0.46);
 
     // Pneumatic release hiss
@@ -340,7 +386,7 @@ class BlueprintAudioEngine {
     hissFilter.connect(hissGain);
     hissGain.connect(this.ctx.destination);
 
-    hiss.start(now + 0.1);
+    this.startTransient(hiss, now + 0.1);
   }
 }
 

@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer-core` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- This dependency consolidation leaves the already-qualified browser behavior and original assertions intact; it does not grant new operator or release acceptance.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
@@ -11,6 +17,13 @@
 ### Changed
 - `version.json` restructured to the catalog's common shape: `version`, `model` and `built` at top level (the former `timestamp` key moved verbatim to `built`, full ISO datetime kept), with `build_name` and `system_id` preserved under a `meta` object. Version value unchanged.
 - Test harness `scripts/verify.js`: the hardcoded Chrome/Edge candidate list was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to puppeteer's own `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. No absolute local path remains in the harness. Harness only; runtime unchanged.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and seismic station triangulation motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
 
 ## [1.0.0] - 2026-08-22
 
@@ -29,3 +42,10 @@
 - **Safety Interlock**: "Crustal Shear Lockout" defaulting to RELEASED (safe), featuring unmissable audio-visual alert states when engaged.
 - **Audio Synthesizer**: Native Web Audio API procedural synthesis for infrasonic sub-bass tremor hum, phase-lock chirps, breakthrough rupture shockwave, and sustained harmonic resonance.
 - **Scalability & UX**: Strict 16:9 1920x1080 native fit with JS-computed scale transform up to 4K (3840x2160), operator reference modal (`?`), and attribution links.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace the independently maintained server with the shared loopback/public-file transport after hosted qualification; original client assets and tests are retained.
+- Actual migrated command checks and broader acceptance remain separate.

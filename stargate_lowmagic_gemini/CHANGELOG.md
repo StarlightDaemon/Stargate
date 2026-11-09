@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Preset cancellation repair — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Snuffing or clearing the hearth now cancels the app-owned preset interval as
+  well as resetting the portal and dial. Previously, snuffing after two preset
+  symbols allowed the remaining five symbols to bind after cancellation.
+- Each replay has a generation guard so a queued callback from a cancelled or
+  replaced replay cannot add symbols to the next address.
+- Verification retains the original no-suite classification and adds real
+  pointer cancellation/restart checks, delayed idle checks, and a deterministic
+  queued-callback regression probe. Hosted acceptance is recorded separately.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and hearth flame motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.0.0] - 2026-09-04
 
 **Built by:** Gemini 3.8 Flash (High)
@@ -23,3 +45,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cold-Iron Threshold Nail safety interlock (defaults to Released) with visual warning rhyme when engaged.
 - Procedural Web Audio engine producing folk acoustic sounds (plucked twine, chalk scrapes, bellows breath, sheep-shear snip, and hearth bell).
 - Accessibility support including `prefers-reduced-motion` compliance, live region state captioning, and full keyboard operability.
+
+
+## Infrastructure maintenance — 2026-11-08
+
+**Maintained by:** Codex maintenance session.
+- Replace the independently maintained server with the shared loopback/public-file transport after hosted qualification; original client assets and tests are retained.
+- Actual migrated command checks and broader acceptance remain separate.

@@ -113,6 +113,7 @@ const SKIP_ENTRIES = new Set([
 ]);
 
 const SKIP_FILES = new Set([
+  ".gitignore",
   "README.md",
   "CHANGELOG.md",
   "package.json",
@@ -120,7 +121,7 @@ const SKIP_FILES = new Set([
   "npm-shrinkwrap.json",
 ]);
 
-const ROOT_DEVELOPMENT_FILE = /^(?:(?:test|verify|diag|audit)(?:[_-].*)?|.*[_-](?:test|spec)|run[_-]?tests?(?:[_-].*)?|server)\.(?:[cm]?js|ts|html)$/i;
+const ROOT_DEVELOPMENT_FILE = /^(?:(?:test|verify|diag|audit)(?:[_-].*)?|.*[_-](?:test|spec)|run[_-]?tests?(?:[_-].*)?|(?:dev-)?serve(?:r)?)\.(?:[cm]?js|ts|html)$/i;
 
 // Google Fonts requests disclose a visitor's IP address to a third party and
 // make each standalone build depend on an off-site render-blocking resource.

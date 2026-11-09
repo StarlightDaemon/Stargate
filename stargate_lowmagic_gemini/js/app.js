@@ -25,6 +25,7 @@ class RushlightApp {
     this.muteBtnEl = null;
 
     this.autoDialTimer = null;
+    this.autoDialGeneration = 0;
     this.dropdownIndex = -1;
   }
 
@@ -255,28 +256,33 @@ class RushlightApp {
     this.startSequentialAutoDial(dest.symbols);
   }
 
+  cancelAutoDial() {
+    // Invalidate a callback already queued before the interval was cleared.
+    this.autoDialGeneration++;
+    if (this.autoDialTimer !== null) {
+      clearInterval(this.autoDialTimer);
+      this.autoDialTimer = null;
+    }
+  }
+
   startSequentialAutoDial(symbolSequence) {
     if (window.Portal.getState() === 'BUILDUP' || window.Portal.getState() === 'ACTIVE') {
       return;
     }
 
-    // Clear current dial
+    // Cancel the previous replay before resetting or starting another one.
+    this.cancelAutoDial();
     window.HearthDial.clearDial();
-
-    // Cancel any ongoing auto-dialing
-    if (this.autoDialTimer) {
-      clearInterval(this.autoDialTimer);
-      this.autoDialTimer = null;
-    }
+    const generation = this.autoDialGeneration;
 
     let idx = 0;
     const intervalMs = 210; // ~210ms per symbol (satisfies Standards Sec 6: visible staged sequence)
 
     this.autoDialTimer = setInterval(() => {
+      if (generation !== this.autoDialGeneration) return;
       // Check if state got cancelled or disengaged
       if (idx >= symbolSequence.length || window.Portal.getState() === 'ACTIVE' || window.Portal.getState() === 'BUILDUP') {
-        clearInterval(this.autoDialTimer);
-        this.autoDialTimer = null;
+        this.cancelAutoDial();
         return;
       }
 
@@ -285,8 +291,7 @@ class RushlightApp {
       idx++;
 
       if (idx >= symbolSequence.length) {
-        clearInterval(this.autoDialTimer);
-        this.autoDialTimer = null;
+        this.cancelAutoDial();
         // Ends in PENDING_KINDLE state. STRICT NO-AUTO-FIRE GUARANTEE.
       }
     }, intervalMs);

@@ -1,5 +1,21 @@
 # Changelog — DSV-7 Cerulean Lantern Pilot Console
 
+## Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- Existing build-suite heading and breakthrough white-rim predicate failures remain explicit; the original assertions and application assets are unchanged.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
+
+## Development server consolidation — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the duplicate handler with the shared preview launcher. `node server.js [port]` is preserved, including positional-port precedence over `PORT` and default port 8747. Binding stays on loopback.
+- Development files are private (403), unsupported methods return 405, and malformed URLs return 400 instead of an uncaught URI error. Original source-disclosure and POST acceptance were reproduced before replacement.
+- Qualification job `128820919093` demonstrated identical bytes for all nine public assets, unchanged original close-out checks passing 185/185 in both modes, and matching baseline failures: build-suite metadata heading check (132/133), and breakthrough white-rim sampling at 0% against >60% (23/24 bracketed checks). Shared stage images were reviewed; paired legacy review remains pending. A separate current metadata check recognizes the documented September heading normalization without editing the historical literal assertion.
+- No client art, behavior, original test predicate, release version or original attribution changed. Handler equivalence is qualified with those baseline failures; full acceptance is not claimed. Merge and deployment remain on HOLD; prior operator-confirmation caveats remain applicable.
+
 ## Catalog maintenance pass — 2026-09-04
 
 **Performed by:** Claude Fable 5.1, in catalog-wide maintenance commits of 2026-09-04, independently of the build session. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review. No runtime file was touched.

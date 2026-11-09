@@ -36,3 +36,18 @@ To run automated end-to-end verification via Puppeteer:
 ```bash
 node test/verify.js
 ```
+
+
+## Shared local preview
+
+`node server.js` uses the repository shared server at `http://127.0.0.1:8088`.
+`PORT` overrides the port. Keep this exhibit inside the repository. The original
+synchronous `startServer(port)` returning a native HTTP server contract is retained.
+Only tracked public assets are served; unsupported methods and development files
+are denied. Original creative-fit and operator dispositions remain unchanged.
+An occupied port now reports an error instead of silently opening a different port.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.

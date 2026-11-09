@@ -16,6 +16,21 @@ The Hesperus Deep-Space Synthesis Array (HDSSA) is a 9-station synthetic apertur
 ## Development & Usage
 ```bash
 npm install
-npm run dev      # Runs dev server at http://localhost:5173
+npm run dev      # Runs source preview at http://127.0.0.1:5173
 npm run test:e2e # Runs end-to-end automated validation suite
 ```
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.
+
+Normal source preview uses shared loopback serving: `npm run dev` opens `http://127.0.0.1:5173`. Set `PORT` or pass `-- --port NUMBER` (also `-p`); explicit arguments take precedence. Invalid or occupied ports fail. Only tracked public assets are served; development files, raw traversal and unsupported methods are refused.
+
+For complete original-suite verification from this directory, run `npm run test:e2e`. It owns its comparison listeners and browser while preserving all original assertions. Install this directory's retained Vite dependency with `npm ci --ignore-scripts` for the historical package-transport comparison; direct historical runners are not the supported verification entry point.
+
+`npm run build` still produces Vite's `dist/` artifact. `npm run preview` still serves that artifact, explicitly on `127.0.0.1:4173` with strict port selection; `-- --port NUMBER` selects another port. This audited built-preview path is a deliberate specialist exception to shared source serving, with separate built-artifact qualification. It is not a deployment command.
+
+Both transports passed the full original suite, eight public assets, cancellation observations and listener cleanup in run `42514572291`, job `128834661724`.
+
+Sound/operator acceptance and built-artifact qualification remain separate; merge and deployment remain on HOLD.
