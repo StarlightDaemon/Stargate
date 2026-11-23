@@ -17,6 +17,8 @@ A public gallery of original, client-side "portal console" builds. Each `stargat
 
   The output folder must be inside the repository, and `_site/` must never be committed.
 
+  The workflow runs on every push but builds and deploys only from `main`. CI doesn't run the three local checks above, so run them yourself before committing.
+
 ## Layout
 
 - `hub/`: the gallery site. It scans every build and generates `hub/index.json`.
@@ -38,7 +40,7 @@ A public gallery of original, client-side "portal console" builds. Each `stargat
 
 ## Records and hand-over
 
-There is no central open-loops file. A build's status (live, known-issue, retired) lives in its own `README.md`/`version.json` and in `hub/index.json`; its history is in its `CHANGELOG.md`. Claims and hand-over notes go in `../../HANDOFF.md`: the workspace folder two levels above the repo or worktree root. It's outside Git, so every worktree sees the same file.
+There is no central open-loops file. A build's gallery status (live, known-issue, retired) is set in the `STATUS_OVERRIDES` and `SEQUESTERED_STATUS` tables in `hub/generate.js`; unlisted builds default to `live`. `hub/index.json` is the generated output: change the tables, then run `npm run gallery:generate`. The reasons for a known issue, and each build's history, are in its `CHANGELOG.md`. Claims and hand-over notes go in `../../HANDOFF.md`: the workspace folder two levels above the repo or worktree root. It's outside Git, so every worktree sees the same file.
 
 ## Working in parallel
 
