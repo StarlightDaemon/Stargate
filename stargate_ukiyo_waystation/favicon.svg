@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Woodblock cloud route</title>
+  <rect width="32" height="32" rx="5" fill="#f6eed8"/>
+  <g fill="none" stroke="#1a1818" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21Q10 9 16 21T28 21M4 26Q10 14 16 26T28 26"/><circle cx="22" cy="9" r="4" fill="#c73d2a" stroke="none"/></g>
+</svg>

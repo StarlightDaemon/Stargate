@@ -7,9 +7,6 @@
     "start": "node scripts/server.js",
     "test": "node scripts/verify_e2e.js"
   },
-  "devDependencies": {
-    "puppeteer": "^25.9.0"
-  },
   "keywords": [
     "planetarium",
     "stargate",

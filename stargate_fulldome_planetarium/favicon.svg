@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Projector dome</title>
+  <rect width="32" height="32" rx="5" fill="#02040a"/>
+  <g fill="none" stroke="#00f0ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 25A12 12 0 0 1 28 25ZM16 25 11 11M16 25 22 15M16 4V8M24 7 27 4"/></g>
+</svg>

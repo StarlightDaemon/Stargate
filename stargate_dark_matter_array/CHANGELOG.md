@@ -4,6 +4,12 @@ All notable changes to the BOREAS-IX Subterranean Cryogenic Dark Matter Array pr
 
 ## [Unreleased]
 
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Existing package commands and non-dependency metadata are unchanged; install the shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted the exact npm-generated manifest and lockfile emitted by hosted run `42510716794`, job `128822957920`, after byte-count and SHA-256 verification. This candidate passed a clean install, installed-tree check, native CommonJS/ES-module resolution and a full audit with zero findings. The wider candidate job failed on other targets; this entry records only this exhibit's successful candidate.
+- This dependency consolidation leaves the already-qualified browser behavior and original assertions intact; it does not grant new operator or release acceptance.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
@@ -66,3 +72,13 @@ All notable changes to the BOREAS-IX Subterranean Cryogenic Dark Matter Array pr
 - **Blind-Analysis Safety Interlock:** Defaults to RELEASED (unlocked), with explicit protocol warnings when active.
 - **Session Event Logger & LocalStorage Persistence:** Dialing history, preferences, theme moods, and operator logs persist across page reloads.
 - **Responsive 1920x1080 to 4K Design:** Unitless scaling architecture fitting standard HD and Ultra HD monitors without scrollbars.
+
+
+## Maintenance — shared preview security (2026-11-08)
+
+**Performed by:** Codex maintenance session.
+
+- Replaced the development handler after original-suite, asset and HTTP qualification.
+- Retained the default port and original client behavior; added PORT selection
+  where absent. Development files, malformed requests and unsupported methods
+  are denied by the shared loopback-only server.

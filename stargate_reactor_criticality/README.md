@@ -21,3 +21,14 @@ node scripts/server.js
 # Or open index.html in modern browser
 ```
 Open `http://localhost:8080/` or `http://127.0.0.1:8080/`.
+
+The development command uses the repository's shared preview tool. Keep the
+parent repository available for local development. `PORT` overrides the default
+8080; the listener binds only to loopback and serves tracked public assets using
+GET/HEAD and the shared containment policy. The published experience remains static.
+
+Run the original engine integration suite with `node tests/integration_test.js`
+from this directory. From the repository root, `node scripts/check-reactor-security.js`
+also compares historical/shared HTTP serving and real browser interactions using
+the browser environment documented in `scripts/MAINTENANCE.md`. These checks keep
+operator acceptance separate and retain baseline resource/UI findings in reports.

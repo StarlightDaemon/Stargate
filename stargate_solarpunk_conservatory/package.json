@@ -9,9 +9,5 @@
     "test": "node test/run-tests.mjs",
     "capture": "node test/capture.mjs"
   },
-  "devDependencies": {
-    "pngjs": "^7.0.0",
-    "puppeteer-core": "^25.10.0"
-  },
   "license": "MIT"
 }

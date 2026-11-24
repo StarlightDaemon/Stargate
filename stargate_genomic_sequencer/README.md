@@ -19,3 +19,13 @@ A standalone digital/schematic Stargate dialing interface themed around biotechn
 npm start
 # Server listens at http://127.0.0.1:8085
 ```
+
+
+## Shared local preview
+
+Run `node server.js` from this exhibit directory. The compatibility launcher uses
+the repository shared server at `http://127.0.0.1:8085`; `PORT` overrides the port.
+Only tracked public assets are served; development files and unsupported methods
+are denied. Keep the exhibit inside this repository. Original verification suites
+and client behavior remain independently qualified; security migration does not
+assert new operator acceptance.

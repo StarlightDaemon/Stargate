@@ -1,0 +1,457 @@
+name: Verify preview tooling (no deploy)
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  # One-off candidate generation is complete. CI now verifies committed locks.
+  shared-toolchain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts
+      - run: npm ls --all
+      - run: npm run security:deps
+      - run: git diff --exit-code -- package.json package-lock.json
+  dependency-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Collect remaining active lockfile audits (findings remain acceptance failures)
+        run: node scripts/check-dependency-baseline.js --strict --include-qualified
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: remaining-dependency-baseline
+          path: |
+            test/dependency-campaign/**/report.json
+            test/dependency-campaign/**/audit.stdout.json
+            test/dependency-campaign/**/audit.stderr.log
+          retention-days: 30
+  next-server-qualification:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: built-orthographic_cad
+            command: node scripts/check-vite-built-preview.js stargate_orthographic_cad
+            evidence: test/vite-built-preview/stargate_orthographic_cad/
+            package: stargate_orthographic_cad
+          - target: built-radio_interferometry
+            command: node scripts/check-vite-built-preview.js stargate_radio_interferometry
+            evidence: test/vite-built-preview/stargate_radio_interferometry/
+            package: stargate_radio_interferometry
+          - target: built-seti_deepscope
+            command: node scripts/check-vite-built-preview.js stargate_seti_deepscope
+            evidence: test/vite-built-preview/stargate_seti_deepscope/
+            package: stargate_seti_deepscope
+          - target: built-seti_freeform
+            command: node scripts/check-vite-built-preview.js stargate_seti_freeform
+            evidence: test/vite-built-preview/stargate_seti_freeform/
+            package: stargate_seti_freeform
+          - target: freeform-manual-contract
+            command: node scripts/check-freeform-manual-contract.js
+            evidence: test/freeform-manual-contract/
+          - target: cathedral-layout
+            command: node scripts/check-cathedral-layout.js
+            evidence: test/cathedral-layout/
+          - target: cathedral-oculus
+            command: node scripts/check-package-entry-security.js stargate_cathedral_oculus
+            evidence: test/package-entry-security/stargate_cathedral_oculus/
+            package: stargate_cathedral_oculus
+          - target: mastering-suite
+            command: node scripts/check-package-entry-security.js stargate_mastering_suite
+            evidence: test/package-entry-security/stargate_mastering_suite/
+            package: stargate_mastering_suite
+          - target: blueprint-drafting
+            command: node scripts/check-package-entry-security.js stargate_blueprint_drafting
+            evidence: test/package-entry-security/stargate_blueprint_drafting/
+            package: stargate_blueprint_drafting
+          - target: orthographic-cad
+            command: node scripts/check-package-entry-security.js stargate_orthographic_cad
+            evidence: test/package-entry-security/stargate_orthographic_cad/
+            package: stargate_orthographic_cad
+          - target: radio-interferometry
+            command: node scripts/check-package-entry-security.js stargate_radio_interferometry
+            evidence: test/package-entry-security/stargate_radio_interferometry/
+            package: stargate_radio_interferometry
+          - target: seti-deepscope
+            command: node scripts/check-package-entry-security.js stargate_seti_deepscope
+            evidence: test/package-entry-security/stargate_seti_deepscope/
+            package: stargate_seti_deepscope
+          - target: seti-freeform
+            command: node scripts/check-package-entry-security.js stargate_seti_freeform
+            evidence: test/package-entry-security/stargate_seti_freeform/
+            package: stargate_seti_freeform
+          - target: bathyscaphe-regressions
+            command: node scripts/check-bathyscaphe-regressions.js
+            evidence: test/bathyscaphe-regressions/
+          - target: harness-celestial-astrolabe
+            command: node scripts/check-remaining-harnesses.js stargate_celestial_astrolabe
+            evidence: test/remaining-harnesses/stargate_celestial_astrolabe/
+          - target: harness-darkpool-router
+            command: node scripts/check-remaining-harnesses.js stargate_darkpool_router
+            evidence: test/remaining-harnesses/stargate_darkpool_router/
+          - target: harness-lumina-grove
+            command: node scripts/check-remaining-harnesses.js stargate_lumina_grove
+            evidence: test/remaining-harnesses/stargate_lumina_grove/
+          - target: harness-high-scifi
+            command: node scripts/check-remaining-harnesses.js stargate_high_scifi
+            evidence: test/remaining-harnesses/stargate_high_scifi/
+          - target: harness-aetheric-telegraph
+            command: node scripts/check-remaining-harnesses.js stargate_aetheric_telegraph
+            evidence: test/remaining-harnesses/stargate_aetheric_telegraph/
+          - target: harness-bibliographic-depository
+            command: node scripts/check-remaining-harnesses.js stargate_bibliographic_depository
+            evidence: test/remaining-harnesses/stargate_bibliographic_depository/
+          - target: harness-solarpunk-conservatory
+            command: node scripts/check-remaining-harnesses.js stargate_solarpunk_conservatory
+            evidence: test/remaining-harnesses/stargate_solarpunk_conservatory/
+          - target: hub-loading
+            command: node scripts/check-hub-loading.js
+            evidence: test/hub-loading/
+          - target: nimbus-notes-security
+            command: node scripts/check-nimbus-notes-security.js
+            evidence: test/nimbus-notes-security/
+          - target: blueprint-drafting-contract
+            command: node scripts/check-blueprint-drafting-contract.js
+            evidence: test/blueprint-drafting-current-contract/
+          - target: blueprint-regressions
+            command: node scripts/check-blueprint-regressions.js
+            evidence: test/blueprint-regressions/
+          - target: keyboard-interlocks
+            command: node scripts/check-keyboard-interlocks.js
+            evidence: test/keyboard-interlocks/
+          - target: erebus-regressions
+            command: node scripts/check-erebus-regressions.js
+            evidence: test/erebus-regressions/
+          - target: municipal-regressions
+            command: node scripts/check-municipal-regressions.js
+            evidence: test/municipal-regressions/
+          - target: reactor-regressions
+            command: node scripts/check-reactor-regressions.js
+            evidence: test/reactor-regressions/
+          - target: registered-regression-dispatch
+            command: node scripts/run-qualified-suites.js --exhibit stargate_nouveau_nimbus
+            evidence: test/qualified-suites/
+          - target: registered-suite-dispatch
+            command: node scripts/run-qualified-suites.js --exhibit stargate_solarpunk_astra --exhibit stargate_konstrukt_transit
+            evidence: test/qualified-suites/
+          - target: apiculture
+            command: node scripts/check-apiculture-security.js
+            evidence: test/apiculture-security/
+          - target: cyberpunk-fable
+            command: node scripts/check-extra-entry-security.js stargate_cyberpunk_fable
+            evidence: test/extra-entry-security/stargate_cyberpunk_fable/
+            png: true
+          - target: steampunk-fable
+            command: node scripts/check-extra-entry-security.js stargate_steampunk_fable
+            evidence: test/extra-entry-security/stargate_steampunk_fable/
+            png: true
+          - target: ukiyo-fable
+            command: node scripts/check-extra-entry-security.js stargate_ukiyo_waystation_fable
+            evidence: test/extra-entry-security/stargate_ukiyo_waystation_fable/
+            png: true
+          - target: navigation-diagnostics
+            command: node scripts/check-navigation-diagnostics.js
+            evidence: test/navigation-diagnostics/
+          - target: nexrad
+            command: node scripts/check-telemetry-security.js stargate_meteorological_nexrad
+            evidence: test/telemetry-security/stargate_meteorological_nexrad/
+          - target: orbital
+            command: node scripts/check-telemetry-security.js stargate_orbital_atc
+            evidence: test/telemetry-security/stargate_orbital_atc/
+          - target: ecogrid
+            command: node scripts/check-telemetry-security.js stargate_solarpunk_ecogrid
+            evidence: test/telemetry-security/stargate_solarpunk_ecogrid/
+          - target: sonar
+            command: node scripts/check-telemetry-security.js stargate_sonar_abyssal
+            evidence: test/telemetry-security/stargate_sonar_abyssal/
+          - target: caissa
+            command: node scripts/check-instrument-security.js --exhibit stargate_caissa_workstation
+            evidence: test/instrument-security/stargate_caissa_workstation/
+          - target: cyberpunk
+            command: node scripts/check-instrument-security.js --exhibit stargate_cyberpunk_gemini
+            evidence: test/instrument-security/stargate_cyberpunk_gemini/
+          - target: fulldome
+            command: node scripts/check-instrument-security.js --exhibit stargate_fulldome_planetarium
+            evidence: test/instrument-security/stargate_fulldome_planetarium/
+          - target: seismic
+            command: node scripts/check-instrument-security.js --exhibit stargate_seismic_triangulation
+            evidence: test/instrument-security/stargate_seismic_triangulation/
+          - target: ukiyo
+            command: node scripts/check-instrument-security.js --exhibit stargate_ukiyo_waystation
+            evidence: test/instrument-security/stargate_ukiyo_waystation/
+          - target: lantern
+            command: node scripts/check-secondary-security.js stargate_bathyscaphe_pilot_fable
+            evidence: test/secondary-security/stargate_bathyscaphe_pilot_fable/
+          - target: dark-matter
+            command: node scripts/check-secondary-security.js stargate_dark_matter_array
+            evidence: test/secondary-security/stargate_dark_matter_array/
+          - target: conservatory
+            command: node scripts/check-secondary-security.js stargate_solarpunk_conservatory
+            evidence: test/secondary-security/stargate_solarpunk_conservatory/
+            png: true
+          - target: lowmagic
+            command: node scripts/check-secondary-security.js stargate_lowmagic_gemini
+            evidence: test/secondary-security/stargate_lowmagic_gemini/
+          - target: municipal
+            command: node scripts/check-municipal-security.js
+            evidence: test/municipal-security/
+          - target: atompunk
+            command: node scripts/check-specialist-security.js stargate_atompunk_fable
+            evidence: test/specialist-security/stargate_atompunk_fable/
+            png: true
+          - target: canopy
+            command: node scripts/check-specialist-security.js stargate_canopy_commons
+            evidence: test/specialist-security/stargate_canopy_commons/
+            png: true
+          - target: dark-gothic
+            command: node scripts/check-specialist-security.js stargate_dark_gothic_fable
+            evidence: test/specialist-security/stargate_dark_gothic_fable/
+            png: true
+          - target: nimbus
+            command: node scripts/check-specialist-security.js stargate_nouveau_nimbus
+            evidence: test/specialist-security/stargate_nouveau_nimbus/
+          - target: futurist
+            command: node scripts/check-specialist-security.js stargate_futurist_dynamism
+            evidence: test/specialist-security/stargate_futurist_dynamism/
+          - target: sigint
+            command: node scripts/check-sigint-security.js
+            evidence: test/sigint-security/
+          - target: konstrukt
+            command: node scripts/check-konstrukt-security.js
+            evidence: test/konstrukt-security/
+          - target: epigraphic
+            command: node scripts/check-science-security.js stargate_epigraphic_spectrometry
+            evidence: test/science-security/stargate_epigraphic_spectrometry/
+          - target: genomic
+            command: node scripts/check-science-security.js stargate_genomic_sequencer
+            evidence: test/science-security/stargate_genomic_sequencer/
+          - target: windtunnel
+            command: node scripts/check-science-security.js stargate_windtunnel_aerodynamics
+            evidence: test/science-security/stargate_windtunnel_aerodynamics/
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      STARGATE_LOG_VISUALS: '1'
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
+      STARGATE_PNG_MODULE: ${{ github.workspace }}/node_modules/pngjs
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+      - run: npm ci --ignore-scripts
+      - name: Install locked historical package transport for qualification
+        if: ${{ matrix.package != null }}
+        run: npm ci --ignore-scripts --prefix ${{ matrix.package }}
+      - name: Preserve original suites and reproduce security findings
+        run: ${{ matrix.command }}
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: server-${{ matrix.target }}-evidence
+          path: ${{ matrix.evidence }}
+          retention-days: 30
+  active-page-loads:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+      - run: npm ci --ignore-scripts
+      - name: Check every active static exhibit and its resources
+        run: >-
+          node -e 'require("./scripts/verify.js").main(["--http","--browser"]).then(r=>{process.exitCode=r.summary.FAIL||r.summary["ENVIRONMENT-BLOCKED"]?1:0;console.log("Page loading only; interaction and operator acceptance remain separate gates.")}).catch(e=>{console.error(e);process.exitCode=1})'
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: active-page-load-evidence
+          path: test/verification/
+          retention-days: 30
+  synchrotron-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      STARGATE_LOG_VISUALS: '1'
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+      - run: npm ci --ignore-scripts
+      - name: Qualify Synchrotron security and original behavior
+        run: node scripts/check-synchrotron-security.js
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: synchrotron-security-evidence
+          path: test/synchrotron-security/
+          retention-days: 30
+  blueprint-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      STARGATE_LOG_VISUALS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+      - run: npm ci --ignore-scripts
+      - run: npm ci --ignore-scripts --prefix stargate_blueprint_alpha
+      - name: Validate installed Blueprint dependency graph and unchanged lock
+        run: |
+          npm ls --prefix stargate_blueprint_alpha --all
+          git diff --exit-code -- stargate_blueprint_alpha/package.json stargate_blueprint_alpha/package-lock.json
+      - name: Qualify Blueprint custom, npm, embedded-test and shared entry points
+        run: node scripts/check-blueprint-security.js
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: blueprint-security-evidence
+          path: test/blueprint-security/
+          retention-days: 30
+  reactor-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      STARGATE_LOG_VISUALS: '1'
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+      - run: npm ci --ignore-scripts
+      - name: Preserve original Reactor suite and compare historical/shared security and interactions
+        run: node scripts/check-reactor-security.js
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: reactor-security-evidence
+          path: test/reactor-security/
+          retention-days: 30
+  consolidation-batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+      - run: npm ci --ignore-scripts
+      - run: node scripts/check-consolidation.js
+      - name: Qualify Erebus security replacement and preserve its existing behavior
+        env:
+          STARGATE_LOG_VISUALS: '1'
+        run: node scripts/check-erebus-security.js
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: consolidation-evidence
+          path: |
+            test/consolidation/
+            test/erebus-security/
+          retention-days: 30
+  preview:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Test real HTTP, containment, links, lifecycle and verification diagnostics
+        run: node --test --test-isolation=none scripts/test-preview.js scripts/test-preview-handlers.js scripts/test-preview-api.js scripts/test-verification.js scripts/test-qualified-suites.js scripts/test-exhibit-dependency-candidates.js scripts/test-deepscope-cancellation.js scripts/test-package-entry-adapter.js scripts/test-vite-built-preview.js scripts/test-package-entry-viewport.js scripts/test-qualification-vite-process.js scripts/test-freeform-cancellation.js
+      - name: Check gallery
+        run: node hub/generate.js --check
+      - name: Check Pages output guard
+        run: node scripts/test-build-pages-output-guard.js
+      - name: Check hub security
+        run: node scripts/audit-hub-security.js --strict
+      - name: Check active metadata and static references (not operator acceptance)
+        run: >-
+          node -e 'require("./scripts/verify.js").main([]).then(r=>{process.exitCode=r.summary.FAIL||r.summary["ENVIRONMENT-BLOCKED"]?1:0;console.log("Static gate only; unrequested runtime and operator checks remain UNVERIFIED.")}).catch(e=>{console.error(e);process.exitCode=1})'
+
+  pilot-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      STARGATE_LOG_VISUALS: '1'
+      STARGATE_PUPPETEER_MODULE: ${{ github.workspace }}/node_modules/puppeteer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Locate existing Chrome
+        run: echo "PUPPETEER_EXECUTABLE_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+      - name: Install shared locked browser-test dependency
+        run: npm ci --ignore-scripts
+      - name: Run original builder suites against both servers
+        run: node scripts/run-pilot-suites.js
+      - name: Compare pilot browser behavior with legacy and shared serving
+        if: ${{ !cancelled() }}
+        run: node scripts/check-pilot-browsers.js
+      - name: Preserve diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pilot-browser-evidence
+          path: |
+            test/pilot-browser/
+            test/pilot-suites/
+          retention-days: 30

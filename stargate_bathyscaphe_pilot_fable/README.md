@@ -8,18 +8,25 @@ Hadal Threshold Institute · fictional deep-sea submersible piloting console. An
 
 ```
 node server.js          # → http://127.0.0.1:8747/
+node server.js 8750     # optional positional port; takes precedence over PORT
 ```
 
-Any static server works; there is no backend. Preferences, pilot record and read archive entries persist in this browser's `localStorage` only.
+The launcher delegates to the repository's shared loopback preview server. It serves tracked public assets, keeps development files private, rejects unsupported methods and handles malformed URLs without crashing. The optional positional port takes precedence over `PORT`; the default remains 8747. Launch from this repository checkout. There is no backend. Preferences, pilot record and read archive entries persist in this browser's `localStorage` only.
 
 ## Verify
 
 ```
-npm install                      # puppeteer
+npm --prefix .. ci --ignore-scripts # shared browser tools at repository root
 node verify/run.js               # build-session suite: screenshots → verify/shots/, report → verify/report.md
 node verify/closeout.js          # 2026-08-23 close-out suite: screenshots → verify/shots/closeout/, log → verify/closeout.log
 node verify/closeout_stages.js   # bracketed three-stage capture → verify/closeout_stages.log
 ```
+
+## Modernization verification (2026-11-08)
+
+Hosted job `128820919093` compared all nine tracked public assets through the original and shared handlers with identical bytes. The unchanged close-out suite passed 185/185 in both modes; the original smoke diagnostic completed. The build suite remains 132/133 because its literal `## v1.0.0` heading expectation conflicts with the documented September normalization to `## [1.0.0]`. The bracketed stage suite remains 23/24: its breakthrough white-rim predicate measured 0% near-white samples against a required >60% through both handlers. All other original predicates passed, with no page errors. Shared screenshots show distinct buildup, breakthrough and sustained-active states; paired legacy screenshot review is pending.
+
+This qualifies handler consolidation with documented baseline failures; it is not a full acceptance PASS. Original suites, client assets, attribution and release version are preserved. Merge and deployment remain on HOLD, and operator confirmation is still outstanding.
 
 ## Verification status (2026-08-23)
 
@@ -35,3 +42,8 @@ node verify/closeout_stages.js   # bracketed three-stage capture → verify/clos
 - `js/ui.js` — controller: clusters, telemetry, panels, persistence, session log
 
 Built by Claude Fable 5 (high reasoning). See `CHANGELOG.md` and `version.json`.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Oscilloscope trace</title>
+  <rect width="32" height="32" rx="5" fill="#04130b"/>
+  <g fill="none" stroke="#52ff9e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5H28V27H4ZM6 17H10L13 9 17 24 20 15H26"/></g>
+</svg>

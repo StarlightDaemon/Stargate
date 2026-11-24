@@ -172,6 +172,8 @@ class HMIApplication {
           this.activeStabilizationTimeout = null;
         }
         this.physics.scram();
+        const presetIndicator = document.getElementById('preset-status-indicator');
+        if (presetIndicator) presetIndicator.textContent = 'STANDBY';
         this.hideStabilizationHud();
         this.telemetry.addLog('EMERGENCY SCRAM', 'Manual scram executed. All control rods inserted.', 'scram');
         this.updateChannelButtonsUI();
@@ -415,6 +417,8 @@ class HMIApplication {
 
     // 4. Continually refresh channel button stats
     this.updateChannelButtonsUI();
+    // Physics advances activation stages between clicks; keep their UI in sync.
+    this.updateActionButtonsUI();
 
     requestAnimationFrame((t) => this.animationLoop(t));
   }

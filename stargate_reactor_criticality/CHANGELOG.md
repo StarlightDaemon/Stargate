@@ -2,6 +2,50 @@
 
 ## [Unreleased]
 
+### State-feedback repair — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Refresh activation controls after physics advances each frame, so the existing
+  sustained-state label and aperture banner appear when the model enters that
+  state. Previously they retained the buildup feedback until another UI action.
+- SCRAM resets the preset status indicator to `STANDBY` immediately instead of
+  leaving the previous `PENDING CRITICALITY` message after the address is cleared.
+- The original integration suite remains unchanged and passes 79/79 assertions.
+  A separate regression probe reproduces the original stale stage feedback and
+  verifies the corrected methods offline. Its hosted browser checks compare the
+  pinned original app with the repair, including stage feedback, manual/preset
+  operation and cancellation followed by 8.25 seconds; results are recorded
+  separately. This is not new operator or full functional acceptance.
+
+### Development-server security maintenance
+
+- Replaced the exposed development handler with the shared loopback-only preview
+  after historical/shared qualification. Parent/sibling-file and server-source
+  requests now receive 403; POST receives 405. Wildcard CORS is removed.
+- Preserved `node scripts/server.js` and default port 8080; added `PORT` override.
+  Client HTML/CSS/JavaScript, version, original attribution and original assertions
+  are unchanged. No package dependencies were introduced.
+- The original mock-DOM integration suite passes 79/79 assertions. Real HTTP
+  matches all 11 public assets. Browser comparison covers two manual cycles,
+  explicit activation, all three stages, interlock rejection, stepped presets
+  without auto-activation and cancellation during buildup followed by 8.25 seconds.
+- Seven 1920x1080 captures reviewed: idle, ready, buildup, breakthrough, sustained,
+  preset dialing and cancelled. Core states and primary controls remain visible.
+  Full sound, responsive and operator acceptance remain separate.
+
+### Known issues observed during maintenance
+
+- The activation label remains on buildup and its banner stays hidden after the
+  automatic transition to sustained state. The frame loop updates physics,
+  telemetry and channel controls but does not refresh the action controls.
+- The preset status remains pending after SCRAM, although the reactor returns to
+  subcritical with an empty sequence. These client feedback defects are separate
+  from serving and remain pending a narrowly scoped functional repair.
+- Both historical and shared serving report the existing missing `/favicon.ico`.
+
+### Earlier maintenance attribution
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
@@ -10,6 +54,13 @@
 
 ### Changed
 - Test harness `scripts/cdp_browser_capture.js` (raw CDP): the hardcoded Chrome path was replaced by `resolveChrome()`, which takes `CHROME_PATH` or `PUPPETEER_EXECUTABLE_PATH`, falls back to a dynamically required puppeteer/puppeteer-core `executablePath()`, and otherwise fails with an explicit error naming `CHROME_PATH`. It now also writes its capture output to the gitignored `test/` directory, created on demand, instead of the parent build root. Harness only; runtime unchanged.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and annular reactor motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
 
 ## [1.0.0] - 2026-08-22
 

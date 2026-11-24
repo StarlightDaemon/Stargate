@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Seismic station triangulation</title>
+  <rect width="32" height="32" rx="5" fill="#050911"/>
+  <g fill="none" stroke="#00e5ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5 5 26H27ZM7 19H11L14 13 18 23 21 17H25"/></g>
+</svg>

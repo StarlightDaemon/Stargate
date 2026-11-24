@@ -249,6 +249,8 @@ const Viewport = (() => {
     if (hudPressureDisplay) {
       hudPressureDisplay.textContent = `${phys.pressureBar.toFixed(1)} BAR`;
     }
+    const velocityLabel = document.getElementById('hud-velocity-label');
+    if (velocityLabel) velocityLabel.textContent = phys.velocity < -0.1 ? 'ASCENT RATE:' : phys.velocity > 0.1 ? 'DESCENT RATE:' : 'VERTICAL RATE:';
     if (hudVelocityDisplay) {
       hudVelocityDisplay.textContent = `${Math.abs(phys.velocity).toFixed(1)} M/S`;
     }

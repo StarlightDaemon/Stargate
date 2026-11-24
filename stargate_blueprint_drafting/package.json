@@ -3,13 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "vite",
-    "test": "node test.js"
+    "start": "node server.cjs",
+    "test": "node ../scripts/check-package-entry-security.js stargate_blueprint_drafting"
   },
   "dependencies": {
-    "vite": "^6.4.3"
-  },
-  "devDependencies": {
-    "puppeteer": "^25.9.0"
+    "vite": "^6.4.4"
   }
 }

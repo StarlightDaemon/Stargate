@@ -365,6 +365,7 @@ class PortalController {
   }
 
   disengage(reason = "Hearth Snuffed") {
+    window.App.cancelAutoDial();
     // -------------------------------------------------------------
     // DISENGAGE GUARANTEE (Standards Sec 8)
     // Clear all scheduled timers immediately

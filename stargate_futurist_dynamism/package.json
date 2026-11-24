@@ -7,10 +7,13 @@
     "start": "node server.js",
     "test": "node test/verify.js"
   },
-  "keywords": ["futurism", "portal", "dynamism", "chronophotography", "teleportation"],
+  "keywords": [
+    "futurism",
+    "portal",
+    "dynamism",
+    "chronophotography",
+    "teleportation"
+  ],
   "author": "StarlightDaemon",
-  "license": "MIT",
-  "devDependencies": {
-    "puppeteer": "^25.9.0"
-  }
+  "license": "MIT"
 }

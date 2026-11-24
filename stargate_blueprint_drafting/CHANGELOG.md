@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Shared source preview — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Routed `npm start` through shared loopback serving with default port `5173` and `PORT`, `--port`, `-p` overrides. `npm test` owns the comparison listeners and preserves all three original suites; Vite dependency declarations and lockfile remain unchanged.
+- Retained the matched historical autoapproval failures in `test.js` and `run_tests_with_vite.js` on both transports (run `42514572291`, job `128834661761`). `test_fix.js`, public assets, cancellation and shared security/cleanup passed. The separate current explicit-Engage contract passed eight pointer cycles; neither result overrides the existing unresolved operator warning.
+- Application behavior, original attribution and the closed-as-is disposition are preserved. Merge and deployment remain on HOLD.
+
+### Shared verification dependencies — 2026-11-08
+
+- Removed duplicate `puppeteer` declarations in favor of the repository's locked development tools. Package commands and non-dependency metadata are preserved; install shared tools with `npm ci --ignore-scripts` at the repository root before browser verification.
+- Adopted exact npm-generated manifest and lockfile bytes from hosted run `42512175752`, job `128827397973`, after byte-count and SHA-256 verification. This candidate passed clean install, installed-tree validation, native CommonJS/ES-module resolution and a full audit with zero findings.
+- Raised the existing Vite 6 minimum to `^6.4.4` and refreshed `source-map-js` within supported ranges. Vite commands and build behavior remain unchanged by this dependency patch; serving security is a separate qualification.
+- This dependency qualification does not grant functional, visual, sound, operator or release acceptance. Existing known issues and historical operator dispositions are preserved; merge and deployment remain on HOLD.
+
 **Built by:** Claude Sonnet 5 (keyboard-focus / reduced-motion CSS) and Claude Fable 5.1 (every other item), in catalog-wide maintenance commits of 2026-09-04. Entry backfilled 2026-09-04 by Claude Fable 5.1 from the commit diffs. Version number left unchanged; whether any item warrants a bump is for operator review.
 
 ### Added
@@ -14,6 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Test harnesses `test.js` and `run_tests_with_vite.js` now write their idle screenshot to a `test/` directory resolved relative to the script (gitignored, created on demand) instead of a bare cwd-relative filename, so the destination no longer depends on where the harness is launched from. Harness only; runtime unchanged.
+
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and orbital drafting geometry motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
 
 ## [1.0.0] - 2026-08-11
 ### Added

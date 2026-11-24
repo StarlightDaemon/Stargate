@@ -37,3 +37,16 @@ npm run dev
 # Run automated end-to-end test suite (Puppeteer)
 npm test
 ```
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.
+
+Normal source preview uses the shared loopback server: `npm run dev` opens `http://127.0.0.1:5173`. Set `PORT` or pass `-- --port NUMBER` (also `-p`) to select another port; an explicit argument takes precedence. Invalid or occupied ports fail instead of selecting another interface or port. Only tracked public assets are served; development files, raw traversal and unsupported methods are refused.
+
+`npm test` now owns both loopback comparison listeners and the browser. It runs the unchanged original suite through the qualification adapter, including public-asset and security probes. Run `npm ci --ignore-scripts` in this directory before this comparison; the retained `vite` dependency supplies the historical package transport. Direct historical test files remain preserved as evidence, rather than the supported test entry point.
+
+`npm run build` still produces Vite's `dist/` artifact. `npm run preview` still serves that built artifact, explicitly on `127.0.0.1:4173` with strict port selection; `-- --port NUMBER` selects another port. This audited Vite built-preview path is a deliberate specialist exception to shared source serving. It requires the local Vite installation and separate built-artifact qualification; it is not a deployment command.
+
+Source-serving qualification: hosted run `42512882276`, job `128829555762`, passed the full original suite on installed package and shared transports, public assets and cancellation observations. Built-artifact, sound and operator acceptance are separate; merge and deployment remain on HOLD.

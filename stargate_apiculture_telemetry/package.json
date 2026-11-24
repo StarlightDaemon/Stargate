@@ -7,10 +7,6 @@
     "start": "node scripts/server.js",
     "test:e2e": "node tests/e2e_verification.js"
   },
-  "devDependencies": {
-    "puppeteer": "^25.9.0",
-    "express": "^4.22.2"
-  },
   "keywords": [
     "stargate",
     "apiculture",
@@ -19,8 +15,5 @@
     "portal"
   ],
   "author": "IPATC Consortium / Gemini 3.7 Flash (High reasoning)",
-  "license": "MIT",
-  "overrides": {
-    "qs": "6.16.0"
-  }
+  "license": "MIT"
 }

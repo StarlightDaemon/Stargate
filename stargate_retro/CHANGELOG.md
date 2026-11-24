@@ -14,6 +14,13 @@ versioning follows [Semantic Versioning](https://semver.org/).
 ### Changed
 - `version.json` reformatted from a single line to the catalog's common shape: `version` and `model` at top level, with the former free-text `note` key renamed to `model` and its value kept verbatim (`v1.1.0 recall servo-retune fix by Claude Opus; original build by Claude Fable`). No date key existed, so no `built` field was added. Version value unchanged.
 
+### Browser icon compatibility — 2026-11-08
+
+**Performed by:** Codex maintenance session.
+
+- Added a local SVG favicon using the existing palette and oscilloscope trace motif,
+  with an explicit HTML icon link to prevent the missing favicon request.
+
 ## [1.1.0] - 2026-08-15
 
 **Built by:** Claude Opus (auto-dial staging fix; original build by Claude Fable)

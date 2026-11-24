@@ -21,6 +21,7 @@ class StargateAethericTerminal {
     this.stagedGlyphs = [];
     this.lockedEscapements = new Set();
     this.quickDialTimers = [];
+    this.ignitionTimer = null;
     this.isSafetyHoldEngaged = true; // Review/Safety Hold default engaged
     this.ringRotationAngle = 0;
     this.activeConduit = null;
@@ -573,6 +574,7 @@ class StargateAethericTerminal {
   }
 
   igniteConduitVortex() {
+    clearTimeout(this.ignitionTimer);
     this.state = AppState.IGNITING;
     this.updateControlsState();
     this.ringStatusDot.className = 'status-indicator-dot active';
@@ -589,7 +591,9 @@ class StargateAethericTerminal {
       this.vortexParticles.push(this.createVortexParticle(true));
     }
 
-    setTimeout(() => {
+    this.ignitionTimer = setTimeout(() => {
+      this.ignitionTimer = null;
+      if (this.state !== AppState.IGNITING) return;
       this.state = AppState.ACTIVE;
       this.ringStatusDot.className = 'status-indicator-dot active';
       this.ringStatusText.textContent = 'CONDUIT ESTABLISHED: LUMINIFEROUS AETHER TRANSIT OPEN';
@@ -642,6 +646,8 @@ class StargateAethericTerminal {
   // DISENGAGE / EMERGENCY VENT STEAM
   // =========================================================================
   disengageAndVentSteam() {
+    clearTimeout(this.ignitionTimer);
+    this.ignitionTimer = null;
     this.cancelPendingQuickDialSequence();
 
     if (this.state === AppState.IDLE && this.stagedGlyphs.length === 0) {

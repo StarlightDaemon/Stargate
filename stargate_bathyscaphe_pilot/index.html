@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DSV-9 ARCHELON // Bathyscaphe Pilot Console & Abyssal Gateway Interface</title>
   <meta name="description" content="High-fidelity deep-sea submersible HUD and Abyssal Gateway rift navigation console for the DSV-9 ARCHELON, operated by the Hadal Exploration & Abyssal Research Consortium (HEARC).">
@@ -212,7 +213,7 @@
                   <span class="stat-val" id="hud-pressure-display">1.01 BAR</span>
                 </div>
                 <div class="hud-stat">
-                  <span class="stat-lbl">DESCENT RATE:</span>
+                  <span class="stat-lbl" id="hud-velocity-label">VERTICAL RATE:</span>
                   <span class="stat-val" id="hud-velocity-display">0.0 M/S</span>
                 </div>
                 <div class="hud-stat">
@@ -222,7 +223,7 @@
               </div>
 
               <div class="hud-aperture-state-pill" id="hud-aperture-state">
-                SURFACE HOLD // PROFILE PENDING
+                PROFILE INCOMPLETE // AWAITING WAYPOINTS
               </div>
             </div>
 
@@ -654,8 +655,8 @@
             <p>Once all 8 waypoints are stabilized, the system enters the <strong>PENDING / ARMED</strong> state (it will NEVER auto-fire). The operator must manually engage the <strong>COMMENCE DESCENT APERTURE</strong> actuator. The descent executes across three deliberate stages:</p>
             <ul>
               <li><strong>Stage 1 (Buildup):</strong> 2.0s descent acceleration, hydraulic pressure surge, hull creak audio.</li>
-              <li><strong>Stage 2 (Breakthrough):</strong> Target depth reached at 11,800m, dimensional aperture breach, optical flash.</li>
-              <li><strong>Stage 3 (Sustained Active):</strong> Stable hold at depth, live particle vortex, continuous active telemetry.</li>
+              <li><strong>Stage 2 (Breakthrough):</strong> Aperture projection established for the 11,800m target, dimensional breach, optical flash.</li>
+              <li><strong>Stage 3 (Sustained Active):</strong> Stable aperture, live particle vortex, continuous actual-depth telemetry as descent continues.</li>
             </ul>
           </div>
           <div class="manual-section">

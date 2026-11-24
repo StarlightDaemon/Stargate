@@ -21,3 +21,8 @@ Run with any HTTP server (e.g. Python):
 python -m http.server 8089
 ```
 Open `http://localhost:8089` in any modern web browser.
+
+
+## Shared verification dependencies — 2026-11-08
+
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's verification commands, with system Chrome configured as required by the harness. Existing package commands and application assets are unchanged by this dependency maintenance.

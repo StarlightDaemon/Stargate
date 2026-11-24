@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Terminal prompt</title>
+  <rect width="32" height="32" rx="5" fill="#0d0901"/>
+  <g fill="none" stroke="#ffaa00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6H28V26H4ZM8 12 13 16 8 20M17 21H23"/></g>
+</svg>

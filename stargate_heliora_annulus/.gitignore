@@ -1,0 +1,3 @@
+node_modules/
+# Verification screenshots and logs stay local.
+test/

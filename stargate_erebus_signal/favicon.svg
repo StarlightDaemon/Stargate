@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Intercept waveform</title>
+  <rect width="32" height="32" rx="5" fill="#080a08"/>
+  <g fill="none" stroke="#98fb98" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17H8L11 8 15 25 19 5 23 17H29"/></g>
+</svg>

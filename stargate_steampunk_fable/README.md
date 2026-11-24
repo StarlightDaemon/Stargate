@@ -36,6 +36,8 @@ session log, and a settings panel. Session state persists in `localStorage` only
 
 ## Running
 
+Browser verification uses the shared tools installed at the repository root. Run `npm ci --ignore-scripts` there before using this exhibit's existing verification commands, with system Chrome configured as required by the harness. The exhibit's package commands and application assets are unchanged.
+
 ```
 npm run serve
 ```
@@ -50,3 +52,8 @@ npm test
 ## Credits
 
 Built by Claude Fable 5 (reasoning level not recorded at build time). See `CHANGELOG.md` and `version.json`.
+
+
+## Shared preview maintenance — 2026-11-08
+
+The existing launch command now uses the repository shared preview, bound to `127.0.0.1`. It serves tracked public assets only; source harnesses and package metadata return 403, unsupported methods return 405. Run from a complete repository checkout. Hosted original-suite and asset equivalence passed before migration; post-migration launcher checks remain required. This infrastructure change preserves the historical creative and operator disposition.

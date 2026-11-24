@@ -22,6 +22,8 @@ class DeepScopeApp {
     // Auto-dial state
     this.isAutoDialing = false;
     this.autoDialTimeout = null;
+    this.dialGeneration = 0;
+    this.coincidenceTimer = null;
 
     // Timers
     this.lastFrameTime = performance.now();
@@ -279,8 +281,10 @@ class DeepScopeApp {
     let dishIdx = 0;
     const totalDishes = 10;
     const stepDuration = 25; // 25ms per dish cross-check (total 250ms)
+    const generation = this.dialGeneration;
 
     const runDishStep = () => {
+      if (generation !== this.dialGeneration) return;
       if (dishIdx < totalDishes) {
         // Light up perimeter node
         const node = document.getElementById(`dish-node-${dishIdx}`);
@@ -293,7 +297,9 @@ class DeepScopeApp {
 
         soundEngine.playCoincidenceStep(dishIdx);
 
-        setTimeout(() => {
+        this.coincidenceTimer = setTimeout(() => {
+          if (generation !== this.dialGeneration) return;
+          this.coincidenceTimer = null;
           if (node) {
             node.classList.remove('active-check');
             node.classList.add('locked-ok');
@@ -354,16 +360,18 @@ class DeepScopeApp {
     this.handleDisengage(false); // Clean flush first
 
     this.isAutoDialing = true;
+    const generation = this.dialGeneration;
     const targetCarriers = [...preset.carriers];
     let currentIndex = 0;
 
     const dialNext = () => {
-      if (!this.isAutoDialing) return; // Aborted by disengage
+      if (!this.isAutoDialing || generation !== this.dialGeneration) return; // Aborted or replaced
 
       if (currentIndex < targetCarriers.length) {
         const cId = targetCarriers[currentIndex];
         currentIndex++;
         this.executeCoincidenceLockSequence(cId, () => {
+          if (generation !== this.dialGeneration) return;
           if (this.isAutoDialing && currentIndex < targetCarriers.length) {
             this.autoDialTimeout = setTimeout(dialNext, 120);
           } else {
@@ -481,6 +489,12 @@ class DeepScopeApp {
   handleDisengage(playSound = true) {
     if (playSound) soundEngine.playDisengageSound();
 
+    // Invalidate callbacks already queued before clearing their timer handles.
+    this.dialGeneration++;
+    if (this.coincidenceTimer !== null) {
+      clearTimeout(this.coincidenceTimer);
+      this.coincidenceTimer = null;
+    }
     if (this.autoDialTimeout) {
       clearTimeout(this.autoDialTimeout);
       this.autoDialTimeout = null;

@@ -9,8 +9,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "puppeteer-core": "^25.7.0"
-  }
+  "type": "commonjs"
 }

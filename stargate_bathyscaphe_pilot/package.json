@@ -15,8 +15,5 @@
     "hud"
   ],
   "author": "StarlightDaemon",
-  "license": "MIT",
-  "devDependencies": {
-    "puppeteer": "^25.9.0"
-  }
+  "license": "MIT"
 }

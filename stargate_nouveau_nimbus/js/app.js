@@ -803,7 +803,7 @@ class NimbusApp {
 
       <div class="settings-section">
         <div class="settings-section-title">Journal de l'Opérateur (Persistance Locale)</div>
-        <textarea id="operator-notes-input" style="width:100%; height:80px; font-family:'Cormorant Garamond'; font-size:15px; padding:8px; border:1.5px solid var(--vermeil-gold-dark); border-radius:4px; background:var(--bg-parchment);">${this.state.sessionData.operatorNotes || ''}</textarea>
+        <textarea id="operator-notes-input" style="width:100%; height:80px; font-family:'Cormorant Garamond'; font-size:15px; padding:8px; border:1.5px solid var(--vermeil-gold-dark); border-radius:4px; background:var(--bg-parchment);"></textarea>
       </div>
     `;
 
@@ -834,6 +834,8 @@ class NimbusApp {
     // Notes handler
     const notesEl = document.getElementById("operator-notes-input");
     if (notesEl) {
+      // Notes are operator text, including literal markup; never parse them as HTML.
+      notesEl.value = this.state.sessionData.operatorNotes || '';
       notesEl.addEventListener("change", (e) => {
         this.state.saveOperatorNotes(e.target.value);
       });

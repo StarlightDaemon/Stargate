@@ -48,10 +48,10 @@
       <button class="filter-btn" data-status="known-issue" aria-pressed="false">KNOWN ISSUE</button>
       <button class="filter-btn" data-status="retired" aria-pressed="false">RETIRED</button>
     </div>
-    <span id="filter-count" class="filter-count" aria-live="polite"></span>
+    <span id="filter-count" class="filter-count" role="status" aria-live="polite" aria-atomic="true">Loading gallery…</span>
   </section>
 
-  <section id="grid" aria-label="Build gallery"></section>
+  <section id="grid" aria-label="Build gallery" aria-busy="true"></section>
 
   <p id="empty-state" hidden>No builds match this filter.</p>
 

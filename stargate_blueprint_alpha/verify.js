@@ -7,50 +7,21 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const puppeteer = require('puppeteer');
+const puppeteer = require(process.env.STARGATE_PUPPETEER_MODULE || 'puppeteer');
+const { selectExhibit, startPreview } = require('../scripts/preview.js');
 // Verification screenshots go to the gitignored test/ directory, never the
 // build root (STARGATE_BUILD_STANDARDS.md section 3).
-const OUT_DIR = path.join(__dirname, 'test');
+const OUT_DIR = process.env.STARGATE_TEST_OUTPUT_DIR || path.join(__dirname, 'test');
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
-const PORT = 8088;
-const BASE_URL = `http://127.0.0.1:${PORT}`;
+let BASE_URL;
 
-// Static file server for verification
-function createServer() {
-  const MIME_TYPES = {
-    '.html': 'text/html; charset=utf-8',
-    '.css': 'text/css; charset=utf-8',
-    '.js': 'application/javascript; charset=utf-8',
-    '.json': 'application/json; charset=utf-8',
-    '.md': 'text/markdown; charset=utf-8',
-    '.svg': 'image/svg+xml'
-  };
-
-  const server = http.createServer((req, res) => {
-    let reqPath = req.url.split('?')[0];
-    if (reqPath === '/') reqPath = '/index.html';
-    const filePath = path.join(__dirname, reqPath);
-
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('404 Not Found');
-        return;
-      }
-      const ext = path.extname(filePath).toLowerCase();
-      const mime = MIME_TYPES[ext] || 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': mime });
-      res.end(data);
-    });
-  });
-
-  return new Promise((resolve) => {
-    server.listen(PORT, '127.0.0.1', () => {
-      console.log(`[VERIFY SERVER] Running at ${BASE_URL}`);
-      resolve(server);
-    });
-  });
+// Own an ephemeral preview under the same policy as both development commands.
+async function createServer() {
+  const preview = await startPreview({ ...selectExhibit('stargate_blueprint_alpha'), port: 0 });
+  BASE_URL = preview.url;
+  console.log(`[VERIFY SERVER] Running at ${BASE_URL}`);
+  return preview;
 }
 
 // Helper to make real HTTP GET request
@@ -78,13 +49,13 @@ async function runTests() {
       { path: '/app.js', mime: 'application/javascript' },
       { path: '/audio.js', mime: 'application/javascript' },
       { path: '/version.json', mime: 'application/json' },
-      { path: '/CHANGELOG.md', mime: 'text/markdown' }
+      { path: '/CHANGELOG.md', mime: 'text/plain', status: 403 }
     ];
 
     for (const ep of endpoints) {
       const res = await fetchUrl(`${BASE_URL}${ep.path}`);
-      if (res.status === 200 && res.headers['content-type'].includes(ep.mime)) {
-        console.log(`  ✓ GET ${ep.path} -> 200 OK (${res.headers['content-type']})`);
+      if (res.status === (ep.status || 200) && (res.headers['content-type'].includes(ep.mime) || (ep.mime === 'application/javascript' && res.headers['content-type'].includes('text/javascript')))) {
+        console.log(`  ✓ GET ${ep.path} -> ${res.status} (${res.headers['content-type']})`);
       } else {
         throw new Error(`Endpoint check failed for ${ep.path}: status ${res.status}`);
       }
@@ -108,8 +79,8 @@ async function runTests() {
     // 3. Puppeteer Browser Testing
     console.log('\n--- 3. Launching Puppeteer Browser ---');
     browser = await puppeteer.launch({
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--use-gl=swiftshader']
+      headless: true,
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH
     });
     const page = await browser.newPage();
 
@@ -372,8 +343,9 @@ async function runTests() {
     process.exitCode = 1;
   } finally {
     if (browser) await browser.close();
-    server.close();
+    await server.close();
   }
 }
 
-runTests();
+module.exports = { createServer, runTests };
+if (require.main === module) runTests().catch(err => { console.error(err); process.exitCode = 1; });

@@ -6,8 +6,5 @@
   "scripts": {
     "start": "node server.js",
     "test": "node verify.js"
-  },
-  "devDependencies": {
-    "puppeteer-core": "^22.15.0"
   }
 }

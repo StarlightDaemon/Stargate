@@ -156,7 +156,19 @@ const Archive = (() => {
   let currentCategory = 'all';
   let searchQuery = '';
 
+  const refreshSavedDiveCount = () => {
+    const counter = document.getElementById('local-dives-count');
+    const history = Storage.getDiveHistory();
+    if (counter) counter.textContent = `${Array.isArray(history) ? history.length : 0} recorded`;
+  };
+
   const init = () => {
+    document.querySelectorAll('.btn-cat-filter').forEach(button => {
+      const category = button.getAttribute('data-cat');
+      const count = RECORDS.filter(record => category === 'all' || record.type === category).length;
+      button.textContent = button.textContent.replace(/\s*\(\d+\)$/, '') + ` (${count})`;
+    });
+    refreshSavedDiveCount();
     renderRecordList();
     renderRecordDetail(currentRecordId);
     bindEvents();
@@ -265,7 +277,8 @@ const Archive = (() => {
 
   return {
     init,
-    renderRecordDetail
+    renderRecordDetail,
+    refreshSavedDiveCount
   };
 })();
 

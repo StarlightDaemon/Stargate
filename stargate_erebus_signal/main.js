@@ -2,6 +2,21 @@ const Synth = {
     ctx: null,
     humOsc: null,
     humGain: null,
+    transientSources: new Set(),
+    effectTimers: new Set(),
+    scheduleEffect(callback, ms) {
+        const timer = setTimeout(() => {
+            this.effectTimers.delete(timer);
+            callback();
+        }, ms);
+        this.effectTimers.add(timer);
+    },
+    stopEffects() {
+        for (const timer of this.effectTimers) clearTimeout(timer);
+        this.effectTimers.clear();
+        for (const source of this.transientSources) source.stop();
+        this.transientSources.clear();
+    },
     init() {
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -18,6 +33,11 @@ const Synth = {
         osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
+        this.transientSources.add(osc);
+        osc.onended = () => {
+            this.transientSources.delete(osc);
+            osc.disconnect(); gain.disconnect();
+        };
         osc.start();
         gain.gain.setValueAtTime(vol, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
@@ -40,15 +60,20 @@ const Synth = {
         gain.connect(this.ctx.destination);
         gain.gain.setValueAtTime(vol, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+        this.transientSources.add(noise);
+        noise.onended = () => {
+            this.transientSources.delete(noise);
+            noise.disconnect(); filter.disconnect(); gain.disconnect();
+        };
         noise.start();
     },
     playLock() {
         this.playTone(800, 'square', 0.1, 0.15);
-        setTimeout(() => this.playTone(1200, 'square', 0.1, 0.15), 100);
+        this.scheduleEffect(() => this.playTone(1200, 'square', 0.1, 0.15), 100);
     },
     playFinalLock() {
         this.playTone(400, 'sawtooth', 0.2, 0.2);
-        setTimeout(() => this.playTone(800, 'sawtooth', 0.4, 0.3), 150);
+        this.scheduleEffect(() => this.playTone(800, 'sawtooth', 0.4, 0.3), 150);
         this.playNoise(0.5, 0.3); // loud burst
     },
     playHum() {
@@ -68,17 +93,17 @@ const Synth = {
         filter.connect(this.humGain);
         this.humGain.connect(this.ctx.destination);
         this.humGain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+        const osc = this.humOsc, gain = this.humGain;
+        osc.onended = () => { osc.disconnect(); filter.disconnect(); gain.disconnect(); };
         this.humOsc.start();
     },
     stopHum() {
-        if(this.humGain) {
-            this.humGain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 1);
-            setTimeout(() => {
-                if(this.humOsc) {
-                    this.humOsc.stop();
-                    this.humOsc = null;
-                }
-            }, 1000);
+        const osc = this.humOsc, gain = this.humGain;
+        this.humOsc = null;
+        this.humGain = null;
+        if(osc && gain) {
+            gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 1);
+            osc.stop(this.ctx.currentTime + 1);
         }
     },
     playReject() {
@@ -96,11 +121,39 @@ let direction = 1;
 let sequence = [];
 let isBusy = false;
 let isConnected = false;
+let operationGeneration = 0;
+const operationTimers = new Map();
+let rejectionBlink = null;
+
+function waitForOperation(ms, generation) {
+    return new Promise(resolve => {
+        const timer = setTimeout(() => {
+            operationTimers.delete(timer);
+            resolve(generation === operationGeneration);
+        }, ms);
+        operationTimers.set(timer, resolve);
+    });
+}
+
+function cancelOperations() {
+    operationGeneration++;
+    Synth.stopEffects();
+    for (const [timer, resolve] of operationTimers) {
+        clearTimeout(timer);
+        resolve(false);
+    }
+    operationTimers.clear();
+    if (rejectionBlink !== null) clearInterval(rejectionBlink);
+    rejectionBlink = null;
+    document.body.style.backgroundColor = '';
+}
 
 async function selectSymbol(symbolIdx) {
     if (isBusy || isConnected || sequence.length >= 4) return;
     Synth.init();
     isBusy = true;
+    const generation = operationGeneration;
+    updateUI();
     Synth.playTone(600, 'sine', 0.1);
 
     const targetChevron = chevronIndices[sequence.length];
@@ -127,7 +180,7 @@ async function selectSymbol(symbolIdx) {
     
     Synth.playNoise(1.5, 0.15);
 
-    await new Promise(r => setTimeout(r, 1500));
+    if (!await waitForOperation(1500, generation)) return;
 
     document.body.classList.remove('seeking');
     targetChevronEl.classList.remove('seeking-target');
@@ -141,7 +194,7 @@ async function selectSymbol(symbolIdx) {
 }
 
 async function toggleEngage() {
-    if (isConnected) {
+    if (isConnected || isBusy || (sequence.length > 0 && sequence.length < 4)) {
         disengage();
     } else {
         engage();
@@ -152,6 +205,8 @@ async function engage() {
     if (isBusy || isConnected || sequence.length < 4) return;
     Synth.init();
     isBusy = true;
+    const generation = operationGeneration;
+    updateUI();
 
     const lockout = document.getElementById('signal-lockout').checked;
     
@@ -166,7 +221,7 @@ async function engage() {
     
     Synth.playNoise(1.0, 0.2);
     
-    await new Promise(r => setTimeout(r, 1000));
+    if (!await waitForOperation(1000, generation)) return;
     
     document.body.classList.remove('seeking');
     finalChevronEl.classList.remove('seeking-target');
@@ -176,17 +231,17 @@ async function engage() {
         document.getElementById('surface').classList.add('rejected');
         
         // Blink red
-        let blinkInterval = setInterval(() => {
+        rejectionBlink = setInterval(() => {
             document.body.style.backgroundColor = document.body.style.backgroundColor === 'rgb(50, 0, 0)' ? '' : 'rgb(50, 0, 0)';
         }, 100);
 
-        setTimeout(() => {
-            clearInterval(blinkInterval);
-            document.body.style.backgroundColor = '';
-            document.getElementById('surface').classList.remove('rejected');
-            resetGate();
-            isBusy = false;
-        }, 1500);
+        if (!await waitForOperation(1500, generation)) return;
+        clearInterval(rejectionBlink);
+        rejectionBlink = null;
+        document.body.style.backgroundColor = '';
+        document.getElementById('surface').classList.remove('rejected');
+        isBusy = false;
+        resetGate();
         return;
     }
 
@@ -198,7 +253,9 @@ async function engage() {
     
     // Breakthrough flash
     document.body.classList.add('breakthrough-flash');
-    setTimeout(() => document.body.classList.remove('breakthrough-flash'), 200);
+    waitForOperation(200, generation).then(current => {
+        if (current) document.body.classList.remove('breakthrough-flash');
+    });
 
     Synth.playHum();
     isConnected = true;
@@ -206,24 +263,26 @@ async function engage() {
     updateUI();
 }
 
-function disengage() {
-    if (isBusy || !isConnected) return;
+async function disengage() {
+    const wasConnected = isConnected;
+    cancelOperations();
+    const generation = operationGeneration;
     Synth.init();
-    isBusy = true;
-    
     Synth.stopHum();
-    Synth.playNoise(1.5, 0.4); 
-    
-    document.getElementById('surface').classList.add('degrading');
-    document.getElementById('surface').classList.remove('active');
-    
-    setTimeout(() => {
-        document.getElementById('surface').classList.remove('degrading');
-        resetGate();
-        isConnected = false;
+    isConnected = false;
+    isBusy = wasConnected;
+    document.body.classList.remove('seeking', 'breakthrough-flash');
+    const surface = document.getElementById('surface');
+    surface.classList.remove('active', 'rejected', 'degrading');
+    resetGate();
+    if (wasConnected) {
+        Synth.playNoise(1.5, 0.4);
+        surface.classList.add('degrading');
+        if (!await waitForOperation(1500, generation)) return;
+        surface.classList.remove('degrading');
         isBusy = false;
         updateUI();
-    }, 1500);
+    }
 }
 
 function resetGate() {
@@ -242,7 +301,10 @@ function updateUI() {
     const engageBtn = document.getElementById('engage-btn');
     if (isConnected) {
         engageBtn.textContent = 'DISCONNECT_LINK';
-        engageBtn.disabled = isBusy;
+        engageBtn.disabled = false;
+    } else if (isBusy || (sequence.length > 0 && sequence.length < 4)) {
+        engageBtn.textContent = 'CANCEL_LINK';
+        engageBtn.disabled = false;
     } else {
         engageBtn.textContent = 'ENGAGE_LINK';
         engageBtn.disabled = (sequence.length < 4 || isBusy);
@@ -255,12 +317,16 @@ function updateUI() {
 async function quickDial(addressString) {
     if (isBusy || isConnected) return;
     Synth.init();
+    cancelOperations();
+    const generation = operationGeneration;
     resetGate();
     const addrs = addressString.split(',').map(Number);
     for (let i = 0; i < addrs.length; i++) {
         await selectSymbol(addrs[i]);
+        if (generation !== operationGeneration) return;
     }
-    await engage();
+    // A completed preset remains pending until the operator explicitly engages.
+    updateUI();
 }
 
 // Ambient static setup on first click

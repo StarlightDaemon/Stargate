@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Botanical aperture</title>
+  <rect width="32" height="32" rx="5" fill="#122124"/>
+  <g fill="none" stroke="#d4af37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 27V12C6 0 0 19 13 19M16 12C26 0 32 19 19 19M10 26Q16 21 22 26"/></g>
+</svg>

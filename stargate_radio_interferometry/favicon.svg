@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Interferometer baselines</title>
+  <rect width="32" height="32" rx="5" fill="#05080e"/>
+  <g fill="none" stroke="#00f0ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8Q5 20 17 20ZM11 14 24 5M11 18V27M6 27H17M22 10Q27 10 27 15"/></g>
+</svg>

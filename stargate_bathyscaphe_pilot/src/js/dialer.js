@@ -39,6 +39,8 @@ const Dialer = (() => {
   let isInterlockEngaged = false; // MUST default to false (RELEASED)
   let trimAnimationTimer = null;
   let stagedDescentTimers = [];
+  let emergencySettleTimer = null;
+  let trimGeneration = 0;
 
   const getWaypoints = () => WAYPOINTS;
   const getTrimChannels = () => TRIM_CHANNELS;
@@ -89,6 +91,11 @@ const Dialer = (() => {
       return false;
     }
 
+    // An accepted manual waypoint owns the remaining profile. Stop the computer
+    // replay as well as its current trim callback so a later preset can start.
+    if (speed === 'manual' && window.QuickDial) QuickDial.cancelAutoDial();
+    clearEmergencySettle();
+    const generation = ++trimGeneration;
     SoundEngine.resumeContext();
     SoundEngine.playSolenoidClick();
     SoundEngine.playBallastHiss(speed === 'computer' ? 0.25 : 0.45, true);
@@ -110,6 +117,7 @@ const Dialer = (() => {
     if (trimAnimationTimer) clearInterval(trimAnimationTimer);
 
     trimAnimationTimer = setInterval(() => {
+      if (generation !== trimGeneration || dialerState !== 'TRIMMING') return;
       step++;
       const progress = step / stepCount;
 
@@ -183,6 +191,7 @@ const Dialer = (() => {
     // =========================================================================
     // STAGE 1: BUILDUP (2.0s duration)
     // =========================================================================
+    const activationStartedAt = performance.now();
     dialerState = 'BUILDUP';
     SoundEngine.playApertureBoom(1);
     Storage.logEvent('DESCENT_STG1', 'Stage 1 BUILDUP: Main descent thrusters vectoring 100%, hydraulic purge engaged');
@@ -199,7 +208,7 @@ const Dialer = (() => {
 
       dialerState = 'BREAKTHROUGH';
       SoundEngine.playApertureBoom(2);
-      Storage.logEvent('DESCENT_STG2', 'Stage 2 BREAKTHROUGH: Abyssal Gateway rift aperture breached at 11,800m');
+      Storage.logEvent('DESCENT_STG2', 'Stage 2 BREAKTHROUGH: Rift aperture projection established for the 11,800m target');
       
       // Trigger aperture optical flash shockwave
       const fxLayer = document.getElementById('aperture-fx-layer');
@@ -217,13 +226,13 @@ const Dialer = (() => {
 
         dialerState = 'SUSTAINED_ACTIVE';
         SoundEngine.playApertureBoom(3);
-        Storage.logEvent('DESCENT_STG3', 'Stage 3 SUSTAINED ACTIVE: Bathyscaphe holding in Hadal Rift Gateway corridor');
+        Storage.logEvent('DESCENT_STG3', 'Stage 3 SUSTAINED ACTIVE: Aperture stable; vessel depth continues toward the 11,800m target');
 
-        // Log completed dive to localStorage
+        // Record the completed aperture sequence, not an arrival at target depth.
         Storage.saveCompletedDive({
           depth: 11800,
-          pressure: '1,191.0 BAR',
-          duration: 180,
+          pressure: `${Physics.getState().pressureBar.toFixed(1)} BAR`,
+          duration: Math.round((performance.now() - activationStartedAt) / 100) / 10,
           routeName: 'Standard Hadal Gateway Vector'
         });
 
@@ -246,7 +255,11 @@ const Dialer = (() => {
    * Always reachable, immediately purges profile and surfaces the vehicle.
    */
   const emergencyBlowBallast = () => {
+    if (window.QuickDial) QuickDial.cancelAutoDial();
+    clearEmergencySettle();
+    trimGeneration++;
     clearStagedTimers();
+    SoundEngine.resetAfterDisengage();
     if (trimAnimationTimer) {
       clearInterval(trimAnimationTimer);
       trimAnimationTimer = null;
@@ -262,8 +275,8 @@ const Dialer = (() => {
     // Reset locked waypoints
     lockedWaypoints = [];
 
-    // Surface vehicle immediately
-    Physics.setTargetDepth(0, 2.5);
+    // Restore the documented surface reset; retain the brief ballast-blow effect.
+    Physics.resetToSurface();
     Physics.setBuoyancyDelta(8.5); // Strong positive buoyancy during ascent
 
     TRIM_CHANNELS.forEach(ch => { ch.fill = 15; });
@@ -272,7 +285,9 @@ const Dialer = (() => {
     const fxLayer = document.getElementById('aperture-fx-layer');
     if (fxLayer) fxLayer.className = 'aperture-fx-layer';
 
-    setTimeout(() => {
+    emergencySettleTimer = setTimeout(() => {
+      if (dialerState !== 'EMERGENCY_ASCENT') return;
+      emergencySettleTimer = null;
       Physics.setBuoyancyDelta(0.0);
       TRIM_CHANNELS.forEach(ch => { ch.fill = 50; });
       renderTrimBars();
@@ -281,6 +296,11 @@ const Dialer = (() => {
     }, 1200);
 
     updateUIState();
+  };
+
+  const clearEmergencySettle = () => {
+    if (emergencySettleTimer !== null) clearTimeout(emergencySettleTimer);
+    emergencySettleTimer = null;
   };
 
   const clearStagedTimers = () => {
@@ -395,7 +415,7 @@ const Dialer = (() => {
         actBtn.disabled = true;
         actBtn.className = 'btn-commence-descent active-sustained';
         if (actPrimaryText) actPrimaryText.textContent = 'APERTURE STABILIZED ACTIVE';
-        if (actSubtext) actSubtext.textContent = 'HOLDING AT 11,800m HADAL GATEWAY';
+        if (actSubtext) actSubtext.textContent = 'DESCENT TARGET: 11,800m HADAL GATEWAY';
         if (actStageLabel) actStageLabel.textContent = 'STAGE 03: ACTIVE';
         if (hudApertureState) {
           hudApertureState.textContent = 'HADAL GATEWAY ACTIVE // APERTURE OPEN';
@@ -408,7 +428,7 @@ const Dialer = (() => {
         if (actSubtext) actSubtext.textContent = 'CROSSING DIMENSIONAL THRESHOLD';
         if (actStageLabel) actStageLabel.textContent = 'STAGE 02: BREACH';
         if (hudApertureState) {
-          hudApertureState.textContent = 'APERTURE BREAKTHROUGH // 11,800M';
+          hudApertureState.textContent = 'APERTURE BREAKTHROUGH // TARGET 11,800M';
           hudApertureState.className = 'hud-aperture-state-pill state-buildup';
         }
       } else if (dialerState === 'BUILDUP') {
@@ -438,7 +458,7 @@ const Dialer = (() => {
         if (actSubtext) actSubtext.textContent = `LOCK ALL 8 WAYPOINTS (${lockedWaypoints.length}/8)`;
         if (actStageLabel) actStageLabel.textContent = 'STANDBY';
         if (hudApertureState) {
-          hudApertureState.textContent = 'SURFACE HOLD // PROFILE PENDING';
+          hudApertureState.textContent = 'PROFILE INCOMPLETE // AWAITING WAYPOINTS';
           hudApertureState.className = 'hud-aperture-state-pill';
         }
       }

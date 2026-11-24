@@ -77,6 +77,8 @@ function checkReleaseShell() {
     ["Open Graph image", /<meta property="og:image" content="https:\/\/starlightdaemon\.github\.io\/Stargate\/[^"]+">/],
     ["Twitter card", /<meta name="twitter:card" content="summary_large_image">/],
     ["skip link", /<a class="skip-link" href="#main-content">/],
+    ["loading status", /<span id="filter-count" class="filter-count" role="status" aria-live="polite" aria-atomic="true">Loading gallery…<\/span>/],
+    ["gallery busy state", /<section id="grid" aria-label="Build gallery" aria-busy="true"><\/section>/],
   ];
   for (const [label, pattern] of invariants) {
     if (!pattern.test(html)) fail(`Hub HTML is missing its ${label}.`);
@@ -188,8 +190,8 @@ function checkSecurityAndSize() {
     const name = path.basename(file);
     const parent = path.dirname(relativeOutput(file));
     const isBuildRoot = !parent.includes("/") || parent.startsWith("_sequestered/") && parent.split("/").length === 2;
-    return ["README.md", "CHANGELOG.md", "package.json", "package-lock.json", "npm-shrinkwrap.json"].includes(name) ||
-      isBuildRoot && /^(?:(?:test|verify|diag|audit)(?:[_-].*)?|.*[_-](?:test|spec)|run[_-]?tests?(?:[_-].*)?|server)\.(?:[cm]?js|ts|html)$/i.test(name);
+    return [".gitignore", "README.md", "CHANGELOG.md", "package.json", "package-lock.json", "npm-shrinkwrap.json"].includes(name) ||
+      isBuildRoot && /^(?:(?:test|verify|diag|audit)(?:[_-].*)?|.*[_-](?:test|spec)|run[_-]?tests?(?:[_-].*)?|(?:dev-)?serve(?:r)?)\.(?:[cm]?js|ts|html)$/i.test(name);
   });
   if (developmentFiles.length) {
     fail(`Development-only files shipped: ${developmentFiles.map(relativeOutput).join(", ")}`);
